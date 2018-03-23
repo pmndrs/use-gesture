@@ -1,7 +1,7 @@
 import React from 'react'
 
-export default Wrapped =>
-    class WithGesture extends React.Component {
+const withGesture = Wrapped =>
+    class extends React.Component {
         state = { x: 0, y: 0, down: false }
 
         componentDidMount() {
@@ -21,9 +21,11 @@ export default Wrapped =>
         handleTouchStart = e => this.handleMouseDown(e.touches[0])
         handleTouchMove = e => e.preventDefault() || this.handleMouseMove(e.touches[0])
         handleMouseUp = () => this.setState({ down: false })
-        handleMouseDown = ({ pageX, pageY }) => this.setState({ x: 0, y: 0, initialX: pageX, initialY: pageY, down: true })
+        handleMouseDown = ({ pageX, pageY }) =>
+            this.setState({ x: pageX, y: pageX, xDelta: 0, yDelta: 0, initialX: pageX, initialY: pageY, down: true })
         handleMouseMove = ({ pageX, pageY }) =>
-            this.state.down && this.setState({ x: pageX - this.state.initialX, y: pageY - this.state.initialY })
+            this.state.down &&
+            this.setState({ x: pageX, y: pageX, xDelta: pageX - this.state.initialX, yDelta: pageY - this.state.initialY })
 
         render() {
             return (
@@ -33,3 +35,13 @@ export default Wrapped =>
             )
         }
     }
+
+const Gesture = withGesture(
+    class extends React.PureComponent {
+        render() {
+            return this.props.children({ x, y, xDelta, yDelta, xInitial, yInitial, down })
+        }
+    },
+)
+
+export { withGesture, Gesture }
