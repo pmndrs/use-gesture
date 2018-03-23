@@ -39,7 +39,7 @@ const withGesture = Wrapped =>
 const Gesture = withGesture(
     class extends React.PureComponent {
         render() {
-            return this.props.children({ x, y, xDelta, yDelta, xInitial, yInitial, down })
+            return this.props.children(this.props)
         }
     },
 )
