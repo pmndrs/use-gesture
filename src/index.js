@@ -18,7 +18,7 @@ export default Wrapped =>
             window.removeEventListener('mouseup', this.handleMouseUp)
         }
 
-        handleTouchStart = (pressLocation, e) => this.handleMouseDown(pressLocation, e.touches[0])
+        handleTouchStart = e => this.handleMouseDown(e.touches[0])
         handleTouchMove = e => e.preventDefault() || this.handleMouseMove(e.touches[0])
         handleMouseUp = () => this.setState({ down: false })
         handleMouseDown = ({ pageX, pageY }) => this.setState({ x: 0, y: 0, initialX: pageX, initialY: pageY, down: true })
