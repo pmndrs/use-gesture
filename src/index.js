@@ -2,7 +2,7 @@ import React from 'react'
 
 const withGesture = Wrapped =>
     class extends React.Component {
-        state = { x: 0, y: 0, down: false }
+        state = { x: 0, y: 0, xDelta: 0, yDelta: 0, xInitial: 0, yInitial: 0, down: false }
 
         componentDidMount() {
             window.addEventListener('touchmove', this.handleTouchMove)
@@ -22,15 +22,15 @@ const withGesture = Wrapped =>
         handleTouchMove = e => e.preventDefault() || this.handleMouseMove(e.touches[0])
         handleMouseUp = () => this.setState({ down: false })
         handleMouseDown = ({ pageX, pageY }) =>
-            this.setState({ x: pageX, y: pageX, xDelta: 0, yDelta: 0, initialX: pageX, initialY: pageY, down: true })
+            this.setState({ x: pageX, y: pageX, xDelta: 0, yDelta: 0, xInitial: pageX, yInitial: pageY, down: true })
         handleMouseMove = ({ pageX, pageY }) =>
             this.state.down &&
-            this.setState({ x: pageX, y: pageX, xDelta: pageX - this.state.initialX, yDelta: pageY - this.state.initialY })
+            this.setState({ x: pageX, y: pageX, xDelta: pageX - this.state.xInitial, yDelta: pageY - this.state.yInitial })
 
         render() {
             return (
                 <div onMouseDown={this.handleMouseDown} onTouchStart={this.handleTouchStart}>
-                    <Wrapped {...this.props} x={this.state.x} y={this.state.y} down={this.state.down} />
+                    <Wrapped {...this.props} {...this.state} />
                 </div>
             )
         }
