@@ -6,13 +6,13 @@ const withGesture = Wrapped =>
 
         handleTouchStart = e => e.preventDefault() || this.handleMouseDown(e.touches[0])
         handleTouchMove = e => e.preventDefault() || this.handleMouseMove(e.touches[0])
-        
+
         handleMouseUp = () => {
             window.removeEventListener('touchmove', this.handleTouchMove)
             window.removeEventListener('touchend', this.handleMouseUp)
             window.removeEventListener('mousemove', this.handleMouseMove)
             window.removeEventListener('mouseup', this.handleMouseUp)
-            const newProps = { down: false }
+            const newProps = { ...this.state, down: false }
             this.setState(this.props.onUp ? this.props.onMouseUp(newProps) : newProps)
         }
 
@@ -21,12 +21,12 @@ const withGesture = Wrapped =>
             window.addEventListener('touchend', this.handleMouseUp)
             window.addEventListener('mousemove', this.handleMouseMove)
             window.addEventListener('mouseup', this.handleMouseUp)
-            const newProps = { x: pageX, y: pageX, xDelta: 0, yDelta: 0, xInitial: pageX, yInitial: pageY, down: true }
+            const newProps = { ...this.state, x: pageX, y: pageX, xDelta: 0, yDelta: 0, xInitial: pageX, yInitial: pageY, down: true }
             this.setState(this.props.onDown ? this.props.onDown(newProps) : newProps)
         }
 
         handleMouseMove = ({ pageX, pageY }) => {
-            const newProps = { x: pageX, y: pageX, xDelta: pageX - this.state.xInitial, yDelta: pageY - this.state.yInitial }
+            const newProps = { ...this.state, x: pageX, y: pageX, xDelta: pageX - this.state.xInitial, yDelta: pageY - this.state.yInitial }
             this.setState(this.props.onMove ? this.props.onMove(newProps) : newProps)
         }
 
