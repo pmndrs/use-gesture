@@ -21,6 +21,14 @@ class Something extends React.Component {
 
 or ...
 
+```jsx
+withGesture(
+    ({ down, x, y, xDelta, yDelta, xInitial, yInitial }) => `coordinates: ${x} ${y}`
+)
+```
+
+or ...
+
 
 ```jsx
 import { Gesture } from 'react-with-gesture'
