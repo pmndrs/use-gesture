@@ -1,7 +1,5 @@
 import React from 'react'
 
-onMouseUp={props =>}
-
 const withGesture = Wrapped =>
     class extends React.Component {
         state = { x: 0, y: 0, xDelta: 0, yDelta: 0, xInitial: 0, yInitial: 0, down: false }
@@ -26,7 +24,7 @@ const withGesture = Wrapped =>
             const newProps = { x: pageX, y: pageX, xDelta: 0, yDelta: 0, xInitial: pageX, yInitial: pageY, down: true }
             this.setState(this.props.onDown ? this.props.onDown(newProps) : newProps)
         }
-        
+
         handleMouseMove = ({ pageX, pageY }) => {
             const newProps = { x: pageX, y: pageX, xDelta: pageX - this.state.xInitial, yDelta: pageY - this.state.yInitial }
             this.setState(this.props.onMove ? this.props.onMove(newProps) : newProps)
