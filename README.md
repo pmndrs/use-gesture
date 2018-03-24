@@ -2,6 +2,8 @@
     
 Wraps a component into a div that receives MouseDown and TouchStart events, then captures movement until release.
 
+Demo: https://codesandbox.io/embed/jzn14k0ppy
+
 * `down`, true on mouse-down or finger-touch
 * `x/y`, screen coordinates
 * `xDelta/yDelta`, coordinates relative to initial coordinates, great for sliding/dragging gestures
