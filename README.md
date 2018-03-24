@@ -2,12 +2,10 @@
     
 Wraps a component into a div that receives MouseDown and TouchStart events, then captures movement until release.
 
-| prop | description                        |
-|------|------------------------------------|
-| down | true on mouse-down or finger-touch |
-| x/y  | screen coordinates                 |
-| xDelta/yDelta | coordinates relative to initial coordinates, great for sliding/dragging gestures |
-| yInitial/yInitial | coordinates of the first click/touch |
+* down, true on mouse-down or finger-touch |
+* x/y, screen coordinates                 |
+* xDelta/yDelta, coordinates relative to initial coordinates, great for sliding/dragging gestures |
+* xInitial/yInitial, coordinates of the first click/touch |
 
 ```jsx
 import { withGesture } from 'react-with-gesture'
