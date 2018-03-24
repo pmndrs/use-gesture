@@ -19,7 +19,7 @@ import { withGesture } from 'react-with-gesture'
 @withGesture
 class Something extends React.Component {
     render() {
-        const { down, x, y, xDelta, yDelta, xInitial, yInitial }
+        const { down, x, y, xDelta, yDelta, xInitial, yInitial } = this.props
         return <div>Drag me! coordinates: {x}, {y}</div>
     }
 }
