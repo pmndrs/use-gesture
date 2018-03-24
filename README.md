@@ -1,17 +1,39 @@
     npm install react-with-gesture
     
-Wraps a component into a div that receives MouseDown and TouchStart events, then captures the movement of it until release. It sends the coordinates, down-state and deltas down to the wrapped component as props.
+Wraps a component into a div that receives MouseDown and TouchStart events, then captures movement until release.
+
+| prop | description                        |
+|------|------------------------------------|
+| down | true on mouse-down or finger-touch |
+| x/y  | screen coordinates                 |
+| xDelta/yDelta | coordinates relative to initial coordinates, great for sliding/dragging gestures |
+| yInitial/yInitial | coordinates of the first click/touch |
 
 ```jsx
-import withGesture from 'react-with-gesture'
+import { withGesture } from 'react-with-gesture'
 
 @withGesture
 class Something extends React.Component {
     render() {
-        const { x, y, down }
-        `x: ${x} y: ${y} down: ${down}`
-    }
+        const { down, x, y, xDelta, yDelta, xInitial, yInitial }
+        return `coordinates: ${x} ${y}`
+    }
 }
 ```
 
+or ...
 
+
+```jsx
+import { Gesture } from 'react-with-gesture'
+
+class Something extends React.Component {
+    render() {
+        return (
+            <Gesture>
+                {({ down, x, y, xDelta, yDelta, xInitial, yInitial }) => `coordinates: ${x} ${y}`}
+            </Gesture>
+        )
+    }
+}
+```
