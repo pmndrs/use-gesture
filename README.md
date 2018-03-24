@@ -2,6 +2,10 @@
     
 Wraps a component into a div that receives MouseDown and TouchStart events, then captures movement until release.
 
+<p align="middle">
+  <img src="assets/button.gif" width="600"/>
+</p>
+
 Demo: https://codesandbox.io/embed/jzn14k0ppy
 
 * `down`, true on mouse-down or finger-touch
