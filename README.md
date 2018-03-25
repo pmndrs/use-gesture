@@ -19,8 +19,8 @@ import { withGesture } from 'react-with-gesture'
 @withGesture
 class Something extends React.Component {
     render() {
-        const { down, x, y, xDelta, yDelta, xInitial, yInitial }
-        return `coordinates: ${x} ${y}`
+        const { down, x, y, xDelta, yDelta, xInitial, yInitial } = this.props
+        return <div>Drag me! coordinates: {x}, {y}</div>
     }
 }
 ```
@@ -29,7 +29,8 @@ or ...
 
 ```jsx
 withGesture(
-    ({ down, x, y, xDelta, yDelta, xInitial, yInitial }) => `coordinates: ${x} ${y}`
+    ({ down, x, y, xDelta, yDelta, xInitial, yInitial }) => 
+        <div>Drag me! coordinates: {x}, {y}</div>
 )
 ```
 
@@ -43,7 +44,9 @@ class Something extends React.Component {
     render() {
         return (
             <Gesture>
-                {({ down, x, y, xDelta, yDelta, xInitial, yInitial }) => `coordinates: ${x} ${y}`}
+                {({ down, x, y, xDelta, yDelta, xInitial, yInitial }) =>
+                    <div>Drag me! coordinates: {x}, {y}</div>
+                }
             </Gesture>
         )
     }
