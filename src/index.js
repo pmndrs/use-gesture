@@ -31,13 +31,18 @@ const withGesture = Wrapped =>
         }
         handleMouseMove = ({ pageX, pageY }) => {
             const newProps = { ...this.state, x: pageX, y: pageX, xDelta: pageX - this.state.xInitial, yDelta: pageY - this.state.yInitial }
-            this.setState(this.props.onMove ? this.props.onMove(newProps) : newProps, () => this._busy = false)
+            this.setState(this.props.onMove ? this.props.onMove(newProps) : newProps, () => (this._busy = false))
         }
 
         render() {
+            const { style, className, ...props } = this.props
             return (
-                <div onMouseDown={this.handleMouseDown} onTouchStart={this.handleTouchStart}>
-                    <Wrapped {...this.props} {...this.state} />
+                <div
+                    onMouseDown={this.handleMouseDown}
+                    onTouchStart={this.handleTouchStart}
+                    style={{ display: 'contents', ...style }}
+                    className={className}>
+                    <Wrapped {...props} {...this.state} />
                 </div>
             )
         }
