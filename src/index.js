@@ -13,7 +13,7 @@ const withGesture = Wrapped =>
             window.removeEventListener('mousemove', this.handleMouseMoveRaf)
             window.removeEventListener('mouseup', this.handleMouseUp)
             const newProps = { ...this.state, down: false }
-            this.setState(this.props.onUp ? this.props.onMouseUp(newProps) : newProps)
+            this.setState(this.props.onUp ? this.props.onUp(newProps) : newProps)
         }
 
         handleMouseDown = ({ pageX, pageY }) => {
