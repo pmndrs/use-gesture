@@ -21,7 +21,7 @@ const withGesture = Wrapped =>
             window.addEventListener('touchend', this.handleMouseUp)
             window.addEventListener('mousemove', this.handleMouseMoveRaf)
             window.addEventListener('mouseup', this.handleMouseUp)
-            const newProps = { ...this.state, x: pageX, y: pageX, xDelta: 0, yDelta: 0, xInitial: pageX, yInitial: pageY, xPrev: pageX, yPrev: pageY, down: true }
+            const newProps = { ...this.state, x: pageX, y: pageY, xDelta: 0, yDelta: 0, xInitial: pageX, yInitial: pageY, xPrev: pageX, yPrev: pageY, down: true }
             this.setState(this.props.onDown ? this.props.onDown(newProps) : newProps)
         }
 
@@ -30,7 +30,7 @@ const withGesture = Wrapped =>
             this._busy = true
         }
         handleMouseMove = ({ pageX, pageY }) => {
-            const newProps = { ...this.state, x: pageX, y: pageX, xDelta: pageX - this.state.xInitial, yDelta: pageY - this.state.yInitial, xPrev: this.state.x, yPrev: this.state.y, xVelocity: pageX - this.state.x, yVelocity: pageY - this.state.y }
+            const newProps = { ...this.state, x: pageX, y: pageY, xDelta: pageX - this.state.xInitial, yDelta: pageY - this.state.yInitial, xPrev: this.state.x, yPrev: this.state.y, xVelocity: pageX - this.state.x, yVelocity: pageY - this.state.y }
             this.setState(this.props.onMove ? this.props.onMove(newProps) : newProps, () => (this._busy = false))
         }
 
