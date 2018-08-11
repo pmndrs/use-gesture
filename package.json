@@ -4,6 +4,7 @@
     "description": "hoc for receiving gestures",
     "main": "dist/react-with-gesture",
     "module": "dist/react-with-gesture.es",
+    "typings": "./index.d.ts",
     "sideEffects": false,
     "scripts": {
         "prebuild": "rimraf dist",
@@ -34,6 +35,7 @@
         "@babel/preset-react": "7.0.0-beta.40",
         "@babel/preset-stage-2": "7.0.0-beta.40",
         "@babel/runtime": "7.0.0-beta.40",
+        "@types/react": "^16.4.9",
         "babel-core": "7.0.0-bridge.0",
         "babel-jest": "22.4.0",
         "babel-plugin-annotate-pure-calls": "0.3.0-beta.0",
