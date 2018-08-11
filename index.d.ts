@@ -15,7 +15,7 @@ export interface GestureState {
     yVelocity: number;
 }
 
-type GestureChildComponent<T> = React.ComponentType<T & GestureState>;
+type GestureChildComponent<T> = React.ComponentType<T & Partial<GestureState>>;
 
 export interface WithGestureProps {
     onUp?: (newProps: GestureState) => GestureState;
