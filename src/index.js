@@ -2,6 +2,11 @@ import React from 'react'
 
 const withGesture = Wrapped =>
     class extends React.Component {
+        static defaultProps = {
+            touch: true,
+            mouse: true
+        }
+
         state = {
             x: 0,
             y: 0,
@@ -16,6 +21,7 @@ const withGesture = Wrapped =>
 
         // Touch handlers
         handleTouchStart = e => {
+            if (!this.props.touch) return
             window.addEventListener('touchmove', this.handleTouchMove)
             window.addEventListener('touchend', this.handleTouchEnd)
             this.handleDown(e.touches[0])
@@ -31,6 +37,7 @@ const withGesture = Wrapped =>
 
         // Mouse handlers
         handleMouseDown = e => {
+            if (!this.props.mouse) return
             window.addEventListener('mousemove', this.handleMouseMoveRaf)
             window.addEventListener('mouseup', this.handleMouseUp)
             this.handleDown(e)
