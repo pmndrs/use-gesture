@@ -9,7 +9,8 @@
     "scripts": {
         "prebuild": "rimraf dist",
         "build": "rollup -c",
-        "prepare": "npm run build"
+        "prepare": "npm run build",
+        "test:typings": "typings-tester --dir test/typescript"
     },
     "repository": {
         "type": "git",
@@ -44,7 +45,9 @@
         "react-dom": "16.2.0",
         "rimraf": "2.6.2",
         "rollup": "0.56.2",
-        "rollup-plugin-babel": "4.0.0-beta.2"
+        "rollup-plugin-babel": "4.0.0-beta.2",
+        "typescript": "^3.0.1",
+        "typings-tester": "^0.3.1"
     },
     "peerDependencies": {
         "prop-types": "15.x.x",
