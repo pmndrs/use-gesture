@@ -14,28 +14,46 @@ const withGesture = Wrapped =>
             down: false
         }
 
-        handleTouchStart = e => this.handleMouseDown(e.touches[0])
-        handleTouchMove = e => this.handleMouseMove(e.touches[0])
-
-        handleMouseUp = () => {
+        // Touch handlers
+        handleTouchStart = e => {
+            window.addEventListener('touchmove', this.handleTouchMove)
+            window.addEventListener('touchend', this.handleTouchEnd)
+            this.handleDown(e.touches[0])
+        }
+        handleTouchMove = e => {
+            this.handleMove(e.touches[0])
+        }
+        handleTouchEnd = () => {
             window.removeEventListener('touchmove', this.handleTouchMove)
             window.removeEventListener('touchend', this.handleMouseUp)
-            window.removeEventListener('mousemove', this.handleMouseMoveRaf)
-            window.removeEventListener('mouseup', this.handleMouseUp)
-            const newProps = {
-                ...this.state,
-                down: false
-            }
-            this.setState(
-                this.props.onUp ? this.props.onUp(newProps) : newProps
-            )
+            this.handleUp()
         }
 
-        handleMouseDown = ({ pageX, pageY }) => {
-            window.addEventListener('touchmove', this.handleTouchMove)
-            window.addEventListener('touchend', this.handleMouseUp)
+        // Mouse handlers
+        handleMouseDown = e => {
             window.addEventListener('mousemove', this.handleMouseMoveRaf)
             window.addEventListener('mouseup', this.handleMouseUp)
+            this.handleDown(e)
+        }
+        handleMouseMove = ({ pageX, pageY }) => {
+            if (!this._busy) {
+                requestAnimationFrame(() => {
+                    this.handleMove({
+                        pageX,
+                        pageY
+                    })
+                })
+                this._busy = true
+            }
+        }
+        handleMouseUp = () => {
+            window.removeEventListener('mousemove', this.handleMouseMove)
+            window.removeEventListener('mouseup', this.handleMouseUp)
+            this.handleUp()
+        }
+
+        // Common handlers
+        handleDown = ({ pageX, pageY }) => {
             const newProps = {
                 ...this.state,
                 x: pageX,
@@ -52,18 +70,7 @@ const withGesture = Wrapped =>
                 this.props.onDown ? this.props.onDown(newProps) : newProps
             )
         }
-
-        handleMouseMoveRaf = ({ pageX, pageY }) => {
-            !this._busy &&
-            requestAnimationFrame(() =>
-                this.handleMouseMove({
-                    pageX,
-                    pageY
-                })
-            )
-            this._busy = true
-        }
-        handleMouseMove = ({ pageX, pageY }) => {
+        handleMove = ({ pageX, pageY }) => {
             const newProps = {
                 ...this.state,
                 x: pageX,
@@ -78,6 +85,15 @@ const withGesture = Wrapped =>
             this.setState(
                 this.props.onMove ? this.props.onMove(newProps) : newProps,
                 () => (this._busy = false)
+            )
+        }
+        handleUp = () => {
+            const newProps = {
+                ...this.state,
+                down: false
+            }
+            this.setState(
+                this.props.onUp ? this.props.onUp(newProps) : newProps
             )
         }
 
