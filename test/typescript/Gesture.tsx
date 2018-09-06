@@ -27,6 +27,8 @@ const allProps = (
         onDown={handleEvent}
         onMove={handleEvent}
         onUp={handleEvent}
+        touch={false}
+        mouse={true}
     >
         {({
             x,

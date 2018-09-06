@@ -21,6 +21,9 @@ export interface WithGestureProps {
     onUp?: (newProps: GestureState) => GestureState;
     onDown?: (newProps: GestureState) => GestureState;
     onMove?: (newProps: GestureState) => GestureState;
+
+    touch?: boolean;
+    mouse?: boolean;
 }
 
 export interface GestureProps {

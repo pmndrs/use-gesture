@@ -2,36 +2,106 @@ import React from 'react'
 
 const withGesture = Wrapped =>
     class extends React.Component {
-        state = { x: 0, y: 0, xDelta: 0, yDelta: 0, xInitial: 0, yInitial: 0, xPrev: 0, yPrev: 0, down: false }
+        static defaultProps = {
+            touch: true,
+            mouse: true
+        }
 
-        handleTouchStart = e => this.handleMouseDown(e.touches[0])
-        handleTouchMove = e => this.handleMouseMove(e.touches[0])
+        state = {
+            x: 0,
+            y: 0,
+            xDelta: 0,
+            yDelta: 0,
+            xInitial: 0,
+            yInitial: 0,
+            xPrev: 0,
+            yPrev: 0,
+            down: false
+        }
 
-        handleMouseUp = () => {
+        // Touch handlers
+        handleTouchStart = e => {
+            if (!this.props.touch) return
+            window.addEventListener('touchmove', this.handleTouchMove)
+            window.addEventListener('touchend', this.handleTouchEnd)
+            this.handleDown(e.touches[0])
+        }
+        handleTouchMove = e => {
+            this.handleMove(e.touches[0])
+        }
+        handleTouchEnd = () => {
             window.removeEventListener('touchmove', this.handleTouchMove)
             window.removeEventListener('touchend', this.handleMouseUp)
-            window.removeEventListener('mousemove', this.handleMouseMoveRaf)
-            window.removeEventListener('mouseup', this.handleMouseUp)
-            const newProps = { ...this.state, down: false }
-            this.setState(this.props.onUp ? this.props.onUp(newProps) : newProps)
+            this.handleUp()
         }
 
-        handleMouseDown = ({ pageX, pageY }) => {
-            window.addEventListener('touchmove', this.handleTouchMove)
-            window.addEventListener('touchend', this.handleMouseUp)
+        // Mouse handlers
+        handleMouseDown = e => {
+            if (!this.props.mouse) return
             window.addEventListener('mousemove', this.handleMouseMoveRaf)
             window.addEventListener('mouseup', this.handleMouseUp)
-            const newProps = { ...this.state, x: pageX, y: pageY, xDelta: 0, yDelta: 0, xInitial: pageX, yInitial: pageY, xPrev: pageX, yPrev: pageY, down: true }
-            this.setState(this.props.onDown ? this.props.onDown(newProps) : newProps)
-        }
-
-        handleMouseMoveRaf = ({ pageX, pageY }) => {
-            !this._busy && requestAnimationFrame(() => this.handleMouseMove({ pageX, pageY }))
-            this._busy = true
+            this.handleDown(e)
         }
         handleMouseMove = ({ pageX, pageY }) => {
-            const newProps = { ...this.state, x: pageX, y: pageY, xDelta: pageX - this.state.xInitial, yDelta: pageY - this.state.yInitial, xPrev: this.state.x, yPrev: this.state.y, xVelocity: pageX - this.state.x, yVelocity: pageY - this.state.y }
-            this.setState(this.props.onMove ? this.props.onMove(newProps) : newProps, () => (this._busy = false))
+            if (!this._busy) {
+                requestAnimationFrame(() => {
+                    this.handleMove({
+                        pageX,
+                        pageY
+                    })
+                })
+                this._busy = true
+            }
+        }
+        handleMouseUp = () => {
+            window.removeEventListener('mousemove', this.handleMouseMove)
+            window.removeEventListener('mouseup', this.handleMouseUp)
+            this.handleUp()
+        }
+
+        // Common handlers
+        handleDown = ({ pageX, pageY }) => {
+            const newProps = {
+                ...this.state,
+                x: pageX,
+                y: pageY,
+                xDelta: 0,
+                yDelta: 0,
+                xInitial: pageX,
+                yInitial: pageY,
+                xPrev: pageX,
+                yPrev: pageY,
+                down: true
+            }
+            this.setState(
+                this.props.onDown ? this.props.onDown(newProps) : newProps
+            )
+        }
+        handleMove = ({ pageX, pageY }) => {
+            const newProps = {
+                ...this.state,
+                x: pageX,
+                y: pageY,
+                xDelta: pageX - this.state.xInitial,
+                yDelta: pageY - this.state.yInitial,
+                xPrev: this.state.x,
+                yPrev: this.state.y,
+                xVelocity: pageX - this.state.x,
+                yVelocity: pageY - this.state.y
+            }
+            this.setState(
+                this.props.onMove ? this.props.onMove(newProps) : newProps,
+                () => (this._busy = false)
+            )
+        }
+        handleUp = () => {
+            const newProps = {
+                ...this.state,
+                down: false
+            }
+            this.setState(
+                this.props.onUp ? this.props.onUp(newProps) : newProps
+            )
         }
 
         render() {
@@ -41,7 +111,8 @@ const withGesture = Wrapped =>
                     onMouseDown={this.handleMouseDown}
                     onTouchStart={this.handleTouchStart}
                     style={{ display: 'contents', ...style }}
-                    className={className}>
+                    className={className}
+                >
                     <Wrapped {...props} {...this.state} />
                 </div>
             )
@@ -53,7 +124,7 @@ const Gesture = withGesture(
         render() {
             return this.props.children(this.props)
         }
-    },
+    }
 )
 
 export { withGesture, Gesture }
