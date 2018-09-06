@@ -4,11 +4,13 @@
     "description": "hoc for receiving gestures",
     "main": "dist/react-with-gesture",
     "module": "dist/react-with-gesture.es",
+    "typings": "./index.d.ts",
     "sideEffects": false,
     "scripts": {
         "prebuild": "rimraf dist",
         "build": "rollup -c",
-        "prepare": "npm run build"
+        "prepare": "npm run build",
+        "test:typings": "typings-tester --dir test/typescript"
     },
     "repository": {
         "type": "git",
@@ -34,6 +36,7 @@
         "@babel/preset-react": "7.0.0-beta.40",
         "@babel/preset-stage-2": "7.0.0-beta.40",
         "@babel/runtime": "7.0.0-beta.40",
+        "@types/react": "^16.4.9",
         "babel-core": "7.0.0-bridge.0",
         "babel-jest": "22.4.0",
         "babel-plugin-annotate-pure-calls": "0.3.0-beta.0",
@@ -42,7 +45,9 @@
         "react-dom": "16.2.0",
         "rimraf": "2.6.2",
         "rollup": "0.56.2",
-        "rollup-plugin-babel": "4.0.0-beta.2"
+        "rollup-plugin-babel": "4.0.0-beta.2",
+        "typescript": "^3.0.1",
+        "typings-tester": "^0.3.1"
     },
     "peerDependencies": {
         "prop-types": "15.x.x",
