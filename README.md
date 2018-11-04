@@ -1,5 +1,5 @@
     npm install react-with-gesture
-    
+
 Wraps a component into a div that receives MouseDown and TouchStart events, then captures movement until release.
 
 <p align="middle">
@@ -8,56 +8,77 @@ Wraps a component into a div that receives MouseDown and TouchStart events, then
 
 Demo: https://codesandbox.io/embed/jzn14k0ppy
 
-* `down`, true on mouse-down or finger-touch
-* `x/y`, screen coordinates
-* `xDelta/yDelta`, coordinates relative to initial coordinates, great for sliding/dragging gestures
-* `xInitial/yInitial`, coordinates of the first click/touch
+- `down`, true on mouse-down or finger-touch
+- `x/y`, screen coordinates
+- `xDelta/yDelta`, coordinates relative to initial coordinates, great for sliding/dragging gestures
+- `xInitial/yInitial`, coordinates of the first click/touch
+
+### Decorators
 
 ```jsx
-import { withGesture } from 'react-with-gesture'
+import { withGesture } from 'react-with-gesture'
 
 @withGesture
-class Something extends React.Component {
-    render() {
-        const { down, x, y, xDelta, yDelta, xInitial, yInitial } = this.props
-        return <div>Drag me! coordinates: {x}, {y}</div>
-    }
+export class App extends React.Component {
+  render() {
+    const { down, x, y, xDelta, yDelta, xInitial, yInitial } = this.props
+    return (
+      <div>
+        Drag me! coordinates: {x}, {y}
+      </div>
+    )
+  }
 }
 ```
 
-or ...
+### Higher order component
 
 ```jsx
-withGesture(
-    ({ down, x, y, xDelta, yDelta, xInitial, yInitial }) => 
-        <div>Drag me! coordinates: {x}, {y}</div>
-)
+class App extends React.Component {
+  render() {
+    const { down, x, y, xDelta, yDelta, xInitial, yInitial } = this.props
+    return (
+      <div>
+        Drag me! coordinates: {x}, {y}
+      </div>
+    )
+  }
+}
+
+export withGesture(App)
 ```
 
-or ...
-
+### Render props
 
 ```jsx
-import { Gesture } from 'react-with-gesture'
+import { Gesture } from 'react-with-gesture'
 
-class Something extends React.Component {
-    render() {
-        return (
-            <Gesture>
-                {({ down, x, y, xDelta, yDelta, xInitial, yInitial }) =>
-                    <div>Drag me! coordinates: {x}, {y}</div>
-                }
-            </Gesture>
-        )
-    }
+class App extends React.Component {
+  render() {
+    return (
+      <Gesture>
+        {({ down, x, y, xDelta, yDelta, xInitial, yInitial }) => (
+          <div>
+            Drag me! coordinates: {x}, {y}
+          </div>
+        )}
+      </Gesture>
+    )
+  }
 }
 ```
 
-or ...
+### Hooks
 
 ```jsx
 import { useSpring } from 'react-with-gesture'
 
-const [handlers, { down, x, y, xDelta, yDelta, xInitial, yInitial }] = useGesture()
-return <div {...handlers}>Drag me! coordinates: {x}, {y}</div>
+function App() {
+  const [handlers, { down, x, y, xDelta, yDelta, xInitial, yInitial }] = useGesture()
+  return (
+    <div {...handlers}>
+      Drag me! coordinates: {x}, {y}
+    </div>
+  )
+}
 ```
