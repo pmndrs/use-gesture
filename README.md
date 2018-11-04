@@ -56,6 +56,8 @@ class Something extends React.Component {
 or ...
 
 ```jsx
+import { useSpring } from 'react-with-gesture'
+
 const [handlers, { down, x, y, xDelta, yDelta, xInitial, yInitial }] = useGesture()
 return (
     <div {...handlers}>Drag me! coordinates: {x}, {y}</div>

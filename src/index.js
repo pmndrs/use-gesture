@@ -119,6 +119,7 @@ const Gesture = withGesture(
   },
 )
 
+// TODO: take care of code duplication before releasing 2.0
 function useGesture(ref) {
   const [state, set] = React.useState({
     x: 0,
