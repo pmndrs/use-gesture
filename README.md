@@ -13,7 +13,7 @@ Demo: https://codesandbox.io/embed/jzn14k0ppy
 - `xDelta/yDelta`, coordinates relative to initial coordinates, great for sliding/dragging gestures
 - `xInitial/yInitial`, coordinates of the first click/touch
 
-### Decorators
+### Decorated higher order component
 
 ```jsx
 import { withGesture } from 'react-with-gesture'
