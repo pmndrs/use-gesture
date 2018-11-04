@@ -52,3 +52,11 @@ class Something extends React.Component {
     }
 }
 ```
+
+or ...
+
+```jsx
+const [handlers, { down, x, y, xDelta, yDelta, xInitial, yInitial }] = useGesture()
+return (
+    <div {...handlers}>Drag me! coordinates: {x}, {y}</div>
+```
