@@ -102,10 +102,10 @@ const withGesture = Wrapped =>
 
     constructor(props) {
       super(props)
-      this.state = initialstate
+      this.state = initialState
       let set = this.setState.bind(this)
       if (props.transient) {
-        this._state = initialstate
+        this._state = initialState
         set = cb => (this._state = cb(this._state))
       }
       this.handlers = handlers(set, props)
