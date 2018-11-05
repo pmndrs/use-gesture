@@ -12,6 +12,8 @@ Demo: https://codesandbox.io/embed/jzn14k0ppy
 - `x/y`, screen coordinates
 - `xDelta/yDelta`, coordinates relative to initial coordinates, great for sliding/dragging gestures
 - `xInitial/yInitial`, coordinates of the first click/touch
+- `xVelocity/yVelocity`, flick velocity
+- `xPrev/yPrev`, coordinates of the previous frame
 
 ### Decorated higher order component
 
