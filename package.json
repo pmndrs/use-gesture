@@ -1,6 +1,6 @@
 {
     "name": "react-with-gesture",
-    "version": "2.0.1",
+    "version": "2.0.2",
     "description": "hoc for receiving gestures",
     "main": "dist/react-with-gesture",
     "module": "dist/react-with-gesture.es",
