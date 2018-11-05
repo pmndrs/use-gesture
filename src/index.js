@@ -20,7 +20,7 @@ function handlers(set, props) {
   const handleUp = () =>
     set(state => {
       const newProps = { ...state, down: false }
-      props.onUp && props.onUp(newProps)
+      props.onAction && props.onAction(newProps)
       return newProps
     })
   const handleDown = ({ pageX, pageY }) =>
@@ -39,7 +39,7 @@ function handlers(set, props) {
         yPrev: pageY,
         down: true,
       }
-      props.onDown && props.onDown(newProps)
+      props.onAction && props.onAction(newProps)
       return newProps
     })
   const handleMove = ({ pageX, pageY, movementX, movementY }) =>
@@ -55,7 +55,7 @@ function handlers(set, props) {
         xVelocity: movementX,
         yVelocity: movementY,
       }
-      props.onMove && props.onMove(newProps)
+      props.onAction && props.onAction(newProps)
       return newProps
     })
 
@@ -95,12 +95,8 @@ const withGesture = Wrapped =>
       /** When this holds true it will manage its state outside of React, in this case it will never ever
        cause a new render, clients have to rely on callbacks to get notified (onUp/Down/Move). */
       transient: PropTypes.bool,
-      /** Optional. Calls back on mouse-down or surface touched */
-      onDown: PropTypes.func,
-      /** Optional. Calls back on mouse-up or touch lifted */
-      onUp: PropTypes.func,
-      /** Optional. Calls back on mouse/touch move */
-      onMove: PropTypes.func,
+      /** Optional. Calls back on mouse or touch down/up/move */
+      onAction: PropTypes.func,
     }
     static defaultProps = { touch: true, mouse: true }
 
