@@ -71,7 +71,7 @@ class App extends React.Component {
 ### Hooks
 
 ```jsx
-import { useSpring } from 'react-with-gesture'
+import { useGesture } from 'react-with-gesture'
 
 function App() {
   const [handlers, { down, x, y, xDelta, yDelta, xInitial, yInitial }] = useGesture()
