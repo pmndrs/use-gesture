@@ -82,3 +82,11 @@ function App() {
   )
 }
 ```
+
+### Transient mode
+
+Provide the `transient` flag and it won't cause new render passes, instead you will be notified through the `onAction` callback. This works the same for Hoc's, render-props and hooks.
+
+```jsx
+const [handlers] = useGesture({ transient: true, onAction: e => console.log(e) })
+```
