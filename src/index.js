@@ -15,7 +15,7 @@ const initialState = {
   down: false,
 }
 
-function handlers(set, props) {
+function handlers(set, props = {}) {
   // Common handlers
   const handleUp = () =>
     set(state => {
