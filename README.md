@@ -91,4 +91,12 @@ Provide the `transient` flag and it won't cause new render passes, instead you w
 
 ```jsx
 const [handlers] = useGesture({ transient: true, onAction: e => console.log(e) })
+
+function BrokenCount() {
+  const [count, set] = useState(0)
+  // Will always remain 1, because "count" is stale ...
+  effect(() => void setInterval(() => set(count + 1), 1000), [])
+  return <div>{count}</div>
+}
+
 ```
