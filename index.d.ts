@@ -17,6 +17,11 @@ export interface GestureState {
 
 type GestureChildComponent<T> = React.ComponentType<T & Partial<GestureState>>;
 
+export interface GestureOptions {
+  transient?: boolean;
+  onAction?(action: GestureState): void;
+}
+
 export interface WithGestureProps {
     onUp?: (newProps: GestureState) => GestureState;
     onDown?: (newProps: GestureState) => GestureState;
@@ -24,6 +29,8 @@ export interface WithGestureProps {
 
     touch?: boolean;
     mouse?: boolean;
+
+    className?: string;
 }
 
 export interface GestureProps {
@@ -32,6 +39,11 @@ export interface GestureProps {
 
 export function withGesture<T>(
     WrappedComponent: GestureChildComponent<T>,
-): React.ComponentType<T & WithGestureProps>;
+): React.ComponentType<T & WithGestureProps & GestureOptions>;
 
-export class Gesture extends React.Component<GestureProps & WithGestureProps> {}
+export function useGesture(options?: GestureOptions): [{
+    onMouseDown: React.MouseEventHandler,
+    onTouchDown: React.TouchEventHandler
+}, GestureState];
+
+export class Gesture extends React.Component<GestureProps & WithGestureProps & GestureOptions> {}
