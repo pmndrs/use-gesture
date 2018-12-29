@@ -14,6 +14,7 @@ Demo: https://codesandbox.io/embed/jzn14k0ppy
 - `xInitial/yInitial`, coordinates of the first click/touch
 - `xVelocity/yVelocity`, flick velocity
 - `xPrev/yPrev`, coordinates of the previous frame
+- `target`, the dom element
 
 ### Decorated higher order component
 
@@ -76,9 +77,9 @@ class App extends React.Component {
 import { useGesture } from 'react-with-gesture'
 
 function App() {
-  const [handlers, { down, x, y, xDelta, yDelta, xInitial, yInitial }] = useGesture()
+  const [bind, { args, down, x, y, xDelta, yDelta, xInitial, yInitial }] = useGesture()
   return (
-    <div {...handlers}>
+    <div {...bind(/*arguments you pass here will be available under args*/)}>
       Drag me! coordinates: {x}, {y}
     </div>
   )
@@ -87,16 +88,8 @@ function App() {
 
 ### Transient mode
 
-Provide the `transient` flag and it won't cause new render passes, instead you will be notified through the `onAction` callback. This works the same for Hoc's, render-props and hooks.
+This won't cause new render passes, instead you will be notified through the callback. This works the same for Hoc's, render-props and hooks.
 
 ```jsx
-const [handlers] = useGesture({ transient: true, onAction: e => console.log(e) })
-
-function BrokenCount() {
-  const [count, set] = useState(0)
-  // Will always remain 1, because "count" is stale ...
-  effect(() => void setInterval(() => set(count + 1), 1000), [])
-  return <div>{count}</div>
-}
-
+const bind = useGesture(e => console.log(e))
 ```

@@ -2,6 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 const initialState = {
+  target: undefined,
+  args: undefined,
   x: 0,
   y: 0,
   xDelta: 0,
@@ -15,18 +17,20 @@ const initialState = {
   down: false,
 }
 
-function handlers(set, props = {}) {
+function handlers(set, props = {}, args) {
   // Common handlers
   const handleUp = () =>
     set(state => {
-      const newProps = { ...state, down: false }
+      const newProps = { ...state, target: undefined, down: false }
       props.onAction && props.onAction(newProps)
       return newProps
     })
-  const handleDown = ({ pageX, pageY }) =>
+  const handleDown = ({ target, pageX, pageY }) =>
     set(state => {
       const newProps = {
         ...state,
+        target,
+        args,
         x: pageX,
         y: pageY,
         xDelta: 0,
@@ -114,7 +118,10 @@ const withGesture = Wrapped =>
     render() {
       const { style, className, ...props } = this.props
       return (
-        <div {...this.handlers} style={{ display: 'contents', ...style }} className={className}>
+        <div
+          {...this.handlers}
+          style={{ display: 'contents', ...style }}
+          className={className}>
           <Wrapped {...props} {...this.state} />
         </div>
       )
@@ -126,16 +133,23 @@ const Gesture = withGesture(
     render() {
       return this.props.children(this.props)
     }
-  },
+  }
 )
 
 function useGesture(props) {
   const [state, set] = React.useState(initialState)
   const transientState = React.useRef(initialState)
+  if (typeof props === 'function') props = { transient: true, onAction: props }
   const [spread] = React.useState(() =>
-    handlers(props && props.transient ? cb => (transientState.current = cb(transientState.current)) : set, props),
+    (...args) => handlers(
+      props && props.transient
+        ? cb => (transientState.current = cb(transientState.current))
+        : set,
+      props,
+      args
+    )
   )
-  return [spread, state]
+  return props && props.transient ? spread : [spread, state]
 }
 
 export { withGesture, Gesture, useGesture }
