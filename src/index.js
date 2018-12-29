@@ -88,8 +88,8 @@ function handlers(set, props = {}, args) {
     handleUp()
   }
   return {
-    onMouseDown: handleMouseDown,
-    onTouchStart: handleTouchStart,
+    onMouseDown: props.mouse ? handleMouseDown : undefined,
+    onTouchStart: props.touch ? handleTouchStart : undefined,
   }
 }
 
