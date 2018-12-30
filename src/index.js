@@ -72,7 +72,7 @@ function handlers(set, props = {}, args) {
   const handleTouchMove = e => handleMove(e.touches[0])
   const handleTouchEnd = () => {
     window.removeEventListener('touchmove', handleTouchMove)
-    window.removeEventListener('touchend', handleMouseUp)
+    window.removeEventListener('touchend', handleTouchEnd)
     handleUp()
   }
 
@@ -136,12 +136,13 @@ const Gesture = withGesture(
   }
 )
 
-function useGesture(props) {
+function useGesture(props = { mouse: true, touch: true }) {
   const [state, set] = React.useState(initialState)
   const transientState = React.useRef(initialState)
-  if (typeof props === 'function') props = { transient: true, onAction: props }
-  const [spread] = React.useState(() =>
-    (...args) => handlers(
+  if (typeof props === 'function')
+    props = { transient: true, onAction: props, mouse: true, touch: true }
+  const [spread] = React.useState(() => (...args) =>
+    handlers(
       props && props.transient
         ? cb => (transientState.current = cb(transientState.current))
         : set,
