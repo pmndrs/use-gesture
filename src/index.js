@@ -1,9 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
+const defaultProps = { touch: true, mouse: true, passive: { passive: true } }
+
 const initialState = {
-  target: undefined,
+  event: undefined,
   args: undefined,
+  target: undefined,
   x: 0,
   y: 0,
   xDelta: 0,
@@ -25,10 +28,12 @@ function handlers(set, props = {}, args) {
       props.onAction && props.onAction(newProps)
       return newProps
     })
-  const handleDown = ({ target, pageX, pageY }) =>
+  const handleDown = event => {
+    const { target, pageX, pageY } = event
     set(state => {
       const newProps = {
         ...state,
+        event,
         target,
         args,
         x: pageX,
@@ -46,10 +51,13 @@ function handlers(set, props = {}, args) {
       props.onAction && props.onAction(newProps)
       return newProps
     })
-  const handleMove = ({ pageX, pageY, movementX, movementY }) =>
+  }
+  const handleMove = event => {
+    const { pageX, pageY, movementX, movementY } = event
     set(state => {
       const newProps = {
         ...state,
+        event,
         x: pageX,
         y: pageY,
         xDelta: pageX - state.xInitial,
@@ -62,11 +70,12 @@ function handlers(set, props = {}, args) {
       props.onAction && props.onAction(newProps)
       return newProps
     })
+  }
 
   // Touch handlers
   const handleTouchStart = e => {
-    window.addEventListener('touchmove', handleTouchMove)
-    window.addEventListener('touchend', handleTouchEnd)
+    window.addEventListener('touchmove', handleTouchMove, props.passive)
+    window.addEventListener('touchend', handleTouchEnd, props.passive)
     handleDown(e.touches[0])
   }
   const handleTouchMove = e => handleMove(e.touches[0])
@@ -78,8 +87,8 @@ function handlers(set, props = {}, args) {
 
   // Mouse handlers
   const handleMouseDown = e => {
-    window.addEventListener('mousemove', handleMove)
-    window.addEventListener('mouseup', handleMouseUp)
+    window.addEventListener('mousemove', handleMove, props.passive)
+    window.addEventListener('mouseup', handleMouseUp, props.passive)
     handleDown(e)
   }
   const handleMouseUp = () => {
@@ -101,8 +110,10 @@ const withGesture = Wrapped =>
       transient: PropTypes.bool,
       /** Optional. Calls back on mouse or touch down/up/move */
       onAction: PropTypes.func,
+      /** Optional. Event config */
+      passive: PropTypes.any,
     }
-    static defaultProps = { touch: true, mouse: true }
+    static defaultProps = defaultProps
 
     constructor(props) {
       super(props)
@@ -118,10 +129,7 @@ const withGesture = Wrapped =>
     render() {
       const { style, className, ...props } = this.props
       return (
-        <div
-          {...this.handlers}
-          style={{ display: 'contents', ...style }}
-          className={className}>
+        <div {...this.handlers} style={{ display: 'contents', ...style }} className={className}>
           <Wrapped {...props} {...this.state} />
         </div>
       )
@@ -133,22 +141,15 @@ const Gesture = withGesture(
     render() {
       return this.props.children(this.props)
     }
-  }
+  },
 )
 
-function useGesture(props = { mouse: true, touch: true }) {
+function useGesture(props = defaultProps) {
   const [state, set] = React.useState(initialState)
   const transientState = React.useRef(initialState)
-  if (typeof props === 'function')
-    props = { transient: true, onAction: props, mouse: true, touch: true }
+  if (typeof props === 'function') props = { transient: true, onAction: props, ...defaultProps }
   const [spread] = React.useState(() => (...args) =>
-    handlers(
-      props && props.transient
-        ? cb => (transientState.current = cb(transientState.current))
-        : set,
-      props,
-      args
-    )
+    handlers(props && props.transient ? cb => (transientState.current = cb(transientState.current)) : set, props, args),
   )
   return props && props.transient ? spread : [spread, state]
 }

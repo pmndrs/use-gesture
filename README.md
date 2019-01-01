@@ -15,6 +15,7 @@ Demo: https://codesandbox.io/embed/jzn14k0ppy
 - `xVelocity/yVelocity`, flick velocity
 - `xPrev/yPrev`, coordinates of the previous frame
 - `target`, the dom element
+- `event`, the event itself, in case you need to prevent defaults, etc.
 
 ### Decorated higher order component
 
