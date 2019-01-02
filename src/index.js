@@ -29,7 +29,7 @@ function handlers(set, props = {}, args) {
       return newProps
     })
   const handleDown = event => {
-    const { target, pageX, pageY } = event
+    const { target, pageX, pageY } = event.touches ? event.touches[0] : event
     set(state => {
       const newProps = {
         ...state,
@@ -53,7 +53,7 @@ function handlers(set, props = {}, args) {
     })
   }
   const handleMove = event => {
-    const { pageX, pageY, movementX, movementY } = event
+    const { pageX, pageY, movementX, movementY } = event.touches ? event.touches[0] : event
     set(state => {
       const newProps = {
         ...state,
@@ -76,9 +76,9 @@ function handlers(set, props = {}, args) {
   const handleTouchStart = e => {
     window.addEventListener('touchmove', handleTouchMove, props.passive)
     window.addEventListener('touchend', handleTouchEnd, props.passive)
-    handleDown(e.touches[0])
+    handleDown(e)
   }
-  const handleTouchMove = e => handleMove(e.touches[0])
+  const handleTouchMove = e => handleMove(e)
   const handleTouchEnd = () => {
     window.removeEventListener('touchmove', handleTouchMove)
     window.removeEventListener('touchend', handleTouchEnd)
