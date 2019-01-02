@@ -22,9 +22,9 @@ const initialState = {
 
 function handlers(set, props = {}, args) {
   // Common handlers
-  const handleUp = () =>
+  const handleUp = event =>
     set(state => {
-      const newProps = { ...state, target: undefined, down: false }
+      const newProps = { ...state, event, target: undefined, down: false }
       props.onAction && props.onAction(newProps)
       return newProps
     })
@@ -79,10 +79,10 @@ function handlers(set, props = {}, args) {
     handleDown(e.touches[0])
   }
   const handleTouchMove = e => handleMove(e.touches[0])
-  const handleTouchEnd = () => {
+  const handleTouchEnd = e => {
     window.removeEventListener('touchmove', handleTouchMove)
     window.removeEventListener('touchend', handleTouchEnd)
-    handleUp()
+    handleUp(e)
   }
 
   // Mouse handlers
@@ -91,10 +91,10 @@ function handlers(set, props = {}, args) {
     window.addEventListener('mouseup', handleMouseUp, props.passive)
     handleDown(e)
   }
-  const handleMouseUp = () => {
+  const handleMouseUp = e => {
     window.removeEventListener('mousemove', handleMove)
     window.removeEventListener('mouseup', handleMouseUp)
-    handleUp()
+    handleUp(e)
   }
   return {
     onMouseDown: props.mouse ? handleMouseDown : undefined,
@@ -123,7 +123,8 @@ const withGesture = Wrapped =>
         this._state = initialState
         set = cb => (this._state = cb(this._state))
       }
-      this.handlers = handlers(set, props)
+      const syncSet = fn => set(fn(this._state))
+      this.handlers = handlers(syncSet, props)
     }
 
     render() {
@@ -147,9 +148,10 @@ const Gesture = withGesture(
 function useGesture(props = defaultProps) {
   const [state, set] = React.useState(initialState)
   const transientState = React.useRef(initialState)
+  const syncSet = fn => set(fn(state))
   if (typeof props === 'function') props = { transient: true, onAction: props, ...defaultProps }
   const [spread] = React.useState(() => (...args) =>
-    handlers(props && props.transient ? cb => (transientState.current = cb(transientState.current)) : set, props, args),
+    handlers(props && props.transient ? cb => (transientState.current = cb(transientState.current)) : syncSet, props, args),
   )
   return props && props.transient ? spread : [spread, state]
 }
