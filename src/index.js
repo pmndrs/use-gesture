@@ -2,73 +2,93 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 const defaultProps = { touch: true, mouse: true, passive: { passive: true } }
-
 const initialState = {
   event: undefined,
   args: undefined,
+  temp: undefined,
   target: undefined,
-  x: 0,
-  y: 0,
-  xDelta: 0,
-  yDelta: 0,
-  xInitial: 0,
-  yInitial: 0,
-  xPrev: 0,
-  yPrev: 0,
-  xVelocity: 0,
-  yVelocity: 0,
+  time: undefined,
+  xy: [0, 0],
+  delta: [0, 0],
+  initial: [0, 0],
+  previous: [0, 0],
+  direction: [0, 0],
+  local: [0, 0],
+  lastLocal: [0, 0],
+  velocity: 0,
+  distance: 0,
   down: false,
+  first: true
 }
 
 function handlers(set, props = {}, args) {
   // Common handlers
   const handleUp = () =>
     set(state => {
-      const newProps = { ...state, target: undefined, down: false }
-      props.onAction && props.onAction(newProps)
-      return newProps
+      const newProps = { ...state, down: false, first: false }
+      const temp = props.onAction && props.onAction(newProps)
+      return {
+        ...newProps,
+        lastLocal: state.local,
+        temp: temp || newProps.temp
+      }
     })
   const handleDown = event => {
     const { target, pageX, pageY } = event
     set(state => {
+      const lastLocal = state.lastLocal || initialState.lastLocal
       const newProps = {
-        ...state,
+        ...initialState,
         event,
         target,
         args,
-        x: pageX,
-        y: pageY,
-        xDelta: 0,
-        yDelta: 0,
-        xVelocity: 0,
-        yVelocity: 0,
-        xInitial: pageX,
-        yInitial: pageY,
-        xPrev: pageX,
-        yPrev: pageY,
+        lastLocal,
+        local: lastLocal,
+        xy: [pageX, pageY],
+        initial: [pageX, pageY],
+        previous: [pageX, pageY],
         down: true,
+        time: Date.now(),
+        cancel: () => {
+          window.removeEventListener('touchmove', handleTouchMove)
+          window.removeEventListener('touchend', handleTouchEnd)
+          window.removeEventListener('mousemove', handleMove)
+          window.removeEventListener('mouseup', handleMouseUp)
+          requestAnimationFrame(() => handleUp())
+        }
       }
-      props.onAction && props.onAction(newProps)
-      return newProps
+      const temp = props.onAction && props.onAction(newProps)
+      return { ...newProps, temp }
     })
   }
   const handleMove = event => {
-    const { pageX, pageY, movementX, movementY } = event
+    const { pageX, pageY } = event
     set(state => {
+      const time = Date.now()
+      const x_dist = pageX - state.xy[0]
+      const y_dist = pageY - state.xy[1]
+      const delta_x = pageX - state.initial[0]
+      const delta_y = pageY - state.initial[1]
+      const dx = pageX - state.initial[0]
+      const dy = pageY - state.initial[1]
+      const distance = Math.sqrt(dx * dx + dy * dy)
+      const len = Math.sqrt(x_dist * x_dist + y_dist * y_dist)
+      const scalar = 1 / (len || 1)
       const newProps = {
         ...state,
         event,
-        x: pageX,
-        y: pageY,
-        xDelta: pageX - state.xInitial,
-        yDelta: pageY - state.yInitial,
-        xPrev: state.x,
-        yPrev: state.y,
-        xVelocity: movementX,
-        yVelocity: movementY,
+        time,
+        xy: [pageX, pageY],
+        delta: [delta_x, delta_y],
+        local: [state.lastLocal[0] + pageX - state.initial[0], state.lastLocal[1] + pageY - state.initial[1]],
+        velocity: len / (time - state.time),
+        distance,
+        direction: [x_dist * scalar, y_dist * scalar],
+        previous: state.xy,
+        first: false
       }
-      props.onAction && props.onAction(newProps)
-      return newProps
+      const temp = props.onAction && props.onAction(newProps)
+      return { ...newProps, temp: temp || newProps.temp }
     })
   }
 
@@ -98,60 +118,58 @@ function handlers(set, props = {}, args) {
   }
   return {
     onMouseDown: props.mouse ? handleMouseDown : undefined,
-    onTouchStart: props.touch ? handleTouchStart : undefined,
+    onTouchStart: props.touch ? handleTouchStart : undefined
   }
 }
 
-const withGesture = Wrapped =>
-  class extends React.Component {
-    static propTypes = {
-      /** When this holds true it will manage its state outside of React, in this case it will never ever
-       cause a new render, clients have to rely on callbacks to get notified (onUp/Down/Move). */
-      transient: PropTypes.bool,
-      /** Optional. Calls back on mouse or touch down/up/move */
-      onAction: PropTypes.func,
-      /** Optional. Event config */
-      passive: PropTypes.any,
-    }
-    static defaultProps = defaultProps
+class Gesture extends React.Component {
+  static propTypes = {
+    /** Optional. Accept mouse input, true by default */
+    mouse: PropTypes.bool,
+    /** Optional. Accept touch input, true by default */
+    touch: PropTypes.bool,
+    /** Optional. Calls back on mouse or touch down/up/move. When this is given it will manage state outside of React,
+     * in this case it will never cause a new render, clients have to rely on callbacks to get notified. */
+    onAction: PropTypes.func,
+    /** Optional. addEventListener 3rd arg config, { passive: true } by default, should be false if you plan to call event.preventDefault() or event.stopPropagation() */
+    passive: PropTypes.any
+  }
+  static defaultProps = defaultProps
 
-    constructor(props) {
-      super(props)
-      this.state = initialState
-      let set = this.setState.bind(this)
-      if (props.transient) {
-        this._state = initialState
-        set = cb => (this._state = cb(this._state))
-      }
-      this.handlers = handlers(set, props)
+  constructor(props) {
+    super(props)
+    this.state = initialState
+    let set = this.setState.bind(this)
+    if (props.onAction) {
+      this._state = initialState
+      set = cb => (this._state = cb(this._state))
     }
-
-    render() {
-      const { style, className, ...props } = this.props
-      return (
-        <div {...this.handlers} style={{ display: 'contents', ...style }} className={className}>
-          <Wrapped {...props} {...this.state} />
-        </div>
-      )
-    }
+    this.handlers = handlers(set, props)
   }
 
-const Gesture = withGesture(
-  class extends React.PureComponent {
-    render() {
-      return this.props.children(this.props)
-    }
-  },
+  render() {
+    const { style, children, className } = this.props
+    return (
+      <div {...this.handlers} style={{ display: 'contents', ...style }} className={className}>
+        {children(this.state)}
+      </div>
+    )
+  }
+}
+
+const withGesture = config => Wrapped => props => (
+  <Gesture {...config} children={gestureProps => <Wrapped {...props} {...gestureProps} />} />
 )
 
-function useGesture(props = defaultProps) {
+function useGesture(props) {
   const [state, set] = React.useState(initialState)
   const transientState = React.useRef(initialState)
-  if (typeof props === 'function') props = { transient: true, onAction: props, ...defaultProps }
+  if (typeof props === 'function') props = { onAction: props }
+  props = { ...defaultProps, ...props }
   const [spread] = React.useState(() => (...args) =>
-    handlers(props && props.transient ? cb => (transientState.current = cb(transientState.current)) : set, props, args),
+    handlers(props.onAction ? cb => (transientState.current = cb(transientState.current)) : set, props, args)
   )
-  return props && props.transient ? spread : [spread, state]
+  return props.onAction ? spread : [spread, state]
 }
 
 export { withGesture, Gesture, useGesture }
