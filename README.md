@@ -58,8 +58,7 @@ class extends React.Component {
   touch: true,                  // accept mouse input
   mouse: true,                  // accept touch input
   passive: { passive: true },   // event handler 3rd argument input, passive by default
-  onAction: undefined           // if you define onAction: event => eventHandler react-with-gesture
-                                // will not render changes through React any longer
+  onAction: undefined           // event => eventHandler, to respond to events outside Reacts render cycle
 }
 ```
 
