@@ -9,7 +9,7 @@
 
 React-with-gesture is a small utility that lets you bind enriched mouse and touch events to any component or view. It calculates initial position, deltas, velocity, direction, distance, etc. With this data it becomes trivial to set up even complex gesture controls with just a few lines of code.
     
-You can use it stand-alone, but to make the most of it you should combine it with a animation library, preferrably [react-spring](https://github.com/react-spring/react-spring).
+You can use it stand-alone, but to make the most of it you should combine it with a animation library, preferrably [react-spring](https://github.com/react-spring/react-spring) (nothing complements gestures better than physics-based springs).
 
 ### Demos
 
