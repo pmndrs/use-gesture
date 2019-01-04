@@ -23,7 +23,7 @@ Slider: https://codesandbox.io/embed/zrj66y8714
 
 ### Api
 
-The api is straight forward. You bind handlers to your view, and you will receive events when the user is clicking/dragging/pulling/releasing them.
+The api is straight forward. You bind handlers to your view, and you will receive events when the user is clicking/dragging/pulling/releasing them. You can use React hooks, render-props or higher-order-components.
 
 ```js
 // Full config with event handler
