@@ -7,9 +7,9 @@
     
     import { useGesture, withGesture, Gesture } from 'react-with-gesture'
 
-Ever thought about doing that sidebar pull-out, or a view pager, and some slider, any gesture on the web basically, and dropped the idea b/c it's way too hard? In that case, this is your lib. 
+Ever thought about doing that sidebar pull-out, or a view pager, some slider, any gesture on the web basically, and dropped the idea because it's way too hard? In that case, this is your lib. 
 
-React-with-gesture is a small utility that lets you bind enriched mouse and touch events to any component or view. It calculates initial position, deltas, velocity, direction, distance, etc. With this data it becomes trivial to set up even complex gesture controls with just a few lines of code.
+React-with-gesture is a small utility that lets you bind richer mouse and touch events to any component or view. It calculates initial position, deltas, velocity, direction, distance, etc. With this data it becomes trivial to set up even complex gesture controls with just a few lines of code.
     
 You can use it stand-alone, but to make the most of it you should combine it with a animation library, preferrably [react-spring](https://github.com/react-spring/react-spring) (nothing complements gestures better than physics-based springs).
 
@@ -22,6 +22,8 @@ Draggable list: https://codesandbox.io/embed/r5qmj8m6lq
 Slider: https://codesandbox.io/embed/zrj66y8714
 
 ### Api
+
+The api is straight forward. You bind handlers to your view, and you will receive events when the user is clicking/dragging/pulling/releasing them.
 
 ```js
 // Short cut with event handler
