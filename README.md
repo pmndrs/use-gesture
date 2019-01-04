@@ -7,7 +7,7 @@
     
     import { useGesture, withGesture, Gesture } from 'react-with-gesture'
 
-Ever though about doing that sidebar pull-out, or a view pager, and some slider, any gesture on the web basically, and dropped the idea b/c it's way too hard? In that case, this is your lib. 
+Ever thought about doing that sidebar pull-out, or a view pager, and some slider, any gesture on the web basically, and dropped the idea b/c it's way too hard? In that case, this is your lib. 
 
 React-with-gesture is a small utility that lets you bind enriched mouse and touch events to any component or view. It calculates initial position, deltas, velocity, direction, distance, etc. With this data it becomes trivial to set up even complex gesture controls with just a few lines of code.
     
