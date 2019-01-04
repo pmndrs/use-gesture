@@ -43,7 +43,7 @@ return <div {...bind(optionalArgs)} />
   {event => <div />}
 </Gesture>
 
-// HOC
+// HOC with decorator
 @withGesture(config)
 class extends React.Component {
   render() {
@@ -51,6 +51,9 @@ class extends React.Component {
     return <div />
   }
 }
+
+// Plain standard HOC
+withGesture(config)(Component)
 ```
 
 ### Config
