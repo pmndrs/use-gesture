@@ -9,7 +9,7 @@
 
 Ever thought about doing that sidebar pull-out, or a view pager, some slider, any gesture on the web basically, and dropped the idea because it's way too hard? In that case, this is your lib. The attempt was to gather the right amount of data needed to make even complex interaction possible without ending up either in complex math-, or implicit magic-hell.
 
-React-with-gesture is a small utility that lets you bind richer mouse and touch events to any component or view. It calculates initial position, deltas, velocity, direction, distance, etc. With this data it becomes trivial to set up even complex gesture controls with just a few lines of code.
+React-with-gesture is a small utility that lets you bind richer mouse and touch events to any component or view. It calculates initial position, deltas, velocity, direction, distance, etc. With this data it becomes trivial to set up gesture controls, and often takes no more than a few lines of code.
     
 You can use it stand-alone, but to make the most of it you should combine it with a animation library, preferrably [react-spring](https://github.com/react-spring/react-spring) (nothing complements gestures better than physics-based springs).
 
