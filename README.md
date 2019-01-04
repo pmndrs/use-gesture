@@ -83,7 +83,7 @@ Alternatively you can supply a function, which becomes `onAction` with defaults.
   down,                         // mouse / touch down
   first,                        // marks first event (mouse / touch down)
   args,                         // arguments optionally passed to bind(a,b,c,d,..)
-  temp,                         // arguments optionally returns by the onAction
+  temp,                         // arguments optionally returned by onActions eventHandler
 }
 ```
 
