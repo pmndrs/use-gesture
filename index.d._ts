@@ -1,3 +1,5 @@
+// Needs overhaul
+
 import * as React from 'react';
 
 export interface GestureState {

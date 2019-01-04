@@ -69,9 +69,6 @@ function handlers(set, props = {}, args) {
       const y_dist = pageY - state.xy[1]
       const delta_x = pageX - state.initial[0]
       const delta_y = pageY - state.initial[1]
-      const dx = pageX - state.initial[0]
-      const dy = pageY - state.initial[1]
-      const distance = Math.sqrt(dx * dx + dy * dy)
       const len = Math.sqrt(x_dist * x_dist + y_dist * y_dist)
       const scalar = 1 / (len || 1)
       const newProps = {
@@ -82,7 +79,7 @@ function handlers(set, props = {}, args) {
         delta: [delta_x, delta_y],
         local: [state.lastLocal[0] + pageX - state.initial[0], state.lastLocal[1] + pageY - state.initial[1]],
         velocity: len / (time - state.time),
-        distance,
+        distance: len,
         direction: [x_dist * scalar, y_dist * scalar],
         previous: state.xy,
         first: false
