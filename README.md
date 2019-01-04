@@ -21,20 +21,6 @@ Draggable list: https://codesandbox.io/embed/r5qmj8m6lq
 
 Slider: https://codesandbox.io/embed/zrj66y8714
 
-### Config
-
-```
-{ 
-  touch: true,                  // accept mouse input
-  mouse: true,                  // accept touch input
-  passive: { passive: true },   // event handler 3rd argument input, passive by default
-  onAction: undefined           // if you define onAction: event => eventHandler react-with-gesture
-                                // will not render changes through React any longer
-}
-```
-
-Alternatively you can supply a function, which becomes `onAction` with defaults.
-
 ### Api
 
 ```js
@@ -64,6 +50,20 @@ class extends React.Component {
   }
 }
 ```
+
+### Config
+
+```
+{ 
+  touch: true,                  // accept mouse input
+  mouse: true,                  // accept touch input
+  passive: { passive: true },   // event handler 3rd argument input, passive by default
+  onAction: undefined           // if you define onAction: event => eventHandler react-with-gesture
+                                // will not render changes through React any longer
+}
+```
+
+Alternatively you can supply a function, which becomes `onAction` with defaults.
 
 ### Event data
 
