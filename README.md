@@ -26,15 +26,15 @@ Slider: https://codesandbox.io/embed/zrj66y8714
 The api is straight forward. You bind handlers to your view, and you will receive events when the user is clicking/dragging/pulling/releasing them.
 
 ```js
-// Short cut with event handler
-const bind = useGesture(event => eventHandler)
-return <div {...bind(optionalArgs)} />
-
 // Full config with event handler
 const bind = useGesture({ onAction: event => eventHandler, ...config })
 return <div {...bind(optionalArgs)} />
 
-// No event handler (will re-render the component on event changes)
+// Short cut with event handler (becomes onAction + default config)
+const bind = useGesture(event => eventHandler)
+return <div {...bind(optionalArgs)} />
+
+// No event handler (will re-render the component on event changes with fresh props)
 const [bind, props] = useGesture()
 return <div {...bind(optionalArgs)} />
 
@@ -63,8 +63,6 @@ class extends React.Component {
   onAction: undefined           // event => eventHandler, respond to events outside Reacts render cycle
 }
 ```
-
-Alternatively you can supply a function, which becomes `onAction` with defaults.
 
 ### Event data
 
