@@ -129,7 +129,7 @@ return (
 
 Demo: https://codesandbox.io/embed/zq19y1xr9m
 
-This demo reads out further data like velocity and direction to calculate decay.
+This demo reads out further data like velocity and direction to calculate decay. `temp` in this case is a simple storage that picks up whatever value you (optionally) return inside the event handler. It's valid as long as the gesture is active. Without this you would need to store the initial xy value somewhere else and conditionally update it when the gesture begins.
 
 ```jsx
 const [{ xy }, set] = useSpring(() => ({ xy: [0, 0] }))
