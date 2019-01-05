@@ -97,7 +97,7 @@ withGesture(config)(Component)
 
 Demo: https://codesandbox.io/embed/l2wy87l28l
 
-In this example we use useGesture's default syntax, where each change ends up re-rendering the component so that we get fresh props that we simply stick into the view. In this case we fetch `local` off the gesture evnt, which keeps track of delta positions after release, so we never have to read out the dom for positioning of the dom node.
+In this example we use useGesture's default syntax, where each change ends up re-rendering the component so that we get fresh props that we simply stick into the view. In this case we fetch `local` off the gesture evnt, which keeps track of delta positions after release. Deltas are especially important in this lib, becuase they make it possible to use transitions for positioning, instead of doing complex getBoundingClientRect() calculations to figure out where a node went on the screen.
 
 ```jsx
 const [bind, { local: [x, y] }] = useGesture()
