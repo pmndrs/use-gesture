@@ -97,6 +97,8 @@ withGesture(config)(Component)
 
 Demo: https://codesandbox.io/embed/l2wy87l28l
 
+In this example we use useGesture's default syntax, where each change ends up re-rendering the component so that we get fresh props that we simply stick into the view. In this case we fetch `local` off the gesture evnt, which keeps track of delta positions after release, so we never have to read out the dom for positioning of the dom node.
+
 ```jsx
 const [bind, { local: [x, y] }] = useGesture()
 return <div {...bind()} style={{ transform: `translate3d(${x}px,${y}px,0)` }} />
@@ -107,6 +109,8 @@ return <div {...bind()} style={{ transform: `translate3d(${x}px,${y}px,0)` }} />
 <img src="https://i.imgur.com/KDeJBqp.gif" width="195"/>
 
 Demo: https://codesandbox.io/embed/r24mzvo3q
+
+Re-rendering on every event can be taxing, but it can be avoided. If you are using an animation lib that can update the view outside of React (for instance react-spring or animated), then you can use the onAction syntax, which gives you a callback in which you receive events. 
 
 ```jsx
 const [{ xy }, set] = useSpring(() => ({ xy: [0, 0] }))
@@ -124,6 +128,8 @@ return (
 <img src="https://i.imgur.com/JyeQsEI.gif" width="195"/>
 
 Demo: https://codesandbox.io/embed/zq19y1xr9m
+
+This demo reads out further data like velocity and direction to calculate decay.
 
 ```jsx
 const [{ xy }, set] = useSpring(() => ({ xy: [0, 0] }))
