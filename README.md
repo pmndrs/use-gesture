@@ -11,7 +11,7 @@ Ever thought about doing that sidebar pull-out, or a view pager, some slider, an
 
 React-with-gesture is a small utility that lets you bind richer, captured mouse and touch events to any component or view. It calculates initial position, deltas, velocity, direction, distance, etc. With this data it becomes trivial to set up gesture controls, and often takes no more than a few lines of code.
     
-You can use it stand-alone, but to make the most of it you should combine it with a animation library, preferrably [react-spring](https://github.com/react-spring/react-spring) (nothing complements gestures better than physics-based springs).
+You can use it stand-alone, but to make the most of it you should combine it with a animation library, preferably [react-spring](https://github.com/react-spring/react-spring) (nothing complements gestures better than physics-based springs).
 
 ### Demos
 
@@ -97,7 +97,7 @@ withGesture(config)(Component)
 
 Demo: https://codesandbox.io/embed/l2wy87l28l
 
-In this example we use useGesture's default syntax, where each change ends up re-rendering the component so that we get fresh props that we simply stick into the view. In this case we fetch `local` off the gesture event, which keeps track of delta positions after release. Deltas are especially important in this lib, becuase they make it possible to use transitions for positioning, instead of doing complex getBoundingClientRect() calculations to figure out where a node went on the screen.
+In this example we use useGesture's default syntax, where each change ends up re-rendering the component so that we get fresh props that we simply stick into the view. In this case we fetch `local` off the gesture event, which keeps track of delta positions after release. Deltas are especially important in this lib, because they make it possible to use transitions for positioning, instead of doing complex getBoundingClientRect() calculations to figure out where a node went on the screen.
 
 ```jsx
 const [bind, { local: [x, y] }] = useGesture()
