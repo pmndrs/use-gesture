@@ -1,6 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
+const touchMove = 'touchmove'
+const touchEnd = 'touchend'
+const mouseMove = 'mousemove'
+const mouseUp = 'mouseup'
 const defaultProps = { touch: true, mouse: true, passive: { passive: true } }
 const initialState = {
   event: undefined,
@@ -18,7 +22,7 @@ const initialState = {
   velocity: 0,
   distance: 0,
   down: false,
-  first: true
+  first: true,
 }
 
 function handlers(set, props = {}, args) {
@@ -30,7 +34,7 @@ function handlers(set, props = {}, args) {
       return {
         ...newProps,
         lastLocal: state.local,
-        temp: temp || newProps.temp
+        temp: temp || newProps.temp,
       }
     })
   const handleDown = event => {
@@ -50,12 +54,10 @@ function handlers(set, props = {}, args) {
         down: true,
         time: Date.now(),
         cancel: () => {
-          window.removeEventListener('touchmove', handleTouchMove)
-          window.removeEventListener('touchend', handleTouchEnd)
-          window.removeEventListener('mousemove', handleMove)
-          window.removeEventListener('mouseup', handleMouseUp)
+          handleTouchEnd(null)
+          handleMouseUp(null)
           requestAnimationFrame(() => handleUp())
-        }
+        },
       }
       const temp = props.onAction && props.onAction(newProps)
       return { ...newProps, temp }
@@ -69,6 +71,7 @@ function handlers(set, props = {}, args) {
       const y_dist = pageY - state.xy[1]
       const delta_x = pageX - state.initial[0]
       const delta_y = pageY - state.initial[1]
+      const distance = Math.sqrt(delta_x * delta_x + delta_y * delta_y)
       const len = Math.sqrt(x_dist * x_dist + y_dist * y_dist)
       const scalar = 1 / (len || 1)
       const newProps = {
@@ -79,10 +82,10 @@ function handlers(set, props = {}, args) {
         delta: [delta_x, delta_y],
         local: [state.lastLocal[0] + pageX - state.initial[0], state.lastLocal[1] + pageY - state.initial[1]],
         velocity: len / (time - state.time),
-        distance: len,
+        distance: distance,
         direction: [x_dist * scalar, y_dist * scalar],
         previous: state.xy,
-        first: false
+        first: false,
       }
       const temp = props.onAction && props.onAction(newProps)
       return { ...newProps, temp: temp || newProps.temp }
@@ -91,31 +94,31 @@ function handlers(set, props = {}, args) {
 
   // Touch handlers
   const handleTouchStart = e => {
-    window.addEventListener('touchmove', handleTouchMove, props.passive)
-    window.addEventListener('touchend', handleTouchEnd, props.passive)
+    window.addEventListener(touchMove, handleTouchMove, props.passive)
+    window.addEventListener(touchEnd, handleTouchEnd, props.passive)
     handleDown(e.touches[0])
   }
   const handleTouchMove = e => handleMove(e.touches[0])
-  const handleTouchEnd = () => {
-    window.removeEventListener('touchmove', handleTouchMove)
-    window.removeEventListener('touchend', handleTouchEnd)
-    handleUp()
+  const handleTouchEnd = e => {
+    window.removeEventListener(touchMove, handleTouchMove)
+    window.removeEventListener(touchEnd, handleTouchEnd)
+    if (e !== null) handleUp()
   }
 
   // Mouse handlers
   const handleMouseDown = e => {
-    window.addEventListener('mousemove', handleMove, props.passive)
-    window.addEventListener('mouseup', handleMouseUp, props.passive)
+    window.addEventListener(mouseMove, handleMove, props.passive)
+    window.addEventListener(mouseUp, handleMouseUp, props.passive)
     handleDown(e)
   }
-  const handleMouseUp = () => {
-    window.removeEventListener('mousemove', handleMove)
-    window.removeEventListener('mouseup', handleMouseUp)
-    handleUp()
+  const handleMouseUp = e => {
+    window.removeEventListener(mouseMove, handleMove)
+    window.removeEventListener(mouseUp, handleMouseUp)
+    if (e !== null) handleUp()
   }
   return {
     onMouseDown: props.mouse ? handleMouseDown : undefined,
-    onTouchStart: props.touch ? handleTouchStart : undefined
+    onTouchStart: props.touch ? handleTouchStart : undefined,
   }
 }
 
@@ -129,7 +132,7 @@ class Gesture extends React.Component {
      * in this case it will never cause a new render, clients have to rely on callbacks to get notified. */
     onAction: PropTypes.func,
     /** Optional. addEventListener 3rd arg config, { passive: true } by default, should be false if you plan to call event.preventDefault() or event.stopPropagation() */
-    passive: PropTypes.any
+    passive: PropTypes.any,
   }
   static defaultProps = defaultProps
 
@@ -164,7 +167,7 @@ function useGesture(props) {
   if (typeof props === 'function') props = { onAction: props }
   props = { ...defaultProps, ...props }
   const [spread] = React.useState(() => (...args) =>
-    handlers(props.onAction ? cb => (transientState.current = cb(transientState.current)) : set, props, args)
+    handlers(props.onAction ? cb => (transientState.current = cb(transientState.current)) : set, props, args),
   )
   return props.onAction ? spread : [spread, state]
 }
