@@ -9,7 +9,7 @@
 
 Ever thought about doing that sidebar pull-out, or a view pager, some slider, any gesture on the web basically, and dropped the idea because it's way too hard? In that case, this is your lib. The attempt was to gather the right amount of data needed to make even complex interaction possible without ending up either in complex math-, or implicit magic-hell.
 
-React-with-gesture is a small utility that lets you bind richer mouse and touch events to any component or view. It calculates initial position, deltas, velocity, direction, distance, etc. With this data it becomes trivial to set up gesture controls, and often takes no more than a few lines of code.
+React-with-gesture is a small utility that lets you bind richer, captured mouse and touch events to any component or view. It calculates initial position, deltas, velocity, direction, distance, etc. With this data it becomes trivial to set up gesture controls, and often takes no more than a few lines of code.
     
 You can use it stand-alone, but to make the most of it you should combine it with a animation library, preferrably [react-spring](https://github.com/react-spring/react-spring) (nothing complements gestures better than physics-based springs).
 
@@ -97,6 +97,8 @@ withGesture(config)(Component)
 
 Demo: https://codesandbox.io/embed/l2wy87l28l
 
+In this example we use useGesture's default syntax, where each change ends up re-rendering the component so that we get fresh props that we simply stick into the view. In this case we fetch `local` off the gesture event, which keeps track of delta positions after release. Deltas are especially important in this lib, becuase they make it possible to use transitions for positioning, instead of doing complex getBoundingClientRect() calculations to figure out where a node went on the screen.
+
 ```jsx
 const [bind, { local: [x, y] }] = useGesture()
 return <div {...bind()} style={{ transform: `translate3d(${x}px,${y}px,0)` }} />
@@ -107,6 +109,8 @@ return <div {...bind()} style={{ transform: `translate3d(${x}px,${y}px,0)` }} />
 <img src="https://i.imgur.com/KDeJBqp.gif" width="195"/>
 
 Demo: https://codesandbox.io/embed/r24mzvo3q
+
+Re-rendering on every event can be taxing, but it can be avoided. If you are using an animation lib that can update the view outside of React (for instance react-spring or animated), then you can use the onAction syntax, which gives you a callback in which you receive events. 
 
 ```jsx
 const [{ xy }, set] = useSpring(() => ({ xy: [0, 0] }))
@@ -124,6 +128,8 @@ return (
 <img src="https://i.imgur.com/JyeQsEI.gif" width="195"/>
 
 Demo: https://codesandbox.io/embed/zq19y1xr9m
+
+This demo reads out further data like velocity and direction to calculate decay. `temp` in this case is a simple storage that picks up whatever value you (optionally) return inside the event handler. It's valid as long as the gesture is active. Without this you would need to store the initial xy value somewhere else and conditionally update it when the gesture begins.
 
 ```jsx
 const [{ xy }, set] = useSpring(() => ({ xy: [0, 0] }))
