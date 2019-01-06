@@ -6,7 +6,7 @@
   <a href="https://codesandbox.io/embed/r5qmj8m6lq"><img src="https://i.imgur.com/ifdCBvG.gif" width="150"/></a>
 </p>
 <p align="middle">
-  These are real demos, click them
+  <i>These demos are real, click them!</i>
 </p>
 
 ```
