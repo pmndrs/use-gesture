@@ -1,5 +1,3 @@
-    npm install react-with-gesture
-
 <p align="middle">
   <a href="https://codesandbox.io/embed/n9vo1my91p"><img src="https://i.imgur.com/tg1mN1F.gif" width="655"/></a>
 </p>
@@ -11,11 +9,15 @@
   These are real demos, click them
 </p>
 
-Ever thought about doing that sidebar pull-out, or a view pager, some slider, any gesture on the web basically, and dropped the idea because it's way too hard? In that case, this is your lib. The attempt was to gather the right amount of data needed to make even complex interaction possible without ending up either in complex math-, or implicit magic-hell.
+```
+npm install react-with-gesture
+```
 
-React-with-gesture is a small utility that lets you bind richer, captured mouse and touch events to any component or view. It calculates initial position, deltas, velocity, direction, distance, etc. With this data it becomes trivial to set up gesture controls, and often takes no more than a few lines of code.
+Ever thought about doing that sidebar pull-out, a view pager, some slider, any gesture on the web basically, and dropped the idea because it's too hard? In that case, this is your lib.
+
+React-with-gesture is a small utility that lets you bind richer mouse and touch events to any component or view. With the data you receive it becomes trivial to set up gestures, and often takes no more than a few lines of code.
     
-You can use it stand-alone, but to make the most of it you should combine it with a animation library, preferably [react-spring](https://github.com/react-spring/react-spring) (nothing complements gestures better than physics-based springs).
+You can use it stand-alone, but to make the most of it you should combine it with an animation library like [react-spring](https://github.com/react-spring/react-spring), though you can most certainly use any other.
 
 ### Api
 
