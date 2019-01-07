@@ -40,12 +40,12 @@ return <div {...bind(optionalArgs)} />
 const [bind, props] = useGesture()
 return <div {...bind(optionalArgs)} />
 
-// Render props
+/* -------------------------- Render-props and Higher-order-components -------------------------- */
+
 <Gesture {...config}>
   {event => <div />}
 </Gesture>
 
-// HOC with decorator
 @withGesture(config)
 class extends React.Component {
   render() {
@@ -54,7 +54,6 @@ class extends React.Component {
   }
 }
 
-// Plain standard HOC
 withGesture(config)(Component)
 ```
 
