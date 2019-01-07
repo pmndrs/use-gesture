@@ -36,8 +36,8 @@ return <div {...bind(optionalArgs)} />
 const bind = useGesture(event => eventHandler)
 return <div {...bind(optionalArgs)} />
 
-// No event handler (will re-render the component on event changes with fresh props)
-const [bind, props] = useGesture()
+// Without onAction it will re-render the component on event changes with fresh props
+const [bind, props] = useGesture({ ...config })
 return <div {...bind(optionalArgs)} />
 
 /* -------------------------- Render-props and Higher-order-components -------------------------- */
