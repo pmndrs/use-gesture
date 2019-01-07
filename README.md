@@ -25,7 +25,7 @@ You can use it stand-alone, but to make the most of it you should combine it wit
 import { useGesture, withGesture, Gesture } from 'react-with-gesture'
 ```
 
-The api is straight forward. You can use React hooks, render-props or higher-order-components. You bind handlers to your view (done automatically for you if you use render-props or hoc's), and you will receive events when the user is clicking/dragging/pulling/releasing them.
+The api is straight forward. You can use React-hooks, render-props or higher-order-components. You bind handlers to your view (done for you if you use render-props or hoc's), and you will receive events when you click/drag/pull/release it. Hooks however are preferred, since they allow gestures to be re-used for more than one view (you can use the same `bind()` function multiple times!).
 
 ```js
 // Full config with event handler
