@@ -2,8 +2,8 @@
   <a href="https://codesandbox.io/embed/n9vo1my91p"><img src="https://i.imgur.com/tg1mN1F.gif" width="655"/></a>
 </p>
 <p align="middle">
-  <a href="https://codesandbox.io/embed/j0y0vpz59"><img src="https://i.imgur.com/OxGLHeT.gif" width="535"/></a>
-  <a href="https://codesandbox.io/embed/r5qmj8m6lq"><img src="https://i.imgur.com/ifdCBvG.gif" width="150"/></a>
+  <a href="https://codesandbox.io/embed/j0y0vpz59"><img src="https://i.imgur.com/OxGLHeT.gif" width="515"/></a>
+  <a href="https://codesandbox.io/embed/r5qmj8m6lq"><img src="https://i.imgur.com/ifdCBvG.gif" width="130"/></a>
 </p>
 <p align="middle">
   <i>These demos are real, click them!</i>
