@@ -27,12 +27,13 @@ const initialState = {
 
 function handlers(set, props = {}, args) {
   // Common handlers
-  const handleUp = () =>
+  const handleUp = event =>
     set(state => {
       const newProps = { ...state, down: false, first: false }
       const temp = props.onAction && props.onAction(newProps)
       return {
         ...newProps,
+        event,
         lastLocal: state.local,
         temp: temp || newProps.temp,
       }
@@ -54,8 +55,8 @@ function handlers(set, props = {}, args) {
         down: true,
         time: Date.now(),
         cancel: () => {
-          onUp(null)
-          requestAnimationFrame(() => handleUp())
+          stop()
+          requestAnimationFrame(() => handleUp(e))
         },
       }
       const temp = props.onAction && props.onAction(newProps)
@@ -107,7 +108,7 @@ function handlers(set, props = {}, args) {
     handleDown(e)
   }
 
-  const onUp = e => {
+  const stop = () => {
     if (props.mouse) {
       window.removeEventListener(mouseMove, handleMove, props.passive)
       window.removeEventListener(mouseUp, onUp, props.passive)
@@ -116,8 +117,12 @@ function handlers(set, props = {}, args) {
       window.removeEventListener(touchMove, handleMove, props.passive)
       window.removeEventListener(touchEnd, onUp, props.passive)
     }
+  }
 
-    if (e !== null) handleUp()
+  const onUp = e => {
+    stop()
+
+    handleUp(e)
   }
 
   return {
