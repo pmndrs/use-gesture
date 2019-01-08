@@ -38,7 +38,7 @@ function handlers(set, props = {}, args) {
       }
     })
   const handleDown = event => {
-    const { target, pageX, pageY } = event
+    const { target, pageX, pageY } = event.touches ? event.touches[0] : event
     set(state => {
       const lastLocal = state.lastLocal || initialState.lastLocal
       const newProps = {
@@ -54,8 +54,7 @@ function handlers(set, props = {}, args) {
         down: true,
         time: Date.now(),
         cancel: () => {
-          handleTouchEnd(null)
-          handleMouseUp(null)
+          onUp(null)
           requestAnimationFrame(() => handleUp())
         },
       }
@@ -64,7 +63,7 @@ function handlers(set, props = {}, args) {
     })
   }
   const handleMove = event => {
-    const { pageX, pageY } = event
+    const { pageX, pageY } = event.touches ? event.touches[0] : event
     set(state => {
       const time = Date.now()
       const x_dist = pageX - state.xy[0]
@@ -80,7 +79,10 @@ function handlers(set, props = {}, args) {
         time,
         xy: [pageX, pageY],
         delta: [delta_x, delta_y],
-        local: [state.lastLocal[0] + pageX - state.initial[0], state.lastLocal[1] + pageY - state.initial[1]],
+        local: [
+          state.lastLocal[0] + pageX - state.initial[0],
+          state.lastLocal[1] + pageY - state.initial[1],
+        ],
         velocity: len / (time - state.time),
         distance: distance,
         direction: [x_dist * scalar, y_dist * scalar],
@@ -92,33 +94,35 @@ function handlers(set, props = {}, args) {
     })
   }
 
-  // Touch handlers
-  const handleTouchStart = e => {
-    window.addEventListener(touchMove, handleTouchMove, props.passive)
-    window.addEventListener(touchEnd, handleTouchEnd, props.passive)
-    handleDown(e.touches[0])
+  const onDown = e => {
+    if (props.mouse) {
+      window.addEventListener(mouseMove, handleMove, props.passive)
+      window.addEventListener(mouseUp, onUp, props.passive)
+    }
+    if (props.touch) {
+      window.addEventListener(touchMove, handleMove, props.passive)
+      window.addEventListener(touchEnd, onUp, props.passive)
+    }
+
+    handleDown(e)
   }
-  const handleTouchMove = e => handleMove(e.touches[0])
-  const handleTouchEnd = e => {
-    window.removeEventListener(touchMove, handleTouchMove)
-    window.removeEventListener(touchEnd, handleTouchEnd)
+
+  const onUp = e => {
+    if (props.mouse) {
+      window.removeEventListener(mouseMove, handleMove, props.passive)
+      window.removeEventListener(mouseUp, onUp, props.passive)
+    }
+    if (props.touch) {
+      window.removeEventListener(touchMove, handleMove, props.passive)
+      window.removeEventListener(touchEnd, onUp, props.passive)
+    }
+
     if (e !== null) handleUp()
   }
 
-  // Mouse handlers
-  const handleMouseDown = e => {
-    window.addEventListener(mouseMove, handleMove, props.passive)
-    window.addEventListener(mouseUp, handleMouseUp, props.passive)
-    handleDown(e)
-  }
-  const handleMouseUp = e => {
-    window.removeEventListener(mouseMove, handleMove)
-    window.removeEventListener(mouseUp, handleMouseUp)
-    if (e !== null) handleUp()
-  }
   return {
-    onMouseDown: props.mouse ? handleMouseDown : undefined,
-    onTouchStart: props.touch ? handleTouchStart : undefined,
+    onMouseDown: props.mouse ? onDown : undefined,
+    onTouchStart: props.touch ? onDown : undefined,
   }
 }
 
