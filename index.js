@@ -125,10 +125,18 @@ function handlers(set, props = {}, args) {
     handleUp(e)
   }
 
-  return {
-    onMouseDown: props.mouse ? onDown : undefined,
-    onTouchStart: props.touch ? onDown : undefined,
+  const output = {}
+  const capture = props.passive.capture ? 'Capture' : ''
+
+  if (props.mouse) {
+    output[`onMouseDown${capture}`] = onDown
   }
+
+  if (props.touch) {
+    output[`onTouchStart${capture}`] = onDown
+  }
+
+  return output
 }
 
 class Gesture extends React.Component {
