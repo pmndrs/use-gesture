@@ -61,8 +61,8 @@ withGesture(config)(Component)
 
 ```
 { 
-  touch: true,                  // accept mouse input
-  mouse: true,                  // accept touch input
+  touch: true,                  // accept touch input
+  mouse: true,                  // accept mouse input
   passive: { passive: true },   // event handler 3rd argument input, passive by default
   onAction: undefined           // event => eventHandler, respond to events outside Reacts render cycle
 }
