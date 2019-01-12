@@ -1,14 +1,28 @@
 import * as React from 'react';
-import { Gesture, GestureState, withGesture } from '../../index';
+import {GestureState, withGesture} from '../../index';
 
-interface ChildProps {
+interface ChildProps extends Partial<GestureState> {
     testProp: boolean;
 }
 
-class ChildComponent extends React.Component<ChildProps> {}
+class ChildComponent extends React.Component<ChildProps> {
+    render() {
+        return this.props.children
+    }
+}
 
-const WrappedComponent = withGesture(
-    ChildComponent,
-);
+const WithGesture = withGesture({
+    onAction(state) {
+        return state.delta
+    }
+})
 
-const wrappedComponent = <WrappedComponent testProp/>;
+const WrappedComponent = WithGesture(ChildComponent);
+
+function Test() {
+    return (
+        <WrappedComponent testProp>
+            <div/>
+        </WrappedComponent>
+    )
+}
