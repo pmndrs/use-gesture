@@ -1,6 +1,5 @@
 import * as React from 'react'
 import {useGesture, GestureState} from '../../index'
-import {useState} from "react";
 
 function useGestureWithFunction(props: any) {
     const bind = useGesture(e => e)

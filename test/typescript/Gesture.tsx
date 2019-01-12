@@ -57,8 +57,6 @@ const allProps = (
     </Gesture>
 );
 
-const incorrectHandleEvent = (gestureState: GestureState) => {
-};
 const incorrectEventProp = (
     <Gesture
         // typings:expect-error
