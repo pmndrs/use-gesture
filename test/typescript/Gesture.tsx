@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Gesture, GestureState } from '../../index';
+import {Gesture, GestureState} from '../../index';
 
 const requiredProps = (
     <Gesture>{() => null}</Gesture>
@@ -7,52 +7,60 @@ const requiredProps = (
 
 const handleEvent = (gestureState: GestureState) => {
     const {
-        x,
-        y,
-        xDelta,
-        yDelta,
-        xInitial,
-        yInitial,
-        xPrev,
-        yPrev,
+        event,
+        target,
+        initial,
+        xy,
+        previous,
+        delta,
+        direction,
+        local,
+        time,
+        velocity,
+        distance,
         down,
-        xVelocity,
-        yVelocity,
+        first,
+        args,
+        temp
     } = gestureState;
+
     return gestureState;
 };
 
 const allProps = (
     <Gesture
-        onDown={handleEvent}
-        onMove={handleEvent}
-        onUp={handleEvent}
+        onAction={e => e.delta}
         touch={false}
         mouse={true}
+        className={'test'}
+        style={{width: 200}}
     >
         {({
-            x,
-            y,
-            xDelta,
-            yDelta,
-            xInitial,
-            yInitial,
-            xPrev,
-            yPrev,
-            down,
-            xVelocity,
-            yVelocity,
-        }) => (
+              event,
+              target,
+              initial,
+              xy,
+              previous,
+              delta,
+              direction,
+              local,
+              time,
+              velocity,
+              distance,
+              down,
+              first,
+              args,
+              temp
+          }) => (
             <div/>
         )}
     </Gesture>
 );
 
-const incorrectHandleEvent = (gestureState: GestureState) => {};
 const incorrectEventProp = (
     <Gesture
         // typings:expect-error
-        onUp={incorrectHandleEvent}
+        touch={123}
     >
         {() => null}
     </Gesture>
