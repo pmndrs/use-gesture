@@ -56,7 +56,7 @@ function handlers(set, props = {}, args) {
         time: Date.now(),
         cancel: () => {
           stop()
-          requestAnimationFrame(() => handleUp(e))
+          requestAnimationFrame(() => handleUp(event))
         },
       }
       const temp = props.onAction && props.onAction(newProps)
