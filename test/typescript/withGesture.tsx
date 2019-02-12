@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {GestureState, withGesture} from '../../index';
 
-interface ChildProps extends Partial<GestureState> {
+interface ChildProps extends GestureState {
     testProp: boolean;
 }
 

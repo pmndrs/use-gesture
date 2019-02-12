@@ -92,9 +92,11 @@ withGesture(config)(Component)
 
 ### Examples
 
-#### React hooks (basic drag/n/drop)
+<p align="middle">
+  <img src="https://i.imgur.com/ooNu3jz.gif" width="200"/>
+</p>
 
-<img src="https://i.imgur.com/ooNu3jz.gif" width="195"/>
+#### React hooks (basic drag/n/drop)
 
 Demo: https://codesandbox.io/embed/l2wy87l28l
 
@@ -105,9 +107,11 @@ const [bind, { local: [x, y] }] = useGesture()
 return <div {...bind()} style={{ transform: `translate3d(${x}px,${y}px,0)` }} />
 ```
 
-#### React hooks with onAction (and react-spring) (basic pull & release)
+<p align="middle">
+  <img src="https://i.imgur.com/KDeJBqp.gif" width="200"/>
+</p>
 
-<img src="https://i.imgur.com/KDeJBqp.gif" width="195"/>
+#### React hooks with onAction (and react-spring) (basic pull & release)
 
 Demo: https://codesandbox.io/embed/r24mzvo3q
 
@@ -124,9 +128,11 @@ return (
 )
 ```
 
-#### React hooks with onAction (and react-spring) (decay)
+<p align="middle">
+  <img src="https://i.imgur.com/JyeQsEI.gif" width="200"/>
+</p>
 
-<img src="https://i.imgur.com/JyeQsEI.gif" width="195"/>
+#### React hooks with onAction (and react-spring) (decay)
 
 Demo: https://codesandbox.io/embed/zq19y1xr9m
 

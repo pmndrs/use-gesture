@@ -1,5 +1,8 @@
 import * as React from 'react';
 
+// Helper type, taken from: https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-8.html
+type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
+
 export type vector2 = [number, number];
 
 export interface GestureState {
@@ -38,11 +41,9 @@ export interface GestureProps {
     children(props: GestureState): React.ReactNode;
 }
 
-type GestureChildComponent<T> = React.ComponentType<T & Partial<GestureState>>;
-
 export function withGesture(config: GestureOptions)
-    : <T>(WrappedComponent: GestureChildComponent<T>)
-    => React.ComponentType<T>
+    : <P extends GestureState>(WrappedComponent: React.ComponentType<P>) 
+    => React.ComponentType<Omit<P, keyof GestureState>>
 
 type GestureEvents = {
     onMouseDown?: React.MouseEventHandler;
