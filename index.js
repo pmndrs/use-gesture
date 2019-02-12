@@ -23,6 +23,7 @@ const initialState = {
   distance: 0,
   down: false,
   first: true,
+  shiftKey: false,
 }
 
 function handlers(set, props = {}, args) {
@@ -34,6 +35,7 @@ function handlers(set, props = {}, args) {
       return {
         ...newProps,
         event,
+        shiftKey: event.shiftKey,
         lastLocal: state.local,
         temp: temp || newProps.temp,
       }
@@ -48,6 +50,7 @@ function handlers(set, props = {}, args) {
         target,
         args,
         lastLocal,
+        shiftKey: event.shiftKey,
         local: lastLocal,
         xy: [pageX, pageY],
         initial: [pageX, pageY],
@@ -78,6 +81,7 @@ function handlers(set, props = {}, args) {
         ...state,
         event,
         time,
+        shiftKey: event.shiftKey,
         xy: [pageX, pageY],
         delta: [delta_x, delta_y],
         local: [
