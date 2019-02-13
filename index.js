@@ -29,19 +29,22 @@ const initialState = {
 function handlers(set, props = {}, args) {
   // Common handlers
   const handleUp = event =>
+  {
+    const shiftKey = event.shiftKey
     set(state => {
       const newProps = { ...state, down: false, first: false }
       const temp = props.onAction && props.onAction(newProps)
       return {
         ...newProps,
         event,
-        shiftKey: event.shiftKey,
+        shiftKey,
         lastLocal: state.local,
         temp: temp || newProps.temp,
       }
     })
+  }
   const handleDown = event => {
-    const { target, pageX, pageY } = event.touches ? event.touches[0] : event
+    const { target, pageX, pageY, shiftKey } = event.touches ? event.touches[0] : event
     set(state => {
       const lastLocal = state.lastLocal || initialState.lastLocal
       const newProps = {
@@ -50,7 +53,7 @@ function handlers(set, props = {}, args) {
         target,
         args,
         lastLocal,
-        shiftKey: event.shiftKey,
+        shiftKey,
         local: lastLocal,
         xy: [pageX, pageY],
         initial: [pageX, pageY],
@@ -67,7 +70,7 @@ function handlers(set, props = {}, args) {
     })
   }
   const handleMove = event => {
-    const { pageX, pageY } = event.touches ? event.touches[0] : event
+    const { pageX, pageY, shiftKey } = event.touches ? event.touches[0] : event
     set(state => {
       const time = Date.now()
       const x_dist = pageX - state.xy[0]
@@ -81,7 +84,7 @@ function handlers(set, props = {}, args) {
         ...state,
         event,
         time,
-        shiftKey: event.shiftKey,
+        shiftKey,
         xy: [pageX, pageY],
         delta: [delta_x, delta_y],
         local: [

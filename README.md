@@ -87,6 +87,7 @@ withGesture(config)(Component)
   first,                        // marks first event (mouse / touch down)
   args,                         // arguments optionally passed to bind(a,b,c,d,..)
   temp,                         // arguments optionally returned by onActions eventHandler
+  shiftKey,                     // shift pressed (true/false)
 }
 ```
 
