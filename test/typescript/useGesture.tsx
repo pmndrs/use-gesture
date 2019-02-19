@@ -22,3 +22,9 @@ function useGetureWithoutOnAction(props: any) {
     return <div {...bind(...props)}> gesture hooks without on action </div>
 }
 
+function useGestureWithoutProps() {
+    const [bind, {local: [x, y]}] = useGesture()
+
+    return <div {...bind()}> gesture hooks without props </div>
+}
+
