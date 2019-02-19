@@ -50,10 +50,10 @@ type GestureEvents = {
     onTouchDown?: React.TouchEventHandler;
 }
 
+export function useGesture(): [(...args: any[]) => GestureEvents, GestureState]
 export function useGesture(onAction: (state: GestureState) => any): (...args: any[]) => GestureEvents
 export function useGesture(options: Pick<GestureOptions, Exclude<keyof GestureOptions, "onAction">>): [(...args: any[]) => GestureEvents, GestureState]
 export function useGesture(options: GestureOptions): (...args: any[]) => GestureEvents
-export function useGesture(): [(...args: any[]) => GestureEvents, GestureState]
 
 export class Gesture extends React.Component<GestureProps & GestureOptions> {
 }
