@@ -47,7 +47,7 @@ export function withGesture(config: GestureOptions)
 
 type GestureEvents = {
     onMouseDown?: React.MouseEventHandler;
-    onTouchDown?: React.TouchEventHandler;
+    onTouchStart?: React.TouchEventHandler;
 }
 
 export function useGesture(): [(...args: any[]) => GestureEvents, GestureState]
