@@ -32,6 +32,7 @@ export interface GestureOptions {
     passive?: boolean | AddEventListenerOptions;
 
     onAction?(state: GestureState): any;
+    onMove?(state: GestureState): any;
 }
 
 export interface GestureProps {

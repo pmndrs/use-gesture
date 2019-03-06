@@ -98,6 +98,7 @@ function handlers(set, props = {}, args) {
         first: false,
       }
       const temp = props.onAction && props.onAction(newProps)
+      if (props.onMove) props.onMove(newProps)
       return { ...newProps, temp: temp || newProps.temp }
     })
   }
@@ -155,6 +156,8 @@ class Gesture extends React.Component {
     /** Optional. Calls back on mouse or touch down/up/move. When this is given it will manage state outside of React,
      * in this case it will never cause a new render, clients have to rely on callbacks to get notified. */
     onAction: PropTypes.func,
+    /** Optional. Provides a callback on touchmove and mousemove events. */
+    onMove: PropTypes.func,
     /** Optional. addEventListener 3rd arg config, { passive: true } by default, should be false if you plan to call event.preventDefault() or event.stopPropagation() */
     passive: PropTypes.any,
   }
