@@ -28,9 +28,8 @@ const initialState = {
 
 function handlers(set, props = {}, args) {
   // Common handlers
-  const handleUp = event =>
+  const handleUp = (event, shiftKey) =>
   {
-    const shiftKey = event.shiftKey
     set(state => {
       const newProps = { ...state, down: false, first: false }
       const temp = props.onAction && props.onAction(newProps)
@@ -127,10 +126,12 @@ function handlers(set, props = {}, args) {
   }
 
   const onUp = e => {
-    stop()
+    const { shiftKey } = e;
 
-    handleUp(e)
-  }
+    stop();
+
+    handleUp(e, shiftKey);
+  };
 
   const output = {}
   const capture = props.passive.capture ? 'Capture' : ''
