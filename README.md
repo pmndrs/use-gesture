@@ -44,9 +44,13 @@ return <div {...bind(optionalArgs)} />
 #### Render-props and Higher-order-components
 
 ```jsx
-<Gesture {...config}>
-  {event => <div />}
-</Gesture>
+render() {
+  return (
+    <Gesture {...config}>
+      {event => <div />}
+    </Gesture>
+  )
+}
 
 @withGesture(config)
 class extends React.Component {
