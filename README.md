@@ -27,7 +27,7 @@ import { useGesture, withGesture, Gesture } from 'react-with-gesture'
 
 The api is straight forward. You can use React-hooks, render-props or higher-order-components. You bind handlers to your view (done for you if you use render-props or hoc's), and you will receive events when you click/drag/pull/release it. Hooks however are preferred, since they allow gestures to be re-used for more than one view (you can use the same `bind()` function multiple times!).
 
-```js
+```jsx
 // Full config with event handler
 const bind = useGesture({ onAction: event => eventHandler, ...config })
 return <div {...bind(optionalArgs)} />
@@ -39,9 +39,11 @@ return <div {...bind(optionalArgs)} />
 // Without onAction it will re-render the component on event changes with fresh props
 const [bind, props] = useGesture({ ...config })
 return <div {...bind(optionalArgs)} />
+```
 
-/* -------------------------- Render-props and Higher-order-components -------------------------- */
+#### Render-props and Higher-order-components
 
+```jsx
 <Gesture {...config}>
   {event => <div />}
 </Gesture>
