@@ -43,7 +43,7 @@ return <div {...bind(optionalArgs)} />
 
 #### Render-props and Higher-order-components
 
-```jsx
+```js
 render() {
   return (
     <Gesture {...config}>
