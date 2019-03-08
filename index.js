@@ -5,7 +5,15 @@ const touchMove = 'touchmove'
 const touchEnd = 'touchend'
 const mouseMove = 'mousemove'
 const mouseUp = 'mouseup'
-const defaultProps = { touch: true, mouse: true, passive: { passive: true } }
+const defaultProps = {
+  touch: true,
+  mouse: true,
+  passive: { passive: true },
+  onAction: undefined,
+  onDown: undefined,
+  onUp: undefined,
+  onMove: undefined
+}
 const initialState = {
   event: undefined,
   args: undefined,
@@ -34,6 +42,7 @@ function handlers(set, props = {}, args) {
     set(state => {
       const newProps = { ...state, down: false, first: false }
       const temp = props.onAction && props.onAction(newProps)
+      if (props.onUp) props.onUp(newProps)
       return {
         ...newProps,
         event,
@@ -66,6 +75,7 @@ function handlers(set, props = {}, args) {
         },
       }
       const temp = props.onAction && props.onAction(newProps)
+      if (props.onDown) props.onDown(newProps)
       return { ...newProps, temp }
     })
   }
@@ -158,9 +168,14 @@ class Gesture extends React.Component {
     onAction: PropTypes.func,
     /** Optional. Provides a callback on touchmove and mousemove events. */
     onMove: PropTypes.func,
+    /** Optional. Provides a callback on mouseup and touchend events. */
+    onUp: PropTypes.func,
+    /** Optional. Provides a callback on touchstart and mousedown events. */
+    onDown: PropTypes.func,
     /** Optional. addEventListener 3rd arg config, { passive: true } by default, should be false if you plan to call event.preventDefault() or event.stopPropagation() */
     passive: PropTypes.any,
   }
+
   static defaultProps = defaultProps
 
   constructor(props) {
