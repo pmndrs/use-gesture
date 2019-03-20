@@ -6,6 +6,7 @@ const touchEnd = 'touchend'
 const mouseMove = 'mousemove'
 const mouseUp = 'mouseup'
 const defaultProps = {
+  window,
   touch: true,
   mouse: true,
   passive: { passive: true },
@@ -114,12 +115,12 @@ function handlers(set, props = {}, args) {
 
   const onDown = e => {
     if (props.mouse) {
-      window.addEventListener(mouseMove, handleMove, props.passive)
-      window.addEventListener(mouseUp, onUp, props.passive)
+      props.window.addEventListener(mouseMove, handleMove, props.passive)
+      props.window.addEventListener(mouseUp, onUp, props.passive)
     }
     if (props.touch) {
-      window.addEventListener(touchMove, handleMove, props.passive)
-      window.addEventListener(touchEnd, onUp, props.passive)
+      props.window.addEventListener(touchMove, handleMove, props.passive)
+      props.window.addEventListener(touchEnd, onUp, props.passive)
     }
 
     handleDown(e)
@@ -127,12 +128,12 @@ function handlers(set, props = {}, args) {
 
   const stop = () => {
     if (props.mouse) {
-      window.removeEventListener(mouseMove, handleMove, props.passive)
-      window.removeEventListener(mouseUp, onUp, props.passive)
+      props.window.removeEventListener(mouseMove, handleMove, props.passive)
+      props.window.removeEventListener(mouseUp, onUp, props.passive)
     }
     if (props.touch) {
-      window.removeEventListener(touchMove, handleMove, props.passive)
-      window.removeEventListener(touchEnd, onUp, props.passive)
+      props.window.removeEventListener(touchMove, handleMove, props.passive)
+      props.window.removeEventListener(touchEnd, onUp, props.passive)
     }
   }
 
