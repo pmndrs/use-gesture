@@ -12,7 +12,11 @@ const defaultProps = {
   onAction: undefined,
   onDown: undefined,
   onUp: undefined,
-  onMove: undefined
+  onMove: undefined,
+  transform: {
+    x: x => x,
+    y: y => y
+  }
 }
 const initialState = {
   event: undefined,
@@ -58,7 +62,7 @@ function handlers(set, props = {}, args) {
       const lastLocal = state.lastLocal || initialState.lastLocal
       let newProps = {
         ...initialState,
-        transform: event.transform,
+        transform: event.transform || props.transform || defaultProps.transform,
         event,
         target,
         args,
@@ -85,13 +89,15 @@ function handlers(set, props = {}, args) {
     const { pageX, pageY, shiftKey } = event.touches ? event.touches[0] : event
     set(state => {
       const time = Date.now()
-      const x_dist = pageX - state.xy[0]
-      const y_dist = pageY - state.xy[1]
-      const delta_x = pageX - state.initial[0]
-      const delta_y = pageY - state.initial[1]
+      const x_dist = state.transform.x(pageX - state.xy[0])
+      const y_dist = state.transform.y(pageY - state.xy[1])
+      const delta_x = state.transform.x(pageX - state.initial[0])
+      const delta_y = state.transform.y(pageY - state.initial[1])
       const distance = Math.sqrt(delta_x * delta_x + delta_y * delta_y)
       const len = Math.sqrt(x_dist * x_dist + y_dist * y_dist)
       const scalar = 1 / (len || 1)
+      const local_x = state.lastLocal[0] + delta_x
+      const local_y = state.lastLocal[1] + delta_y
       let newProps = {
         ...state,
         event,
@@ -99,17 +105,13 @@ function handlers(set, props = {}, args) {
         shiftKey,
         xy: [pageX, pageY],
         delta: [delta_x, delta_y],
-        local: [
-          state.lastLocal[0] + pageX - state.initial[0],
-          state.lastLocal[1] + pageY - state.initial[1]
-        ],
+        local: [local_x, local_y],
         velocity: len / (time - state.time),
         distance: distance,
         direction: [x_dist * scalar, y_dist * scalar],
         previous: state.xy,
         first: false
       }
-      if (state.transform) newProps = state.transform(newProps)
       const temp = props.onAction && props.onAction(newProps)
       if (props.onMove) props.onMove(newProps)
       return { ...newProps, temp: temp || newProps.temp }
