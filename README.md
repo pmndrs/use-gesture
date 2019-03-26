@@ -10,19 +10,19 @@
 </p>
 
 ```
-npm install react-with-gesture
+npm install react-use-gesture
 ```
 
 Ever thought about doing that sidebar pull-out, a view pager, some slider, any gesture on the web basically, and dropped the idea because it's too hard? In that case, this is your lib.
 
-React-with-gesture is a small utility that lets you bind richer mouse and touch events to any component or view. With the data you receive it becomes trivial to set up gestures, and often takes no more than a few lines of code.
+React-use-gesture is a small utility that lets you bind richer mouse and touch events to any component or view. With the data you receive it becomes trivial to set up gestures, and often takes no more than a few lines of code.
     
 You can use it stand-alone, but to make the most of it you should combine it with an animation library like [react-spring](https://github.com/react-spring/react-spring), though you can most certainly use any other.
 
 ### Api
 
 ```js
-import { useGesture, withGesture, Gesture } from 'react-with-gesture'
+import useGesture from 'react-use-gesture'
 ```
 
 The api is straight forward. You can use React-hooks, render-props or higher-order-components. You bind handlers to your view (done for you if you use render-props or hoc's), and you will receive events when you click/drag/pull/release it. Hooks however are preferred, since they allow gestures to be re-used for more than one view (you can use the same `bind()` function multiple times!).
@@ -39,28 +39,6 @@ return <div {...bind(optionalArgs)} />
 // Without onAction it will re-render the component on event changes with fresh props
 const [bind, props] = useGesture({ ...config })
 return <div {...bind(optionalArgs)} />
-```
-
-#### Render-props and Higher-order-components
-
-```js
-render() {
-  return (
-    <Gesture {...config}>
-      {event => <div />}
-    </Gesture>
-  )
-}
-
-@withGesture(config)
-class extends React.Component {
-  render() {
-    const event = this.props.event
-    return <div />
-  }
-}
-
-withGesture(config)(Component)
 ```
 
 ### Config

@@ -1,6 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
+console.log('hello')
+
 const touchMove = 'touchmove'
 const touchEnd = 'touchend'
 const mouseMove = 'mousemove'
@@ -31,15 +33,14 @@ const initialState = {
   distance: 0,
   down: false,
   first: true,
-  shiftKey: false,
+  shiftKey: false
 }
 
 function handlers(set, props = {}, args) {
   // Common handlers
-  const handleUp = (event, shiftKey) =>
-  {
+  const handleUp = (event, shiftKey) => {
     set(state => {
-      const newProps = { ...state, down: false, first: false }
+      let newProps = { ...state, down: false, first: false }
       const temp = props.onAction && props.onAction(newProps)
       if (props.onUp) props.onUp(newProps)
       return {
@@ -47,16 +48,19 @@ function handlers(set, props = {}, args) {
         event,
         shiftKey,
         lastLocal: state.local,
-        temp: temp || newProps.temp,
+        temp: temp || newProps.temp
       }
     })
   }
   const handleDown = event => {
-    const { target, pageX, pageY, shiftKey } = event.touches ? event.touches[0] : event
+    const { target, pageX, pageY, shiftKey } = event.touches
+      ? event.touches[0]
+      : event
     set(state => {
       const lastLocal = state.lastLocal || initialState.lastLocal
-      const newProps = {
+      let newProps = {
         ...initialState,
+        transform: event.transform,
         event,
         target,
         args,
@@ -71,13 +75,14 @@ function handlers(set, props = {}, args) {
         cancel: () => {
           stop()
           requestAnimationFrame(() => handleUp(event))
-        },
+        }
       }
       const temp = props.onAction && props.onAction(newProps)
       if (props.onDown) props.onDown(newProps)
       return { ...newProps, temp }
     })
   }
+
   const handleMove = event => {
     const { pageX, pageY, shiftKey } = event.touches ? event.touches[0] : event
     set(state => {
@@ -89,7 +94,7 @@ function handlers(set, props = {}, args) {
       const distance = Math.sqrt(delta_x * delta_x + delta_y * delta_y)
       const len = Math.sqrt(x_dist * x_dist + y_dist * y_dist)
       const scalar = 1 / (len || 1)
-      const newProps = {
+      let newProps = {
         ...state,
         event,
         time,
@@ -98,14 +103,15 @@ function handlers(set, props = {}, args) {
         delta: [delta_x, delta_y],
         local: [
           state.lastLocal[0] + pageX - state.initial[0],
-          state.lastLocal[1] + pageY - state.initial[1],
+          state.lastLocal[1] + pageY - state.initial[1]
         ],
         velocity: len / (time - state.time),
         distance: distance,
         direction: [x_dist * scalar, y_dist * scalar],
         previous: state.xy,
-        first: false,
+        first: false
       }
+      if (state.transform) newProps = state.transform(newProps)
       const temp = props.onAction && props.onAction(newProps)
       if (props.onMove) props.onMove(newProps)
       return { ...newProps, temp: temp || newProps.temp }
@@ -137,12 +143,10 @@ function handlers(set, props = {}, args) {
   }
 
   const onUp = e => {
-    const { shiftKey } = e;
-
-    stop();
-
-    handleUp(e, shiftKey);
-  };
+    const { shiftKey } = e
+    stop()
+    handleUp(e, shiftKey)
+  }
 
   const output = {}
   const capture = props.passive.capture ? 'Capture' : ''
@@ -158,61 +162,19 @@ function handlers(set, props = {}, args) {
   return output
 }
 
-class Gesture extends React.Component {
-  static propTypes = {
-    /** Optional. Accept mouse input, true by default */
-    mouse: PropTypes.bool,
-    /** Optional. Accept touch input, true by default */
-    touch: PropTypes.bool,
-    /** Optional. Calls back on mouse or touch down/up/move. When this is given it will manage state outside of React,
-     * in this case it will never cause a new render, clients have to rely on callbacks to get notified. */
-    onAction: PropTypes.func,
-    /** Optional. Provides a callback on touchmove and mousemove events. */
-    onMove: PropTypes.func,
-    /** Optional. Provides a callback on mouseup and touchend events. */
-    onUp: PropTypes.func,
-    /** Optional. Provides a callback on touchstart and mousedown events. */
-    onDown: PropTypes.func,
-    /** Optional. addEventListener 3rd arg config, { passive: true } by default, should be false if you plan to call event.preventDefault() or event.stopPropagation() */
-    passive: PropTypes.any,
-  }
-
-  static defaultProps = defaultProps
-
-  constructor(props) {
-    super(props)
-    this.state = initialState
-    let set = this.setState.bind(this)
-    if (props.onAction) {
-      this._state = initialState
-      set = cb => (this._state = cb(this._state))
-    }
-    this.handlers = handlers(set, props)
-  }
-
-  render() {
-    const { style, children, className } = this.props
-    return (
-      <div {...this.handlers} style={{ display: 'contents', ...style }} className={className}>
-        {children(this.state)}
-      </div>
-    )
-  }
-}
-
-const withGesture = config => Wrapped => props => (
-  <Gesture {...config} children={gestureProps => <Wrapped {...props} {...gestureProps} />} />
-)
-
-function useGesture(props) {
+export default function useGesture(props) {
   const [state, set] = React.useState(initialState)
   const transientState = React.useRef(initialState)
   if (typeof props === 'function') props = { onAction: props }
   props = { ...defaultProps, ...props }
   const [spread] = React.useState(() => (...args) =>
-    handlers(props.onAction ? cb => (transientState.current = cb(transientState.current)) : set, props, args),
+    handlers(
+      props.onAction
+        ? cb => (transientState.current = cb(transientState.current))
+        : set,
+      props,
+      args
+    )
   )
   return props.onAction ? spread : [spread, state]
 }
-
-export { withGesture, Gesture, useGesture }

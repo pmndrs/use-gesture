@@ -1,9 +1,9 @@
 {
-  "name": "react-with-gesture",
-  "version": "4.0.8",
+  "name": "react-use-gesture",
+  "version": "5.0.0-beta.0",
   "description": "hoc for receiving gestures",
-  "main": "dist/react-with-gesture",
-  "module": "dist/react-with-gesture.es",
+  "main": "dist/react-use-gesture",
+  "module": "dist/react-use-gesture.es",
   "typings": "./index.d.ts",
   "sideEffects": false,
   "lint-staged": {
@@ -25,7 +25,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/drcmda/react-with-gesture.git"
+    "url": "git+https://github.com/react-spring/react-use-gesture.git"
   },
   "keywords": [
     "react",
@@ -37,9 +37,9 @@
   "author": "Paul Henschel",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/drcmda/react-with-gesture/issues"
+    "url": "https://github.com/react-spring/react-use-gesture/issues"
   },
-  "homepage": "https://github.com/drcmda/react-with-gesture#readme",
+  "homepage": "https://github.com/react-spring/react-use-gesture#readme",
   "devDependencies": {
     "@babel/core": "7.1.2",
     "@babel/plugin-proposal-class-properties": "^7.1.0",
