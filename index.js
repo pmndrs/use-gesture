@@ -232,6 +232,11 @@ function handlers(state, props = {}, args) {
         }
       : {}
 
+    if (specificEventState.first) {
+      console.log(startState)
+      console.log(specificEventState)
+    }
+
     // TODO: should handle the cancel method
     state.current = {
       ...state.current,
@@ -247,8 +252,9 @@ function handlers(state, props = {}, args) {
         previous: xy,
         ...startState,
         ...specificEventState,
+        transform: t,
         time: now,
-        ...(event.debounced ? {} : { event: event.nativeEvent }),
+        event,
         target,
         type
       }
