@@ -224,18 +224,13 @@ function handlers(state, props = {}, args) {
     const startState = specificEventState.first
       ? {
           ...initialState[stateKey],
-          lastLocal,
-          local: lastLocal,
+          lastLocal: state.current[stateKey].local,
+          local: state.current[stateKey].local,
           initial: [x, y],
           previous: [x, y],
           cancel: action === 'onDrag' ? cancelDrag : () => {}
         }
       : {}
-
-    if (specificEventState.first) {
-      console.log(startState)
-      console.log(specificEventState)
-    }
 
     // TODO: should handle the cancel method
     state.current = {
