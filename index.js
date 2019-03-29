@@ -152,14 +152,15 @@ function handlers(state, props = {}, args) {
 
     const dragging = down
     const moving = !eventAttributes.debounced
-
     return {
       down,
       moving,
       dragging,
       hovering,
       active:
-        (action === 'onDrag' && dragging) || (action === 'onMove' && moving)
+        (action === 'onDrag' && dragging) ||
+        (action === 'onMove' && moving) ||
+        (action === 'onHover' && hovering)
           ? 1
           : 0,
       shiftKey,
