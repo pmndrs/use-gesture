@@ -35,6 +35,9 @@
     "touch"
   ],
   "author": "Paul Henschel",
+  "contributors": [
+    "David Bismut"
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/react-spring/react-use-gesture/issues"
@@ -68,8 +71,5 @@
     "prop-types": "15.x.x",
     "react": ">= 16.0.0",
     "react-dom": ">= 16.0.0"
-  },
-  "dependencies": {
-    "pepjs": "^0.5.0"
   }
 }
