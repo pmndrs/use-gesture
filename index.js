@@ -20,13 +20,10 @@ const wheel = 'wheel'
 const stateKeys = { onDrag: 'drag', onHover: 'move', onMove: 'move', onScroll: 'scroll', onWheel: 'wheel' }
 
 const defaultConfig = {
-  // [V5] events should allow for multiple events supports
-  hover: false,
-  scroll: false,
-  wheel: false,
+  domTarget: undefined,
   event: { passive: true, capture: false },
-  transform: { x: x => x, y: y => y },
-  domElement: undefined
+  window: typeof window !== 'undefined' ? window : undefined,
+  transform: { x: x => x, y: y => y }
 }
 
 const initialCommon = {
@@ -49,7 +46,8 @@ const initialCommon = {
   last: false,
   active: true,
   time: undefined,
-  temp: undefined
+  temp: undefined,
+  cancel: noop
 }
 
 const initialState = {
@@ -61,8 +59,7 @@ const initialState = {
     moving: undefined,
     touches: undefined,
     down: undefined,
-    shiftKey: undefined,
-    cancel: noop
+    shiftKey: undefined
   },
   move: { ...initialCommon },
   drag: { ...initialCommon },
@@ -86,12 +83,12 @@ export default function useGesture(props) {
   const timeouts = React.useRef({})
   const domListeners = React.useRef([])
   const dragListeners = React.useRef([])
-  const { domElement } = props.config
+  const { domTarget } = props.config
 
   const clean = () => {
     clearTimeouts(timeouts.current)
-    setListeners(domElement, domListeners.current, props.config.event, false)
-    setListeners(window, dragListeners.current, props.config.event, false)
+    setListeners(domTarget, domListeners.current, props.config.event, false)
+    setListeners(props.config.window, dragListeners.current, props.config.event, false)
   }
 
   React.useEffect(() => clean, [])
@@ -209,7 +206,7 @@ export default function useGesture(props) {
       dragListeners.current.push([touchEnd, onDragEnd])
       dragListeners.current.push([touchCancel, onDragEnd])
 
-      setListeners(window, dragListeners.current, props.config.event, true)
+      setListeners(props.config.window, dragListeners.current, props.config.event, true)
 
       const { mov_x, mov_y, touches, shiftKey } = getPointerEventData(event)
       const startState = getGenericStartState(event, 'drag', [mov_x, mov_y])
@@ -223,7 +220,7 @@ export default function useGesture(props) {
     }
 
     const onDragEnd = event => {
-      setListeners(window, dragListeners.current, props.config.event, false)
+      setListeners(props.config.window, dragListeners.current, props.config.event, false)
       updateState({
         shared: { dragging: false, down: false, touches: 0 },
         drag: { ...genericEndState, ...getEventGenericData(event), cancel: noop }
@@ -329,7 +326,7 @@ export default function useGesture(props) {
     const output = {}
     const capture = props.config.event.capture ? 'Capture' : ''
 
-    if (domElement) {
+    if (domTarget) {
       if (actions.has('onHover')) {
         domListeners.current.push([mouseEnter, onEnter])
         domListeners.current.push([mouseLeave, onLeave])
@@ -347,7 +344,7 @@ export default function useGesture(props) {
       if (actions.has('onWheel')) {
         domListeners.current.push([wheel, onWheel])
       }
-      setListeners(domElement, domListeners.current, props.config.event, true)
+      setListeners(domTarget, domListeners.current, props.config.event, true)
       return clean
     }
 
