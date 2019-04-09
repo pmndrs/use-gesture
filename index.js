@@ -89,9 +89,8 @@ export default function useGesture(_props) {
   React.useEffect(() => clean, [clean])
 
   const [bind] = React.useState(() => (...args) => {
-    const unchanged =
-      handlersRef.current && argsRef.current.length === args.length && args.every((arg, index) => arg === argsRef.current[index])
-    if (!unchanged) {
+    const unchanged = argsRef.current.length === args.length && args.every((arg, index) => arg === argsRef.current[index])
+    if (!unchanged || !handlersRef.current) {
       clean()
       argsRef.current = args
       handlersRef.current = handlers(args)
