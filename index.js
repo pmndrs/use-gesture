@@ -103,6 +103,8 @@ export default function useGesture(_props) {
   /*** HANDLERS ***/
 
   function handlers(args) {
+    state.current.shared.args = args
+
     const {
       domTarget,
       event: { pointerEvents }
@@ -115,8 +117,6 @@ export default function useGesture(_props) {
     )
 
     const updateState = newState => {
-      newState.shared = newState.shared || {}
-      newState.shared.args = args
       const updatedState = Object.entries(newState).reduce((acc, [k, v]) => ({ ...acc, [k]: { ...state.current[k], ...v } }), {})
       state.current = { ...state.current, ...updatedState }
     }
