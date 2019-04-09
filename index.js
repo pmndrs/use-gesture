@@ -74,7 +74,7 @@ export default function useGesture(_props) {
   props.current = _props
 
   const state = React.useRef(initialState)
-  const oldArgs = React.useRef(null)
+  const oldArgs = React.useRef([])
   const oldResult = React.useRef(null)
   const timeouts = React.useRef({})
   const domListeners = React.useRef([])
@@ -89,8 +89,7 @@ export default function useGesture(_props) {
   React.useEffect(() => clean, [clean])
 
   const [bind] = React.useState(() => (...args) => {
-    const unchanged =
-      Array.isArray(oldArgs.current) && oldArgs.current.length === args.length && args.every((arg, index) => arg === oldArgs.current[index])
+    const unchanged = oldArgs.current.length === args.length && args.every((arg, index) => arg === oldArgs.current[index])
     oldArgs.current = args
     if (!unchanged) {
       clean()
@@ -116,6 +115,8 @@ export default function useGesture(_props) {
     )
 
     const updateState = newState => {
+      newState.shared = newState.shared || {}
+      newState.shared.args = args
       const updatedState = Object.entries(newState).reduce((acc, [k, v]) => ({ ...acc, [k]: { ...state.current[k], ...v } }), {})
       state.current = { ...state.current, ...updatedState }
     }
@@ -220,7 +221,7 @@ export default function useGesture(_props) {
       const startState = getGenericStartState(event, 'drag', [mov_x, mov_y])
 
       updateState({
-        shared: { args, ...rest, dragging: true, down: true },
+        shared: { ...rest, dragging: true, down: true },
         drag: { ...startState, event, currentTarget, pointerId, cancel: () => cancelDrag(event) }
       })
 
@@ -277,7 +278,7 @@ export default function useGesture(_props) {
       }
 
       updateState({
-        shared: { args, pinching: true, down: true, touches: 2 },
+        shared: { pinching: true, down: true, touches: 2 },
         pinch: { da: [0, 0], ...startState, event, cancel: () => cancelPinch(event) }
       })
 
@@ -345,7 +346,7 @@ export default function useGesture(_props) {
 
       if (!state.current.shared.moving) {
         const startState = getGenericStartState(event, 'move', [mov_x, mov_y])
-        updateState({ shared: { args, moving: true, ...rest }, move: { ...startState, event } })
+        updateState({ shared: { moving: true, ...rest }, move: { ...startState, event } })
         return handleGestureStart('onMove')
       }
 
@@ -367,7 +368,7 @@ export default function useGesture(_props) {
 
       if (!state.current.shared.scrolling) {
         const startState = getGenericStartState(event, 'scroll', [mov_x, mov_y])
-        updateState({ shared: { args, scrolling: true }, scroll: { ...startState, event } })
+        updateState({ shared: { scrolling: true }, scroll: { ...startState, event } })
         return handleGestureStart('onScroll')
       }
 
@@ -392,7 +393,7 @@ export default function useGesture(_props) {
 
       if (!state.current.shared.wheeling) {
         const startState = getGenericStartState(event, 'wheel', [mov_x, mov_y])
-        updateState({ shared: { args, wheeling: true }, wheel: { ...startState, event } })
+        updateState({ shared: { wheeling: true }, wheel: { ...startState, event } })
         return handleGestureStart('onWheel')
       }
 
@@ -405,7 +406,7 @@ export default function useGesture(_props) {
       if (!props.current.config.enabled || !props.current.config.hover) return
       const { mov_x, mov_y, down, touches, shiftKey } = getPointerEventData(event)
       updateState({
-        shared: { args, hovering: true, down, touches, shiftKey },
+        shared: { hovering: true, down, touches, shiftKey },
         move: { xy: [mov_x, mov_y], event }
       })
       handleGesture('onHover')
@@ -415,7 +416,7 @@ export default function useGesture(_props) {
       if (!props.current.config.enabled || !props.current.config.hover) return
       const { mov_x, mov_y, down, touches, shiftKey } = getPointerEventData(event)
       const kinematics = getKinematics(mov_x, mov_y, event, 'move')
-      updateState({ shared: { args, hovering: false, down, touches, shiftKey }, move: { ...kinematics, event } })
+      updateState({ shared: { hovering: false, down, touches, shiftKey }, move: { ...kinematics, event } })
       handleGesture('onHover')
     }
 
