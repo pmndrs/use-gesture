@@ -81,11 +81,12 @@ Because we’re now using `animated.div`, we’re able to make the element dragg
 
 ### Supported gestures
 
-In addition to **drag**, react-use-gesture also supports **scroll** gestures, and mouse-specific gestures such as **move**, **hover** (entering and leaving an element), and **wheel**. Every gesture has a handler that you can pass to `useGesture`, and you can even pass multiple handlers for the element to respond to different gestures.
+In addition to **drag**, react-use-gesture also supports **scroll** gestures, and mouse-specific gestures such as **move**, **wheel** and **hover** (entering and leaving an element), and touch-specific **pinch**. Every gesture has a handler that you can pass to `useGesture`, and you can even pass multiple handlers for the element to respond to different gestures.
 
 ```jsx
 const bind = useGesture({
   onDrag: state => {...},     // fires on drag
+  onPinch: state => {...},     // fires on pinch
   onScroll: state => {...},   // fires on scroll
   onHover: state => {...},    // fires on mouse enter, mouse leave
   onMove: state => {...},     // fires on mouse move over the element
@@ -95,7 +96,7 @@ const bind = useGesture({
 
 #### `on[Gesture]Start` and `on[Gesture]End`
 
-Drag, move, scroll and wheel gestures also have two additional handlers that let you perform actions when they start or end. For example, `onScrollEnd` fires when the user finished scrolling.
+Drag, pinch, move, scroll and wheel gestures also have two additional handlers that let you perform actions when they start or end. For example, `onScrollEnd` fires when the user finished scrolling.
 
 **Note #1:** `on[Gesture]Start` and `on[Gesture]End` methods are provided as a commodity. `on[Gesture]` handlers receive `first` and `last` properties that indicate if the event fired is the first (i.e. gesture has started) or the last one (i.e. gesture has ended).
 
@@ -129,42 +130,67 @@ const bind = useGesture({ onDrag: state => doStuff })
 
 ### `useGesture` event state
 
-Every time a handler is called, it will get passed the current event state of its corresponding gesture. An event state is an object that includes the source event and adds multiple attributes listed below:
+Every time a handler is called, it will get passed the current event state for its corresponding gesture. An event state is an object that includes the source event and adds multiple attributes listed below.
 
-| Name                                             | Type           | Description                                                                                                                                                                  |
-| ------------------------------------------------ | -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `event`                                          | `object`       | source event                                                                                                                                                                 |
-| `time`                                           | `Number`       | timestamp of the current gesture                                                                                                                                             |
-| `xy`                                             | `Vec2 ([x,y])` | for touch/mouse events, `xy` returns the position of the pointer on the screen. For scroll/wheel events `xy` returns how much the element has been scrolled on x and y axis. |
-| `previous`                                       | `Vec2`         | previous `xy`                                                                                                                                                                |
-| `initial`                                        | `Vec2`         | `xy` value when the gesture has started                                                                                                                                      |
-| `delta`                                          | `Vec2`         | delta offset (`xy - initial`)                                                                                                                                                |
-| `local`                                          | `Vec2`         | delta with book-keeping (remembers the `xy` value throughout gestures)                                                                                                       |
-| `lastLocal`                                      | `Vec2`         | previous `local`                                                                                                                                                             |
-| `vxvy`                                           | `Vec2`         | momentum / sped of the gesture (x and y axis separated)                                                                                                                      |
-| `velocity`                                       | `Number`       | momentum / speed of the gesture (x and y axis combined)                                                                                                                      |
-| `distance`                                       | `Number`       | delta distance                                                                                                                                                               |
-| `first`                                          | `Boolean`      | marks the first event                                                                                                                                                        |
-| `last`                                           | `Boolean`      | marks the last event                                                                                                                                                         |
-| `active`                                         | `Boolean`      | `true` when the gesture is active, `false` otherwise                                                                                                                         |
-| `temp`                                           | `Any`          | serves as a cache storing any value returned by your handler during its previous run. See below for an example.                                                              |
-| `cancel`                                         | `Function`     | you can call `cancel` to interrupt the drag gesture. `cancel`is only relevant in the `onDrag` handler.                                                                       |
-| `down`                                           | `Boolean`      | mouse / touch down                                                                                                                                                           |
-| `touches`                                        | `Number`       | number of touches pressing the screen                                                                                                                                        |
-| `shiftKey`<br>`altKey`<br>`ctrlKey`<br>`metaKey` | `Boolean`      | modifier keys are pressed                                                                                                                                                    |
-| `dragging`                                       | `Boolean`      | `true` when the user is dragging                                                                                                                                             |
-| `moving`                                         | `Boolean`      | `true` when the user is moving the mouse                                                                                                                                     |
-| `hovering`                                       | `Boolean`      | `true` when the mouse hovers the element                                                                                                                                     |
-| `scrolling`                                      | `Boolean`      | `true` when the user is scrolling                                                                                                                                            |
-| `wheeling`                                       | `Boolean`      | `true` when the user is wheeling                                                                                                                                             |
-| `args`                                           | `Any`          | arguments you passed to `bind`                                                                                                                                               |
+#### Shared State
+
+The following attributes are provided to the handler whatever the gesture.
+
+| Name                                             | Type       | Description                                                                                                     |
+|--------------------------------------------------|------------|-----------------------------------------------------------------------------------------------------------------|
+| `event`                                          | `object`   | source event                                                                                                    |
+| `time`                                           | `Number`   | timestamp of the current gesture                                                                                |
+| `first`                                          | `Boolean`  | marks the first event                                                                                           |
+| `last`                                           | `Boolean`  | marks the last event                                                                                            |
+| `active`                                         | `Boolean`  | `true` when the gesture is active, `false` otherwise                                                            |
+| `temp`                                           | `Any`      | serves as a cache storing any value returned by your handler during its previous run. See below for an example. |
+| `cancel`                                         | `Function` | you can call `cancel` to interrupt the drag gesture. `cancel`is only relevant in the `onDrag` handler.          |
+| `down`                                           | `Boolean`  | mouse / touch down                                                                                              |
+| `touches`                                        | `Number`   | number of touches pressing the screen                                                                           |
+| `shiftKey`<br>`altKey`<br>`ctrlKey`<br>`metaKey` | `Boolean`  | modifier keys are pressed                                                                                       |
+| `dragging`                                       | `Boolean`  | `true` when the user is dragging                                                                                |
+| `moving`                                         | `Boolean`  | `true` when the user is moving the mouse                                                                        |
+| `hovering`                                       | `Boolean`  | `true` when the mouse hovers the element                                                                        |
+| `scrolling`                                      | `Boolean`  | `true` when the user is scrolling                                                                               |
+| `wheeling`                                       | `Boolean`      | `true` when the user is wheeling                                                                                                                                             
+| `args`                                           | `Any`          | arguments you passed to `bind`                                                                                                                
+
+#### Specific state attributes for XY Gestures `[drag, scroll, wheel, hover]`
+
+The following attributes are provided to the handler for gestures that deal with `x/y` coordinates.
+
+| Name        | Type           | Description                                                                                                                                                                  |
+|-------------|----------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `xy`        | `Vec2 ([x,y])` | for touch/mouse events, `xy` returns the position of the pointer on the screen. For scroll/wheel events `xy` returns how much the element has been scrolled on x and y axis. |
+| `previous`  | `Vec2`         | previous `xy`                                                                                                                                                                |
+| `initial`   | `Vec2`         | `xy` value when the gesture has started                                                                                                                                      |
+| `delta`     | `Vec2`         | delta offset (`xy - initial`)                                                                                                                                                |
+| `local`     | `Vec2`         | delta with book-keeping (remembers the `xy` value throughout gestures)                                                                                                       |
+| `lastLocal` | `Vec2`         | previous `local`                                                                                                                                                             |
+| `vxvy`      | `Vec2`         | momentum / speed of the gesture (`x` and `y` axis separated)                                                                                                                 |
+| `velocity`  | `Number`       | momentum / speed of the gesture (`x` and `y` axis combined)                                                                                                                  |
+| `distance`                                       | `Number`       | delta distance                      
+
+#### Specific state attributes for Distance Angle Gestures `[pinch]`
+
+Pinch is generally about scaling and rotating. The scale depends on the distance between the two fingers, while the rotation depends on the direction / angle of the vector formed by the two fingers.
+
+| Name        | Type   | Description                                                            |
+|-------------|--------|------------------------------------------------------------------------|
+| `da`        | `Vec2` | distance and angle.                                                    |
+| `previous`  | `Vec2` | previous `da`                                                          |
+| `initial`   | `Vec2` | `da` value when the gesture has started                                |
+| `delta`     | `Vec2` | delta offset (`da - initial`)                                          |
+| `local`     | `Vec2` | delta with book-keeping (remembers the `da` value throughout gestures) |
+| `lastLocal` | `Vec2` | previous `local`                                                       |
+| `vdva`      | `Vec2` | momentum / speed of the gesture for distance and angle                 |
 
 ### `useGesture` config
 
 You can pass a `config` object to `useGesture` to customize its behavior.
 
 | Name        | Default Value                     | Description                                                                                                                                                                            |
-| ----------- | --------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|-------------|-----------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `domTarget` | `undefined`                       | lets you specify a dom node you want to attach gestures to (body, window, document...)                                                                                                 |
 | `event`     | `{passive: true, capture: false}` | the event config attribute lets you configure `passive` and `capture` options passed to event listeners                                                                                |
 | `transform` | `{x: x => x, y =>y }`             | Transform functions you can pass to modify `x` and `y` values.                                                                                                                         |
@@ -211,4 +237,4 @@ The recommended way of passing an external value to `useGesture` is by using `Re
 `onDrag` only fires while your touch or press the element. You just need to hover your mouse above the element to trigger `onMove`.
 
 **Why `onWheel` and `onScroll`?**
-Scrolling and wheeling are structurally different events although they produce similar results most of the time. First of all, `wheel` is a mouse-only event. For `onScroll` to be fired, the element you're scrolling needs to actually scroll, therefore have content overflowing, while you just need to wheel over an element to trigger `onWheel`. If you use [react-three-fiber](https://github.com/drcmda/react-three-fiber), `onWheel` might prove useful to simulate scroll on canvas elements.
+Scrolling and wheeling are structurally different events although they produce similar results (i.e. scrolling a page). First of all, `wheel` is a mouse-only event. Then, for `onScroll` to be fired, the element you're scrolling needs to actually scroll, therefore have content overflowing, while you just need to wheel over an element to trigger `onWheel`. If you use [react-three-fiber](https://github.com/drcmda/react-three-fiber), `onWheel` might prove useful to simulate scroll on canvas elements.
