@@ -25,7 +25,7 @@ You can use it stand-alone, but to make the most of it you should combine it wit
 import useGesture from 'react-use-gesture'
 ```
 
-The api is straight forward. You bind handlers to your view, specify the actions you want to respond to (drag, hover, move, scroll or wheel) and you will receive events when you interact with the component. These events include the source dom event, but also carry additional kinematics such as velocity, distance, delta, etc.
+The api is straight forward. You bind handlers to your view, specify the actions you want to respond to (drag, pinch, hover, move, scroll or wheel) and you will receive events when you interact with the component. These events include the source dom event, but also carry additional kinematics such as velocity, distance, delta, etc.
 
 Hooks allow gestures to be re-used for more than one view (you can use the same `bind()` function multiple times!).
 
@@ -119,7 +119,7 @@ _Note that using `useEffect` will also take care of removing event listeners whe
 
 ### Shortcut to the drag event handler
 
-Although React-use-gesture was initially developed to support drag events only (press, move and release), this library now supports hover, move, scroll and wheel events. To ensure retro-compatibility with **v4.x**, **v5.x** still gives you a shortcut to the `onDrag` and pass directly the handler function as the sole argument of `useGesture`
+Although React-use-gesture was initially developed to support drag events only (press, move and release), this library now supports pinch, hover, move, scroll and wheel events. To ensure retro-compatibility with **v4.x**, **v5.x** still gives you a shortcut to the `onDrag` and pass directly the handler function as the sole argument of `useGesture`
 
 ```jsx
 // This:
@@ -173,7 +173,7 @@ The following attributes are provided to the handler for gestures that deal with
 
 #### Specific state attributes for Distance Angle Gestures `[pinch]`
 
-Pinch is generally about scaling and rotating. The scale depends on the distance between the two fingers, while the rotation depends on the direction / angle of the vector formed by the two fingers.
+Pinch is generally about scaling and rotating. The scale depends on the distance between the two fingers, while the rotation depends on the direction / angle of the vector formed by the two fingers. Or more specifically, both scale and rotation depends on the `delta` of `distance` and `angle`, so you will probably end up using `local` or `delta` in most cases.
 
 | Name        | Type   | Description                                                            |
 |-------------|--------|------------------------------------------------------------------------|
@@ -228,7 +228,7 @@ return <animated.div {...bind()} style={{ transform: xy.interpolate((x, y) => `t
 ### Frequently asked questions
 
 **What are the differences between using `useGesture` and adding listeners manually?**
-Not a lot! Essentially `useGesture` simplifies the implementation of the drag gesture, calculates kinematics values you wouldn't get out of the box from the listeners, and debounces move scroll and wheel events to let you know when they end.
+Not a lot! Essentially `useGesture` simplifies the implementation of the drag and pinch gestures, calculates kinematics values you wouldn't get out of the box from the listeners, and debounces move scroll and wheel events to let you know when they end.
 
 **How do you pass state to `useGesture`?**
 The recommended way of passing an external value to `useGesture` is by using `React.useRef`.
