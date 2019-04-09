@@ -74,8 +74,8 @@ export default function useGesture(_props) {
   props.current = _props
 
   const state = React.useRef(initialState)
-  const oldArgs = React.useRef([])
-  const oldResult = React.useRef(null)
+  const argsRef = React.useRef([])
+  const handlersRef = React.useRef(null)
   const timeouts = React.useRef({})
   const domListeners = React.useRef([])
   const dragListeners = React.useRef([])
@@ -89,13 +89,14 @@ export default function useGesture(_props) {
   React.useEffect(() => clean, [clean])
 
   const [bind] = React.useState(() => (...args) => {
-    const unchanged = oldArgs.current.length === args.length && args.every((arg, index) => arg === oldArgs.current[index])
-    oldArgs.current = args
+    const unchanged =
+      handlersRef.current && argsRef.current.length === args.length && args.every((arg, index) => arg === argsRef.current[index])
     if (!unchanged) {
       clean()
-      oldResult.current = handlers(args)
+      argsRef.current = args
+      handlersRef.current = handlers(args)
     }
-    return oldResult.current
+    return handlersRef.current
   })
 
   return bind
