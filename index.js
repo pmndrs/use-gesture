@@ -66,19 +66,21 @@ export default function useGesture(props, config) {
   if (typeof props === 'function') props = { onDrag: props }
   if (props.onAction) {
     props.onDrag = props.onAction
-    delete props.onAction
   }
 
   config = { ...defaultConfig, ...props.config, ...config }
 
-  const configRef = React.useRef(null)
-  const propsRef = React.useRef(null)
-  configRef.current = config
-  propsRef.current = props
+  const propsRef = React.useRef(props)
+  const configRef = React.useRef(config)
+
+  React.useEffect(() => {
+    propsRef.current = props
+    configRef.current = config
+  }, [props, config])
 
   const state = React.useRef(initialState)
   const argsRef = React.useRef([])
-  const handlersRef = React.useRef(null)
+  const handlersRef = React.useRef()
   const timeouts = React.useRef({})
   const domListeners = React.useRef([])
   const dragListeners = React.useRef([])
