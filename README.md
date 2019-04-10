@@ -136,22 +136,22 @@ Every time a handler is called, it will get passed the current event state for i
 
 The following attributes are provided to the handler whatever the gesture.
 
-| Name                                             | Type       | Description                                                                                                     |
-|--------------------------------------------------|------------|-----------------------------------------------------------------------------------------------------------------|
-| `event`                                          | `object`   | source event                                                                                                    |
-| `time`                                           | `Number`   | timestamp of the current gesture                                                                                |
-| `first`                                          | `Boolean`  | marks the first event                                                                                           |
-| `last`                                           | `Boolean`  | marks the last event                                                                                            |
-| `active`                                         | `Boolean`  | `true` when the gesture is active, `false` otherwise                                                            |
-| `temp`                                           | `Any`      | serves as a cache storing any value returned by your handler during its previous run. See below for an example. |
-| `cancel`                                         | `Function` | you can call `cancel` to interrupt the drag gesture. `cancel`is only relevant in the `onDrag` handler.          |
-| `down`                                           | `Boolean`  | mouse / touch down                                                                                              |
-| `touches`                                        | `Number`   | number of touches pressing the screen                                                                           |
-| `shiftKey`<br>`altKey`<br>`ctrlKey`<br>`metaKey` | `Boolean`  | modifier keys are pressed                                                                                       |
-| `dragging`                                       | `Boolean`  | `true` when the user is dragging                                                                                |
-| `moving`                                         | `Boolean`  | `true` when the user is moving the mouse                                                                        |
-| `hovering`                                       | `Boolean`  | `true` when the mouse hovers the element                                                                        |
-| `scrolling`                                      | `Boolean`  | `true` when the user is scrolling                                                                               |
+| Name                                                | Type       | Description                                                                                                     |
+|-----------------------------------------------------|------------|-----------------------------------------------------------------------------------------------------------------|
+| `event`                                             | `object`   | source event                                                                                                    |
+| `time`                                              | `Number`   | timestamp of the current gesture                                                                                |
+| `first`                                             | `Boolean`  | marks the first event                                                                                           |
+| `last`                                              | `Boolean`  | marks the last event                                                                                            |
+| `active`                                            | `Boolean`  | `true` when the gesture is active, `false` otherwise                                                            |
+| `temp`                                              | `Any`      | serves as a cache storing any value returned by your handler during its previous run. See below for an example. |
+| `cancel`                                            | `Function` | you can call `cancel` to interrupt the drag gesture. `cancel`is only relevant in the `onDrag` handler.          |
+| `down`                                              | `Boolean`  | mouse / touch down                                                                                              |
+| `touches`                                           | `Number`   | number of touches pressing the screen                                                                           |
+| `shiftKey`<br/>`altKey`<br/>`ctrlKey`<br/>`metaKey` | `Boolean`  | modifier keys are pressed                                                                                       |
+| `dragging`                                          | `Boolean`  | `true` when the user is dragging                                                                                |
+| `moving`                                            | `Boolean`  | `true` when the user is moving the mouse                                                                        |
+| `hovering`                                          | `Boolean`  | `true` when the mouse hovers the element                                                                        |
+| `scrolling`                                         | `Boolean`  | `true` when the user is scrolling                                                                               |
 | `wheeling`                                       | `Boolean`      | `true` when the user is wheeling                                                                                                                                             
 | `args`                                           | `Any`          | arguments you passed to `bind`                                                                                                                
 
@@ -197,7 +197,7 @@ You can pass a `config` object as an optional second argument to `useGesture` to
 | `transform` | `{x: x => x, y =>y }`             | transform functions you can pass to modify `x` and `y` values.                                                                                                                         |
 | `window`    | `window`                          | lets you specify which `window` element `useGesture` should use. See this [thread](https://github.com/react-spring/react-use-gesture/pull/43#issue-262835054) for a relevant use case. |
 | `enabled`| `true`| enables or disables all gestures
-|  `drag`<br>`pinch`<br>`scroll`<br>`wheel`<br>`hover`<br>`move`<br> | `true`| enables or disables gestures individually
+|  `drag`<br/>`pinch`<br/>`scroll`<br/>`wheel`<br/>`hover`<br/>`move`<br/> | `true`| enables or disables gestures individually
 
 ### Examples
 
