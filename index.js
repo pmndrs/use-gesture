@@ -72,7 +72,9 @@ export default function useGesture(props, config) {
   config = { ...defaultConfig, ...props.config, ...config }
 
   const configRef = React.useRef(null)
+  const propsRef = React.useRef(null)
   configRef.current = config
+  propsRef.current = props
 
   const state = React.useRef(initialState)
   const argsRef = React.useRef([])
@@ -174,8 +176,8 @@ export default function useGesture(props, config) {
     const handleGesture = action => {
       const stateKey = stateKeys[action]
       const actionState = { ...state.current.shared, ...state.current[stateKey] }
-      if (props[action]) {
-        state.current[stateKey].temp = props[action](actionState) || state.current[stateKey].temp
+      if (propsRef.current[action]) {
+        state.current[stateKey].temp = propsRef.current[action](actionState) || state.current[stateKey].temp
       }
     }
 
@@ -183,20 +185,20 @@ export default function useGesture(props, config) {
       const stateKey = stateKeys[action]
       const actionState = { ...state.current.shared, ...state.current[stateKey] }
       const actionStart = `${action}Start`
-      props[actionStart] && props[actionStart](actionState)
-      if (props[action]) {
-        state.current[stateKey].temp = props[action](actionState) || state.current[stateKey].temp
+      propsRef.current[actionStart] && propsRef.current[actionStart](actionState)
+      if (propsRef.current[action]) {
+        state.current[stateKey].temp = propsRef.current[action](actionState) || state.current[stateKey].temp
       }
     }
 
     const handleGestureEnd = (action, callDefaultAction = true) => {
       const stateKey = stateKeys[action]
       const actionState = { ...state.current.shared, ...state.current[stateKey] }
-      if (callDefaultAction && props[action]) {
-        state.current[stateKey].temp = props[action](actionState) || state.current[stateKey].temp
+      if (callDefaultAction && propsRef.current[action]) {
+        state.current[stateKey].temp = propsRef.current[action](actionState) || state.current[stateKey].temp
       }
       const actionEnd = `${action}End`
-      props[actionEnd] && props[actionEnd](actionState)
+      propsRef.current[actionEnd] && propsRef.current[actionEnd](actionState)
     }
 
     const onDragStart = event => {
