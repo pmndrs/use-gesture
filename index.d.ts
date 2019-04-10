@@ -30,7 +30,7 @@ export interface GestureOptions {
     touch?: boolean;
     mouse?: boolean;
     passive?: boolean | AddEventListenerOptions;
-
+    window?: Window;
     onAction?(state: GestureState): any;
     onMove?(state: GestureState): any;
     onUp?(state: GestureState): any;
