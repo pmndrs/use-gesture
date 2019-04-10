@@ -62,16 +62,17 @@ const initialState = {
 
 const genericEndState = { last: true, active: false }
 
-export default function useGesture(_props) {
-  if (typeof _props === 'function') _props = { onDrag: _props }
-  if (_props.onAction) {
-    _props.onDrag = _props.onAction
-    delete _props.onAction
+export default function useGesture(props, config) {
+  if (typeof props === 'function') props = { onDrag: props }
+  if (props.onAction) {
+    props.onDrag = props.onAction
+    delete props.onAction
   }
-  _props = { ..._props, config: { ...defaultConfig, ..._props.config } }
 
-  const props = React.useRef(_props)
-  props.current = _props
+  config = { ...defaultConfig, ...props.config, ...config }
+
+  const configRef = React.useRef(null)
+  configRef.current = config
 
   const state = React.useRef(initialState)
   const argsRef = React.useRef([])
@@ -82,8 +83,8 @@ export default function useGesture(_props) {
 
   const clean = React.useCallback(() => {
     clearTimeouts(timeouts.current)
-    removeListeners(props.current.config.domTarget, domListeners.current, props.current.config.event)
-    removeListeners(props.current.config.window, dragListeners.current, props.current.config.event)
+    removeListeners(configRef.current.domTarget, domListeners.current, configRef.current.event)
+    removeListeners(configRef.current.window, dragListeners.current, configRef.current.event)
   }, [])
 
   React.useEffect(() => clean, [clean])
@@ -108,10 +109,10 @@ export default function useGesture(_props) {
     const {
       domTarget,
       event: { pointerEvents }
-    } = props.current.config
+    } = configRef.current
 
     const actions = new Set(
-      Object.keys(props.current)
+      Object.keys(props)
         .filter(k => k.indexOf('on') === 0)
         .map(k => k.match(/(on[A-Z][a-z]+)/)[1])
     )
@@ -122,7 +123,7 @@ export default function useGesture(_props) {
     }
 
     const getGenericStartState = (event, stateKey, xy) => {
-      const transform = state.current[stateKey].transform || event.transform || props.current.config.transform
+      const transform = state.current[stateKey].transform || event.transform || configRef.current.transform
       const lastLocal = state.current[stateKey].local || initialState[stateKey].local
       return {
         ...initialState[stateKey],
@@ -139,7 +140,7 @@ export default function useGesture(_props) {
     const getKinematics = (mov_x, mov_y, event, stateKey, isDelta = false) => {
       const lastLocal = state.current[stateKey].lastLocal || initialState[stateKey].lastLocal
       const { xy, initial, delta, time, transform } = state.current[stateKey]
-      const t = transform || event.transform || props.current.config.transform
+      const t = transform || event.transform || configRef.current.transform
 
       const delta_t = event.timeStamp - time
 
@@ -173,8 +174,8 @@ export default function useGesture(_props) {
     const handleGesture = action => {
       const stateKey = stateKeys[action]
       const actionState = { ...state.current.shared, ...state.current[stateKey] }
-      if (props.current[action]) {
-        state.current[stateKey].temp = props.current[action](actionState) || state.current[stateKey].temp
+      if (props[action]) {
+        state.current[stateKey].temp = props[action](actionState) || state.current[stateKey].temp
       }
     }
 
@@ -182,24 +183,24 @@ export default function useGesture(_props) {
       const stateKey = stateKeys[action]
       const actionState = { ...state.current.shared, ...state.current[stateKey] }
       const actionStart = `${action}Start`
-      props.current[actionStart] && props.current[actionStart](actionState)
-      if (props.current[action]) {
-        state.current[stateKey].temp = props.current[action](actionState) || state.current[stateKey].temp
+      props[actionStart] && props[actionStart](actionState)
+      if (props[action]) {
+        state.current[stateKey].temp = props[action](actionState) || state.current[stateKey].temp
       }
     }
 
     const handleGestureEnd = (action, callDefaultAction = true) => {
       const stateKey = stateKeys[action]
       const actionState = { ...state.current.shared, ...state.current[stateKey] }
-      if (callDefaultAction && props.current[action]) {
-        state.current[stateKey].temp = props.current[action](actionState) || state.current[stateKey].temp
+      if (callDefaultAction && props[action]) {
+        state.current[stateKey].temp = props[action](actionState) || state.current[stateKey].temp
       }
       const actionEnd = `${action}End`
-      props.current[actionEnd] && props.current[actionEnd](actionState)
+      props[actionEnd] && props[actionEnd](actionState)
     }
 
     const onDragStart = event => {
-      if (!props.current.config.enabled || !props.current.config.drag) return
+      if (!configRef.current.enabled || !configRef.current.drag) return
 
       const { mov_x, mov_y, ...rest } = getPointerEventData(event)
       // making sure we're not dragging the element when more than one finger press the screen
@@ -215,7 +216,7 @@ export default function useGesture(_props) {
         dragListeners.current.push(['touchmove', onDragMove])
         dragListeners.current.push(['touchend', onDragEnd])
         dragListeners.current.push(['touchcancel', onDragEnd])
-        addListeners(props.current.config.window, dragListeners.current, props.current.config.event)
+        addListeners(configRef.current.window, dragListeners.current, configRef.current.event)
       }
 
       const startState = getGenericStartState(event, 'drag', [mov_x, mov_y])
@@ -235,7 +236,7 @@ export default function useGesture(_props) {
       if (pointerEvents) {
         currentTarget.releasePointerCapture(pointerId)
       } else {
-        removeListeners(props.current.config.window, dragListeners.current, props.current.config.event)
+        removeListeners(configRef.current.window, dragListeners.current, configRef.current.event)
       }
       updateState({ shared: { dragging: false, down: false, touches: 0 }, drag: { ...genericEndState, event, cancel: noop, canceled } })
 
@@ -256,13 +257,13 @@ export default function useGesture(_props) {
     const cancelDrag = event => requestAnimationFrame(() => onDragEnd(event, true))
 
     const onPinchStart = event => {
-      if (!props.current.config.enabled || !props.current.config.pinch || event.touches.length !== 2) return
+      if (!configRef.current.enabled || !configRef.current.pinch || event.touches.length !== 2) return
 
       const dx = event.touches[1].clientX - event.touches[0].clientX
       const dy = event.touches[1].clientY - event.touches[0].clientY
 
       const lastLocal = state.current.pinch.local || initialState.pinch.local
-      const transform = state.current.pinch.transform || event.transform || props.current.config.transform
+      const transform = state.current.pinch.transform || event.transform || configRef.current.transform
 
       const da = [Math.hypot(dx, dy), (Math.atan2(dx, dy) * 180) / Math.PI]
 
@@ -338,7 +339,7 @@ export default function useGesture(_props) {
     }
 
     const onMove = event => {
-      if (!props.current.config.enabled || !props.current.config.move) return
+      if (!configRef.current.enabled || !configRef.current.move) return
       clearTimeout(timeouts.current.move)
       timeouts.current.move = setTimeout(onMoveEnd, 100)
 
@@ -361,7 +362,7 @@ export default function useGesture(_props) {
     }
 
     const onScroll = event => {
-      if (!props.current.config.enabled || !props.current.config.scroll) return
+      if (!configRef.current.enabled || !configRef.current.scroll) return
       clearTimeout(timeouts.current.scroll)
       timeouts.current.scroll = setTimeout(onScrollEnd, 100)
       const { mov_x, mov_y } = getScrollEventData(event)
@@ -386,7 +387,7 @@ export default function useGesture(_props) {
     }
 
     const onWheel = event => {
-      if (!props.current.config.enabled || !props.current.config.wheel) return
+      if (!configRef.current.enabled || !configRef.current.wheel) return
       clearTimeout(timeouts.current.wheel)
       timeouts.current.wheel = setTimeout(onWheelEnd, 100)
       const { mov_x, mov_y } = getWheelEventData(event)
@@ -403,7 +404,7 @@ export default function useGesture(_props) {
     }
 
     const onEnter = event => {
-      if (!props.current.config.enabled || !props.current.config.hover) return
+      if (!configRef.current.enabled || !configRef.current.hover) return
       const { mov_x, mov_y, down, touches, shiftKey } = getPointerEventData(event)
       updateState({
         shared: { hovering: true, down, touches, shiftKey },
@@ -413,7 +414,7 @@ export default function useGesture(_props) {
     }
 
     const onLeave = event => {
-      if (!props.current.config.enabled || !props.current.config.hover) return
+      if (!configRef.current.enabled || !configRef.current.hover) return
       const { mov_x, mov_y, down, touches, shiftKey } = getPointerEventData(event)
       const kinematics = getKinematics(mov_x, mov_y, event, 'move')
       updateState({ shared: { hovering: false, down, touches, shiftKey }, move: { ...kinematics, event } })
@@ -421,7 +422,7 @@ export default function useGesture(_props) {
     }
 
     const output = {}
-    const capture = props.current.config.event.capture ? 'Capture' : ''
+    const capture = configRef.current.event.capture ? 'Capture' : ''
     const listeners = {}
 
     if (actions.has('onMove')) {
@@ -460,7 +461,7 @@ export default function useGesture(_props) {
     if (domTarget) {
       domListeners.current = []
       Object.entries(listeners).forEach(([k, fns]) => domListeners.current.push([k.substr(2).toLowerCase(), chain(...fns)]))
-      addListeners(domTarget, domListeners.current, props.current.config.event)
+      addListeners(domTarget, domListeners.current, configRef.current.event)
       return clean
     }
 

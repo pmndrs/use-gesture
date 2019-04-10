@@ -21,8 +21,11 @@ You can use it stand-alone, but to make the most of it you should combine it wit
 
 ### Api
 
-```js
+```jsx
 import useGesture from 'react-use-gesture'
+
+// in your component
+const bind = useGesture(actions, config)
 ```
 
 The api is straight forward. You bind handlers to your view, specify the actions you want to respond to (drag, pinch, hover, move, scroll or wheel) and you will receive events when you interact with the component. These events include the source dom event, but also carry additional kinematics such as velocity, distance, delta, etc.
@@ -35,7 +38,7 @@ function myComponent() {
   const bind = useGesture({
     onDrag: dragState => doStuffOnDrag,
     onScroll: scrollState => doStuffOnScroll
-  })
+  }, { event : { passive: false } })
   return <div {...bind(optionalArgs)} />
 }
 ```
@@ -108,10 +111,7 @@ React-use-gesture also supports to add handlers to dom nodes directly (or the `w
 
 ```js
 // this will add a scroll listener to the window
-const bind = useGesture({
-  onScroll: state => doStuff,
-  config: { domTarget: window }
-})
+const bind = useGesture({ onScroll: state => doStuff }, { domTarget: window })
 React.useEffect(bind, [bind])
 ```
 
@@ -175,26 +175,29 @@ The following attributes are provided to the handler for gestures that deal with
 
 Pinch is generally about scaling and rotating. The scale depends on the distance between the two fingers, while the rotation depends on the direction / angle of the vector formed by the two fingers. Or more specifically, both scale and rotation depends on the `delta` of `distance` and `angle`, so you will probably end up using `local` or `delta` in most cases.
 
-| Name        | Type   | Description                                                            |
-|-------------|--------|------------------------------------------------------------------------|
-| `da`        | `Vec2` | distance and angle.                                                    |
-| `previous`  | `Vec2` | previous `da`                                                          |
-| `initial`   | `Vec2` | `da` value when the gesture has started                                |
-| `delta`     | `Vec2` | delta offset (`da - initial`)                                          |
-| `local`     | `Vec2` | delta with book-keeping (remembers the `da` value throughout gestures) |
-| `lastLocal` | `Vec2` | previous `local`                                                       |
-| `vdva`      | `Vec2` | momentum / speed of the gesture for distance and angle                 |
+| Name        | Type     | Description                                                            |
+|-------------|----------|------------------------------------------------------------------------|
+| `da`        | `Vec2`   | distance and angle.                                                    |
+| `previous`  | `Vec2`   | previous `da`                                                          |
+| `initial`   | `Vec2`   | `da` value when the gesture has started                                |
+| `delta`     | `Vec2`   | delta offset (`da - initial`)                                          |
+| `local`     | `Vec2`   | delta with book-keeping (remembers the `da` value throughout gestures) |
+| `lastLocal` | `Vec2`   | previous `local`                                                       |
+| `vdva`      | `Vec2`   | momentum / speed of the gesture for distance and angle                 |
+| `turns`     | `Number` | keeps track of the number of turns                                     |
 
 ### `useGesture` config
 
-You can pass a `config` object to `useGesture` to customize its behavior.
+You can pass a `config` object as an optional second argument to `useGesture` to customize its behavior.
 
 | Name        | Default Value                     | Description                                                                                                                                                                            |
 |-------------|-----------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `domTarget` | `undefined`                       | lets you specify a dom node you want to attach gestures to (body, window, document...)                                                                                                 |
 | `event`     | `{passive: true, capture: false}` | the event config attribute lets you configure `passive` and `capture` options passed to event listeners                                                                                |
-| `transform` | `{x: x => x, y =>y }`             | Transform functions you can pass to modify `x` and `y` values.                                                                                                                         |
-| `window`    | `window`                          | Lets you specify which `window` element `useGesture` should use. See this [thread](https://github.com/react-spring/react-use-gesture/pull/43#issue-262835054) for a relevant use case. |
+| `transform` | `{x: x => x, y =>y }`             | transform functions you can pass to modify `x` and `y` values.                                                                                                                         |
+| `window`    | `window`                          | lets you specify which `window` element `useGesture` should use. See this [thread](https://github.com/react-spring/react-use-gesture/pull/43#issue-262835054) for a relevant use case. |
+| `enabled`| `true`| enables or disables all gestures
+|  `drag`<br>`pinch`<br>`scroll`<br>`wheel`<br>`hover`<br>`move`<br> | `true`| enables or disables gestures individually
 
 ### Examples
 

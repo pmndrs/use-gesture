@@ -1,62 +1,109 @@
-import * as React from 'react';
+import * as React from 'react'
 
 // Helper type, taken from: https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-8.html
-type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
+type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
+type AtLeastOne<T, U = { [K in keyof T]: Pick<T, K> }> = Partial<T> & U[keyof U]
 
-export type vector2 = [number, number];
+export type vector2 = [number, number]
 
-export interface GestureState {
-    event: MouseEvent | TouchEvent;
-    target: HTMLElement;
-    initial: vector2;
-    xy: vector2;
-    previous: vector2;
-    delta: vector2;
-    direction: vector2;
-    local: vector2;
-    lastLocal: vector2;
-    time: number;
-    velocity: number;
-    distance: number;
-    first: boolean;
-    down: boolean;
-    args: any;
-    temp: any;
+interface GestureSharedState {
+  args: any
+  hovering?: boolean
+  scrolling?: boolean
+  dragging?: boolean
+  moving?: boolean
+  pinching?: boolean
+  touches?: number
+  down?: boolean
+  shiftKey?: boolean
+  altKey?: boolean
+  metaKey?: boolean
+  ctrlKey?: boolean
+}
 
-    cancel?(): void;
+interface GestureCommonState extends GestureSharedState {
+  event: MouseEvent | TouchEvent
+  delta: vector2
+  initial: vector2
+  previous: vector2
+  transform(): vector2
+  local: vector2
+  lastLocal: vector2
+  first: boolean
+  last: boolean
+  active: boolean
+  time: number
+  temp: any
+  cancel?(): void
+  canceled: boolean
+}
+
+export interface GestureXYState extends GestureCommonState {
+  xy: vector2
+  velocity: number
+  vxvy: vector2
+  distance: number
+  direction: vector2
+}
+
+export interface GestureDAState extends GestureCommonState {
+  da: vector2
+  vdva: vector2
+  turns: number
+}
+
+export interface EventConfig {
+  passive: boolean
+  capture: boolean
+  pointerEvents: boolean
+}
+
+export interface GestureConfig {
+  domTarget: EventTarget
+  event: Partial<EventConfig>
+  window: EventTarget
+  transform(): vector2
+  enabled: boolean
+  drag: boolean
+  pinch: boolean
+  scroll: boolean
+  wheel: boolean
+  hover: boolean
+  move: boolean
 }
 
 export interface GestureOptions {
-    touch?: boolean;
-    mouse?: boolean;
-    passive?: boolean | AddEventListenerOptions;
-
-    onAction?(state: GestureState): any;
-    onMove?(state: GestureState): any;
-    onUp?(state: GestureState): any;
-    onDown?(state: GestureState): any;
+  onDrag(state: GestureXYState): any
+  onDragStart(state: GestureXYState): any
+  onDragEnd(state: GestureXYState): any
+  onMove(state: GestureXYState): any
+  onMoveStart(state: GestureXYState): any
+  onMoveEnd(state: GestureXYState): any
+  onScroll(state: GestureXYState): any
+  onScrollStart(state: GestureXYState): any
+  onScrollEnd(state: GestureXYState): any
+  onWheel(state: GestureXYState): any
+  onWheelStart(state: GestureXYState): any
+  onWheelEnd(state: GestureXYState): any
+  onPinch(state: GestureDAState): any
+  onPinchStart(state: GestureDAState): any
+  onPinchEnd(state: GestureDAState): any
 }
-
-export interface GestureProps {
-    style?: React.CSSProperties;
-    className?: string;
-
-    children(props: GestureState): React.ReactNode;
-}
-
-export function withGesture(config: GestureOptions)
-    : <P extends GestureState>(WrappedComponent: React.ComponentType<P>) 
-    => React.ComponentType<Omit<P, keyof GestureState>>
 
 type GestureEvents = {
-    onMouseDown?: React.MouseEventHandler;
-    onTouchStart?: React.TouchEventHandler;
+  onMouseDown: React.MouseEventHandler
+  onMouseUp: React.MouseEventHandler
+  onMouseEnter: React.MouseEventHandler
+  onMouseLeave: React.MouseEventHandler
+  onMouseMove: React.MouseEventHandler
+  onTouchStart: React.TouchEventHandler
+  onTouchMove: React.TouchEventHandler
+  onTouchEnd: React.TouchEventHandler
+  onTouchCancel: React.TouchEventHandler
 }
 
-export function useGesture(): [(...args: any[]) => GestureEvents, GestureState]
-export function useGesture(onAction: (state: GestureState) => any): (...args: any[]) => GestureEvents
-export function useGesture(options: Pick<GestureOptions, Exclude<keyof GestureOptions, "onAction">>): [(...args: any[]) => GestureEvents, GestureState]
-export function useGesture(options: GestureOptions): (...args: any[]) => GestureEvents
-
-export class Gesture extends React.Component<GestureProps & GestureOptions> {
-}
+export function useGesture(
+  onDrag: (state: GestureXYState) => any,
+  config?: Partial<GestureConfig>
+): (...args: any[]) => Partial<GestureEvents>
+export function useGesture(options: AtLeastOne<GestureOptions>, config?: Partial<GestureConfig>): (...args: any[]) => Partial<GestureEvents>

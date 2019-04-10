@@ -1,31 +1,33 @@
 import * as React from 'react'
-import { useGesture, GestureState } from '../../index'
+import { useGesture, GestureXYState, GestureDAState } from '../../index'
 
 function useGestureWithFunction(props: any) {
-  const bind = useGesture(e => e)
+  const bind = useGesture(
+    (state: GestureXYState): any => {
+      console.log(state)
+    },
+    { event: { passive: false } }
+  )
   return <div {...bind(...props)}> gesture hooks with function </div>
 }
 
-function useGetureWithOnAction(props: any) {
-  const bind = useGesture({
-    onAction(state: GestureState): any {
-      return 'test'
-    }
-  })
+function useGestureWithOnDrag(props: any) {
+  const bind = useGesture(
+    {
+      onDrag(state: GestureXYState): any {
+        console.log(state)
+      }
+    },
+    { event: { passive: false }, window }
+  )
   return <div {...bind(...props)}> gesture hooks with on action </div>
 }
 
-function useGetureWithoutOnAction(props: any) {
-  const [bind, state] = useGesture({ mouse: true })
-  return <div {...bind(...props)}> gesture hooks without on action </div>
-}
-
-function useGestureWithoutProps() {
-  const [
-    bind,
-    {
-      local: [x, y]
+function useGestureNoConfig(props: any) {
+  const bind = useGesture({
+    onPinch(state: GestureDAState): any {
+      console.log(state)
     }
-  ] = useGesture()
-  return <div {...bind()}> gesture hooks without props </div>
+  })
+  return <div {...bind(...props)}> gesture hooks with on action </div>
 }
