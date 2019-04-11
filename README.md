@@ -66,13 +66,13 @@ function myComponent() {
 }
 ```
 
-When the user drags the `div` that receives the `bind()` prop, `useGesture` updates the state of the component and the `div` gets positioned accordingly.
+When the user drags the `div` that receives the `{...bind()}` prop, `useGesture` updates the state of the component and the `div` gets positioned accordingly.
 
 In this case we fetch `local` off the gesture event, which keeps track of delta positions after release. Deltas are especially important in this lib, because they make it possible to use transitions for positioning, instead of doing complex `getBoundingClientRect()` calculations to figure out where a node went on the screen.
 
 #### Avoid re-rendering (preferred)
 
-In the example we’ve just seen, the component gets re-rendered every time `useGesture` drag handler fires, which can be taxing. To avoid re-rendering you may want to use libraries such as [react-spring](https://github.com/react-spring/react-spring) that allow to animate dom elements without setting state and therefore without triggering new renders.
+In the example we’ve just seen, the component gets re-rendered every time `useGesture` drag handler fires, which can be taxing. To avoid re-rendering you may want to use libraries such as [react-spring](https://github.com/react-spring/react-spring) that allow animating dom elements without setting state, and therefore without triggering new renders.
 
 ```jsx
 import { useSpring, animated } from 'react-spring'
@@ -89,7 +89,7 @@ Because we’re now using `animated.div`, we’re able to make the element dragg
 
 ### Supported gestures
 
-In addition to **drag**, react-use-gesture also supports **scroll** gestures, and mouse-specific gestures such as **move**, **wheel** and **hover** (entering and leaving an element), and touch-specific **pinch**. Every gesture has a handler that you can pass to `useGesture`, and you can even pass multiple handlers for the element to respond to different gestures.
+In addition to **drag**, react-use-gesture also supports **scroll** gestures, and mouse-specific gestures such as **move**, **wheel** and **hover** (entering and leaving an element), and touch-specific **pinch**. Every gesture has a handler that should be passed to `useGesture`, and you can even pass multiple handlers for the element to respond to different gestures.
 
 ```jsx
 const bind = useGesture({
@@ -106,13 +106,13 @@ const bind = useGesture({
 
 Drag, pinch, move, scroll and wheel gestures also have two additional handlers that let you perform actions when they start or end. For example, `onScrollEnd` fires when the user finished scrolling.
 
-**Note #1:** `on[Gesture]Start` and `on[Gesture]End` methods are provided as a commodity. `on[Gesture]` handlers receive `first` and `last` properties that indicate if the event fired is the first (i.e. gesture has started) or the last one (i.e. gesture has ended).
+**Note #1:** `on[Gesture]Start` and `on[Gesture]End` methods are provided as a commodity. `on[Gesture]` handlers also receive `first` and `last` properties that indicate if the event fired is the first (i.e. gesture has started) or the last one (i.e. gesture has ended).
 
-**Note #2:** since browsers don't have native event listeners for when scroll, move or wheel ends, react-use-gesture debounces these events to estimate when they stopped. One of the consequence of debouncing is trying to access properties from the native event when a gesture has ended will probably result in a warning: [React does event pooling](https://reactjs.org/docs/events.html#event-pooling), meaning a React event can only be queried synchronously.
+**Note #2:** since browsers don't have native event listeners for when scroll, move or wheel ends, react-use-gesture debounces these events to estimate when they stopped. One of the consequence of debouncing is trying to access properties from the source event when a gesture has ended will probably result in a warning: [React does event pooling](https://reactjs.org/docs/events.html#event-pooling), meaning a React event can only be queried synchronously.
 
 ### Adding gestures to dom nodes
 
-React-use-gesture also supports to add handlers to dom nodes directly (or the `window` or `document` objects). In that case, you shouldn't spread the `bind()` object returned by `useGesture` as a prop, but use the `React.useEffect` hook as below.
+React-use-gesture also supports adding handlers to dom nodes directly (or the `window` or `document` objects). In that case, you shouldn't spread the `bind()` object returned by `useGesture` as a prop, but use the `React.useEffect` hook as below.
 
 ```js
 // this will add a scroll listener to the window
@@ -120,14 +120,14 @@ const bind = useGesture({ onScroll: state => doStuff }, { domTarget: window })
 React.useEffect(bind, [bind])
 ```
 
-_Note that using `useEffect` will also take care of removing event listeners when the component is unmounted._
+> _Note that using `useEffect` will also take care of removing event listeners when the component is unmounted._
 
 ### Shortcut to the drag event handler
 
-Although React-use-gesture was initially developed to support drag events only (press, move and release), this library now supports pinch, hover, move, scroll and wheel events. To ensure retro-compatibility with **v4.x**, **v5.x** still gives you a shortcut to the `onDrag` and pass directly the handler function as the sole argument of `useGesture`
+Although React-use-gesture was initially developed to support drag events only (press, move and release), this library now supports pinch, hover, move, scroll and wheel events. To ensure retro-compatibility with **v4.x**, **v5.x** still gives you a shortcut to the `onDrag` and pass directly the handler function as the sole argument of `useGesture`.
 
 ```jsx
-// This:
+// this:
 const bind = useGesture(state => doStuff)
 // is equivalent to this:
 const bind = useGesture({ onDrag: state => doStuff })
@@ -139,7 +139,7 @@ Every time a handler is called, it will get passed the current event state for i
 
 #### Shared State
 
-The following attributes are provided to the handler whatever the gesture.
+The following attributes are provided to the handler for all gestures.
 
 | Name                                                | Type       | Description                                                                                                     |
 |-----------------------------------------------------|------------|-----------------------------------------------------------------------------------------------------------------|
@@ -214,7 +214,7 @@ Demo: https://codesandbox.io/s/r24mzvo3q
   <img src="https://i.imgur.com/JyeQsEI.gif" width="200"/>
 </p>
 
-#### React hooks with onAction (and react-spring) (decay)
+#### Example with `temp`  and react-spring
 
 Demo: https://codesandbox.io/s/zq19y1xr9m
 
@@ -222,10 +222,10 @@ This demo reads out further data like velocity and direction to calculate decay.
 
 ```jsx
 const [{ xy }, set] = useSpring(() => ({ xy: [0, 0] }))
-const bind = useGesture(({ down, delta, velocity, direction, temp = xy.getValue() }) => {
+const bind = useGesture(({ active, delta, velocity, direction, temp = xy.getValue() }) => {
   set({
     xy: add(delta, temp),
-    immediate: down,
+    immediate: active,
     config: { velocity: scale(direction, velocity), decay: true }
   })
   return temp
