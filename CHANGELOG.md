@@ -43,7 +43,7 @@ const bind = useGesture({
 
 ### Breaking
 
-1. HOC and render-props component support has been dropped. Hooks usage is enforced, therefore this package creates React 16.8+.
+1. HOC and render-props component support has been dropped. Hooks usage is enforced, therefore this package requires React 16.8+.
 
 2. Default syntax `[bind, props] = useGesture()` has been dropped in favor of `bind = useGesture({ onDrag: () => {...} })` which is more performance-effective since it doesn’t render on each frame.
 
