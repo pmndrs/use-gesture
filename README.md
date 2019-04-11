@@ -122,7 +122,7 @@ React.useEffect(bind, [bind])
 
 _Note that using `useEffect` will also take care of removing event listeners when the component is unmounted._
 
-#### Shortcut to the drag event handler
+### Shortcut to the drag event handler
 
 Although React-use-gesture was initially developed to support drag events only (press, move and release), this library now supports pinch, hover, move, scroll and wheel events. To ensure retro-compatibility with **v4.x**, **v5.x** still gives you a shortcut to the `onDrag` and pass directly the handler function as the sole argument of `useGesture`
 
@@ -133,13 +133,11 @@ const bind = useGesture(state => doStuff)
 const bind = useGesture({ onDrag: state => doStuff })
 ```
 
----
-
-## `useGesture` event state
+### `useGesture` event state
 
 Every time a handler is called, it will get passed the current event state for its corresponding gesture. An event state is an object that includes the source event and adds multiple attributes listed below.
 
-### Shared State
+#### Shared State
 
 The following attributes are provided to the handler whatever the gesture.
 
@@ -162,7 +160,7 @@ The following attributes are provided to the handler whatever the gesture.
 | `wheeling`                                       | `Boolean`      | `true` when the user is wheeling                                                                                                                                             
 | `args`                                           | `Any`          | arguments you passed to `bind`                                                                                                                
 
-### Specific state attributes for XY Gestures `[drag, scroll, wheel, hover]`
+#### Specific state attributes for XY Gestures `[drag, scroll, wheel, hover]`
 
 The following attributes are provided to the handler for gestures that deal with `x/y` coordinates.
 
@@ -178,7 +176,7 @@ The following attributes are provided to the handler for gestures that deal with
 | `velocity`  | `Number`       | momentum / speed of the gesture (`x` and `y` axis combined)                                                                                                                  |
 | `distance`                                       | `Number`       | delta distance                      
 
-### Specific state attributes for Distance Angle Gestures `[pinch]`
+#### Specific state attributes for Distance Angle Gestures `[pinch]`
 
 Pinch is generally about scaling and rotating. The scale depends on the distance between the two fingers, while the rotation depends on the direction / angle of the vector formed by the two fingers. Or more specifically, both scale and rotation depends on the `delta` of `distance` and `angle`, so you will probably end up using `local` or `delta` in most cases.
 
@@ -193,7 +191,7 @@ Pinch is generally about scaling and rotating. The scale depends on the distance
 | `vdva`      | `Vec2`   | momentum / speed of the gesture for distance and angle                 |
 | `turns`     | `Number` | keeps track of the number of turns                                     |
 
-## `useGesture` config
+### `useGesture` config
 
 You can pass a `config` object as an optional second argument to `useGesture` to customize its behavior.
 
