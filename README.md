@@ -9,9 +9,8 @@
   <i>These demos are real, click them!</i>
 </p>
 
-```
-npm install react-use-gesture
-```
+
+# react-use-gesture
 
 Ever thought about doing that sidebar pull-out, a view pager, some slider, any gesture on the web basically, and dropped the idea because it's too hard? In that case, this is your lib.
 
@@ -19,7 +18,13 @@ React-use-gesture is a React hook that lets you bind richer mouse and touch even
 
 You can use it stand-alone, but to make the most of it you should combine it with an animation library like [react-spring](https://github.com/react-spring/react-spring), though you can most certainly use any other.
 
-### Api
+## Installation
+
+```
+npm install react-use-gesture
+```
+
+## Api
 
 ```jsx
 import useGesture from 'react-use-gesture'
@@ -97,7 +102,7 @@ const bind = useGesture({
 })
 ```
 
-#### `on[Gesture]Start` and `on[Gesture]End`
+### `on[Gesture]Start` and `on[Gesture]End`
 
 Drag, pinch, move, scroll and wheel gestures also have two additional handlers that let you perform actions when they start or end. For example, `onScrollEnd` fires when the user finished scrolling.
 
@@ -117,7 +122,7 @@ React.useEffect(bind, [bind])
 
 _Note that using `useEffect` will also take care of removing event listeners when the component is unmounted._
 
-### Shortcut to the drag event handler
+#### Shortcut to the drag event handler
 
 Although React-use-gesture was initially developed to support drag events only (press, move and release), this library now supports pinch, hover, move, scroll and wheel events. To ensure retro-compatibility with **v4.x**, **v5.x** still gives you a shortcut to the `onDrag` and pass directly the handler function as the sole argument of `useGesture`
 
@@ -128,11 +133,13 @@ const bind = useGesture(state => doStuff)
 const bind = useGesture({ onDrag: state => doStuff })
 ```
 
-### `useGesture` event state
+---
+
+## `useGesture` event state
 
 Every time a handler is called, it will get passed the current event state for its corresponding gesture. An event state is an object that includes the source event and adds multiple attributes listed below.
 
-#### Shared State
+### Shared State
 
 The following attributes are provided to the handler whatever the gesture.
 
@@ -155,7 +162,7 @@ The following attributes are provided to the handler whatever the gesture.
 | `wheeling`                                       | `Boolean`      | `true` when the user is wheeling                                                                                                                                             
 | `args`                                           | `Any`          | arguments you passed to `bind`                                                                                                                
 
-#### Specific state attributes for XY Gestures `[drag, scroll, wheel, hover]`
+### Specific state attributes for XY Gestures `[drag, scroll, wheel, hover]`
 
 The following attributes are provided to the handler for gestures that deal with `x/y` coordinates.
 
@@ -171,7 +178,7 @@ The following attributes are provided to the handler for gestures that deal with
 | `velocity`  | `Number`       | momentum / speed of the gesture (`x` and `y` axis combined)                                                                                                                  |
 | `distance`                                       | `Number`       | delta distance                      
 
-#### Specific state attributes for Distance Angle Gestures `[pinch]`
+### Specific state attributes for Distance Angle Gestures `[pinch]`
 
 Pinch is generally about scaling and rotating. The scale depends on the distance between the two fingers, while the rotation depends on the direction / angle of the vector formed by the two fingers. Or more specifically, both scale and rotation depends on the `delta` of `distance` and `angle`, so you will probably end up using `local` or `delta` in most cases.
 
@@ -186,7 +193,7 @@ Pinch is generally about scaling and rotating. The scale depends on the distance
 | `vdva`      | `Vec2`   | momentum / speed of the gesture for distance and angle                 |
 | `turns`     | `Number` | keeps track of the number of turns                                     |
 
-### `useGesture` config
+## `useGesture` config
 
 You can pass a `config` object as an optional second argument to `useGesture` to customize its behavior.
 
@@ -199,7 +206,7 @@ You can pass a `config` object as an optional second argument to `useGesture` to
 | `enabled`| `true`| enables or disables all gestures
 |  `drag`<br/>`pinch`<br/>`scroll`<br/>`wheel`<br/>`hover`<br/>`move`<br/> | `true`| enables or disables gestures individually
 
-### Examples
+## Examples
 
 #### React hooks with onAction (and react-spring) (basic pull & release)
 
@@ -228,16 +235,20 @@ const bind = useGesture(({ down, delta, velocity, direction, temp = xy.getValue(
 return <animated.div {...bind()} style={{ transform: xy.interpolate((x, y) => `translate3d(${x}px,${y}px,0)`) }} />
 ```
 
-### Frequently asked questions
+## Frequently asked questions
 
 **What are the differences between using `useGesture` and adding listeners manually?**
+
 Not a lot! Essentially `useGesture` simplifies the implementation of the drag and pinch gestures, calculates kinematics values you wouldn't get out of the box from the listeners, and debounces move scroll and wheel events to let you know when they end.
 
 **How do you pass state to `useGesture`?**
+
 The recommended way of passing an external value to `useGesture` is by using `React.useRef`.
 
 **Why `onMove` when `onDrag` already exists?**
+
 `onDrag` only fires while your touch or press the element. You just need to hover your mouse above the element to trigger `onMove`.
 
 **Why `onWheel` and `onScroll`?**
+
 Scrolling and wheeling are structurally different events although they produce similar results (i.e. scrolling a page). First of all, `wheel` is a mouse-only event. Then, for `onScroll` to be fired, the element you're scrolling needs to actually scroll, therefore have content overflowing, while you just need to wheel over an element to trigger `onWheel`. If you use [react-three-fiber](https://github.com/drcmda/react-three-fiber), `onWheel` might prove useful to simulate scroll on canvas elements.
