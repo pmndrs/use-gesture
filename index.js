@@ -134,6 +134,7 @@ export default function useGesture(props, config) {
         xy,
         initial: xy,
         previous: xy,
+        first: true,
         local: lastLocal,
         lastLocal,
         transform,
@@ -254,7 +255,7 @@ export default function useGesture(props, config) {
       const kinematics = getKinematics(mov_x, mov_y, event, 'drag')
       const cancel = () => cancelDrag(event)
 
-      updateState({ shared: { moving: true, ...rest }, drag: { ...kinematics, event, cancel } })
+      updateState({ shared: { moving: true, ...rest }, drag: { ...kinematics, first: false, event, cancel } })
       handleGesture('onDrag')
     }
 
@@ -276,6 +277,7 @@ export default function useGesture(props, config) {
         da: da,
         initial: da,
         previous: da,
+        first: true,
         local: lastLocal,
         lastLocal,
         transform,
@@ -326,6 +328,7 @@ export default function useGesture(props, config) {
           vdva: [d_dist / delta_t, a_dist / delta_t],
           turns: newTurns,
           previous: da,
+          first: false,
           local: [local_d, local_a],
           event,
           time: event.timeStamp,
@@ -356,7 +359,7 @@ export default function useGesture(props, config) {
       }
 
       const kinematics = getKinematics(mov_x, mov_y, event, 'move')
-      updateState({ shared: rest, move: { ...kinematics, event } })
+      updateState({ shared: rest, move: { ...kinematics, first: false, event } })
       handleGesture('onMove')
     }
 
@@ -378,7 +381,7 @@ export default function useGesture(props, config) {
       }
 
       const kinematics = getKinematics(mov_x, mov_y, event, 'scroll')
-      updateState({ scroll: { ...kinematics, event } })
+      updateState({ scroll: { ...kinematics, first: false, event } })
       handleGesture('onScroll')
     }
 
@@ -403,7 +406,7 @@ export default function useGesture(props, config) {
       }
 
       const kinematics = getKinematics(mov_x, mov_y, event, 'wheel', true)
-      updateState({ wheel: { ...kinematics, event } })
+      updateState({ wheel: { ...kinematics, first: false, event } })
       handleGesture('onWheel')
     }
 
