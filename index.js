@@ -342,7 +342,7 @@ export default function useGesture(props, config) {
 
     const onMoveEnd = () => {
       updateState({ shared: { moving: false }, move: { ...genericEndState, velocity: 0, vxvy: [0, 0] } })
-      handleGestureEnd('onMove', false)
+      handleGestureEnd('onMove')
     }
 
     const onMove = event => {
@@ -415,7 +415,7 @@ export default function useGesture(props, config) {
       const { mov_x, mov_y, down, touches, shiftKey } = getPointerEventData(event)
       updateState({
         shared: { hovering: true, down, touches, shiftKey },
-        move: { xy: [mov_x, mov_y], event }
+        move: { xy: [mov_x, mov_y], active: true, event }
       })
       handleGesture('onHover')
     }
@@ -424,7 +424,7 @@ export default function useGesture(props, config) {
       if (!configRef.current.enabled || !configRef.current.hover) return
       const { mov_x, mov_y, down, touches, shiftKey } = getPointerEventData(event)
       const kinematics = getKinematics(mov_x, mov_y, event, 'move')
-      updateState({ shared: { hovering: false, down, touches, shiftKey }, move: { ...kinematics, event } })
+      updateState({ shared: { hovering: false, down, touches, shiftKey }, move: { ...kinematics, active: false, event } })
       handleGesture('onHover')
     }
 
