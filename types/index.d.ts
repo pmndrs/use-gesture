@@ -1,12 +1,13 @@
+// TypeScript Version: 3.0
 import * as React from 'react'
 
 // Helper type, taken from: https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-8.html
-type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
-type AtLeastOne<T, U = { [K in keyof T]: Pick<T, K> }> = Partial<T> & U[keyof U]
+export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
+export type AtLeastOne<T, U = { [K in keyof T]: Pick<T, K> }> = Partial<T> & U[keyof U]
 
 export type vector2 = [number, number]
 
-interface GestureSharedState {
+export interface SharedGestureState {
   args: any
   hovering?: boolean
   scrolling?: boolean
@@ -21,7 +22,7 @@ interface GestureSharedState {
   ctrlKey?: boolean
 }
 
-interface GestureCommonState extends GestureSharedState {
+export interface CommonGestureState extends SharedGestureState {
   event: MouseEvent | TouchEvent
   delta: vector2
   initial: vector2
@@ -38,7 +39,7 @@ interface GestureCommonState extends GestureSharedState {
   canceled: boolean
 }
 
-export interface GestureXYState extends GestureCommonState {
+export interface CoordinatesGestureState extends CommonGestureState {
   xy: vector2
   velocity: number
   vxvy: vector2
@@ -46,7 +47,7 @@ export interface GestureXYState extends GestureCommonState {
   direction: vector2
 }
 
-export interface GestureDAState extends GestureCommonState {
+export interface DistanceAngleGestureState extends CommonGestureState {
   da: vector2
   vdva: vector2
   turns: number
@@ -72,25 +73,28 @@ export interface GestureConfig {
   move: boolean
 }
 
-export interface GestureOptions {
-  onDrag(state: GestureXYState): any
-  onDragStart(state: GestureXYState): any
-  onDragEnd(state: GestureXYState): any
-  onMove(state: GestureXYState): any
-  onMoveStart(state: GestureXYState): any
-  onMoveEnd(state: GestureXYState): any
-  onScroll(state: GestureXYState): any
-  onScrollStart(state: GestureXYState): any
-  onScrollEnd(state: GestureXYState): any
-  onWheel(state: GestureXYState): any
-  onWheelStart(state: GestureXYState): any
-  onWheelEnd(state: GestureXYState): any
-  onPinch(state: GestureDAState): any
-  onPinchStart(state: GestureDAState): any
-  onPinchEnd(state: GestureDAState): any
+export type CoordinatesHandler = (state: CoordinatesGestureState) => any
+export type DistanceAngleHandler = (state: DistanceAngleGestureState) => any
+
+export interface GestureHandlers {
+  onDrag: CoordinatesHandler
+  onDragStart: CoordinatesHandler
+  onDragEnd: CoordinatesHandler
+  onMove: CoordinatesHandler
+  onMoveStart: CoordinatesHandler
+  onMoveEnd: CoordinatesHandler
+  onScroll: CoordinatesHandler
+  onScrollStart: CoordinatesHandler
+  onScrollEnd: CoordinatesHandler
+  onWheel: CoordinatesHandler
+  onWheelStart: CoordinatesHandler
+  onWheelEnd: CoordinatesHandler
+  onPinch: DistanceAngleHandler
+  onPinchStart: DistanceAngleHandler
+  onPinchEnd: DistanceAngleHandler
 }
 
-type GestureEvents = {
+export interface GestureEvents {
   onMouseDown: React.MouseEventHandler
   onMouseUp: React.MouseEventHandler
   onMouseEnter: React.MouseEventHandler
@@ -103,7 +107,6 @@ type GestureEvents = {
 }
 
 export function useGesture(
-  onDrag: (state: GestureXYState) => any,
+  handlers: AtLeastOne<GestureHandlers> | CoordinatesHandler,
   config?: Partial<GestureConfig>
 ): (...args: any[]) => Partial<GestureEvents>
-export function useGesture(options: AtLeastOne<GestureOptions>, config?: Partial<GestureConfig>): (...args: any[]) => Partial<GestureEvents>
