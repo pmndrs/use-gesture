@@ -1,7 +1,7 @@
 language: node_js
 node_js:
-  - stable
+  - '10'
 cache: yarn
 script:
-  - 'npm run test'
-  - 'npm run dtslint'
+  - 'yarn test'
+  - 'yarn dtslint'
