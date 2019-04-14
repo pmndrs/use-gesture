@@ -8,6 +8,7 @@ import Interactive from './components/Interactive'
 
 // TODO - test when attaching to a dom element
 // TODO - test temp
+// TODO - test drag with touch events
 
 afterAll(cleanup)
 
