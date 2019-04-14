@@ -1,6 +1,28 @@
 # Changelog
 
-## 5.0.0 Release
+## 5.0.0-beta.4 Release
+**Summary:** bug fixing and added tests!
+
+### Added
+
+1. Tests have been added with `react-testing-library`: they still throw a warning about some tests not being wrapped in `act(...)` but this is probably because of async debouncing in move, scroll, wheel events and RAF for `cancel` in drag and pinch. 
+
+2. Added Travis integration.
+
+
+### Improved
+
+1. Now using `dtslint` for Typescript definitions and tests.
+
+### Fixed
+
+1. `first` was always returning true and this is no longer the case.
+
+2. `active` wasn't set to `true` when moving in `onMove`.
+
+3. Added `active`set to `false` on `mouseLeave` for `onHover`. This might not be a good idea though.
+
+## 5.0.0-beta.3 Release
 
 **Summary:** major release introducing additional gestures on top of **drag**: **pinch**, **scroll**, **wheel**, **hover** and **move** are now supported. This release is dropping support for high-order and render-props component and can only be used through React hooks 🎣. Therefore `react-with-gesture` is now `react-use-gesture`. 
 
