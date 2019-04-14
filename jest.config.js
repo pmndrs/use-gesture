@@ -1,3 +1,3 @@
 module.exports = {
-  testPathIgnorePatterns: ['components/']
+  testPathIgnorePatterns: ['components/', 'types/']
 }
