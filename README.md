@@ -182,16 +182,16 @@ The following attributes are provided to the handler for gestures that deal with
 
 Pinch is generally about scaling and rotating. The scale depends on the distance between the two fingers, while the rotation depends on the direction / angle of the vector formed by the two fingers. Or more specifically, both scale and rotation depends on the `delta` of `distance` and `angle`, so you will probably end up using `local` or `delta` in most cases.
 
-| Name        | Type     | Description                                                            |
-|-------------|----------|------------------------------------------------------------------------|
-| `da`        | `Vec2`   | distance and angle.                                                    |
-| `previous`  | `Vec2`   | previous `da`                                                          |
-| `initial`   | `Vec2`   | `da` value when the gesture has started                                |
-| `delta`     | `Vec2`   | delta offset (`da - initial`)                                          |
-| `local`     | `Vec2`   | delta with book-keeping (remembers the `da` value throughout gestures) |
-| `lastLocal` | `Vec2`   | previous `local`                                                       |
-| `vdva`      | `Vec2`   | momentum / speed of the gesture for distance and angle                 |
-| `turns`     | `Number` | keeps track of the number of turns                                     |
+| Name        | Type     | Description                                                                                           |
+|-------------|----------|-------------------------------------------------------------------------------------------------------|
+| `da`        | `Vec2`   | distance and angle.                                                                                   |
+| `previous`  | `Vec2`   | previous `da`                                                                                         |
+| `initial`   | `Vec2`   | `da` value when the gesture has started                                                               |
+| `delta`     | `Vec2`   | delta offset (`da - initial`)                                                                         |
+| `local`     | `Vec2`   | delta with book-keeping (remembers the `da` value throughout gestures)                                |
+| `lastLocal` | `Vec2`   | previous `local`                                                                                      |
+| `vdva`      | `Vec2`   | momentum / speed of the gesture for distance and angle                                                |
+| `turns`     | `Number` | keeps track of the number of turns (don't rely on `turns` to the count of rotations from the gesture) |
 
 ### `useGesture` config
 
