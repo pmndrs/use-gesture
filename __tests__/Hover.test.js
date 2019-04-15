@@ -14,7 +14,7 @@ describe.each([
   // ['attached to node', InteractiveDom, true]
 ])('testing onHover %s)', (testName, Component, domTarget) => {
   const prefix = domTarget ? 'dom-' : ''
-  const { getByTestId } = render(<Component gesture="Hover" />)
+  const { getByTestId, rerender } = render(<Component gesture="Hover" />)
   const element = getByTestId(`${prefix}hover-el`)
 
   test('mouseEnter should initiate hover', () => {
@@ -29,5 +29,17 @@ describe.each([
     expect(getByTestId(`${prefix}hover-active`)).toHaveTextContent('false')
     expect(getByTestId(`${prefix}hover-hovering`)).toHaveTextContent('false')
     expect(getByTestId(`${prefix}hover-xy`)).toHaveTextContent('20,40')
+  })
+
+  test('disabling all gestures should prevent state from updating', () => {
+    rerender(<Component gesture="Hover" config={{ enabled: false }} />)
+    fireEvent.mouseEnter(element)
+    expect(getByTestId(`${prefix}hover-hovering`)).toHaveTextContent('false')
+  })
+
+  test('disabling the hover gesture should prevent state from updating', () => {
+    rerender(<Component gesture="Hover" config={{ hover: false }} />)
+    fireEvent.mouseEnter(element)
+    expect(getByTestId(`${prefix}hover-hovering`)).toHaveTextContent('false')
   })
 })

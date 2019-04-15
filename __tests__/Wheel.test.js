@@ -13,7 +13,7 @@ describe.each([['attached to component', Interactive, false], ['attached to node
   'testing onWheel %s)',
   (testName, Component, domTarget) => {
     const prefix = domTarget ? 'dom-' : ''
-    const { getByTestId } = render(<Component gesture="Wheel" tempArg="temp" />)
+    const { getByTestId, rerender } = render(<Component gesture="Wheel" tempArg="temp" />)
     const element = getByTestId(`${prefix}wheel-el`)
 
     test('wheel event should initiate the gesture', () => {
@@ -60,6 +60,18 @@ describe.each([['attached to component', Interactive, false], ['attached to node
 
     test('terminating the gesture should fire onWheelEnd', async () => {
       await wait(() => expect(getByTestId(`${prefix}wheel-end`)).toHaveTextContent(/^fired$/))
+    })
+
+    test('disabling all gestures should prevent state from updating', () => {
+      rerender(<Component gesture="Wheel" config={{ enabled: false }} />)
+      fireEvent.wheel(element)
+      expect(getByTestId(`${prefix}wheel-wheeling`)).toHaveTextContent('false')
+    })
+
+    test('disabling the wheel gesture should prevent state from updating', () => {
+      rerender(<Component gesture="Wheel" config={{ wheel: false }} />)
+      fireEvent.wheel(element)
+      expect(getByTestId(`${prefix}wheel-wheeling`)).toHaveTextContent('false')
     })
   }
 )

@@ -1,21 +1,24 @@
 import React from 'react'
 import useGesture from '../../index'
 
-const Interactive = ({ bindArgs, gesture, canceled, tempArg, ...props }) => {
+const Interactive = ({ bindArgs, gesture, canceled, tempArg, config, ...props }) => {
   const [state, set] = React.useState({})
   const [[startFired, endFired], setStartEnd] = React.useState([0, 0])
 
-  const bind = useGesture({
-    [`on${gesture}Start`]: () => void setStartEnd([startFired + 1, 0]),
-    [`on${gesture}End`]: () => void setStartEnd([0, endFired + 1]),
-    [`on${gesture}`]: ({ event, transform, cancel, currentTarget, temp = tempArg, ...rest }) => {
-      set({ ...rest, temp })
-      if (canceled) {
-        cancel()
+  const bind = useGesture(
+    {
+      [`on${gesture}Start`]: () => void setStartEnd([startFired + 1, 0]),
+      [`on${gesture}End`]: () => void setStartEnd([0, endFired + 1]),
+      [`on${gesture}`]: ({ event, transform, cancel, currentTarget, temp = tempArg, ...rest }) => {
+        set({ ...rest, temp })
+        if (canceled) {
+          cancel()
+        }
+        return temp
       }
-      return temp
-    }
-  })
+    },
+    config
+  )
 
   const output = bind(...bindArgs)
   const oldOutput = React.useRef(output)

@@ -67,7 +67,20 @@ describe.each([['attached to component', Interactive, false], ['attached to node
       expect(getByTestId(`${prefix}drag-end`)).toHaveTextContent(/^fired$/)
     })
 
+    test('disabling all gestures should prevent state from updating', () => {
+      rerender(<Component gesture="Drag" config={{ enabled: false }} />)
+      fireEvent.mouseDown(element)
+      expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('false')
+    })
+
+    test('disabling the drag gesture should prevent state from updating', () => {
+      rerender(<Component gesture="Drag" config={{ drag: false }} />)
+      fireEvent.mouseDown(element)
+      expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('false')
+    })
+
     test('restarting the gesture should book-keep local and reset delta', () => {
+      rerender(<Component gesture="Drag" />)
       fireEvent.mouseDown(element, { clientX: 30, clientY: 60 })
       fireEvent.mouseMove(element, { clientX: 20, clientY: 50 })
       expect(getByTestId(`${prefix}drag-local`)).toHaveTextContent('0,20')

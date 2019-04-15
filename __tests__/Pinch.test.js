@@ -85,5 +85,17 @@ describe.each([['attached to component', Interactive, false], ['attached to node
         expect(getByTestId(`${prefix}pinch-pinching`)).toHaveTextContent('false')
       })
     })
+
+    test('disabling all gestures should prevent state from updating', () => {
+      rerender(<Component gesture="Pinch" config={{ enabled: false }} />)
+      fireEvent.mouseMove(element)
+      expect(getByTestId(`${prefix}pinch-pinching`)).toHaveTextContent('false')
+    })
+
+    test('disabling the pinch gesture should prevent state from updating', () => {
+      rerender(<Component gesture="Pinch" config={{ pinch: false }} />)
+      fireEvent.mouseMove(element)
+      expect(getByTestId(`${prefix}pinch-pinching`)).toHaveTextContent('false')
+    })
   }
 )

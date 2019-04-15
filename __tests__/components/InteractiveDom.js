@@ -1,7 +1,7 @@
 import React from 'react'
 import useGesture from '../../index'
 
-const InteractiveDom = ({ bindArgs, gesture, canceled, tempArg, ...props }) => {
+const InteractiveDom = ({ bindArgs, gesture, canceled, tempArg, config, ...props }) => {
   const domTarget = React.useRef(null)
   const [state, set] = React.useState({})
   const [[startFired, endFired], setStartEnd] = React.useState([0, 0])
@@ -18,7 +18,7 @@ const InteractiveDom = ({ bindArgs, gesture, canceled, tempArg, ...props }) => {
         return temp
       }
     },
-    { domTarget }
+    { domTarget, ...config }
   )
 
   React.useEffect(bind, [bind])

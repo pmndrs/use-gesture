@@ -13,7 +13,7 @@ describe.each([['attached to component', Interactive, false], ['attached to node
   'testing onMove %s)',
   (testName, Component, domTarget) => {
     const prefix = domTarget ? 'dom-' : ''
-    const { getByTestId } = render(<Component gesture="Move" tempArg="temp" />)
+    const { getByTestId, rerender } = render(<Component gesture="Move" tempArg="temp" />)
     const element = getByTestId(`${prefix}move-el`)
 
     test('mouseMove should initiate the gesture', () => {
@@ -60,6 +60,18 @@ describe.each([['attached to component', Interactive, false], ['attached to node
 
     test('terminating the gesture should fire onMoveEnd', async () => {
       await wait(() => expect(getByTestId(`${prefix}move-end`)).toHaveTextContent(/^fired$/))
+    })
+
+    test('disabling all gestures should prevent state from updating', () => {
+      rerender(<Component gesture="Move" config={{ enabled: false }} />)
+      fireEvent.mouseMove(element)
+      expect(getByTestId(`${prefix}move-moving`)).toHaveTextContent('false')
+    })
+
+    test('disabling the move gesture should prevent state from updating', () => {
+      rerender(<Component gesture="Move" config={{ move: false }} />)
+      fireEvent.mouseMove(element)
+      expect(getByTestId(`${prefix}move-moving`)).toHaveTextContent('false')
     })
   }
 )
