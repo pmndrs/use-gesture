@@ -23,7 +23,7 @@
     "prepare": "npm run build",
     "test": "jest",
     "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage",
+    "test:coverage": "jest --coverage --silent",
     "dtslint": "dtslint types"
   },
   "repository": {
