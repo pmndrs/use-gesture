@@ -7,7 +7,6 @@ import InteractiveDom from './components/InteractiveDom'
 // TODO - fix act warning (probably caused by RAF in cancel)
 // https://github.com/facebook/react/issues/14769
 
-// TODO - test when attaching to a dom element
 // TODO - test drag with touch events
 
 afterAll(cleanup)

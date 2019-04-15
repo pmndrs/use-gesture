@@ -252,10 +252,6 @@ return <animated.div {...bind()} style={{ transform: xy.interpolate((x, y) => `t
 
 Not a lot! Essentially `useGesture` simplifies the implementation of the drag and pinch gestures, calculates kinematics values you wouldn't get out of the box from the listeners, and debounces move scroll and wheel events to let you know when they end.
 
-**How do you pass state to `useGesture`?**
-
-The recommended way of passing an external value to `useGesture` is by using `React.useRef`.
-
 **Why `onMove` when `onDrag` already exists?**
 
 `onDrag` only fires while your touch or press the element. You just need to hover your mouse above the element to trigger `onMove`.
@@ -263,3 +259,15 @@ The recommended way of passing an external value to `useGesture` is by using `Re
 **Why `onWheel` and `onScroll`?**
 
 Scrolling and wheeling are structurally different events although they produce similar results (i.e. scrolling a page). First of all, `wheel` is a mouse-only event. Then, for `onScroll` to be fired, the element you're scrolling needs to actually scroll, therefore have content overflowing, while you just need to wheel over an element to trigger `onWheel`. If you use [react-three-fiber](https://github.com/drcmda/react-three-fiber), `onWheel` might prove useful to simulate scroll on canvas elements.
+
+**Accessing source event triggers a warning in the console!**
+
+You're probably trying to access an event in `onScroll`, `onMove` or `onWheel` handlers. The last event is debounced, and therefore not accessible asynchronously because of how React pools events. A possible solution would be to make sure the event is not part of the last state:
+
+```jsx
+useGesture({
+  onScroll: ({ event, last }) => {
+    !last && event.preventDefault() // <-- event will not be accessed in the last event
+  }
+})
+```

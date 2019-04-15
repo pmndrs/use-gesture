@@ -427,7 +427,11 @@ export default function useGesture(props, config) {
       if (!configRef.current.enabled || !configRef.current.hover) return
       const { mov_x, mov_y, down, touches, shiftKey } = getPointerEventData(event)
       const kinematics = getKinematics(mov_x, mov_y, event, 'move')
-      updateState({ shared: { hovering: false, moving: false, down, touches, shiftKey }, move: { ...kinematics, active: false, event } })
+      updateState({
+        shared: { hovering: false, moving: false, down, touches, shiftKey },
+        move: { ...kinematics, ...genericEndState, event }
+      })
+      handleGestureEnd('onMove')
       handleGesture('onHover')
     }
 
