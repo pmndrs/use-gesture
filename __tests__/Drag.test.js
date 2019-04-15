@@ -8,6 +8,7 @@ import InteractiveDom from './components/InteractiveDom'
 // https://github.com/facebook/react/issues/14769
 
 // TODO - test drag with touch events
+// TODO - test with pointerEvents
 
 afterAll(cleanup)
 
