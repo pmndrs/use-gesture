@@ -87,7 +87,9 @@ export default function useGesture(props, config) {
 
   const clean = React.useCallback(() => {
     clearTimeouts(timeouts.current)
-    removeListeners(configRef.current.domTarget, domListeners.current, configRef.current.event)
+    const { domTarget } = configRef.current
+    const realDomTarget = domTarget && 'current' in domTarget ? domTarget.current : domTarget
+    removeListeners(realDomTarget, domListeners.current, configRef.current.event)
     removeListeners(configRef.current.window, dragListeners.current, configRef.current.event)
   }, [])
 
@@ -467,8 +469,9 @@ export default function useGesture(props, config) {
 
     if (domTarget) {
       domListeners.current = []
+      const realDomTarget = domTarget && 'current' in domTarget ? domTarget.current : domTarget
       Object.entries(listeners).forEach(([k, fns]) => domListeners.current.push([k.substr(2).toLowerCase(), chain(...fns)]))
-      addListeners(domTarget, domListeners.current, configRef.current.event)
+      addListeners(realDomTarget, domListeners.current, configRef.current.event)
       return clean
     }
 
