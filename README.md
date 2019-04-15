@@ -122,6 +122,17 @@ const bind = useGesture({ onScroll: state => doStuff }, { domTarget: window })
 React.useEffect(bind, [bind])
 ```
 
+You can also directly pass a ref to `domTarget`:
+
+```js
+const myRef = React.useRef(null)
+// this will add a scroll listener the div
+const bind = useGesture({ onScroll: state => doStuff }, { domTarget: myRef })
+React.useEffect(bind, [bind])
+/*...*/
+return <div ref={myRef} />
+```
+
 > _Note that using `useEffect` will also take care of removing event listeners when the component is unmounted._
 
 ### Shortcut to the drag event handler
@@ -199,8 +210,8 @@ You can pass a `config` object as an optional second argument to `useGesture` to
 
 | Name        | Default Value                     | Description                                                                                                                                                                            |
 |-------------|-----------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `domTarget` | `undefined`                       | lets you specify a dom node you want to attach gestures to (body, window, document...)                                                                                                 |
-| `event`     | `{passive: true, capture: false}` | the event config attribute lets you configure `passive` and `capture` options passed to event listeners                                                                                |
+| `domTarget` | `undefined`                       | lets you specify a dom node you want to attach gestures to (body, window, document...). You can also pass a ref created with the `useRef` hook.                                        |
+| `event`     | `{passive: true, capture: false}` | the event config attribute lets you configure `passive` and `capture` options passed to event listeners.                                                                               |
 | `transform` | `{x: x => x, y =>y }`             | transform functions you can pass to modify `x` and `y` values.                                                                                                                         |
 | `window`    | `window`                          | lets you specify which `window` element `useGesture` should use. See this [thread](https://github.com/react-spring/react-use-gesture/pull/43#issue-262835054) for a relevant use case. |
 | `enabled`| `true`| enables or disables all gestures
