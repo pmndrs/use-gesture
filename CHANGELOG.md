@@ -8,6 +8,10 @@
 1. Tests are now testing `domTarget`.
 2. `domTarget` now accepts refs.
 
+### Fixed
+
+1. `onMoveEnd` shouldn't fire if state isn't moving (ie `onLeave` was triggered)
+
 ## 5.0.0-beta.4 Release
 **Summary:** bug fixing and added tests!
 

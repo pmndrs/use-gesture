@@ -11,7 +11,6 @@ const InteractiveDom = ({ bindArgs, gesture, canceled, tempArg, ...props }) => {
       [`on${gesture}Start`]: () => void setStartEnd([startFired + 1, 0]),
       [`on${gesture}End`]: () => void setStartEnd([0, endFired + 1]),
       [`on${gesture}`]: ({ event, transform, cancel, currentTarget, temp = tempArg, ...rest }) => {
-        console.warn('fiiiiiired')
         set({ ...rest, temp })
         if (canceled) {
           cancel()
