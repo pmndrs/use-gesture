@@ -22,7 +22,7 @@
     "build": "rollup -c",
     "prepare": "npm run build",
     "test": "jest",
-    "test:watch": "jest --watch",
+    "test:watch": "jest --watch --silent",
     "test:coverage": "jest --coverage --silent",
     "dtslint": "dtslint types"
   },

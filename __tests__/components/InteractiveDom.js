@@ -1,4 +1,5 @@
 import React from 'react'
+import { Common, createHandlers } from './Common'
 import useGesture from '../../index'
 
 const InteractiveDom = ({ bindArgs, gesture, canceled, tempArg, config, ...props }) => {
@@ -6,36 +7,12 @@ const InteractiveDom = ({ bindArgs, gesture, canceled, tempArg, config, ...props
   const [state, set] = React.useState({})
   const [[startFired, endFired], setStartEnd] = React.useState([0, 0])
 
-  const bind = useGesture(
-    {
-      [`on${gesture}Start`]: () => void setStartEnd([startFired + 1, 0]),
-      [`on${gesture}End`]: () => void setStartEnd([0, endFired + 1]),
-      [`on${gesture}`]: ({ event, transform, cancel, currentTarget, temp = tempArg, ...rest }) => {
-        set({ ...rest, temp })
-        if (canceled) {
-          cancel()
-        }
-        return temp
-      }
-    },
-    { domTarget, ...config }
-  )
-
+  const bind = useGesture(createHandlers({ gesture, tempArg, set, setStartEnd, canceled }), { domTarget, ...config })
   React.useEffect(bind, [bind])
 
-  const testKey = 'dom-' + gesture.toLowerCase()
+  const testKey = 'dom-' + (Array.isArray(gesture) ? gesture.join('').toLowerCase() : gesture.toLowerCase())
 
-  return (
-    <div ref={domTarget} data-testid={`${testKey}-el`} style={{ height: 30, width: 30, background: 'blue', overflow: 'scroll' }}>
-      <div data-testid={`${testKey}-start`}>{startFired === 0 ? 'not fired' : startFired > 1 ? 'fired too much' : 'fired'}</div>
-      <div data-testid={`${testKey}-end`}>{endFired === 0 ? 'not fired' : endFired > 1 ? 'fired too much' : 'fired'}</div>
-      {Object.entries(state).map(([k, v]) => (
-        <div key={k} data-testid={`${testKey}-${k}`}>
-          {v !== undefined ? v.toString() : 'undefined'}
-        </div>
-      ))}
-    </div>
-  )
+  return <Common ref={domTarget} state={state} testKey={testKey} startFired={startFired} endFired={endFired} />
 }
 
 export default InteractiveDom
