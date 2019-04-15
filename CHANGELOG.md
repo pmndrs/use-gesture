@@ -1,5 +1,13 @@
 # Changelog
 
+## 5.0.0-beta.5 Release
+**Summary:** bug fixing and more tests.
+
+### Improved
+
+1. Tests are now testing `domTarget`.
+2. `domTarget` now accepts refs.
+
 ## 5.0.0-beta.4 Release
 **Summary:** bug fixing and added tests!
 
