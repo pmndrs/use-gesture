@@ -43,8 +43,10 @@ describe.each([['attached to component', Interactive, false], ['attached to node
       expect(getByTestId(`${prefix}drag-temp`)).toHaveTextContent('temp')
     })
 
+    // TODO - not sure why using window as the mouseMove target doesn't work
+
     test('moving should set first to false', () => {
-      fireEvent.mouseMove(element, { clientX: 20, clientY: 50 })
+      fireEvent.mouseMove(document, { clientX: 20, clientY: 50 })
       expect(getByTestId(`${prefix}drag-first`)).toHaveTextContent('false')
     })
 
@@ -57,7 +59,7 @@ describe.each([['attached to component', Interactive, false], ['attached to node
     })
 
     test('mouseUp should terminate the gesture', () => {
-      fireEvent.mouseUp(element)
+      fireEvent.mouseUp(document)
       expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('false')
       expect(getByTestId(`${prefix}drag-active`)).toHaveTextContent('false')
       expect(getByTestId(`${prefix}drag-last`)).toHaveTextContent('true')
@@ -83,7 +85,7 @@ describe.each([['attached to component', Interactive, false], ['attached to node
     test('restarting the gesture should book-keep local and reset delta', () => {
       rerender(<Component gesture="Drag" />)
       fireEvent.mouseDown(element, { clientX: 30, clientY: 60 })
-      fireEvent.mouseMove(element, { clientX: 20, clientY: 50 })
+      fireEvent.mouseMove(document, { clientX: 20, clientY: 50 })
       expect(getByTestId(`${prefix}drag-local`)).toHaveTextContent('0,20')
       expect(getByTestId(`${prefix}drag-delta`)).toHaveTextContent('-10,-10')
     })

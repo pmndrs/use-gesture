@@ -6,7 +6,7 @@ import Interactive from './components/Interactive'
 
 afterAll(cleanup)
 
-// TODO: should be able to test on a node component
+// TODO - should be able to test on a node component
 // but for some reason, the tests don't work with mouseEnter/mouseLeave
 
 describe.each([
