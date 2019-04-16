@@ -12,7 +12,7 @@
 
 # react-use-gesture
 
-[![npm](https://img.shields.io/npm/v/react-use-gesture.svg)](https://www.npmjs.com/package/react-use-gesture) ![npm bundle size](https://img.shields.io/bundlephobia/minzip/react-use-gesture.svg) ![NPM](https://img.shields.io/npm/l/react-use-gesture.svg) [![BuildStatus](https://travis-ci.org/react-spring/react-use-gesture.svg?branch=5.x)](https://travis-ci.org/react-spring/react-use-gesture)
+![npm (tag)](https://img.shields.io/npm/v/react-use-gesture/beta.svg) ![npm bundle size](https://img.shields.io/bundlephobia/minzip/react-use-gesture.svg) ![NPM](https://img.shields.io/npm/l/react-use-gesture.svg) [![BuildStatus](https://travis-ci.org/react-spring/react-use-gesture.svg?branch=5.x)](https://travis-ci.org/react-spring/react-use-gesture)
 
 Ever thought about doing that sidebar pull-out, a view pager, some slider, any gesture on the web basically, and dropped the idea because it's too hard? In that case, this is your lib.
 
@@ -238,11 +238,6 @@ You can pass a `config` object as an optional second argument to `useGesture` to
 |  `drag`<br/>`pinch`<br/>`scroll`<br/>`wheel`<br/>`hover`<br/>`move`<br/> | `true`| enables or disables gestures individually
 
 ## Examples
-
-#### React hooks with onAction (and react-spring) (basic pull & release)
-
-Demo: https://codesandbox.io/s/r24mzvo3q
-
 
 #### Example with `temp` and react-spring
 
