@@ -91,7 +91,9 @@ Because we’re now using `animated.div`, we’re able to make the element dragg
 
 ### Supported gestures
 
-In addition to **drag**, react-use-gesture also supports **scroll** gestures, and mouse-specific gestures such as **move**, **wheel** and **hover** (entering and leaving an element), and touch-specific **pinch**. Every gesture has a handler that should be passed to `useGesture`, and you can even pass multiple handlers for the element to respond to different gestures.
+In addition to **drag**, react-use-gesture also supports **scroll** gesture, and mouse-specific gestures such as **move**, **wheel** and **hover** (entering and leaving an element), and touch-specific **pinch**.
+
+Every gesture has a handler that should be passed to `useGesture`, and you can pass multiple handlers to the same element for it to respond to different gestures.
 
 ```jsx
 const bind = useGesture({
@@ -108,9 +110,23 @@ const bind = useGesture({
 
 Drag, pinch, move, scroll and wheel gestures also have two additional handlers that let you perform actions when they start or end. For example, `onScrollEnd` fires when the user finished scrolling.
 
-**Note #1:** `on[Gesture]Start` and `on[Gesture]End` methods are provided as a commodity. `on[Gesture]` handlers also receive `first` and `last` properties that indicate if the event fired is the first (i.e. gesture has started) or the last one (i.e. gesture has ended).
+> **Note #1:** `on[Gesture]Start` and `on[Gesture]End` methods are provided as a commodity. `on[Gesture]` handlers also receive `first` and `last` properties that indicate if the event fired is the first (i.e. gesture has started) or the last one (i.e. gesture has ended).
 
-**Note #2:** since browsers don't have native event listeners for when scroll, move or wheel ends, react-use-gesture debounces these events to estimate when they stopped. One of the consequence of debouncing is trying to access properties from the source event when a gesture has ended will probably result in a warning: [React does event pooling](https://reactjs.org/docs/events.html#event-pooling), meaning a React event can only be queried synchronously.
+```jsx
+// this:
+useGesture({ onDragStart: doStuffOnStart, onDragEnd:doStuffOnEnd })
+
+// is equivalent to this:
+useGesture({
+  onDrag: ({first, last}) {
+    if(first) doStuffOnStart()
+    if (last) doStuffOnEnd()
+  }
+})
+```
+
+> **Note #2:** since browsers don't have native event listeners for when scroll, move or wheel ends, react-use-gesture debounces these events to estimate when they stopped. One of the consequence of debouncing is trying to access properties from the source event when a gesture has ended will probably result in a warning: [React does event pooling](https://reactjs.org/docs/events.html#event-pooling), meaning a React event can only be queried synchronously.
+
 
 ### Adding gestures to dom nodes
 
@@ -137,7 +153,9 @@ return <div ref={myRef} />
 
 ### Shortcut to the drag event handler
 
-Although React-use-gesture was initially developed to support drag events only (press, move and release), this library now supports pinch, hover, move, scroll and wheel events. To ensure retro-compatibility with **v4.x**, **v5.x** still gives you a shortcut to the `onDrag` and pass directly the handler function as the sole argument of `useGesture`.
+Although React-use-gesture was initially developed to support drag events only (press, move and release), this library now supports pinch, hover, move, scroll and wheel events.
+
+To ensure retro-compatibility with **v4.x**, **v5.x** still gives you a shortcut to the `onDrag` and pass directly the handler function as the sole argument of `useGesture`.
 
 ```jsx
 // this:
@@ -173,7 +191,7 @@ The following attributes are provided to the handler for all gestures.
 | `wheeling`                                       | `Boolean`      | `true` when the user is wheeling                                                                                                                                             
 | `args`                                           | `Any`          | arguments you passed to `bind`                                                                                                                
 
-#### Specific state attributes for XY Gestures `[drag, scroll, wheel, hover]`
+#### Specific state attributes for X/Y Coordinates Gestures `[drag, scroll, wheel, hover]`
 
 The following attributes are provided to the handler for gestures that deal with `x/y` coordinates.
 
@@ -191,18 +209,20 @@ The following attributes are provided to the handler for gestures that deal with
 
 #### Specific state attributes for Distance Angle Gestures `[pinch]`
 
-Pinch is generally about scaling and rotating. The scale depends on the distance between the two fingers, while the rotation depends on the direction / angle of the vector formed by the two fingers. Or more specifically, both scale and rotation depends on the `delta` of `distance` and `angle`, so you will probably end up using `local` or `delta` in most cases.
+Pinch is generally about scaling and rotating. The scale depends on the distance between the two fingers, while the rotation depends on the direction / angle of the vector formed by the two fingers or pointers.
 
-| Name        | Type     | Description                                                                                           |
-|-------------|----------|-------------------------------------------------------------------------------------------------------|
-| `da`        | `Vec2`   | distance and angle.                                                                                   |
-| `previous`  | `Vec2`   | previous `da`                                                                                         |
-| `initial`   | `Vec2`   | `da` value when the gesture has started                                                               |
-| `delta`     | `Vec2`   | delta offset (`da - initial`)                                                                         |
-| `local`     | `Vec2`   | delta with book-keeping (remembers the `da` value throughout gestures)                                |
-| `lastLocal` | `Vec2`   | previous `local`                                                                                      |
-| `vdva`      | `Vec2`   | momentum / speed of the gesture for distance and angle                                                |
-| `turns`     | `Number` | keeps track of the number of turns (don't rely on `turns` to the count of rotations from the gesture) |
+> _More specifically, both scale and rotation depends on the `delta` of `distance` and `angle`, so you will probably end up using `local` or `delta` in most cases._
+
+| Name        | Type     | Description                                                                                 |
+|-------------|----------|---------------------------------------------------------------------------------------------|
+| `da`        | `Vec2`   | absolute distance and angle of the two pointers/fingers.                                    |
+| `previous`  | `Vec2`   | previous `da`                                                                               |
+| `initial`   | `Vec2`   | `da` value when the gesture has started                                                     |
+| `delta`     | `Vec2`   | delta offset (`da - initial`)                                                               |
+| `local`     | `Vec2`   | delta with book-keeping (remembers the `da` value throughout gestures)                      |
+| `lastLocal` | `Vec2`   | previous `local`                                                                            |
+| `vdva`      | `Vec2`   | momentum / speed of the gesture for distance and angle                                      |
+| `turns`     | `Number` | keeps track of the number of turns (don't rely on `turns` to count the number of rotations) |
 
 ### `useGesture` config
 
@@ -223,26 +243,29 @@ You can pass a `config` object as an optional second argument to `useGesture` to
 
 Demo: https://codesandbox.io/s/r24mzvo3q
 
+
+#### Example with `temp` and react-spring
+
 <p align="middle">
   <img src="https://i.imgur.com/JyeQsEI.gif" width="200"/>
+  <br/>
+  <a href="https://codesandbox.io/s/zq19y1xr9m">Codesandbox</a>
 </p>
 
-#### Example with `temp`  and react-spring
-
-Demo: https://codesandbox.io/s/zq19y1xr9m
 
 This demo reads out further data like velocity and direction to calculate decay. `temp` in this case is a simple storage that picks up whatever value you (optionally) return inside the event handler. It's valid as long as the gesture is active. Without this you would need to store the initial xy value somewhere else and conditionally update it when the gesture begins.
 
 ```jsx
 const [{ xy }, set] = useSpring(() => ({ xy: [0, 0] }))
-const bind = useGesture(({ active, delta, velocity, direction, temp = xy.getValue() }) => {
+const bind = useGesture({
+  onDrag: ({ active, delta, velocity, direction, temp = xy.getValue() }) => {
   set({
     xy: add(delta, temp),
     immediate: active,
     config: { velocity: scale(direction, velocity), decay: true }
   })
   return temp
-})
+}})
 return <animated.div {...bind()} style={{ transform: xy.interpolate((x, y) => `translate3d(${x}px,${y}px,0)`) }} />
 ```
 
