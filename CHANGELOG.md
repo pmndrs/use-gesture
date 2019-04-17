@@ -5,12 +5,14 @@
 
 ### Improved
 
-1. Tests are now testing `domTarget`.
 2. `domTarget` now accepts refs.
+1. Tests are now testing `domTarget`.
+1. Tests are now testing `bind` passing arguments.
 
 ### Fixed
 
-1. `onMoveEnd` shouldn't fire if state isn't moving (ie `onLeave` was triggered)
+1. `onMoveEnd` shouldn't fire if state isn't moving (ie `onLeave` was triggered).
+2. Performance optimizations were removed as they were conflicting with passing args to `bind`.
 
 ## 5.0.0-beta.4 Release
 **Summary:** bug fixing and added tests!
