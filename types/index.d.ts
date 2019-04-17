@@ -7,8 +7,7 @@ export type AtLeastOne<T, U = { [K in keyof T]: Pick<T, K> }> = Partial<T> & U[k
 
 export type vector2 = [number, number]
 
-export interface SharedGestureState {
-  args: any
+export interface CommonGestureState {
   hovering?: boolean
   scrolling?: boolean
   dragging?: boolean
@@ -20,9 +19,6 @@ export interface SharedGestureState {
   altKey?: boolean
   metaKey?: boolean
   ctrlKey?: boolean
-}
-
-export interface CommonGestureState extends SharedGestureState {
   event: MouseEvent | TouchEvent
   delta: vector2
   initial: vector2
@@ -37,6 +33,7 @@ export interface CommonGestureState extends SharedGestureState {
   temp: any
   cancel?(): void
   canceled: boolean
+  args: any
 }
 
 export interface CoordinatesGestureState extends CommonGestureState {

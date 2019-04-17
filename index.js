@@ -32,7 +32,8 @@ const initialCommon = {
   time: undefined,
   temp: undefined,
   cancel: noop,
-  canceled: false
+  canceled: false,
+  args: undefined
 }
 
 const initialXY = { xy: [0, 0], velocity: 0, vxvy: [0, 0], distance: 0, direction: [0, 0] } // xy coordinates
@@ -40,7 +41,6 @@ const initialDA = { da: [0, 0], vdva: [0, 0], turns: 0 } // distance and angle
 
 const initialState = {
   shared: {
-    args: undefined,
     hovering: undefined,
     scrolling: undefined,
     dragging: undefined,
@@ -95,23 +95,13 @@ export default function useGesture(props, config) {
 
   React.useEffect(() => clean, [clean])
 
-  const [bind] = React.useState(() => (...args) => {
-    const unchanged = argsRef.current.length === args.length && args.every((arg, index) => arg === argsRef.current[index])
-    if (!unchanged || !handlersRef.current) {
-      clean()
-      argsRef.current = args
-      handlersRef.current = handlers(args)
-    }
-    return handlersRef.current
-  })
+  const [bind] = React.useState(() => (...args) => handlers(args))
 
   return bind
 
   /*** HANDLERS ***/
 
   function handlers(args) {
-    state.current.shared.args = args
-
     const {
       domTarget,
       event: { pointerEvents }
@@ -140,7 +130,8 @@ export default function useGesture(props, config) {
         local: lastLocal,
         lastLocal,
         transform,
-        time: event.timeStamp
+        time: event.timeStamp,
+        args
       }
     }
 
