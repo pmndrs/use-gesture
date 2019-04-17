@@ -1,6 +1,6 @@
 {
   "name": "react-use-gesture",
-  "version": "5.0.0-beta.4",
+  "version": "5.0.0-beta.5",
   "description": "hook for receiving gestures",
   "main": "dist/react-use-gesture.js",
   "module": "dist/react-use-gesture.es.js",
