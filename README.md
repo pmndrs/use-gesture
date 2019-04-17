@@ -272,7 +272,7 @@ Not a lot! Essentially `useGesture` simplifies the implementation of the drag an
 
 **Why `onMove` when `onDrag` already exists?**
 
-`onDrag` only fires while your touch or press the element. You just need to hover your mouse above the element to trigger `onMove`.
+`onDrag` only fires while you touch or press the element. You just need to hover your mouse above the element to trigger `onMove`.
 
 **Why `onWheel` and `onScroll`?**
 
