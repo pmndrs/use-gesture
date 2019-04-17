@@ -19,10 +19,9 @@ export const createHandlers = ({ gesture, tempArg, canceled, set, setStartEnd })
   )
 }
 
-export const Common = React.forwardRef(({ listeners, testKey, state, startFired, endFired, handlersChanged }, ref) => {
+export const Common = React.forwardRef(({ listeners, testKey, state, startFired, endFired }, ref) => {
   return (
-    <div ref={ref} {...listeners} data-testid={`${testKey}-el`} style={{ height: 30, width: 30, overflow: 'scroll' }}>
-      <div data-testid="handlers">{handlersChanged ? 'changed' : 'memo'}</div>
+    <div ref={ref} {...listeners} data-testid={`${testKey}-el`} style={{ height: 400, width: 400 }}>
       <div data-testid={`${testKey}-start`}>{startFired === 0 ? 'not fired' : startFired > 1 ? 'fired too much' : 'fired'}</div>
       <div data-testid={`${testKey}-end`}>{endFired === 0 ? 'not fired' : endFired > 1 ? 'fired too much' : 'fired'}</div>
       {Object.entries(state).map(([k, v]) => (

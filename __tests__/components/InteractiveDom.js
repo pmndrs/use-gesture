@@ -2,7 +2,7 @@ import React from 'react'
 import { Common, createHandlers } from './Common'
 import useGesture from '../../index'
 
-const InteractiveDom = ({ bindArgs, gesture, canceled, tempArg, config, ...props }) => {
+const InteractiveDom = ({ bindArgs = [], gesture, canceled, tempArg, config, ...props }) => {
   const domTarget = React.useRef(null)
   const [state, set] = React.useState({})
   const [[startFired, endFired], setStartEnd] = React.useState([0, 0])
