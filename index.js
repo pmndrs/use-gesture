@@ -79,8 +79,6 @@ export default function useGesture(props, config) {
   }, [props, config])
 
   const state = React.useRef(initialState)
-  const argsRef = React.useRef([])
-  const handlersRef = React.useRef()
   const timeouts = React.useRef({})
   const domListeners = React.useRef([])
   const dragListeners = React.useRef([])
