@@ -46,7 +46,7 @@ describe.each([['attached to component', Interactive, false], ['attached to node
     // TODO - not sure why using window as the mouseMove target doesn't work
 
     test('moving should set first to false', () => {
-      fireEvent.mouseMove(document, { clientX: 20, clientY: 50 })
+      fireEvent.mouseMove(window, { clientX: 20, clientY: 50 })
       expect(getByTestId(`${prefix}drag-first`)).toHaveTextContent('false')
     })
 
@@ -59,7 +59,7 @@ describe.each([['attached to component', Interactive, false], ['attached to node
     })
 
     test('mouseUp should terminate the gesture', () => {
-      fireEvent.mouseUp(document)
+      fireEvent.mouseUp(window)
       expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('false')
       expect(getByTestId(`${prefix}drag-active`)).toHaveTextContent('false')
       expect(getByTestId(`${prefix}drag-last`)).toHaveTextContent('true')
