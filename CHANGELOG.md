@@ -1,5 +1,12 @@
 # Changelog
 
+## 5.0.0-beta.6 Release
+**Summary:** Minor bug fixing.
+
+### Fixed
+
+1. `NaN` or `Infinity` velocities are now set to `0`
+
 ## 5.0.0-beta.5 Release
 **Summary:** bug fixing and more tests.
 

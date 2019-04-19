@@ -156,8 +156,8 @@ export default function useGesture(props, config) {
       return {
         xy: [x, y],
         delta: [delta_x, delta_y],
-        velocity: len / delta_t,
-        vxvy: [x_dist / delta_t, y_dist / delta_t],
+        velocity: delta_t ? len / delta_t : 0,
+        vxvy: [delta_t ? x_dist / delta_t : 0, delta_t ? y_dist / delta_t : 0],
         distance: Math.hypot(delta_x, delta_y),
         direction: [x_dist * scalar, y_dist * scalar],
         local: [local_x, local_y],
@@ -316,7 +316,7 @@ export default function useGesture(props, config) {
         pinch: {
           da: [d, a],
           delta: [delta_d, delta_a],
-          vdva: [d_dist / delta_t, a_dist / delta_t],
+          vdva: [delta_t ? d_dist / delta_t : 0, delta_t ? a_dist / delta_t : 0],
           turns: newTurns,
           previous: da,
           first: false,
