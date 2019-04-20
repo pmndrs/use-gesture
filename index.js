@@ -60,7 +60,7 @@ const initialState = {
   pinch: { ...initialCommon, ...initialDA }
 }
 
-const genericEndState = { last: true, active: false }
+const genericEndState = { first: false, last: true, active: false }
 
 export default function useGesture(props, config) {
   if (typeof props === 'function') props = { onDrag: props }
