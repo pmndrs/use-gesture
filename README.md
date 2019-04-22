@@ -9,7 +9,6 @@
   <i>These demos are real, click them!</i>
 </p>
 
-
 # react-use-gesture
 
 ![npm (tag)](https://img.shields.io/npm/v/react-use-gesture/beta.svg) ![npm bundle size](https://img.shields.io/bundlephobia/minzip/react-use-gesture.svg) ![NPM](https://img.shields.io/npm/l/react-use-gesture.svg) [![BuildStatus](https://travis-ci.org/react-spring/react-use-gesture.svg?branch=5.x)](https://travis-ci.org/react-spring/react-use-gesture)
@@ -29,7 +28,7 @@ npm install react-use-gesture
 ## Api
 
 ```jsx
-import useGesture from 'react-use-gesture'
+import { useGesture } from 'react-use-gesture'
 
 // in your component
 const bind = useGesture(actions, config)
@@ -42,10 +41,13 @@ Hooks allow gestures to be re-used for more than one view (you can use the same 
 ```jsx
 // Rough example that makes a div respond to drag and scroll gestures
 function myComponent() {
-  const bind = useGesture({
-    onDrag: dragState => doStuffOnDrag,
-    onScroll: scrollState => doStuffOnScroll
-  }, { event : { passive: false } })
+  const bind = useGesture(
+    {
+      onDrag: dragState => doStuffOnDrag,
+      onScroll: scrollState => doStuffOnScroll
+    },
+    { event: { passive: false } }
+  )
   return <div {...bind(optionalArgs)} />
 }
 ```
@@ -127,7 +129,6 @@ useGesture({
 
 > **Note #2:** since browsers don't have native event listeners for when scroll, move or wheel ends, react-use-gesture debounces these events to estimate when they stopped. One of the consequence of debouncing is trying to access properties from the source event when a gesture has ended will probably result in a warning: [React does event pooling](https://reactjs.org/docs/events.html#event-pooling), meaning a React event can only be queried synchronously.
 
-
 ### Adding gestures to dom nodes
 
 React-use-gesture also supports adding handlers to dom nodes directly (or the `window` or `document` objects). In that case, you shouldn't spread the `bind()` object returned by `useGesture` as a prop, but use the `React.useEffect` hook as below.
@@ -173,7 +174,7 @@ Every time a handler is called, it will get passed the current event state for i
 The following attributes are provided to the handler for all gestures.
 
 | Name                                                | Type       | Description                                                                                                                  |
-|-----------------------------------------------------|------------|------------------------------------------------------------------------------------------------------------------------------|
+| --------------------------------------------------- | ---------- | ---------------------------------------------------------------------------------------------------------------------------- |
 | `event`                                             | `object`   | source event                                                                                                                 |
 | `time`                                              | `Number`   | timestamp of the current gesture                                                                                             |
 | `first`                                             | `Boolean`  | marks the first event                                                                                                        |
@@ -188,15 +189,15 @@ The following attributes are provided to the handler for all gestures.
 | `moving`                                            | `Boolean`  | `true` when the user is moving the mouse                                                                                     |
 | `hovering`                                          | `Boolean`  | `true` when the mouse hovers the element                                                                                     |
 | `scrolling`                                         | `Boolean`  | `true` when the user is scrolling                                                                                            |
-| `wheeling`                                       | `Boolean`      | `true` when the user is wheeling                                                                                                                                             
-| `args`                                           | `Any`          | arguments you passed to `bind`                                                                                                                
+| `wheeling`                                          | `Boolean`  | `true` when the user is wheeling                                                                                             |
+| `args`                                              | `Any`      | arguments you passed to `bind`                                                                                               |
 
 #### Specific state attributes for X/Y Coordinates Gestures `[drag, scroll, wheel, hover]`
 
 The following attributes are provided to the handler for gestures that deal with `x/y` coordinates.
 
 | Name        | Type           | Description                                                                                                                                                                  |
-|-------------|----------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| ----------- | -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `xy`        | `Vec2 ([x,y])` | for touch/mouse events, `xy` returns the position of the pointer on the screen. For scroll/wheel events `xy` returns how much the element has been scrolled on x and y axis. |
 | `previous`  | `Vec2`         | previous `xy`                                                                                                                                                                |
 | `initial`   | `Vec2`         | `xy` value when the gesture has started                                                                                                                                      |
@@ -205,7 +206,7 @@ The following attributes are provided to the handler for gestures that deal with
 | `lastLocal` | `Vec2`         | previous `local`                                                                                                                                                             |
 | `vxvy`      | `Vec2`         | momentum / speed of the gesture (`x` and `y` axis separated)                                                                                                                 |
 | `velocity`  | `Number`       | momentum / speed of the gesture (`x` and `y` axis combined)                                                                                                                  |
-| `distance`                                       | `Number`       | delta distance                      
+| `distance`  | `Number`       | delta distance                                                                                                                                                               |
 
 #### Specific state attributes for Distance Angle Gestures `[pinch]`
 
@@ -214,7 +215,7 @@ Pinch is generally about scaling and rotating. The scale depends on the distance
 > _More specifically, both scale and rotation depends on the `delta` of `distance` and `angle`, so you will probably end up using `local` or `delta` in most cases._
 
 | Name        | Type     | Description                                                                                 |
-|-------------|----------|---------------------------------------------------------------------------------------------|
+| ----------- | -------- | ------------------------------------------------------------------------------------------- |
 | `da`        | `Vec2`   | absolute distance and angle of the two pointers/fingers.                                    |
 | `previous`  | `Vec2`   | previous `da`                                                                               |
 | `initial`   | `Vec2`   | `da` value when the gesture has started                                                     |
@@ -228,14 +229,14 @@ Pinch is generally about scaling and rotating. The scale depends on the distance
 
 You can pass a `config` object as an optional second argument to `useGesture` to customize its behavior.
 
-| Name        | Default Value                     | Description                                                                                                                                                                            |
-|-------------|-----------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `domTarget` | `undefined`                       | lets you specify a dom node you want to attach gestures to (body, window, document...). You can also pass a ref created with the `useRef` hook.                                        |
-| `event`     | `{passive: true, capture: false}` | the event config attribute lets you configure `passive` and `capture` options passed to event listeners.                                                                               |
-| `transform` | `{x: x => x, y =>y }`             | transform functions you can pass to modify `x` and `y` values.                                                                                                                         |
-| `window`    | `window`                          | lets you specify which `window` element `useGesture` should use. See this [thread](https://github.com/react-spring/react-use-gesture/pull/43#issue-262835054) for a relevant use case. |
-| `enabled`| `true`| enables or disables all gestures
-|  `drag`<br/>`pinch`<br/>`scroll`<br/>`wheel`<br/>`hover`<br/>`move`<br/> | `true`| enables or disables gestures individually
+| Name                                                                    | Default Value                     | Description                                                                                                                                                                            |
+| ----------------------------------------------------------------------- | --------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `domTarget`                                                             | `undefined`                       | lets you specify a dom node you want to attach gestures to (body, window, document...). You can also pass a ref created with the `useRef` hook.                                        |
+| `event`                                                                 | `{passive: true, capture: false}` | the event config attribute lets you configure `passive` and `capture` options passed to event listeners.                                                                               |
+| `transform`                                                             | `{x: x => x, y =>y }`             | transform functions you can pass to modify `x` and `y` values.                                                                                                                         |
+| `window`                                                                | `window`                          | lets you specify which `window` element `useGesture` should use. See this [thread](https://github.com/react-spring/react-use-gesture/pull/43#issue-262835054) for a relevant use case. |
+| `enabled`                                                               | `true`                            | enables or disables all gestures                                                                                                                                                       |
+| `drag`<br/>`pinch`<br/>`scroll`<br/>`wheel`<br/>`hover`<br/>`move`<br/> | `true`                            | enables or disables gestures individually                                                                                                                                              |
 
 ## Examples
 
@@ -247,20 +248,20 @@ You can pass a `config` object as an optional second argument to `useGesture` to
   <a href="https://codesandbox.io/s/zq19y1xr9m">Codesandbox</a>
 </p>
 
-
 This demo reads out further data like velocity and direction to calculate decay. `temp` in this case is a simple storage that picks up whatever value you (optionally) return inside the event handler. It's valid as long as the gesture is active. Without this you would need to store the initial xy value somewhere else and conditionally update it when the gesture begins.
 
 ```jsx
 const [{ xy }, set] = useSpring(() => ({ xy: [0, 0] }))
 const bind = useGesture({
   onDrag: ({ active, delta, velocity, direction, temp = xy.getValue() }) => {
-  set({
-    xy: add(delta, temp),
-    immediate: active,
-    config: { velocity: scale(direction, velocity), decay: true }
-  })
-  return temp
-}})
+    set({
+      xy: add(delta, temp),
+      immediate: active,
+      config: { velocity: scale(direction, velocity), decay: true }
+    })
+    return temp
+  }
+})
 return <animated.div {...bind()} style={{ transform: xy.interpolate((x, y) => `translate3d(${x}px,${y}px,0)`) }} />
 ```
 

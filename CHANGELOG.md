@@ -6,7 +6,7 @@
 
 ### Breaking
 
-1. You should import useGesture as follows: `import { useGesture } from 'react-use-gesture'`
+1. You should now import useGesture as follows: `import { useGesture } from 'react-use-gesture'`
 
 ## 5.0.0-beta.7 Release
 
