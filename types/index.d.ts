@@ -103,7 +103,7 @@ export interface GestureEvents {
   onTouchCancel: React.TouchEventHandler
 }
 
-export function useGesture(
+export default function useGesture(
   handlers: AtLeastOne<GestureHandlers> | CoordinatesHandler,
   config?: Partial<GestureConfig>
 ): (...args: any[]) => Partial<GestureEvents>
