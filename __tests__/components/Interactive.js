@@ -1,6 +1,6 @@
 import React from 'react'
 import { Common, createHandlers } from './Common'
-import useGesture from '../../index'
+import { useGesture } from '../../index'
 
 const Interactive = ({ bindArgs = [], gesture, canceled, tempArg, config, ...props }) => {
   const [state, set] = React.useState({})

@@ -62,7 +62,7 @@ const initialState = {
 
 const genericEndState = { first: false, last: true, active: false }
 
-export default function useGesture(props, config) {
+export function useGesture(props, config) {
   if (typeof props === 'function') props = { onDrag: props }
   if (props.onAction) {
     props.onDrag = props.onAction

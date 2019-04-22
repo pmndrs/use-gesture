@@ -1,5 +1,5 @@
 import React from 'react'
-import useGesture from '../../index'
+import { useGesture } from '../../index'
 import { Common } from './Common'
 
 export const DefaultProp = () => {

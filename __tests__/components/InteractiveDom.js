@@ -1,6 +1,6 @@
 import React from 'react'
 import { Common, createHandlers } from './Common'
-import useGesture from '../../index'
+import { useGesture } from '../../index'
 
 const InteractiveDom = ({ bindArgs = [], gesture, canceled, tempArg, config, ...props }) => {
   const domTarget = React.useRef(null)
