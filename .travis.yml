@@ -1,7 +1,10 @@
 language: node_js
 node_js:
   - stable
-before_install:
-  - pip install --user codecov
-after_success:
-  - codecov --file coverage/lcov.info --disable search
+cache:
+  yarn: true
+  directories:
+    - /home/travis/.dts/typescript-installs/
+script:
+  - 'yarn test'
+  - 'yarn dtslint'

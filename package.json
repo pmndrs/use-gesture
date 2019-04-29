@@ -1,72 +1,88 @@
 {
-  "name": "react-with-gesture",
-  "version": "4.0.8",
-  "description": "hoc for receiving gestures",
-  "main": "dist/react-with-gesture",
-  "module": "dist/react-with-gesture.es",
-  "typings": "./index.d.ts",
+  "name": "react-use-gesture",
+  "version": "5.0.0",
+  "description": "hook for receiving gestures",
+  "main": "dist/react-use-gesture.js",
+  "module": "dist/react-use-gesture.es.js",
+  "types": "types",
   "sideEffects": false,
-  "lint-staged": {
-    "*.{js,ts,json}": [
-      "prettier --write",
-      "git add"
-    ]
-  },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged"
+      "pre-commit": "pretty-quick --staged"
     }
   },
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "rollup -c",
     "prepare": "npm run build",
-    "test:typings": "typings-tester --dir test/typescript"
+    "test": "jest",
+    "test:watch": "jest --watch --silent",
+    "test:coverage": "jest --coverage --silent",
+    "dtslint": "dtslint types"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/drcmda/react-with-gesture.git"
+    "url": "git+https://github.com/react-spring/react-use-gesture.git"
   },
   "keywords": [
     "react",
-    "hoc",
+    "hook",
     "gesture",
     "mouse",
-    "touch"
+    "touch",
+    "drag",
+    "pinch",
+    "scroll",
+    "wheel"
   ],
   "author": "Paul Henschel",
+  "contributors": [
+    "David Bismut"
+  ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/drcmda/react-with-gesture/issues"
+    "url": "https://github.com/react-spring/react-use-gesture/issues"
   },
-  "homepage": "https://github.com/drcmda/react-with-gesture#readme",
+  "homepage": "https://github.com/react-spring/react-use-gesture#readme",
   "devDependencies": {
     "@babel/core": "7.1.2",
-    "@babel/plugin-proposal-class-properties": "^7.1.0",
+    "@babel/plugin-transform-modules-commonjs": "^7.4.3",
     "@babel/plugin-transform-runtime": "7.1.0",
-    "@babel/preset-env": "7.1.0",
-    "@babel/preset-react": "7.0.0",
-    "@babel/preset-stage-2": "7.0.0",
-    "@babel/runtime": "7.1.2",
+    "@babel/preset-env": "^7.4.3",
+    "@babel/preset-react": "^7.0.0",
     "@types/react": "^16.4.18",
     "babel-core": "7.0.0-bridge.0",
-    "babel-jest": "23.6.0",
-    "babel-plugin-annotate-pure-calls": "0.4.0",
-    "babel-plugin-transform-react-remove-prop-types": "0.4.19",
+    "babel-eslint": "9.x",
+    "babel-jest": "^24.7.1",
+    "dtslint": "^0.6.1",
+    "eslint": "5.x",
+    "eslint-config-react-app": "^3.0.8",
+    "eslint-plugin-flowtype": "2.x",
+    "eslint-plugin-import": "2.x",
+    "eslint-plugin-jsx-a11y": "6.x",
+    "eslint-plugin-react": "7.x",
+    "eslint-plugin-react-hooks": "^1.6.0",
     "husky": "^1.3.1",
-    "lint-staged": "^8.1.5",
+    "jest": "^24.7.1",
+    "jest-dom": "^3.1.3",
     "prettier": "^1.16.4",
-    "react": "16.6.0",
-    "react-dom": "16.6.0",
-    "rimraf": "2.6.2",
-    "rollup": "0.67.0",
-    "rollup-plugin-babel": "4.0.3",
-    "typescript": "^3.1.6",
-    "typings-tester": "^0.3.2"
+    "pretty-quick": "^1.10.0",
+    "react": "^16.8.0",
+    "react-dom": "^16.8.0",
+    "react-testing-library": "^6.1.2",
+    "rimraf": "^2.6.2",
+    "rollup": "^1.10.0",
+    "rollup-plugin-babel": "^4.3.2",
+    "typescript": "^3.4.3"
   },
   "peerDependencies": {
-    "prop-types": "15.x.x",
-    "react": ">= 16.0.0",
-    "react-dom": ">= 16.0.0"
+    "react": ">= 16.8.0",
+    "react-dom": ">= 16.8.0"
+  },
+  "jest": {
+    "testPathIgnorePatterns": [
+      "components/",
+      "types/"
+    ]
   }
 }
