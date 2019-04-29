@@ -1,5 +1,9 @@
 # Changelog
 
+## 5.0.0 Release
+
+**Summary:** Version bump from `5.0.0-beta.8`.
+
 ## 5.0.0-beta.8 Release
 
 **Summary:** Removed default export to match TypeScript import in JS.

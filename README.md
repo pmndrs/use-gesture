@@ -4,6 +4,7 @@
 <p align="middle">
   <a href="https://codesandbox.io/s/j0y0vpz59"><img src="https://i.imgur.com/OxGLHeT.gif" width="515"/></a>
   <a href="https://codesandbox.io/s/r5qmj8m6lq"><img src="https://i.imgur.com/ifdCBvG.gif" width="130"/></a>
+  <a href="https://codesandbox.io/s/9o92o24wrr"><img src="https://i.imgur.com/z6jFWpM.gif" width="180"/></a>
 </p>
 <p align="middle">
   <i>These demos are real, click them!</i>
@@ -11,7 +12,7 @@
 
 # react-use-gesture
 
-![npm (tag)](https://img.shields.io/npm/v/react-use-gesture/beta.svg) ![npm bundle size](https://img.shields.io/bundlephobia/minzip/react-use-gesture.svg) ![NPM](https://img.shields.io/npm/l/react-use-gesture.svg) [![BuildStatus](https://travis-ci.org/react-spring/react-use-gesture.svg?branch=5.x)](https://travis-ci.org/react-spring/react-use-gesture)
+![npm (tag)](https://img.shields.io/npm/v/react-use-gesture.svg) ![npm bundle size](https://img.shields.io/bundlephobia/minzip/react-use-gesture.svg) ![NPM](https://img.shields.io/npm/l/react-use-gesture.svg) [![BuildStatus](https://travis-ci.org/react-spring/react-use-gesture.svg)](https://travis-ci.org/react-spring/react-use-gesture)
 
 Ever thought about doing that sidebar pull-out, a view pager, some slider, any gesture on the web basically, and dropped the idea because it's too hard? In that case, this is your lib.
 
