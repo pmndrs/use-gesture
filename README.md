@@ -53,10 +53,6 @@ function myComponent() {
 }
 ```
 
-### React-use-gesture only adds listeners, nothing more!
-
-Contrary to libraries such as [react-pose](https://popmotion.io/pose/) that provide out of the box draggable components, binding a drag handler to a `div` through react-use-gesture doesn’t make it draggable. For that, you will need to pass it styling elements based on the values returned by `useGesture`.
-
 #### Making things move
 
 <p align="middle">
