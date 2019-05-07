@@ -250,7 +250,10 @@ export function useGesture(props, config) {
       handleGesture('onDrag')
     }
 
-    const cancelDrag = event => requestAnimationFrame(() => onDragEnd(event, true))
+    const cancelDrag = event => {
+      updateState({ drag: { canceled: true } })
+      requestAnimationFrame(() => onDragEnd(event, true))
+    }
 
     const onPinchStart = event => {
       if (!configRef.current.enabled || !configRef.current.pinch || event.touches.length !== 2) return
