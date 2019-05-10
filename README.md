@@ -237,7 +237,7 @@ You can pass a `config` object as an optional second argument to `useGesture` to
 
 ## Examples
 
-#### Example with `temp` and react-spring
+#### `temp` and react-spring
 
 <p align="middle">
   <img src="https://i.imgur.com/JyeQsEI.gif" width="200"/>
@@ -261,6 +261,10 @@ const bind = useGesture({
 })
 return <animated.div {...bind()} style={{ transform: xy.interpolate((x, y) => `translate3d(${x}px,${y}px,0)`) }} />
 ```
+
+#### Other examples
+
+- [Locking Axis](https://codesandbox.io/s/25n4m933j)
 
 ## Frequently asked questions
 
