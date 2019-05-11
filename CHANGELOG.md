@@ -6,7 +6,7 @@
 
 ### Fixed
 
-1. Fixed a bug where `onDragEnd` or `onPinchEnd` would be called too late when the gestures are canceled (#52)
+1. Fixed a bug where `onDragEnd` or `onPinchEnd` would be called too late when the gestures are canceled #52
 
 2. Wheel and scroll gestures are also returning modifier keys.
 
