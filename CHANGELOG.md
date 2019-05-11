@@ -1,5 +1,15 @@
 # Changelog
 
+## 5.0.1 Release
+
+**Summary:** release updating dev dependencies and fixing minor bugs.
+
+### Fixed
+
+1. Fixed a bug where `onDragEnd` or `onPinchEnd` would be called too late when the gestures are canceled (#52)
+
+2. Wheel and scroll gestures are also returning modifier keys.
+
 ## 5.0.0 Release
 
 **Summary (recap from betas):** major release introducing additional gestures on top of **drag**: **pinch**, **scroll**, **wheel**, **hover** and **move** are now supported. This release is dropping support for high-order and render-props component and can only be used through React hooks 🎣. Therefore `react-with-gesture` is now `react-use-gesture`.

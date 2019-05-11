@@ -225,7 +225,7 @@ export function useGesture(props, config) {
       handleGestureStart('onDrag')
     }
 
-    const onDragEnd = (event, canceled = false) => {
+    const onDragEnd = event => {
       if (!state.current.shared.dragging) return
 
       const { currentTarget, pointerId } = state.current.drag
@@ -234,7 +234,7 @@ export function useGesture(props, config) {
       } else {
         removeListeners(configRef.current.window, dragListeners.current, configRef.current.event)
       }
-      updateState({ shared: { dragging: false, down: false, touches: 0 }, drag: { ...genericEndState, event, cancel: noop, canceled } })
+      updateState({ shared: { dragging: false, down: false, touches: 0 }, drag: { ...genericEndState, event } })
 
       handleGestureEnd('onDrag')
     }
@@ -250,7 +250,10 @@ export function useGesture(props, config) {
       handleGesture('onDrag')
     }
 
-    const cancelDrag = event => requestAnimationFrame(() => onDragEnd(event, true))
+    const cancelDrag = event => {
+      updateState({ drag: { canceled: true, cancel: noop } })
+      requestAnimationFrame(() => onDragEnd(event))
+    }
 
     const onPinchStart = event => {
       if (!configRef.current.enabled || !configRef.current.pinch || event.touches.length !== 2) return
@@ -277,15 +280,15 @@ export function useGesture(props, config) {
 
       updateState({
         shared: { pinching: true, down: true, touches: 2 },
-        pinch: { da: [0, 0], ...startState, event, cancel: () => cancelPinch(event) }
+        pinch: { ...startState, event, cancel: () => cancelPinch(event) }
       })
 
       handleGestureStart('onPinch')
     }
 
-    const onPinchEnd = (event, canceled = false) => {
+    const onPinchEnd = event => {
       if (!state.current.shared.pinching) return
-      updateState({ shared: { pinching: false, down: false, touches: 0 }, pinch: { ...genericEndState, event, cancel: noop, canceled } })
+      updateState({ shared: { pinching: false, down: false, touches: 0 }, pinch: { ...genericEndState, event } })
       handleGestureEnd('onPinch')
     }
 
@@ -329,7 +332,10 @@ export function useGesture(props, config) {
       handleGesture('onPinch')
     }
 
-    const cancelPinch = event => requestAnimationFrame(() => onPinchEnd(event, true))
+    const cancelPinch = event => {
+      updateState({ pinch: { canceled: true, cancel: noop } })
+      requestAnimationFrame(() => onPinchEnd(event))
+    }
 
     const onMoveEnd = () => {
       if (!state.current.shared.moving) return
@@ -364,7 +370,7 @@ export function useGesture(props, config) {
       if (!configRef.current.enabled || !configRef.current.scroll) return
       clearTimeout(timeouts.current.scroll)
       timeouts.current.scroll = setTimeout(onScrollEnd, 100)
-      const { mov_x, mov_y } = getScrollEventData(event)
+      const { mov_x, mov_y, ...rest } = getScrollEventData(event)
 
       if (!state.current.shared.scrolling) {
         const startState = getGenericStartState(event, 'scroll', [mov_x, mov_y])
@@ -373,7 +379,7 @@ export function useGesture(props, config) {
       }
 
       const kinematics = getKinematics(mov_x, mov_y, event, 'scroll')
-      updateState({ scroll: { ...kinematics, first: false, event } })
+      updateState({ shared: rest, scroll: { ...kinematics, first: false, event } })
       handleGesture('onScroll')
     }
 
@@ -389,16 +395,16 @@ export function useGesture(props, config) {
       if (!configRef.current.enabled || !configRef.current.wheel) return
       clearTimeout(timeouts.current.wheel)
       timeouts.current.wheel = setTimeout(onWheelEnd, 100)
-      const { mov_x, mov_y } = getWheelEventData(event)
+      const { mov_x, mov_y, ...rest } = getWheelEventData(event)
 
       if (!state.current.shared.wheeling) {
         const startState = getGenericStartState(event, 'wheel', [mov_x, mov_y])
-        updateState({ shared: { wheeling: true }, wheel: { ...startState, event } })
+        updateState({ shared: { wheeling: true, ...rest }, wheel: { ...startState, event } })
         return handleGestureStart('onWheel')
       }
 
       const kinematics = getKinematics(mov_x, mov_y, event, 'wheel', true)
-      updateState({ wheel: { ...kinematics, first: false, event } })
+      updateState({ shared: rest, wheel: { ...kinematics, first: false, event } })
       handleGesture('onWheel')
     }
 
@@ -496,13 +502,14 @@ function getScrollEventData(event) {
   // If the currentTarget is the window then we return the scrollX/Y position.
   // If not (ie the currentTarget is a DOM element), then we return scrollLeft/Top
   const { scrollX, scrollY, scrollLeft, scrollTop } = event.currentTarget
-  return { mov_x: scrollX || scrollLeft || 0, mov_y: scrollY || scrollTop || 0 }
+  const { shiftKey, altKey, metaKey, ctrlKey } = event
+  return { mov_x: scrollX || scrollLeft || 0, mov_y: scrollY || scrollTop || 0, shiftKey, altKey, metaKey, ctrlKey }
 }
 
-function getWheelEventData(event) {
+function getWheelEventData({ deltaX, deltaY, shiftKey, altKey, metaKey, ctrlKey }) {
   //TODO implement polyfill ?
   // https://developer.mozilla.org/en-US/docs/Web/Events/wheel#Polyfill
-  return { mov_x: event.deltaX, mov_y: event.deltaY }
+  return { mov_x: deltaX, mov_y: deltaY, shiftKey, altKey, metaKey, ctrlKey }
 }
 
 function getPointerEventData(event) {
