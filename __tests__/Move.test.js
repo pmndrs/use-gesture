@@ -1,5 +1,5 @@
 import React from 'react'
-import { render, cleanup, fireEvent, wait } from 'react-testing-library'
+import { render, cleanup, fireEvent, createEvent, wait } from 'react-testing-library'
 import 'jest-dom/extend-expect'
 import Interactive from './components/Interactive'
 import InteractiveDom from './components/InteractiveDom'
@@ -15,9 +15,13 @@ describe.each([['attached to component', Interactive, false], ['attached to node
     const prefix = domTarget ? 'dom-' : ''
     const { getByTestId, rerender } = render(<Component gesture="Move" tempArg="temp" />)
     const element = getByTestId(`${prefix}move-el`)
+    let delta_t
 
     test('mouseMove should initiate the gesture', () => {
-      fireEvent.mouseMove(element, { clientX: 20, clientY: 50 })
+      const event = createEvent.mouseMove(element, { clientX: 20, clientY: 50 })
+      fireEvent(element, event)
+      delta_t = event.timeStamp
+
       expect(getByTestId(`${prefix}move-active`)).toHaveTextContent('true')
       expect(getByTestId(`${prefix}move-moving`)).toHaveTextContent('true')
       expect(getByTestId(`${prefix}move-first`)).toHaveTextContent('true')
@@ -35,7 +39,10 @@ describe.each([['attached to component', Interactive, false], ['attached to node
     })
 
     test('the second mouseMove event should set first to false', () => {
-      fireEvent.mouseMove(element, { clientX: 30, clientY: 80 })
+      const event = createEvent.mouseMove(element, { clientX: 30, clientY: 80 })
+      fireEvent(element, event)
+      delta_t = event.timeStamp - delta_t
+
       expect(getByTestId(`${prefix}move-first`)).toHaveTextContent('false')
       expect(getByTestId(`${prefix}move-last`)).toHaveTextContent('false')
     })
@@ -47,7 +54,7 @@ describe.each([['attached to component', Interactive, false], ['attached to node
 
     test('kinematics should update', () => {
       expect(getByTestId(`${prefix}move-velocity`)).not.toHaveTextContent(/^0$/)
-      expect(getByTestId(`${prefix}move-vxvy`)).not.toHaveTextContent('0,0')
+      expect(getByTestId(`${prefix}move-vxvy`)).toHaveTextContent(`${10 / delta_t},${30 / delta_t}`)
     })
 
     test('the last mouseMove event should debounce and terminate the gesture', async () => {

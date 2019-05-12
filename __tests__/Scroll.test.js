@@ -1,5 +1,5 @@
 import React from 'react'
-import { render, cleanup, fireEvent, wait } from 'react-testing-library'
+import { render, cleanup, fireEvent, createEvent, wait } from 'react-testing-library'
 import 'jest-dom/extend-expect'
 import Interactive from './components/Interactive'
 import InteractiveDom from './components/InteractiveDom'
@@ -15,11 +15,16 @@ describe.each([['attached to component', Interactive, false], ['attached to node
     const prefix = domTarget ? 'dom-' : ''
     const { getByTestId, rerender } = render(<Component gesture="Scroll" tempArg="temp" />)
     const element = getByTestId(`${prefix}scroll-el`)
+    let delta_t
 
     test('scroll event should initiate the gesture', () => {
       element.scrollLeft = 10
       element.scrollTop = 30
-      fireEvent.scroll(element)
+
+      const event = createEvent.scroll(element)
+      fireEvent(element, event)
+      delta_t = event.timeStamp
+
       expect(getByTestId(`${prefix}scroll-active`)).toHaveTextContent('true')
       expect(getByTestId(`${prefix}scroll-scrolling`)).toHaveTextContent('true')
       expect(getByTestId(`${prefix}scroll-first`)).toHaveTextContent('true')
@@ -39,7 +44,10 @@ describe.each([['attached to component', Interactive, false], ['attached to node
     test('the second scroll event should set first to false', () => {
       element.scrollLeft = 40
       element.scrollTop = 50
-      fireEvent.scroll(element)
+      const event = createEvent.scroll(element)
+      fireEvent(element, event)
+      delta_t = event.timeStamp - delta_t
+
       expect(getByTestId(`${prefix}scroll-first`)).toHaveTextContent('false')
       expect(getByTestId(`${prefix}scroll-last`)).toHaveTextContent('false')
     })
@@ -51,7 +59,7 @@ describe.each([['attached to component', Interactive, false], ['attached to node
 
     test('kinematics should update', () => {
       expect(getByTestId(`${prefix}scroll-velocity`)).not.toHaveTextContent(/^0$/)
-      expect(getByTestId(`${prefix}scroll-vxvy`)).not.toHaveTextContent('0,0')
+      expect(getByTestId(`${prefix}scroll-vxvy`)).toHaveTextContent(`${30 / delta_t},${20 / delta_t}`)
     })
 
     test('the last scroll event should debounce and terminate the gesture', async () => {

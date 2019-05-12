@@ -1,5 +1,5 @@
 import React from 'react'
-import { render, cleanup, fireEvent, wait } from 'react-testing-library'
+import { render, cleanup, fireEvent, createEvent, wait } from 'react-testing-library'
 import 'jest-dom/extend-expect'
 import Interactive from './components/Interactive'
 import InteractiveDom from './components/InteractiveDom'
@@ -18,6 +18,7 @@ describe.each([['attached to component', Interactive, false], ['attached to node
     const prefix = domTarget ? 'dom-' : ''
     const { getByTestId, queryByTestId, rerender } = render(<Component gesture="Drag" tempArg="temp" />)
     const element = getByTestId(`${prefix}drag-el`)
+    let delta_t
 
     test('two-fingers touch should NOT initiate the gesture', () => {
       fireEvent.touchStart(element, { touches: [{}, {}] })
@@ -25,7 +26,10 @@ describe.each([['attached to component', Interactive, false], ['attached to node
     })
 
     test('mouseDown should initiate the gesture', () => {
-      fireEvent.mouseDown(element, { clientX: 10, clientY: 20 })
+      const event = createEvent.mouseDown(element, { clientX: 10, clientY: 20 })
+      fireEvent(element, event)
+      delta_t = event.timeStamp
+
       expect(getByTestId(`${prefix}drag-active`)).toHaveTextContent('true')
       expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('true')
       expect(getByTestId(`${prefix}drag-first`)).toHaveTextContent('true')
@@ -46,16 +50,20 @@ describe.each([['attached to component', Interactive, false], ['attached to node
     // TODO - not sure why using window as the mouseMove target doesn't work
 
     test('moving should set first to false', () => {
-      fireEvent.mouseMove(window, { clientX: 20, clientY: 50 })
+      const event = createEvent.mouseMove(element, { clientX: 20, clientY: 50 })
+      fireEvent(element, event)
+      delta_t = event.timeStamp - delta_t
+
       expect(getByTestId(`${prefix}drag-first`)).toHaveTextContent('false')
     })
 
     test('moving should update kinematics', () => {
       expect(getByTestId(`${prefix}drag-xy`)).toHaveTextContent('20,50')
       expect(getByTestId(`${prefix}drag-local`)).toHaveTextContent('10,30')
+      expect(getByTestId(`${prefix}drag-delta`)).toHaveTextContent('10,30')
       expect(getByTestId(`${prefix}drag-previous`)).toHaveTextContent('10,20')
       expect(getByTestId(`${prefix}drag-velocity`)).not.toHaveTextContent(/^0$/)
-      expect(getByTestId(`${prefix}drag-vxvy`)).not.toHaveTextContent('0,0')
+      expect(getByTestId(`${prefix}drag-vxvy`)).toHaveTextContent(`${10 / delta_t},${30 / delta_t}`)
     })
 
     test('mouseUp should terminate the gesture', () => {

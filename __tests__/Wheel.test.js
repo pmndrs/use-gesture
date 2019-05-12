@@ -1,5 +1,5 @@
 import React from 'react'
-import { render, cleanup, fireEvent, wait } from 'react-testing-library'
+import { render, cleanup, fireEvent, createEvent, wait } from 'react-testing-library'
 import 'jest-dom/extend-expect'
 import Interactive from './components/Interactive'
 import InteractiveDom from './components/InteractiveDom'
@@ -16,8 +16,13 @@ describe.each([['attached to component', Interactive, false], ['attached to node
     const { getByTestId, rerender } = render(<Component gesture="Wheel" tempArg="temp" />)
     const element = getByTestId(`${prefix}wheel-el`)
 
+    let delta_t
+
     test('wheel event should initiate the gesture', () => {
-      fireEvent.wheel(element, { deltaX: 1, deltaY: -1 })
+      const event = createEvent.wheel(element, { deltaX: 1, deltaY: -1 })
+      fireEvent(element, event)
+      delta_t = event.timeStamp
+
       expect(getByTestId(`${prefix}wheel-active`)).toHaveTextContent('true')
       expect(getByTestId(`${prefix}wheel-wheeling`)).toHaveTextContent('true')
       expect(getByTestId(`${prefix}wheel-first`)).toHaveTextContent('true')
@@ -35,7 +40,9 @@ describe.each([['attached to component', Interactive, false], ['attached to node
     })
 
     test('the second wheel event should set first to false', () => {
-      fireEvent.wheel(element, { deltaX: 4, deltaY: -5 })
+      const event = createEvent.wheel(element, { deltaX: 4, deltaY: -5 })
+      fireEvent(element, event)
+      delta_t = event.timeStamp - delta_t
       expect(getByTestId(`${prefix}wheel-first`)).toHaveTextContent('false')
       expect(getByTestId(`${prefix}wheel-last`)).toHaveTextContent('false')
     })
@@ -47,7 +54,7 @@ describe.each([['attached to component', Interactive, false], ['attached to node
 
     test('kinematics should update', () => {
       expect(getByTestId(`${prefix}wheel-velocity`)).not.toHaveTextContent(/^0$/)
-      expect(getByTestId(`${prefix}wheel-vxvy`)).not.toHaveTextContent('0,0')
+      expect(getByTestId(`${prefix}wheel-vxvy`)).toHaveTextContent(`${4 / delta_t},${-5 / delta_t}`)
     })
 
     test('the last wheel event should debounce and terminate the gesture', async () => {
