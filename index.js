@@ -1,5 +1,4 @@
 import React from 'react'
-
 const noop = () => {}
 
 const stateKeys = { onDrag: 'drag', onHover: 'move', onMove: 'move', onPinch: 'pinch', onScroll: 'scroll', onWheel: 'wheel' }
@@ -135,15 +134,16 @@ export function useGesture(props, config) {
 
     const getKinematics = (mov_x, mov_y, event, stateKey, isDelta = false) => {
       const lastLocal = state.current[stateKey].lastLocal || initialState[stateKey].lastLocal
-      const { xy, initial, delta, time, transform } = state.current[stateKey]
+      const { xy, initial, time, transform } = state.current[stateKey]
       const t = transform || event.transform || configRef.current.transform
 
       const delta_t = event.timeStamp - time
 
       const x = isDelta ? mov_x + xy[0] : mov_x
       const y = isDelta ? mov_y + xy[1] : mov_y
-      const delta_x = t.x(isDelta ? mov_x + delta[0] : x - initial[0])
-      const delta_y = t.y(isDelta ? mov_y + delta[1] : y - initial[1])
+
+      const delta_x = t.x(x - initial[0])
+      const delta_y = t.y(y - initial[1])
 
       const x_dist = t.x(x - xy[0])
       const y_dist = t.y(y - xy[1])
@@ -393,6 +393,7 @@ export function useGesture(props, config) {
 
     const onWheel = event => {
       if (!configRef.current.enabled || !configRef.current.wheel) return
+
       clearTimeout(timeouts.current.wheel)
       timeouts.current.wheel = setTimeout(onWheelEnd, 100)
       const { mov_x, mov_y, ...rest } = getWheelEventData(event)
@@ -435,36 +436,36 @@ export function useGesture(props, config) {
     const listeners = {}
 
     if (actions.has('onMove')) {
-      pushEventProp(listeners, pointerEvents ? 'onPointerMove' : 'onMouseMove', onMove)
+      pushInKeys(listeners, pointerEvents ? 'onPointerMove' : 'onMouseMove', onMove)
     }
 
     if (actions.has('onDrag')) {
       if (pointerEvents) {
-        pushEventProp(listeners, 'onPointerDown', onDragStart)
-        pushEventProp(listeners, 'onPointerMove', onDragMove)
-        pushEventProp(listeners, ['onPointerUp', 'onPointerCancel'], onDragEnd)
+        pushInKeys(listeners, 'onPointerDown', onDragStart)
+        pushInKeys(listeners, 'onPointerMove', onDragMove)
+        pushInKeys(listeners, ['onPointerUp', 'onPointerCancel'], onDragEnd)
       } else {
-        pushEventProp(listeners, ['onMouseDown', 'onTouchStart'], onDragStart)
+        pushInKeys(listeners, ['onMouseDown', 'onTouchStart'], onDragStart)
       }
     }
 
     if (actions.has('onPinch')) {
-      pushEventProp(listeners, 'onTouchStart', onPinchStart)
-      pushEventProp(listeners, 'onTouchMove', onPinchMove)
-      pushEventProp(listeners, ['onTouchEnd', 'onTouchCancel'], onPinchEnd)
+      pushInKeys(listeners, 'onTouchStart', onPinchStart)
+      pushInKeys(listeners, 'onTouchMove', onPinchMove)
+      pushInKeys(listeners, ['onTouchEnd', 'onTouchCancel'], onPinchEnd)
     }
 
     if (actions.has('onHover')) {
-      pushEventProp(listeners, pointerEvents ? 'onPointerEnter' : 'onMouseEnter', onEnter)
-      pushEventProp(listeners, pointerEvents ? 'onPointerLeave' : 'onMouseLeave', onLeave)
+      pushInKeys(listeners, pointerEvents ? 'onPointerEnter' : 'onMouseEnter', onEnter)
+      pushInKeys(listeners, pointerEvents ? 'onPointerLeave' : 'onMouseLeave', onLeave)
     }
 
     if (actions.has('onScroll')) {
-      pushEventProp(listeners, 'onScroll', onScroll)
+      pushInKeys(listeners, 'onScroll', onScroll)
     }
 
     if (actions.has('onWheel')) {
-      pushEventProp(listeners, 'onWheel', onWheel)
+      pushInKeys(listeners, 'onWheel', onWheel)
     }
 
     if (domTarget) {
@@ -482,13 +483,17 @@ export function useGesture(props, config) {
 
 /*** UTILS ***/
 
-const chain = (...fns) => (...args) => fns.forEach(a => a(...args))
-const pushEventProp = (l, keys, fn) => {
+// returns a function that chains all functions given as parameters
+const chain = (...fns) => (...args) => fns.forEach(fn => fn(...args))
+
+// utility function that pushes values in object keys which are in fact arrays
+const pushInKeys = (obj, keys, value) => {
   if (!Array.isArray(keys)) keys = [keys]
-  keys.forEach(key => (l[key] = l[key] ? [...l[key], fn] : [fn]))
+  keys.forEach(key => (obj[key] = obj[key] ? [...obj[key], value] : [value]))
 }
 
-const clearTimeouts = timeouts => Object.values(timeouts).forEach(clearTimeout)
+// clears timeouts in keys
+const clearTimeouts = timeoutsObj => Object.values(timeoutsObj).forEach(clearTimeout)
 
 const setListeners = add => (el, listeners, options) => {
   const action = add ? 'addEventListener' : 'removeEventListener'
