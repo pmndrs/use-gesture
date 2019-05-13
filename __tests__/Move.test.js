@@ -6,9 +6,6 @@ import InteractiveDom from './components/InteractiveDom'
 
 afterAll(cleanup)
 
-// TODO - fix act warning (probably caused by debounce)
-// https://github.com/facebook/react/issues/14769
-
 describe.each([['attached to component', Interactive, false], ['attached to node', InteractiveDom, true]])(
   'testing onMove %s)',
   (testName, Component, domTarget) => {

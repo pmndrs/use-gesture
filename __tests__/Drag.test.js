@@ -4,9 +4,6 @@ import 'jest-dom/extend-expect'
 import Interactive from './components/Interactive'
 import InteractiveDom from './components/InteractiveDom'
 
-// TODO - fix act warning (probably caused by RAF in cancel)
-// https://github.com/facebook/react/issues/14769
-
 // TODO - test drag with touch events
 // TODO - test with pointerEvents
 

@@ -4,9 +4,6 @@ import 'jest-dom/extend-expect'
 import Interactive from './components/Interactive'
 import InteractiveDom from './components/InteractiveDom'
 
-// TODO - fix act warning (probably caused by debounce)
-// https://github.com/facebook/react/issues/14769
-
 afterAll(cleanup)
 
 describe.each([['attached to component', Interactive, false], ['attached to node', InteractiveDom, true]])(
