@@ -26,7 +26,7 @@ describe.each([['attached to component', Interactive, false], ['attached to node
       expect(getByTestId(`${prefix}wheel-active`)).toHaveTextContent('true')
       expect(getByTestId(`${prefix}wheel-wheeling`)).toHaveTextContent('true')
       expect(getByTestId(`${prefix}wheel-first`)).toHaveTextContent('true')
-      expect(getByTestId(`${prefix}wheel-xy`)).toHaveTextContent('1,-1')
+      expect(getByTestId(`${prefix}wheel-values`)).toHaveTextContent('1,-1')
       expect(getByTestId(`${prefix}wheel-initial`)).toHaveTextContent('1,-1')
     })
 
@@ -48,13 +48,13 @@ describe.each([['attached to component', Interactive, false], ['attached to node
     })
 
     test('xy should add wheel event deltas', () => {
-      expect(getByTestId(`${prefix}wheel-xy`)).toHaveTextContent('5,-6')
+      expect(getByTestId(`${prefix}wheel-values`)).toHaveTextContent('5,-6')
       expect(getByTestId(`${prefix}wheel-delta`)).toHaveTextContent('4,-5')
     })
 
     test('kinematics should update', () => {
       expect(getByTestId(`${prefix}wheel-velocity`)).not.toHaveTextContent(/^0$/)
-      expect(getByTestId(`${prefix}wheel-vxvy`)).toHaveTextContent(`${4 / delta_t},${-5 / delta_t}`)
+      expect(getByTestId(`${prefix}wheel-velocities`)).toHaveTextContent(`${4 / delta_t},${-5 / delta_t}`)
     })
 
     test('the last wheel event should debounce and terminate the gesture', async () => {

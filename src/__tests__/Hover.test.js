@@ -21,14 +21,14 @@ describe.each([
     fireEvent.mouseEnter(element, { clientX: 10, clientY: 20 })
     expect(getByTestId(`${prefix}hover-active`)).toHaveTextContent('true')
     expect(getByTestId(`${prefix}hover-hovering`)).toHaveTextContent('true')
-    expect(getByTestId(`${prefix}hover-xy`)).toHaveTextContent('10,20')
+    expect(getByTestId(`${prefix}hover-values`)).toHaveTextContent('10,20')
   })
 
   test('mouseLeave should terminate hover', () => {
     fireEvent.mouseLeave(element, { clientX: 20, clientY: 40 })
     expect(getByTestId(`${prefix}hover-active`)).toHaveTextContent('false')
     expect(getByTestId(`${prefix}hover-hovering`)).toHaveTextContent('false')
-    expect(getByTestId(`${prefix}hover-xy`)).toHaveTextContent('20,40')
+    expect(getByTestId(`${prefix}hover-values`)).toHaveTextContent('20,40')
   })
 
   test('disabling all gestures should prevent state from updating', () => {

@@ -26,7 +26,7 @@ describe.each([['attached to component', Interactive, false], ['attached to node
       expect(getByTestId(`${prefix}pinch-active`)).toHaveTextContent('true')
       expect(getByTestId(`${prefix}pinch-pinching`)).toHaveTextContent('true')
       expect(getByTestId(`${prefix}pinch-first`)).toHaveTextContent('true')
-      expect(getByTestId(`${prefix}pinch-da`)).toHaveTextContent(`40,0`)
+      expect(getByTestId(`${prefix}pinch-values`)).toHaveTextContent(`40,0`)
       expect(getByTestId(`${prefix}pinch-initial`)).toHaveTextContent(`40,0`)
     })
 
@@ -45,10 +45,10 @@ describe.each([['attached to component', Interactive, false], ['attached to node
     })
 
     test('moving should update kinematics', () => {
-      expect(getByTestId(`${prefix}pinch-da`)).toHaveTextContent(`30,90`)
+      expect(getByTestId(`${prefix}pinch-values`)).toHaveTextContent(`30,90`)
       expect(getByTestId(`${prefix}pinch-local`)).toHaveTextContent(`-10,-90`)
       expect(getByTestId(`${prefix}pinch-previous`)).toHaveTextContent(`40,0`)
-      expect(getByTestId(`${prefix}pinch-vdva`)).not.toHaveTextContent('0,0')
+      expect(getByTestId(`${prefix}pinch-velocities`)).not.toHaveTextContent('0,0')
     })
 
     test('touchEnd should terminate the gesture', () => {
@@ -66,7 +66,7 @@ describe.each([['attached to component', Interactive, false], ['attached to node
     test('restarting the gesture should book-keep local and reset delta', () => {
       fireEvent.touchStart(element, { touches: [{ clientX: 0, clientY: 0 }, { clientX: 0, clientY: 40 }] })
       fireEvent.touchMove(element, { touches: [{ clientX: 0, clientY: 0 }, { clientX: -30, clientY: 0 }] })
-      expect(getByTestId(`${prefix}pinch-da`)).toHaveTextContent(`30,-90`)
+      expect(getByTestId(`${prefix}pinch-values`)).toHaveTextContent(`30,-90`)
       expect(getByTestId(`${prefix}pinch-local`)).toHaveTextContent(`-20,0`)
       expect(getByTestId(`${prefix}pinch-delta`)).toHaveTextContent(`-10,90`)
     })

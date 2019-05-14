@@ -30,7 +30,7 @@ describe.each([['attached to component', Interactive, false], ['attached to node
       expect(getByTestId(`${prefix}drag-active`)).toHaveTextContent('true')
       expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('true')
       expect(getByTestId(`${prefix}drag-first`)).toHaveTextContent('true')
-      expect(getByTestId(`${prefix}drag-xy`)).toHaveTextContent('10,20')
+      expect(getByTestId(`${prefix}drag-values`)).toHaveTextContent('10,20')
       expect(getByTestId(`${prefix}drag-down`)).toHaveTextContent('true')
       expect(getByTestId(`${prefix}drag-initial`)).toHaveTextContent('10,20')
     })
@@ -55,12 +55,12 @@ describe.each([['attached to component', Interactive, false], ['attached to node
     })
 
     test('moving should update kinematics', () => {
-      expect(getByTestId(`${prefix}drag-xy`)).toHaveTextContent('20,50')
+      expect(getByTestId(`${prefix}drag-values`)).toHaveTextContent('20,50')
       expect(getByTestId(`${prefix}drag-local`)).toHaveTextContent('10,30')
       expect(getByTestId(`${prefix}drag-delta`)).toHaveTextContent('10,30')
       expect(getByTestId(`${prefix}drag-previous`)).toHaveTextContent('10,20')
       expect(getByTestId(`${prefix}drag-velocity`)).not.toHaveTextContent(/^0$/)
-      expect(getByTestId(`${prefix}drag-vxvy`)).toHaveTextContent(`${10 / delta_t},${30 / delta_t}`)
+      expect(getByTestId(`${prefix}drag-velocities`)).toHaveTextContent(`${10 / delta_t},${30 / delta_t}`)
     })
 
     test('mouseUp should terminate the gesture', () => {

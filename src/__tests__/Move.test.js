@@ -22,7 +22,7 @@ describe.each([['attached to component', Interactive, false], ['attached to node
       expect(getByTestId(`${prefix}move-active`)).toHaveTextContent('true')
       expect(getByTestId(`${prefix}move-moving`)).toHaveTextContent('true')
       expect(getByTestId(`${prefix}move-first`)).toHaveTextContent('true')
-      expect(getByTestId(`${prefix}move-xy`)).toHaveTextContent('20,50')
+      expect(getByTestId(`${prefix}move-values`)).toHaveTextContent('20,50')
       expect(getByTestId(`${prefix}move-initial`)).toHaveTextContent('20,50')
     })
 
@@ -44,14 +44,14 @@ describe.each([['attached to component', Interactive, false], ['attached to node
       expect(getByTestId(`${prefix}move-last`)).toHaveTextContent('false')
     })
 
-    test('xy should update to latest mouse coordinates', () => {
-      expect(getByTestId(`${prefix}move-xy`)).toHaveTextContent('30,80')
+    test('values should update to latest mouse coordinates', () => {
+      expect(getByTestId(`${prefix}move-values`)).toHaveTextContent('30,80')
       expect(getByTestId(`${prefix}move-delta`)).toHaveTextContent('10,30')
     })
 
     test('kinematics should update', () => {
       expect(getByTestId(`${prefix}move-velocity`)).not.toHaveTextContent(/^0$/)
-      expect(getByTestId(`${prefix}move-vxvy`)).toHaveTextContent(`${10 / delta_t},${30 / delta_t}`)
+      expect(getByTestId(`${prefix}move-velocities`)).toHaveTextContent(`${10 / delta_t},${30 / delta_t}`)
     })
 
     test('the last mouseMove event should debounce and terminate the gesture', async () => {

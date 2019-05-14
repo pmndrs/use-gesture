@@ -10,6 +10,7 @@
     ],
     "@babel/preset-react"
   ],
+  "plugins": [["@babel/proposal-class-properties", { "loose": true }]],
   "env": {
     "test": {
       "plugins": ["@babel/transform-modules-commonjs", "@babel/plugin-transform-runtime"]
