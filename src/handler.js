@@ -49,20 +49,18 @@ export default class Handler {
     }
   }
 
-  getKinematics = (mov_x, mov_y, event, stateKey, isDelta = false) => {
-    const lastLocal = this.state[stateKey].lastLocal
-    const { values: xy, initial, time } = this.state[stateKey]
+  getStateKinematics = (stateKey, { values: eventValues, event }, isDelta = false) => {
+    const { values: xy, initial, lastLocal, time } = this.state[stateKey]
     const transform = this.state[stateKey].transform || event.transform || this.config.transform
 
     const delta_t = event.timeStamp - time
 
-    const x = isDelta ? mov_x + xy[0] : mov_x
-    const y = isDelta ? mov_y + xy[1] : mov_y
+    const values = isDelta ? addV(eventValues, xy) : eventValues
 
-    const { velocities, delta, velocity, distance, direction } = getVelocity([x, y], xy, initial, transform, delta_t)
+    const { velocities, delta, velocity, distance, direction } = calculateKinematics(values, xy, initial, transform, delta_t)
 
     return {
-      values: [x, y],
+      values,
       delta,
       velocity,
       velocities,
@@ -106,7 +104,7 @@ export default class Handler {
   onDragStart = (args, event) => {
     if (!this.isGestureEnabled('drag')) return
 
-    const { mov_x, mov_y, ...rest } = getPointerEventData(event)
+    const { values, ...rest } = getPointerEventData(event)
     // making sure we're not dragging the element when more than one finger press the screen
     if (rest.touches > 1) return
 
@@ -123,7 +121,7 @@ export default class Handler {
       addListeners(this.config.window, this.dragListeners, this.config.event)
     }
 
-    const startState = this.getStartState('drag', { args, event, values: [mov_x, mov_y] })
+    const startState = this.getStartState('drag', { args, event, values })
 
     this.updateState({
       shared: { ...rest, dragging: true, down: true },
@@ -136,8 +134,8 @@ export default class Handler {
   onDragMove = event => {
     if (this.state.drag.canceled || !this.state.shared.dragging) return
 
-    const { mov_x, mov_y, ...rest } = getPointerEventData(event)
-    const kinematics = this.getKinematics(mov_x, mov_y, event, 'drag')
+    const { values, ...rest } = getPointerEventData(event)
+    const kinematics = this.getStateKinematics('drag', { values, event })
     const cancel = () => this.cancelDrag(event)
 
     this.updateState({ shared: { moving: true, ...rest }, drag: { ...kinematics, first: false, event, cancel } })
@@ -235,14 +233,14 @@ export default class Handler {
     clearTimeout(this.timeouts.move)
     this.timeouts.move = setTimeout(this.onMoveEnd, 100)
 
-    const { mov_x, mov_y, ...rest } = getPointerEventData(event)
+    const { values, ...rest } = getPointerEventData(event)
 
     if (!this.state.shared.moving) {
-      const startState = this.getStartState('move', { args, event, values: [mov_x, mov_y] })
+      const startState = this.getStartState('move', { args, event, values })
       this.updateState({ shared: { moving: true, ...rest }, move: startState })
       this.handleGestureStart('onMove')
     } else {
-      const kinematics = this.getKinematics(mov_x, mov_y, event, 'move')
+      const kinematics = this.getStateKinematics('move', { values, event })
       this.updateState({ shared: rest, move: { ...kinematics, first: false, event } })
       this.handleGesture('onMove')
     }
@@ -260,14 +258,14 @@ export default class Handler {
 
     clearTimeout(this.timeouts.scroll)
     this.timeouts.scroll = setTimeout(this.onScrollEnd, 100)
-    const { mov_x, mov_y, ...rest } = getScrollEventData(event)
+    const { values, ...rest } = getScrollEventData(event)
 
     if (!this.state.shared.scrolling) {
-      const startState = this.getStartState('scroll', { args, event, values: [mov_x, mov_y] })
+      const startState = this.getStartState('scroll', { args, event, values })
       this.updateState({ shared: { scrolling: true }, scroll: startState })
       this.handleGestureStart('onScroll')
     } else {
-      const kinematics = this.getKinematics(mov_x, mov_y, event, 'scroll')
+      const kinematics = this.getStateKinematics('scroll', { values, event })
       this.updateState({ shared: rest, scroll: { ...kinematics, first: false, event } })
       this.handleGesture('onScroll')
     }
@@ -285,14 +283,14 @@ export default class Handler {
 
     clearTimeout(this.timeouts.wheel)
     this.timeouts.wheel = setTimeout(this.onWheelEnd, 100)
-    const { mov_x, mov_y, ...rest } = getWheelEventData(event)
+    const { values, ...rest } = getWheelEventData(event)
 
     if (!this.state.shared.wheeling) {
-      const startState = this.getStartState('wheel', { args, event, values: [mov_x, mov_y] })
+      const startState = this.getStartState('wheel', { args, event, values })
       this.updateState({ shared: { wheeling: true, ...rest }, wheel: startState })
       this.handleGestureStart('onWheel')
     } else {
-      const kinematics = this.getKinematics(mov_x, mov_y, event, 'wheel', true)
+      const kinematics = this.getStateKinematics('wheel', { values, event }, true)
       this.updateState({ shared: rest, wheel: { ...kinematics, first: false, event } })
       this.handleGesture('onWheel')
     }
@@ -308,10 +306,10 @@ export default class Handler {
   onPointerEnter = (args, event) => {
     if (!this.isGestureEnabled('hover')) return
 
-    const { mov_x, mov_y, down, touches, shiftKey } = getPointerEventData(event)
+    const { values, down, touches, shiftKey } = getPointerEventData(event)
     this.updateState({
       shared: { hovering: true, down, touches, shiftKey },
-      move: { values: [mov_x, mov_y], active: true, event, args }
+      move: { values, active: true, event, args }
     })
     this.handleGesture('onHover')
   }
@@ -319,8 +317,8 @@ export default class Handler {
   onPointerLeave = (args, event) => {
     if (!this.isGestureEnabled('hover')) return
 
-    const { mov_x, mov_y, down, touches, shiftKey } = getPointerEventData(event)
-    const kinematics = this.getKinematics(mov_x, mov_y, event, 'move')
+    const { values, down, touches, shiftKey } = getPointerEventData(event)
+    const kinematics = this.getStateKinematics('move', { values, event })
     this.updateState({
       shared: { hovering: false, moving: false, down, touches, shiftKey },
       move: { ...kinematics, ...genericEndState, event, args }
@@ -435,25 +433,24 @@ function getScrollEventData(event) {
   // If not (ie the currentTarget is a DOM element), then we return scrollLeft/Top
   const { scrollX, scrollY, scrollLeft, scrollTop } = event.currentTarget
   const { shiftKey, altKey, metaKey, ctrlKey } = event
-  return { mov_x: scrollX || scrollLeft || 0, mov_y: scrollY || scrollTop || 0, shiftKey, altKey, metaKey, ctrlKey }
+  return { values: [scrollX || scrollLeft || 0, scrollY || scrollTop || 0], shiftKey, altKey, metaKey, ctrlKey }
 }
 
 function getWheelEventData({ deltaX, deltaY, shiftKey, altKey, metaKey, ctrlKey }) {
   //TODO implement polyfill ?
   // https://developer.mozilla.org/en-US/docs/Web/Events/wheel#Polyfill
-  return { mov_x: deltaX, mov_y: deltaY, shiftKey, altKey, metaKey, ctrlKey }
+  return { values: [deltaX, deltaY], shiftKey, altKey, metaKey, ctrlKey }
 }
 
 function getPointerEventData(event) {
   const { touches, changedTouches, shiftKey, altKey, metaKey, ctrlKey } = event
   const touchEvents = touches && touches.length > 0 ? touches : changedTouches && changedTouches.length > 0 ? changedTouches : null
-  const { clientX: mov_x, clientY: mov_y, buttons } = touchEvents ? touchEvents[0] : event
+  const { clientX, clientY, buttons } = touchEvents ? touchEvents[0] : event
   const down = (touchEvents && touchEvents.length > 0) || buttons % 2 === 1 // makes sure main button is pressed
-  console.log({ mov_x })
-  return { mov_x, mov_y, touches: (touchEvents && touchEvents.length) || 0, down, shiftKey, altKey, metaKey, ctrlKey }
+  return { values: [clientX, clientY], touches: (touchEvents && touchEvents.length) || 0, down, shiftKey, altKey, metaKey, ctrlKey }
 }
 
-const getVelocity = (values, previousValues, initialValues, transform, delta_t) => {
+const calculateKinematics = (values, previousValues, initialValues, transform, delta_t) => {
   const delta = subV(values, initialValues).map((v, i) => transform[i](v))
   const diff = subV(values, previousValues).map((v, i) => transform[i](v))
   const len = Math.hypot(...diff)
