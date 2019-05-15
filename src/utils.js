@@ -70,3 +70,11 @@ export const getAllKinematics = (delta, diff, delta_t) => {
     direction: getDirection(diff, len)
   }
 }
+
+export const supportsGestureEvent = () => {
+  try {
+    return 'constructor' in GestureEvent // eslint-disable-line no-undef
+  } catch (e) {
+    return false
+  }
+}

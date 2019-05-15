@@ -11,7 +11,8 @@ import {
   getAllKinematics,
   getPointerEventData,
   getScrollEventData,
-  getWheelEventData
+  getWheelEventData,
+  supportsGestureEvent
 } from './utils'
 
 const GESTURE_END = 'gestureEnd'
@@ -178,6 +179,8 @@ export default class Handler {
   onPinchStart = (args, event) => {
     if (!this.isGestureEnabled('pinch') || event.touches.length !== 2) return
 
+    const { shiftKey, altKey, metaKey, ctrlKey } = event
+
     const dx = event.touches[1].clientX - event.touches[0].clientX
     const dy = event.touches[1].clientY - event.touches[0].clientY
 
@@ -186,7 +189,7 @@ export default class Handler {
     const startState = this.getStartState('pinch', { args, event, values: da })
 
     this.updateState({
-      shared: { pinching: true, down: true, touches: 2 },
+      shared: { pinching: true, down: true, touches: 2, shiftKey, altKey, metaKey, ctrlKey },
       pinch: { ...startState, cancel: () => this.cancelPinch(event) }
     })
     this.fireGestureHandler('onPinch', GESTURE_START)
@@ -195,6 +198,7 @@ export default class Handler {
   onPinchMove = event => {
     if (this.state.pinch.canceled || event.touches.length !== 2) return
     const { values: da, turns, initial, lastLocal, time } = this.state.pinch
+    const { shiftKey, altKey, metaKey, ctrlKey } = event
 
     const dx = event.touches[1].clientX - event.touches[0].clientX
     const dy = event.touches[1].clientY - event.touches[0].clientY
@@ -210,18 +214,21 @@ export default class Handler {
     const delta_d = Math.hypot(dx, dy) - initial[0]
     const delta_a = initial[1] - a + 360 * newTurns
 
+    const delta = [delta_d, delta_a]
+
     const { velocities } = getVelocities([diff_d, diff_a], delta_t)
 
     const cancel = () => this.cancelPinch(event)
 
     this.updateState({
+      shared: { shiftKey, altKey, metaKey, ctrlKey },
       pinch: {
         values: [d, a],
-        delta: [delta_d, delta_a],
+        delta,
         velocities,
         turns: newTurns,
         previous: da,
-        local: addV(lastLocal, [delta_d, delta_a]),
+        local: addV(lastLocal, delta),
         first: false,
         event,
         time: event.timeStamp,
@@ -239,6 +246,107 @@ export default class Handler {
   onPinchEnd = event => {
     if (!this.state.shared.pinching) return
     this.updateState({ shared: { pinching: false, down: false, touches: 0 }, pinch: { ...genericEndState, event } })
+    this.fireGestureHandler('onPinch', GESTURE_END)
+  }
+
+  onCtrlWheel = (args, event) => {
+    if (!this.isGestureEnabled('pinch') || !event.ctrlKey) return
+    event.preventDefault()
+
+    clearTimeout(this.timeouts.pinch)
+    this.timeouts.pinch = setTimeout(this.onPinchEnd, 100)
+
+    const { values, ...rest } = getWheelEventData(event)
+
+    if (!this.state.shared.pinching) {
+      const startState = this.getStartState('pinch', { args, event, values: [0, 0] })
+      this.updateState({ shared: { pinching: true, ...rest }, pinch: startState })
+      return this.fireGestureHandler('onPinch', GESTURE_START)
+    }
+
+    const { values: da, initial, lastLocal, time } = this.state.pinch
+
+    const d = da[0] - values[1]
+    const diff_d = values[1] - d
+
+    const delta_t = event.timeStamp - time
+    const delta_d = d - initial[0]
+
+    const { velocities } = getVelocities([diff_d, 0], delta_t)
+
+    this.updateState({
+      shared: rest,
+      pinch: {
+        values: [d, 0],
+        velocities,
+        delta: [delta_d, 0],
+        previous: da,
+        local: addV(lastLocal, [delta_d, 0]),
+        first: false,
+        event,
+        time: event.timeStamp
+      }
+    })
+    this.fireGestureHandler('onPinch')
+  }
+
+  onWebKitGestureStart = (args, event) => {
+    if (!this.isGestureEnabled('pinch')) return
+    event.preventDefault()
+
+    const da = [event.scale * 100, event.rotation]
+    const startState = this.getStartState('pinch', { args, event, values: da })
+
+    this.updateState({
+      shared: { pinching: true, down: true, touches: 2 },
+      pinch: { ...startState, cancel: () => this.cancelPinch(event) }
+    })
+
+    this.fireGestureHandler('onPinch', GESTURE_START)
+  }
+
+  onWebKitGestureChange = event => {
+    if (this.state.pinch.canceled) return
+    event.preventDefault()
+
+    const { values: da, initial, lastLocal, time } = this.state.pinch
+
+    const d = event.scale * 100
+    const a = event.rotation
+
+    const diff_d = d - da[0]
+    const diff_a = a - da[1]
+
+    const delta_t = event.timeStamp - time
+    const delta_d = d - initial[0]
+    const delta_a = a - initial[1]
+    const delta = [delta_d, delta_a]
+
+    const { velocities } = getVelocities([diff_d, diff_a], delta_t)
+
+    const cancel = () => this.cancelPinch(event)
+
+    this.updateState({
+      pinch: {
+        values: [d, a],
+        delta,
+        velocities,
+        previous: da,
+        local: addV(lastLocal, delta),
+        first: false,
+        event,
+        time: event.timeStamp,
+        cancel
+      }
+    })
+    this.fireGestureHandler('onPinch')
+  }
+
+  onWebKitGestureEnd = event => {
+    if (!this.state.shared.pinching) return
+    event.preventDefault()
+
+    this.updateState({ shared: { pinching: false, down: false, touches: 0 }, pinch: { ...genericEndState, event, cancel: noop } })
     this.fireGestureHandler('onPinch', GESTURE_END)
   }
 
@@ -364,6 +472,8 @@ export default class Handler {
     const onScroll = this.onScroll.bind(this, args)
     const onPointerEnter = this.onPointerEnter.bind(this, args)
     const onPointerLeave = this.onPointerLeave.bind(this, args)
+    const onCtrlWheel = this.onCtrlWheel.bind(this, args)
+    const onWebKitGestureStart = this.onWebKitGestureStart.bind(this, args)
 
     const output = {}
     const captureString = capture ? 'Capture' : ''
@@ -384,6 +494,13 @@ export default class Handler {
     }
 
     if (actions.has('onPinch')) {
+      if (domTarget && supportsGestureEvent()) {
+        pushInKeys(listeners, 'onGestureStart', onWebKitGestureStart)
+        pushInKeys(listeners, 'onGestureChange', this.onWebKitGestureChange)
+        pushInKeys(listeners, 'onGestureEnd', this.onWebKitGestureEnd)
+      } else {
+        pushInKeys(listeners, 'onWheel', onCtrlWheel)
+      }
       pushInKeys(listeners, 'onTouchStart', onPinchStart)
       pushInKeys(listeners, 'onTouchMove', this.onPinchMove)
       pushInKeys(listeners, ['onTouchEnd', 'onTouchCancel'], this.onPinchEnd)
