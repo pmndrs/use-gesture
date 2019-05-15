@@ -12,7 +12,7 @@
 
 # react-use-gesture
 
-![npm (tag)](https://img.shields.io/npm/v/react-use-gesture/next.svg) ![npm bundle size](https://img.shields.io/bundlephobia/minzip/react-use-gesture/5.1.0.svg) ![NPM](https://img.shields.io/npm/l/react-use-gesture.svg) [![BuildStatus](https://travis-ci.org/react-spring/react-use-gesture.svg)](https://travis-ci.org/react-spring/react-use-gesture?branch=next)
+![npm (tag)](https://img.shields.io/npm/v/react-use-gesture/next.svg) ![npm bundle size](https://img.shields.io/bundlephobia/minzip/react-use-gesture/5.1.0-beta.1.svg) ![NPM](https://img.shields.io/npm/l/react-use-gesture.svg) [![BuildStatus](https://travis-ci.org/react-spring/react-use-gesture.svg)](https://travis-ci.org/react-spring/react-use-gesture?branch=next)
 
 Ever thought about doing that sidebar pull-out, a view pager, some slider, any gesture on the web basically, and dropped the idea because it's too hard? In that case, this is your lib.
 
