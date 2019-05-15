@@ -6,6 +6,9 @@ import InteractiveDom from './components/InteractiveDom'
 
 afterAll(cleanup)
 
+// TODO test onCtrlWheel
+// TODO test with gesturechange
+
 describe.each([['attached to component', Interactive, false], ['attached to node', InteractiveDom, true]])(
   'testing onPinch %s)',
   (testName, Component, domTarget) => {

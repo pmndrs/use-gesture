@@ -92,11 +92,9 @@ export default class Handler {
     }
   }
 
-  getStateKinematics = (stateKey, { values: eventValues, event }, isDelta = false) => {
+  getXYKinematics = (stateKey, { values, event }) => {
     const { values: xy, initial, lastLocal, time } = this.state[stateKey]
     const transform = this.state[stateKey].transform || event.transform || this.config.transform
-
-    const values = isDelta ? addV(eventValues, xy) : eventValues
 
     const delta = subV(values, initial).map((v, i) => Object.values(transform)[i](v))
     const diff = subV(values, xy).map((v, i) => Object.values(transform)[i](v))
@@ -105,6 +103,7 @@ export default class Handler {
     const { velocity, velocities, distance, direction } = getAllKinematics(delta, diff, delta_t)
 
     return {
+      event,
       values,
       delta,
       velocity,
@@ -114,6 +113,35 @@ export default class Handler {
       local: addV(lastLocal, delta),
       previous: xy,
       transform,
+      time: event.timeStamp
+    }
+  }
+
+  getDAKinematics = (stateKey, { values: [d, a], event }, invertAngle = false) => {
+    const { values: da, turns, initial, lastLocal, time } = this.state[stateKey]
+
+    const diff_d = d - da[0]
+    let diff_a = a - da[1]
+
+    const newTurns = Math.abs(diff_a) > 300 ? turns + Math.sign(diff_a) : turns
+
+    diff_a -= 360 * newTurns
+    const delta_d = d - initial[0]
+    const delta_a = (initial[1] - a + 360 * newTurns) * (invertAngle ? -1 : 1)
+
+    const delta = [delta_d, delta_a]
+
+    const delta_t = event.timeStamp - time
+    const { velocities } = getVelocities([diff_d, diff_a], delta_t)
+
+    return {
+      event,
+      values: [d, a],
+      delta,
+      velocities,
+      turns: newTurns,
+      local: addV(lastLocal, delta),
+      previous: da,
       time: event.timeStamp
     }
   }
@@ -153,10 +181,10 @@ export default class Handler {
     if (this.state.drag.canceled || !this.state.shared.dragging) return
 
     const { values, ...rest } = getPointerEventData(event)
-    const kinematics = this.getStateKinematics('drag', { values, event })
+    const xyKinematics = this.getXYKinematics('drag', { values, event })
     const cancel = () => this.cancelDrag(event)
 
-    this.updateState({ shared: { moving: true, ...rest }, drag: { ...kinematics, first: false, event, cancel } })
+    this.updateState({ shared: { moving: true, ...rest }, drag: { ...xyKinematics, first: false, cancel } })
     this.fireGestureHandler('onDrag')
   }
 
@@ -197,7 +225,6 @@ export default class Handler {
 
   onPinchMove = event => {
     if (this.state.pinch.canceled || event.touches.length !== 2) return
-    const { values: da, turns, initial, lastLocal, time } = this.state.pinch
     const { shiftKey, altKey, metaKey, ctrlKey } = event
 
     const dx = event.touches[1].clientX - event.touches[0].clientX
@@ -205,36 +232,12 @@ export default class Handler {
     const d = Math.hypot(dx, dy)
     const a = (Math.atan2(dx, dy) * 180) / Math.PI
 
-    const diff_d = d - da[0]
-    let diff_a = a - da[1]
-
-    const newTurns = Math.abs(diff_a) > 300 ? turns + Math.sign(diff_a) : turns
-
-    diff_a -= 360 * newTurns
-    const delta_d = Math.hypot(dx, dy) - initial[0]
-    const delta_a = initial[1] - a + 360 * newTurns
-
-    const delta = [delta_d, delta_a]
-
-    const delta_t = event.timeStamp - time
-    const { velocities } = getVelocities([diff_d, diff_a], delta_t)
-
+    const daKinematics = this.getDAKinematics('pinch', { values: [d, a], event })
     const cancel = () => this.cancelPinch(event)
 
     this.updateState({
       shared: { shiftKey, altKey, metaKey, ctrlKey },
-      pinch: {
-        values: [d, a],
-        delta,
-        velocities,
-        turns: newTurns,
-        previous: da,
-        local: addV(lastLocal, delta),
-        first: false,
-        event,
-        time: event.timeStamp,
-        cancel
-      }
+      pinch: { ...daKinematics, first: false, cancel }
     })
     this.fireGestureHandler('onPinch')
   }
@@ -265,28 +268,12 @@ export default class Handler {
       return this.fireGestureHandler('onPinch', GESTURE_START)
     }
 
-    const { values: da, initial, lastLocal, time } = this.state.pinch
-
-    const d = da[0] - values[1]
-    const diff_d = values[1] - d
-
-    const delta_t = event.timeStamp - time
-    const delta_d = d - initial[0]
-
-    const { velocities } = getVelocities([diff_d, 0], delta_t)
+    const d = this.state.pinch.values[0] - values[1]
+    const daKinematics = this.getDAKinematics('pinch', { values: [d, 0], event }, true)
 
     this.updateState({
       shared: rest,
-      pinch: {
-        values: [d, 0],
-        velocities,
-        delta: [delta_d, 0],
-        previous: da,
-        local: addV(lastLocal, [delta_d, 0]),
-        first: false,
-        event,
-        time: event.timeStamp
-      }
+      pinch: { ...daKinematics, first: false }
     })
     this.fireGestureHandler('onPinch')
   }
@@ -310,42 +297,13 @@ export default class Handler {
     if (this.state.pinch.canceled) return
     event.preventDefault()
 
-    const { values: da, turns, initial, lastLocal, time } = this.state.pinch
-
     const d = event.scale * 100
-    let a = event.rotation
+    const a = event.rotation
 
-    const diff_d = d - da[0]
-    let diff_a = a - da[1]
-
-    const newTurns = Math.abs(diff_a) > 300 ? turns + Math.sign(diff_a) : turns
-
-    diff_a -= 360 * newTurns
-
-    const delta_t = event.timeStamp - time
-    const delta_d = d - initial[0]
-    const delta_a = a - 360 * newTurns - initial[1]
-
-    const delta = [delta_d, delta_a]
-
-    const { velocities } = getVelocities([diff_d, diff_a], delta_t)
-
+    const daKinematics = this.getDAKinematics('pinch', { values: [d, a], event }, true)
     const cancel = () => this.cancelPinch(event)
 
-    this.updateState({
-      pinch: {
-        values: [d, a],
-        delta,
-        velocities,
-        turns: newTurns,
-        previous: da,
-        local: addV(lastLocal, delta),
-        first: false,
-        event,
-        time: event.timeStamp,
-        cancel
-      }
-    })
+    this.updateState({ pinch: { ...daKinematics, first: false, cancel } })
     this.fireGestureHandler('onPinch')
   }
 
@@ -370,8 +328,8 @@ export default class Handler {
       this.updateState({ shared: { moving: true, ...rest }, move: startState })
       this.fireGestureHandler('onMove', GESTURE_START)
     } else {
-      const kinematics = this.getStateKinematics('move', { values, event })
-      this.updateState({ shared: rest, move: { ...kinematics, first: false, event } })
+      const xyKinematics = this.getXYKinematics('move', { values, event })
+      this.updateState({ shared: rest, move: { ...xyKinematics, first: false } })
       this.fireGestureHandler('onMove')
     }
   }
@@ -395,8 +353,8 @@ export default class Handler {
       this.updateState({ shared: { scrolling: true }, scroll: startState })
       this.fireGestureHandler('onScroll', GESTURE_START)
     } else {
-      const kinematics = this.getStateKinematics('scroll', { values, event })
-      this.updateState({ shared: rest, scroll: { ...kinematics, first: false, event } })
+      const xyKinematics = this.getXYKinematics('scroll', { values, event })
+      this.updateState({ shared: rest, scroll: { ...xyKinematics, first: false } })
       this.fireGestureHandler('onScroll')
     }
   }
@@ -413,15 +371,16 @@ export default class Handler {
 
     clearTimeout(this.timeouts.wheel)
     this.timeouts.wheel = setTimeout(this.onWheelEnd, 100)
-    const { values, ...rest } = getWheelEventData(event)
+    const { values: eventValues, ...rest } = getWheelEventData(event)
+    const values = addV(eventValues, this.state.wheel.values)
 
     if (!this.state.shared.wheeling) {
       const startState = this.getStartState('wheel', { args, event, values })
       this.updateState({ shared: { wheeling: true, ...rest }, wheel: startState })
       this.fireGestureHandler('onWheel', GESTURE_START)
     } else {
-      const kinematics = this.getStateKinematics('wheel', { values, event }, true)
-      this.updateState({ shared: rest, wheel: { ...kinematics, first: false, event } })
+      const xyKinematics = this.getXYKinematics('wheel', { values, event })
+      this.updateState({ shared: rest, wheel: { ...xyKinematics, first: false } })
       this.fireGestureHandler('onWheel')
     }
   }
@@ -448,10 +407,10 @@ export default class Handler {
     if (!this.isGestureEnabled('hover')) return
 
     const { values, down, touches, shiftKey } = getPointerEventData(event)
-    const kinematics = this.getStateKinematics('move', { values, event })
+    const xyKinematics = this.getXYKinematics('move', { values, event })
     this.updateState({
       shared: { hovering: false, moving: false, down, touches, shiftKey },
-      move: { ...kinematics, ...genericEndState, event, args }
+      move: { ...xyKinematics, ...genericEndState, event, args }
     })
     this.fireGestureHandler('onMove', GESTURE_END)
     this.fireGestureHandler('onHover')

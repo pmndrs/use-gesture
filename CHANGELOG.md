@@ -1,5 +1,14 @@
 # Changelog
 
+## 5.1.0 Release
+
+**Summary:** important release introducing trackpad gestures. There has been some important refactoring involved.
+
+### Added
+
+1. Support for for zoom and rotate on trackpad for Safari.
+2. Support for zoom on trackpad for Chrome and Firefox.
+
 ## 5.0.1 Release
 
 **Summary:** release updating dev dependencies and fixing minor bugs.
