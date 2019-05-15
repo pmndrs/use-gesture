@@ -117,7 +117,7 @@ export default class Handler {
     }
   }
 
-  getDAKinematics = (stateKey, { values: [d, a], event }, invertAngle = false) => {
+  getDAKinematics = (stateKey, { values: [d, a], event }) => {
     const { values: da, turns, initial, lastLocal, time } = this.state[stateKey]
 
     const diff_d = d - da[0]
@@ -127,7 +127,7 @@ export default class Handler {
 
     diff_a -= 360 * newTurns
     const delta_d = d - initial[0]
-    const delta_a = (initial[1] - a + 360 * newTurns) * (invertAngle ? -1 : 1)
+    const delta_a = initial[1] - a + 360 * newTurns
 
     const delta = [delta_d, delta_a]
 
@@ -300,7 +300,7 @@ export default class Handler {
     const d = event.scale * 100
     const a = event.rotation
 
-    const daKinematics = this.getDAKinematics('pinch', { values: [d, a], event }, true)
+    const daKinematics = this.getDAKinematics('pinch', { values: [d, -a], event })
     const cancel = () => this.cancelPinch(event)
 
     this.updateState({ pinch: { ...daKinematics, first: false, cancel } })
