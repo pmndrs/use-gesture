@@ -1,6 +1,9 @@
 import { stateKeys, initialState, genericEndState } from './default'
 import { noop } from './utils'
 
+const GESTURE_END = 'gestureEnd'
+const GESTURE_START = 'gestureStart'
+
 export default class Handler {
   props = null
   config = null
@@ -14,17 +17,36 @@ export default class Handler {
     this.config = config
   }
 
+  // removes listeners and clears timeouts
+  // used on component unmount
   clean = () => {
-    clearTimeouts(this.timeouts)
+    Object.values(this.timeouts).forEach(clearTimeout)
     const { domTarget } = this.config
     const realDomTarget = domTarget && 'current' in domTarget ? domTarget.current : domTarget
     removeListeners(realDomTarget, this.domListeners, this.config.event)
     removeListeners(this.config.window, this.dragListeners, this.config.event)
   }
 
+  // utility function to update state
   updateState = newState => {
     const updatedState = Object.entries(newState).reduce((acc, [k, v]) => ({ ...acc, [k]: { ...this.state[k], ...v } }), {})
     this.state = { ...this.state, ...updatedState }
+  }
+
+  fireGestureHandler = (action, flag) => {
+    const stateKey = stateKeys[action]
+    const actionState = { ...this.state.shared, ...this.state[stateKey] }
+    if (flag === GESTURE_START) {
+      const actionStart = `${action}Start`
+      this.props[actionStart] && this.props[actionStart](actionState)
+    }
+    if (this.props[action]) {
+      this.state[stateKey].temp = this.props[action](actionState) || this.state[stateKey].temp
+    }
+    if (flag === GESTURE_END) {
+      const actionEnd = `${action}End`
+      this.props[actionEnd] && this.props[actionEnd](actionState)
+    }
   }
 
   isGestureEnabled = gesture => {
@@ -73,34 +95,6 @@ export default class Handler {
     }
   }
 
-  handleGesture = action => {
-    const stateKey = stateKeys[action]
-    const actionState = { ...this.state.shared, ...this.state[stateKey] }
-    if (this.props[action]) {
-      this.state[stateKey].temp = this.props[action](actionState) || this.state[stateKey].temp
-    }
-  }
-
-  handleGestureStart = action => {
-    const stateKey = stateKeys[action]
-    const actionState = { ...this.state.shared, ...this.state[stateKey] }
-    const actionStart = `${action}Start`
-    this.props[actionStart] && this.props[actionStart](actionState)
-    if (this.props[action]) {
-      this.state[stateKey].temp = this.props[action](actionState) || this.state[stateKey].temp
-    }
-  }
-
-  handleGestureEnd = (action, callDefaultAction = true) => {
-    const stateKey = stateKeys[action]
-    const actionState = { ...this.state.shared, ...this.state[stateKey] }
-    if (callDefaultAction && this.props[action]) {
-      this.state[stateKey].temp = this.props[action](actionState) || this.state[stateKey].temp
-    }
-    const actionEnd = `${action}End`
-    this.props[actionEnd] && this.props[actionEnd](actionState)
-  }
-
   onDragStart = (args, event) => {
     if (!this.isGestureEnabled('drag')) return
 
@@ -128,7 +122,7 @@ export default class Handler {
       drag: { ...startState, currentTarget, pointerId, cancel: () => this.cancelDrag(event) }
     })
 
-    this.handleGestureStart('onDrag')
+    this.fireGestureHandler('onDrag', GESTURE_START)
   }
 
   onDragMove = event => {
@@ -139,7 +133,7 @@ export default class Handler {
     const cancel = () => this.cancelDrag(event)
 
     this.updateState({ shared: { moving: true, ...rest }, drag: { ...kinematics, first: false, event, cancel } })
-    this.handleGesture('onDrag')
+    this.fireGestureHandler('onDrag')
   }
 
   onDragEnd = event => {
@@ -153,7 +147,7 @@ export default class Handler {
     }
     this.updateState({ shared: { dragging: false, down: false, touches: 0 }, drag: { ...genericEndState, event } })
 
-    this.handleGestureEnd('onDrag')
+    this.fireGestureHandler('onDrag', GESTURE_END)
   }
 
   cancelDrag = event => {
@@ -176,7 +170,7 @@ export default class Handler {
       pinch: { ...startState, cancel: () => this.cancelPinch(event) }
     })
 
-    this.handleGestureStart('onPinch')
+    this.fireGestureHandler('onPinch', GESTURE_START)
   }
 
   onPinchMove = event => {
@@ -213,7 +207,7 @@ export default class Handler {
         cancel
       }
     })
-    this.handleGesture('onPinch')
+    this.fireGestureHandler('onPinch')
   }
 
   cancelPinch = event => {
@@ -224,7 +218,7 @@ export default class Handler {
   onPinchEnd = event => {
     if (!this.state.shared.pinching) return
     this.updateState({ shared: { pinching: false, down: false, touches: 0 }, pinch: { ...genericEndState, event } })
-    this.handleGestureEnd('onPinch')
+    this.fireGestureHandler('onPinch', GESTURE_END)
   }
 
   onMove = (args, event) => {
@@ -238,11 +232,11 @@ export default class Handler {
     if (!this.state.shared.moving) {
       const startState = this.getStartState('move', { args, event, values })
       this.updateState({ shared: { moving: true, ...rest }, move: startState })
-      this.handleGestureStart('onMove')
+      this.fireGestureHandler('onMove', GESTURE_START)
     } else {
       const kinematics = this.getStateKinematics('move', { values, event })
       this.updateState({ shared: rest, move: { ...kinematics, first: false, event } })
-      this.handleGesture('onMove')
+      this.fireGestureHandler('onMove')
     }
   }
 
@@ -250,7 +244,7 @@ export default class Handler {
     if (!this.state.shared.moving) return
 
     this.updateState({ shared: { moving: false }, move: { ...genericEndState, velocity: 0, velocities: [0, 0] } })
-    this.handleGestureEnd('onMove')
+    this.fireGestureHandler('onMove', GESTURE_END)
   }
 
   onScroll = (args, event) => {
@@ -263,11 +257,11 @@ export default class Handler {
     if (!this.state.shared.scrolling) {
       const startState = this.getStartState('scroll', { args, event, values })
       this.updateState({ shared: { scrolling: true }, scroll: startState })
-      this.handleGestureStart('onScroll')
+      this.fireGestureHandler('onScroll', GESTURE_START)
     } else {
       const kinematics = this.getStateKinematics('scroll', { values, event })
       this.updateState({ shared: rest, scroll: { ...kinematics, first: false, event } })
-      this.handleGesture('onScroll')
+      this.fireGestureHandler('onScroll')
     }
   }
 
@@ -275,7 +269,7 @@ export default class Handler {
     if (!this.state.shared.scrolling) return
 
     this.updateState({ shared: { scrolling: false }, scroll: { ...genericEndState, velocity: 0, velocities: [0, 0] } })
-    this.handleGestureEnd('onScroll')
+    this.fireGestureHandler('onScroll', GESTURE_END)
   }
 
   onWheel = (args, event) => {
@@ -288,11 +282,11 @@ export default class Handler {
     if (!this.state.shared.wheeling) {
       const startState = this.getStartState('wheel', { args, event, values })
       this.updateState({ shared: { wheeling: true, ...rest }, wheel: startState })
-      this.handleGestureStart('onWheel')
+      this.fireGestureHandler('onWheel', GESTURE_START)
     } else {
       const kinematics = this.getStateKinematics('wheel', { values, event }, true)
       this.updateState({ shared: rest, wheel: { ...kinematics, first: false, event } })
-      this.handleGesture('onWheel')
+      this.fireGestureHandler('onWheel')
     }
   }
 
@@ -300,7 +294,7 @@ export default class Handler {
     if (!this.state.shared.wheeling) return
 
     this.updateState({ shared: { wheeling: false }, wheel: { ...genericEndState, velocity: 0, velocities: [0, 0] } })
-    this.handleGestureEnd('onWheel')
+    this.fireGestureHandler('onWheel', GESTURE_END)
   }
 
   onPointerEnter = (args, event) => {
@@ -311,7 +305,7 @@ export default class Handler {
       shared: { hovering: true, down, touches, shiftKey },
       move: { values, active: true, event, args }
     })
-    this.handleGesture('onHover')
+    this.fireGestureHandler('onHover')
   }
 
   onPointerLeave = (args, event) => {
@@ -323,8 +317,8 @@ export default class Handler {
       shared: { hovering: false, moving: false, down, touches, shiftKey },
       move: { ...kinematics, ...genericEndState, event, args }
     })
-    this.handleGestureEnd('onMove')
-    this.handleGesture('onHover')
+    this.fireGestureHandler('onMove', GESTURE_END)
+    this.fireGestureHandler('onHover')
   }
 
   bind = (...args) => {
@@ -416,9 +410,6 @@ const pushInKeys = (obj, keys, value) => {
   if (!Array.isArray(keys)) keys = [keys]
   keys.forEach(key => (obj[key] = obj[key] ? [...obj[key], value] : [value]))
 }
-
-// clears timeouts in keys
-const clearTimeouts = timeoutsObj => Object.values(timeoutsObj).forEach(clearTimeout)
 
 const setListeners = add => (el, listeners, options) => {
   const action = add ? 'addEventListener' : 'removeEventListener'
