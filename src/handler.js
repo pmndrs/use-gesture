@@ -206,16 +206,17 @@ export default class Handler {
     const a = (Math.atan2(dx, dy) * 180) / Math.PI
 
     const diff_d = d - da[0]
-    const diff_a = a - da[1]
+    let diff_a = a - da[1]
 
     const newTurns = Math.abs(diff_a) > 300 ? turns + Math.sign(diff_a) : turns
 
-    const delta_t = event.timeStamp - time
+    diff_a -= 360 * newTurns
     const delta_d = Math.hypot(dx, dy) - initial[0]
     const delta_a = initial[1] - a + 360 * newTurns
 
     const delta = [delta_d, delta_a]
 
+    const delta_t = event.timeStamp - time
     const { velocities } = getVelocities([diff_d, diff_a], delta_t)
 
     const cancel = () => this.cancelPinch(event)
@@ -309,17 +310,22 @@ export default class Handler {
     if (this.state.pinch.canceled) return
     event.preventDefault()
 
-    const { values: da, initial, lastLocal, time } = this.state.pinch
+    const { values: da, turns, initial, lastLocal, time } = this.state.pinch
 
     const d = event.scale * 100
-    const a = event.rotation
+    let a = event.rotation
 
     const diff_d = d - da[0]
-    const diff_a = a - da[1]
+    let diff_a = a - da[1]
+
+    const newTurns = Math.abs(diff_a) > 300 ? turns + Math.sign(diff_a) : turns
+
+    diff_a -= 360 * newTurns
 
     const delta_t = event.timeStamp - time
     const delta_d = d - initial[0]
-    const delta_a = a - initial[1]
+    const delta_a = a - 360 * newTurns - initial[1]
+
     const delta = [delta_d, delta_a]
 
     const { velocities } = getVelocities([diff_d, diff_a], delta_t)
@@ -331,6 +337,7 @@ export default class Handler {
         values: [d, a],
         delta,
         velocities,
+        turns: newTurns,
         previous: da,
         local: addV(lastLocal, delta),
         first: false,
@@ -500,10 +507,10 @@ export default class Handler {
         pushInKeys(listeners, 'onGestureEnd', this.onWebKitGestureEnd)
       } else {
         pushInKeys(listeners, 'onWheel', onCtrlWheel)
+        pushInKeys(listeners, 'onTouchStart', onPinchStart)
+        pushInKeys(listeners, 'onTouchMove', this.onPinchMove)
+        pushInKeys(listeners, ['onTouchEnd', 'onTouchCancel'], this.onPinchEnd)
       }
-      pushInKeys(listeners, 'onTouchStart', onPinchStart)
-      pushInKeys(listeners, 'onTouchMove', this.onPinchMove)
-      pushInKeys(listeners, ['onTouchEnd', 'onTouchCancel'], this.onPinchEnd)
     }
 
     if (actions.has('onHover')) {
