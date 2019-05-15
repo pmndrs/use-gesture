@@ -1,5 +1,18 @@
 import { stateKeys, initialState, genericEndState } from './default'
-import { noop } from './utils'
+import {
+  noop,
+  addV,
+  subV,
+  removeListeners,
+  addListeners,
+  pushInKeys,
+  chainFns,
+  getVelocities,
+  getAllKinematics,
+  getPointerEventData,
+  getScrollEventData,
+  getWheelEventData
+} from './utils'
 
 const GESTURE_END = 'gestureEnd'
 const GESTURE_START = 'gestureStart'
@@ -33,9 +46,16 @@ export default class Handler {
     this.state = { ...this.state, ...updatedState }
   }
 
+  // fire the gesture handler defined by the user
   fireGestureHandler = (action, flag) => {
     const stateKey = stateKeys[action]
     const actionState = { ...this.state.shared, ...this.state[stateKey] }
+
+    actionState.xy = actionState.values // legacy state attribute for xy gestures
+    actionState.vxvy = actionState.velocities // legacy state attribute for xy gestures
+    actionState.da = actionState.values // legacy state attribute for pinch gestures
+    actionState.vdva = actionState.velocities // legacy state attribute for pinch gestures
+
     if (flag === GESTURE_START) {
       const actionStart = `${action}Start`
       this.props[actionStart] && this.props[actionStart](actionState)
@@ -75,11 +95,13 @@ export default class Handler {
     const { values: xy, initial, lastLocal, time } = this.state[stateKey]
     const transform = this.state[stateKey].transform || event.transform || this.config.transform
 
-    const delta_t = event.timeStamp - time
-
     const values = isDelta ? addV(eventValues, xy) : eventValues
 
-    const { velocities, delta, velocity, distance, direction } = calculateKinematics(values, xy, initial, transform, delta_t)
+    const delta = subV(values, initial).map((v, i) => Object.values(transform)[i](v))
+    const diff = subV(values, xy).map((v, i) => Object.values(transform)[i](v))
+
+    const delta_t = event.timeStamp - time
+    const { velocity, velocities, distance, direction } = getAllKinematics(delta, diff, delta_t)
 
     return {
       values,
@@ -106,12 +128,13 @@ export default class Handler {
     if (this.config.event.pointerEvents) {
       currentTarget.setPointerCapture(pointerId)
     } else {
-      this.dragListeners = []
-      this.dragListeners.push(['mousemove', this.onDragMove])
-      this.dragListeners.push(['mouseup', this.onDragEnd])
-      this.dragListeners.push(['touchmove', this.onDragMove])
-      this.dragListeners.push(['touchend', this.onDragEnd])
-      this.dragListeners.push(['touchcancel', this.onDragEnd])
+      this.dragListeners = [
+        ['mousemove', this.onDragMove],
+        ['mouseup', this.onDragEnd],
+        ['touchmove', this.onDragMove],
+        ['touchend', this.onDragEnd],
+        ['touchcancel', this.onDragEnd]
+      ]
       addListeners(this.config.window, this.dragListeners, this.config.event)
     }
 
@@ -140,13 +163,10 @@ export default class Handler {
     if (!this.state.shared.dragging) return
 
     const { currentTarget, pointerId } = this.state.drag
-    if (this.config.event.pointerEvents) {
-      currentTarget.releasePointerCapture(pointerId)
-    } else {
-      removeListeners(this.config.window, this.dragListeners, this.config.event)
-    }
-    this.updateState({ shared: { dragging: false, down: false, touches: 0 }, drag: { ...genericEndState, event } })
+    if (this.config.event.pointerEvents) currentTarget.releasePointerCapture(pointerId)
+    else removeListeners(this.config.window, this.dragListeners, this.config.event)
 
+    this.updateState({ shared: { dragging: false, down: false, touches: 0 }, drag: { ...genericEndState, event } })
     this.fireGestureHandler('onDrag', GESTURE_END)
   }
 
@@ -169,7 +189,6 @@ export default class Handler {
       shared: { pinching: true, down: true, touches: 2 },
       pinch: { ...startState, cancel: () => this.cancelPinch(event) }
     })
-
     this.fireGestureHandler('onPinch', GESTURE_START)
   }
 
@@ -182,14 +201,16 @@ export default class Handler {
     const d = Math.hypot(dx, dy)
     const a = (Math.atan2(dx, dy) * 180) / Math.PI
 
-    const d_dist = d - da[0]
-    const a_dist = a - da[1]
+    const diff_d = d - da[0]
+    const diff_a = a - da[1]
 
-    const newTurns = Math.abs(a_dist) > 300 ? turns + Math.sign(a_dist) : turns
+    const newTurns = Math.abs(diff_a) > 300 ? turns + Math.sign(diff_a) : turns
 
     const delta_t = event.timeStamp - time
     const delta_d = Math.hypot(dx, dy) - initial[0]
     const delta_a = initial[1] - a + 360 * newTurns
+
+    const { velocities } = getVelocities([diff_d, diff_a], delta_t)
 
     const cancel = () => this.cancelPinch(event)
 
@@ -197,7 +218,7 @@ export default class Handler {
       pinch: {
         values: [d, a],
         delta: [delta_d, delta_a],
-        velocities: [delta_t ? d_dist / delta_t : 0, delta_t ? a_dist / delta_t : 0],
+        velocities,
         turns: newTurns,
         previous: da,
         local: addV(lastLocal, [delta_d, delta_a]),
@@ -384,73 +405,12 @@ export default class Handler {
     if (domTarget) {
       this.domListeners = []
       const realDomTarget = domTarget && 'current' in domTarget ? domTarget.current : domTarget
-      Object.entries(listeners).forEach(([k, fns]) => this.domListeners.push([k.substr(2).toLowerCase(), chain(...fns)]))
+      Object.entries(listeners).forEach(([k, fns]) => this.domListeners.push([k.substr(2).toLowerCase(), chainFns(...fns)]))
       addListeners(realDomTarget, this.domListeners, this.config.event)
       return this.clean
     }
 
-    Object.entries(listeners).forEach(([k, fns]) => (output[k + captureString] = chain(...fns)))
+    Object.entries(listeners).forEach(([k, fns]) => (output[k + captureString] = chainFns(...fns)))
     return output
-  }
-}
-
-/*** UTILS ***/
-
-// vector add
-const addV = (v1, v2) => v1.map((v, i) => v + v2[i])
-
-// vector substract
-const subV = (v1, v2) => v1.map((v, i) => v - v2[i])
-
-// returns a function that chains all functions given as parameters
-const chain = (...fns) => (...args) => fns.forEach(fn => fn(...args))
-
-// utility function that pushes values in object keys which are in fact arrays
-const pushInKeys = (obj, keys, value) => {
-  if (!Array.isArray(keys)) keys = [keys]
-  keys.forEach(key => (obj[key] = obj[key] ? [...obj[key], value] : [value]))
-}
-
-const setListeners = add => (el, listeners, options) => {
-  const action = add ? 'addEventListener' : 'removeEventListener'
-  listeners.forEach(([type, fn]) => el[action](type, fn, options))
-}
-
-const addListeners = setListeners(true)
-const removeListeners = setListeners(false)
-
-function getScrollEventData(event) {
-  // If the currentTarget is the window then we return the scrollX/Y position.
-  // If not (ie the currentTarget is a DOM element), then we return scrollLeft/Top
-  const { scrollX, scrollY, scrollLeft, scrollTop } = event.currentTarget
-  const { shiftKey, altKey, metaKey, ctrlKey } = event
-  return { values: [scrollX || scrollLeft || 0, scrollY || scrollTop || 0], shiftKey, altKey, metaKey, ctrlKey }
-}
-
-function getWheelEventData({ deltaX, deltaY, shiftKey, altKey, metaKey, ctrlKey }) {
-  //TODO implement polyfill ?
-  // https://developer.mozilla.org/en-US/docs/Web/Events/wheel#Polyfill
-  return { values: [deltaX, deltaY], shiftKey, altKey, metaKey, ctrlKey }
-}
-
-function getPointerEventData(event) {
-  const { touches, changedTouches, shiftKey, altKey, metaKey, ctrlKey } = event
-  const touchEvents = touches && touches.length > 0 ? touches : changedTouches && changedTouches.length > 0 ? changedTouches : null
-  const { clientX, clientY, buttons } = touchEvents ? touchEvents[0] : event
-  const down = (touchEvents && touchEvents.length > 0) || buttons % 2 === 1 // makes sure main button is pressed
-  return { values: [clientX, clientY], touches: (touchEvents && touchEvents.length) || 0, down, shiftKey, altKey, metaKey, ctrlKey }
-}
-
-const calculateKinematics = (values, previousValues, initialValues, transform, delta_t) => {
-  const delta = subV(values, initialValues).map((v, i) => transform[i](v))
-  const diff = subV(values, previousValues).map((v, i) => transform[i](v))
-  const len = Math.hypot(...diff)
-
-  return {
-    delta,
-    velocities: delta_t ? diff.map(v => v / delta_t) : Array(values.length).fill(0),
-    velocity: delta_t ? len / delta_t : 0,
-    distance: Math.hypot(...delta),
-    direction: diff.map(v => v / (len || 1))
   }
 }

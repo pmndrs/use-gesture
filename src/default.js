@@ -6,7 +6,7 @@ export const defaultConfig = {
   domTarget: undefined,
   event: { passive: true, capture: false, pointerEvents: false },
   window: typeof window !== 'undefined' ? window : undefined,
-  transform: [x => x, y => y],
+  transform: { x: x => x, y: y => y },
   enabled: true,
   drag: true,
   pinch: true,
