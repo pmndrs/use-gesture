@@ -265,6 +265,7 @@ return <animated.div {...bind()} style={{ transform: xy.interpolate((x, y) => `t
 #### Other examples
 
 - [Locking Axis](https://codesandbox.io/s/25n4m933j)
+- [Boundaries](https://codesandbox.io/s/r7xnzk4x0o)
 
 ## Frequently asked questions
 
