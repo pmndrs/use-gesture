@@ -127,12 +127,12 @@ export default class Handler {
 
     diff_a -= 360 * newTurns
     const delta_d = d - initial[0]
-    const delta_a = initial[1] - a + 360 * newTurns
+    const delta_a = a - 360 * newTurns - initial[1]
 
     const delta = [delta_d, delta_a]
 
     const delta_t = event.timeStamp - time
-    const { velocities } = getVelocities([diff_d, diff_a], delta_t)
+    const velocities = getVelocities([diff_d, diff_a], delta_t)
 
     return {
       event,
@@ -230,9 +230,10 @@ export default class Handler {
     const dx = event.touches[1].clientX - event.touches[0].clientX
     const dy = event.touches[1].clientY - event.touches[0].clientY
     const d = Math.hypot(dx, dy)
-    const a = (Math.atan2(dx, dy) * 180) / Math.PI
+    const a = -(Math.atan2(dx, dy) * 180) / Math.PI
 
     const daKinematics = this.getDAKinematics('pinch', { values: [d, a], event })
+
     const cancel = () => this.cancelPinch(event)
 
     this.updateState({
@@ -300,7 +301,7 @@ export default class Handler {
     const d = event.scale * 100
     const a = event.rotation
 
-    const daKinematics = this.getDAKinematics('pinch', { values: [d, -a], event })
+    const daKinematics = this.getDAKinematics('pinch', { values: [d, a], event })
     const cancel = () => this.cancelPinch(event)
 
     this.updateState({ pinch: { ...daKinematics, first: false, cancel } })

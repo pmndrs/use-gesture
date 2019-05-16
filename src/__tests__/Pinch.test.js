@@ -1,5 +1,5 @@
 import React from 'react'
-import { render, cleanup, fireEvent, wait } from 'react-testing-library'
+import { render, cleanup, fireEvent, createEvent, wait } from 'react-testing-library'
 import 'jest-dom/extend-expect'
 import Interactive from './components/Interactive'
 import InteractiveDom from './components/InteractiveDom'
@@ -15,6 +15,7 @@ describe.each([['attached to component', Interactive, false], ['attached to node
     const prefix = domTarget ? 'dom-' : ''
     const { getByTestId, queryByTestId, rerender } = render(<Component gesture="Pinch" tempArg="temp" />)
     const element = getByTestId(`${prefix}pinch-el`)
+    let delta_t
 
     test('one-finger touch should NOT initiate the gesture', () => {
       fireEvent.touchStart(element)
@@ -22,7 +23,10 @@ describe.each([['attached to component', Interactive, false], ['attached to node
     })
 
     test('touch with two fingers should initiate the gesture', () => {
-      fireEvent.touchStart(element, { touches: [{ clientX: 0, clientY: 0 }, { clientX: 0, clientY: 40 }] })
+      const event = createEvent.touchStart(element, { touches: [{ clientX: 0, clientY: 0 }, { clientX: 0, clientY: 40 }] })
+      fireEvent(element, event)
+      delta_t = event.timeStamp
+
       expect(getByTestId(`${prefix}pinch-active`)).toHaveTextContent('true')
       expect(getByTestId(`${prefix}pinch-pinching`)).toHaveTextContent('true')
       expect(getByTestId(`${prefix}pinch-first`)).toHaveTextContent('true')
@@ -40,15 +44,21 @@ describe.each([['attached to component', Interactive, false], ['attached to node
     })
 
     test('moving should set first to false', () => {
-      fireEvent.touchMove(element, { touches: [{ clientX: 0, clientY: 0 }, { clientX: 30, clientY: 0 }] })
+      const event = createEvent.touchMove(element, { touches: [{ clientX: 0, clientY: 0 }, { clientX: 30, clientY: 0 }] })
+      fireEvent(element, event)
+      delta_t = event.timeStamp - delta_t
       expect(getByTestId(`${prefix}pinch-first`)).toHaveTextContent('false')
     })
 
-    test('moving should update kinematics', () => {
-      expect(getByTestId(`${prefix}pinch-values`)).toHaveTextContent(`30,90`)
+    test('moving should update values and deltas', () => {
+      expect(getByTestId(`${prefix}pinch-values`)).toHaveTextContent(`30,-90`)
+      expect(getByTestId(`${prefix}pinch-delta`)).toHaveTextContent(`-10,-90`)
       expect(getByTestId(`${prefix}pinch-local`)).toHaveTextContent(`-10,-90`)
       expect(getByTestId(`${prefix}pinch-previous`)).toHaveTextContent(`40,0`)
-      expect(getByTestId(`${prefix}pinch-velocities`)).not.toHaveTextContent('0,0')
+    })
+
+    test('moving should update kinematics', () => {
+      expect(getByTestId(`${prefix}pinch-velocities`)).toHaveTextContent(`${-10 / delta_t},${-90 / delta_t}`)
     })
 
     test('touchEnd should terminate the gesture', () => {
@@ -66,7 +76,7 @@ describe.each([['attached to component', Interactive, false], ['attached to node
     test('restarting the gesture should book-keep local and reset delta', () => {
       fireEvent.touchStart(element, { touches: [{ clientX: 0, clientY: 0 }, { clientX: 0, clientY: 40 }] })
       fireEvent.touchMove(element, { touches: [{ clientX: 0, clientY: 0 }, { clientX: -30, clientY: 0 }] })
-      expect(getByTestId(`${prefix}pinch-values`)).toHaveTextContent(`30,-90`)
+      expect(getByTestId(`${prefix}pinch-values`)).toHaveTextContent(`30,90`)
       expect(getByTestId(`${prefix}pinch-local`)).toHaveTextContent(`-20,0`)
       expect(getByTestId(`${prefix}pinch-delta`)).toHaveTextContent(`-10,90`)
     })
