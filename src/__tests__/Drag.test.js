@@ -47,7 +47,7 @@ describe.each([['attached to component', Interactive, false], ['attached to node
     // TODO - not sure why using window as the mouseMove target doesn't work
 
     test('moving should set first to false', () => {
-      const event = createEvent.mouseMove(element, { clientX: 20, clientY: 50 })
+      const event = createEvent.mouseMove(element, { clientX: 20, clientY: 50, buttons: 1 })
       fireEvent(element, event)
       delta_t = event.timeStamp - delta_t
 
@@ -90,7 +90,7 @@ describe.each([['attached to component', Interactive, false], ['attached to node
     test('restarting the gesture should book-keep local and reset delta', () => {
       rerender(<Component gesture="Drag" />)
       fireEvent.mouseDown(element, { clientX: 30, clientY: 60 })
-      fireEvent.mouseMove(document, { clientX: 20, clientY: 50 })
+      fireEvent.mouseMove(document, { clientX: 20, clientY: 50, buttons: 1 })
       expect(getByTestId(`${prefix}drag-local`)).toHaveTextContent('0,20')
       expect(getByTestId(`${prefix}drag-delta`)).toHaveTextContent('-10,-10')
     })

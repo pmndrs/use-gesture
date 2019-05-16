@@ -41,8 +41,17 @@ export function getPointerEventData(event) {
   const { touches, changedTouches, shiftKey, altKey, metaKey, ctrlKey } = event
   const touchEvents = touches && touches.length > 0 ? touches : changedTouches && changedTouches.length > 0 ? changedTouches : null
   const { clientX, clientY, buttons } = touchEvents ? touchEvents[0] : event
-  const down = (touchEvents && touchEvents.length > 0) || buttons % 2 === 1 // makes sure main button is pressed
-  return { values: [clientX, clientY], touches: (touchEvents && touchEvents.length) || 0, down, shiftKey, altKey, metaKey, ctrlKey }
+  const down = (touchEvents && touchEvents.length > 0) || buttons > 0
+  return {
+    values: [clientX, clientY],
+    touches: (touchEvents && touchEvents.length) || 0,
+    down,
+    buttons,
+    shiftKey,
+    altKey,
+    metaKey,
+    ctrlKey
+  }
 }
 
 export const getVelocity = (diff, delta_t, len) => {

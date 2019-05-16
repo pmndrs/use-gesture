@@ -181,6 +181,12 @@ export default class Handler {
     if (this.state.drag.canceled || !this.state.shared.dragging) return
 
     const { values, ...rest } = getPointerEventData(event)
+
+    if (rest.buttons === 0 && rest.touches === 0) {
+      this.onDragEnd(event)
+      return
+    }
+
     const xyKinematics = this.getXYKinematics('drag', { values, event })
     const cancel = () => this.cancelDrag(event)
 
@@ -195,7 +201,15 @@ export default class Handler {
     if (this.config.event.pointerEvents) currentTarget.releasePointerCapture(pointerId)
     else removeListeners(this.config.window, this.dragListeners, this.config.event)
 
-    this.updateState({ shared: { dragging: false, down: false, touches: 0 }, drag: { ...genericEndState, event } })
+    let eventAttributes
+    if (event instanceof Event) {
+      const { values, ...rest } = getPointerEventData(event)
+      eventAttributes = rest
+    } else {
+      eventAttributes = { down: false, buttons: 0, touches: 0 }
+    }
+
+    this.updateState({ shared: { dragging: false, ...eventAttributes }, drag: { ...genericEndState, event } })
     this.fireGestureHandler('onDrag', GESTURE_END)
   }
 

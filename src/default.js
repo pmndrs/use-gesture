@@ -47,6 +47,7 @@ export const initialState = {
     moving: undefined,
     pinching: undefined,
     touches: undefined,
+    buttons: undefined,
     down: undefined,
     shiftKey: undefined,
     altKey: undefined,

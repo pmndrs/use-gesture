@@ -180,6 +180,7 @@ The following attributes are provided to the handler for all gestures.
 | `temp`                                              | `Any`      | serves as a cache storing any value returned by your handler during its previous run. See below for an example.              |
 | `cancel`                                            | `Function` | you can call `cancel` to interrupt the drag or pinch gestures. `cancel`is only relevant for `onDrag` and `onPinch` handlers. |
 | `down`                                              | `Boolean`  | mouse / touch down                                                                                                           |
+| `buttons`                                           | `Number`   | buttons pressed (see [documentation](https://developer.mozilla.org/fr/docs/Web/API/MouseEvent/button))                       |
 | `touches`                                           | `Number`   | number of touches pressing the screen                                                                                        |
 | `shiftKey`<br/>`altKey`<br/>`ctrlKey`<br/>`metaKey` | `Boolean`  | modifier keys are pressed                                                                                                    |
 | `dragging`                                          | `Boolean`  | `true` when the user is dragging                                                                                             |
