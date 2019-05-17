@@ -31,6 +31,7 @@ describe.each([['attached to component', Interactive, false], ['attached to node
       expect(getByTestId(`${prefix}pinch-pinching`)).toHaveTextContent('true')
       expect(getByTestId(`${prefix}pinch-first`)).toHaveTextContent('true')
       expect(getByTestId(`${prefix}pinch-values`)).toHaveTextContent(`40,0`)
+      expect(getByTestId(`${prefix}pinch-origin`)).toHaveTextContent(`0,20`)
       expect(getByTestId(`${prefix}pinch-initial`)).toHaveTextContent(`40,0`)
     })
 
@@ -54,6 +55,7 @@ describe.each([['attached to component', Interactive, false], ['attached to node
       expect(getByTestId(`${prefix}pinch-values`)).toHaveTextContent(`30,-90`)
       expect(getByTestId(`${prefix}pinch-delta`)).toHaveTextContent(`-10,-90`)
       expect(getByTestId(`${prefix}pinch-local`)).toHaveTextContent(`-10,-90`)
+      expect(getByTestId(`${prefix}pinch-origin`)).toHaveTextContent(`15,0`)
       expect(getByTestId(`${prefix}pinch-previous`)).toHaveTextContent(`40,0`)
     })
 
