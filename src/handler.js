@@ -120,6 +120,8 @@ export default class Handler {
   getDAKinematics = (stateKey, { values: [d, a], event }) => {
     const { values: da, turns, initial, lastLocal, time } = this.state[stateKey]
 
+    a = a === undefined ? da[1] : a // when angle is not defined by onCtrlWheel
+
     const diff_d = d - da[0]
     let diff_a = a - da[1]
 
@@ -295,7 +297,7 @@ export default class Handler {
     }
 
     const d = this.state.pinch.values[0] - values[1]
-    const daKinematics = this.getDAKinematics('pinch', { values: [d, 0], event }, true)
+    const daKinematics = this.getDAKinematics('pinch', { values: [d], event }, true)
 
     this.updateState({
       shared: rest,
