@@ -6,7 +6,6 @@ import InteractiveDom from './components/InteractiveDom'
 
 afterAll(cleanup)
 
-// TODO test onCtrlWheel
 // TODO test with gesturechange
 
 describe.each([['attached to component', Interactive, false], ['attached to node', InteractiveDom, true]])(
@@ -83,6 +82,11 @@ describe.each([['attached to component', Interactive, false], ['attached to node
       expect(getByTestId(`${prefix}pinch-delta`)).toHaveTextContent(`-10,90`)
     })
 
+    test('using wheel with ctrl key pressed should update pinch values', () => {
+      fireEvent.wheel(element, { deltaX: 4, deltaY: -5, ctrlKey: true })
+      expect(getByTestId(`${prefix}pinch-values`)).toHaveTextContent(`35,90`)
+    })
+
     test('passing the 180° angle between clockwise between two move events should account for a new turn', () => {
       fireEvent.touchMove(element, { touches: [{ clientX: 0, clientY: 0 }, { clientX: 3, clientY: -30 }] })
       fireEvent.touchMove(element, { touches: [{ clientX: 0, clientY: 0 }, { clientX: -3, clientY: -30 }] })
@@ -100,13 +104,13 @@ describe.each([['attached to component', Interactive, false], ['attached to node
 
     test('disabling all gestures should prevent state from updating', () => {
       rerender(<Component gesture="Pinch" config={{ enabled: false }} />)
-      fireEvent.mouseMove(element)
+      fireEvent.touchStart(element, { touches: [{ clientX: 0, clientY: 0 }, { clientX: 0, clientY: 40 }] })
       expect(getByTestId(`${prefix}pinch-pinching`)).toHaveTextContent('false')
     })
 
     test('disabling the pinch gesture should prevent state from updating', () => {
       rerender(<Component gesture="Pinch" config={{ pinch: false }} />)
-      fireEvent.mouseMove(element)
+      fireEvent.touchStart(element, { touches: [{ clientX: 0, clientY: 0 }, { clientX: 0, clientY: 40 }] })
       expect(getByTestId(`${prefix}pinch-pinching`)).toHaveTextContent('false')
     })
   }
