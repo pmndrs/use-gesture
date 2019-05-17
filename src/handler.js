@@ -227,12 +227,13 @@ export default class Handler {
     const dy = event.touches[1].clientY - event.touches[0].clientY
 
     const da = [Math.hypot(dx, dy), (Math.atan2(dx, dy) * 180) / Math.PI]
+    const origin = [event.touches[1].clientX + event.touches[0].clientX, event.touches[1].clientY + event.touches[0].clientY]
 
     const startState = this.getStartState('pinch', { args, event, values: da })
 
     this.updateState({
       shared: { pinching: true, down: true, touches: 2, shiftKey, altKey, metaKey, ctrlKey },
-      pinch: { ...startState, cancel: () => this.cancelPinch(event) }
+      pinch: { ...startState, origin, cancel: () => this.cancelPinch(event) }
     })
     this.fireGestureHandler('onPinch', GESTURE_START)
   }
@@ -247,12 +248,13 @@ export default class Handler {
     const a = -(Math.atan2(dx, dy) * 180) / Math.PI
 
     const daKinematics = this.getDAKinematics('pinch', { values: [d, a], event })
+    const origin = [event.touches[1].clientX + event.touches[0].clientX, event.touches[1].clientY + event.touches[0].clientY]
 
     const cancel = () => this.cancelPinch(event)
 
     this.updateState({
       shared: { shiftKey, altKey, metaKey, ctrlKey },
-      pinch: { ...daKinematics, first: false, cancel }
+      pinch: { ...daKinematics, origin, first: false, cancel }
     })
     this.fireGestureHandler('onPinch')
   }
@@ -264,7 +266,16 @@ export default class Handler {
 
   onPinchEnd = event => {
     if (!this.state.shared.pinching) return
-    this.updateState({ shared: { pinching: false, down: false, touches: 0 }, pinch: { ...genericEndState, event } })
+
+    let eventAttributes
+    if (event instanceof Event) {
+      const { values, ...rest } = getPointerEventData(event)
+      eventAttributes = rest
+    } else {
+      eventAttributes = { down: false, touches: 0 }
+    }
+
+    this.updateState({ shared: { pinching: false, ...eventAttributes }, pinch: { ...genericEndState, event } })
     this.fireGestureHandler('onPinch', GESTURE_END)
   }
 
@@ -476,6 +487,7 @@ export default class Handler {
 
     if (actions.has('onPinch')) {
       if (domTarget && supportsGestureEvent()) {
+        // TODO also use touch events to calculate distance
         pushInKeys(listeners, 'onGestureStart', onWebKitGestureStart)
         pushInKeys(listeners, 'onGestureChange', this.onWebKitGestureChange)
         pushInKeys(listeners, 'onGestureEnd', this.onWebKitGestureEnd)

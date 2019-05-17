@@ -15,11 +15,14 @@ export interface CommonGestureState {
   pinching?: boolean
   touches?: number
   down?: boolean
+  buttons?: number
   shiftKey?: boolean
   altKey?: boolean
   metaKey?: boolean
   ctrlKey?: boolean
   event: MouseEvent | TouchEvent
+  values: vector2
+  velocities: vector2
   delta: vector2
   initial: vector2
   previous: vector2
@@ -47,6 +50,7 @@ export interface CoordinatesGestureState extends CommonGestureState {
 export interface DistanceAngleGestureState extends CommonGestureState {
   da: vector2
   vdva: vector2
+  origin: vector2
   turns: number
 }
 

@@ -221,6 +221,7 @@ Pinch is generally about scaling and rotating. The scale depends on the distance
 | `local`     | `Vec2`   | delta with book-keeping (remembers the `da` value throughout gestures)                      |
 | `lastLocal` | `Vec2`   | previous `local`                                                                            |
 | `vdva`      | `Vec2`   | momentum / speed of the gesture for distance and angle                                      |
+| `origin`    | `Number` | center between the two touch event coordinates                                              |
 | `turns`     | `Number` | keeps track of the number of turns (don't rely on `turns` to count the number of rotations) |
 
 ### `useGesture` config

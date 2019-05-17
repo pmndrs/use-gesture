@@ -36,8 +36,8 @@ export const initialCommon = {
   args: undefined
 }
 
-const initialXY = { velocity: 0, distance: 0, direction: [0, 0] } // xy coordinates
-const initialDA = { turns: 0 } // distance and angle
+const initialXY = { xy: [0, 0], vxvy: [0, 0], velocity: 0, distance: 0, direction: [0, 0] } // xy coordinates
+const initialDA = { da: [0, 0], vdva: [0, 0], origin: undefined, turns: 0 } // distance and angle
 
 export const initialState = {
   shared: {

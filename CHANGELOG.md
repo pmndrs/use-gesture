@@ -8,6 +8,12 @@
 
 1. Support for for zoom and rotate on trackpad for Safari.
 2. Support for zoom on trackpad for Chrome and Firefox.
+3. Added `buttons` attribute to pointer-related gesture state.
+4. Added `origin` attribute to pinch gesture.
+
+### Fixed
+
+1. Drag gesture will interrupt if a move event has no button pressed (that could happen if triggering a right click) and then moving the mouse around.
 
 ## 5.0.1 Release
 
