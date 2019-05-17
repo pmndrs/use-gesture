@@ -227,7 +227,7 @@ export default class Handler {
     const dy = event.touches[1].clientY - event.touches[0].clientY
 
     const da = [Math.hypot(dx, dy), (Math.atan2(dx, dy) * 180) / Math.PI]
-    const origin = [event.touches[1].clientX + event.touches[0].clientX, event.touches[1].clientY + event.touches[0].clientY]
+    const origin = [(event.touches[1].clientX + event.touches[0].clientX) / 2, (event.touches[1].clientY + event.touches[0].clientY) / 2]
 
     const startState = this.getStartState('pinch', { args, event, values: da })
 
@@ -248,7 +248,7 @@ export default class Handler {
     const a = -(Math.atan2(dx, dy) * 180) / Math.PI
 
     const daKinematics = this.getDAKinematics('pinch', { values: [d, a], event })
-    const origin = [event.touches[1].clientX + event.touches[0].clientX, event.touches[1].clientY + event.touches[0].clientY]
+    const origin = [(event.touches[1].clientX + event.touches[0].clientX) / 2, (event.touches[1].clientY + event.touches[0].clientY) / 2]
 
     const cancel = () => this.cancelPinch(event)
 
