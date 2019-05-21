@@ -22,6 +22,7 @@ describe.each([
     fireEvent.mouseMove(element)
     expect(getByTestId(`${prefix}movehover-hovering`)).toHaveTextContent('true')
     expect(getByTestId(`${prefix}movehover-moving`)).toHaveTextContent('true')
+    expect(getByTestId(`${prefix}movehover-end`)).toHaveTextContent(/^not fired$/)
   })
 
   test('mouseLeave should immediately terminate the move gesture and call onMoveEnd', () => {

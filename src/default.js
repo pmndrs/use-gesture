@@ -1,10 +1,9 @@
 import { noop } from './utils'
 
-export const stateKeys = { onDrag: 'drag', onHover: 'move', onMove: 'move', onPinch: 'pinch', onScroll: 'scroll', onWheel: 'wheel' }
-
 export const defaultConfig = {
   domTarget: undefined,
-  event: { passive: true, capture: false, pointerEvents: false },
+  event: { passive: true, capture: false },
+  pointerEvents: false,
   window: typeof window !== 'undefined' ? window : undefined,
   transform: { x: x => x, y: y => y },
   enabled: true,
@@ -26,9 +25,9 @@ export const initialCommon = {
   transform: undefined,
   local: [0, 0],
   lastLocal: [0, 0],
-  first: true,
+  first: false,
   last: false,
-  active: true,
+  active: false,
   time: undefined,
   temp: undefined,
   cancel: noop,

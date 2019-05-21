@@ -23,7 +23,7 @@ describe.each([['attached to component', Interactive, false], ['attached to node
     })
 
     test('mouseDown should initiate the gesture', () => {
-      const event = createEvent.mouseDown(element, { clientX: 10, clientY: 20 })
+      const event = createEvent.mouseDown(element, { clientX: 10, clientY: 20, buttons: 1 })
       fireEvent(element, event)
       delta_t = event.timeStamp
 

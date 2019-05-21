@@ -12,7 +12,7 @@ test('function passed as sole argument to useGesture should trigger drag (testin
   expect(getByTestId('drag-active')).toHaveTextContent('true')
 })
 
-test('onAction should propshould trigger drag (testing onAction alias)', () => {
+test('onAction should trigger drag (testing onAction alias)', () => {
   const { getByTestId } = render(<ActionProp />)
   const element = getByTestId('drag-el')
   fireEvent.mouseDown(element)
