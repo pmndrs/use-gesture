@@ -78,8 +78,6 @@ export interface GestureHandlers {
   onDragStart: CoordinatesHandler
   onDragEnd: CoordinatesHandler
   onHover: CoordinatesHandler
-  onHoverStart: CoordinatesHandler
-  onHoverEnd: CoordinatesHandler
   onMove: CoordinatesHandler
   onMoveStart: CoordinatesHandler
   onMoveEnd: CoordinatesHandler
