@@ -1,7 +1,6 @@
 import DistanceAngleRecognizer from './DistanceAngleRecognizer'
-import { noop, getTwoTouchesEventData } from '../utils'
+import { noop, getTwoTouchesEventData, GESTURE_ONCHANGE, GESTURE_ONSTART, GESTURE_ONEND } from '../utils'
 import { genericEndState } from '../default'
-import { GESTURE_ONCHANGE, GESTURE_ONSTART, GESTURE_ONEND } from '../Handler'
 
 export default class PinchRecognizer extends DistanceAngleRecognizer {
   constructor(...args) {

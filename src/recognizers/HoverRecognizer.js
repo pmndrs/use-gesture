@@ -1,7 +1,6 @@
 import CoordinatesRecognizer from './CoordinatesRecognizer'
-import { getPointerEventData } from '../utils'
+import { getPointerEventData, GESTURE_ONCHANGE, GESTURE_ONEND } from '../utils'
 import { genericEndState } from '../default'
-import { GESTURE_ONCHANGE, GESTURE_ONEND } from '../Handler'
 
 export default class HoverRecognizer extends CoordinatesRecognizer {
   timeout = null

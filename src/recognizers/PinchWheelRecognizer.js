@@ -1,7 +1,6 @@
 import DistanceAngleRecognizer from './DistanceAngleRecognizer'
-import { getWheelEventData } from '../utils'
+import { getWheelEventData, GESTURE_ONCHANGE, GESTURE_ONSTART, GESTURE_ONEND } from '../utils'
 import { genericEndState } from '../default'
-import { GESTURE_ONCHANGE, GESTURE_ONSTART, GESTURE_ONEND } from '../Handler'
 
 export default class PinchWheelRecognizer extends DistanceAngleRecognizer {
   constructor(...args) {

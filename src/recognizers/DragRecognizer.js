@@ -1,7 +1,6 @@
 import CoordinatesRecognizer from './CoordinatesRecognizer'
-import { noop, getPointerEventData } from '../utils'
+import { noop, getPointerEventData, GESTURE_ONCHANGE, GESTURE_ONSTART, GESTURE_ONEND } from '../utils'
 import { genericEndState } from '../default'
-import { GESTURE_ONCHANGE, GESTURE_ONSTART, GESTURE_ONEND } from '../Handler'
 
 export default class DragRecognizer extends CoordinatesRecognizer {
   dragListeners = []

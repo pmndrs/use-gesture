@@ -1,3 +1,7 @@
+export const GESTURE_ONCHANGE = 'GESTURE_ONCHANGE'
+export const GESTURE_ONEND = 'GESTURE_ONEND'
+export const GESTURE_ONSTART = 'GESTURE_ONSTART'
+
 export const noop = () => {}
 
 // vector add

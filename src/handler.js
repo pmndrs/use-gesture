@@ -1,5 +1,5 @@
 import { defaultConfig, initialState } from './default'
-import { addListeners, removeListeners, supportsGestureEvent } from './utils'
+import { addListeners, removeListeners, supportsGestureEvent, GESTURE_ONSTART, GESTURE_ONEND } from './utils'
 
 import RecognizerController from './controllers/RecognizerController'
 import DragRecognizer from './recognizers/DragRecognizer'
@@ -10,10 +10,6 @@ import HoverRecognizer from './recognizers/HoverRecognizer'
 import PinchRecognizer from './recognizers/PinchRecognizer'
 import PinchWheelRecognizer from './recognizers/PinchWheelRecognizer'
 import PinchWebKitGestureRecognizer from './recognizers/PinchWebKitGestureRecognizer'
-
-export const GESTURE_ONCHANGE = 'GESTURE_ONCHANGE'
-export const GESTURE_ONEND = 'GESTURE_ONEND'
-export const GESTURE_ONSTART = 'GESTURE_ONSTART'
 
 export default class Handler {
   props = null

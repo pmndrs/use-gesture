@@ -1,7 +1,6 @@
 import CoordinatesRecognizer from './CoordinatesRecognizer'
-import { getScrollEventData } from '../utils'
+import { getScrollEventData, GESTURE_ONCHANGE, GESTURE_ONSTART, GESTURE_ONEND } from '../utils'
 import { genericEndState } from '../default'
-import { GESTURE_ONCHANGE, GESTURE_ONSTART, GESTURE_ONEND } from '../Handler'
 
 export default class ScrollRecognizer extends CoordinatesRecognizer {
   constructor(...args) {
