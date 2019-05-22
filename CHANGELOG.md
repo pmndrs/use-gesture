@@ -1,5 +1,13 @@
 # Changelog
 
+## 5.0.2 Release
+
+**Summary:** minor release.
+
+### Fixed
+
+1. Added `onHover` in Typescript definitions.
+
 ## 5.0.1 Release
 
 **Summary:** release updating dev dependencies and fixing minor bugs.
