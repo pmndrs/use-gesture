@@ -2,7 +2,7 @@
 
 ## 5.1.0 Release
 
-**Summary:** important release introducing trackpad gestures. There has been some important refactoring involved.
+**Summary:** important release introducing trackpad gestures. The library has been fully rewritten in TypeScript with some important refactoring involved.
 
 ### Added
 
@@ -14,6 +14,10 @@
 ### Fixed
 
 1. Drag gesture will interrupt if a move event has no button pressed (that could happen if triggering a right click) and then moving the mouse around.
+
+### Breaking changes
+
+1. `config` object must be passed as a second argument.
 
 ## 5.0.1 Release
 
@@ -62,7 +66,7 @@ const bind = useGesture({
   onDrag: ({ first }) => {
     if (first) setDragCount(dragCount + 1)
     console.log(count) //<-- count will be up to date
-  }
+  },
 })
 ```
 
@@ -183,7 +187,7 @@ const bind = useGesture({
   onDrag: ({ first }) => {
     if (first) setDragCount(dragCount + 1)
     console.log(count) //<-- count will be up to date
-  }
+  },
 })
 ```
 

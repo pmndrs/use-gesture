@@ -12,7 +12,7 @@ describe.each([['attached to component', Interactive, false], ['attached to node
   'testing onPinch %s)',
   (testName, Component, domTarget) => {
     const prefix = domTarget ? 'dom-' : ''
-    const { getByTestId, queryByTestId, rerender } = render(<Component gesture="Pinch" tempArg="temp" />)
+    const { getByTestId, queryByTestId, rerender } = render(<Component gestures={['Pinch']} tempArg="temp" />)
     const element = getByTestId(`${prefix}pinch-el`)
     let delta_t
 
@@ -94,7 +94,7 @@ describe.each([['attached to component', Interactive, false], ['attached to node
     })
 
     test('canceling the gesture should cancel the gesture in the next RAF tick', async () => {
-      rerender(<Component gesture="Pinch" canceled />)
+      rerender(<Component gestures={['Pinch']} canceled />)
       fireEvent.touchMove(element, { touches: [{}, {}] })
       await wait(() => {
         expect(getByTestId(`${prefix}pinch-canceled`)).toHaveTextContent('true')
@@ -103,13 +103,13 @@ describe.each([['attached to component', Interactive, false], ['attached to node
     })
 
     test('disabling all gestures should prevent state from updating', () => {
-      rerender(<Component gesture="Pinch" config={{ enabled: false }} />)
+      rerender(<Component gestures={['Pinch']} config={{ enabled: false }} />)
       fireEvent.touchStart(element, { touches: [{ clientX: 0, clientY: 0 }, { clientX: 0, clientY: 40 }] })
       expect(getByTestId(`${prefix}pinch-pinching`)).toHaveTextContent('false')
     })
 
     test('disabling the pinch gesture should prevent state from updating', () => {
-      rerender(<Component gesture="Pinch" config={{ pinch: false }} />)
+      rerender(<Component gestures={['Pinch']} config={{ pinch: false }} />)
       fireEvent.touchStart(element, { touches: [{ clientX: 0, clientY: 0 }, { clientX: 0, clientY: 40 }] })
       expect(getByTestId(`${prefix}pinch-pinching`)).toHaveTextContent('false')
     })

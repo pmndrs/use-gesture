@@ -10,11 +10,11 @@ afterAll(cleanup)
 // but for some reason, the tests don't work with mouseEnter/mouseLeave
 
 describe.each([
-  ['attached to component', Interactive, false]
+  ['attached to component', Interactive, false],
   // ['attached to node', InteractiveDom, true]
 ])('testing onMove and onHover %s)', (testName, Component, domTarget) => {
   const prefix = domTarget ? 'dom-' : ''
-  const { getByTestId } = render(<Component gesture={['Move', 'Hover']} />)
+  const { getByTestId } = render(<Component gestures={['Move', 'Hover']} />)
   const element = getByTestId(`${prefix}movehover-el`)
 
   test('mouseEnter/mouseMove should initiate the move gesture', () => {

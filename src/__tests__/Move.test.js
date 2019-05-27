@@ -10,7 +10,7 @@ describe.each([['attached to component', Interactive, false], ['attached to node
   'testing onMove %s)',
   (testName, Component, domTarget) => {
     const prefix = domTarget ? 'dom-' : ''
-    const { getByTestId, rerender } = render(<Component gesture="Move" tempArg="temp" />)
+    const { getByTestId, rerender } = render(<Component gestures={['Move']} tempArg="temp" />)
     const element = getByTestId(`${prefix}move-el`)
     let delta_t
 
@@ -58,7 +58,7 @@ describe.each([['attached to component', Interactive, false], ['attached to node
       await wait(() => [
         expect(getByTestId(`${prefix}move-last`)).toHaveTextContent('true'),
         expect(getByTestId(`${prefix}move-active`)).toHaveTextContent('false'),
-        expect(getByTestId(`${prefix}move-moving`)).toHaveTextContent('false')
+        expect(getByTestId(`${prefix}move-moving`)).toHaveTextContent('false'),
       ])
     })
 
@@ -67,13 +67,13 @@ describe.each([['attached to component', Interactive, false], ['attached to node
     })
 
     test('disabling all gestures should prevent state from updating', () => {
-      rerender(<Component gesture="Move" config={{ enabled: false }} />)
+      rerender(<Component gestures={['Move']} config={{ enabled: false }} />)
       fireEvent.mouseMove(element)
       expect(getByTestId(`${prefix}move-moving`)).toHaveTextContent('false')
     })
 
     test('disabling the move gesture should prevent state from updating', () => {
-      rerender(<Component gesture="Move" config={{ move: false }} />)
+      rerender(<Component gestures={['Move']} config={{ move: false }} />)
       fireEvent.mouseMove(element)
       expect(getByTestId(`${prefix}move-moving`)).toHaveTextContent('false')
     })

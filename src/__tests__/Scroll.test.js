@@ -10,7 +10,7 @@ describe.each([['attached to component', Interactive, false], ['attached to node
   'testing onScroll %s)',
   (testName, Component, domTarget) => {
     const prefix = domTarget ? 'dom-' : ''
-    const { getByTestId, rerender } = render(<Component gesture="Scroll" tempArg="temp" />)
+    const { getByTestId, rerender } = render(<Component gestures={['Scroll']} tempArg="temp" />)
     const element = getByTestId(`${prefix}scroll-el`)
     let delta_t
 
@@ -63,7 +63,7 @@ describe.each([['attached to component', Interactive, false], ['attached to node
       await wait(() => [
         expect(getByTestId(`${prefix}scroll-last`)).toHaveTextContent('true'),
         expect(getByTestId(`${prefix}scroll-active`)).toHaveTextContent('false'),
-        expect(getByTestId(`${prefix}scroll-scrolling`)).toHaveTextContent('false')
+        expect(getByTestId(`${prefix}scroll-scrolling`)).toHaveTextContent('false'),
       ])
     })
 
@@ -72,13 +72,13 @@ describe.each([['attached to component', Interactive, false], ['attached to node
     })
 
     test('disabling all gestures should prevent state from updating', () => {
-      rerender(<Component gesture="Scroll" config={{ enabled: false }} />)
+      rerender(<Component gestures={['Scroll']} config={{ enabled: false }} />)
       fireEvent.scroll(element)
       expect(getByTestId(`${prefix}scroll-scrolling`)).toHaveTextContent('false')
     })
 
     test('disabling the scroll gesture should prevent state from updating', () => {
-      rerender(<Component gesture="Scroll" config={{ scroll: false }} />)
+      rerender(<Component gestures={['Scroll']} config={{ scroll: false }} />)
       fireEvent.scroll(element)
       expect(getByTestId(`${prefix}scroll-scrolling`)).toHaveTextContent('false')
     })
