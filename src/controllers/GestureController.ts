@@ -10,7 +10,7 @@ import {
 } from '../../types/states.d'
 import { Fn, AtLeastOneOf } from '../../types/common.d'
 import { ReactEventHandlerKey, GestureFlag, ReactEventHandlers } from '../../types/events.d'
-import { GestureHandlers, Handler, HandlerKey } from '../../types'
+import { GestureHandlers, Handler, HandlerKey } from '../../types/web.d'
 import { GestureConfig } from '../../types/config.d'
 
 import { defaultConfig, initialState, mappedKeys } from '../defaults'

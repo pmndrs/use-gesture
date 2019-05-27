@@ -1,9 +1,11 @@
 import pkg from './package.json'
-const babel = require('rollup-plugin-babel')
-const resolve = require('rollup-plugin-node-resolve')
-const commonjs = require('rollup-plugin-commonjs')
+import babel from 'rollup-plugin-babel'
+import resolve from 'rollup-plugin-node-resolve'
 
 const extensions = ['.js', '.jsx', '.ts']
+
+const root = process.platform === 'win32' ? path.resolve('/') : '/'
+const external = id => !id.startsWith('.') && !id.startsWith(root)
 
 const getBabelOptions = ({ useESModules }, targets) => ({
   babelrc: false,
@@ -22,15 +24,15 @@ const getBabelOptions = ({ useESModules }, targets) => ({
 export default [
   {
     input: `./src/index`,
-    output: { file: pkg.module, format: 'esm' },
-    external: [...Object.keys(pkg.dependencies || {}), ...Object.keys(pkg.peerDependencies || {})],
+    output: { file: `dist/${pkg.module}`, format: 'esm' },
+    external,
     plugins: [babel(getBabelOptions({ useESModules: true }, '>1%, not dead, not ie 11, not op_mini all')), resolve({ extensions })],
   },
   {
     input: `./src/index`,
-    output: { file: pkg.main, format: 'cjs' },
-    external: [...Object.keys(pkg.dependencies || {}), ...Object.keys(pkg.peerDependencies || {})],
-    plugins: [babel(getBabelOptions({ useESModules: false })), commonjs(), resolve({ extensions })],
+    output: { file: `dist/${pkg.main}`, format: 'cjs' },
+    external,
+    plugins: [babel(getBabelOptions({ useESModules: false })), resolve({ extensions })],
   },
 ]
 

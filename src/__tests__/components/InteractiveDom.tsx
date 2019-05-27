@@ -1,9 +1,9 @@
 import React from 'react'
 import { Common, createHandlers } from './Common'
 import { useGesture } from '../../index'
-import { GestureKey } from '../../../types/states'
-import { Fn } from '../../../types/common'
-import { GestureConfig } from '../../../types/config'
+import { GestureKey } from '../../../types/states.d'
+import { Fn } from '../../../types/common.d'
+import { GestureConfig } from '../../../types/config.d'
 
 const InteractiveDom = ({
   // bindArgs = [],

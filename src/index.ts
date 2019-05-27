@@ -1,6 +1,6 @@
 import React from 'react'
 import GestureController from './controllers/GestureController'
-import { GestureHandlers, Handler } from '../types'
+import { GestureHandlers, Handler } from '../types/web.d'
 import { GestureConfig } from '../types/config.d'
 import { ReactEventHandlers } from '../types/events.d'
 import { Fn, AtLeastOneOf } from '../types/common.d'

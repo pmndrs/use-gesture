@@ -1,7 +1,7 @@
 import React from 'react'
-import { GestureKey } from '../../../types/states'
-import { Fn, TransformType, AtLeastOneOf } from '../../../types/common'
-import { GestureHandlers } from '../../../types'
+import { GestureKey } from '../../../types/states.d'
+import { Fn, TransformType, AtLeastOneOf } from '../../../types/common.d'
+import { GestureHandlers } from '../../../types/web.d'
 
 export const createHandlers = ({
   gestures,

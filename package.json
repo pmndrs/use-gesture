@@ -1,9 +1,10 @@
 {
   "name": "react-use-gesture",
-  "version": "5.1.0-beta.6",
-  "description": "hook for receiving gestures",
-  "main": "dist/react-use-gesture.cjs.js",
-  "module": "dist/react-use-gesture.js",
+  "version": "5.1.0-beta.9",
+  "description": "React hook for receiving gestures",
+  "main": "web.cjs.js",
+  "module": "web.js",
+  "private": true,
   "sideEffects": false,
   "husky": {
     "hooks": {
@@ -12,11 +13,14 @@
   },
   "scripts": {
     "prebuild": "rimraf dist",
-    "build": "rollup -c",
+    "build": "npm-run-all --parallel copy rollup",
+    "copy": "copyfiles -f package.json readme.md LICENSE.md \"types/*\" dist && json -I -f dist/package.json -e \"this.private=false; this.devDependencies=undefined; this.optionalDependencies=undefined; this.scripts=undefined; this.husky=undefined; this.prettier=undefined; this.jest=undefined;\"",
+    "rollup": "rollup -c",
     "prepare": "npm run build",
     "test": "jest",
     "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage --silent"
+    "test:coverage": "jest --coverage --silent",
+    "test:ts": "tsc --noEmit"
   },
   "repository": {
     "type": "git",
@@ -55,7 +59,6 @@
   "devDependencies": {
     "@babel/core": "7.4.4",
     "@babel/plugin-proposal-class-properties": "^7.4.4",
-    "@babel/plugin-transform-modules-commonjs": "^7.4.3",
     "@babel/plugin-transform-runtime": "7.4.4",
     "@babel/preset-env": "^7.4.3",
     "@babel/preset-react": "^7.0.0",
@@ -63,9 +66,12 @@
     "@types/react": "^16.8.18",
     "babel-core": "7.0.0-bridge.0",
     "babel-jest": "^24.7.1",
+    "copyfiles": "^2.1.0",
     "husky": "^2.2.0",
     "jest": "^24.7.1",
     "jest-dom": "^3.1.3",
+    "json": "^9.0.6",
+    "npm-run-all": "^4.1.5",
     "prettier": "^1.16.4",
     "pretty-quick": "^1.10.0",
     "react": "^16.9.0-alpha.0",
