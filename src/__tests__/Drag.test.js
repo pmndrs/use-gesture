@@ -44,11 +44,9 @@ describe.each([['attached to component', Interactive, false], ['attached to node
       expect(getByTestId(`${prefix}drag-temp`)).toHaveTextContent('temp')
     })
 
-    // TODO - not sure why using window as the mouseMove target doesn't work
-
     test('moving should set first to false', () => {
-      const event = createEvent.mouseMove(element, { clientX: 20, clientY: 50, buttons: 1 })
-      fireEvent(element, event)
+      const event = createEvent.mouseMove(window, { clientX: 20, clientY: 50, buttons: 1 })
+      fireEvent(window, event)
       delta_t = event.timeStamp - delta_t
 
       expect(getByTestId(`${prefix}drag-first`)).toHaveTextContent('false')
