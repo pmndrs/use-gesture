@@ -1,12 +1,12 @@
 import DistanceAngleRecognizer from './DistanceAngleRecognizer'
 import { noop, getTwoTouchesEventData } from '../utils'
 import GestureController from '../controllers/GestureController'
-import { TransformedEvent, GestureFlag, ReactEventHandlerKey } from '../../types/events.d'
+import { TransformedEvent, GestureFlag, ReactEventHandlerKey, ReactEventHandlers } from '../../types/events.d'
 import { genericEndState } from '../defaults'
 import { Fn } from '../../types/common.d'
 
-export default class PinchRecognizer<BinderType> extends DistanceAngleRecognizer<BinderType> {
-  constructor(controller: GestureController<BinderType>, args: any[]) {
+export default class PinchRecognizer extends DistanceAngleRecognizer {
+  constructor(controller: GestureController<ReactEventHandlers | Fn>, args: any[]) {
     super('pinch', controller, args)
   }
 
@@ -15,7 +15,7 @@ export default class PinchRecognizer<BinderType> extends DistanceAngleRecognizer
 
     const { values, origin, ...rest } = getTwoTouchesEventData(event)
 
-    const startState = this.getStartState({ args: this.args, event, values })
+    const startState = this.getStartState(values, event)
     this.updateState(
       { ...rest, pinching: true, down: true },
       { ...startState, origin, cancel: () => this.onCancel(event) },
@@ -29,7 +29,7 @@ export default class PinchRecognizer<BinderType> extends DistanceAngleRecognizer
 
     const { values, origin, ...rest } = getTwoTouchesEventData(event)
 
-    const kinematics = this.getKinematics({ values, event })
+    const kinematics = this.getKinematics(values, event)
     const cancel = () => this.onCancel(event)
 
     this.updateState(rest, { ...kinematics, origin, first: false, cancel }, GestureFlag.OnChange)

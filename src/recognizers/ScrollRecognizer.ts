@@ -1,12 +1,12 @@
 import CoordinatesRecognizer from './CoordinatesRecognizer'
 import { getScrollEventData } from '../utils'
 import GestureController from '../controllers/GestureController'
-import { TransformedEvent, GestureFlag, ReactEventHandlerKey } from '../../types/events.d'
+import { TransformedEvent, GestureFlag, ReactEventHandlerKey, ReactEventHandlers } from '../../types/events.d'
 import { genericEndState } from '../defaults'
 import { Fn } from '../../types/common.d'
 
-export default class ScrollRecognizer<BinderType> extends CoordinatesRecognizer<BinderType> {
-  constructor(controller: GestureController<BinderType>, args: any[]) {
+export default class ScrollRecognizer extends CoordinatesRecognizer {
+  constructor(controller: GestureController<ReactEventHandlers | Fn>, args: any[]) {
     super('scroll', controller, args)
   }
 
@@ -19,10 +19,10 @@ export default class ScrollRecognizer<BinderType> extends CoordinatesRecognizer<
     const { values, ...rest } = getScrollEventData(event)
 
     if (!this.getState().active) {
-      const startState = this.getStartState({ args: this.args, event, values })
+      const startState = this.getStartState(values, event)
       this.updateState({ scrolling: true, ...rest }, startState, GestureFlag.OnStart)
     } else {
-      const kinematics = this.getKinematics({ values, event })
+      const kinematics = this.getKinematics(values, event)
       this.updateState(rest, { ...kinematics, first: false }, GestureFlag.OnChange)
     }
   }

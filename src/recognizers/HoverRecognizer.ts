@@ -1,12 +1,12 @@
 import CoordinatesRecognizer from './CoordinatesRecognizer'
 import { getPointerEventData } from '../utils'
 import GestureController from '../controllers/GestureController'
-import { GestureFlag, TransformedEvent, ReactEventHandlerKey } from '../../types/events.d'
+import { GestureFlag, TransformedEvent, ReactEventHandlerKey, ReactEventHandlers } from '../../types/events.d'
 import { genericEndState } from '../defaults'
 import { Fn } from '../../types/common.d'
 
-export default class HoverRecognizer<BinderType> extends CoordinatesRecognizer<BinderType> {
-  constructor(controller: GestureController<BinderType>, args: any[]) {
+export default class HoverRecognizer extends CoordinatesRecognizer {
+  constructor(controller: GestureController<ReactEventHandlers | Fn>, args: any[]) {
     super('hover', controller, args)
   }
 
@@ -19,7 +19,7 @@ export default class HoverRecognizer<BinderType> extends CoordinatesRecognizer<B
   onEnd = (event: TransformedEvent): void => {
     if (!this.isEnabled()) return
     const { values, ...rest } = getPointerEventData(event)
-    const kinematics = this.getKinematics({ values, event })
+    const kinematics = this.getKinematics(values, event)
 
     this.updateState({ hovering: false, moving: false, ...rest }, { ...kinematics, ...genericEndState, velocity: 0, velocities: [0, 0] })
     this.controller.fireGestureHandler('move', GestureFlag.OnEnd)

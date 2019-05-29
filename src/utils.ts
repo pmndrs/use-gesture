@@ -3,6 +3,7 @@ import { EventOptions } from '../types/config.d'
 import { Coordinates, FullGestureState, DistanceAngle } from '../types/states.d'
 import { TransformedEvent } from '../types/events.d'
 
+// blank function
 export const noop = () => {}
 
 // returns a function that chains all functions given as parameters
@@ -29,12 +30,22 @@ interface ModifierKeys {
   ctrlKey: boolean
 }
 
+/**
+ * Gets modifier keys from event
+ * @param event
+ * @returns modifier keys
+ */
 export function getModifierKeys(event: TransformedEvent): ModifierKeys {
   const { shiftKey, altKey, metaKey, ctrlKey } = event
   return { shiftKey, altKey, metaKey, ctrlKey }
 }
 type ScrollEventData = Pick<FullGestureState<Coordinates>, 'values'> & ModifierKeys
 
+/**
+ * Gets scroll event data
+ * @param event
+ * @returns scroll event data
+ */
 export function getScrollEventData(event: TransformedEvent): ScrollEventData {
   // If the currentTarget is the window then we return the scrollX/Y position.
   // If not (ie the currentTarget is a DOM element), then we return scrollLeft/Top
@@ -44,6 +55,11 @@ export function getScrollEventData(event: TransformedEvent): ScrollEventData {
 
 type WheelEventData = Pick<FullGestureState<Coordinates>, 'values'> & ModifierKeys
 
+/**
+ * Gets wheel event data
+ * @param event
+ * @returns wheel event data
+ */
 export function getWheelEventData(event: TransformedEvent<WheelEvent>): WheelEventData {
   const { deltaX, deltaY } = event
   //TODO implement polyfill ?
@@ -52,6 +68,11 @@ export function getWheelEventData(event: TransformedEvent<WheelEvent>): WheelEve
 }
 type PointerEventData = Pick<FullGestureState<Coordinates>, 'values' | 'touches' | 'down' | 'buttons'> & ModifierKeys
 
+/**
+ * Gets pointer event data
+ * @param event
+ * @returns pointer event data
+ */
 export function getPointerEventData(event: MouseEvent | TouchEvent | PointerEvent): PointerEventData {
   const { touches, buttons, changedTouches } = event as any
   const touchEvents = touches && touches.length > 0 ? touches : changedTouches && changedTouches.length > 0 ? changedTouches : null
@@ -68,6 +89,11 @@ export function getPointerEventData(event: MouseEvent | TouchEvent | PointerEven
 
 type TwoTouchesEventData = Pick<FullGestureState<DistanceAngle>, 'values' | 'touches' | 'down' | 'origin'> & ModifierKeys
 
+/**
+ * Gets two touches event data
+ * @param event
+ * @returns two touches event data
+ */
 export function getTwoTouchesEventData(event: TouchEvent): TwoTouchesEventData {
   const { touches } = event
   const dx = touches[1].clientX - touches[0].clientX
@@ -79,18 +105,46 @@ export function getTwoTouchesEventData(event: TouchEvent): TwoTouchesEventData {
   return { values: da, origin, touches: 2, down: touches.length > 0, ...getModifierKeys(event) }
 }
 
-export const calculateVelocity = (diff: number[], delta_t: number, len: number): number => {
+/**
+ * Calculates velocity
+ * @param diff the difference between current and previous vectors
+ * @param delta_t the time delta
+ * @param len the length of the diff vector
+ * @returns velocity
+ */
+export function calculateVelocity(diff: number[], delta_t: number, len: number): number {
   len = len || Math.hypot(...diff)
   return delta_t ? len / delta_t : 0
 }
 
-export const calculateVelocities = <T extends number[]>(diff: T, delta_t: number): T => {
+/**
+ * Calculates velocities vector
+ * @template T the expected vector type
+ * @param diff the previous value
+ * @param delta_t the time delta
+ * @returns velocities vector
+ */
+export function calculateVelocities<T extends number[]>(diff: T, delta_t: number): T {
   return delta_t ? <T>diff.map(v => v / delta_t) : <T>Array(diff.length).fill(0)
 }
 
-export const calculateDistance = (delta: number[]): number => Math.hypot(...delta)
+/**
+ * Calculates distance
+ * @param delta the difference between current and initial vectors
+ * @returns distance
+ */
+export function calculateDistance(delta: number[]): number {
+  return Math.hypot(...delta)
+}
 
-export const calculateDirection = <T extends number[]>(diff: T, len: number): T => {
+/**
+ * Calculates direction
+ * @template T the expected vector type
+ * @param diff
+ * @param len
+ * @returns direction
+ */
+export function calculateDirection<T extends number[]>(diff: T, len: number): T {
   len = len || Math.hypot(...diff) || 1
   return <T>diff.map(v => v / len)
 }
@@ -102,7 +156,15 @@ interface Kinematics<T extends number[]> {
   direction: T
 }
 
-export const calculateAllKinematics = <T extends number[]>(delta: T, diff: T, delta_t: number): Kinematics<T> => {
+/**
+ * Calculates all kinematics
+ * @template T the expected vector type
+ * @param delta the difference between current and initial vectors
+ * @param diff the difference between current and previous vectors
+ * @param delta_t the time delta between current and previous timestamps
+ * @returns all kinematics
+ */
+export function calculateAllKinematics<T extends number[]>(delta: T, diff: T, delta_t: number): Kinematics<T> {
   const len = Math.hypot(...diff)
 
   return {
@@ -113,7 +175,11 @@ export const calculateAllKinematics = <T extends number[]>(delta: T, diff: T, de
   }
 }
 
-export const supportsGestureEvent = (): boolean => {
+/**
+ * Whether the browser supports GestureEvent (ie Safari)
+ * @returns true if the browser supports gesture event
+ */
+export function supportsGestureEvent(): boolean {
   try {
     // TODO [TS] possibly find GestureEvent definitions?
     // @ts-ignore: Unreachable code error

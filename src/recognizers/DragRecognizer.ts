@@ -1,12 +1,12 @@
 import CoordinatesRecognizer from './CoordinatesRecognizer'
 import { noop, getPointerEventData } from '../utils'
 import GestureController from '../controllers/GestureController'
-import { TransformedEvent, GestureFlag, ReactEventHandlerKey } from '../../types/events.d'
+import { TransformedEvent, GestureFlag, ReactEventHandlerKey, ReactEventHandlers } from '../../types/events.d'
 import { Fn } from '../../types/common.d'
 import { genericEndState } from '../defaults'
 
-export default class DragRecognizer<BinderType> extends CoordinatesRecognizer<BinderType> {
-  constructor(controller: GestureController<BinderType>, args: any[]) {
+export default class DragRecognizer extends CoordinatesRecognizer {
+  constructor(controller: GestureController<ReactEventHandlers | Fn>, args: any[]) {
     super('drag', controller, args)
   }
 
@@ -32,7 +32,7 @@ export default class DragRecognizer<BinderType> extends CoordinatesRecognizer<Bi
       this.addWindowListeners(dragListeners)
     }
 
-    const startState = this.getStartState({ values, args: this.args, event })
+    const startState = this.getStartState(values, event)
 
     this.updateState(
       { ...rest, dragging: true, down: true },
@@ -52,7 +52,7 @@ export default class DragRecognizer<BinderType> extends CoordinatesRecognizer<Bi
       return
     }
 
-    const kinematics = this.getKinematics({ values, event })
+    const kinematics = this.getKinematics(values, event)
     const cancel = () => this.onCancel(event)
 
     this.updateState(rest, { ...kinematics, first: false, cancel }, GestureFlag.OnChange)

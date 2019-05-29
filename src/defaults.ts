@@ -5,6 +5,11 @@ import { HandlerKey } from '../types/web.d'
 
 type MappedKeys = { [K in GestureKey]: { stateKey: StateKey; handlerKey: HandlerKey } }
 
+/**
+ * Some gestures might use the state key from another gesture (i.e. hover)
+ * so mappedKeys is a commodity object to get the state key and handler key
+ * for every gesture
+ */
 export const mappedKeys: MappedKeys = {
   drag: { stateKey: 'drag', handlerKey: 'onDrag' },
   pinch: { stateKey: 'pinch', handlerKey: 'onPinch' },
@@ -14,6 +19,7 @@ export const mappedKeys: MappedKeys = {
   hover: { stateKey: 'move', handlerKey: 'onHover' },
 }
 
+// default config (will extend user config)
 export const defaultConfig: GestureConfig = {
   domTarget: undefined,
   event: { passive: true, capture: false },
@@ -29,6 +35,7 @@ export const defaultConfig: GestureConfig = {
   move: true,
 }
 
+// common initial state for all gestures
 export const initialCommon: CommonGestureState = {
   event: undefined,
   currentTarget: undefined,
@@ -51,9 +58,13 @@ export const initialCommon: CommonGestureState = {
   args: undefined,
 }
 
+// initial state for coordinates-based gestures
 const initialCoordinates: Coordinates = { xy: [0, 0], vxvy: [0, 0], velocity: 0, distance: 0, direction: [0, 0] } // xy coordinates
+
+// initial state for distance and angle-based gestures (pinch)
 const initialDistanceAngle: DistanceAngle = { da: [0, 0], vdva: [0, 0], origin: [0, 0], turns: 0 } // distance and angle
 
+// initial state object (used by the gesture controller)
 export const initialState: StateObject = {
   shared: {
     hovering: false,
@@ -77,4 +88,5 @@ export const initialState: StateObject = {
   pinch: { ...initialCommon, ...initialDistanceAngle },
 }
 
+// generic end state for all gestures
 export const genericEndState = { first: false, last: true, active: false }
