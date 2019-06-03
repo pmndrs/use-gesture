@@ -33,7 +33,7 @@ export default class MoveRecognizer extends CoordinatesRecognizer {
   }
 
   getEventBindings(): [ReactEventHandlerKey | ReactEventHandlerKey[], Fn][] {
-    if (this.hasPointerEvents()) {
+    if (this.pointerEventsEnabled()) {
       return [['onPointerMove', this.onChange]]
     }
     return [['onMouseMove', this.onChange]]

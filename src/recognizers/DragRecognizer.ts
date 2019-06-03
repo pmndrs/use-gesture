@@ -18,7 +18,8 @@ export default class DragRecognizer extends CoordinatesRecognizer {
     if (rest.touches > 1) return
 
     const { currentTarget, pointerId } = event as PointerEvent
-    if (this.hasPointerEvents()) {
+    if (this.pointerEventsEnabled()) {
+      // if pointers events
       currentTarget && (currentTarget as any).setPointerCapture(pointerId)
     } else {
       this.removeWindowListeners()
@@ -63,7 +64,7 @@ export default class DragRecognizer extends CoordinatesRecognizer {
     if (!state.active) return
 
     const { currentTarget, pointerId } = state
-    if (currentTarget && this.hasPointerEvents()) (currentTarget as any).releasePointerCapture(pointerId)
+    if (currentTarget && this.pointerEventsEnabled()) (currentTarget as any).releasePointerCapture(pointerId)
     else this.removeWindowListeners()
 
     this.updateState({ dragging: false, down: false, buttons: 0, touches: 0 }, { ...genericEndState, event }, GestureFlag.OnEnd)
@@ -75,7 +76,7 @@ export default class DragRecognizer extends CoordinatesRecognizer {
   }
 
   getEventBindings(): [ReactEventHandlerKey | ReactEventHandlerKey[], Fn][] {
-    if (this.hasPointerEvents()) {
+    if (this.pointerEventsEnabled()) {
       return [['onPointerDown', this.onStart], ['onPointerMove', this.onChange], [['onPointerUp', 'onPointerCancel'], this.onEnd]]
     }
     return [[['onMouseDown', 'onTouchStart'], this.onStart]]
