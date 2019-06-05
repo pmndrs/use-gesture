@@ -174,8 +174,8 @@ React.useEffect(bind, [bind])
 const [dragCount, setDragCount] = useState(0)
 const bind = useGesture({
   onDrag: ({ first }) => {
+    console.log(dragCount) //<-- count will be up to date
     if (first) setDragCount(dragCount + 1)
-    console.log(count) //<-- count will be up to date
   }
 })
 ```
