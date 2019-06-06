@@ -1,6 +1,6 @@
 {
   "name": "react-use-gesture",
-  "version": "5.1.0-beta.10",
+  "version": "5.1.0",
   "description": "React hook for receiving gestures",
   "main": "web.cjs.js",
   "module": "web.js",
