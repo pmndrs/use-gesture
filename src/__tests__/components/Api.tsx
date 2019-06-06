@@ -27,3 +27,22 @@ export const BindProps = ({ args1 = [], args2 = [] }) => {
     </>
   )
 }
+
+export const GenuineHandlers = () => {
+  const [state, set] = React.useState({})
+  const [state2, set2] = React.useState('mouse not down')
+  const [state3, set3] = React.useState('not clicked')
+
+  const bind = useGesture({
+    onDrag: ({ event, transform, cancel, currentTarget, ...rest }) => void set(rest),
+    onMouseDown: () => set2('mouse down'),
+    onClick: () => set3('clicked'),
+  })
+
+  return (
+    <Common listeners={{ ...bind() }} state={state} testKey="drag">
+      <div data-testid={`mouseDown`}>{state2}</div>
+      <div data-testid={`click`}>{state3}</div>
+    </Common>
+  )
+}

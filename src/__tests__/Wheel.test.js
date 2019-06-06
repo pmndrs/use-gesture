@@ -4,16 +4,13 @@ import 'jest-dom/extend-expect'
 import Interactive from './components/Interactive'
 import InteractiveDom from './components/InteractiveDom'
 
-// TODO - fix act warning (probably caused by debounce)
-// https://github.com/facebook/react/issues/14769
-
 afterAll(cleanup)
 
 describe.each([['attached to component', Interactive, false], ['attached to node', InteractiveDom, true]])(
   'testing onWheel %s)',
   (testName, Component, domTarget) => {
     const prefix = domTarget ? 'dom-' : ''
-    const { getByTestId, rerender } = render(<Component gesture="Wheel" tempArg="temp" />)
+    const { getByTestId, rerender } = render(<Component gestures={['Wheel']} tempArg="temp" />)
     const element = getByTestId(`${prefix}wheel-el`)
 
     let delta_t
@@ -26,7 +23,7 @@ describe.each([['attached to component', Interactive, false], ['attached to node
       expect(getByTestId(`${prefix}wheel-active`)).toHaveTextContent('true')
       expect(getByTestId(`${prefix}wheel-wheeling`)).toHaveTextContent('true')
       expect(getByTestId(`${prefix}wheel-first`)).toHaveTextContent('true')
-      expect(getByTestId(`${prefix}wheel-xy`)).toHaveTextContent('1,-1')
+      expect(getByTestId(`${prefix}wheel-values`)).toHaveTextContent('1,-1')
       expect(getByTestId(`${prefix}wheel-initial`)).toHaveTextContent('1,-1')
     })
 
@@ -48,13 +45,13 @@ describe.each([['attached to component', Interactive, false], ['attached to node
     })
 
     test('xy should add wheel event deltas', () => {
-      expect(getByTestId(`${prefix}wheel-xy`)).toHaveTextContent('5,-6')
+      expect(getByTestId(`${prefix}wheel-values`)).toHaveTextContent('5,-6')
       expect(getByTestId(`${prefix}wheel-delta`)).toHaveTextContent('4,-5')
     })
 
     test('kinematics should update', () => {
       expect(getByTestId(`${prefix}wheel-velocity`)).not.toHaveTextContent(/^0$/)
-      expect(getByTestId(`${prefix}wheel-vxvy`)).toHaveTextContent(`${4 / delta_t},${-5 / delta_t}`)
+      expect(getByTestId(`${prefix}wheel-velocities`)).toHaveTextContent(`${4 / delta_t},${-5 / delta_t}`)
     })
 
     test('the last wheel event should debounce and terminate the gesture', async () => {
@@ -70,13 +67,13 @@ describe.each([['attached to component', Interactive, false], ['attached to node
     })
 
     test('disabling all gestures should prevent state from updating', () => {
-      rerender(<Component gesture="Wheel" config={{ enabled: false }} />)
+      rerender(<Component gestures={['Wheel']} config={{ enabled: false }} />)
       fireEvent.wheel(element)
       expect(getByTestId(`${prefix}wheel-wheeling`)).toHaveTextContent('false')
     })
 
     test('disabling the wheel gesture should prevent state from updating', () => {
-      rerender(<Component gesture="Wheel" config={{ wheel: false }} />)
+      rerender(<Component gestures={['Wheel']} config={{ wheel: false }} />)
       fireEvent.wheel(element)
       expect(getByTestId(`${prefix}wheel-wheeling`)).toHaveTextContent('false')
     })

@@ -1,5 +1,25 @@
 # Changelog
 
+## 5.1.0 Release
+
+**Summary:** important release introducing trackpad gestures. The library has been fully rewritten in TypeScript with some important refactoring involved.
+
+### Added
+
+1. Support for for zoom and rotate on trackpad for Safari.
+2. Support for zoom on trackpad for Chrome and Firefox.
+3. Added `buttons` attribute to pointer-related gesture state.
+4. Added `origin` attribute to pinch gesture.
+5. Accepts support for genuine element handlers (such as `onMouseDown`) to prevent overriding when passing the prop directly to the bound component.
+
+### Fixed
+
+1. Drag gesture will interrupt if a move event has no button pressed (that could happen if triggering a right click) and then moving the mouse around.
+
+### Breaking changes
+
+1. `config` object must be passed as a second argument.
+
 ## 5.0.2 Release
 
 **Summary:** minor release.
@@ -53,9 +73,9 @@ React.useEffect(bind, [bind])
 const [dragCount, setDragCount] = useState(0)
 const bind = useGesture({
   onDrag: ({ first }) => {
+    console.log(dragCount) //<-- count will be up to date
     if (first) setDragCount(dragCount + 1)
-    console.log(count) //<-- count will be up to date
-  }
+  },
 })
 ```
 
@@ -176,7 +196,7 @@ const bind = useGesture({
   onDrag: ({ first }) => {
     console.log(dragCount) //<-- count will be up to date
     if (first) setDragCount(dragCount + 1)
-  }
+  },
 })
 ```
 

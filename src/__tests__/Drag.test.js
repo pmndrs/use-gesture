@@ -13,7 +13,7 @@ describe.each([['attached to component', Interactive, false], ['attached to node
   'testing onDrag %s)',
   (testName, Component, domTarget) => {
     const prefix = domTarget ? 'dom-' : ''
-    const { getByTestId, queryByTestId, rerender } = render(<Component gesture="Drag" tempArg="temp" />)
+    const { getByTestId, queryByTestId, rerender } = render(<Component gestures={['Drag']} tempArg="temp" />)
     const element = getByTestId(`${prefix}drag-el`)
     let delta_t
 
@@ -23,14 +23,14 @@ describe.each([['attached to component', Interactive, false], ['attached to node
     })
 
     test('mouseDown should initiate the gesture', () => {
-      const event = createEvent.mouseDown(element, { clientX: 10, clientY: 20 })
+      const event = createEvent.mouseDown(element, { clientX: 10, clientY: 20, buttons: 1 })
       fireEvent(element, event)
       delta_t = event.timeStamp
 
       expect(getByTestId(`${prefix}drag-active`)).toHaveTextContent('true')
       expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('true')
       expect(getByTestId(`${prefix}drag-first`)).toHaveTextContent('true')
-      expect(getByTestId(`${prefix}drag-xy`)).toHaveTextContent('10,20')
+      expect(getByTestId(`${prefix}drag-values`)).toHaveTextContent('10,20')
       expect(getByTestId(`${prefix}drag-down`)).toHaveTextContent('true')
       expect(getByTestId(`${prefix}drag-initial`)).toHaveTextContent('10,20')
     })
@@ -44,23 +44,21 @@ describe.each([['attached to component', Interactive, false], ['attached to node
       expect(getByTestId(`${prefix}drag-temp`)).toHaveTextContent('temp')
     })
 
-    // TODO - not sure why using window as the mouseMove target doesn't work
-
     test('moving should set first to false', () => {
-      const event = createEvent.mouseMove(element, { clientX: 20, clientY: 50 })
-      fireEvent(element, event)
+      const event = createEvent.mouseMove(window, { clientX: 20, clientY: 50, buttons: 1 })
+      fireEvent(window, event)
       delta_t = event.timeStamp - delta_t
 
       expect(getByTestId(`${prefix}drag-first`)).toHaveTextContent('false')
     })
 
     test('moving should update kinematics', () => {
-      expect(getByTestId(`${prefix}drag-xy`)).toHaveTextContent('20,50')
+      expect(getByTestId(`${prefix}drag-values`)).toHaveTextContent('20,50')
       expect(getByTestId(`${prefix}drag-local`)).toHaveTextContent('10,30')
       expect(getByTestId(`${prefix}drag-delta`)).toHaveTextContent('10,30')
       expect(getByTestId(`${prefix}drag-previous`)).toHaveTextContent('10,20')
       expect(getByTestId(`${prefix}drag-velocity`)).not.toHaveTextContent(/^0$/)
-      expect(getByTestId(`${prefix}drag-vxvy`)).toHaveTextContent(`${10 / delta_t},${30 / delta_t}`)
+      expect(getByTestId(`${prefix}drag-velocities`)).toHaveTextContent(`${10 / delta_t},${30 / delta_t}`)
     })
 
     test('mouseUp should terminate the gesture', () => {
@@ -76,31 +74,31 @@ describe.each([['attached to component', Interactive, false], ['attached to node
     })
 
     test('disabling all gestures should prevent state from updating', () => {
-      rerender(<Component gesture="Drag" config={{ enabled: false }} />)
+      rerender(<Component gestures={['Drag']} config={{ enabled: false }} />)
       fireEvent.mouseDown(element)
       expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('false')
     })
 
     test('disabling the drag gesture should prevent state from updating', () => {
-      rerender(<Component gesture="Drag" config={{ drag: false }} />)
+      rerender(<Component gestures={['Drag']} config={{ drag: false }} />)
       fireEvent.mouseDown(element)
       expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('false')
     })
 
     test('restarting the gesture should book-keep local and reset delta', () => {
-      rerender(<Component gesture="Drag" />)
+      rerender(<Component gestures={['Drag']} />)
       fireEvent.mouseDown(element, { clientX: 30, clientY: 60 })
-      fireEvent.mouseMove(document, { clientX: 20, clientY: 50 })
+      fireEvent.mouseMove(document, { clientX: 20, clientY: 50, buttons: 1 })
       expect(getByTestId(`${prefix}drag-local`)).toHaveTextContent('0,20')
       expect(getByTestId(`${prefix}drag-delta`)).toHaveTextContent('-10,-10')
     })
 
     test('canceling the gesture should cancel the gesture in the next RAF tick', async () => {
-      rerender(<Component gesture="Drag" canceled />)
+      rerender(<Component gestures={['Drag']} canceled />)
       fireEvent.mouseDown(element, { clientX: 30, clientY: 60 })
       await wait(() => [
         expect(getByTestId(`${prefix}drag-canceled`)).toHaveTextContent('true'),
-        expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('false')
+        expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('false'),
       ])
     })
   }

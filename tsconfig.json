@@ -1,0 +1,17 @@
+{
+  "include": ["src", "types"],
+  "compilerOptions": {
+    "target": "es2017",
+    "moduleResolution": "node",
+    "outDir": "./dist",
+    "allowJs": true,
+    "preserveSymlinks": true,
+    "jsx": "react",
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "strict": true
+  }
+}

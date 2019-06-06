@@ -12,7 +12,7 @@
 
 # react-use-gesture
 
-![npm (tag)](https://img.shields.io/npm/v/react-use-gesture.svg) ![npm bundle size](https://img.shields.io/bundlephobia/minzip/react-use-gesture.svg) ![NPM](https://img.shields.io/npm/l/react-use-gesture.svg) [![BuildStatus](https://travis-ci.org/react-spring/react-use-gesture.svg)](https://travis-ci.org/react-spring/react-use-gesture)
+![npm (tag)](https://img.shields.io/npm/v/react-use-gesture.svg) ![npm bundle size](https://img.shields.io/bundlephobia/minzip/react-use-gesture.svg) ![NPM](https://img.shields.io/npm/l/react-use-gesture.svg) [![BuildStatus](https://travis-ci.org/react-spring/react-use-gesture.svg)](https://travis-ci.org/react-spring/react-use-gesture?branch=next)
 
 Ever thought about doing that sidebar pull-out, a view pager, some slider, any gesture on the web basically, and dropped the idea because it's too hard? In that case, this is your lib.
 
@@ -45,7 +45,7 @@ function myComponent() {
   const bind = useGesture(
     {
       onDrag: dragState => doStuffOnDrag,
-      onScroll: scrollState => doStuffOnScroll
+      onScroll: scrollState => doStuffOnScroll,
     },
     { event: { passive: false } }
   )
@@ -180,6 +180,7 @@ The following attributes are provided to the handler for all gestures.
 | `temp`                                              | `Any`      | serves as a cache storing any value returned by your handler during its previous run. See below for an example.              |
 | `cancel`                                            | `Function` | you can call `cancel` to interrupt the drag or pinch gestures. `cancel`is only relevant for `onDrag` and `onPinch` handlers. |
 | `down`                                              | `Boolean`  | mouse / touch down                                                                                                           |
+| `buttons`                                           | `Number`   | buttons pressed (see [documentation](https://developer.mozilla.org/fr/docs/Web/API/MouseEvent/button))                       |
 | `touches`                                           | `Number`   | number of touches pressing the screen                                                                                        |
 | `shiftKey`<br/>`altKey`<br/>`ctrlKey`<br/>`metaKey` | `Boolean`  | modifier keys are pressed                                                                                                    |
 | `dragging`                                          | `Boolean`  | `true` when the user is dragging                                                                                             |
@@ -220,6 +221,7 @@ Pinch is generally about scaling and rotating. The scale depends on the distance
 | `local`     | `Vec2`   | delta with book-keeping (remembers the `da` value throughout gestures)                      |
 | `lastLocal` | `Vec2`   | previous `local`                                                                            |
 | `vdva`      | `Vec2`   | momentum / speed of the gesture for distance and angle                                      |
+| `origin`    | `Number` | center between the two touch event coordinates                                              |
 | `turns`     | `Number` | keeps track of the number of turns (don't rely on `turns` to count the number of rotations) |
 
 ### `useGesture` config
@@ -254,10 +256,10 @@ const bind = useGesture({
     set({
       xy: add(delta, temp),
       immediate: active,
-      config: { velocity: scale(direction, velocity), decay: true }
+      config: { velocity: scale(direction, velocity), decay: true },
     })
     return temp
-  }
+  },
 })
 return <animated.div {...bind()} style={{ transform: xy.interpolate((x, y) => `translate3d(${x}px,${y}px,0)`) }} />
 ```
@@ -289,6 +291,6 @@ You're probably trying to access an event in `onScroll`, `onMove` or `onWheel` h
 useGesture({
   onScroll: ({ event, last }) => {
     !last && event.preventDefault() // <-- event will not be accessed in the last event
-  }
+  },
 })
 ```

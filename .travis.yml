@@ -7,4 +7,3 @@ cache:
     - /home/travis/.dts/typescript-installs/
 script:
   - 'yarn test'
-  - 'yarn dtslint'
