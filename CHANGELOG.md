@@ -1,6 +1,6 @@
 # Changelog
 
-## 5.1.0 Release
+## 5.1.1 Release
 
 **Summary:** important release introducing trackpad gestures. The library has been fully rewritten in TypeScript with some important refactoring involved.
 
