@@ -1,7 +1,7 @@
 import React from 'react'
 import { render, cleanup, fireEvent } from 'react-testing-library'
 import 'jest-dom/extend-expect'
-import { DefaultProp, ActionProp, BindProps } from './components/Api'
+import { DefaultProp, ActionProp, BindProps, GenuineHandlers } from './components/Api'
 
 afterEach(cleanup)
 
@@ -35,4 +35,15 @@ test('bind should dispatch its arguments', () => {
   expect(getByTestId('drag-args')).toHaveTextContent('args1')
   fireEvent.mouseUp(firstElement)
   expect(getByTestId('drag-args')).toHaveTextContent('args1')
+})
+
+test('Genuine handlers should correctly execute', () => {
+  const { getByTestId } = render(<GenuineHandlers />)
+  const element = getByTestId('drag-el')
+  fireEvent.mouseDown(element)
+  expect(getByTestId('drag-active')).toHaveTextContent('true')
+  expect(getByTestId('mouseDown')).toHaveTextContent('mouse down')
+
+  fireEvent.click(element)
+  expect(getByTestId('click')).toHaveTextContent(/^clicked$/)
 })

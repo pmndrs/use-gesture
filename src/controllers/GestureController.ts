@@ -8,9 +8,9 @@ import {
   GestureKey,
   FullGestureState,
 } from '../../types/states.d'
-import { Fn, AtLeastOneOf } from '../../types/common.d'
+import { Fn } from '../../types/common.d'
 import { ReactEventHandlerKey, GestureFlag, ReactEventHandlers } from '../../types/events.d'
-import { GestureHandlers, Handler, HandlerKey } from '../../types/web.d'
+import { GestureHandlers, Handler, HandlerKey, GestureHandlersPartial } from '../../types/web.d'
 import { GestureConfig } from '../../types/config.d'
 
 import { defaultConfig, initialState, mappedKeys } from '../defaults'
@@ -29,7 +29,7 @@ import DistanceAngleRecognizer from '../recognizers/DistanceAngleRecognizer'
 
 type GestureTimeouts = Partial<{ [stateKey in StateKey]: number }>
 type WindowListeners = Partial<{ [stateKey in StateKey]: [string, Fn][] }>
-type Bindings = Partial<{ [eventName in ReactEventHandlerKey]: Fn[] }>
+type Bindings = Partial<{ [eventName in ReactEventHandlerKey]: Fn[] | Fn }>
 
 /**
  * Gesture controller will create gesture recognizers (which handle the gesture logic)
@@ -38,7 +38,7 @@ type Bindings = Partial<{ [eventName in ReactEventHandlerKey]: Fn[] }>
  * @template BinderType the type the bind function should return
  */
 export default class GestureController<BinderType extends ReactEventHandlers | Fn> {
-  public handlers!: AtLeastOneOf<GestureHandlers> // keeping track of the handlers set in useGesture
+  public handlers!: GestureHandlersPartial // keeping track of the handlers set in useGesture
   public config!: GestureConfig // keeping track of the config set in useGesture
   public state: StateObject = initialState // state for all gestures
   public timeouts: GestureTimeouts = {} // keeping track of timeouts for debounced gestures (such as move, scroll, wheel)
@@ -46,7 +46,7 @@ export default class GestureController<BinderType extends ReactEventHandlers | F
   private domListeners: [string, Fn][] = [] // when config.domTarget is set, we attach events directly to the dom
   private windowListeners: WindowListeners = {} // keeps track of window listeners added by gestures (drag only at the moment)
 
-  constructor(handlers: AtLeastOneOf<GestureHandlers> | Handler<Coordinates>, config?: Partial<GestureConfig>) {
+  constructor(handlers: GestureHandlersPartial | Handler<Coordinates>, config?: Partial<GestureConfig>) {
     this.setHandlersAndConfig(handlers, config)
   }
 
@@ -54,10 +54,11 @@ export default class GestureController<BinderType extends ReactEventHandlers | F
    * Set handlers and config of gesture controller
    * Should be called every time handlers and config change in useGesture
    */
-  public setHandlersAndConfig = (handlers: AtLeastOneOf<GestureHandlers> | Handler<Coordinates>, config?: Partial<GestureConfig>) => {
-    if (typeof handlers === 'function') handlers = { onDrag: handlers } as GestureHandlers
+  public setHandlersAndConfig = (handlers: GestureHandlersPartial | Handler<Coordinates>, config?: Partial<GestureConfig>) => {
+    if (typeof handlers === 'function') handlers = { onDrag: handlers } as GestureHandlersPartial
     else if (handlers.onAction) {
       handlers.onDrag = handlers.onAction
+      delete handlers.onAction
     }
     this.config = { ...defaultConfig, ...config }
     const { domTarget } = this.config
@@ -222,8 +223,9 @@ export default class GestureController<BinderType extends ReactEventHandlers | F
     const captureString = this.config.event.capture ? 'Capture' : ''
 
     Object.entries(this.bindings).forEach(([event, fns]) => {
+      const fnsArray = Array.isArray(fns) ? fns : [fns]
       const key = (event + captureString) as ReactEventHandlerKey
-      output[key] = chainFns(...(<Fn[]>fns))
+      output[key] = chainFns(...(<Fn[]>fnsArray))
     })
 
     return output
@@ -244,23 +246,38 @@ export default class GestureController<BinderType extends ReactEventHandlers | F
 
     const { domTarget } = this.config
 
+    const genuineHandlers = { ...this.handlers }
+
     // cleaning before adding
     this.cleanOnBind()
 
     if (actions.has('onDrag')) {
       this.addRecognizer(new DragRecognizer(this, args))
+      delete genuineHandlers.onDrag
+      delete genuineHandlers.onDragStart
+      delete genuineHandlers.onDragEnd
     }
     if (actions.has('onScroll')) {
       this.addRecognizer(new ScrollRecognizer(this, args))
+      delete genuineHandlers.onScroll
+      delete genuineHandlers.onScrollStart
+      delete genuineHandlers.onScrollEnd
     }
     if (actions.has('onWheel')) {
       this.addRecognizer(new WheelRecognizer(this, args))
+      delete genuineHandlers.onWheel
+      delete genuineHandlers.onWheelStart
+      delete genuineHandlers.onWheelEnd
     }
     if (actions.has('onMove')) {
       this.addRecognizer(new MoveRecognizer(this, args))
+      delete genuineHandlers.onMove
+      delete genuineHandlers.onMoveStart
+      delete genuineHandlers.onMoveEnd
     }
     if (actions.has('onHover')) {
       this.addRecognizer(new HoverRecognizer(this, args))
+      delete genuineHandlers.onHover
     }
     if (actions.has('onPinch')) {
       // since react doesn't have handlers for gesture events we can only use them
@@ -271,7 +288,16 @@ export default class GestureController<BinderType extends ReactEventHandlers | F
         this.addRecognizer(new PinchRecognizer(this, args))
         this.addRecognizer(new PinchWheelRecognizer(this, args))
       }
+      delete genuineHandlers.onPinch
+      delete genuineHandlers.onPinchStart
+      delete genuineHandlers.onPinchEnd
     }
+
+    // we also add event bindings for genuine handlers
+    Object.entries(genuineHandlers).map(([event, fn]) => {
+      // we're cheating when it comes to event type :(
+      this.addEventBindings([<ReactEventHandlerKey>event, <Fn>fn])
+    })
 
     // if config.domTarget is set we add event listeners to it and return the clean function
     if (domTarget) {

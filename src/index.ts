@@ -1,9 +1,9 @@
 import React from 'react'
 import GestureController from './controllers/GestureController'
-import { GestureHandlers, Handler } from '../types/web.d'
+import { Handler, GestureHandlersPartial } from '../types/web.d'
 import { GestureConfig } from '../types/config.d'
 import { ReactEventHandlers } from '../types/events.d'
-import { Fn, AtLeastOneOf } from '../types/common.d'
+import { Fn } from '../types/common.d'
 import { Coordinates } from '../types/states.d'
 
 type GetBinderTypeFromDomTarget<T extends Partial<GestureConfig>> = T['domTarget'] extends object ? Fn : ReactEventHandlers
@@ -21,7 +21,7 @@ type GetBinderTypeFromDomTarget<T extends Partial<GestureConfig>> = T['domTarget
  */
 
 export function useGesture<Config extends Partial<GestureConfig>>(
-  handlers: AtLeastOneOf<GestureHandlers> | Handler<Coordinates>,
+  handlers: GestureHandlersPartial | Handler<Coordinates>,
   config?: Config
 ): (...args: any[]) => GetBinderTypeFromDomTarget<Config> {
   // the gesture controller will keep track of all gesture states

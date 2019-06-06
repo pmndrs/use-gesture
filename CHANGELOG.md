@@ -10,6 +10,7 @@
 2. Support for zoom on trackpad for Chrome and Firefox.
 3. Added `buttons` attribute to pointer-related gesture state.
 4. Added `origin` attribute to pinch gesture.
+5. Accepts support for genuine element handlers (such as `onMouseDown`) to prevent overriding when passing the prop directly to the bound component.
 
 ### Fixed
 

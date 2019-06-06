@@ -1,4 +1,6 @@
 import { DistanceAngle, FullGestureState, Coordinates } from './states'
+import { AtLeastOneOf } from './common'
+import { DOMAttributes, ReactEventHandler } from 'react'
 
 export type Handler<T extends Coordinates | DistanceAngle> = (state: FullGestureState<T>) => any
 export type HandlerKey = 'onDrag' | 'onPinch' | 'onMove' | 'onHover' | 'onScroll' | 'onWheel'
@@ -22,3 +24,6 @@ export type GestureHandlers = {
   onPinchStart: Handler<DistanceAngle>
   onPinchEnd: Handler<DistanceAngle>
 }
+
+/* Handlers should also accept DomAttributes to prevent overrides */
+export type GestureHandlersPartial = AtLeastOneOf<GestureHandlers> & Partial<Omit<DOMAttributes<Element>, keyof GestureHandlers>>

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { ReactChild } from 'react'
 import { GestureKey } from '../../../types/states.d'
 import { Fn, TransformType, AtLeastOneOf } from '../../../types/common.d'
 import { GestureHandlers } from '../../../types/web.d'
@@ -54,7 +54,8 @@ export const Common = React.forwardRef(
       state,
       startFired = 0,
       endFired = 0,
-    }: { listeners?: object; testKey: string; state: object; startFired?: number; endFired?: number },
+      children,
+    }: { listeners?: object; testKey: string; state: object; startFired?: number; endFired?: number; children?: ReactChild | ReactChild[] },
     ref
   ) => {
     return (
@@ -66,6 +67,7 @@ export const Common = React.forwardRef(
             {v !== undefined ? v.toString() : 'undefined'}
           </div>
         ))}
+        {children}
       </div>
     )
   }
