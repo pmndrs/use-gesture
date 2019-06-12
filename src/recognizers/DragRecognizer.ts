@@ -1,12 +1,12 @@
 import CoordinatesRecognizer from './CoordinatesRecognizer'
 import { noop, getPointerEventData } from '../utils'
 import GestureController from '../controllers/GestureController'
-import { TransformedEvent, GestureFlag, ReactEventHandlerKey, ReactEventHandlers } from '../../types/events.d'
+import { TransformedEvent, GestureFlag, ReactEventHandlerKey } from '../../types/events.d'
 import { Fn } from '../../types/common.d'
 import { genericEndState } from '../defaults'
 
 export default class DragRecognizer extends CoordinatesRecognizer {
-  constructor(controller: GestureController<ReactEventHandlers | Fn>, args: any[]) {
+  constructor(controller: GestureController, args: any[]) {
     super('drag', controller, args)
   }
 

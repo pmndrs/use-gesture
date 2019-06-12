@@ -1,7 +1,6 @@
 import React, { ReactChild } from 'react'
-import { GestureKey } from '../../../types/states.d'
-import { Fn, TransformType, AtLeastOneOf } from '../../../types/common.d'
-import { GestureHandlers } from '../../../types/web.d'
+import { Fn, TransformType } from '../../../types/common.d'
+import { GestureHandlersPartial } from '../../../types/web.d'
 
 export const createHandlers = ({
   gestures,
@@ -10,39 +9,50 @@ export const createHandlers = ({
   set,
   setStartEnd,
 }: {
-  gestures: GestureKey[]
+  gestures: string[]
   tempArg: any[]
   canceled: boolean
   set: Fn
   setStartEnd: React.Dispatch<React.SetStateAction<[number, number]>>
-}): AtLeastOneOf<GestureHandlers> => {
+}): GestureHandlersPartial => {
   return gestures.reduce(
-    (acc: AtLeastOneOf<GestureHandlers>, g) => ({
-      ...acc,
-      [`on${g}Start`]: () => void setStartEnd(([startFired, endFired]) => [startFired + 1, endFired]),
-      [`on${g}End`]: () => void setStartEnd(([, endFired]) => [0, endFired + 1]),
-      [`on${g}`]: ({
-        event,
-        transform,
-        cancel,
-        currentTarget,
-        temp = tempArg,
-        ...rest
-      }: {
-        event: Event
-        transform: TransformType
-        cancel: Fn
-        currentTarget: EventTarget
-        temp: any[]
-      }) => {
-        set({ ...rest, temp })
-        if (canceled) {
-          cancel()
+    (acc: GestureHandlersPartial, g) => {
+      const gesture = {
+        [`on${g}`]: ({
+          event,
+          transform,
+          cancel,
+          currentTarget,
+          temp = tempArg,
+          ...rest
+        }: {
+          event: Event
+          transform: TransformType
+          cancel: Fn
+          currentTarget: EventTarget
+          temp: any
+        }) => {
+          set({ ...rest, temp })
+          if (canceled) {
+            cancel()
+          }
+          return temp
+        },
+      }
+      if (g !== 'Hover') {
+        gesture[`on${g}Start`] = () => {
+          setStartEnd(([startFired, endFired]) => [startFired + 1, endFired])
         }
-        return temp
-      },
-    }),
-    {} as GestureHandlers
+        gesture[`on${g}End`] = () => {
+          setStartEnd(([, endFired]) => [0, endFired + 1])
+        }
+      }
+      return {
+        ...acc,
+        ...gesture,
+      }
+    },
+    {} as GestureHandlersPartial
   )
 }
 

@@ -2,11 +2,9 @@ import React from 'react'
 import GestureController from './controllers/GestureController'
 import { Handler, GestureHandlersPartial } from '../types/web.d'
 import { GestureConfig } from '../types/config.d'
-import { ReactEventHandlers } from '../types/events.d'
-import { Fn } from '../types/common.d'
 import { Coordinates } from '../types/states.d'
-
-type GetBinderTypeFromDomTarget<T extends Partial<GestureConfig>> = T['domTarget'] extends object ? Fn : ReactEventHandlers
+import { Fn } from '../types/common'
+import { ReactEventHandlers } from '../types/events'
 
 /** API
  * Default Drag:
@@ -23,13 +21,13 @@ type GetBinderTypeFromDomTarget<T extends Partial<GestureConfig>> = T['domTarget
 export function useGesture<Config extends Partial<GestureConfig>>(
   handlers: GestureHandlersPartial | Handler<Coordinates>,
   config?: Config
-): (...args: any[]) => GetBinderTypeFromDomTarget<Config> {
+): (...args: any[]) => Fn | ReactEventHandlers {
   // the gesture controller will keep track of all gesture states
-  const gestureController = React.useRef<GestureController<GetBinderTypeFromDomTarget<Config>>>()
+  const gestureController = React.useRef<GestureController>()
 
   if (!gestureController.current) {
     // we initialize the gesture controller once
-    gestureController.current = new GestureController<GetBinderTypeFromDomTarget<Config>>(handlers, config)
+    gestureController.current = new GestureController(handlers, config)
   }
 
   React.useEffect(() => {

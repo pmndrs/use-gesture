@@ -35,10 +35,3 @@ export default [
     plugins: [babel(getBabelOptions({ useESModules: false })), resolve({ extensions })],
   },
 ]
-
-// export default {
-//   input: './src/index',
-//   output: [{ file: pkg.main, format: 'cjs' }, { file: pkg.module, format: 'es' }],
-//   external: [...Object.keys(pkg.dependencies || {}), ...Object.keys(pkg.peerDependencies || {})],
-//   plugins: [babel()]
-// }

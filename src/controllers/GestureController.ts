@@ -37,7 +37,7 @@ type Bindings = Partial<{ [eventName in ReactEventHandlerKey]: Fn[] | Fn }>
  *
  * @template BinderType the type the bind function should return
  */
-export default class GestureController<BinderType extends ReactEventHandlers | Fn> {
+export default class GestureController {
   public handlers!: GestureHandlersPartial // keeping track of the handlers set in useGesture
   public config!: GestureConfig // keeping track of the config set in useGesture
   public state: StateObject = initialState // state for all gestures
@@ -231,7 +231,7 @@ export default class GestureController<BinderType extends ReactEventHandlers | F
     return output
   }
 
-  public bind = (...args: any[]): BinderType => {
+  public bind = (...args: any[]): Fn | ReactEventHandlers => {
     // if handlers contains {onDragStart, onDrag, onDragEnd, onMoveStart, onMove}
     // actions will skip on[Gesture]["Start"|"End"] functions and include
     // ['onDrag', 'onMove']
@@ -302,10 +302,10 @@ export default class GestureController<BinderType extends ReactEventHandlers | F
     // if config.domTarget is set we add event listeners to it and return the clean function
     if (domTarget) {
       this.addDomTargetListeners()
-      return this.clean as BinderType
+      return this.clean as Fn
     }
 
     // if not, we return an object that contains gesture handlers mapped to react handler event keys
-    return this.getBindings() as BinderType
+    return this.getBindings() as ReactEventHandlers
   }
 }

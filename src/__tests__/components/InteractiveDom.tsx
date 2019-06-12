@@ -24,7 +24,7 @@ const InteractiveDom = ({
   const [[startFired, endFired], setStartEnd] = React.useState([0, 0])
 
   const bind = useGesture(createHandlers({ gestures, tempArg, set, setStartEnd, canceled }), { ...config, domTarget })
-  React.useEffect(bind, [bind])
+  React.useEffect(bind as Fn, [bind])
 
   const testKey = 'dom-' + gestures.join('').toLowerCase()
 

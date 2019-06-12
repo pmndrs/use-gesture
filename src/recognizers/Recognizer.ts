@@ -2,7 +2,7 @@ import { initialState, mappedKeys } from '../defaults'
 import GestureController from '../controllers/GestureController'
 import { Coordinates, DistanceAngle, StateKey, GestureState, GestureKey, SharedGestureState } from '../../types/states.d'
 import { Fn, Vector2, TransformType } from '../../types/common.d'
-import { ReactEventHandlerKey, GestureFlag, TransformedEvent, ReactEventHandlers } from '../../types/events.d'
+import { ReactEventHandlerKey, GestureFlag, TransformedEvent } from '../../types/events.d'
 
 /**
  * Recognizer abstract class
@@ -19,7 +19,7 @@ export default abstract class Recognizer<GestureType extends Coordinates | Dista
    */
   constructor(
     protected readonly gestureKey: GestureKey,
-    protected readonly controller: GestureController<ReactEventHandlers | Fn>,
+    protected readonly controller: GestureController,
     protected readonly args: any[] = []
   ) {
     // mapping this.stateKey to the state key the gesture handles

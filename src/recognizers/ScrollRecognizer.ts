@@ -1,12 +1,12 @@
 import CoordinatesRecognizer from './CoordinatesRecognizer'
 import { getScrollEventData } from '../utils'
 import GestureController from '../controllers/GestureController'
-import { TransformedEvent, GestureFlag, ReactEventHandlerKey, ReactEventHandlers } from '../../types/events.d'
+import { TransformedEvent, GestureFlag, ReactEventHandlerKey } from '../../types/events.d'
 import { genericEndState } from '../defaults'
 import { Fn } from '../../types/common.d'
 
 export default class ScrollRecognizer extends CoordinatesRecognizer {
-  constructor(controller: GestureController<ReactEventHandlers | Fn>, args: any[]) {
+  constructor(controller: GestureController, args: any[]) {
     super('scroll', controller, args)
   }
 
