@@ -1,5 +1,15 @@
 # Changelog
 
+## 5.1.2 Release
+
+**Summary:** Minor release fixing TypeScript export.
+
+### Fixed
+
+1. `import { useGesture } from 'react-use-gesture'` should now be functional
+
+## ~~5.1.0 Release~~ (do not use)
+
 ## 5.1.1 Release
 
 **Summary:** important release introducing trackpad gestures. The library has been fully rewritten in TypeScript with some important refactoring involved.
