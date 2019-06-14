@@ -44,8 +44,8 @@ Hooks allow gestures to be re-used for more than one view (you can use the same 
 function myComponent() {
   const bind = useGesture(
     {
-      onDrag: dragState => doStuffOnDrag,
-      onScroll: scrollState => doStuffOnScroll,
+      onDrag: dragState => { /* do stuff on drag */ },
+      onScroll: scrollState => { /* do stuff on scroll */ },
     },
     { event: { passive: false } }
   )
