@@ -1,3 +1,4 @@
+import { WheelEvent } from 'react'
 import DistanceAngleRecognizer from './DistanceAngleRecognizer'
 import { getWheelEventData } from '../utils'
 import GestureController from '../controllers/GestureController'

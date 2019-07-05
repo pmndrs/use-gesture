@@ -1,3 +1,4 @@
+import { WheelEvent } from 'react'
 import CoordinatesRecognizer from './CoordinatesRecognizer'
 import { addV, getWheelEventData } from '../utils'
 import GestureController from '../controllers/GestureController'

@@ -1,4 +1,16 @@
-import { MouseEventHandler, PointerEventHandler, UIEventHandler, WheelEventHandler, TouchEventHandler } from 'react'
+import {
+  MouseEventHandler,
+  PointerEventHandler,
+  UIEventHandler,
+  WheelEventHandler,
+  TouchEventHandler,
+  SyntheticEvent,
+  MouseEvent,
+  TouchEvent,
+  WheelEvent,
+  PointerEvent,
+} from 'react'
+
 import { TransformType, Fn } from './common.d'
 
 export enum GestureFlag {
@@ -8,7 +20,7 @@ export enum GestureFlag {
 }
 
 export type GestureEvent = PointerEvent & { scale: number; rotation: number }
-export type TransformedEvent<T extends Event = MouseEvent | TouchEvent | WheelEvent | PointerEvent | GestureEvent> = T & {
+export type TransformedEvent<T extends SyntheticEvent = MouseEvent | TouchEvent | WheelEvent | PointerEvent | GestureEvent> = T & {
   transform?: TransformType
 }
 

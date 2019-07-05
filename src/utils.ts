@@ -1,3 +1,4 @@
+import { MouseEvent, TouchEvent, WheelEvent, PointerEvent } from 'react'
 import { Fn, Vector2 } from '../types/common.d'
 import { EventOptions } from '../types/config.d'
 import { Coordinates, FullGestureState, DistanceAngle } from '../types/states.d'
