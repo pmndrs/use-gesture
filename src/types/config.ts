@@ -1,4 +1,4 @@
-import { DomTargetRef, TransformType } from './common.d'
+import { TransformType } from './common'
 import React from 'react'
 
 export type EventOptions = { capture: boolean; passive: boolean }

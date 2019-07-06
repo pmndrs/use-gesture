@@ -1,8 +1,8 @@
 import Recognizer from './Recognizer'
 import { addV, subV, calculateAllKinematics } from '../utils'
-import { Vector2, TransformType } from '../../types/common.d'
-import { TransformedEvent } from '../../types/events.d'
-import { GestureState, Coordinates } from '../../types/states.d'
+import { Vector2, TransformType } from '../types/common'
+import { TransformedEvent } from '../types/events'
+import { GestureState, Coordinates } from '../types/states'
 
 /**
  * Abstract class for coordinates-based gesture recongizers

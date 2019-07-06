@@ -1,5 +1,5 @@
-import { Vector2, TransformType, Omit } from './common.d'
-import { TransformedEvent } from './events.d'
+import { Vector2, TransformType } from './common'
+import { TransformedEvent } from './events'
 
 export type GestureKey = 'drag' | 'pinch' | 'move' | 'scroll' | 'wheel' | 'hover'
 export type StateKey = Exclude<GestureKey, 'hover'>

@@ -7,11 +7,11 @@ import {
   SharedGestureState,
   GestureKey,
   FullGestureState,
-} from '../../types/states.d'
-import { Fn } from '../../types/common.d'
-import { ReactEventHandlerKey, GestureFlag, ReactEventHandlers } from '../../types/events.d'
-import { GestureHandlers, Handler, HandlerKey, GestureHandlersPartial } from '../../types/web.d'
-import { GestureConfig } from '../../types/config.d'
+} from '../types/states'
+import { Fn } from '../types/common'
+import { ReactEventHandlerKey, GestureFlag, ReactEventHandlers } from '../types/events'
+import { GestureHandlers, Handler, HandlerKey, GestureHandlersPartial } from '../types/'
+import { GestureConfig } from '../types/config'
 
 import { defaultConfig, initialState, mappedKeys } from '../defaults'
 import { addListeners, removeListeners, supportsGestureEvent, chainFns } from '../utils'
@@ -240,7 +240,7 @@ export default class GestureController {
         .filter(k => k.indexOf('on') === 0)
         .map(k => {
           const match = k.match(/(on[A-Z][a-z]+)/)
-          if (match) return <HandlerKey>match[1]
+          return match ? <HandlerKey>match[1] : undefined
         })
     )
 

@@ -1,6 +1,6 @@
 import { DistanceAngle, FullGestureState, Coordinates } from './states'
 import { AtLeastOneOf, Fn, Omit } from './common'
-import { DOMAttributes, ReactEventHandler } from 'react'
+import { DOMAttributes } from 'react'
 import { GestureConfig } from './config'
 import { ReactEventHandlers } from './events'
 
@@ -32,13 +32,3 @@ export type GestureHandlersPartial = AtLeastOneOf<GestureHandlers> &
   Partial<Omit<DOMAttributes<Element>, 'onDrag' | 'onScroll' | 'onWheel'>>
 
 export type GetBinderTypeFromDomTarget<T extends Partial<GestureConfig>> = T['domTarget'] extends object ? Fn : ReactEventHandlers
-
-export function useGesture<Config extends Partial<GestureConfig>>(
-  handlers: GestureHandlersPartial,
-  config?: Config
-): (...args: any[]) => GetBinderTypeFromDomTarget<Config>
-
-export function useGesture<Config extends Partial<GestureConfig>>(
-  handlers: Handler<Coordinates>,
-  config?: Config
-): (...args: any[]) => GetBinderTypeFromDomTarget<Config>

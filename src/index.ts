@@ -1,10 +1,10 @@
 import React from 'react'
 import GestureController from './controllers/GestureController'
-import { Handler, GestureHandlersPartial } from '../types/web.d'
-import { GestureConfig } from '../types/config.d'
-import { Coordinates } from '../types/states.d'
-import { Fn } from '../types/common'
-import { ReactEventHandlers } from '../types/events'
+import { Handler, GestureHandlersPartial } from './types/'
+import { GestureConfig } from './types/config'
+import { Coordinates } from './types/states'
+import { Fn } from './types/common'
+import { ReactEventHandlers } from './types/events'
 
 /** API
  * Default Drag:
@@ -18,10 +18,12 @@ import { ReactEventHandlers } from '../types/events'
  * React.useEffect(bind, [bind])
  */
 
+type GetBinderTypeFromDomTarget<T extends Partial<GestureConfig>> = T['domTarget'] extends object ? Fn : ReactEventHandlers
+
 export function useGesture<Config extends Partial<GestureConfig>>(
   handlers: GestureHandlersPartial | Handler<Coordinates>,
   config?: Config
-): (...args: any[]) => Fn | ReactEventHandlers {
+): (...args: any[]) => GetBinderTypeFromDomTarget<Config> {
   // the gesture controller will keep track of all gesture states
   const gestureController = React.useRef<GestureController>()
 
@@ -41,5 +43,5 @@ export function useGesture<Config extends Partial<GestureConfig>>(
 
   // we return the bind function of our controller, which returns an binding object or
   // a cleaning function depending on whether config.domTarget is set
-  return gestureController.current.bind
+  return gestureController.current.bind as (...args: any[]) => GetBinderTypeFromDomTarget<Config>
 }

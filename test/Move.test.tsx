@@ -3,16 +3,18 @@ import { render, cleanup, fireEvent, createEvent, wait } from 'react-testing-lib
 import 'jest-dom/extend-expect'
 import Interactive from './components/Interactive'
 import InteractiveDom from './components/InteractiveDom'
+import { InteractiveType } from './components/types'
 
 afterAll(cleanup)
 
 describe.each([['attached to component', Interactive, false], ['attached to node', InteractiveDom, true]])(
   'testing onMove %s)',
-  (testName, Component, domTarget) => {
+  (_testName, C, domTarget) => {
+    const Component = C as InteractiveType
     const prefix = domTarget ? 'dom-' : ''
     const { getByTestId, rerender } = render(<Component gestures={['Move']} tempArg="temp" />)
     const element = getByTestId(`${prefix}move-el`)
-    let delta_t
+    let delta_t: number
 
     test('mouseMove should initiate the gesture', () => {
       const event = createEvent.mouseMove(element, { clientX: 20, clientY: 50 })

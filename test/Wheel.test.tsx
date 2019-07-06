@@ -3,17 +3,19 @@ import { render, cleanup, fireEvent, createEvent, wait } from 'react-testing-lib
 import 'jest-dom/extend-expect'
 import Interactive from './components/Interactive'
 import InteractiveDom from './components/InteractiveDom'
+import { InteractiveType } from './components/types'
 
 afterAll(cleanup)
 
 describe.each([['attached to component', Interactive, false], ['attached to node', InteractiveDom, true]])(
   'testing onWheel %s)',
-  (testName, Component, domTarget) => {
+  (_testName, C, domTarget) => {
+    const Component = C as InteractiveType
     const prefix = domTarget ? 'dom-' : ''
     const { getByTestId, rerender } = render(<Component gestures={['Wheel']} tempArg="temp" />)
     const element = getByTestId(`${prefix}wheel-el`)
 
-    let delta_t
+    let delta_t: number
 
     test('wheel event should initiate the gesture', () => {
       const event = createEvent.wheel(element, { deltaX: 1, deltaY: -1 })

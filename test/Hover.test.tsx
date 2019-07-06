@@ -2,6 +2,7 @@ import React from 'react'
 import { render, cleanup, fireEvent } from 'react-testing-library'
 import 'jest-dom/extend-expect'
 import Interactive from './components/Interactive'
+import { InteractiveType } from './components/types'
 // import InteractiveDom from './components/InteractiveDom'
 
 afterAll(cleanup)
@@ -12,7 +13,8 @@ afterAll(cleanup)
 describe.each([
   ['attached to component', Interactive, false],
   // ['attached to node', InteractiveDom, true]
-])('testing onHover %s)', (testName, Component, domTarget) => {
+])('testing onHover %s)', (_testName, C, domTarget) => {
+  const Component = C as InteractiveType
   const prefix = domTarget ? 'dom-' : ''
   const { getByTestId, rerender } = render(<Component gestures={['Hover']} />)
   const element = getByTestId(`${prefix}hover-el`)

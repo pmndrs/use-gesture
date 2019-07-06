@@ -1,24 +1,9 @@
 import React from 'react'
 import { Common, createHandlers } from './Common'
-import { useGesture } from '../../index'
-import { GestureKey } from '../../../types/states.d'
-import { Fn } from '../../../types/common.d'
-import { GestureConfig } from '../../../types/config.d'
+import { useGesture } from '../../src/index'
+import { InteractiveType } from './types'
 
-const Interactive = ({
-  bindArgs = [],
-  gestures,
-  canceled,
-  tempArg,
-  config,
-}: {
-  bindArgs: any[]
-  gestures: GestureKey[]
-  cancel: Fn
-  canceled: boolean
-  tempArg: any[]
-  config?: Partial<GestureConfig>
-}) => {
+const Interactive: InteractiveType = ({ bindArgs = [], gestures, canceled, tempArg, config }) => {
   const [state, set] = React.useState({})
   const [[startFired, endFired], setStartEnd] = React.useState([0, 0])
 

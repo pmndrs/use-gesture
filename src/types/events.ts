@@ -11,7 +11,7 @@ import {
   PointerEvent,
 } from 'react'
 
-import { TransformType, Fn } from './common.d'
+import { TransformType, Fn } from './common'
 
 export enum GestureFlag {
   OnStart = 'start',

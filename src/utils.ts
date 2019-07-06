@@ -1,8 +1,8 @@
 import { MouseEvent, TouchEvent, WheelEvent, PointerEvent } from 'react'
-import { Fn, Vector2 } from '../types/common.d'
-import { EventOptions } from '../types/config.d'
-import { Coordinates, FullGestureState, DistanceAngle } from '../types/states.d'
-import { TransformedEvent } from '../types/events.d'
+import { Fn, Vector2 } from './types/common'
+import { EventOptions } from './types/config'
+import { Coordinates, FullGestureState, DistanceAngle } from './types/states'
+import { TransformedEvent } from './types/events'
 
 // blank function
 export const noop = () => {}

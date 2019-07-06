@@ -3,6 +3,7 @@ import { render, cleanup, fireEvent, createEvent, wait } from 'react-testing-lib
 import 'jest-dom/extend-expect'
 import Interactive from './components/Interactive'
 import InteractiveDom from './components/InteractiveDom'
+import { InteractiveType } from './components/types'
 
 afterAll(cleanup)
 
@@ -10,11 +11,12 @@ afterAll(cleanup)
 
 describe.each([['attached to component', Interactive, false], ['attached to node', InteractiveDom, true]])(
   'testing onPinch %s)',
-  (testName, Component, domTarget) => {
+  (_testName, C, domTarget) => {
+    const Component = C as InteractiveType
     const prefix = domTarget ? 'dom-' : ''
     const { getByTestId, queryByTestId, rerender } = render(<Component gestures={['Pinch']} tempArg="temp" />)
     const element = getByTestId(`${prefix}pinch-el`)
-    let delta_t
+    let delta_t: number
 
     test('one-finger touch should NOT initiate the gesture', () => {
       fireEvent.touchStart(element)

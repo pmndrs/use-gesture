@@ -1,5 +1,5 @@
 import React from 'react'
-import { useGesture } from '../../index'
+import { useGesture } from '../../src/index'
 import { Common } from './Common'
 
 export const DefaultProp = () => {
@@ -9,14 +9,21 @@ export const DefaultProp = () => {
   return <Common listeners={{ ...bind() }} state={state} testKey="drag" />
 }
 
-export const ActionProp = () => {
+export const ActionProp: React.FunctionComponent = () => {
   const [state, set] = React.useState({})
-  const bind = useGesture({ onAction: ({ event, transform, cancel, currentTarget, ...rest }) => void set(rest) })
+  const bind = useGesture({
+    onAction: ({ event, transform, cancel, currentTarget, ...rest }) => void set(rest),
+  })
 
   return <Common listeners={{ ...bind() }} state={state} testKey="drag" />
 }
 
-export const BindProps = ({ args1 = [], args2 = [] }) => {
+interface Props {
+  args1: any[]
+  args2: any[]
+}
+
+export const BindProps: React.FunctionComponent<Props> = ({ args1 = [], args2 = [] }) => {
   const [state, set] = React.useState({})
   const bind = useGesture(({ event, transform, cancel, currentTarget, ...rest }) => void set(rest))
 
@@ -28,7 +35,7 @@ export const BindProps = ({ args1 = [], args2 = [] }) => {
   )
 }
 
-export const GenuineHandlers = () => {
+export const GenuineHandlers: React.FunctionComponent = () => {
   const [state, set] = React.useState({})
   const [state2, set2] = React.useState('mouse not down')
   const [state3, set3] = React.useState('not clicked')
