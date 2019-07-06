@@ -11,7 +11,8 @@
   "scripts": {
     "start": "tsdx watch",
     "build": "tsdx build",
-    "test": "tsdx test --env=jsdom --watchAll"
+    "test": "tsdx test --env=jsdom",
+    "test:watch": "tsdx test --env=jsdom --watchAll"
   },
   "peerDependencies": {
     "react": ">= 16.8.0"
