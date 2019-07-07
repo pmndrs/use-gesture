@@ -1,8 +1,6 @@
 import Recognizer from './Recognizer'
 import { addV, calculateVelocities } from '../utils'
-import { DistanceAngle, GestureState } from '../types/states'
-import { Vector2 } from '../types/common'
-import { TransformedEvent } from '../types/events'
+import { DistanceAngle, GestureState, Vector2, TransformedEvent } from '../types'
 
 /**
  * Abstract class for distance/angle-based gesture recongizers

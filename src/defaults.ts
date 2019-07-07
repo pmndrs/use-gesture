@@ -1,7 +1,5 @@
 import { noop } from './utils'
-import { GestureConfig } from './types/config'
-import { CommonGestureState, Coordinates, DistanceAngle, StateObject, StateKey, GestureKey } from './types/states'
-import { HandlerKey } from './types/'
+import { GestureConfig, HandlerKey, CommonGestureState, Coordinates, DistanceAngle, StateObject, StateKey, GestureKey } from './types'
 
 type MappedKeys = { [K in GestureKey]: { stateKey: StateKey; handlerKey: HandlerKey } }
 

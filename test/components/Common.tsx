@@ -1,6 +1,6 @@
 import React, { ReactChild } from 'react'
-import { Fn, TransformType } from '../../src/types/common'
-import { GestureHandlersPartial } from '../../src/types/'
+import { Fn, TransformType } from '../../src/types'
+import { GestureHandlersPartial } from '../../src/types'
 
 export const createHandlers = ({
   gestures,

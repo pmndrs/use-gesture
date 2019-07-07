@@ -1,6 +1,5 @@
 import React from 'react'
-import { Fn } from '../../src/types/common'
-import { GestureConfig } from '../../src/types/config'
+import { Fn, GestureConfig } from '../../src/types'
 
 interface Props {
   bindArgs?: any[]

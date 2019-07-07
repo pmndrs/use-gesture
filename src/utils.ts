@@ -1,8 +1,5 @@
-import { MouseEvent, TouchEvent, WheelEvent, PointerEvent } from 'react'
-import { Fn, Vector2 } from './types/common'
-import { EventOptions } from './types/config'
-import { Coordinates, FullGestureState, DistanceAngle } from './types/states'
-import { TransformedEvent } from './types/events'
+import React from 'react'
+import { Fn, Vector2, EventOptions, Coordinates, FullGestureState, DistanceAngle, TransformedEvent } from './types'
 
 // blank function
 export const noop = () => {}
@@ -61,7 +58,7 @@ type WheelEventData = Pick<FullGestureState<Coordinates>, 'values'> & ModifierKe
  * @param event
  * @returns wheel event data
  */
-export function getWheelEventData(event: TransformedEvent<WheelEvent>): WheelEventData {
+export function getWheelEventData(event: TransformedEvent<React.WheelEvent>): WheelEventData {
   const { deltaX, deltaY } = event
   //TODO implement polyfill ?
   // https://developer.mozilla.org/en-US/docs/Web/Events/wheel#Polyfill
@@ -74,7 +71,7 @@ type PointerEventData = Pick<FullGestureState<Coordinates>, 'values' | 'touches'
  * @param event
  * @returns pointer event data
  */
-export function getPointerEventData(event: MouseEvent | TouchEvent | PointerEvent): PointerEventData {
+export function getPointerEventData(event: React.MouseEvent | React.TouchEvent | React.PointerEvent): PointerEventData {
   const { touches, buttons, changedTouches } = event as any
   const touchEvents = touches && touches.length > 0 ? touches : changedTouches && changedTouches.length > 0 ? changedTouches : null
   const { clientX, clientY } = touchEvents ? touchEvents[0] : event
@@ -95,7 +92,7 @@ type TwoTouchesEventData = Pick<FullGestureState<DistanceAngle>, 'values' | 'tou
  * @param event
  * @returns two touches event data
  */
-export function getTwoTouchesEventData(event: TouchEvent): TwoTouchesEventData {
+export function getTwoTouchesEventData(event: React.TouchEvent): TwoTouchesEventData {
   const { touches } = event
   const dx = touches[1].clientX - touches[0].clientX
   const dy = touches[1].clientY - touches[0].clientY

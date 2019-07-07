@@ -1,9 +1,8 @@
 import CoordinatesRecognizer from './CoordinatesRecognizer'
 import { getPointerEventData } from '../utils'
 import GestureController from '../controllers/GestureController'
-import { TransformedEvent, GestureFlag, ReactEventHandlerKey } from '../types/events'
+import { TransformedEvent, GestureFlag, ReactEventHandlerKey, Fn } from '../types'
 import { genericEndState } from '../defaults'
-import { Fn } from '../types/common'
 
 export default class MoveRecognizer extends CoordinatesRecognizer {
   constructor(controller: GestureController, args: any[]) {
