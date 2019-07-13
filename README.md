@@ -44,8 +44,12 @@ Hooks allow gestures to be re-used for more than one view (you can use the same 
 function myComponent() {
   const bind = useGesture(
     {
-      onDrag: dragState => { /* do stuff on drag */ },
-      onScroll: scrollState => { /* do stuff on scroll */ },
+      onDrag: dragState => {
+        /* do stuff on drag */
+      },
+      onScroll: scrollState => {
+        /* do stuff on scroll */
+      },
     },
     { event: { passive: false } }
   )
@@ -268,6 +272,7 @@ return <animated.div {...bind()} style={{ transform: xy.interpolate((x, y) => `t
 
 - [Locking Axis](https://codesandbox.io/s/25n4m933j)
 - [Boundaries](https://codesandbox.io/s/r7xnzk4x0o)
+- [Swipe](https://codesandbox.io/s/crimson-dawn-pzf9t)
 
 ## Frequently asked questions
 
