@@ -171,7 +171,7 @@ Every time a handler is called, it will get passed the current event state for i
 The following attributes are provided to the handler for all gestures.
 
 | Name                                                | Type       | Description                                                                                                                  |
-| --------------------------------------------------- | ---------- | ---------------------------------------------------------------------------------------------------------------------------- |
+|-----------------------------------------------------|------------|------------------------------------------------------------------------------------------------------------------------------|
 | `event`                                             | `object`   | source event                                                                                                                 |
 | `time`                                              | `Number`   | timestamp of the current gesture                                                                                             |
 | `first`                                             | `Boolean`  | marks the first event                                                                                                        |
@@ -195,7 +195,7 @@ The following attributes are provided to the handler for all gestures.
 The following attributes are provided to the handler for gestures that deal with `x/y` coordinates.
 
 | Name        | Type           | Description                                                                                                                                                                  |
-| ----------- | -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|-------------|----------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `xy`        | `Vec2 ([x,y])` | for touch/mouse events, `xy` returns the position of the pointer on the screen. For scroll/wheel events `xy` returns how much the element has been scrolled on x and y axis. |
 | `previous`  | `Vec2`         | previous `xy`                                                                                                                                                                |
 | `initial`   | `Vec2`         | `xy` value when the gesture has started                                                                                                                                      |
@@ -213,7 +213,7 @@ Pinch is generally about scaling and rotating. The scale depends on the distance
 > _More specifically, both scale and rotation depends on the `delta` of `distance` and `angle`, so you will probably end up using `local` or `delta` in most cases._
 
 | Name        | Type     | Description                                                                                 |
-| ----------- | -------- | ------------------------------------------------------------------------------------------- |
+|-------------|----------|---------------------------------------------------------------------------------------------|
 | `da`        | `Vec2`   | absolute distance and angle of the two pointers/fingers.                                    |
 | `previous`  | `Vec2`   | previous `da`                                                                               |
 | `initial`   | `Vec2`   | `da` value when the gesture has started                                                     |
@@ -229,7 +229,7 @@ Pinch is generally about scaling and rotating. The scale depends on the distance
 You can pass a `config` object as an optional second argument to `useGesture` to customize its behavior.
 
 | Name                                                                    | Default Value                     | Description                                                                                                                                                                            |
-| ----------------------------------------------------------------------- | --------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|-------------------------------------------------------------------------|-----------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `domTarget`                                                             | `undefined`                       | lets you specify a dom node you want to attach gestures to (body, window, document...). You can also pass a ref created with the `useRef` hook.                                        |
 | `event`                                                                 | `{passive: true, capture: false}` | the event config attribute lets you configure `passive` and `capture` options passed to event listeners.                                                                               |
 | `transform`                                                             | `{x: x => x, y =>y }`             | transform functions you can pass to modify `x` and `y` values.                                                                                                                         |
@@ -268,6 +268,7 @@ return <animated.div {...bind()} style={{ transform: xy.interpolate((x, y) => `t
 
 - [Locking Axis](https://codesandbox.io/s/25n4m933j)
 - [Boundaries](https://codesandbox.io/s/r7xnzk4x0o)
+- [Swipe](https://codesandbox.io/s/crimson-dawn-pzf9t)
 
 ## Frequently asked questions
 
