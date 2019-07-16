@@ -1,6 +1,6 @@
 import React, { ReactChild } from 'react'
-import { Fn, TransformType } from '../../../types/common.d'
-import { GestureHandlersPartial } from '../../../types/web.d'
+import { Fn, TransformType } from '../../src/types'
+import { GestureHandlersPartial } from '../../src/types'
 
 export const createHandlers = ({
   gestures,
@@ -11,7 +11,7 @@ export const createHandlers = ({
 }: {
   gestures: string[]
   tempArg: any[]
-  canceled: boolean
+  canceled?: boolean
   set: Fn
   setStartEnd: React.Dispatch<React.SetStateAction<[number, number]>>
 }): GestureHandlersPartial => {
@@ -65,7 +65,14 @@ export const Common = React.forwardRef(
       startFired = 0,
       endFired = 0,
       children,
-    }: { listeners?: object; testKey: string; state: object; startFired?: number; endFired?: number; children?: ReactChild | ReactChild[] },
+    }: {
+      listeners?: object
+      testKey: string
+      state: object
+      startFired?: number
+      endFired?: number
+      children?: ReactChild | ReactChild[]
+    },
     ref
   ) => {
     return (

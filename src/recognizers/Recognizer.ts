@@ -1,8 +1,19 @@
 import { initialState, mappedKeys } from '../defaults'
 import GestureController from '../controllers/GestureController'
-import { Coordinates, DistanceAngle, StateKey, GestureState, GestureKey, SharedGestureState } from '../../types/states.d'
-import { Fn, Vector2, TransformType } from '../../types/common.d'
-import { ReactEventHandlerKey, GestureFlag, TransformedEvent } from '../../types/events.d'
+import {
+  Coordinates,
+  DistanceAngle,
+  StateKey,
+  GestureState,
+  GestureKey,
+  SharedGestureState,
+  Fn,
+  Vector2,
+  TransformType,
+  ReactEventHandlerKey,
+  GestureFlag,
+  TransformedEvent,
+} from '../types'
 
 /**
  * Recognizer abstract class

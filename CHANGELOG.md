@@ -1,5 +1,17 @@
 # Changelog
 
+## 5.1.3 Release
+
+**Summary:** Better build process and TypeScript improvements
+
+### Added
+
+1. Build process now uses `tsdx` instead of `rollup`
+
+### Fixed
+
+1. Event type fixing in TypeScript
+
 ## 5.1.2 Release
 
 **Summary:** Minor release fixing TypeScript export.

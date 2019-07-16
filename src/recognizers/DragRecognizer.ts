@@ -2,8 +2,7 @@ import { PointerEvent } from 'react'
 import CoordinatesRecognizer from './CoordinatesRecognizer'
 import { noop, getPointerEventData } from '../utils'
 import GestureController from '../controllers/GestureController'
-import { TransformedEvent, GestureFlag, ReactEventHandlerKey } from '../../types/events.d'
-import { Fn } from '../../types/common.d'
+import { TransformedEvent, GestureFlag, ReactEventHandlerKey, Fn } from '../types'
 import { genericEndState } from '../defaults'
 
 export default class DragRecognizer extends CoordinatesRecognizer {

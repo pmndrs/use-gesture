@@ -1,9 +1,8 @@
 import CoordinatesRecognizer from './CoordinatesRecognizer'
 import { getPointerEventData } from '../utils'
 import GestureController from '../controllers/GestureController'
-import { GestureFlag, TransformedEvent, ReactEventHandlerKey } from '../../types/events.d'
+import { GestureFlag, TransformedEvent, ReactEventHandlerKey, Fn } from '../types'
 import { genericEndState } from '../defaults'
-import { Fn } from '../../types/common.d'
 
 export default class HoverRecognizer extends CoordinatesRecognizer {
   constructor(controller: GestureController, args: any[]) {

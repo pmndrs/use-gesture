@@ -2,9 +2,8 @@ import { TouchEvent } from 'react'
 import DistanceAngleRecognizer from './DistanceAngleRecognizer'
 import { noop, getTwoTouchesEventData } from '../utils'
 import GestureController from '../controllers/GestureController'
-import { TransformedEvent, GestureFlag, ReactEventHandlerKey } from '../../types/events.d'
+import { TransformedEvent, GestureFlag, ReactEventHandlerKey, Fn } from '../types'
 import { genericEndState } from '../defaults'
-import { Fn } from '../../types/common.d'
 
 export default class PinchRecognizer extends DistanceAngleRecognizer {
   constructor(controller: GestureController, args: any[]) {

@@ -2,9 +2,8 @@ import { TouchEvent } from 'react'
 import DistanceAngleRecognizer from './DistanceAngleRecognizer'
 import { noop, getTwoTouchesEventData } from '../utils'
 import GestureController from '../controllers/GestureController'
-import { TransformedEvent, GestureFlag, ReactEventHandlerKey, GestureEvent } from '../../types/events.d'
+import { TransformedEvent, GestureFlag, ReactEventHandlerKey, GestureEvent, Fn, Vector2 } from '../types'
 import { genericEndState } from '../defaults'
-import { Fn, Vector2 } from '../../types/common.d'
 
 const SCALE_FACTOR = 260
 

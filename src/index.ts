@@ -1,10 +1,7 @@
 import React from 'react'
 import GestureController from './controllers/GestureController'
-import { Handler, GestureHandlersPartial } from '../types/web.d'
-import { GestureConfig } from '../types/config.d'
-import { Coordinates } from '../types/states.d'
-import { Fn } from '../types/common'
-import { ReactEventHandlers } from '../types/events'
+import { Handler, GestureHandlersPartial, GestureConfig, Coordinates, Fn, ReactEventHandlers } from './types'
+import { defaultConfig } from './defaults'
 
 /** API
  * Default Drag:
@@ -18,22 +15,25 @@ import { ReactEventHandlers } from '../types/events'
  * React.useEffect(bind, [bind])
  */
 
+type GetBinderTypeFromDomTarget<T extends Partial<GestureConfig>> = T['domTarget'] extends object ? Fn : ReactEventHandlers
+
 export function useGesture<Config extends Partial<GestureConfig>>(
   handlers: GestureHandlersPartial | Handler<Coordinates>,
   config?: Config
-): (...args: any[]) => Fn | ReactEventHandlers {
+): (...args: any[]) => GetBinderTypeFromDomTarget<Config> {
   // the gesture controller will keep track of all gesture states
   const gestureController = React.useRef<GestureController>()
 
   if (!gestureController.current) {
     // we initialize the gesture controller once
-    gestureController.current = new GestureController(handlers, config)
+    gestureController.current = new GestureController(getDerivedHandlers(handlers), getDerivedConfig(config))
   }
 
   React.useEffect(() => {
     // every time handlers or config change, we let the gesture controller compute
     // them so that the gesture handlers functions are aware of the changes
-    gestureController.current!.setHandlersAndConfig(handlers, config)
+    gestureController.current!.config = getDerivedConfig(config)
+    gestureController.current!.handlers = getDerivedHandlers(handlers)
   }, [handlers, config])
 
   // when the user component unmounts, we run our gesture controller clean function
@@ -41,5 +41,25 @@ export function useGesture<Config extends Partial<GestureConfig>>(
 
   // we return the bind function of our controller, which returns an binding object or
   // a cleaning function depending on whether config.domTarget is set
-  return gestureController.current.bind
+  return gestureController.current.bind as (...args: any[]) => GetBinderTypeFromDomTarget<Config>
+}
+
+function getDerivedHandlers(handlers: GestureHandlersPartial | Handler<Coordinates>): GestureHandlersPartial {
+  if (typeof handlers === 'function') return { onDrag: handlers }
+
+  const { onAction, ...rest } = handlers
+  const derivedHandlers = rest as GestureHandlersPartial
+
+  if (onAction) derivedHandlers.onDrag = onAction
+
+  return derivedHandlers
+}
+
+function getDerivedConfig(config?: Partial<GestureConfig>): GestureConfig {
+  const derivedConfig = { ...defaultConfig, ...config }
+  const { domTarget } = derivedConfig
+  const realDomTarget = domTarget && 'current' in domTarget ? domTarget.current : domTarget
+  derivedConfig.domTarget = realDomTarget
+
+  return derivedConfig
 }

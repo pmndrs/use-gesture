@@ -7,13 +7,17 @@ import {
   SharedGestureState,
   GestureKey,
   FullGestureState,
-} from '../../types/states.d'
-import { Fn } from '../../types/common.d'
-import { ReactEventHandlerKey, GestureFlag, ReactEventHandlers } from '../../types/events.d'
-import { GestureHandlers, Handler, HandlerKey, GestureHandlersPartial } from '../../types/web.d'
-import { GestureConfig } from '../../types/config.d'
+  Fn,
+  ReactEventHandlerKey,
+  GestureFlag,
+  ReactEventHandlers,
+  GestureConfig,
+  GestureHandlers,
+  HandlerKey,
+  GestureHandlersPartial,
+} from '../types'
 
-import { defaultConfig, initialState, mappedKeys } from '../defaults'
+import { initialState, mappedKeys } from '../defaults'
 import { addListeners, removeListeners, supportsGestureEvent, chainFns } from '../utils'
 
 import DragRecognizer from '../recognizers/DragRecognizer'
@@ -38,35 +42,13 @@ type Bindings = Partial<{ [eventName in ReactEventHandlerKey]: Fn[] | Fn }>
  * @template BinderType the type the bind function should return
  */
 export default class GestureController {
-  public handlers!: GestureHandlersPartial // keeping track of the handlers set in useGesture
-  public config!: GestureConfig // keeping track of the config set in useGesture
   public state: StateObject = initialState // state for all gestures
   public timeouts: GestureTimeouts = {} // keeping track of timeouts for debounced gestures (such as move, scroll, wheel)
   private bindings: Bindings = {} // an object holding the handlers associated to the gestures
   private domListeners: [string, Fn][] = [] // when config.domTarget is set, we attach events directly to the dom
   private windowListeners: WindowListeners = {} // keeps track of window listeners added by gestures (drag only at the moment)
 
-  constructor(handlers: GestureHandlersPartial | Handler<Coordinates>, config?: Partial<GestureConfig>) {
-    this.setHandlersAndConfig(handlers, config)
-  }
-
-  /**
-   * Set handlers and config of gesture controller
-   * Should be called every time handlers and config change in useGesture
-   */
-  public setHandlersAndConfig = (handlers: GestureHandlersPartial | Handler<Coordinates>, config?: Partial<GestureConfig>) => {
-    if (typeof handlers === 'function') handlers = { onDrag: handlers } as GestureHandlersPartial
-    else if (handlers.onAction) {
-      handlers.onDrag = handlers.onAction
-      delete handlers.onAction
-    }
-    this.config = { ...defaultConfig, ...config }
-    const { domTarget } = this.config
-    const realDomTarget = domTarget && 'current' in domTarget ? domTarget.current : domTarget
-    this.config.domTarget = realDomTarget
-
-    this.handlers = handlers
-  }
+  constructor(public handlers: GestureHandlersPartial, public config: GestureConfig) {}
 
   /**
    * Function run on component unmount
@@ -240,7 +222,7 @@ export default class GestureController {
         .filter(k => k.indexOf('on') === 0)
         .map(k => {
           const match = k.match(/(on[A-Z][a-z]+)/)
-          if (match) return <HandlerKey>match[1]
+          return match ? <HandlerKey>match[1] : undefined
         })
     )
 
@@ -302,10 +284,10 @@ export default class GestureController {
     // if config.domTarget is set we add event listeners to it and return the clean function
     if (domTarget) {
       this.addDomTargetListeners()
-      return this.clean as Fn
+      return this.clean
     }
 
     // if not, we return an object that contains gesture handlers mapped to react handler event keys
-    return this.getBindings() as ReactEventHandlers
+    return this.getBindings()
   }
 }
