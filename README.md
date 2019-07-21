@@ -105,7 +105,7 @@ const bind = useGesture({
   onScroll: state => {...},   // fires on scroll
   onHover: state => {...},    // fires on mouse enter, mouse leave
   onMove: state => {...},     // fires on mouse move over the element
-  onWheel: state => {...}     // fires on mouse wheel over the eleement
+  onWheel: state => {...}     // fires on mouse wheel over the element
 })
 ```
 
