@@ -136,7 +136,8 @@ export interface CommonGestureState {
   time?: number
   cancel?(): void
   canceled: boolean
-  temp?: any
+  memo?: any
+  temp?: any // TODO to be removed in future versions
   args?: any
 }
 

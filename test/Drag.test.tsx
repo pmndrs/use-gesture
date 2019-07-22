@@ -15,7 +15,7 @@ describe.each([['attached to component', Interactive, false], ['attached to node
   (_testName, C, domTarget): any => {
     const Component = C as InteractiveType
     const prefix = domTarget ? 'dom-' : ''
-    const { getByTestId, queryByTestId, rerender } = render(<Component gestures={['Drag']} tempArg="temp" />)
+    const { getByTestId, queryByTestId, rerender } = render(<Component gestures={['Drag']} memoArg="memo" />)
     const element = getByTestId(`${prefix}drag-el`)
     let delta_t: number
     test('two-fingers touch should NOT initiate the gesture', () => {
@@ -37,8 +37,8 @@ describe.each([['attached to component', Interactive, false], ['attached to node
       expect(getByTestId(`${prefix}drag-start`)).toHaveTextContent(/^fired$/)
       expect(getByTestId(`${prefix}drag-end`)).toHaveTextContent(/^not fired$/)
     })
-    test('testing temp value is passed', () => {
-      expect(getByTestId(`${prefix}drag-temp`)).toHaveTextContent('temp')
+    test('testing memo value is passed', () => {
+      expect(getByTestId(`${prefix}drag-memo`)).toHaveTextContent('memo')
     })
     test('moving should set first to false', () => {
       const event = createEvent.mouseMove(window, { clientX: 20, clientY: 50, buttons: 1 })

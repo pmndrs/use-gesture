@@ -6,7 +6,7 @@ interface Props {
   gestures: string[]
   cancel?: Fn
   canceled?: boolean
-  tempArg?: any
+  memoArg?: any
   config?: Partial<GestureConfig>
 }
 

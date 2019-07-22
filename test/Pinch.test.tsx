@@ -14,7 +14,7 @@ describe.each([['attached to component', Interactive, false], ['attached to node
   (_testName, C, domTarget) => {
     const Component = C as InteractiveType
     const prefix = domTarget ? 'dom-' : ''
-    const { getByTestId, queryByTestId, rerender } = render(<Component gestures={['Pinch']} tempArg="temp" />)
+    const { getByTestId, queryByTestId, rerender } = render(<Component gestures={['Pinch']} memoArg="memo" />)
     const element = getByTestId(`${prefix}pinch-el`)
     let delta_t: number
 
@@ -41,8 +41,8 @@ describe.each([['attached to component', Interactive, false], ['attached to node
       expect(getByTestId(`${prefix}pinch-end`)).toHaveTextContent(/^not fired$/)
     })
 
-    test('testing temp value is passed', () => {
-      expect(getByTestId(`${prefix}pinch-temp`)).toHaveTextContent('temp')
+    test('testing memo value is passed', () => {
+      expect(getByTestId(`${prefix}pinch-memo`)).toHaveTextContent('memo')
     })
 
     test('moving should set first to false', () => {

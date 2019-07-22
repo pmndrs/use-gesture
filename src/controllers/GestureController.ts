@@ -115,6 +115,8 @@ export default class GestureController {
       coordinatesState.xy = state.values // legacy state attribute for xy gestures
       coordinatesState.vxvy = state.velocities // legacy state attribute for xy gestures
     }
+    // TODO to be removed in future versions
+    state.temp = state.memo // legacy temp attribute
 
     if (gestureFlag === GestureFlag.OnStart) {
       const handlerStart = `${handlerKey}Start` as keyof GestureHandlers
@@ -126,7 +128,7 @@ export default class GestureController {
     // i.e. GestureFlag.OnStart would trigger both onDragStart and onDrag
     const handler = this.handlers[handlerKey] as any
     if (handler) {
-      this.state[stateKey].temp = handler(state) || this.state[stateKey].temp
+      this.state[stateKey].memo = handler(state) || this.state[stateKey].memo
     }
 
     if (gestureFlag === GestureFlag.OnEnd) {

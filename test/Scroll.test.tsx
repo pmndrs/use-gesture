@@ -12,7 +12,7 @@ describe.each([['attached to component', Interactive, false], ['attached to node
   (_testName, C, domTarget) => {
     const Component = C as InteractiveType
     const prefix = domTarget ? 'dom-' : ''
-    const { getByTestId, rerender } = render(<Component gestures={['Scroll']} tempArg="temp" />)
+    const { getByTestId, rerender } = render(<Component gestures={['Scroll']} memoArg="memo" />)
     const element = getByTestId(`${prefix}scroll-el`)
     let delta_t: number
 
@@ -36,8 +36,8 @@ describe.each([['attached to component', Interactive, false], ['attached to node
       expect(getByTestId(`${prefix}scroll-end`)).toHaveTextContent(/^not fired$/)
     })
 
-    test('testing temp value is passed', () => {
-      expect(getByTestId(`${prefix}scroll-temp`)).toHaveTextContent('temp')
+    test('testing memo value is passed', () => {
+      expect(getByTestId(`${prefix}scroll-memo`)).toHaveTextContent('memo')
     })
 
     test('the second scroll event should set first to false', () => {

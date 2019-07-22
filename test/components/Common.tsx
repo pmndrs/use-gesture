@@ -4,13 +4,13 @@ import { GestureHandlersPartial } from '../../src/types'
 
 export const createHandlers = ({
   gestures,
-  tempArg,
+  memoArg,
   canceled,
   set,
   setStartEnd,
 }: {
   gestures: string[]
-  tempArg: any[]
+  memoArg: any[]
   canceled?: boolean
   set: Fn
   setStartEnd: React.Dispatch<React.SetStateAction<[number, number]>>
@@ -23,20 +23,20 @@ export const createHandlers = ({
           transform,
           cancel,
           currentTarget,
-          temp = tempArg,
+          memo = memoArg,
           ...rest
         }: {
           event: Event
           transform: TransformType
           cancel: Fn
           currentTarget: EventTarget
-          temp: any
+          memo: any
         }) => {
-          set({ ...rest, temp })
+          set({ ...rest, memo })
           if (canceled) {
             cancel()
           }
-          return temp
+          return memo
         },
       }
       if (g !== 'Hover') {

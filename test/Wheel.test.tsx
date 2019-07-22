@@ -12,7 +12,7 @@ describe.each([['attached to component', Interactive, false], ['attached to node
   (_testName, C, domTarget) => {
     const Component = C as InteractiveType
     const prefix = domTarget ? 'dom-' : ''
-    const { getByTestId, rerender } = render(<Component gestures={['Wheel']} tempArg="temp" />)
+    const { getByTestId, rerender } = render(<Component gestures={['Wheel']} memoArg="memo" />)
     const element = getByTestId(`${prefix}wheel-el`)
 
     let delta_t: number
@@ -34,8 +34,8 @@ describe.each([['attached to component', Interactive, false], ['attached to node
       expect(getByTestId(`${prefix}wheel-end`)).toHaveTextContent(/^not fired$/)
     })
 
-    test('testing temp value is passed', () => {
-      expect(getByTestId(`${prefix}wheel-temp`)).toHaveTextContent('temp')
+    test('testing memo value is passed', () => {
+      expect(getByTestId(`${prefix}wheel-memo`)).toHaveTextContent('memo')
     })
 
     test('the second wheel event should set first to false', () => {
