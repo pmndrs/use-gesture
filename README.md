@@ -22,13 +22,13 @@ You can use it stand-alone, but to make the most of it you should combine it wit
 
 ## Installation
 
-### Using npm
+#### Using npm
 
 ```
 npm install react-use-gesture
 ```
 
-### Using yarn
+#### Using yarn
 
 ```
 yarn add react-use-gesture
