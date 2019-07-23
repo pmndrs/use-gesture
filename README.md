@@ -62,18 +62,18 @@ Hooks allow gestures to be re-used for more than one view (you can use the same 
 ```jsx
 function myComponent() {
   const [[x, y], set] = React.useState([0, 0])
-  const bind = useGesture(({ local }) => set(local))
+  const bind = useDrag(({ local }) => set(local))
   return <div {...bind()} style={{ transform: `translate3d(${x}px,${y}px,0)` }} />
 }
 ```
 
-When the user drags the `div` that receives the `{...bind()}` prop, `useGesture` updates the state of the component and the `div` gets positioned accordingly.
+When the user drags the `div` that receives the `{...bind()}` prop, `useDrag` updates the state of the component and the `div` gets positioned accordingly.
 
 In this case we fetch `local` off the gesture event, which keeps track of delta positions after release. Deltas are especially important in this lib, because they make it possible to use transitions for positioning, instead of doing complex `getBoundingClientRect()` calculations to figure out where a node went on the screen.
 
 #### Avoid re-rendering (preferred)
 
-In the example we’ve just seen, the component gets re-rendered every time `useGesture` drag handler fires, which can be taxing. To avoid re-rendering you may want to use libraries such as [react-spring](https://github.com/react-spring/react-spring) that allow animating dom elements without setting state, and therefore without triggering new renders.
+In the example we’ve just seen, the component gets re-rendered every time the `useDrag` handler fires, which can be taxing. To avoid re-rendering you may want to use libraries such as [react-spring](https://github.com/react-spring/react-spring) that allow animating dom elements without setting state, and therefore without triggering new renders.
 
 ```jsx
 import { useSpring, animated } from 'react-spring'
@@ -114,11 +114,9 @@ Drag, pinch, move, scroll and wheel gestures also have two additional handlers t
 useGesture({ onDragStart: doStuffOnStart, onDragEnd:doStuffOnEnd })
 
 // is equivalent to this:
-useGesture({
-  onDrag: ({first, last}) {
-    if(first) doStuffOnStart()
-    if (last) doStuffOnEnd()
-  }
+useDrag(({first, last}) {
+  if(first) { /* do stuff on drag start */ }
+  if (last) { /* do stuff on drag end */ }
 })
 ```
 
@@ -126,7 +124,7 @@ useGesture({
 
 ### Adding gestures to dom nodes
 
-React-use-gesture also supports adding handlers to dom nodes directly (or the `window` or `document` objects). In that case, you shouldn't spread the `bind()` object returned by `useGesture` as a prop, but use the `React.useEffect` hook as below.
+React-use-gesture also supports adding handlers to dom nodes directly (or the `window` or `document` objects). In that case, you shouldn't spread the `bind()` object returned by `use[Gesture]` as a prop, but use the `React.useEffect` hook as below.
 
 ```js
 // this will add a scroll listener to the window
