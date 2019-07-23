@@ -22,8 +22,16 @@ You can use it stand-alone, but to make the most of it you should combine it wit
 
 ## Installation
 
+### Using npm
+
 ```
 npm install react-use-gesture
+```
+
+### Using yarn
+
+```
+yarn add react-use-gesture
 ```
 
 ## Api
