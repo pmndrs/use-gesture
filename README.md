@@ -1,9 +1,9 @@
 <p align="middle">
-  <a href="https://codesandbox.io/s/n9vo1my91p"><img src="https://i.imgur.com/tg1mN1F.gif" width="655"/></a>
+  <a href="https://codesandbox.io/s/viewpager-0km3o"><img src="https://i.imgur.com/tg1mN1F.gif" width="655"/></a>
 </p>
 <p align="middle">
-  <a href="https://codesandbox.io/s/j0y0vpz59"><img src="https://i.imgur.com/OxGLHeT.gif" width="515"/></a>
-  <a href="https://codesandbox.io/s/r5qmj8m6lq"><img src="https://i.imgur.com/ifdCBvG.gif" width="130"/></a>
+  <a href="https://codesandbox.io/s/cards-utgqg"><img src="https://i.imgur.com/OxGLHeT.gif" width="515"/></a>
+  <a href="https://codesandbox.io/s/draggable-list-vp020"><img src="https://i.imgur.com/ifdCBvG.gif" width="130"/></a>
   <a href="https://codesandbox.io/s/9o92o24wrr"><img src="https://i.imgur.com/z6jFWpM.gif" width="180"/></a>
 </p>
 <p align="middle">
@@ -29,33 +29,29 @@ npm install react-use-gesture
 ## Api
 
 ```jsx
-import { useGesture } from 'react-use-gesture'
+import { useDrag } from 'react-use-gesture'
 
 // in your component
-const bind = useGesture(actions, config)
+const bind = useDrag(dragState => {
+  /* do stuff on drag */
+}, config)
 ```
 
-The api is straight forward. You bind handlers to your view, specify the actions you want to respond to (drag, pinch, hover, move, scroll or wheel) and you will receive events when you interact with the component. These events include the source dom event, but also carry additional kinematics such as velocity, distance, delta, etc.
+The api is straight forward. You import the hook related to the gesture you want to handle and you will receive events when you interact with the component. These events include the source dom event, but also carry additional kinematics such as velocity, distance, delta, etc.
 
 Hooks allow gestures to be re-used for more than one view (you can use the same `bind()` function multiple times!).
 
-```jsx
-// Rough example that makes a div respond to drag and scroll gestures
-function myComponent() {
-  const bind = useGesture(
-    {
-      onDrag: dragState => {
-        /* do stuff on drag */
-      },
-      onScroll: scrollState => {
-        /* do stuff on scroll */
-      },
-    },
-    { event: { passive: false } }
-  )
-  return <div {...bind(optionalArgs)} />
-}
-```
+### Supported hooks
+
+| Hook         | Description                                             |
+| ------------ | ------------------------------------------------------- |
+| `useDrag`    | Handles the drag gesture                                |
+| `useMove`    | Handles mouse move events (touch devices not supported) |
+| `useHover`   | Handles mouse over events (touch devices not supported) |
+| `useScroll`  | Handles scroll events                                   |
+| `useWheel`   | Handles wheel events                                    |
+| `usePinch`   | Handles pinch events                                    |
+| `useGesture` | Handles multiple gestures in one hook                   |
 
 #### Making things move
 
@@ -66,7 +62,7 @@ function myComponent() {
 ```jsx
 function myComponent() {
   const [[x, y], set] = React.useState([0, 0])
-  const bind = useGesture({ onDrag: ({ local }) => set(local) })
+  const bind = useGesture(({ local }) => set(local))
   return <div {...bind()} style={{ transform: `translate3d(${x}px,${y}px,0)` }} />
 }
 ```
@@ -84,7 +80,7 @@ import { useSpring, animated } from 'react-spring'
 
 function myComponent() {
   const [{ local }, set] = useSpring(() => ({ local: [0, 0] }))
-  const bind = useGesture({ onDrag: ({ local }) => set({ local }) })
+  const bind = useDrag(({ local }) => set({ local }))
 
   return <animated.div {...bind()} style={{ transform: local.interpolate((x, y) => `translate3d(${x}px,${y}px,0)`) }} />
 }
@@ -92,21 +88,23 @@ function myComponent() {
 
 Because we’re now using `animated.div`, we’re able to make the element draggable without provoking new renders every time its position should update.
 
-### Supported gestures
+### Supporting multiple gestures at once
 
-In addition to **drag**, react-use-gesture also supports **scroll** gesture, and mouse-specific gestures such as **move**, **wheel** and **hover** (entering and leaving an element), and touch-specific **pinch**.
-
-Every gesture has a handler that should be passed to `useGesture`, and you can pass multiple handlers to the same element for it to respond to different gestures.
+If you want your component to support multiple gestures at once, it is preferred that you use the `useGesture` hook.
 
 ```jsx
-const bind = useGesture({
-  onDrag: state => {...},     // fires on drag
-  onPinch: state => {...},     // fires on pinch
-  onScroll: state => {...},   // fires on scroll
-  onHover: state => {...},    // fires on mouse enter, mouse leave
-  onMove: state => {...},     // fires on mouse move over the element
-  onWheel: state => {...}     // fires on mouse wheel over the eleement
-})
+function myComponent() {
+  const bind = useGesture({
+    onDrag: state => {...},     // fires on drag
+    onPinch: state => {...},     // fires on pinch
+    onScroll: state => {...},   // fires on scroll
+    onHover: state => {...},    // fires on mouse enter, mouse leave
+    onMove: state => {...},     // fires on mouse move over the element
+    onWheel: state => {...}     // fires on mouse wheel over the element
+  })
+
+  return <div {...bind()} />
+}
 ```
 
 ### `on[Gesture]Start` and `on[Gesture]End`
@@ -136,7 +134,7 @@ React-use-gesture also supports adding handlers to dom nodes directly (or the `w
 
 ```js
 // this will add a scroll listener to the window
-const bind = useGesture({ onScroll: state => doStuff }, { domTarget: window })
+const bind = useScroll(state => doStuff, { domTarget: window })
 React.useEffect(bind, [bind])
 ```
 
@@ -145,7 +143,7 @@ You can also directly pass a ref to `domTarget`:
 ```js
 const myRef = React.useRef(null)
 // this will add a scroll listener the div
-const bind = useGesture({ onScroll: state => doStuff }, { domTarget: myRef })
+const bind = useScroll(state => doStuff, { domTarget: myRef })
 React.useEffect(bind, [bind])
 /*...*/
 return <div ref={myRef} />
@@ -153,35 +151,25 @@ return <div ref={myRef} />
 
 > _Note that using `useEffect` will also take care of removing event listeners when the component is unmounted._
 
-### Shortcut to the drag event handler
-
-Although React-use-gesture was initially developed to support drag events only (press, move and release), this library now supports pinch, hover, move, scroll and wheel events.
-
-To ensure retro-compatibility with **v4.x**, **v5.x** still gives you a shortcut to the `onDrag` and pass directly the handler function as the sole argument of `useGesture`.
-
-```jsx
-// this:
-const bind = useGesture(state => doStuff)
-// is equivalent to this:
-const bind = useGesture({ onDrag: state => doStuff })
-```
-
-### `useGesture` event state
+### `use[Gesture]` event state
 
 Every time a handler is called, it will get passed the current event state for its corresponding gesture. An event state is an object that includes the source event and adds multiple attributes listed below.
 
 #### Shared State
 
-The following attributes are provided to the handler for all gestures.
+The following attributes are provid| Hook | Description |
+`|` useDrag Handles the drag gesture |
+| `useMove` | Handles hover events (touch devices not supported)
+| `useHover` | Handlers | ed to the handler for all gestures.
 
 | Name                                                | Type       | Description                                                                                                                  |
-|-----------------------------------------------------|------------|------------------------------------------------------------------------------------------------------------------------------|
+| --------------------------------------------------- | ---------- | ---------------------------------------------------------------------------------------------------------------------------- |
 | `event`                                             | `object`   | source event                                                                                                                 |
 | `time`                                              | `Number`   | timestamp of the current gesture                                                                                             |
 | `first`                                             | `Boolean`  | marks the first event                                                                                                        |
 | `last`                                              | `Boolean`  | marks the last event                                                                                                         |
 | `active`                                            | `Boolean`  | `true` when the gesture is active, `false` otherwise                                                                         |
-| `temp`                                              | `Any`      | serves as a cache storing any value returned by your handler during its previous run. See below for an example.              |
+| `memo`                                              | `Any`      | serves as a cache storing any value returned by your handler during its previous run. See below for an example.              |
 | `cancel`                                            | `Function` | you can call `cancel` to interrupt the drag or pinch gestures. `cancel`is only relevant for `onDrag` and `onPinch` handlers. |
 | `down`                                              | `Boolean`  | mouse / touch down                                                                                                           |
 | `buttons`                                           | `Number`   | buttons pressed (see [documentation](https://developer.mozilla.org/fr/docs/Web/API/MouseEvent/button))                       |
@@ -199,7 +187,7 @@ The following attributes are provided to the handler for all gestures.
 The following attributes are provided to the handler for gestures that deal with `x/y` coordinates.
 
 | Name        | Type           | Description                                                                                                                                                                  |
-|-------------|----------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| ----------- | -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `xy`        | `Vec2 ([x,y])` | for touch/mouse events, `xy` returns the position of the pointer on the screen. For scroll/wheel events `xy` returns how much the element has been scrolled on x and y axis. |
 | `previous`  | `Vec2`         | previous `xy`                                                                                                                                                                |
 | `initial`   | `Vec2`         | `xy` value when the gesture has started                                                                                                                                      |
@@ -217,7 +205,7 @@ Pinch is generally about scaling and rotating. The scale depends on the distance
 > _More specifically, both scale and rotation depends on the `delta` of `distance` and `angle`, so you will probably end up using `local` or `delta` in most cases._
 
 | Name        | Type     | Description                                                                                 |
-|-------------|----------|---------------------------------------------------------------------------------------------|
+| ----------- | -------- | ------------------------------------------------------------------------------------------- |
 | `da`        | `Vec2`   | absolute distance and angle of the two pointers/fingers.                                    |
 | `previous`  | `Vec2`   | previous `da`                                                                               |
 | `initial`   | `Vec2`   | `da` value when the gesture has started                                                     |
@@ -228,12 +216,12 @@ Pinch is generally about scaling and rotating. The scale depends on the distance
 | `origin`    | `Number` | center between the two touch event coordinates                                              |
 | `turns`     | `Number` | keeps track of the number of turns (don't rely on `turns` to count the number of rotations) |
 
-### `useGesture` config
+### `use[Gesture]` config
 
-You can pass a `config` object as an optional second argument to `useGesture` to customize its behavior.
+You can pass a `config` object as an optional second argument to `use[Gesture]` hooks to customize their behavior.
 
 | Name                                                                    | Default Value                     | Description                                                                                                                                                                            |
-|-------------------------------------------------------------------------|-----------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| ----------------------------------------------------------------------- | --------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `domTarget`                                                             | `undefined`                       | lets you specify a dom node you want to attach gestures to (body, window, document...). You can also pass a ref created with the `useRef` hook.                                        |
 | `event`                                                                 | `{passive: true, capture: false}` | the event config attribute lets you configure `passive` and `capture` options passed to event listeners.                                                                               |
 | `transform`                                                             | `{x: x => x, y =>y }`             | transform functions you can pass to modify `x` and `y` values.                                                                                                                         |
@@ -243,27 +231,25 @@ You can pass a `config` object as an optional second argument to `useGesture` to
 
 ## Examples
 
-#### `temp` and react-spring
+#### The case fo `memo`
 
 <p align="middle">
   <img src="https://i.imgur.com/JyeQsEI.gif" width="200"/>
   <br/>
-  <a href="https://codesandbox.io/s/zq19y1xr9m">Codesandbox</a>
+  <a href="https://codesandbox.io/s/memo-and-decay-r7gxy">Codesandbox</a>
 </p>
 
-This demo reads out further data like velocity and direction to calculate decay. `temp` in this case is a simple storage that picks up whatever value you (optionally) return inside the event handler. It's valid as long as the gesture is active. Without this you would need to store the initial xy value somewhere else and conditionally update it when the gesture begins.
+This demo reads out further data like velocity and direction to calculate decay. `memo` in this case is a simple storage that picks up whatever value you (optionally) return inside the event handler. It's valid as long as the gesture is active. Without this you would need to store the initial `xy` value somewhere else and conditionally update it when the gesture begins.
 
 ```jsx
 const [{ xy }, set] = useSpring(() => ({ xy: [0, 0] }))
-const bind = useGesture({
-  onDrag: ({ active, delta, velocity, direction, temp = xy.getValue() }) => {
-    set({
-      xy: add(delta, temp),
-      immediate: active,
-      config: { velocity: scale(direction, velocity), decay: true },
-    })
-    return temp
-  },
+const bind = useDrag(({ active, delta, velocity, direction, memo = xy.getValue() }) => {
+  set({
+    xy: add(delta, memo),
+    immediate: active,
+    config: { velocity: scale(direction, velocity), decay: true },
+  })
+  return memo
 })
 return <animated.div {...bind()} style={{ transform: xy.interpolate((x, y) => `translate3d(${x}px,${y}px,0)`) }} />
 ```
@@ -273,12 +259,13 @@ return <animated.div {...bind()} style={{ transform: xy.interpolate((x, y) => `t
 - [Locking Axis](https://codesandbox.io/s/25n4m933j)
 - [Boundaries](https://codesandbox.io/s/r7xnzk4x0o)
 - [Swipe](https://codesandbox.io/s/crimson-dawn-pzf9t)
+- [Action Sheet](https://codesandbox.io/s/react-use-gesture-sheet-fg3w0)
 
 ## Frequently asked questions
 
-**What are the differences between using `useGesture` and adding listeners manually?**
+**What are the differences between using `use[Gesture]` hooks and adding listeners manually?**
 
-Not a lot! Essentially `useGesture` simplifies the implementation of the drag and pinch gestures, calculates kinematics values you wouldn't get out of the box from the listeners, and debounces move scroll and wheel events to let you know when they end.
+Not a lot! Essentially these `use[Gesture]` hooks simplifies the implementation of the drag and pinch gestures, calculates kinematics values you wouldn't get out of the box from the listeners, and debounces move scroll and wheel events to let you know when they end.
 
 **Why `onMove` when `onDrag` already exists?**
 
@@ -290,12 +277,28 @@ Scrolling and wheeling are structurally different events although they produce s
 
 **Accessing source event triggers a warning in the console!**
 
-You're probably trying to access an event in `onScroll`, `onMove` or `onWheel` handlers. The last event is debounced, and therefore not accessible asynchronously because of how React pools events. A possible solution would be to make sure the event is not part of the last state:
+You're probably trying to access an event in `onScroll`, `onMove` or `onWheel` handlers. The last event is debounced, and therefore not accessible asynchronously because of how React pools events. A possible solution would be to make sure the event is not part of the last state update:
 
 ```jsx
-useGesture({
-  onScroll: ({ event, last }) => {
-    !last && event.preventDefault() // <-- event will not be accessed in the last event
-  },
+useScroll(({ event, last }) => {
+  !last && event.preventDefault() // <-- event will not be accessed in the last event
 })
 ```
+
+**Why do I need to return `memo`?**
+
+As you've seen in some examples, whenever `memo` is used, it is imperatively returned in the handler function. Essentially `memo` is a gesture state attribute that is undefined when the gesture starts, but then takes the return value of the handler function.
+
+In many use cases, we want `memo` to hold the original value of our element position when the gesture starts so that it becomes our point of reference when adding the gesture `delta`. So we set `memo` to the value of our position when `memo` is undefined, which is in fact when the gesture starts. Usually it looks like so:
+
+```jsx
+const [{ x }, set] = useSpring(() => ({ x: 0 }))
+const bind = useDrag(({ delta: [dx], memo = x.getValue() }) => {
+  set({ x: dx + memo })
+  return memo
+})
+```
+
+If we don’t return `memo`, then `memo` will remain undefined and in the next drag frame `memo` will take again the value of x, which will have updated in the meantime (therefore not being the point of reference when the gesture starts anymore).
+
+It may sound silly but returning `memo` makes sure that we continue holding a reference to the initial value of `memo`, ie the original value of x when the gesture started.

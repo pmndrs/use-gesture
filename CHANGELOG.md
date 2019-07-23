@@ -1,5 +1,17 @@
 # Changelog
 
+## 5.2.0 Release
+
+**Summary:** Introducing shorthand hooks for gestures.
+
+### Added
+
+1. `useDrag`, `useMove`,`useHover`,`useScroll`,`useWheel`,`usePinch` hooks have been added
+
+### Changed
+
+1. `temp` renamed to `memo`
+
 ## 5.1.3 Release
 
 **Summary:** Better build process and TypeScript improvements
