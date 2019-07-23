@@ -93,18 +93,14 @@ Because we’re now using `animated.div`, we’re able to make the element dragg
 If you want your component to support multiple gestures at once, it is preferred that you use the `useGesture` hook.
 
 ```jsx
-function myComponent() {
-  const bind = useGesture({
-    onDrag: state => {...},     // fires on drag
-    onPinch: state => {...},     // fires on pinch
-    onScroll: state => {...},   // fires on scroll
-    onHover: state => {...},    // fires on mouse enter, mouse leave
-    onMove: state => {...},     // fires on mouse move over the element
-    onWheel: state => {...}     // fires on mouse wheel over the element
-  })
-
-  return <div {...bind()} />
-}
+const bind = useGesture({
+  onDrag: state => {...},     // fires on drag
+  onPinch: state => {...},     // fires on pinch
+  onScroll: state => {...},   // fires on scroll
+  onHover: state => {...},    // fires on mouse enter, mouse leave
+  onMove: state => {...},     // fires on mouse move over the element
+  onWheel: state => {...}     // fires on mouse wheel over the element
+})
 ```
 
 ### `on[Gesture]Start` and `on[Gesture]End`
