@@ -1,6 +1,6 @@
 import React from 'react'
 import GestureController from './controllers/GestureController'
-import { Handler, GestureHandlersPartial, GestureConfig, Coordinates, Fn, ReactEventHandlers } from './types'
+import { Handler, GestureHandlersPartial, GestureConfig, Coordinates, Fn, ReactEventHandlers, DistanceAngle } from './types'
 import { defaultConfig } from './defaults'
 
 /** API
@@ -43,6 +43,14 @@ export function useGesture<Config extends Partial<GestureConfig>>(
   // a cleaning function depending on whether config.domTarget is set
   return gestureController.current.bind as (...args: any[]) => GetBinderTypeFromDomTarget<Config>
 }
+
+/* SHORTHAND HANDLERS */
+export const useDrag = (handler: Handler<Coordinates>, config?: Partial<GestureConfig>) => useGesture({ onDrag: handler }, config)
+export const useMove = (handler: Handler<Coordinates>, config?: Partial<GestureConfig>) => useGesture({ onMove: handler }, config)
+export const useHover = (handler: Handler<Coordinates>, config?: Partial<GestureConfig>) => useGesture({ onHover: handler }, config)
+export const useScroll = (handler: Handler<Coordinates>, config?: Partial<GestureConfig>) => useGesture({ onScroll: handler }, config)
+export const useWheel = (handler: Handler<Coordinates>, config?: Partial<GestureConfig>) => useGesture({ onWheel: handler }, config)
+export const usePinch = (handler: Handler<DistanceAngle>, config?: Partial<GestureConfig>) => useGesture({ onPinch: handler }, config)
 
 function getDerivedHandlers(handlers: GestureHandlersPartial | Handler<Coordinates>): GestureHandlersPartial {
   if (typeof handlers === 'function') return { onDrag: handlers }
