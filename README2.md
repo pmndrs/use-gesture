@@ -1,0 +1,257 @@
+# react-use-gesture
+
+![npm (tag)](https://img.shields.io/npm/v/react-use-gesture.svg) ![npm bundle size](https://img.shields.io/bundlephobia/minzip/react-use-gesture.svg) ![NPM](https://img.shields.io/npm/l/react-use-gesture.svg) [![BuildStatus](https://travis-ci.org/react-spring/react-use-gesture.svg)](https://travis-ci.org/react-spring/react-use-gesture?branch=next)
+
+React-use-gesture is a hook that lets you bind richer mouse and touch events to any component or view. With the data you receive, it becomes trivial to set up gestures, and often takes no more than a few lines of code.
+
+You can use it stand-alone, but to make the most of it you should combine it with an animation library like [react-spring](https://github.com/react-spring/react-spring), though you can most certainly use any other.
+
+<p align="middle">
+  <a href="https://codesandbox.io/s/cards-utgqg"><img src="https://i.imgur.com/H6nXQEq.gif" width="400"/></a>
+  <a href="https://codesandbox.io/s/viewpager-0km3o"><img src="https://i.imgur.com/iwZOfT9.gif" width="400"/></a>
+  <a href="https://codesandbox.io/s/react-use-gesture-sheet-fg3w0"><img src="https://i.imgur.com/THKPrmR.gif" width="400"/></a>
+  <a href="https://codesandbox.io/s/draggable-list-vp020"><img src="https://i.imgur.com/qLKJod3.gif" width="400"/></a>
+  <a href="https://codesandbox.io/s/9o92o24wrr"><img src="https://i.imgur.com/Walt1Ip.gif" width="400"/></a>
+</p>
+
+> <small>The demos are real click them!</small>
+
+## Api
+
+### Simple example
+
+```jsx
+import { useSpring, animated } from 'react-spring'
+import { useDrag } from 'react-use-gesture'
+
+function Simple() {
+  const [{ xy }, set] = useSpring(() => ({ xy: [0, 0] }))
+
+  // 1. we define the drag gesture logic using the useDrag hook
+  const bind = useDrag(({ down, delta }) => {
+    set({ xy: down ? delta : [0, 0] })
+  })
+
+  return (
+    <animated.div
+      // 2. we bind the result of the hook to our component
+      {...bind()}
+      style={{
+        transform: xy.interpolate((x, y) => `translate3D(${x}px, ${y}px, 0)`),
+      }}
+    />
+  )
+}
+```
+
+<small>[Open in Codesandbox](https://codesandbox.io/s/react-use-gesture-simple-y7yk9)</small>
+
+The example above makes a `div` draggable so that it follows your mouse on drag, and returns to its initial position on release.
+
+> <small>Why are you using `react-spring`? instead of `React.useState`?</small>
+
+### Available hooks
+
+React-use-gesture exports several hooks that can handle different gestures.
+
+| Hook         | Description                                                |
+| ------------ | ---------------------------------------------------------- |
+| `useDrag`    | Handles the drag gesture                                   |
+| `useMove`    | Handles mouse move events (touch devices not supported)    |
+| `useHover`   | Handles mouse over events (touch devices not supported)    |
+| `useScroll`  | Handles scroll events                                      |
+| `useWheel`   | Handles wheel events                                       |
+| `usePinch`   | Handles pinch events                                       |
+| `useGesture` | Handles multiple gestures in one hook ([read more here]()) |
+
+### Gesture event state
+
+Every time a handler is called, it will get passed a gesture state that includes the source event and adds multiple attributes such as speed, previous value, and much mroe.
+
+#### useDrag, useScroll, useWheel, useHover event state
+
+```jsx
+const bind = useDrag(({
+  event,    // the source event
+  xy,       // [x,y] position of the pointer or scroll value for useScroll or useWheel
+  previous, // previous xy
+  initial,  // xy value when the gesture has started
+  delta     // delta offset (xy - initial)
+  local     // delta with book-keeping (remembers the `xy` value throughout gestures)
+  lastLocal // previous local
+  vxvy      // [vx, vy] momentum / speed of the gesture
+  velocity  // combined moment / speed of the gesture
+  distance  // delta distance
+  direction // [dirx, diry] direction per axis
+  time,     // timestamp of the current gesture
+  first,    // true when it's the first event
+  last,     // true when it's the last event
+  active,   // true when the gesture is active
+  memo,     // stores the value returned by your handler during its previous run
+  cancel,   // function you can call to interrupt relevant gestures
+  down,     // true when a mouse button or touch is down
+  buttons,  // buttons pressed (see https://developer.mozilla.org/fr/docs/Web/API/MouseEvent/button)
+  touches   // numbers of touches pressing the screen
+  shiftKey, altKey, ctrlKey, metaKey  // true when modifier keys are pressed
+  args      // arguments you passed to bind
+} => {
+    /* gesture logic */
+  })
+)
+```
+
+> <small>How do I use `memo`?</small>
+
+#### usePinch event state
+
+Pinch is about scaling and rotating, therefore the keys `xy` and `vxvy` are renamed `da` (for distance and angle) and `vdva` respectively.
+
+```jsx
+const bind = usePinch(({
+  da,       // [d,a] absolute distance and angle of the two pointers
+  vdva,     // momentum / speed of the distance and rotation             origin,   // coordinates of the center between the two touch event
+} => {
+    /* gesture logic */
+  })
+)
+```
+
+### Gesture configuration
+
+### `use[Gesture]` config
+
+You can pass a `config` object as an optional second argument to `use[Gesture]` hooks to customize their behavior.
+
+> <small>How do I use `domTarget`?</small>
+
+```jsx
+const bind = useScroll(handler, {
+  // lets you specify a dom node or ref you want to attach the gesture to
+  domTarget: undefined,
+  // the event config attribute lets you configure `passive` and `capture` options passed to event listeners
+  event: { passive: true, capture: false },
+  // transform functions you can pass to modify `x` and `y` values
+  transform: { x: x => x, y => y },
+  // lets you specify which window element the gesture should use.
+  window: window,
+  // enables or disables gestures
+  enabled: true,
+  // enables or disables gestures individually (relevant for the useGesture hook)
+  drag: true,
+  pinch: true,
+  scroll: true,
+  wheel: true,
+  move: true
+})
+```
+
+> <small>See this [thread](https://github.com/react-spring/react-use-gesture/pull/43#issue-262835054) for a relevant use case of `window`.</small>
+
+## Advanced usage
+
+### `useGesture` hook: supporting multiple gestures at once
+
+If you want your component to support multiple gestures at once, it is preferred that you use the `useGesture` hook as below.
+
+```jsx
+const bind = useGesture({
+  onDrag: state => {...},     // fires on drag
+  onPinch: state => {...},     // fires on pinch
+  onScroll: state => {...},   // fires on scroll
+  onHover: state => {...},    // fires on mouse enter, mouse leave
+  onMove: state => {...},     // fires on mouse move over the element
+  onWheel: state => {...}     // fires on mouse wheel over the element
+})
+```
+
+### `on[Gesture]Start` and `on[Gesture]End`
+
+Drag, pinch, move, scroll and wheel gestures also have two additional handlers that let you perform actions when they start or end. For example, `onScrollEnd` fires when the user finished scrolling.
+
+> **Note #1:** `on[Gesture]Start` and `on[Gesture]End` methods are provided as a commodity. `on[Gesture]` handlers also receive `first` and `last` properties that indicate if the event fired is the first (i.e. gesture has started) or the last one (i.e. gesture has ended).
+
+```jsx
+// this:
+useGesture({ onDragStart: doStuffOnStart, onDragEnd:doStuffOnEnd })
+
+// is equivalent to this:
+useDrag(({first, last}) {
+  if (first) { /* do stuff on drag start */ }
+  if (last) { /* do stuff on drag end */ }
+})
+```
+
+### Adding gestures to dom nodes
+
+React-use-gesture also supports adding handlers to dom nodes directly (or the `window` or `document` objects). In that case, you shouldn't spread the `bind()` object returned by `use[Gesture]` hooks as a prop, but use the `React.useEffect` hook as below.
+
+```jsx
+// this will add a scroll listener to the window
+const bind = useScroll(state => doStuff, { domTarget: window })
+React.useEffect(bind, [bind])
+```
+
+You can also directly pass a ref to `domTarget`:
+
+```jsx
+const myRef = React.useRef()
+// this will add a scroll listener the div
+const bind = useScroll(state => doStuff, { domTarget: myRef })
+React.useEffect(bind, [bind])
+/*...*/
+return <div ref={myRef} />
+```
+
+> _Note that using `useEffect` will also take care of removing event listeners when the component is unmounted._
+
+### Other examples
+
+- [Locking Axis](https://codesandbox.io/s/25n4m933j)
+- [Boundaries](https://codesandbox.io/s/r7xnzk4x0o)
+- [Swipe](https://codesandbox.io/s/crimson-dawn-pzf9t)
+
+## Frequently Asked Questions
+
+#### Why are you using `react-spring` instead of `React.useState`?
+
+Simply because setting state in the gesture handler would re-render the component on each gesture frame, which isn't always good for performance. `react-spring` let us animate components without triggering renders. You could still use `useState` if you'd like though!
+
+#### What are the differences between using `use[Gesture]` hooks and adding listeners manually?
+
+Not a lot! Essentially these `use[Gesture]` hooks simplifies the implementation of the drag and pinch gestures, calculates kinematics values you wouldn't get out of the box from the listeners, and debounces move scroll and wheel events to let you know when they end.
+
+#### Why `onMove` when `onDrag` already exists?
+
+`onDrag` only fires while you touch or press the element. You just need to hover your mouse above the element to trigger `onMove`.
+
+#### Why `onWheel` and `onScroll`?
+
+Scrolling and wheeling are structurally different events although they produce similar results (i.e. scrolling a page). First of all, `wheel` is a mouse-only event. Then, for `onScroll` to be fired, the element you're scrolling needs to actually scroll, therefore have content overflowing, while you just need to wheel over an element to trigger `onWheel`. If you use [react-three-fiber](https://github.com/drcmda/react-three-fiber), `onWheel` might prove useful to simulate scroll on canvas elements.
+
+#### Accessing source event triggers a warning in the console!
+
+You're probably trying to access an event in `onScroll`, `onMove` or `onWheel` handlers. The last event is debounced, and therefore not accessible asynchronously because of how React pools events. A possible solution would be to make sure the event is not part of the last state update:
+
+```jsx
+useScroll(({ event, last }) => {
+  !last && event.preventDefault() // <-- event will not be accessed in the last event
+})
+```
+
+#### Why do I need to return `memo`?
+
+As you've seen in some examples, whenever `memo` is used, it is imperatively returned in the handler function. Essentially `memo` is a gesture state attribute that is undefined when the gesture starts, but then takes the return value of the handler function.
+
+In many use cases, we want `memo` to hold the original value of our element position when the gesture starts so that it becomes our point of reference when adding the gesture `delta`. So we set `memo` to the value of our position when `memo` is undefined, which is in fact when the gesture starts. Usually it looks like so:
+
+```jsx
+const [{ x }, set] = useSpring(() => ({ x: 0 }))
+const bind = useDrag(({ delta: [dx], memo = x.getValue() }) => {
+  set({ x: dx + memo })
+  return memo
+})
+```
+
+If we don’t return `memo`, then `memo` will remain undefined and in the next drag frame `memo` will take again the value of x, which will have updated in the meantime (therefore not being the point of reference when the gesture starts anymore).
+
+It may sound silly but returning `memo` makes sure that we continue holding a reference to the initial value of `memo`, ie the original value of x when the gesture started.
