@@ -155,7 +155,7 @@ If you want your component to support multiple gestures at once, it is preferred
 ```jsx
 const bind = useGesture({
   onDrag: state => {...},     // fires on drag
-  onPinch: state => {...},     // fires on pinch
+  onPinch: state => {...},    // fires on pinch
   onScroll: state => {...},   // fires on scroll
   onHover: state => {...},    // fires on mouse enter, mouse leave
   onMove: state => {...},     // fires on mouse move over the element
