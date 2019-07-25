@@ -1,5 +1,13 @@
 # Changelog
 
+## 5.2.1 Release
+
+**Summary:** Minor release.
+
+### Fixed
+
+1. Fixed issue with Webkit Gesture Recognizer
+
 ## 5.2.0 Release
 
 **Summary:** Introducing shorthand hooks for gestures.

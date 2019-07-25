@@ -47,6 +47,7 @@ export default class PinchWebKitGestureRecognizer extends DistanceAngleRecognize
   }
 
   updateTouchData = (event: TransformedEvent<TouchEvent>): void => {
+    if (!this.isEnabled() || event.touches.length !== 2) return
     const { origin } = getTwoTouchesEventData(event)
     this.updateState(null, { origin })
   }

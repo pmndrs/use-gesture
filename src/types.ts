@@ -30,7 +30,7 @@ export enum GestureFlag {
   OnEnd = 'end',
 }
 
-export type GestureEvent = React.PointerEvent & { scale: number; rotation: number }
+export type GestureEvent = React.TouchEvent & { scale: number; rotation: number }
 export type TransformedEvent<
   T extends React.SyntheticEvent = React.MouseEvent | React.TouchEvent | React.WheelEvent | React.PointerEvent | GestureEvent
 > = T & {

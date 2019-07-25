@@ -14,9 +14,7 @@
 
 ![npm (tag)](https://img.shields.io/npm/v/react-use-gesture.svg) ![npm bundle size](https://img.shields.io/bundlephobia/minzip/react-use-gesture.svg) ![NPM](https://img.shields.io/npm/l/react-use-gesture.svg) [![BuildStatus](https://travis-ci.org/react-spring/react-use-gesture.svg)](https://travis-ci.org/react-spring/react-use-gesture?branch=next)
 
-Ever thought about doing that sidebar pull-out, a view pager, some slider, any gesture on the web basically, and dropped the idea because it's too hard? In that case, this is your lib.
-
-React-use-gesture is a React hook that lets you bind richer mouse and touch events to any component or view. With the data you receive, it becomes trivial to set up gestures, and often takes no more than a few lines of code.
+React-use-gesture is a hook that lets you bind richer mouse and touch events to any component or view. With the data you receive, it becomes trivial to set up gestures, and often takes no more than a few lines of code.
 
 You can use it stand-alone, but to make the most of it you should combine it with an animation library like [react-spring](https://github.com/react-spring/react-spring), though you can most certainly use any other.
 
@@ -123,7 +121,7 @@ useGesture({ onDragStart: doStuffOnStart, onDragEnd:doStuffOnEnd })
 
 // is equivalent to this:
 useDrag(({first, last}) {
-  if(first) { /* do stuff on drag start */ }
+  if (first) { /* do stuff on drag start */ }
   if (last) { /* do stuff on drag end */ }
 })
 ```
@@ -143,7 +141,7 @@ React.useEffect(bind, [bind])
 You can also directly pass a ref to `domTarget`:
 
 ```js
-const myRef = React.useRef(null)
+const myRef = React.useRef()
 // this will add a scroll listener the div
 const bind = useScroll(state => doStuff, { domTarget: myRef })
 React.useEffect(bind, [bind])
@@ -164,41 +162,42 @@ The following attributes are provid| Hook | Description |
 | `useMove` | Handles hover events (touch devices not supported)
 | `useHover` | Handlers | ed to the handler for all gestures.
 
-| Name                                                | Type       | Description                                                                                                                  |
-| --------------------------------------------------- | ---------- | ---------------------------------------------------------------------------------------------------------------------------- |
-| `event`                                             | `object`   | source event                                                                                                                 |
-| `time`                                              | `Number`   | timestamp of the current gesture                                                                                             |
-| `first`                                             | `Boolean`  | marks the first event                                                                                                        |
-| `last`                                              | `Boolean`  | marks the last event                                                                                                         |
-| `active`                                            | `Boolean`  | `true` when the gesture is active, `false` otherwise                                                                         |
-| `memo`                                              | `Any`      | serves as a cache storing any value returned by your handler during its previous run. See below for an example.              |
-| `cancel`                                            | `Function` | you can call `cancel` to interrupt the drag or pinch gestures. `cancel`is only relevant for `onDrag` and `onPinch` handlers. |
-| `down`                                              | `Boolean`  | mouse / touch down                                                                                                           |
-| `buttons`                                           | `Number`   | buttons pressed (see [documentation](https://developer.mozilla.org/fr/docs/Web/API/MouseEvent/button))                       |
-| `touches`                                           | `Number`   | number of touches pressing the screen                                                                                        |
-| `shiftKey`<br/>`altKey`<br/>`ctrlKey`<br/>`metaKey` | `Boolean`  | modifier keys are pressed                                                                                                    |
-| `dragging`                                          | `Boolean`  | `true` when the user is dragging                                                                                             |
-| `moving`                                            | `Boolean`  | `true` when the user is moving the mouse                                                                                     |
-| `hovering`                                          | `Boolean`  | `true` when the mouse hovers the element                                                                                     |
-| `scrolling`                                         | `Boolean`  | `true` when the user is scrolling                                                                                            |
-| `wheeling`                                          | `Boolean`  | `true` when the user is wheeling                                                                                             |
-| `args`                                              | `Any`      | arguments you passed to `bind`                                                                                               |
+| Name                                                               | Type                      | Description                                                                                                                         |
+| ------------------------------------------------------------------ | ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| <small>`event`</small>                                             | <small>`object`</small>   | <small>source event</small>                                                                                                         |
+| <small>`time`</small>                                              | <small>`Number`</small>   | <small>timestamp of the current gesture</small>                                                                                     |
+| <small>`first`</small>                                             | <small>`Boolean`          | <small>marks the first event </small>                                                                                               |
+| <small>`last`</small>                                              | <small>`Boolean`</small>  | <small>marks the last event</small>                                                                                                 |
+| <small>`active`</small>                                            | <small>`Boolean`</small>  | `true` when the gesture is active, `false` otherwise                                                                                |
+| <small>`memo`</small>                                              | <small>`Any`</small>      | <small>serves as a cache storing any value returned by your handler during its previous run. See below for an example</small>       |
+| <small>`cancel`</small>                                            | <small>`Function`</small> | <small>you can call `cancel` to interrupt the drag or pinch gestures. `cancel`is only relevant for `onDrag` and `onPinch` handlers. |
+| <small>`down`</small>                                              | <small>`Boolean`</small>  | <small>mouse / touch down</small>                                                                                                   |
+| <small>`buttons`</small>                                           | <small>`Number`</small>   | <small>buttons pressed (see [documentation](https://developer.mozilla.org/fr/docs/Web/API/MouseEvent/button))</small>               |
+| <small>`touches`</small>                                           | <small>`Number`</small>   | <small>number of touches pressing the screen</small>                                                                                |
+| <small>`shiftKey`<br/>`altKey`<br/>`ctrlKey`<br/>`metaKey`</small> | <small>`Boolean`</small>  | <small>modifier keys are pressed</small>                                                                                            |
+| <small>`dragging`</small>                                          | <small>`Boolean`</small>  | <small>`true` when the user is dragging</small>                                                                                     |
+| <small>`moving`</small>                                            | <small>`Boolean`</small>  | <small>`true` when the user is moving the mouse</small>                                                                             |
+| <small>`hovering`</small>                                          | <small>`Boolean`</small>  | <small>`true` when the mouse hovers the element</small>                                                                             |
+| <small>`scrolling`</small>                                         | <small>`Boolean`</small>  | <small>`true` when the user is scrolling</small>                                                                                    |
+| <small>`wheeling`</small>                                          | <small>`Boolean`</small>  | <small>`true` when the user is wheeling</small>                                                                                     |
+| <small>`args`</small>                                              | <small>`Any`</small>      | <small>arguments you passed to `bind`</small>                                                                                       |
 
 #### Specific state attributes for X/Y Coordinates Gestures `[drag, scroll, wheel, hover]`
 
 The following attributes are provided to the handler for gestures that deal with `x/y` coordinates.
 
-| Name        | Type           | Description                                                                                                                                                                  |
-| ----------- | -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `xy`        | `Vec2 ([x,y])` | for touch/mouse events, `xy` returns the position of the pointer on the screen. For scroll/wheel events `xy` returns how much the element has been scrolled on x and y axis. |
-| `previous`  | `Vec2`         | previous `xy`                                                                                                                                                                |
-| `initial`   | `Vec2`         | `xy` value when the gesture has started                                                                                                                                      |
-| `delta`     | `Vec2`         | delta offset (`xy - initial`)                                                                                                                                                |
-| `local`     | `Vec2`         | delta with book-keeping (remembers the `xy` value throughout gestures)                                                                                                       |
-| `lastLocal` | `Vec2`         | previous `local`                                                                                                                                                             |
-| `vxvy`      | `Vec2`         | momentum / speed of the gesture (`x` and `y` axis separated)                                                                                                                 |
-| `velocity`  | `Number`       | momentum / speed of the gesture (`x` and `y` axis combined)                                                                                                                  |
-| `distance`  | `Number`       | delta distance                                                                                                                                                               |
+| Name                       | Type                          | Description                                                                                                                                                                                 |
+| -------------------------- | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| <small>`xy`</small>        | <small>`Vec2 ([x,y])`</small> | <small>for touch/mouse events, `xy` returns the position of the pointer on the screen. For scroll/wheel events `xy` returns how much the element has been scrolled on x and y axis.</small> |
+| <small>`previous`</small>  | <small>`Vec2`</small>         | <small>previous `xy`</small>                                                                                                                                                                |
+| <small>`initial`</small>   | <small>`Vec2`</small>         | <small>`xy` value when the gesture has started</small>                                                                                                                                      |
+| <small>`delta`</small>     | <small>`Vec2`</small>         | <small>delta offset (`xy - initial`)</small>                                                                                                                                                |
+| <small>`local`</small>     | <small>`Vec2`</small>         | <small>delta with book-keeping (remembers the `xy` value throughout gestures)                                                                                                               |
+| <small>`lastLocal`</small> | <small>`Vec2`</small>         | <small>previous `local`</small>                                                                                                                                                             |
+| <small>`vxvy`</small>      | <small>`Vec2`</small>         | <small>momentum / speed of the gesture (`x` and `y` axis separated)</small>                                                                                                                 |
+| <small>`velocity`</small>  | <small>`Number`</small>       | <small>momentum / speed of the gesture (`x` and `y` axis combined)</small>                                                                                                                  |
+| <small>`distance`</small>  | <small>`Number`</small>       | <small>delta distance</small>                                                                                                                                                               |
+| <small>`direction`</small> | <small>`Vec2`</small>         | <small>direction of the gesture per axis</small>                                                                                                                                            |
 
 #### Specific state attributes for Distance Angle Gestures `[pinch]`
 
@@ -206,30 +205,30 @@ Pinch is generally about scaling and rotating. The scale depends on the distance
 
 > _More specifically, both scale and rotation depends on the `delta` of `distance` and `angle`, so you will probably end up using `local` or `delta` in most cases._
 
-| Name        | Type     | Description                                                                                 |
-| ----------- | -------- | ------------------------------------------------------------------------------------------- |
-| `da`        | `Vec2`   | absolute distance and angle of the two pointers/fingers.                                    |
-| `previous`  | `Vec2`   | previous `da`                                                                               |
-| `initial`   | `Vec2`   | `da` value when the gesture has started                                                     |
-| `delta`     | `Vec2`   | delta offset (`da - initial`)                                                               |
-| `local`     | `Vec2`   | delta with book-keeping (remembers the `da` value throughout gestures)                      |
-| `lastLocal` | `Vec2`   | previous `local`                                                                            |
-| `vdva`      | `Vec2`   | momentum / speed of the gesture for distance and angle                                      |
-| `origin`    | `Number` | center between the two touch event coordinates                                              |
-| `turns`     | `Number` | keeps track of the number of turns (don't rely on `turns` to count the number of rotations) |
+| Name                       | Type                    | Description                                                                                                |
+| -------------------------- | ----------------------- | ---------------------------------------------------------------------------------------------------------- |
+| <small>`da`</small>        | <small>`Vec2`</small>   | <small>absolute distance and angle of the two pointers/fingers.</small>                                    |
+| <small>`previous`</small>  | <small>`Vec2`</small>   | <small>previous `da`</small>                                                                               |
+| <small>`initial`</small>   | <small>`Vec2`</small>   | <small>`da`value when the gesture has started</small>                                                      |
+| <small>`delta`</small>     | <small>`Vec2`</small>   | <small>delta offset (`da - initial`)</small>                                                               |
+| <small>`local`</small>     | <small>`Vec2`</small>   | <small>delta with book-keeping (remembers the `da` value throughout gestures)</small>                      |
+| <small>`lastLocal`</small> | <small>`Vec2`</small>   | <small>previous `local`</small>                                                                            |
+| <small>`vdva`</small>      | <small>`Vec2`</small>   | <small>momentum / speed of the gesture for distance and angle</small>                                      |
+| <small>`origin`</small>    | <small>`Number`</small> | <small>center between the two touch event coordinates</small>                                              |
+| <small>`turns`</small>     | <small>`Number`</small> | <small>keeps track of the number of turns (don't rely on `turns` to count the number of rotations)</small> |
 
 ### `use[Gesture]` config
 
 You can pass a `config` object as an optional second argument to `use[Gesture]` hooks to customize their behavior.
 
-| Name                                                                    | Default Value                     | Description                                                                                                                                                                            |
-| ----------------------------------------------------------------------- | --------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `domTarget`                                                             | `undefined`                       | lets you specify a dom node you want to attach gestures to (body, window, document...). You can also pass a ref created with the `useRef` hook.                                        |
-| `event`                                                                 | `{passive: true, capture: false}` | the event config attribute lets you configure `passive` and `capture` options passed to event listeners.                                                                               |
-| `transform`                                                             | `{x: x => x, y =>y }`             | transform functions you can pass to modify `x` and `y` values.                                                                                                                         |
-| `window`                                                                | `window`                          | lets you specify which `window` element `useGesture` should use. See this [thread](https://github.com/react-spring/react-use-gesture/pull/43#issue-262835054) for a relevant use case. |
-| `enabled`                                                               | `true`                            | enables or disables all gestures                                                                                                                                                       |
-| `drag`<br/>`pinch`<br/>`scroll`<br/>`wheel`<br/>`hover`<br/>`move`<br/> | `true`                            | enables or disables gestures individually                                                                                                                                              |
+| Name                                                                              | Default Value                            | Description                                                                                                                                                                                           |
+| --------------------------------------------------------------------------------- | ---------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| <small>`domTarget`</small>                                                        | <small>`undefined`</small>               | <small>lets you specify a dom node you want to attach gestures to (body, window, document...). You can also pass a ref created with the `useRef` hook.</small>                                        |
+| <small>`event`</small>                                                            | <small>`{passive: true, capture: false}` | <small>the event config attribute lets you configure `passive` and `capture` options passed to event listeners.</small>                                                                               |
+| <small>`transform`</small>                                                        | <small>`{x: x => x, y => y }`</small>    | <small>transform functions you can pass to modify `x` and `y` values.</small>                                                                                                                         |
+| <small>`window`</small>                                                           | <small>`window`</small>                  | <small>lets you specify which `window` element `useGesture` should use. See this [thread](https://github.com/react-spring/react-use-gesture/pull/43#issue-262835054) for a relevant use case.</small> |
+| <small>`enabled`</small>                                                          | <small>`true`</small>                    | <small>enables or disables all gestures</small>                                                                                                                                                       |
+| <small>`drag`<br/>`pinch`<br/>`scroll`<br/>`wheel`<br/>`hover`<br/>`move`</small> | <small>`true`</small>                    | <small>enables or disables gestures individually</small>                                                                                                                                              |
 
 ## Examples
 
