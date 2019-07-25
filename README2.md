@@ -55,15 +55,15 @@ The example above makes a `div` draggable so that it follows your mouse on drag,
 
 React-use-gesture exports several hooks that can handle different gestures.
 
-| Hook         | Description                                                |
-| ------------ | ---------------------------------------------------------- |
-| `useDrag`    | Handles the drag gesture                                   |
-| `useMove`    | Handles mouse move events (touch devices not supported)    |
-| `useHover`   | Handles mouse over events (touch devices not supported)    |
-| `useScroll`  | Handles scroll events                                      |
-| `useWheel`   | Handles wheel events                                       |
-| `usePinch`   | Handles pinch events                                       |
-| `useGesture` | Handles multiple gestures in one hook ([read more here]()) |
+| Hook         | Description                                                                                                     |
+| ------------ | --------------------------------------------------------------------------------------------------------------- |
+| `useDrag`    | Handles the drag gesture                                                                                        |
+| `useMove`    | Handles mouse move events (touch devices not supported)                                                         |
+| `useHover`   | Handles mouse over events (touch devices not supported)                                                         |
+| `useScroll`  | Handles scroll events                                                                                           |
+| `useWheel`   | Handles wheel events                                                                                            |
+| `usePinch`   | Handles pinch events                                                                                            |
+| `useGesture` | Handles multiple gestures in one hook ([read more here](#usegesture-hook-supporting-multiple-gestures-at-once)) |
 
 ### Gesture event state
 
@@ -148,7 +148,7 @@ const bind = useScroll(handler, {
 
 ## Advanced usage
 
-### `useGesture` hook: supporting multiple gestures at once
+#### `useGesture` hook: supporting multiple gestures at once
 
 If you want your component to support multiple gestures at once, it is preferred that you use the `useGesture` hook as below.
 
