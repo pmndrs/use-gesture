@@ -15,7 +15,7 @@ You can use it stand-alone, but to make the most of it you should combine it wit
   <a href="https://codesandbox.io/s/infinite-slideshow-fu8wc"><img src="https://i.imgur.com/cuOfqST.gif" width="400"/></a>
 </p>
 
-> The demos are real click them!
+<p align="middle"><i>The demos are real click them!</i></p>
 
 ## Api
 
