@@ -238,7 +238,7 @@ Simply because setting state in the gesture handler would re-render the componen
 
 #### What are the differences between using `use[Gesture]` hooks and adding listeners manually?
 
-Not a lot! Essentially these `use[Gesture]` hooks simplifies the implementation of the drag and pinch gestures, calculates kinematics values you wouldn't get out of the box from the listeners, and debounces move scroll and wheel events to let you know when they end.
+Not a lot! Essentially these `use[Gesture]` hooks simplify the implementation of the drag and pinch gestures, calculate kinematics values you wouldn't get out of the box from the listeners, and debounce move, scroll and wheel events to let you know when they end.
 
 #### Why `onMove` when `onDrag` already exists?
 
