@@ -49,7 +49,7 @@ function Simple() {
 
 The example above makes a `div` draggable so that it follows your mouse on drag, and returns to its initial position on release.
 
-> Why are you using `react-spring`? instead of `React.useState`?
+> [Why are you using `react-spring` instead of `React.useState`](#why-are-you-using-react-spring-instead-of-reactusestate)?
 
 ### Available hooks
 
@@ -101,7 +101,7 @@ const bind = useDrag(({
 )
 ```
 
-> How do I use `memo`?
+> [How do I use `memo`?](#how-do-i-use-memo)
 
 #### usePinch event state
 
