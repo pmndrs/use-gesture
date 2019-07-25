@@ -12,9 +12,10 @@ You can use it stand-alone, but to make the most of it you should combine it wit
   <a href="https://codesandbox.io/s/react-use-gesture-sheet-fg3w0"><img src="https://i.imgur.com/THKPrmR.gif" width="400"/></a>
   <a href="https://codesandbox.io/s/draggable-list-vp020"><img src="https://i.imgur.com/qLKJod3.gif" width="400"/></a>
   <a href="https://codesandbox.io/s/9o92o24wrr"><img src="https://i.imgur.com/Walt1Ip.gif" width="400"/></a>
+  <a href="https://codesandbox.io/s/infinite-slideshow-fu8wc"><img src="https://i.imgur.com/cuOfqST.gif" width="400"/></a>
 </p>
 
-> <small>The demos are real click them!</small>
+> The demos are real click them!
 
 ## Api
 
@@ -44,11 +45,11 @@ function Simple() {
 }
 ```
 
-<small>[Open in Codesandbox](https://codesandbox.io/s/react-use-gesture-simple-y7yk9)</small>
+[Open in Codesandbox](https://codesandbox.io/s/react-use-gesture-simple-y7yk9)
 
 The example above makes a `div` draggable so that it follows your mouse on drag, and returns to its initial position on release.
 
-> <small>Why are you using `react-spring`? instead of `React.useState`?</small>
+> Why are you using `react-spring`? instead of `React.useState`?
 
 ### Available hooks
 
@@ -100,7 +101,7 @@ const bind = useDrag(({
 )
 ```
 
-> <small>How do I use `memo`?</small>
+> How do I use `memo`?
 
 #### usePinch event state
 
@@ -116,13 +117,9 @@ const bind = usePinch(({
 )
 ```
 
-### Gesture configuration
+### Gesture options
 
-### `use[Gesture]` config
-
-You can pass a `config` object as an optional second argument to `use[Gesture]` hooks to customize their behavior.
-
-> <small>How do I use `domTarget`?</small>
+You can pass a an object as an optional second argument to `use[Gesture]` hooks to customize their behavior.
 
 ```jsx
 const bind = useScroll(handler, {
@@ -145,7 +142,9 @@ const bind = useScroll(handler, {
 })
 ```
 
-> <small>See this [thread](https://github.com/react-spring/react-use-gesture/pull/43#issue-262835054) for a relevant use case of `window`.</small>
+> [How do I use `domTarget`](#adding-gestures-to-dom-nodes)?
+
+> See this [thread](https://github.com/react-spring/react-use-gesture/pull/43#issue-262835054) for a relevant use case of `window`.
 
 ## Advanced usage
 
@@ -164,7 +163,7 @@ const bind = useGesture({
 })
 ```
 
-### `on[Gesture]Start` and `on[Gesture]End`
+#### `on[Gesture]Start` and `on[Gesture]End`
 
 Drag, pinch, move, scroll and wheel gestures also have two additional handlers that let you perform actions when they start or end. For example, `onScrollEnd` fires when the user finished scrolling.
 
@@ -181,7 +180,7 @@ useDrag(({first, last}) {
 })
 ```
 
-### Adding gestures to dom nodes
+#### Adding gestures to dom nodes
 
 React-use-gesture also supports adding handlers to dom nodes directly (or the `window` or `document` objects). In that case, you shouldn't spread the `bind()` object returned by `use[Gesture]` hooks as a prop, but use the `React.useEffect` hook as below.
 
@@ -203,6 +202,26 @@ return <div ref={myRef} />
 ```
 
 > _Note that using `useEffect` will also take care of removing event listeners when the component is unmounted._
+
+#### How do I use memo?
+
+<p align="middle">
+  <a href="https://codesandbox.io/s/memo-rocket-29nih"><img src="https://i.imgur.com/BnZtmxE.gif" width="400"/></a>
+</p>
+This demo reads out further data like velocity and direction to calculate decay. `memo` in this case is a simple storage that picks up whatever value you (optionally) return inside the event handler. It's valid as long as the gesture is active. Without this you would need to store the initial `pos` value somewhere else and conditionally update it when the gesture begins.
+
+```jsx
+const [{ pos }, set] = useSpring(() => ({ pos: [0, 0] }))
+const bind = useDrag(({ active, delta, velocity, direction, memo = pos.getValue() }) => {
+  set({
+    pos: add(delta, memo),
+    immediate: active,
+    config: { velocity: scale(direction, velocity), decay: true },
+  })
+  return memo
+})
+return <animated.div {...bind()} style={{ transform: pos.interpolate((x, y) => `translate3d(${x}px,${y}px,0)`) }} />
+```
 
 ### Other examples
 
