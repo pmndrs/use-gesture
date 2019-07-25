@@ -208,6 +208,7 @@ return <div ref={myRef} />
 <p align="middle">
   <a href="https://codesandbox.io/s/memo-rocket-29nih"><img src="https://i.imgur.com/BnZtmxE.gif" width="400"/></a>
 </p>
+
 This demo reads out further data like velocity and direction to calculate decay. `memo` in this case is a simple storage that picks up whatever value you (optionally) return inside the event handler. It's valid as long as the gesture is active. Without this you would need to store the initial `pos` value somewhere else and conditionally update it when the gesture begins.
 
 ```jsx
@@ -233,7 +234,7 @@ return <animated.div {...bind()} style={{ transform: pos.interpolate((x, y) => `
 
 #### Why are you using `react-spring` instead of `React.useState`?
 
-Simply because setting state in the gesture handler would re-render the component on each gesture frame, which isn't always good for performance. `react-spring` let us animate components without triggering renders. You could still use `useState` if you'd like though!
+Simply because setting state in the gesture handler would re-render the component on each gesture frame, which isn't always good for performance. `react-spring` lets us animate components without triggering renders. You could still use `useState` if you'd like though!
 
 #### What are the differences between using `use[Gesture]` hooks and adding listeners manually?
 
