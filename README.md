@@ -234,23 +234,23 @@ return <animated.div {...bind()} style={{ transform: pos.interpolate((x, y) => `
 
 ## Frequently Asked Questions
 
-#### ➡️ Why using `react-spring` instead of `React.useState`?
+#### Why using `react-spring` instead of `React.useState`?
 
 Simply because setting state in the gesture handler would re-render the component on each gesture frame, which isn't always good for performance. `react-spring` lets us animate components without triggering renders. You could still use `useState` if you'd like though!
 
-#### ️➡️ What are the differences between using `use[Gesture]` hooks and adding listeners manually?
+#### ️What are the differences between using `use[Gesture]` hooks and adding listeners manually?
 
 Not a lot! Essentially these `use[Gesture]` hooks simplify the implementation of the drag and pinch gestures, calculate kinematics values you wouldn't get out of the box from the listeners, and debounce move, scroll and wheel events to let you know when they end.
 
-#### ➡️ Why `onMove` when `onDrag` already exists?
+#### Why `onMove` when `onDrag` already exists?
 
 `onDrag` only fires while you touch or press the element. You just need to hover your mouse above the element to trigger `onMove`.
 
-#### ➡️ Why `onWheel` and `onScroll`?
+#### Why `onWheel` and `onScroll`?
 
 Scrolling and wheeling are structurally different events although they produce similar results (i.e. scrolling a page). First of all, `wheel` is a mouse-only event. Then, for `onScroll` to be fired, the element you're scrolling needs to actually scroll, therefore have content overflowing, while you just need to wheel over an element to trigger `onWheel`. If you use [react-three-fiber](https://github.com/drcmda/react-three-fiber), `onWheel` might prove useful to simulate scroll on canvas elements.
 
-#### ➡️ Accessing source event triggers a warning in the console!
+#### Accessing source event triggers a warning in the console!
 
 You're probably trying to access an event in `onScroll`, `onMove` or `onWheel` handlers. The last event is debounced, and therefore not accessible asynchronously because of how React pools events. A possible solution would be to make sure the event is not part of the last state update:
 
@@ -260,7 +260,7 @@ useScroll(({ event, last }) => {
 })
 ```
 
-#### ➡️ Why do I need to return `memo`?
+#### Why do I need to return `memo`?
 
 As you've seen in some examples, whenever `memo` is used, it is imperatively returned in the handler function. Essentially `memo` is a gesture state attribute that is undefined when the gesture starts, but then takes the return value of the handler function.
 
