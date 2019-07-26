@@ -7,12 +7,12 @@ React-use-gesture is a hook that lets you bind richer mouse and touch events to 
 You can use it stand-alone, but to make the most of it you should combine it with an animation library like [react-spring](https://github.com/react-spring/react-spring), though you can most certainly use any other.
 
 <p align="middle">
-  <a href="https://codesandbox.io/s/cards-utgqg"><img src="https://i.imgur.com/H6nXQEq.gif" width="400"/></a>
-  <a href="https://codesandbox.io/s/viewpager-0km3o"><img src="https://i.imgur.com/iwZOfT9.gif" width="400"/></a>
-  <a href="https://codesandbox.io/s/react-use-gesture-sheet-fg3w0"><img src="https://i.imgur.com/THKPrmR.gif" width="400"/></a>
   <a href="https://codesandbox.io/s/draggable-list-vp020"><img src="https://i.imgur.com/qLKJod3.gif" width="400"/></a>
-  <a href="https://codesandbox.io/s/9o92o24wrr"><img src="https://i.imgur.com/Walt1Ip.gif" width="400"/></a>
+  <a href="https://codesandbox.io/s/cards-utgqg"><img src="https://i.imgur.com/H6nXQEq.gif" width="400"/></a>
+  <a href="https://codesandbox.io/s/react-use-gesture-sheet-fg3w0"><img src="https://i.imgur.com/THKPrmR.gif" width="400"/></a>
   <a href="https://codesandbox.io/s/infinite-slideshow-fu8wc"><img src="https://i.imgur.com/cuOfqST.gif" width="400"/></a>
+  <a href="https://codesandbox.io/s/viewpager-0km3o"><img src="https://i.imgur.com/iwZOfT9.gif" width="400"/></a>
+  <a href="https://codesandbox.io/s/9o92o24wrr"><img src="https://i.imgur.com/Walt1Ip.gif" width="400"/></a>
 </p>
 
 <p align="middle"><i>The demos are real click them!</i></p>
