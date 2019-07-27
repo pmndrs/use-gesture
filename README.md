@@ -195,7 +195,7 @@ React.useEffect(bind, [bind])
 You can also directly pass a ref to `domTarget`:
 
 ```jsx
-const myRef = React.useRef()
+const myRef = React.useRef(null)
 // this will add a scroll listener the div
 const bind = useScroll(state => doStuff, { domTarget: myRef })
 React.useEffect(bind, [bind])
