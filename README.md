@@ -277,3 +277,7 @@ const bind = useDrag(({ delta: [dx], memo = x.getValue() }) => {
 If we don’t return `memo`, then `memo` will remain undefined and in the next drag frame `memo` will take again the value of x, which will have updated in the meantime (therefore not being the point of reference when the gesture starts anymore).
 
 It may sound silly but returning `memo` makes sure that we continue holding a reference to the initial value of `memo`, ie the original value of x when the gesture started.
+
+#### Why am I getting warnings from `preventDefault()` after I pass `{ passive: false }`
+
+The basic use of `<Component {...bind()) />` passes the task of attaching listeners to React. React does not [(yet)](https://github.com/facebook/react/issues/6436) support binding passive listeners via props. To have `useGesture` attach the listeners, you must also [use a domTarget](#adding-gestures-to-dom-nodes). This is only required if you plan to `preventDefault` or cancel the event.
