@@ -1,6 +1,6 @@
 # Changelog
 
-## 5.2.2 Release
+## 5.2.3 Release
 
 **Summary:** Minor release.
 

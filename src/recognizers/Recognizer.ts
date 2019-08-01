@@ -43,7 +43,7 @@ export default abstract class Recognizer<GestureType extends Coordinates | Dista
   }
 
   // convenience method to set a timeout for a given gesture
-  protected setTimeout = (callback: (...args: any[]) => void, ms: number = 120, ...args: any[]): void => {
+  protected setTimeout = (callback: (...args: any[]) => void, ms: number = 140, ...args: any[]): void => {
     this.controller.timeouts[this.stateKey] = window.setTimeout(callback, ms, ...args)
   }
 
