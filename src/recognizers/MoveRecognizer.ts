@@ -13,7 +13,7 @@ export default class MoveRecognizer extends CoordinatesRecognizer {
     if (!this.isEnabled()) return
 
     this.clearTimeout()
-    this.setTimeout(this.onEnd, 100)
+    this.setTimeout(this.onEnd)
 
     const { values, ...rest } = getPointerEventData(event)
 

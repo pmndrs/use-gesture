@@ -14,7 +14,7 @@ export default class WheelRecognizer extends CoordinatesRecognizer {
     if (!this.isEnabled()) return
 
     this.clearTimeout()
-    this.setTimeout(this.onEnd, 100)
+    this.setTimeout(this.onEnd)
 
     const { values: eventValues, ...rest } = getWheelEventData(event)
     const values = addV(eventValues, this.getState().values)

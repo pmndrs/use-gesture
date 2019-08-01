@@ -1,5 +1,13 @@
 # Changelog
 
+## 5.2.2 Release
+
+**Summary:** Minor release.
+
+### Fixed
+
+1. Changed the default timeout for debounced events
+
 ## 5.2.1 Release
 
 **Summary:** Minor release.

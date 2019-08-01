@@ -13,7 +13,7 @@ export default class ScrollRecognizer extends CoordinatesRecognizer {
     if (!this.isEnabled()) return
 
     this.clearTimeout()
-    this.setTimeout(this.onEnd, 100)
+    this.setTimeout(this.onEnd)
 
     const { values, ...rest } = getScrollEventData(event)
 

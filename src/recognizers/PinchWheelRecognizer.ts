@@ -15,7 +15,7 @@ export default class PinchWheelRecognizer extends DistanceAngleRecognizer {
     event.preventDefault()
 
     this.clearTimeout()
-    this.setTimeout(this.onEnd, 100)
+    this.setTimeout(this.onEnd)
 
     const { values, ...rest } = getWheelEventData(event)
     const d = this.getState().values[0] - values[1]
