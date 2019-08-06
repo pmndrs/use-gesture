@@ -32,18 +32,14 @@ import { useDrag } from 'react-use-gesture'
 function Simple() {
   const [{ xy }, set] = useSpring(() => ({ xy: [0, 0] }))
 
-  // 1. we define the drag gesture logic using the useDrag hook
-  const bind = useDrag(({ down, delta }) => {
-    set({ xy: down ? delta : [0, 0] })
-  })
+  // 1. Define the gesture
+  const bind = useDrag(({ down, delta }) => set({ xy: down ? delta : [0, 0] }))
 
   return (
     <animated.div
-      // 2. we bind the result of the hook to our component
+      // 2. Bind it to a component
       {...bind()}
-      style={{
-        transform: xy.interpolate((x, y) => `translate3D(${x}px, ${y}px, 0)`),
-      }}
+      style={{ transform: xy.interpolate((x, y) => `translate3D(${x}px, ${y}px, 0)`) }}
     />
   )
 }
