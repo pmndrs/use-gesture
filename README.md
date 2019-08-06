@@ -29,7 +29,7 @@ You can use it stand-alone, but to make the most of it you should combine it wit
 import { useSpring, animated } from 'react-spring'
 import { useDrag } from 'react-use-gesture'
 
-function Simple() {
+function PullRelease() {
   const [{ xy }, set] = useSpring(() => ({ xy: [0, 0] }))
 
   // 1. Define the gesture
