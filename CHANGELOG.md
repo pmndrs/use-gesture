@@ -1,5 +1,13 @@
 # Changelog
 
+## 5.2.4 Release
+
+**Summary:** Minor release.
+
+### Fixed
+
+1. `memo` now works as expected when returning `0` from the handler
+
 ## 5.2.3 Release
 
 **Summary:** Minor release.

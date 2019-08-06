@@ -128,7 +128,8 @@ export default class GestureController {
     // i.e. GestureFlag.OnStart would trigger both onDragStart and onDrag
     const handler = this.handlers[handlerKey] as any
     if (handler) {
-      this.state[stateKey].memo = handler(state) || this.state[stateKey].memo
+      const newMemo = handler(state)
+      this.state[stateKey].memo = newMemo !== undefined ? newMemo : this.state[stateKey].memo
     }
 
     if (gestureFlag === GestureFlag.OnEnd) {
