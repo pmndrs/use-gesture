@@ -39,10 +39,7 @@ function PullRelease() {
     <animated.div
       // 2. Bind it to a component
       {...bind()}
-      style={{ transform: xy.interpolate((x, y) => `translate3D(${x}px, ${y}px, 0)`) }}
-    />
-  )
-}
+      style={{ transform: xy.interpolate((x, y) => `translate3D(${x}px, ${y}px, 0)`) }} />
 ```
 
 The example above makes a `div` draggable so that it follows your mouse on drag, and returns to its initial position on release.
