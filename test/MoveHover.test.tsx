@@ -1,6 +1,6 @@
 import React from 'react'
-import { render, cleanup, fireEvent } from 'react-testing-library'
-import 'jest-dom/extend-expect'
+import { render, cleanup, fireEvent } from '@testing-library/react'
+import '@testing-library/jest-dom/extend-expect'
 import Interactive from './components/Interactive'
 import { InteractiveType } from './components/types'
 // import InteractiveDom from './components/InteractiveDom'

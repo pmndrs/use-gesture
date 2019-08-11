@@ -6,7 +6,6 @@ import {
   GestureState,
   SharedGestureState,
   GestureKey,
-  FullGestureState,
   Fn,
   ReactEventHandlerKey,
   GestureFlag,
@@ -105,18 +104,6 @@ export default class GestureController {
     // gestureKey: 'hover' -> stateKey: 'move', handlerKey: 'onHover'
     const { stateKey, handlerKey } = mappedKeys[gestureKey]
     const state = { ...this.state.shared, ...this.state[stateKey] }
-
-    if (gestureKey === 'pinch') {
-      const pinchState = state as FullGestureState<DistanceAngle>
-      pinchState.da = state.values // legacy state attribute for pinch gestures
-      pinchState.vdva = state.velocities // legacy state attribute for pinch gestures
-    } else {
-      const coordinatesState = state as FullGestureState<Coordinates>
-      coordinatesState.xy = state.values // legacy state attribute for xy gestures
-      coordinatesState.vxvy = state.velocities // legacy state attribute for xy gestures
-    }
-    // TODO to be removed in future versions
-    state.temp = state.memo // legacy temp attribute
 
     if (gestureFlag === GestureFlag.OnStart) {
       const handlerStart = `${handlerKey}Start` as keyof GestureHandlers

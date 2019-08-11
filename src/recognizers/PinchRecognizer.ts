@@ -13,9 +13,9 @@ export default class PinchRecognizer extends DistanceAngleRecognizer {
   onStart = (event: TransformedEvent<TouchEvent>): void => {
     if (!this.isEnabled() || event.touches.length !== 2) return
 
-    const { values, origin, ...rest } = getTwoTouchesEventData(event)
+    const { da, origin, ...rest } = getTwoTouchesEventData(event)
 
-    const startState = this.getStartState(values, event)
+    const startState = this.getStartState(da, event)
     this.updateState(
       { ...rest, pinching: true, down: true },
       { ...startState, origin, cancel: () => this.onCancel(event) },
@@ -27,9 +27,9 @@ export default class PinchRecognizer extends DistanceAngleRecognizer {
     const { canceled, active } = this.getState()
     if (canceled || !active || event.touches.length !== 2) return
 
-    const { values, origin, ...rest } = getTwoTouchesEventData(event)
+    const { da, origin, ...rest } = getTwoTouchesEventData(event)
 
-    const kinematics = this.getKinematics(values, event)
+    const kinematics = this.getKinematics(da, event)
     const cancel = () => this.onCancel(event)
 
     this.updateState(rest, { ...kinematics, origin, first: false, cancel }, GestureFlag.OnChange)

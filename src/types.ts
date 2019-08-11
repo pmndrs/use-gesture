@@ -122,14 +122,13 @@ export interface CommonGestureState {
   event?: TransformedEvent
   currentTarget?: EventTarget | null
   pointerId?: number | null
-  values: Vector2
-  velocities: Vector2
   delta: Vector2
+  movement: Vector2
+  offset: Vector2
   initial: Vector2
   previous: Vector2
+  direction: Vector2
   transform?: TransformType
-  local: Vector2
-  lastLocal: Vector2
   first: boolean
   last: boolean
   active: boolean
@@ -137,7 +136,6 @@ export interface CommonGestureState {
   cancel?(): void
   canceled: boolean
   memo?: any
-  temp?: any // TODO to be removed in future versions
   args?: any
 }
 
@@ -146,7 +144,6 @@ export interface Coordinates {
   velocity: number
   vxvy: Vector2
   distance: number
-  direction: Vector2
 }
 
 export interface DistanceAngle {

@@ -15,20 +15,20 @@ export default class MoveRecognizer extends CoordinatesRecognizer {
     this.clearTimeout()
     this.setTimeout(this.onEnd)
 
-    const { values, ...rest } = getPointerEventData(event)
+    const { xy, ...rest } = getPointerEventData(event)
 
     if (!this.getState().active) {
-      const startState = this.getStartState(values, event)
+      const startState = this.getStartState(xy, event)
       this.updateState({ moving: true, ...rest }, startState, GestureFlag.OnStart)
     } else {
-      const kinematics = this.getKinematics(values, event)
+      const kinematics = this.getKinematics(xy, event)
       this.updateState(rest, { ...kinematics, first: false }, GestureFlag.OnChange)
     }
   }
 
   onEnd = (): void => {
     if (!this.getState().active) return
-    this.updateState({ moving: false }, { ...genericEndState, velocity: 0, velocities: [0, 0] }, GestureFlag.OnEnd)
+    this.updateState({ moving: false }, { ...genericEndState, velocity: 0, vxvy: [0, 0] }, GestureFlag.OnEnd)
   }
 
   getEventBindings(): [ReactEventHandlerKey | ReactEventHandlerKey[], Fn][] {

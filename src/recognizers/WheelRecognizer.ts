@@ -16,10 +16,11 @@ export default class WheelRecognizer extends CoordinatesRecognizer {
     this.clearTimeout()
     this.setTimeout(this.onEnd)
 
-    const { values: eventValues, ...rest } = getWheelEventData(event)
-    const values = addV(eventValues, this.getState().values)
+    const { xy: prevXY, active } = this.getState()
+    const { xy, ...rest } = getWheelEventData(event)
+    const values = addV(xy, prevXY)
 
-    if (!this.getState().active) {
+    if (!active) {
       const startState = this.getStartState(values, event)
       this.updateState({ wheeling: true, ...rest }, startState, GestureFlag.OnStart)
     } else {
@@ -30,7 +31,7 @@ export default class WheelRecognizer extends CoordinatesRecognizer {
 
   onEnd = (): void => {
     if (!this.getState().active) return
-    this.updateState({ wheeling: false }, { ...genericEndState, velocity: 0, velocities: [0, 0] }, GestureFlag.OnEnd)
+    this.updateState({ wheeling: false }, { ...genericEndState, velocity: 0, vxvy: [0, 0] }, GestureFlag.OnEnd)
   }
 
   getEventBindings(): [ReactEventHandlerKey | ReactEventHandlerKey[], Fn][] {

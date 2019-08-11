@@ -11,16 +11,16 @@ export default class HoverRecognizer extends CoordinatesRecognizer {
 
   onStart = (event: TransformedEvent): void => {
     if (!this.isEnabled()) return
-    const { values, ...rest } = getPointerEventData(event)
-    this.updateState({ hovering: true, ...rest }, { values, event, args: this.args }, GestureFlag.OnChange)
+    const { xy, ...rest } = getPointerEventData(event)
+    this.updateState({ hovering: true, ...rest }, { xy, event, args: this.args }, GestureFlag.OnChange)
   }
 
   onEnd = (event: TransformedEvent): void => {
     if (!this.isEnabled()) return
-    const { values, ...rest } = getPointerEventData(event)
-    const kinematics = this.getKinematics(values, event)
+    const { xy, ...rest } = getPointerEventData(event)
+    const kinematics = this.getKinematics(xy, event)
 
-    this.updateState({ hovering: false, moving: false, ...rest }, { ...kinematics, ...genericEndState, velocity: 0, velocities: [0, 0] })
+    this.updateState({ hovering: false, moving: false, ...rest }, { ...kinematics, ...genericEndState, velocity: 0, vxvy: [0, 0] })
 
     // when the mouse leaves the element, we also fire the move handler
     // without waiting for move to end with debounce

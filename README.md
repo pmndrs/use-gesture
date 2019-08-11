@@ -33,7 +33,7 @@ function PullRelease() {
   const [{ xy }, set] = useSpring(() => ({ xy: [0, 0] }))
 
   // 1. Define the gesture
-  const bind = useDrag(({ down, delta }) => set({ xy: down ? delta : [0, 0] }))
+  const bind = useDrag(({ down, movement }) => set({ xy: down ? movement : [0, 0] }))
 
   return (
     <animated.div
@@ -68,28 +68,28 @@ Every time a handler is called, it will get passed a gesture state that includes
 
 ```jsx
 const bind = useDrag(({
-  event,    // the source event
-  xy,       // [x,y] position of the pointer or scroll value for useScroll or useWheel
-  previous, // previous xy
-  initial,  // xy value when the gesture has started
-  delta     // delta offset (xy - initial)
-  local     // delta with book-keeping (remembers the `xy` value throughout gestures)
-  lastLocal // previous local
-  vxvy      // [vx, vy] momentum / speed of the gesture
-  velocity  // combined moment / speed of the gesture
-  distance  // delta distance
-  direction // [dirx, diry] direction per axis
-  time,     // timestamp of the current gesture
-  first,    // true when it's the first event
-  last,     // true when it's the last event
-  active,   // true when the gesture is active
-  memo,     // stores the value returned by your handler during its previous run
-  cancel,   // function you can call to interrupt relevant gestures
-  down,     // true when a mouse button or touch is down
-  buttons,  // buttons pressed (see https://developer.mozilla.org/fr/docs/Web/API/MouseEvent/button)
-  touches   // numbers of touches pressing the screen
-  shiftKey, altKey, ctrlKey, metaKey  // true when modifier keys are pressed
-  args      // arguments you passed to bind
+  event,      // * the source event
+  xy,         // [x,y] position of the pointer or scroll value for useScroll or useWheel
+  previous,   // * previous xy
+  initial,    // * xy value when the gesture has started
+  delta,      // * delta between current and previous values (xy - previous)
+  movement,   // * last gesture offset (xy - initial)
+  offset,     // * offset since the first gesture (movement with book-keeping)
+  vxvy,       // [vx, vy] momentum / speed of the gesture
+  velocity,   // combined moment / speed of the gesture
+  distance,   // offset distance
+  direction,  // * [dirx, diry] direction per axis
+  time,       // * timestamp of the current gesture
+  first,      // * true when it's the first event
+  last,       // * true when it's the last event
+  active,     // * true when the gesture is active
+  memo,       // * stores the value returned by your handler during its previous run
+  cancel,     // * function you can call to interrupt relevant gestures
+  down,       // * true when a mouse button or touch is down
+  buttons,    // * buttons pressed (see https://developer.mozilla.org/fr/docs/Web/API/MouseEvent/button)
+  touches     // * numbers of touches pressing the screen
+  shiftKey, altKey, ctrlKey, metaKey,    // * true when modifier keys are pressed
+  args        // * arguments you passed to bind
 } => {
     /* gesture logic */
   })
@@ -104,8 +104,9 @@ Pinch is about scaling and rotating, therefore the keys `xy` and `vxvy` are rena
 
 ```jsx
 const bind = usePinch(({
-  da,       // [d,a] absolute distance and angle of the two pointers
-  vdva,     // momentum / speed of the distance and rotation             origin,   // coordinates of the center between the two touch event
+  da,         // [d,a] absolute distance and angle of the two pointers
+  vdva,       // momentum / speed of the distance and rotation
+  origin,     // coordinates of the center between the two touch event
 } => {
     /* gesture logic */
   })
@@ -208,9 +209,9 @@ This demo reads out further data like velocity and direction to calculate decay.
 
 ```jsx
 const [{ pos }, set] = useSpring(() => ({ pos: [0, 0] }))
-const bind = useDrag(({ active, delta, velocity, direction, memo = pos.getValue() }) => {
+const bind = useDrag(({ active, movement, velocity, direction, memo = pos.getValue() }) => {
   set({
-    pos: add(delta, memo),
+    pos: addV(movement, memo),
     immediate: active,
     config: { velocity: scale(direction, velocity), decay: true },
   })
@@ -224,6 +225,17 @@ return <animated.div {...bind()} style={{ transform: pos.interpolate((x, y) => `
 - [Locking Axis](https://codesandbox.io/s/25n4m933j)
 - [Boundaries](https://codesandbox.io/s/r7xnzk4x0o)
 - [Swipe](https://codesandbox.io/s/crimson-dawn-pzf9t)
+
+### Utilities
+
+React-use-gesture also exports two methods that add or substract vectors formed as arrays. They might be handy in the case you need to manipulate positions.
+
+```jsx
+import { addV, subV } from 'react-use-gesture'
+
+const sum = addV([10, 10], [5, 5])
+const sub = subV([10, 10], [5, 5])
+```
 
 ## Frequently Asked Questions
 
@@ -257,12 +269,12 @@ useScroll(({ event, last }) => {
 
 As you've seen in some examples, whenever `memo` is used, it is imperatively returned in the handler function. Essentially `memo` is a gesture state attribute that is undefined when the gesture starts, but then takes the return value of the handler function.
 
-In many use cases, we want `memo` to hold the original value of our element position when the gesture starts so that it becomes our point of reference when adding the gesture `delta`. So we set `memo` to the value of our position when `memo` is undefined, which is in fact when the gesture starts. Usually it looks like so:
+In many use cases, we want `memo` to hold the original value of our element position when the gesture starts so that it becomes our point of reference when adding the gesture `movement`. So we set `memo` to the value of our position when `memo` is undefined, which is in fact when the gesture starts. Usually it looks like so:
 
 ```jsx
 const [{ x }, set] = useSpring(() => ({ x: 0 }))
-const bind = useDrag(({ delta: [dx], memo = x.getValue() }) => {
-  set({ x: dx + memo })
+const bind = useDrag(({ movement: [mx], memo = x.getValue() }) => {
+  set({ x: ox + memo })
   return memo
 })
 ```

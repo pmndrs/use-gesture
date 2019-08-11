@@ -1,4 +1,4 @@
-import { initialState, mappedKeys } from '../defaults'
+import { mappedKeys } from '../defaults'
 import GestureController from '../controllers/GestureController'
 import {
   Coordinates,
@@ -8,11 +8,8 @@ import {
   GestureKey,
   SharedGestureState,
   Fn,
-  Vector2,
-  TransformType,
   ReactEventHandlerKey,
   GestureFlag,
-  TransformedEvent,
 } from '../types'
 
 /**
@@ -86,32 +83,5 @@ export default abstract class Recognizer<GestureType extends Coordinates | Dista
     gestureFlag?: GestureFlag
   ): void => {
     this.controller.updateState(sharedState, gestureState, this.gestureKey, gestureFlag)
-  }
-
-  /**
-   * returns the start state for a given gesture
-   * @param values the values of the start state
-   * @param event the event that triggers the gesture start
-   */
-  protected getStartState = (values: Vector2, event: TransformedEvent): GestureState<GestureType> => {
-    const state = this.getState()
-    const initial = initialState[this.stateKey]
-    const transform: TransformType = state.transform || event.transform || this.getTransformConfig()
-    const lastLocal = state.local || initial.local
-
-    return <GestureState<GestureType>>{
-      ...(initial as object),
-      event,
-      values,
-      initial: values,
-      previous: values,
-      local: lastLocal,
-      lastLocal,
-      first: true,
-      active: true,
-      transform,
-      time: event.timeStamp,
-      args: this.args,
-    }
   }
 }
