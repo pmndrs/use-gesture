@@ -28,21 +28,20 @@ export default abstract class DistanceAngleRecognizer extends Recognizer<Distanc
     /**
      * The angle value might jump from 179deg to -179deg when we actually want to
      * read 181deg to ensure continuity. To make that happen, we detect when the jump
-     * is supsiciously high (ie > 300deg) and increase the `turns` value
+     * is supsiciously high (ie > 270deg) and increase the `turns` value
      */
-    const newTurns = Math.abs(delta_a) > 300 ? turns + Math.sign(delta_a) : turns
+    const newTurns = Math.abs(delta_a) > 270 ? turns + Math.sign(delta_a) : turns
 
     // we update the angle difference to its corrected value
-    delta_a -= 360 * newTurns
-    const offset_d = d - initial[0]
-    const offset_a = a - 360 * newTurns - initial[1]
-
-    const movement: Vector2 = [offset_d, offset_a]
-
+    delta_a -= 360 * (newTurns - turns)
     const delta = [delta_d, delta_a] as Vector2
 
+    const movement_d = d - initial[0]
+    const movement_a = a - 360 * newTurns - initial[1]
+    const movement: Vector2 = [movement_d, movement_a]
+
     const delta_t = event.timeStamp - time
-    const velocities = calculateVelocities(delta, delta_t)
+    const vdva = calculateVelocities(delta, delta_t)
     const direction = calculateDirection(delta)
     return {
       event,
@@ -50,7 +49,7 @@ export default abstract class DistanceAngleRecognizer extends Recognizer<Distanc
       movement,
       delta,
       offset: addV(offset, delta),
-      vdva: velocities,
+      vdva,
       direction,
       turns: newTurns,
       previous: da,
@@ -68,7 +67,7 @@ export default abstract class DistanceAngleRecognizer extends Recognizer<Distanc
     const initial = initialState[this.stateKey] as GestureState<DistanceAngle>
     const transform: TransformType = state.transform || event.transform || this.getTransformConfig()
     const offset = state.offset || initial.offset
-
+    const origin = state.origin || initial.origin
     return {
       ...initial,
       event,
@@ -78,6 +77,7 @@ export default abstract class DistanceAngleRecognizer extends Recognizer<Distanc
       offset,
       first: true,
       active: true,
+      origin,
       transform,
       time: event.timeStamp,
       args: this.args,

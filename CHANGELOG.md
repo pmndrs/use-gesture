@@ -18,6 +18,10 @@
 2. Added `delta` that just calculates the delta between current and previous values.
 3. Added `addV` and `subV` as convenient exports for adding and substracting vectors formed as arrays.
 
+### Fixed
+
+1. Fixed velocity for angle on pinch gestures.
+
 ## 5.2.4 Release
 
 **Summary:** Minor release.
