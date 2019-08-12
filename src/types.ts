@@ -162,7 +162,6 @@ export type Handler<T extends Coordinates | DistanceAngle> = (state: FullGesture
 export type HandlerKey = 'onDrag' | 'onPinch' | 'onMove' | 'onHover' | 'onScroll' | 'onWheel'
 
 export type GestureHandlers = {
-  onAction: Handler<Coordinates>
   onDrag: Handler<Coordinates>
   onDragStart: Handler<Coordinates>
   onDragEnd: Handler<Coordinates>

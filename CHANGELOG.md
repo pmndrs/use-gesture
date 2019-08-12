@@ -11,6 +11,8 @@
 3. Former `delta` is replaced by `movement` (`xy - initial`).
 4. Former `local` is replaced by `offset`.
 5. `lastLocal` has been removed.
+6. `onAction` handler as an alias for `onDrag` is not supported anymore
+7. `useGesture` doesn't support a function as a shortcut for `onDrag`. Please use `useDrag` from now on.
 
 ### Added
 

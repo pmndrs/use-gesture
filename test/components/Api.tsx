@@ -1,22 +1,6 @@
 import React from 'react'
-import { useGesture } from '../../src/index'
+import { useGesture, useDrag } from '../../src/index'
 import { Common } from './Common'
-
-export const DefaultProp = () => {
-  const [state, set] = React.useState({})
-  const bind = useGesture(({ event, transform, cancel, currentTarget, ...rest }) => void set(rest))
-
-  return <Common listeners={{ ...bind() }} state={state} testKey="drag" />
-}
-
-export const ActionProp: React.FunctionComponent = () => {
-  const [state, set] = React.useState({})
-  const bind = useGesture({
-    onAction: ({ event, transform, cancel, currentTarget, ...rest }) => void set(rest),
-  })
-
-  return <Common listeners={{ ...bind() }} state={state} testKey="drag" />
-}
 
 interface Props {
   args1: any[]
@@ -25,7 +9,7 @@ interface Props {
 
 export const BindProps: React.FunctionComponent<Props> = ({ args1 = [], args2 = [] }) => {
   const [state, set] = React.useState({})
-  const bind = useGesture(({ event, transform, cancel, currentTarget, ...rest }) => void set(rest))
+  const bind = useDrag(({ event, transform, cancel, currentTarget, ...rest }) => void set(rest))
 
   return (
     <>

@@ -1,24 +1,10 @@
 import React from 'react'
 import { render, cleanup, fireEvent } from '@testing-library/react'
 import '@testing-library/jest-dom/extend-expect'
-import { DefaultProp, ActionProp, BindProps, GenuineHandlers } from './components/Api'
+import { BindProps, GenuineHandlers } from './components/Api'
 import Interactive from './components/Interactive'
 
 afterEach(cleanup)
-
-test('function passed as sole argument to useGesture should trigger drag (testing default prop)', () => {
-  const { getByTestId } = render(<DefaultProp />)
-  const element = getByTestId('drag-el')
-  fireEvent.mouseDown(element)
-  expect(getByTestId('drag-active')).toHaveTextContent('true')
-})
-
-test('onAction should trigger drag (testing onAction alias)', () => {
-  const { getByTestId } = render(<ActionProp />)
-  const element = getByTestId('drag-el')
-  fireEvent.mouseDown(element)
-  expect(getByTestId('drag-active')).toHaveTextContent('true')
-})
 
 test('bind should dispatch its arguments', () => {
   const { getByTestId } = render(<BindProps args1={['args1']} args2={['args2']} />)
