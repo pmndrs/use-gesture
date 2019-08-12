@@ -47,6 +47,8 @@
     "drag",
     "pinch",
     "rotate",
+    "scale",
+    "zoom",
     "scroll",
     "wheel"
   ],
