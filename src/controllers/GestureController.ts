@@ -17,7 +17,7 @@ import {
 } from '../types'
 
 import { initialState, mappedKeys } from '../defaults'
-import { addListeners, removeListeners, supportsGestureEvent, chainFns } from '../utils'
+import { addListeners, removeListeners, gestureEventSupported, chainFns } from '../utils'
 
 import DragRecognizer from '../recognizers/DragRecognizer'
 import ScrollRecognizer from '../recognizers/ScrollRecognizer'
@@ -205,16 +205,8 @@ export default class GestureController {
 
   public bind = (...args: any[]): Fn | ReactEventHandlers => {
     // if handlers contains {onDragStart, onDrag, onDragEnd, onMoveStart, onMove}
-    // actions will skip on[Gesture]["Start"|"End"] functions and include
-    // ['onDrag', 'onMove']
-    const actions: Set<HandlerKey | undefined> = new Set(
-      Object.keys(this.handlers)
-        .filter(k => k.indexOf('on') === 0)
-        .map(k => {
-          const match = k.match(/(on[A-Z][a-z]+)/)
-          return match ? <HandlerKey>match[1] : undefined
-        })
-    )
+    // actions will include 'onDrag' and 'onMove'
+    const actions: Set<HandlerKey> = new Set(Object.keys(this.handlers).map(k => <HandlerKey>k.replace(/End|Start/, '')))
 
     const { domTarget } = this.config
 
@@ -254,7 +246,7 @@ export default class GestureController {
     if (actions.has('onPinch')) {
       // since react doesn't have handlers for gesture events we can only use them
       // domTarget is set (and when the browser supprots them).
-      if (domTarget && supportsGestureEvent()) {
+      if (domTarget && gestureEventSupported()) {
         this.addRecognizer(new PinchWebKitGestureRecognizer(this, args))
       } else {
         this.addRecognizer(new PinchRecognizer(this, args))

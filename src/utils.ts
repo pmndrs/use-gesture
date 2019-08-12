@@ -177,7 +177,7 @@ export function calculateAllKinematics<T extends number[]>(movement: T, delta: T
  * Whether the browser supports GestureEvent (ie Safari)
  * @returns true if the browser supports gesture event
  */
-export function supportsGestureEvent(): boolean {
+export function gestureEventSupported(): boolean {
   try {
     // TODO [TS] possibly find GestureEvent definitions?
     // @ts-ignore: Unreachable code error
