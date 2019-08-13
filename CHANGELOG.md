@@ -19,10 +19,13 @@
 1. Added `direction` to pinch gestures.
 2. Added `delta` that just calculates the delta between current and previous values.
 3. Added `addV` and `subV` as convenient exports for adding and substracting vectors formed as arrays.
+4. Added a warning when using trackpad zoom without a `domTarget` and `event.passive` set to true.
+5. Added a `gesture` key to the event passed to handlers indicating which gesture originated the event.
 
 ### Fixed
 
 1. Fixed velocity for angle on pinch gestures.
+2. Doesn't trigger the `onWheel` handler when the ctrl key is pressed and `onPinch` is active [#80](https://github.com/react-spring/react-use-gesture/issues/80#issuecomment-520915895).
 
 ## 5.2.4 Release
 
