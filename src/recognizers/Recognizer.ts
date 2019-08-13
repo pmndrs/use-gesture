@@ -57,6 +57,8 @@ export default abstract class Recognizer<GestureType extends Coordinates | Dista
   protected pointerEventsEnabled = () => this.controller.config.pointerEvents
   // gets the transform config of the controller
   protected getTransformConfig = () => this.controller.config.transform
+  // checks if non passive events are supported
+  protected supportsNonPassiveEvents = () => this.controller.config.domTarget && !this.controller.config.event.passive
 
   // convenience method to add window listeners for a given gesture
   protected addWindowListeners = (listeners: [string, Fn][]) => {
