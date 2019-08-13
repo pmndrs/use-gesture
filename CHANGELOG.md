@@ -11,7 +11,7 @@
 3. Former `delta` is replaced by `movement` (`xy - initial`).
 4. Former `local` is replaced by `offset`.
 5. `lastLocal` has been removed.
-6. `onAction` handler as an alias for `onDrag` is not supported anymore
+6. `onAction` handler as an alias for `onDrag` is not supported anymore.
 7. `useGesture` doesn't support a function as a shortcut for `onDrag`. Please use `useDrag` from now on.
 
 ### Added
@@ -19,7 +19,7 @@
 1. Added `direction` to pinch gestures.
 2. Added `delta` that just calculates the delta between current and previous values.
 3. Added `addV` and `subV` as convenient exports for adding and substracting vectors formed as arrays.
-4. Added a warning when using trackpad zoom without a `domTarget` and `event.passive` set to true.
+4. Added a warning when using trackpad zoom without a `domTarget` or `event.passive` set to true.
 5. Added a `gesture` key to the event passed to handlers indicating which gesture originated the event.
 
 ### Fixed
