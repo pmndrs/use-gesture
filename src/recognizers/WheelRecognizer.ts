@@ -12,6 +12,7 @@ export default class WheelRecognizer extends CoordinatesRecognizer {
 
   onChange = (event: TransformedEvent<WheelEvent>): void => {
     if (!this.isEnabled()) return
+    if (event.ctrlKey && this.controller.actions.has('onPinch')) return
 
     this.clearTimeout()
     this.setTimeout(this.onEnd)
