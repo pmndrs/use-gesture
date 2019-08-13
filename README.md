@@ -69,6 +69,7 @@ Every time a handler is called, it will get passed a gesture state that includes
 ```jsx
 const bind = useDrag(({
   event,      // * the source event
+              // * event.gesture indicates which gesture originated the event
   xy,         // [x,y] position of the pointer or scroll value for useScroll or useWheel
   previous,   // * previous xy
   initial,    // * xy value when the gesture has started

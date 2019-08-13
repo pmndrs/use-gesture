@@ -35,6 +35,7 @@ export type TransformedEvent<
   T extends React.SyntheticEvent = React.MouseEvent | React.TouchEvent | React.WheelEvent | React.PointerEvent | GestureEvent
 > = T & {
   transform?: TransformType
+  gesture?: GestureKey
 }
 
 export interface ReactEventHandlers {

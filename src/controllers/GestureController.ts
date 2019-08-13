@@ -43,11 +43,15 @@ type Bindings = Partial<{ [eventName in ReactEventHandlerKey]: Fn[] | Fn }>
 export default class GestureController {
   public state: StateObject = initialState // state for all gestures
   public timeouts: GestureTimeouts = {} // keeping track of timeouts for debounced gestures (such as move, scroll, wheel)
+  public actions: Set<HandlerKey>
   private bindings: Bindings = {} // an object holding the handlers associated to the gestures
   private domListeners: [string, Fn][] = [] // when config.domTarget is set, we attach events directly to the dom
   private windowListeners: WindowListeners = {} // keeps track of window listeners added by gestures (drag only at the moment)
-
-  constructor(public handlers: GestureHandlersPartial, public config: GestureConfig) {}
+  constructor(public handlers: GestureHandlersPartial, public config: GestureConfig) {
+    // if handlers contains {onDragStart, onDrag, onDragEnd, onMoveStart, onMove}
+    // actions will include 'onDrag' and 'onMove'
+    this.actions = new Set(Object.keys(this.handlers).map(k => <HandlerKey>k.replace(/End|Start/, '')))
+  }
 
   /**
    * Function run on component unmount
@@ -104,6 +108,7 @@ export default class GestureController {
     // gestureKey: 'hover' -> stateKey: 'move', handlerKey: 'onHover'
     const { stateKey, handlerKey } = mappedKeys[gestureKey]
     const state = { ...this.state.shared, ...this.state[stateKey] }
+    if (state.event) state.event.gesture = gestureKey
 
     if (gestureFlag === GestureFlag.OnStart) {
       const handlerStart = `${handlerKey}Start` as keyof GestureHandlers
@@ -204,10 +209,6 @@ export default class GestureController {
   }
 
   public bind = (...args: any[]): Fn | ReactEventHandlers => {
-    // if handlers contains {onDragStart, onDrag, onDragEnd, onMoveStart, onMove}
-    // actions will include 'onDrag' and 'onMove'
-    const actions: Set<HandlerKey> = new Set(Object.keys(this.handlers).map(k => <HandlerKey>k.replace(/End|Start/, '')))
-
     const { domTarget } = this.config
 
     const genuineHandlers = { ...this.handlers }
@@ -215,35 +216,35 @@ export default class GestureController {
     // cleaning before adding
     this.cleanOnBind()
 
-    if (actions.has('onDrag')) {
+    if (this.actions.has('onDrag')) {
       this.addRecognizer(new DragRecognizer(this, args))
       delete genuineHandlers.onDrag
       delete genuineHandlers.onDragStart
       delete genuineHandlers.onDragEnd
     }
-    if (actions.has('onScroll')) {
+    if (this.actions.has('onScroll')) {
       this.addRecognizer(new ScrollRecognizer(this, args))
       delete genuineHandlers.onScroll
       delete genuineHandlers.onScrollStart
       delete genuineHandlers.onScrollEnd
     }
-    if (actions.has('onWheel')) {
+    if (this.actions.has('onWheel')) {
       this.addRecognizer(new WheelRecognizer(this, args))
       delete genuineHandlers.onWheel
       delete genuineHandlers.onWheelStart
       delete genuineHandlers.onWheelEnd
     }
-    if (actions.has('onMove')) {
+    if (this.actions.has('onMove')) {
       this.addRecognizer(new MoveRecognizer(this, args))
       delete genuineHandlers.onMove
       delete genuineHandlers.onMoveStart
       delete genuineHandlers.onMoveEnd
     }
-    if (actions.has('onHover')) {
+    if (this.actions.has('onHover')) {
       this.addRecognizer(new HoverRecognizer(this, args))
       delete genuineHandlers.onHover
     }
-    if (actions.has('onPinch')) {
+    if (this.actions.has('onPinch')) {
       // since react doesn't have handlers for gesture events we can only use them
       // domTarget is set (and when the browser supprots them).
       if (domTarget && gestureEventSupported()) {
