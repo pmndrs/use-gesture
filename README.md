@@ -105,7 +105,8 @@ Pinch is about scaling and rotating, therefore the keys `xy` and `vxvy` are rena
 ```jsx
 const bind = usePinch(({
   da,       // [d,a] absolute distance and angle of the two pointers
-  vdva,     // momentum / speed of the distance and rotation             origin,   // coordinates of the center between the two touch event
+  vdva,     // momentum / speed of the distance and rotation
+  origin,   // coordinates of the center between the two touch event
 } => {
     /* gesture logic */
   })
