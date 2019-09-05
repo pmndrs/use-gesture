@@ -91,9 +91,9 @@ const bind = useDrag(({
   touches     // * numbers of touches pressing the screen
   shiftKey, altKey, ctrlKey, metaKey,    // * true when modifier keys are pressed
   args        // * arguments you passed to bind
-} => {
+}) => {
     /* gesture logic */
-  })
+  }
 )
 ```
 
@@ -104,14 +104,9 @@ const bind = useDrag(({
 Pinch is about scaling and rotating, therefore the keys `xy` and `vxvy` are renamed `da` (for distance and angle) and `vdva` respectively.
 
 ```jsx
-const bind = usePinch(({
-  da,         // [d,a] absolute distance and angle of the two pointers
-  vdva,       // momentum / speed of the distance and rotation
-  origin,     // coordinates of the center between the two touch event
-} => {
-    /* gesture logic */
-  })
-)
+const bind = usePinch(({ da, vdva, origin }) => { // [d,a] absolute distance and angle of the two pointers // momentum / speed of the distance and rotation // coordinates of the center between the two touch event
+  /* gesture logic */
+})
 ```
 
 ### Gesture options
