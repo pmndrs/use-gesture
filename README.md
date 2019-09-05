@@ -90,9 +90,9 @@ const bind = useDrag(({
   touches   // numbers of touches pressing the screen
   shiftKey, altKey, ctrlKey, metaKey  // true when modifier keys are pressed
   args      // arguments you passed to bind
-} => {
+}) => {
     /* gesture logic */
-  })
+  }
 )
 ```
 
