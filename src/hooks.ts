@@ -4,8 +4,11 @@ import { Handler, GestureHandlersPartial, GestureConfig, Coordinates, Fn, ReactE
 import { defaultConfig } from './defaults'
 
 /** API
- * Default Drag:
- * const bind = useGesture(() => { ... })
+ * const bind = useDrag(() => { ... })
+ * const bind = usePinch(() => { ... })
+ * const bind = useMove(() => { ... })
+ * const bind = useScroll(() => { ... })
+ * const bind = useWheel(() => { ... })
  *
  * Handlers object:
  * const bind = useGesture({ onDrag: () => { ... }, onMove: () => { ... } })
