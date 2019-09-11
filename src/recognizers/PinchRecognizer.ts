@@ -24,8 +24,8 @@ export default class PinchRecognizer extends DistanceAngleRecognizer {
   }
 
   onChange = (event: TransformedEvent<TouchEvent>): void => {
-    const { canceled, active } = this.getState()
-    if (canceled || !active || event.touches.length !== 2) return
+    const { canceled, active, time } = this.getState()
+    if (canceled || !active || event.touches.length !== 2 || event.timeStamp === time) return
 
     const { da, origin, ...rest } = getTwoTouchesEventData(event)
 
