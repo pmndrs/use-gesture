@@ -21,7 +21,6 @@ export const mappedKeys: MappedKeys = {
 export const defaultConfig: GestureConfig = {
   domTarget: undefined,
   event: { passive: true, capture: false },
-  pointerEvents: false,
   window: typeof window !== 'undefined' ? window : undefined,
   transform: { x: (x: number): number => x, y: (y: number): number => y },
   enabled: true,
