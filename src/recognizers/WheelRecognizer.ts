@@ -3,9 +3,10 @@ import CoordinatesRecognizer from './CoordinatesRecognizer'
 import { addV, getWheelEventData } from '../utils'
 import GestureController from '../controllers/GestureController'
 import { TransformedEvent, GestureFlag, ReactEventHandlerKey, Fn } from '../types'
-import { genericEndState } from '../defaults'
 
 export default class WheelRecognizer extends CoordinatesRecognizer {
+  sharedEndState = { wheeling: false, velocity: 0, vxvy: [0, 0] }
+
   constructor(controller: GestureController, args: any[]) {
     super('wheel', controller, args)
   }
@@ -28,11 +29,6 @@ export default class WheelRecognizer extends CoordinatesRecognizer {
       const kinematics = this.getKinematics(values, event)
       this.updateState(rest, { ...kinematics, first: false }, GestureFlag.OnChange)
     }
-  }
-
-  onEnd = (): void => {
-    if (!this.getState().active) return
-    this.updateState({ wheeling: false }, { ...genericEndState, velocity: 0, vxvy: [0, 0] }, GestureFlag.OnEnd)
   }
 
   getEventBindings(): [ReactEventHandlerKey | ReactEventHandlerKey[], Fn][] {

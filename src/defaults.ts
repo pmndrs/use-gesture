@@ -87,3 +87,4 @@ export const initialState: StateObject = {
 
 // generic end state for all gestures
 export const genericEndState = { first: false, last: true, active: false }
+export const genericEndState: Partial<CommonGestureState> = { first: false, last: true, active: false }

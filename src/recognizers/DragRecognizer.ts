@@ -4,6 +4,8 @@ import GestureController from '../controllers/GestureController'
 import { TransformedEvent, GestureFlag, ReactEventHandlerKey, Fn } from '../types'
 
 export default class DragRecognizer extends CoordinatesRecognizer {
+  sharedEndState = { dragging: false, down: false, buttons: 0, touches: 0 }
+
   constructor(controller: GestureController, args: any[]) {
     super('drag', controller, args)
   }

@@ -3,9 +3,10 @@ import DistanceAngleRecognizer from './DistanceAngleRecognizer'
 import { noop, getTwoTouchesEventData } from '../utils'
 import GestureController from '../controllers/GestureController'
 import { TransformedEvent, GestureFlag, ReactEventHandlerKey, Fn } from '../types'
-import { genericEndState } from '../defaults'
 
 export default class PinchRecognizer extends DistanceAngleRecognizer {
+  sharedEndState = { pinching: false, down: false, touches: 0 }
+
   constructor(controller: GestureController, args: any[]) {
     super('pinch', controller, args)
   }
@@ -33,11 +34,6 @@ export default class PinchRecognizer extends DistanceAngleRecognizer {
     const cancel = () => this.onCancel(event)
 
     this.updateState(rest, { ...kinematics, origin, first: false, cancel }, GestureFlag.OnChange)
-  }
-
-  onEnd = (event: TransformedEvent<TouchEvent>): void => {
-    if (!this.getState().active) return
-    this.updateState({ pinching: false, down: false, touches: 0 }, { ...genericEndState, event }, GestureFlag.OnEnd)
   }
 
   onCancel = (event: TransformedEvent<TouchEvent>): void => {

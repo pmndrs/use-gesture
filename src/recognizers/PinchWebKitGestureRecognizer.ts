@@ -3,11 +3,12 @@ import DistanceAngleRecognizer from './DistanceAngleRecognizer'
 import { noop, getTwoTouchesEventData } from '../utils'
 import GestureController from '../controllers/GestureController'
 import { TransformedEvent, GestureFlag, ReactEventHandlerKey, GestureEvent, Fn, Vector2 } from '../types'
-import { genericEndState } from '../defaults'
 
 const SCALE_FACTOR = 260
 
 export default class PinchWebKitGestureRecognizer extends DistanceAngleRecognizer {
+  sharedEndState = { pinching: false, down: false, touches: 0 }
+
   constructor(controller: GestureController, args: any[]) {
     super('pinch', controller, args)
   }
@@ -35,9 +36,10 @@ export default class PinchWebKitGestureRecognizer extends DistanceAngleRecognize
     this.updateState(null, { ...kinematics, first: false, cancel }, GestureFlag.OnChange)
   }
 
+  private superOnEnd = this.onEnd
   onEnd = (event: TransformedEvent): void => {
+    this.superOnEnd(event)
     event.preventDefault()
-    this.updateState({ pinching: false, down: false, touches: 0 }, { ...genericEndState, event }, GestureFlag.OnEnd)
   }
 
   onCancel = (event: TransformedEvent): void => {

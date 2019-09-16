@@ -1,4 +1,4 @@
-import { mappedKeys } from '../defaults'
+import { mappedKeys, genericEndState } from '../defaults'
 import GestureController from '../controllers/GestureController'
 import {
   Coordinates,
@@ -20,6 +20,7 @@ import {
  */
 export default abstract class Recognizer<GestureType extends Coordinates | DistanceAngle> {
   protected stateKey: StateKey
+  protected abstract sharedEndState: Partial<SharedGestureState>
 
   /**
    * Creates an instance of a gesture recognizer.
@@ -84,5 +85,11 @@ export default abstract class Recognizer<GestureType extends Coordinates | Dista
     gestureFlag?: GestureFlag
   ): void => {
     this.controller.updateState(sharedState, gestureState, this.gestureKey, gestureFlag)
+  }
+
+  protected onEnd = (event: TransformedEvent): void => {
+    if (!this.state.active) return
+    this.removeWindowListeners()
+    this.updateState(this.sharedEndState, { ...genericEndState, event }, GestureFlag.OnEnd)
   }
 }

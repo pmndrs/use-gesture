@@ -3,9 +3,10 @@ import DistanceAngleRecognizer from './DistanceAngleRecognizer'
 import { getWheelEventData } from '../utils'
 import GestureController from '../controllers/GestureController'
 import { TransformedEvent, GestureFlag, ReactEventHandlerKey, Fn } from '../types'
-import { genericEndState } from '../defaults'
 
 export default class PinchWheelRecognizer extends DistanceAngleRecognizer {
+  sharedEndState = { pinching: false }
+
   constructor(controller: GestureController, args: any[]) {
     super('pinch', controller, args)
   }
@@ -31,11 +32,6 @@ export default class PinchWheelRecognizer extends DistanceAngleRecognizer {
       const kinematics = this.getKinematics([d, undefined], event)
       this.updateState(rest, { ...kinematics, first: false }, GestureFlag.OnChange)
     }
-  }
-
-  onEnd = (): void => {
-    if (!this.getState().active) return
-    this.updateState({ pinching: false, down: false, touches: 0 }, { ...genericEndState }, GestureFlag.OnEnd)
   }
 
   getEventBindings(): [ReactEventHandlerKey | ReactEventHandlerKey[], Fn][] {
