@@ -10,13 +10,13 @@ export default class HoverRecognizer extends CoordinatesRecognizer {
   }
 
   onStart = (event: TransformedEvent): void => {
-    if (!this.isEnabled()) return
+    if (!this.enabled) return
     const { xy, ...rest } = getPointerEventData(event)
     this.updateState({ hovering: true, ...rest }, { xy, event, args: this.args }, GestureFlag.OnChange)
   }
 
   onEnd = (event: TransformedEvent): void => {
-    if (!this.isEnabled()) return
+    if (!this.enabled) return
     const { xy, ...rest } = getPointerEventData(event)
     const kinematics = this.getKinematics(xy, event)
 

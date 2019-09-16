@@ -10,6 +10,8 @@ import {
   Fn,
   ReactEventHandlerKey,
   GestureFlag,
+  TransformedEvent,
+  TransformType,
 } from '../types'
 
 /**
@@ -35,8 +37,13 @@ export default abstract class Recognizer<GestureType extends Coordinates | Dista
     this.stateKey = mappedKeys[gestureKey].stateKey
   }
 
-  protected isEnabled = (): boolean => {
+  // is the gesture enabled
+  protected get enabled(): boolean {
     return this.controller.config.enabled && this.controller.config[this.gestureKey]
+  }
+  // get the controller state for a given gesture
+  protected get state() {
+    return this.controller.state[this.stateKey] as GestureState<GestureType>
   }
 
   // convenience method to set a timeout for a given gesture
@@ -49,14 +56,8 @@ export default abstract class Recognizer<GestureType extends Coordinates | Dista
     clearTimeout(this.controller.timeouts[this.stateKey])
   }
 
-  // get the controller state for a given gesture
-  protected getState = (): GestureState<GestureType> => this.controller.state[this.stateKey] as GestureState<GestureType>
-  // get the controller shared state
-  protected getSharedState = () => this.controller.state.shared
-  // gets the transform config of the controller
-  protected getTransformConfig = () => this.controller.config.transform
-  // checks if non passive events are supported
-  protected supportsNonPassiveEvents = () => this.controller.config.domTarget && !this.controller.config.event.passive
+  protected getTransform = (event: TransformedEvent): TransformType =>
+    this.state.transform || event.transform || this.controller.config.transform
 
   // convenience method to add window listeners for a given gesture
   protected addWindowListeners = (listeners: [string, Fn][]) => {

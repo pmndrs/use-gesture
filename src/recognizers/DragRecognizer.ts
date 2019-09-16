@@ -2,7 +2,6 @@ import CoordinatesRecognizer from './CoordinatesRecognizer'
 import { noop, getPointerEventData } from '../utils'
 import GestureController from '../controllers/GestureController'
 import { TransformedEvent, GestureFlag, ReactEventHandlerKey, Fn } from '../types'
-import { genericEndState } from '../defaults'
 
 export default class DragRecognizer extends CoordinatesRecognizer {
   constructor(controller: GestureController, args: any[]) {
@@ -27,16 +26,11 @@ export default class DragRecognizer extends CoordinatesRecognizer {
     this.addWindowListeners(dragListeners)
 
     const startState = this.getStartState(xy, event)
-
-    this.updateState(
-      { ...rest, dragging: true, down: true },
-      { ...startState, currentTarget, pointerId, cancel: () => this.onCancel(event) },
-      GestureFlag.OnStart
-    )
+    this.updateState({ ...rest, dragging: true, down: true }, { ...startState, cancel: () => this.onCancel(event) }, GestureFlag.OnStart)
   }
 
   onChange = (event: TransformedEvent): void => {
-    const { canceled, active } = this.getState()
+    const { canceled, active } = this.state
     if (canceled || !active) return
 
     const { xy, ...rest } = getPointerEventData(event)

@@ -13,7 +13,7 @@ export default class PinchWebKitGestureRecognizer extends DistanceAngleRecognize
   }
 
   onStart = (event: TransformedEvent<GestureEvent>): void => {
-    if (!this.isEnabled()) return
+    if (!this.enabled) return
     event.preventDefault()
 
     const da: Vector2 = [event.scale * SCALE_FACTOR, event.rotation]
@@ -23,7 +23,7 @@ export default class PinchWebKitGestureRecognizer extends DistanceAngleRecognize
   }
 
   onChange = (event: TransformedEvent<GestureEvent>): void => {
-    const { canceled, active } = this.getState()
+    const { canceled, active } = this.state
     if (canceled || !active) return
     event.preventDefault()
 
@@ -36,7 +36,6 @@ export default class PinchWebKitGestureRecognizer extends DistanceAngleRecognize
   }
 
   onEnd = (event: TransformedEvent): void => {
-    if (!this.getState().active) return
     event.preventDefault()
     this.updateState({ pinching: false, down: false, touches: 0 }, { ...genericEndState, event }, GestureFlag.OnEnd)
   }
@@ -47,7 +46,7 @@ export default class PinchWebKitGestureRecognizer extends DistanceAngleRecognize
   }
 
   updateTouchData = (event: TransformedEvent<TouchEvent>): void => {
-    if (!this.isEnabled() || event.touches.length !== 2) return
+    if (!this.enabled || event.touches.length !== 2) return
     const { origin } = getTwoTouchesEventData(event)
     this.updateState(null, { origin })
   }

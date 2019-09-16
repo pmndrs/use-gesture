@@ -11,7 +11,7 @@ export default class PinchWheelRecognizer extends DistanceAngleRecognizer {
   }
 
   onChange = (event: TransformedEvent<WheelEvent>): void => {
-    if (!this.isEnabled() || !event.ctrlKey) return
+    if (!this.enabled || !event.ctrlKey) return
 
     if (!this.controller.config.passiveEvents) event.preventDefault()
     else if (process.env.NODE_ENV === 'development')
@@ -22,9 +22,9 @@ export default class PinchWheelRecognizer extends DistanceAngleRecognizer {
     this.setTimeout(this.onEnd)
 
     const { xy, ...rest } = getWheelEventData(event)
-    const d = this.getState().da[0] - xy[1]
+    const d = this.state.da[0] - xy[1]
 
-    if (!this.getState().active) {
+    if (!this.state.active) {
       const startState = this.getStartState([d, 0], event)
       this.updateState({ pinching: true, ...rest }, startState, GestureFlag.OnStart)
     } else {

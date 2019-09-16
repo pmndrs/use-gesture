@@ -1,7 +1,7 @@
 import Recognizer from './Recognizer'
 import { addV, subV, calculateAllKinematics } from '../utils'
 import { initialState } from '../defaults'
-import { Coordinates, GestureState, Vector2, TransformType, TransformedEvent } from '../types'
+import { Coordinates, GestureState, Vector2, TransformedEvent } from '../types'
 
 /**
  * Abstract class for coordinates-based gesture recongizers
@@ -15,9 +15,8 @@ export default abstract class CoordinatesRecognizer extends Recognizer<Coordinat
    */
   protected getKinematics = (values: Vector2, event: TransformedEvent): Partial<GestureState<Coordinates>> => {
     // we get the gesture specific state
-    const state = this.getState()
-    const { xy, initial, offset, time = 0 } = state
-    const transform: TransformType = state.transform || event.transform || this.getTransformConfig()
+    const { xy, initial, offset, time = 0 } = this.state
+    const transform = this.getTransform(event)
 
     // offset is the difference between the current and initial value vectors
     const movement = subV(values, initial).map((v, i) => Object.values(transform)[i](v)) as Vector2
@@ -53,6 +52,8 @@ export default abstract class CoordinatesRecognizer extends Recognizer<Coordinat
     const initial = initialState[this.stateKey] as GestureState<Coordinates>
     const transform: TransformType = state.transform || event.transform || this.getTransformConfig()
     const offset = state.offset || initial.offset
+    const transform = this.getTransform(event)
+    const offset = this.state.offset || initial.offset
 
     return {
       ...initial,

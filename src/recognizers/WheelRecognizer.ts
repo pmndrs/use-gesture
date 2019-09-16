@@ -11,13 +11,13 @@ export default class WheelRecognizer extends CoordinatesRecognizer {
   }
 
   onChange = (event: TransformedEvent<WheelEvent>): void => {
-    if (!this.isEnabled()) return
+    if (!this.enabled) return
     if (event.ctrlKey && this.controller.actions.has('onPinch')) return
 
     this.clearTimeout()
     this.setTimeout(this.onEnd)
 
-    const { xy: prevXY, active } = this.getState()
+    const { xy: prevXY, active } = this.state
     const { xy, ...rest } = getWheelEventData(event)
     const values = addV(xy, prevXY)
 

@@ -10,14 +10,14 @@ export default class MoveRecognizer extends CoordinatesRecognizer {
   }
 
   onChange = (event: TransformedEvent): void => {
-    if (!this.isEnabled()) return
+    if (!this.enabled) return
 
     this.clearTimeout()
     this.setTimeout(this.onEnd)
 
     const { xy, ...rest } = getPointerEventData(event)
 
-    if (!this.getState().active) {
+    if (!this.state.active) {
       const startState = this.getStartState(xy, event)
       this.updateState({ moving: true, ...rest }, startState, GestureFlag.OnStart)
     } else {
