@@ -64,8 +64,8 @@ export function getWheelEventData(event: TransformedEvent<React.WheelEvent>): Wh
   // https://developer.mozilla.org/en-US/docs/Web/Events/wheel#Polyfill
   return { xy: [deltaX, deltaY], ...getModifierKeys(event) }
 }
-type PointerEventData = Pick<FullGestureState<Coordinates>, 'xy' | 'touches' | 'down' | 'buttons'> & ModifierKeys
 
+type PointerEventData = Pick<FullGestureState<Coordinates>, 'xy' | 'touches' | 'down' | 'buttons'> & ModifierKeys
 /**
  * Gets pointer event data
  * @param event
