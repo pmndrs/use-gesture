@@ -13,7 +13,7 @@ export default class PinchWheelRecognizer extends DistanceAngleRecognizer {
   onChange = (event: TransformedEvent<WheelEvent>): void => {
     if (!this.isEnabled() || !event.ctrlKey) return
 
-    if (this.supportsNonPassiveEvents()) event.preventDefault()
+    if (!this.controller.config.passiveEvents) event.preventDefault()
     else if (process.env.NODE_ENV === 'development')
       console.warn(
         'To support zoom on trackpads, try using the `domTarget` option and `config.event.passive` set to `false`. This message will only appear in development mode.'

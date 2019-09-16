@@ -13,6 +13,7 @@ export interface GestureConfig {
   domTarget?: EventTarget | React.RefObject<EventTarget> | null
   event: EventOptions
   window?: EventTarget | null
+  passiveEvents: boolean
   transform: TransformType
   enabled: boolean
   drag: boolean
