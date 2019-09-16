@@ -48,10 +48,7 @@ export default abstract class CoordinatesRecognizer extends Recognizer<Coordinat
    * @param event the event that triggers the gesture start
    */
   protected getStartState = (xy: Vector2, event: TransformedEvent): GestureState<Coordinates> => {
-    const state = this.getState()
     const initial = initialState[this.stateKey] as GestureState<Coordinates>
-    const transform: TransformType = state.transform || event.transform || this.getTransformConfig()
-    const offset = state.offset || initial.offset
     const transform = this.getTransform(event)
     const offset = this.state.offset || initial.offset
 
