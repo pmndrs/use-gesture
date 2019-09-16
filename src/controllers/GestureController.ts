@@ -121,7 +121,7 @@ export default class GestureController {
     const handler = this.handlers[handlerKey] as any
     if (handler) {
       const newMemo = handler(state)
-      this.state[stateKey].memo = newMemo !== undefined ? newMemo : this.state[stateKey].memo
+      this.state[stateKey].memo = newMemo !== void 0 ? newMemo : this.state[stateKey].memo
     }
 
     if (gestureFlag === GestureFlag.OnEnd) {

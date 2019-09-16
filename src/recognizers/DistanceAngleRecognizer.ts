@@ -20,7 +20,7 @@ export default abstract class DistanceAngleRecognizer extends Recognizer<Distanc
 
     // angle might not be defined when ctrl wheel is used for zoom only
     // in that case we set it to the previous angle value
-    a = a === undefined ? da[1] : a
+    a = a !== void 0 ? a : da[1]
 
     const delta_d = d - da[0]
     let delta_a = a - da[1]
