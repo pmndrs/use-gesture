@@ -52,9 +52,6 @@ export default class DragRecognizer extends CoordinatesRecognizer {
   }
 
   getEventBindings(): [ReactEventHandlerKey | ReactEventHandlerKey[], Fn][] {
-    if (this.pointerEventsEnabled()) {
-      return [['onPointerDown', this.onStart], ['onPointerMove', this.onChange], [['onPointerUp', 'onPointerCancel'], this.onEnd]]
-    }
     return [[['onMouseDown', 'onTouchStart'], this.onStart]]
   }
 }
