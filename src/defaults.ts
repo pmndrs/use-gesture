@@ -22,6 +22,7 @@ export const defaultConfig: GestureConfig = {
   domTarget: undefined,
   event: { passive: true, capture: false },
   window: typeof window !== 'undefined' ? window : undefined,
+  passiveEvents: true,
   transform: { x: (x: number): number => x, y: (y: number): number => y },
   enabled: true,
   drag: true,
