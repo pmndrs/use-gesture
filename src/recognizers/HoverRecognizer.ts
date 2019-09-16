@@ -29,9 +29,6 @@ export default class HoverRecognizer extends CoordinatesRecognizer {
   }
 
   getEventBindings(): [ReactEventHandlerKey | ReactEventHandlerKey[], Fn][] {
-    if (this.pointerEventsEnabled()) {
-      return [['onPointerEnter', this.onStart], ['onPointerLeave', this.onEnd]]
-    }
     return [['onMouseEnter', this.onStart], ['onMouseLeave', this.onEnd]]
   }
 }

@@ -53,8 +53,6 @@ export default abstract class Recognizer<GestureType extends Coordinates | Dista
   protected getState = (): GestureState<GestureType> => this.controller.state[this.stateKey] as GestureState<GestureType>
   // get the controller shared state
   protected getSharedState = () => this.controller.state.shared
-  // does the controller config has pointer events enabled
-  protected pointerEventsEnabled = () => this.controller.config.pointerEvents
   // gets the transform config of the controller
   protected getTransformConfig = () => this.controller.config.transform
   // checks if non passive events are supported

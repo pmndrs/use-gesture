@@ -61,5 +61,8 @@ function getDerivedConfig(config?: Partial<GestureConfig>): GestureConfig {
   const realDomTarget = domTarget && 'current' in domTarget ? domTarget.current : domTarget
   derivedConfig.domTarget = realDomTarget
 
+  // if there isn't a domtarget or if event.passive is true, then passiveEvents is true
+  derivedConfig.passiveEvents = !derivedConfig.domTarget || derivedConfig.event.passive
+
   return derivedConfig
 }
