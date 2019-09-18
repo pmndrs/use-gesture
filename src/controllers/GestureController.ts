@@ -80,25 +80,17 @@ export default class GestureController {
    * Commodity function to let gesture recognizer update global state
    * @param sharedState shared partial state object
    * @param gestureState partial gesture specific state object
-   * @param gestureKey the gesture key ('drag', 'move'...)
-   * @param [gestureFlag] if set, will also fire the gesture handler set by the user
+   * @param stateKey the state key ('drag', 'move'...)
    */
   public updateState = (
     sharedState: Partial<SharedGestureState> | null,
     gestureState: Partial<GestureState<Coordinates | DistanceAngle>>,
-    gestureKey: GestureKey,
-    gestureFlag?: GestureFlag
+    stateKey: StateKey
   ): void => {
-    const stateKey = mappedKeys[gestureKey].stateKey
-
     this.state = {
       ...this.state,
       shared: { ...this.state.shared, ...sharedState },
       [stateKey]: { ...this.state[stateKey], ...(gestureState as object) },
-    }
-
-    if (gestureFlag) {
-      this.fireGestureHandler(gestureKey, gestureFlag)
     }
   }
 

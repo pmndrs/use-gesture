@@ -20,7 +20,8 @@ export default class HoverRecognizer extends CoordinatesRecognizer {
   onMouseEnter = (event: TransformedEvent): void => {
     if (!this.enabled) return
     const { values, sharedPayload } = this.getPayloadFromEvent(event)
-    this.updateState({ hovering: true, ...sharedPayload }, { xy: values, event, args: this.args }, GestureFlag.OnChange)
+    this.updateState({ hovering: true, ...sharedPayload }, { xy: values, event, args: this.args })
+    this.fireGestureHandler(GestureFlag.OnChange)
   }
 
   onMouseLeave = (event: TransformedEvent): void => {

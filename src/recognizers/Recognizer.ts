@@ -104,12 +104,12 @@ export default abstract class Recognizer<GestureType extends Coordinates | Dista
    * @param gestureState partial state object for the gesture handled by the recognizer
    * @param [gestureFlag] if set, will also fire the gesture handler set by the user
    */
-  protected updateState = (
-    sharedState: Partial<SharedGestureState> | null,
-    gestureState: Partial<GestureState<GestureType>>,
-    gestureFlag?: GestureFlag
-  ): void => {
-    this.controller.updateState(sharedState, gestureState, this.gestureKey, gestureFlag)
+  protected updateState = (sharedState: Partial<SharedGestureState> | null, gestureState: Partial<GestureState<GestureType>>): void => {
+    this.controller.updateState(sharedState, gestureState, this.stateKey)
+  }
+
+  protected fireGestureHandler = (gestureFlag: GestureFlag): void => {
+    this.controller.fireGestureHandler(this.gestureKey, gestureFlag)
   }
 
   // generic onStart function
@@ -117,49 +117,24 @@ export default abstract class Recognizer<GestureType extends Coordinates | Dista
     const { values, gesturePayload, sharedPayload } = this.getPayloadFromEvent(event)
     const startState = this.getStartState(values, event)
 
-    this.updateState(
-      {
-        ...this.sharedStartState,
-        ...sharedPayload,
-      },
-      {
-        ...startState,
-        ...gesturePayload,
-        ...payload,
-      },
-      GestureFlag.OnStart
-    )
+    this.updateState({ ...this.sharedStartState, ...sharedPayload }, { ...startState, ...gesturePayload, ...payload })
+    this.fireGestureHandler(GestureFlag.OnStart)
   }
 
   // generic onChange function
   onChange = (event: TransformedEvent, payload?: Partial<GestureState<GestureType>>): void => {
     const { values, gesturePayload, sharedPayload } = this.getPayloadFromEvent(event)
     const kinematics = this.getKinematics(values, event)
-    this.updateState(
-      { ...sharedPayload },
-      {
-        first: false,
-        ...kinematics,
-        ...gesturePayload,
-        ...payload,
-      },
-      GestureFlag.OnChange
-    )
+    this.updateState({ ...sharedPayload }, { first: false, ...kinematics, ...gesturePayload, ...payload })
+    this.fireGestureHandler(GestureFlag.OnChange)
   }
 
   // generic onEnd function
   protected onEnd = (event: TransformedEvent, payload?: Partial<GestureState<GestureType>>): void => {
     if (!this.state.active) return
     this.removeWindowListeners()
-    this.updateState(
-      this.sharedEndState,
-      {
-        event,
-        ...genericEndState,
-        ...payload,
-      } as Partial<GestureState<GestureType>>,
-      GestureFlag.OnEnd
-    )
+    this.updateState(this.sharedEndState, { event, ...genericEndState, ...payload } as Partial<GestureState<GestureType>>)
+    this.fireGestureHandler(GestureFlag.OnEnd)
   }
 
   // generic cancel function
