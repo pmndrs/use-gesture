@@ -113,7 +113,7 @@ export default abstract class Recognizer<GestureType extends Coordinates | Dista
   }
 
   // generic onStart function
-  onStart = (event: TransformedEvent, payload?: Partial<GestureState<GestureType>>): void => {
+  protected onStart = (event: TransformedEvent, payload?: Partial<GestureState<GestureType>>): void => {
     const { values, gesturePayload, sharedPayload } = this.getPayloadFromEvent(event)
     const startState = this.getStartState(values, event)
 
@@ -122,7 +122,7 @@ export default abstract class Recognizer<GestureType extends Coordinates | Dista
   }
 
   // generic onChange function
-  onChange = (event: TransformedEvent, payload?: Partial<GestureState<GestureType>>): void => {
+  protected onChange = (event: TransformedEvent, payload?: Partial<GestureState<GestureType>>): void => {
     const { values, gesturePayload, sharedPayload } = this.getPayloadFromEvent(event)
     const kinematics = this.getKinematics(values, event)
     this.updateState({ ...sharedPayload }, { first: false, ...kinematics, ...gesturePayload, ...payload })
@@ -141,5 +141,16 @@ export default abstract class Recognizer<GestureType extends Coordinates | Dista
   protected onCancel = (event: TransformedEvent): void => {
     this.updateState(null, { canceled: true, cancel: noop } as Partial<GestureState<GestureType>>)
     requestAnimationFrame(() => this.onEnd(event))
+  }
+
+  // generic gesture handler for timeout-based gestures
+  protected timeoutHandler = (event: TransformedEvent) => {
+    if (!this.enabled) return
+
+    this.clearTimeout()
+    this.setTimeout(this.onEnd)
+
+    if (!this.state.active) this.onStart(event)
+    else this.onChange(event)
   }
 }

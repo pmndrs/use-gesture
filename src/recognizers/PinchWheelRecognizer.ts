@@ -19,18 +19,15 @@ export default class PinchWheelRecognizer extends DistanceAngleRecognizer {
   }
 
   onWheel = (event: TransformedEvent<WheelEvent>): void => {
-    if (!this.enabled || !event.ctrlKey) return
+    if (!event.ctrlKey) return
 
     if (!this.controller.config.passiveEvents) event.preventDefault()
     else if (process.env.NODE_ENV === 'development')
       console.warn(
         'To support zoom on trackpads, try using the `domTarget` option and `config.event.passive` set to `false`. This message will only appear in development mode.'
       )
-    this.clearTimeout()
-    this.setTimeout(this.onEnd)
 
-    if (!this.state.active) this.onStart(event)
-    else this.onChange(event)
+    this.timeoutHandler(event)
   }
 
   getEventBindings(): [ReactEventHandlerKey | ReactEventHandlerKey[], Fn][] {

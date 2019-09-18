@@ -21,14 +21,8 @@ export default class WheelRecognizer extends CoordinatesRecognizer {
   }
 
   onWheel = (event: TransformedEvent<WheelEvent>): void => {
-    if (!this.enabled) return
     if (event.ctrlKey && this.controller.actions.has('onPinch')) return
-
-    this.clearTimeout()
-    this.setTimeout(this.onEnd)
-
-    if (!this.state.active) this.onStart(event)
-    else this.onChange(event)
+    this.timeoutHandler(event)
   }
 
   getEventBindings(): [ReactEventHandlerKey | ReactEventHandlerKey[], Fn][] {

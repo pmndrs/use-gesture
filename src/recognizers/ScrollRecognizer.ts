@@ -16,17 +16,7 @@ export default class ScrollRecognizer extends CoordinatesRecognizer {
     return { values: xy, sharedPayload }
   }
 
-  onScroll = (event: TransformedEvent): void => {
-    if (!this.enabled) return
-
-    this.clearTimeout()
-    this.setTimeout(this.onEnd)
-
-    if (!this.state.active) this.onStart(event)
-    else this.onChange(event)
-  }
-
   getEventBindings(): [ReactEventHandlerKey | ReactEventHandlerKey[], Fn][] {
-    return [['onScroll', this.onScroll]]
+    return [['onScroll', this.timeoutHandler]]
   }
 }
