@@ -154,7 +154,7 @@ export interface DistanceAngle {
   turns: number
 }
 
-export type GestureState<T extends Coordinates | DistanceAngle> = T & CommonGestureState
+export type GestureState<T extends Coordinates | DistanceAngle = Coordinates | DistanceAngle> = T & CommonGestureState
 export type FullGestureState<T extends Coordinates | DistanceAngle> = SharedGestureState & GestureState<T>
 
 export type StateObject = { shared: SharedGestureState } & { [K in StateKey]: GestureState<Coordinates | DistanceAngle> }

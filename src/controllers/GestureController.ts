@@ -1,6 +1,4 @@
 import {
-  Coordinates,
-  DistanceAngle,
   StateKey,
   StateObject,
   GestureState,
@@ -27,8 +25,7 @@ import HoverRecognizer from '../recognizers/HoverRecognizer'
 import PinchRecognizer from '../recognizers/PinchRecognizer'
 import PinchWheelRecognizer from '../recognizers/PinchWheelRecognizer'
 import PinchWebKitGestureRecognizer from '../recognizers/PinchWebKitGestureRecognizer'
-import CoordinatesRecognizer from '../recognizers/CoordinatesRecognizer'
-import DistanceAngleRecognizer from '../recognizers/DistanceAngleRecognizer'
+import Recognizer from 'recognizers/Recognizer'
 
 type GestureTimeouts = Partial<{ [stateKey in StateKey]: number }>
 type WindowListeners = Partial<{ [stateKey in StateKey]: [string, Fn][] }>
@@ -82,11 +79,7 @@ export default class GestureController {
    * @param gestureState partial gesture specific state object
    * @param stateKey the state key ('drag', 'move'...)
    */
-  public updateState = (
-    sharedState: Partial<SharedGestureState> | null,
-    gestureState: Partial<GestureState<Coordinates | DistanceAngle>>,
-    stateKey: StateKey
-  ): void => {
+  public updateState = (sharedState: Partial<SharedGestureState> | null, gestureState: Partial<GestureState>, stateKey: StateKey): void => {
     this.state = {
       ...this.state,
       shared: { ...this.state.shared, ...sharedState },
@@ -149,7 +142,7 @@ export default class GestureController {
    * Adds a recognizer to this.bindings
    * @param recognizer
    */
-  private addRecognizer = (recognizer: CoordinatesRecognizer | DistanceAngleRecognizer): void => {
+  private addRecognizer = (recognizer: Recognizer): void => {
     recognizer.getEventBindings().map(this.addEventBindings)
   }
 

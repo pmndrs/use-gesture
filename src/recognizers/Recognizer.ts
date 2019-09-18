@@ -15,9 +15,9 @@ import {
 } from '../types'
 import { noop } from '../utils'
 
-type PayloadFromEvent<GestureType extends Coordinates | DistanceAngle> = {
+type PayloadFromEvent = {
   values: [number, number | undefined]
-  gesturePayload?: Partial<GestureState<GestureType>>
+  gesturePayload?: Partial<GestureState>
   sharedPayload?: Partial<SharedGestureState>
 }
 
@@ -25,7 +25,7 @@ type PayloadFromEvent<GestureType extends Coordinates | DistanceAngle> = {
  * Recognizer abstract class
  * @template GestureType whether the Recognizer should deal with coordinates or distance / angle
  */
-export default abstract class Recognizer<GestureType extends Coordinates | DistanceAngle> {
+export default abstract class Recognizer<GestureType extends Coordinates | DistanceAngle = Coordinates | DistanceAngle> {
   protected stateKey: StateKey
   protected abstract sharedStartState: Partial<SharedGestureState>
   protected abstract sharedEndState: Partial<SharedGestureState>
@@ -78,7 +78,7 @@ export default abstract class Recognizer<GestureType extends Coordinates | Dista
     this.controller.removeWindowListeners(this.stateKey)
   }
 
-  protected abstract getPayloadFromEvent(event: TransformedEvent): PayloadFromEvent<GestureType>
+  protected abstract getPayloadFromEvent(event: TransformedEvent): PayloadFromEvent
 
   /**
    * Utility function to get kinematics of the gesture
