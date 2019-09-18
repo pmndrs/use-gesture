@@ -13,6 +13,13 @@ import {
   TransformedEvent,
   TransformType,
 } from '../types'
+import { noop } from '../utils'
+
+type PayloadFromEvent<GestureType extends Coordinates | DistanceAngle> = {
+  values: [number, number | undefined]
+  gesturePayload?: Partial<GestureState<GestureType>>
+  sharedPayload?: Partial<SharedGestureState>
+}
 
 /**
  * Recognizer abstract class
@@ -20,6 +27,7 @@ import {
  */
 export default abstract class Recognizer<GestureType extends Coordinates | DistanceAngle> {
   protected stateKey: StateKey
+  protected abstract sharedStartState: Partial<SharedGestureState>
   protected abstract sharedEndState: Partial<SharedGestureState>
 
   /**
@@ -70,6 +78,23 @@ export default abstract class Recognizer<GestureType extends Coordinates | Dista
     this.controller.removeWindowListeners(this.stateKey)
   }
 
+  protected abstract getPayloadFromEvent(event: TransformedEvent): PayloadFromEvent<GestureType>
+
+  /**
+   * Utility function to get kinematics of the gesture
+   * @values values we want to calculate the kinematics from
+   * @event
+   * @returns set of values including movement, velocity, velocities, distance and direction
+   */
+  protected abstract getKinematics(values: [number, number | undefined], event: TransformedEvent): Partial<GestureState<GestureType>>
+
+  /**
+   * returns the start state for a given gesture
+   * @param values the xy values of the start state
+   * @param event the event that triggers the gesture start
+   */
+  protected abstract getStartState(values: [number, number | undefined], event: TransformedEvent): Partial<GestureState<GestureType>>
+
   // should return the bindings for a given gesture
   public abstract getEventBindings(): [ReactEventHandlerKey | ReactEventHandlerKey[], Fn][]
 
@@ -87,9 +112,59 @@ export default abstract class Recognizer<GestureType extends Coordinates | Dista
     this.controller.updateState(sharedState, gestureState, this.gestureKey, gestureFlag)
   }
 
-  protected onEnd = (event: TransformedEvent): void => {
+  // generic onStart function
+  onStart = (event: TransformedEvent, payload?: Partial<GestureState<GestureType>>): void => {
+    const { values, gesturePayload, sharedPayload } = this.getPayloadFromEvent(event)
+    const startState = this.getStartState(values, event)
+
+    this.updateState(
+      {
+        ...this.sharedStartState,
+        ...sharedPayload,
+      },
+      {
+        ...startState,
+        ...gesturePayload,
+        ...payload,
+      },
+      GestureFlag.OnStart
+    )
+  }
+
+  // generic onChange function
+  onChange = (event: TransformedEvent, payload?: Partial<GestureState<GestureType>>): void => {
+    const { values, gesturePayload, sharedPayload } = this.getPayloadFromEvent(event)
+    const kinematics = this.getKinematics(values, event)
+    this.updateState(
+      { ...sharedPayload },
+      {
+        first: false,
+        ...kinematics,
+        ...gesturePayload,
+        ...payload,
+      },
+      GestureFlag.OnChange
+    )
+  }
+
+  // generic onEnd function
+  protected onEnd = (event: TransformedEvent, payload?: Partial<GestureState<GestureType>>): void => {
     if (!this.state.active) return
     this.removeWindowListeners()
-    this.updateState(this.sharedEndState, { ...genericEndState, event }, GestureFlag.OnEnd)
+    this.updateState(
+      this.sharedEndState,
+      {
+        event,
+        ...genericEndState,
+        ...payload,
+      } as Partial<GestureState<GestureType>>,
+      GestureFlag.OnEnd
+    )
+  }
+
+  // generic cancel function
+  protected onCancel = (event: TransformedEvent): void => {
+    this.updateState(null, { canceled: true, cancel: noop } as Partial<GestureState<GestureType>>)
+    requestAnimationFrame(() => this.onEnd(event))
   }
 }

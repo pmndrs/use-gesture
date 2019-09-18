@@ -1,20 +1,20 @@
 import Recognizer from './Recognizer'
 import { addV, calculateVelocities, calculateDirection } from '../utils'
-import { DistanceAngle, GestureState, Vector2, TransformedEvent } from '../types'
+import { DistanceAngle, GestureState, Vector2, TransformedEvent, GestureKey } from '../types'
 import { initialState } from '../defaults'
+import GestureController from 'controllers/GestureController'
 
 /**
  * Abstract class for distance/angle-based gesture recongizers
  */
 export default abstract class DistanceAngleRecognizer extends Recognizer<DistanceAngle> {
-  /**
-   * Utility function to get kinematics of the gesture
-   * @d distance
-   * @a angle
-   * @event
-   * @returns set of values including delta, velocities, turns
-   */
-  protected getKinematics = ([d, a]: [number, number?], event: TransformedEvent): Partial<GestureState<DistanceAngle>> => {
+  constructor(gestureKey: GestureKey, controller: GestureController, args: any[] = []) {
+    super(gestureKey, controller, args)
+    this.getKinematics = this.getKinematics.bind(this)
+    this.getStartState = this.getStartState.bind(this)
+  }
+
+  getKinematics([d, a]: [number, number?], event: TransformedEvent): Partial<GestureState<DistanceAngle>> {
     const { da, turns, initial, offset, time = 0 } = this.state
 
     // angle might not be defined when ctrl wheel is used for zoom only
@@ -56,26 +56,19 @@ export default abstract class DistanceAngleRecognizer extends Recognizer<Distanc
     }
   }
 
-  /**
-   * returns the start state for a given gesture
-   * @param da the distance/angle values of the start state
-   * @param event the event that triggers the gesture start
-   */
-  protected getStartState = (da: Vector2, event: TransformedEvent): GestureState<DistanceAngle> => {
+  getStartState(da: Vector2, event: TransformedEvent): GestureState<DistanceAngle> {
     const initial = initialState[this.stateKey] as GestureState<DistanceAngle>
     const transform = this.getTransform(event)
-    const offset = this.state.offset || initial.offset
-    const origin = this.state.origin || initial.origin
     return {
       ...initial,
       event,
       da,
       initial: da,
       previous: da,
-      offset,
+      offset: this.state.offset,
+      origin: this.state.origin,
       first: true,
       active: true,
-      origin,
       transform,
       time: event.timeStamp,
       args: this.args,

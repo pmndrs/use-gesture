@@ -5,24 +5,30 @@ import { GestureFlag, TransformedEvent, ReactEventHandlerKey, Fn } from '../type
 import { genericEndState } from '../defaults'
 
 export default class HoverRecognizer extends CoordinatesRecognizer {
+  sharedStartState = { hovering: true }
   sharedEndState = { hovering: false, moving: false, velocity: 0, vxvy: [0, 0] }
 
   constructor(controller: GestureController, args: any[]) {
     super('hover', controller, args)
   }
 
-  onStart = (event: TransformedEvent): void => {
-    if (!this.enabled) return
-    const { xy, ...rest } = getPointerEventData(event)
-    this.updateState({ hovering: true, ...rest }, { xy, event, args: this.args }, GestureFlag.OnChange)
+  getPayloadFromEvent(event: TransformedEvent) {
+    const { xy, ...sharedPayload } = getPointerEventData(event)
+    return { values: xy, sharedPayload }
   }
 
-  onEnd = (event: TransformedEvent): void => {
+  onMouseEnter = (event: TransformedEvent): void => {
     if (!this.enabled) return
-    const { xy, ...rest } = getPointerEventData(event)
-    const kinematics = this.getKinematics(xy, event)
+    const { values, sharedPayload } = this.getPayloadFromEvent(event)
+    this.updateState({ hovering: true, ...sharedPayload }, { xy: values, event, args: this.args }, GestureFlag.OnChange)
+  }
 
-    this.updateState({ hovering: false, moving: false, ...rest }, { ...kinematics, ...genericEndState, velocity: 0, vxvy: [0, 0] })
+  onMouseLeave = (event: TransformedEvent): void => {
+    if (!this.enabled) return
+    const { values, sharedPayload } = this.getPayloadFromEvent(event)
+    const kinematics = this.getKinematics(values, event)
+
+    this.updateState({ hovering: false, moving: false, ...sharedPayload }, { ...kinematics, ...genericEndState, velocity: 0, vxvy: [0, 0] })
 
     // when the mouse leaves the element, we also fire the move handler
     // without waiting for move to end with debounce
@@ -31,6 +37,6 @@ export default class HoverRecognizer extends CoordinatesRecognizer {
   }
 
   getEventBindings(): [ReactEventHandlerKey | ReactEventHandlerKey[], Fn][] {
-    return [['onMouseEnter', this.onStart], ['onMouseLeave', this.onEnd]]
+    return [['onMouseEnter', this.onMouseEnter], ['onMouseLeave', this.onMouseLeave]]
   }
 }

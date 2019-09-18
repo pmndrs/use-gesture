@@ -2,16 +2,23 @@ import { WheelEvent } from 'react'
 import DistanceAngleRecognizer from './DistanceAngleRecognizer'
 import { getWheelEventData } from '../utils'
 import GestureController from '../controllers/GestureController'
-import { TransformedEvent, GestureFlag, ReactEventHandlerKey, Fn } from '../types'
+import { TransformedEvent, ReactEventHandlerKey, Fn } from '../types'
 
 export default class PinchWheelRecognizer extends DistanceAngleRecognizer {
+  sharedStartState = { pinching: true }
   sharedEndState = { pinching: false }
 
   constructor(controller: GestureController, args: any[]) {
     super('pinch', controller, args)
   }
 
-  onChange = (event: TransformedEvent<WheelEvent>): void => {
+  getPayloadFromEvent(event: TransformedEvent<WheelEvent>) {
+    const { xy, ...sharedPayload } = getWheelEventData(event)
+    const d = this.state.da[0] - xy[1]
+    return { values: [d, undefined] as [number, number | undefined], sharedPayload }
+  }
+
+  onWheel = (event: TransformedEvent<WheelEvent>): void => {
     if (!this.enabled || !event.ctrlKey) return
 
     if (!this.controller.config.passiveEvents) event.preventDefault()
@@ -22,19 +29,11 @@ export default class PinchWheelRecognizer extends DistanceAngleRecognizer {
     this.clearTimeout()
     this.setTimeout(this.onEnd)
 
-    const { xy, ...rest } = getWheelEventData(event)
-    const d = this.state.da[0] - xy[1]
-
-    if (!this.state.active) {
-      const startState = this.getStartState([d, 0], event)
-      this.updateState({ pinching: true, ...rest }, startState, GestureFlag.OnStart)
-    } else {
-      const kinematics = this.getKinematics([d, undefined], event)
-      this.updateState(rest, { ...kinematics, first: false }, GestureFlag.OnChange)
-    }
+    if (!this.state.active) this.onStart(event)
+    else this.onChange(event)
   }
 
   getEventBindings(): [ReactEventHandlerKey | ReactEventHandlerKey[], Fn][] {
-    return [['onWheel', this.onChange]]
+    return [['onWheel', this.onWheel]]
   }
 }

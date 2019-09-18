@@ -7,13 +7,7 @@ import { Coordinates, GestureState, Vector2, TransformedEvent } from '../types'
  * Abstract class for coordinates-based gesture recongizers
  */
 export default abstract class CoordinatesRecognizer extends Recognizer<Coordinates> {
-  /**
-   * Utility function to get kinematics of the gesture
-   * @values values we want to calculate the kinematics from
-   * @event
-   * @returns set of values including movement, velocity, velocities, distance and direction
-   */
-  protected getKinematics = (values: Vector2, event: TransformedEvent): Partial<GestureState<Coordinates>> => {
+  getKinematics(values: Vector2, event: TransformedEvent): Partial<GestureState<Coordinates>> {
     // we get the gesture specific state
     const { xy, initial, offset, time = 0 } = this.state
     const transform = this.getTransform(event)
@@ -42,15 +36,9 @@ export default abstract class CoordinatesRecognizer extends Recognizer<Coordinat
     }
   }
 
-  /**
-   * returns the start state for a given gesture
-   * @param xy the xy values of the start state
-   * @param event the event that triggers the gesture start
-   */
-  protected getStartState = (xy: Vector2, event: TransformedEvent): GestureState<Coordinates> => {
+  getStartState(xy: Vector2, event: TransformedEvent): GestureState<Coordinates> {
     const initial = initialState[this.stateKey] as GestureState<Coordinates>
     const transform = this.getTransform(event)
-    const offset = this.state.offset || initial.offset
 
     return {
       ...initial,
@@ -58,7 +46,7 @@ export default abstract class CoordinatesRecognizer extends Recognizer<Coordinat
       xy,
       initial: xy,
       previous: xy,
-      offset,
+      offset: this.state.offset,
       first: true,
       active: true,
       transform,
