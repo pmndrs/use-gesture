@@ -12,11 +12,12 @@ import {
   GestureFlag,
   TransformedEvent,
   TransformType,
+  Vector2,
 } from '../types'
 import { noop } from '../utils'
 
 type PayloadFromEvent = {
-  values: [number, number | undefined]
+  values: Vector2
   gesturePayload?: Partial<GestureState>
   sharedPayload?: Partial<SharedGestureState>
 }
