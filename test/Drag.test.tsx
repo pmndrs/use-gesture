@@ -1,6 +1,6 @@
-import 'jest-dom/extend-expect'
 import React from 'react'
-import { render, cleanup, fireEvent, createEvent, wait } from 'react-testing-library'
+import { render, cleanup, fireEvent, createEvent, wait } from '@testing-library/react'
+import '@testing-library/jest-dom/extend-expect'
 import Interactive from './components/Interactive'
 import InteractiveDom from './components/InteractiveDom'
 import { InteractiveType } from './components/types'
@@ -29,7 +29,7 @@ describe.each([['attached to component', Interactive, false], ['attached to node
       expect(getByTestId(`${prefix}drag-active`)).toHaveTextContent('true')
       expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('true')
       expect(getByTestId(`${prefix}drag-first`)).toHaveTextContent('true')
-      expect(getByTestId(`${prefix}drag-values`)).toHaveTextContent('10,20')
+      expect(getByTestId(`${prefix}drag-xy`)).toHaveTextContent('10,20')
       expect(getByTestId(`${prefix}drag-down`)).toHaveTextContent('true')
       expect(getByTestId(`${prefix}drag-initial`)).toHaveTextContent('10,20')
     })
@@ -47,12 +47,21 @@ describe.each([['attached to component', Interactive, false], ['attached to node
       expect(getByTestId(`${prefix}drag-first`)).toHaveTextContent('false')
     })
     test('moving should update kinematics', () => {
-      expect(getByTestId(`${prefix}drag-values`)).toHaveTextContent('20,50')
-      expect(getByTestId(`${prefix}drag-local`)).toHaveTextContent('10,30')
+      expect(getByTestId(`${prefix}drag-xy`)).toHaveTextContent('20,50')
+      expect(getByTestId(`${prefix}drag-offset`)).toHaveTextContent('10,30')
+      expect(getByTestId(`${prefix}drag-movement`)).toHaveTextContent('10,30')
       expect(getByTestId(`${prefix}drag-delta`)).toHaveTextContent('10,30')
       expect(getByTestId(`${prefix}drag-previous`)).toHaveTextContent('10,20')
       expect(getByTestId(`${prefix}drag-velocity`)).not.toHaveTextContent(/^0$/)
-      expect(getByTestId(`${prefix}drag-velocities`)).toHaveTextContent(`${10 / delta_t},${30 / delta_t}`)
+      expect(getByTestId(`${prefix}drag-vxvy`)).toHaveTextContent(`${10 / delta_t},${30 / delta_t}`)
+    })
+    test('moving again should further update xy and movement', () => {
+      fireEvent.mouseMove(window, { clientX: -10, clientY: 30, buttons: 1 })
+      expect(getByTestId(`${prefix}drag-xy`)).toHaveTextContent('-10,30')
+      expect(getByTestId(`${prefix}drag-offset`)).toHaveTextContent('-20,10')
+      expect(getByTestId(`${prefix}drag-movement`)).toHaveTextContent('-20,10')
+      expect(getByTestId(`${prefix}drag-delta`)).toHaveTextContent('-30,-20')
+      expect(getByTestId(`${prefix}drag-previous`)).toHaveTextContent('20,50')
     })
     test('mouseUp should terminate the gesture', () => {
       fireEvent.mouseUp(window)
@@ -74,12 +83,12 @@ describe.each([['attached to component', Interactive, false], ['attached to node
       fireEvent.mouseDown(element)
       expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('false')
     })
-    test('restarting the gesture should book-keep local and reset delta', () => {
+    test('restarting the gesture should book-keep offset and reset movement', () => {
       rerender(<Component gestures={['Drag']} />)
       fireEvent.mouseDown(element, { clientX: 30, clientY: 60 })
       fireEvent.mouseMove(window, { clientX: 20, clientY: 50, buttons: 1 })
-      expect(getByTestId(`${prefix}drag-local`)).toHaveTextContent('0,20')
-      expect(getByTestId(`${prefix}drag-delta`)).toHaveTextContent('-10,-10')
+      expect(getByTestId(`${prefix}drag-offset`)).toHaveTextContent('-30,0')
+      expect(getByTestId(`${prefix}drag-movement`)).toHaveTextContent('-10,-10')
     })
     test('canceling the gesture should cancel the gesture in the next RAF tick', async () => {
       rerender(<Component gestures={['Drag']} canceled />)

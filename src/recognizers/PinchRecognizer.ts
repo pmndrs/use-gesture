@@ -1,51 +1,35 @@
 import { TouchEvent } from 'react'
 import DistanceAngleRecognizer from './DistanceAngleRecognizer'
-import { noop, getTwoTouchesEventData } from '../utils'
+import { getTwoTouchesEventData } from '../utils'
 import GestureController from '../controllers/GestureController'
-import { TransformedEvent, GestureFlag, ReactEventHandlerKey, Fn } from '../types'
-import { genericEndState } from '../defaults'
+import { TransformedEvent, ReactEventHandlerKey, Fn } from '../types'
 
 export default class PinchRecognizer extends DistanceAngleRecognizer {
+  sharedStartState = { pinching: true }
+  sharedEndState = { pinching: false, down: false, touches: 0 }
+
   constructor(controller: GestureController, args: any[]) {
     super('pinch', controller, args)
   }
 
-  onStart = (event: TransformedEvent<TouchEvent>): void => {
-    if (!this.isEnabled() || event.touches.length !== 2) return
-
-    const { values, origin, ...rest } = getTwoTouchesEventData(event)
-
-    const startState = this.getStartState(values, event)
-    this.updateState(
-      { ...rest, pinching: true, down: true },
-      { ...startState, origin, cancel: () => this.onCancel(event) },
-      GestureFlag.OnStart
-    )
+  getPayloadFromEvent(event: TransformedEvent<TouchEvent>) {
+    const { da, origin, ...sharedPayload } = getTwoTouchesEventData(event)
+    return { values: da, gesturePayload: { origin }, sharedPayload }
   }
 
-  onChange = (event: TransformedEvent<TouchEvent>): void => {
-    const { canceled, active } = this.getState()
-    if (canceled || !active || event.touches.length !== 2) return
-
-    const { values, origin, ...rest } = getTwoTouchesEventData(event)
-
-    const kinematics = this.getKinematics(values, event)
-    const cancel = () => this.onCancel(event)
-
-    this.updateState(rest, { ...kinematics, origin, first: false, cancel }, GestureFlag.OnChange)
+  onPinchStart = (event: TransformedEvent<TouchEvent>): void => {
+    if (!this.enabled || event.touches.length !== 2) return
+    this.onStart(event, { cancel: () => this.onCancel(event) })
   }
 
-  onEnd = (event: TransformedEvent<TouchEvent>): void => {
-    if (!this.getState().active) return
-    this.updateState({ pinching: false, down: false, touches: 0 }, { ...genericEndState, event }, GestureFlag.OnEnd)
-  }
+  onPinchChange = (event: TransformedEvent<TouchEvent>): void => {
+    const { canceled, active, time } = this.state
+    if (canceled || !active || event.touches.length !== 2 || event.timeStamp === time) return
 
-  onCancel = (event: TransformedEvent<TouchEvent>): void => {
-    this.updateState(null, { canceled: true, cancel: noop })
-    requestAnimationFrame(() => this.onEnd(event))
+    this.onChange(event, { cancel: () => this.onCancel(event) })
   }
 
   getEventBindings(): [ReactEventHandlerKey | ReactEventHandlerKey[], Fn][] {
-    return [['onTouchStart', this.onStart], ['onTouchMove', this.onChange], [['onTouchEnd', 'onTouchCancel'], this.onEnd]]
+    return [['onTouchStart', this.onPinchStart], ['onTouchMove', this.onPinchChange], [['onTouchEnd', 'onTouchCancel'], this.onEnd]]
   }
 }

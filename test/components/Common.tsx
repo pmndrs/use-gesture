@@ -81,7 +81,7 @@ export const Common = React.forwardRef(
         <div data-testid={`${testKey}-end`}>{endFired === 0 ? 'not fired' : endFired > 1 ? 'fired too much' : 'fired'}</div>
         {Object.entries(state).map(([k, v]) => (
           <div key={k} data-testid={`${testKey}-${k}`}>
-            {v !== undefined ? v.toString() : 'undefined'}
+            {String(v)}
           </div>
         ))}
         {children}

@@ -1,6 +1,6 @@
 import React from 'react'
-import { render, cleanup, fireEvent, createEvent, wait } from 'react-testing-library'
-import 'jest-dom/extend-expect'
+import { render, cleanup, fireEvent, createEvent, wait } from '@testing-library/react'
+import '@testing-library/jest-dom/extend-expect'
 import Interactive from './components/Interactive'
 import InteractiveDom from './components/InteractiveDom'
 import { InteractiveType } from './components/types'
@@ -31,7 +31,7 @@ describe.each([['attached to component', Interactive, false], ['attached to node
       expect(getByTestId(`${prefix}pinch-active`)).toHaveTextContent('true')
       expect(getByTestId(`${prefix}pinch-pinching`)).toHaveTextContent('true')
       expect(getByTestId(`${prefix}pinch-first`)).toHaveTextContent('true')
-      expect(getByTestId(`${prefix}pinch-values`)).toHaveTextContent(`40,0`)
+      expect(getByTestId(`${prefix}pinch-da`)).toHaveTextContent(`40,0`)
       expect(getByTestId(`${prefix}pinch-origin`)).toHaveTextContent(`0,20`)
       expect(getByTestId(`${prefix}pinch-initial`)).toHaveTextContent(`40,0`)
     })
@@ -52,16 +52,16 @@ describe.each([['attached to component', Interactive, false], ['attached to node
       expect(getByTestId(`${prefix}pinch-first`)).toHaveTextContent('false')
     })
 
-    test('moving should update values and deltas', () => {
-      expect(getByTestId(`${prefix}pinch-values`)).toHaveTextContent(`30,-90`)
-      expect(getByTestId(`${prefix}pinch-delta`)).toHaveTextContent(`-10,-90`)
-      expect(getByTestId(`${prefix}pinch-local`)).toHaveTextContent(`-10,-90`)
+    test('moving should update distance/angle and movement', () => {
+      expect(getByTestId(`${prefix}pinch-da`)).toHaveTextContent(`30,-90`)
+      expect(getByTestId(`${prefix}pinch-movement`)).toHaveTextContent(`-10,-90`)
+      expect(getByTestId(`${prefix}pinch-offset`)).toHaveTextContent(`-10,-90`)
       expect(getByTestId(`${prefix}pinch-origin`)).toHaveTextContent(`15,0`)
       expect(getByTestId(`${prefix}pinch-previous`)).toHaveTextContent(`40,0`)
     })
 
     test('moving should update kinematics', () => {
-      expect(getByTestId(`${prefix}pinch-velocities`)).toHaveTextContent(`${-10 / delta_t},${-90 / delta_t}`)
+      expect(getByTestId(`${prefix}pinch-vdva`)).toHaveTextContent(`${-10 / delta_t},${-90 / delta_t}`)
     })
 
     test('touchEnd should terminate the gesture', () => {
@@ -76,17 +76,17 @@ describe.each([['attached to component', Interactive, false], ['attached to node
       expect(getByTestId(`${prefix}pinch-end`)).toHaveTextContent(/^fired$/)
     })
 
-    test('restarting the gesture should book-keep local and reset delta', () => {
+    test('restarting the gesture should book-keep offset and reset movement', () => {
       fireEvent.touchStart(element, { touches: [{ clientX: 0, clientY: 0 }, { clientX: 0, clientY: 40 }] })
       fireEvent.touchMove(element, { touches: [{ clientX: 0, clientY: 0 }, { clientX: -30, clientY: 0 }] })
-      expect(getByTestId(`${prefix}pinch-values`)).toHaveTextContent(`30,90`)
-      expect(getByTestId(`${prefix}pinch-local`)).toHaveTextContent(`-20,0`)
-      expect(getByTestId(`${prefix}pinch-delta`)).toHaveTextContent(`-10,90`)
+      expect(getByTestId(`${prefix}pinch-da`)).toHaveTextContent(`30,90`)
+      expect(getByTestId(`${prefix}pinch-offset`)).toHaveTextContent(`-20,0`)
+      expect(getByTestId(`${prefix}pinch-movement`)).toHaveTextContent(`-10,90`)
     })
 
-    test('using wheel with ctrl key pressed should update pinch values', () => {
+    test('using wheel with ctrl key pressed should update pinch distance/angle', () => {
       fireEvent.wheel(element, { deltaX: 4, deltaY: -5, ctrlKey: true })
-      expect(getByTestId(`${prefix}pinch-values`)).toHaveTextContent(`35,90`)
+      expect(getByTestId(`${prefix}pinch-da`)).toHaveTextContent(`35,90`)
     })
 
     test('passing the 180° angle between clockwise between two move events should account for a new turn', () => {

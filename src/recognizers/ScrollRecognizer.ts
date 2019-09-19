@@ -1,37 +1,22 @@
 import CoordinatesRecognizer from './CoordinatesRecognizer'
 import { getScrollEventData } from '../utils'
 import GestureController from '../controllers/GestureController'
-import { TransformedEvent, GestureFlag, ReactEventHandlerKey, Fn } from '../types'
-import { genericEndState } from '../defaults'
+import { TransformedEvent, ReactEventHandlerKey, Fn } from '../types'
 
 export default class ScrollRecognizer extends CoordinatesRecognizer {
+  sharedStartState = { scrolling: true }
+  sharedEndState = { scrolling: false, velocity: 0, vxvy: [0, 0] }
+
   constructor(controller: GestureController, args: any[]) {
     super('scroll', controller, args)
   }
 
-  onChange = (event: TransformedEvent): void => {
-    if (!this.isEnabled()) return
-
-    this.clearTimeout()
-    this.setTimeout(this.onEnd)
-
-    const { values, ...rest } = getScrollEventData(event)
-
-    if (!this.getState().active) {
-      const startState = this.getStartState(values, event)
-      this.updateState({ scrolling: true, ...rest }, startState, GestureFlag.OnStart)
-    } else {
-      const kinematics = this.getKinematics(values, event)
-      this.updateState(rest, { ...kinematics, first: false }, GestureFlag.OnChange)
-    }
-  }
-
-  onEnd = (): void => {
-    if (!this.getState().active) return
-    this.updateState({ scrolling: false }, { ...genericEndState, velocity: 0, velocities: [0, 0] }, GestureFlag.OnEnd)
+  getPayloadFromEvent(event: TransformedEvent) {
+    const { xy, ...sharedPayload } = getScrollEventData(event)
+    return { values: xy, sharedPayload }
   }
 
   getEventBindings(): [ReactEventHandlerKey | ReactEventHandlerKey[], Fn][] {
-    return [['onScroll', this.onChange]]
+    return [['onScroll', this.timeoutHandler]]
   }
 }

@@ -21,8 +21,8 @@ export const mappedKeys: MappedKeys = {
 export const defaultConfig: GestureConfig = {
   domTarget: undefined,
   event: { passive: true, capture: false },
-  pointerEvents: false,
   window: typeof window !== 'undefined' ? window : undefined,
+  passiveEvents: true,
   transform: { x: (x: number): number => x, y: (y: number): number => y },
   enabled: true,
   drag: true,
@@ -38,14 +38,13 @@ export const initialCommon: CommonGestureState = {
   event: undefined,
   currentTarget: undefined,
   pointerId: undefined,
-  values: [0, 0],
-  velocities: [0, 0],
   delta: [0, 0],
+  movement: [0, 0],
+  offset: [0, 0],
+  direction: [0, 0],
   initial: [0, 0],
   previous: [0, 0],
   transform: undefined,
-  local: [0, 0],
-  lastLocal: [0, 0],
   first: false,
   last: false,
   active: false,
@@ -57,7 +56,7 @@ export const initialCommon: CommonGestureState = {
 }
 
 // initial state for coordinates-based gestures
-const initialCoordinates: Coordinates = { xy: [0, 0], vxvy: [0, 0], velocity: 0, distance: 0, direction: [0, 0] } // xy coordinates
+const initialCoordinates: Coordinates = { xy: [0, 0], vxvy: [0, 0], velocity: 0, distance: 0 } // xy coordinates
 
 // initial state for distance and angle-based gestures (pinch)
 const initialDistanceAngle: DistanceAngle = { da: [0, 0], vdva: [0, 0], origin: [0, 0], turns: 0 } // distance and angle
@@ -87,4 +86,4 @@ export const initialState: StateObject = {
 }
 
 // generic end state for all gestures
-export const genericEndState = { first: false, last: true, active: false }
+export const genericEndState: Partial<CommonGestureState> = { first: false, last: true, active: false }

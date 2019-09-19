@@ -13,7 +13,7 @@ export interface GestureConfig {
   domTarget?: EventTarget | React.RefObject<EventTarget> | null
   event: EventOptions
   window?: EventTarget | null
-  pointerEvents: boolean
+  passiveEvents: boolean
   transform: TransformType
   enabled: boolean
   drag: boolean
@@ -35,6 +35,7 @@ export type TransformedEvent<
   T extends React.SyntheticEvent = React.MouseEvent | React.TouchEvent | React.WheelEvent | React.PointerEvent | GestureEvent
 > = T & {
   transform?: TransformType
+  gesture?: GestureKey
 }
 
 export interface ReactEventHandlers {
@@ -122,14 +123,13 @@ export interface CommonGestureState {
   event?: TransformedEvent
   currentTarget?: EventTarget | null
   pointerId?: number | null
-  values: Vector2
-  velocities: Vector2
   delta: Vector2
+  movement: Vector2
+  offset: Vector2
   initial: Vector2
   previous: Vector2
+  direction: Vector2
   transform?: TransformType
-  local: Vector2
-  lastLocal: Vector2
   first: boolean
   last: boolean
   active: boolean
@@ -137,7 +137,6 @@ export interface CommonGestureState {
   cancel?(): void
   canceled: boolean
   memo?: any
-  temp?: any // TODO to be removed in future versions
   args?: any
 }
 
@@ -146,7 +145,6 @@ export interface Coordinates {
   velocity: number
   vxvy: Vector2
   distance: number
-  direction: Vector2
 }
 
 export interface DistanceAngle {
@@ -156,7 +154,7 @@ export interface DistanceAngle {
   turns: number
 }
 
-export type GestureState<T extends Coordinates | DistanceAngle> = T & CommonGestureState
+export type GestureState<T extends Coordinates | DistanceAngle = Coordinates | DistanceAngle> = T & CommonGestureState
 export type FullGestureState<T extends Coordinates | DistanceAngle> = SharedGestureState & GestureState<T>
 
 export type StateObject = { shared: SharedGestureState } & { [K in StateKey]: GestureState<Coordinates | DistanceAngle> }
@@ -165,7 +163,6 @@ export type Handler<T extends Coordinates | DistanceAngle> = (state: FullGesture
 export type HandlerKey = 'onDrag' | 'onPinch' | 'onMove' | 'onHover' | 'onScroll' | 'onWheel'
 
 export type GestureHandlers = {
-  onAction: Handler<Coordinates>
   onDrag: Handler<Coordinates>
   onDragStart: Handler<Coordinates>
   onDragEnd: Handler<Coordinates>

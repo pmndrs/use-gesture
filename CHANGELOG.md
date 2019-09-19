@@ -1,12 +1,39 @@
 # Changelog
 
+## 6.0.0 Release
+
+**Summary:** Refinement release, better naming of keys, with breaking changes.
+
+### Breaking
+
+1. `temp` is no longer supported. Please use `memo`.
+2. `delta` now calculates the delta between current and previous values.
+3. Former `delta` is replaced by `movement` (`xy - initial`).
+4. Former `local` is replaced by `offset`.
+5. `lastLocal` has been removed.
+6. `onAction` handler as an alias for `onDrag` is not supported anymore.
+7. `useGesture` doesn't support a function as a shortcut for `onDrag`. Please use `useDrag` from now on.
+
+### Added
+
+1. Added `direction` to pinch gestures.
+2. Added `delta` that just calculates the delta between current and previous values.
+3. Added `addV` and `subV` as convenient exports for adding and substracting vectors formed as arrays.
+4. Added a warning when using trackpad zoom without a `domTarget` or `event.passive` set to true.
+5. Added a `gesture` key to the event passed to handlers indicating which gesture originated the event.
+
+### Fixed
+
+1. Fixed velocity for angle on pinch gestures.
+2. Doesn't trigger the `onWheel` handler when the ctrl key is pressed and `onPinch` is active [#80](https://github.com/react-spring/react-use-gesture/issues/80#issuecomment-520915895).
+
 ## 5.2.4 Release
 
 **Summary:** Minor release.
 
 ### Fixed
 
-1. `memo` now works as expected when returning `0` from the handler
+1. `memo` now works as expected when returning `0` from the handler.
 
 ## 5.2.3 Release
 
@@ -14,7 +41,7 @@
 
 ### Fixed
 
-1. Changed the default timeout for debounced events
+1. Changed the default timeout for debounced events.
 
 ## 5.2.1 Release
 
@@ -22,7 +49,7 @@
 
 ### Fixed
 
-1. Fixed issue with Webkit Gesture Recognizer
+1. Fixed issue with Webkit Gesture Recognizer.
 
 ## 5.2.0 Release
 
@@ -30,23 +57,23 @@
 
 ### Added
 
-1. `useDrag`, `useMove`,`useHover`,`useScroll`,`useWheel`,`usePinch` hooks have been added
+1. `useDrag`, `useMove`,`useHover`,`useScroll`,`useWheel`,`usePinch` hooks have been added.
 
 ### Changed
 
-1. `temp` renamed to `memo`
+1. `temp` renamed to `memo`.
 
 ## 5.1.3 Release
 
-**Summary:** Better build process and TypeScript improvements
+**Summary:** Better build process and TypeScript improvements.
 
 ### Added
 
-1. Build process now uses `tsdx` instead of `rollup`
+1. Build process now uses `tsdx` instead of `rollup`.
 
 ### Fixed
 
-1. Event type fixing in TypeScript
+1. Event type fixing in TypeScript.
 
 ## 5.1.2 Release
 
@@ -54,7 +81,7 @@
 
 ### Fixed
 
-1. `import { useGesture } from 'react-use-gesture'` should now be functional
+1. `import { useGesture } from 'react-use-gesture'` should now be functional.
 
 ## ~~5.1.0 Release~~ (do not use)
 

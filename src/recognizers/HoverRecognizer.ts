@@ -9,18 +9,24 @@ export default class HoverRecognizer extends CoordinatesRecognizer {
     super('hover', controller, args)
   }
 
-  onStart = (event: TransformedEvent): void => {
-    if (!this.isEnabled()) return
-    const { values, ...rest } = getPointerEventData(event)
-    this.updateState({ hovering: true, ...rest }, { values, event, args: this.args }, GestureFlag.OnChange)
+  getPayloadFromEvent(event: TransformedEvent) {
+    const { xy, ...sharedPayload } = getPointerEventData(event)
+    return { values: xy, sharedPayload }
   }
 
-  onEnd = (event: TransformedEvent): void => {
-    if (!this.isEnabled()) return
-    const { values, ...rest } = getPointerEventData(event)
+  onMouseEnter = (event: TransformedEvent): void => {
+    if (!this.enabled) return
+    const { values, sharedPayload } = this.getPayloadFromEvent(event)
+    this.updateState({ hovering: true, ...sharedPayload }, { xy: values, event, args: this.args })
+    this.fireGestureHandler(GestureFlag.OnChange)
+  }
+
+  onMouseLeave = (event: TransformedEvent): void => {
+    if (!this.enabled) return
+    const { values, sharedPayload } = this.getPayloadFromEvent(event)
     const kinematics = this.getKinematics(values, event)
 
-    this.updateState({ hovering: false, moving: false, ...rest }, { ...kinematics, ...genericEndState, velocity: 0, velocities: [0, 0] })
+    this.updateState({ hovering: false, moving: false, ...sharedPayload }, { ...kinematics, ...genericEndState, velocity: 0, vxvy: [0, 0] })
 
     // when the mouse leaves the element, we also fire the move handler
     // without waiting for move to end with debounce
@@ -29,9 +35,6 @@ export default class HoverRecognizer extends CoordinatesRecognizer {
   }
 
   getEventBindings(): [ReactEventHandlerKey | ReactEventHandlerKey[], Fn][] {
-    if (this.pointerEventsEnabled()) {
-      return [['onPointerEnter', this.onStart], ['onPointerLeave', this.onEnd]]
-    }
-    return [['onMouseEnter', this.onStart], ['onMouseLeave', this.onEnd]]
+    return [['onMouseEnter', this.onMouseEnter], ['onMouseLeave', this.onMouseLeave]]
   }
 }

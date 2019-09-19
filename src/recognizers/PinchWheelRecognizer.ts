@@ -2,39 +2,35 @@ import { WheelEvent } from 'react'
 import DistanceAngleRecognizer from './DistanceAngleRecognizer'
 import { getWheelEventData } from '../utils'
 import GestureController from '../controllers/GestureController'
-import { TransformedEvent, GestureFlag, ReactEventHandlerKey, Fn } from '../types'
-import { genericEndState } from '../defaults'
+import { TransformedEvent, ReactEventHandlerKey, Fn } from '../types'
 
 export default class PinchWheelRecognizer extends DistanceAngleRecognizer {
+  sharedStartState = { pinching: true }
+  sharedEndState = { pinching: false }
+
   constructor(controller: GestureController, args: any[]) {
     super('pinch', controller, args)
   }
 
-  onChange = (event: TransformedEvent<WheelEvent>): void => {
-    if (!this.isEnabled() || !event.ctrlKey) return
-    event.preventDefault()
-
-    this.clearTimeout()
-    this.setTimeout(this.onEnd)
-
-    const { values, ...rest } = getWheelEventData(event)
-    const d = this.getState().values[0] - values[1]
-
-    if (!this.getState().active) {
-      const startState = this.getStartState([d, 0], event)
-      this.updateState({ pinching: true, ...rest }, startState, GestureFlag.OnStart)
-    } else {
-      const kinematics = this.getKinematics([d, undefined], event)
-      this.updateState(rest, { ...kinematics, first: false }, GestureFlag.OnChange)
-    }
+  getPayloadFromEvent(event: TransformedEvent<WheelEvent>) {
+    const { xy, ...sharedPayload } = getWheelEventData(event)
+    const d = this.state.da[0] - xy[1]
+    return { values: [d, undefined] as [number, number | undefined], sharedPayload }
   }
 
-  onEnd = (): void => {
-    if (!this.getState().active) return
-    this.updateState({ pinching: false, down: false, touches: 0 }, { ...genericEndState }, GestureFlag.OnEnd)
+  onWheel = (event: TransformedEvent<WheelEvent>): void => {
+    if (!event.ctrlKey) return
+
+    if (!this.controller.config.passiveEvents) event.preventDefault()
+    else if (process.env.NODE_ENV === 'development')
+      console.warn(
+        'To support zoom on trackpads, try using the `domTarget` option and `config.event.passive` set to `false`. This message will only appear in development mode.'
+      )
+
+    this.timeoutHandler(event)
   }
 
   getEventBindings(): [ReactEventHandlerKey | ReactEventHandlerKey[], Fn][] {
-    return [['onWheel', this.onChange]]
+    return [['onWheel', this.onWheel]]
   }
 }

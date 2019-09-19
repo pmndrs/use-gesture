@@ -37,7 +37,7 @@ export function getModifierKeys(event: TransformedEvent): ModifierKeys {
   const { shiftKey, altKey, metaKey, ctrlKey } = event
   return { shiftKey, altKey, metaKey, ctrlKey }
 }
-type ScrollEventData = Pick<FullGestureState<Coordinates>, 'values'> & ModifierKeys
+type ScrollEventData = Pick<FullGestureState<Coordinates>, 'xy'> & ModifierKeys
 
 /**
  * Gets scroll event data
@@ -48,10 +48,10 @@ export function getScrollEventData(event: TransformedEvent): ScrollEventData {
   // If the currentTarget is the window then we return the scrollX/Y position.
   // If not (ie the currentTarget is a DOM element), then we return scrollLeft/Top
   const { scrollX, scrollY, scrollLeft, scrollTop } = <Element & Window>event.currentTarget
-  return { values: [scrollX || scrollLeft || 0, scrollY || scrollTop || 0], ...getModifierKeys(event) }
+  return { xy: [scrollX || scrollLeft || 0, scrollY || scrollTop || 0], ...getModifierKeys(event) }
 }
 
-type WheelEventData = Pick<FullGestureState<Coordinates>, 'values'> & ModifierKeys
+type WheelEventData = Pick<FullGestureState<Coordinates>, 'xy'> & ModifierKeys
 
 /**
  * Gets wheel event data
@@ -62,10 +62,10 @@ export function getWheelEventData(event: TransformedEvent<React.WheelEvent>): Wh
   const { deltaX, deltaY } = event
   //TODO implement polyfill ?
   // https://developer.mozilla.org/en-US/docs/Web/Events/wheel#Polyfill
-  return { values: [deltaX, deltaY], ...getModifierKeys(event) }
+  return { xy: [deltaX, deltaY], ...getModifierKeys(event) }
 }
-type PointerEventData = Pick<FullGestureState<Coordinates>, 'values' | 'touches' | 'down' | 'buttons'> & ModifierKeys
 
+type PointerEventData = Pick<FullGestureState<Coordinates>, 'xy' | 'touches' | 'down' | 'buttons'> & ModifierKeys
 /**
  * Gets pointer event data
  * @param event
@@ -77,7 +77,7 @@ export function getPointerEventData(event: React.MouseEvent | React.TouchEvent |
   const { clientX, clientY } = touchEvents ? touchEvents[0] : event
   const down = (touchEvents && touchEvents.length > 0) || buttons > 0
   return {
-    values: [clientX, clientY],
+    xy: [clientX, clientY],
     touches: (touchEvents && touchEvents.length) || 0,
     down,
     buttons,
@@ -85,7 +85,7 @@ export function getPointerEventData(event: React.MouseEvent | React.TouchEvent |
   }
 }
 
-type TwoTouchesEventData = Pick<FullGestureState<DistanceAngle>, 'values' | 'touches' | 'down' | 'origin'> & ModifierKeys
+type TwoTouchesEventData = Pick<FullGestureState<DistanceAngle>, 'da' | 'touches' | 'down' | 'origin'> & ModifierKeys
 
 /**
  * Gets two touches event data
@@ -100,51 +100,51 @@ export function getTwoTouchesEventData(event: React.TouchEvent): TwoTouchesEvent
   const da: Vector2 = [Math.hypot(dx, dy), -(Math.atan2(dx, dy) * 180) / Math.PI]
   const origin: Vector2 = [(touches[1].clientX + touches[0].clientX) / 2, (touches[1].clientY + touches[0].clientY) / 2]
 
-  return { values: da, origin, touches: 2, down: touches.length > 0, ...getModifierKeys(event) }
+  return { da, origin, touches: 2, down: touches.length > 0, ...getModifierKeys(event) }
 }
 
 /**
  * Calculates velocity
- * @param diff the difference between current and previous vectors
- * @param delta_t the time delta
- * @param len the length of the diff vector
+ * @param delta the difference between current and previous vectors
+ * @param delta_t the time offset
+ * @param len the length of the delta vector
  * @returns velocity
  */
-export function calculateVelocity(diff: number[], delta_t: number, len: number): number {
-  len = len || Math.hypot(...diff)
+export function calculateVelocity(delta: number[], delta_t: number, len: number): number {
+  len = len || Math.hypot(...delta)
   return delta_t ? len / delta_t : 0
 }
 
 /**
  * Calculates velocities vector
  * @template T the expected vector type
- * @param diff the previous value
- * @param delta_t the time delta
+ * @param delta the difference between current and previous vectors
+ * @param delta_t the time offset
  * @returns velocities vector
  */
-export function calculateVelocities<T extends number[]>(diff: T, delta_t: number): T {
-  return delta_t ? <T>diff.map(v => v / delta_t) : <T>Array(diff.length).fill(0)
+export function calculateVelocities<T extends number[]>(delta: T, delta_t: number): T {
+  return delta_t ? <T>delta.map(v => v / delta_t) : <T>Array(delta.length).fill(0)
 }
 
 /**
  * Calculates distance
- * @param delta the difference between current and initial vectors
+ * @param movement the difference between current and initial vectors
  * @returns distance
  */
-export function calculateDistance(delta: number[]): number {
-  return Math.hypot(...delta)
+export function calculateDistance(movement: number[]): number {
+  return Math.hypot(...movement)
 }
 
 /**
  * Calculates direction
  * @template T the expected vector type
- * @param diff
+ * @param delta
  * @param len
  * @returns direction
  */
-export function calculateDirection<T extends number[]>(diff: T, len: number): T {
-  len = len || Math.hypot(...diff) || 1
-  return <T>diff.map(v => v / len)
+export function calculateDirection<T extends number[]>(delta: T, len?: number): T {
+  len = len || Math.hypot(...delta) || 1
+  return <T>delta.map(v => v / len!)
 }
 
 interface Kinematics<T extends number[]> {
@@ -157,19 +157,19 @@ interface Kinematics<T extends number[]> {
 /**
  * Calculates all kinematics
  * @template T the expected vector type
- * @param delta the difference between current and initial vectors
- * @param diff the difference between current and previous vectors
- * @param delta_t the time delta between current and previous timestamps
+ * @param movement the difference between current and initial vectors
+ * @param delta the difference between current and previous vectors
+ * @param delta_t the time difference between current and previous timestamps
  * @returns all kinematics
  */
-export function calculateAllKinematics<T extends number[]>(delta: T, diff: T, delta_t: number): Kinematics<T> {
-  const len = Math.hypot(...diff)
+export function calculateAllKinematics<T extends number[]>(movement: T, delta: T, delta_t: number): Kinematics<T> {
+  const len = Math.hypot(...delta)
 
   return {
-    velocities: calculateVelocities(diff, delta_t),
-    velocity: calculateVelocity(diff, delta_t, len),
-    distance: calculateDistance(delta),
-    direction: calculateDirection(diff, len),
+    velocities: calculateVelocities(delta, delta_t),
+    velocity: calculateVelocity(delta, delta_t, len),
+    distance: calculateDistance(movement),
+    direction: calculateDirection(delta, len),
   }
 }
 
@@ -177,7 +177,7 @@ export function calculateAllKinematics<T extends number[]>(delta: T, diff: T, de
  * Whether the browser supports GestureEvent (ie Safari)
  * @returns true if the browser supports gesture event
  */
-export function supportsGestureEvent(): boolean {
+export function gestureEventSupported(): boolean {
   try {
     // TODO [TS] possibly find GestureEvent definitions?
     // @ts-ignore: Unreachable code error
