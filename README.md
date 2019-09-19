@@ -85,7 +85,8 @@ const bind = useDrag(({
   last,       // * true when it's the last event
   active,     // * true when the gesture is active
   memo,       // * stores the value returned by your handler during its previous run
-  cancel,     // * function you can call to interrupt relevant gestures
+  cancel,     // * function you can call to interrupt relevant gestures (drag and pinch only)
+  canceled,   // * whether the gesture has been canceled (drag and pinch only)
   down,       // * true when a mouse button or touch is down
   buttons,    // * buttons pressed (see https://developer.mozilla.org/fr/docs/Web/API/MouseEvent/button)
   touches     // * numbers of touches pressing the screen
@@ -104,7 +105,8 @@ const bind = useDrag(({
 Pinch is about scaling and rotating, therefore the keys `xy` and `vxvy` are renamed `da` (for distance and angle) and `vdva` respectively.
 
 ```jsx
-const bind = usePinch(({ da, vdva, origin }) => { // [d,a] absolute distance and angle of the two pointers // momentum / speed of the distance and rotation // coordinates of the center between the two touch event
+const bind = usePinch(({ da, vdva, origin }) => {
+  // [d,a] absolute distance and angle of the two pointers // momentum / speed of the distance and rotation // coordinates of the center between the two touch event
   /* gesture logic */
 })
 ```
