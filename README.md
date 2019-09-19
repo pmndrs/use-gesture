@@ -51,7 +51,7 @@ The example above makes a `div` draggable so that it follows your mouse on drag,
 React-use-gesture exports several hooks that can handle different gestures.
 
 | Hook         | Description                                                                                                     |
-| ------------ | --------------------------------------------------------------------------------------------------------------- |
+|--------------|-----------------------------------------------------------------------------------------------------------------|
 | `useDrag`    | Handles the drag gesture                                                                                        |
 | `useMove`    | Handles mouse move events (touch devices not supported)                                                         |
 | `useHover`   | Handles mouse over events (touch devices not supported)                                                         |
@@ -105,9 +105,14 @@ const bind = useDrag(({
 Pinch is about scaling and rotating, therefore the keys `xy` and `vxvy` are renamed `da` (for distance and angle) and `vdva` respectively.
 
 ```jsx
-const bind = usePinch(({ da, vdva, origin }) => { // [d,a] absolute distance and angle of the two pointers // momentum / speed of the distance and rotation // coordinates of the center between the two touch event
+const bind = usePinch(({
+  da,         // [d,a] absolute distance and angle of the two pointers
+  vdva,       // momentum / speed of the distance and rotation
+  origin      // coordinates of the center between the two touch event
+}) => {
   /* gesture logic */
-})
+  }
+)
 ```
 
 ### Gesture options

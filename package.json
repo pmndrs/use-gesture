@@ -23,11 +23,6 @@
   "peerDependencies": {
     "react": ">= 16.8.0"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "pretty-quick --staged"
-    }
-  },
   "prettier": {
     "printWidth": 140,
     "semi": false,
