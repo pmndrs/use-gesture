@@ -1,5 +1,13 @@
 # Changelog
 
+## 6.0.1 Release
+
+**Summary:** Bug fix.
+
+### Fixed
+
+1. Pinching with wheel could return undefined angle. It now returns previous angle or 0.
+
 ## 6.0.0 Release
 
 **Summary:** Refinement release, better naming of keys, with breaking changes.
