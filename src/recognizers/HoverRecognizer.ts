@@ -5,9 +5,6 @@ import { GestureFlag, TransformedEvent, ReactEventHandlerKey, Fn } from '../type
 import { genericEndState } from '../defaults'
 
 export default class HoverRecognizer extends CoordinatesRecognizer {
-  sharedStartState = { hovering: true }
-  sharedEndState = { hovering: false, moving: false, velocity: 0, vxvy: [0, 0] }
-
   constructor(controller: GestureController, args: any[]) {
     super('hover', controller, args)
   }

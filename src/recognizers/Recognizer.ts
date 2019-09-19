@@ -27,8 +27,8 @@ type PayloadFromEvent = {
  */
 export default abstract class Recognizer<GestureType extends Coordinates | DistanceAngle = Coordinates | DistanceAngle> {
   protected stateKey: StateKey
-  protected abstract sharedStartState: Partial<SharedGestureState>
-  protected abstract sharedEndState: Partial<SharedGestureState>
+  protected sharedStartState?: Partial<SharedGestureState>
+  protected sharedEndState?: Partial<SharedGestureState>
 
   /**
    * Creates an instance of a gesture recognizer.
@@ -133,7 +133,7 @@ export default abstract class Recognizer<GestureType extends Coordinates | Dista
   protected onEnd = (event: TransformedEvent, payload?: Partial<GestureState<GestureType>>): void => {
     if (!this.state.active) return
     this.removeWindowListeners()
-    this.updateState(this.sharedEndState, { event, ...genericEndState, ...payload } as Partial<GestureState<GestureType>>)
+    this.updateState(this.sharedEndState!, { event, ...genericEndState, ...payload } as Partial<GestureState<GestureType>>)
     this.fireGestureHandler(GestureFlag.OnEnd)
   }
 
