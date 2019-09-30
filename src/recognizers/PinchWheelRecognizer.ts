@@ -2,7 +2,7 @@ import { WheelEvent } from 'react'
 import DistanceAngleRecognizer from './DistanceAngleRecognizer'
 import { getWheelEventData } from '../utils'
 import GestureController from '../controllers/GestureController'
-import { TransformedEvent, ReactEventHandlerKey, Fn } from '../types'
+import { UseGestureEvent, ReactEventHandlerKey, Fn } from '../types'
 
 export default class PinchWheelRecognizer extends DistanceAngleRecognizer {
   sharedStartState = { pinching: true }
@@ -12,7 +12,7 @@ export default class PinchWheelRecognizer extends DistanceAngleRecognizer {
     super('pinch', controller, args)
   }
 
-  getPayloadFromEvent(event: TransformedEvent<WheelEvent>) {
+  getPayloadFromEvent(event: UseGestureEvent<WheelEvent>) {
     const {
       xy: [, delta_d],
       ...sharedPayload
@@ -25,7 +25,7 @@ export default class PinchWheelRecognizer extends DistanceAngleRecognizer {
     return { values: [d, a] as [number, number], sharedPayload }
   }
 
-  onWheel = (event: TransformedEvent<WheelEvent>): void => {
+  onWheel = (event: UseGestureEvent<WheelEvent>): void => {
     if (!event.ctrlKey) return
 
     if (!this.controller.config.passiveEvents) event.preventDefault()

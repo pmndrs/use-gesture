@@ -18,9 +18,10 @@ import { defaultConfig } from './defaults'
  * React.useEffect(bind, [bind])
  */
 
-type GetBinderTypeFromDomTarget<T extends Partial<GestureConfig>> = T['domTarget'] extends object ? Fn : ReactEventHandlers
+type PartialGestureConfig = Partial<Omit<GestureConfig, 'passiveEvents'>>
+type GetBinderTypeFromDomTarget<T extends PartialGestureConfig> = T['domTarget'] extends object ? Fn : ReactEventHandlers
 
-export function useGesture<Config extends Partial<GestureConfig>>(
+export function useGesture<Config extends PartialGestureConfig>(
   handlers: GestureHandlersPartial,
   config?: Config
 ): (...args: any[]) => GetBinderTypeFromDomTarget<Config> {
@@ -48,12 +49,12 @@ export function useGesture<Config extends Partial<GestureConfig>>(
 }
 
 /* SHORTHAND HANDLERS */
-export const useDrag = (handler: Handler<Coordinates>, config?: Partial<GestureConfig>) => useGesture({ onDrag: handler }, config)
-export const useMove = (handler: Handler<Coordinates>, config?: Partial<GestureConfig>) => useGesture({ onMove: handler }, config)
-export const useHover = (handler: Handler<Coordinates>, config?: Partial<GestureConfig>) => useGesture({ onHover: handler }, config)
-export const useScroll = (handler: Handler<Coordinates>, config?: Partial<GestureConfig>) => useGesture({ onScroll: handler }, config)
-export const useWheel = (handler: Handler<Coordinates>, config?: Partial<GestureConfig>) => useGesture({ onWheel: handler }, config)
-export const usePinch = (handler: Handler<DistanceAngle>, config?: Partial<GestureConfig>) => useGesture({ onPinch: handler }, config)
+export const useDrag = (handler: Handler<Coordinates>, config?: PartialGestureConfig) => useGesture({ onDrag: handler }, config)
+export const useMove = (handler: Handler<Coordinates>, config?: PartialGestureConfig) => useGesture({ onMove: handler }, config)
+export const useHover = (handler: Handler<Coordinates>, config?: PartialGestureConfig) => useGesture({ onHover: handler }, config)
+export const useScroll = (handler: Handler<Coordinates>, config?: PartialGestureConfig) => useGesture({ onScroll: handler }, config)
+export const useWheel = (handler: Handler<Coordinates>, config?: PartialGestureConfig) => useGesture({ onWheel: handler }, config)
+export const usePinch = (handler: Handler<DistanceAngle>, config?: PartialGestureConfig) => useGesture({ onPinch: handler }, config)
 
 function getDerivedConfig(config?: Partial<GestureConfig>): GestureConfig {
   const derivedConfig = { ...defaultConfig, ...config }
@@ -61,8 +62,12 @@ function getDerivedConfig(config?: Partial<GestureConfig>): GestureConfig {
   const realDomTarget = domTarget && 'current' in domTarget ? domTarget.current : domTarget
   derivedConfig.domTarget = realDomTarget
 
+  const passive = derivedConfig.event.passive !== void 0 ? derivedConfig.event.passive : true
+
+  // TODO make test to check if passive is correctly passed to config
+
   // if there isn't a domtarget or if event.passive is true, then passiveEvents is true
-  derivedConfig.passiveEvents = !derivedConfig.domTarget || derivedConfig.event.passive
+  derivedConfig.passiveEvents = !derivedConfig.domTarget || passive
 
   return derivedConfig
 }

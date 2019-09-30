@@ -1,5 +1,18 @@
 # Changelog
 
+## 6.0.2 Release
+
+**Summary:** Re-introducing pointer-events.
+
+### Added
+
+1. Pointer Events are supported again with `config: { pointerEvents: true }`.
+
+
+### Breaking
+1. Removed `transform` function: it was originally introduced for `react-three-fiber` support but resulted useless eventually.
+
+
 ## 6.0.1 Release
 
 **Summary:** Bug fix.

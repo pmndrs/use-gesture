@@ -10,8 +10,7 @@ import {
   Fn,
   ReactEventHandlerKey,
   GestureFlag,
-  TransformedEvent,
-  TransformType,
+  UseGestureEvent,
   Vector2,
 } from '../types'
 import { noop } from '../utils'
@@ -66,9 +65,6 @@ export default abstract class Recognizer<GestureType extends Coordinates | Dista
     clearTimeout(this.controller.timeouts[this.stateKey])
   }
 
-  protected getTransform = (event: TransformedEvent): TransformType =>
-    this.state.transform || event.transform || this.controller.config.transform
-
   // convenience method to add window listeners for a given gesture
   protected addWindowListeners = (listeners: [string, Fn][]) => {
     this.controller.addWindowListeners(this.stateKey, listeners)
@@ -79,7 +75,7 @@ export default abstract class Recognizer<GestureType extends Coordinates | Dista
     this.controller.removeWindowListeners(this.stateKey)
   }
 
-  protected abstract getPayloadFromEvent(event: TransformedEvent): PayloadFromEvent
+  protected abstract getPayloadFromEvent(event: UseGestureEvent): PayloadFromEvent
 
   /**
    * Utility function to get kinematics of the gesture
@@ -87,14 +83,14 @@ export default abstract class Recognizer<GestureType extends Coordinates | Dista
    * @event
    * @returns set of values including movement, velocity, velocities, distance and direction
    */
-  protected abstract getKinematics(values: [number, number | undefined], event: TransformedEvent): Partial<GestureState<GestureType>>
+  protected abstract getKinematics(values: [number, number | undefined], event: UseGestureEvent): Partial<GestureState<GestureType>>
 
   /**
    * returns the start state for a given gesture
    * @param values the xy values of the start state
    * @param event the event that triggers the gesture start
    */
-  protected abstract getStartState(values: [number, number | undefined], event: TransformedEvent): Partial<GestureState<GestureType>>
+  protected abstract getStartState(values: [number, number | undefined], event: UseGestureEvent): Partial<GestureState<GestureType>>
 
   // should return the bindings for a given gesture
   public abstract getEventBindings(): [ReactEventHandlerKey | ReactEventHandlerKey[], Fn][]
@@ -114,7 +110,7 @@ export default abstract class Recognizer<GestureType extends Coordinates | Dista
   }
 
   // generic onStart function
-  protected onStart = (event: TransformedEvent, payload?: Partial<GestureState<GestureType>>): void => {
+  protected onStart = (event: UseGestureEvent, payload?: Partial<GestureState<GestureType>>): void => {
     const { values, gesturePayload, sharedPayload } = this.getPayloadFromEvent(event)
     const startState = this.getStartState(values, event)
 
@@ -123,7 +119,7 @@ export default abstract class Recognizer<GestureType extends Coordinates | Dista
   }
 
   // generic onChange function
-  protected onChange = (event: TransformedEvent, payload?: Partial<GestureState<GestureType>>): void => {
+  protected onChange = (event: UseGestureEvent, payload?: Partial<GestureState<GestureType>>): void => {
     const { values, gesturePayload, sharedPayload } = this.getPayloadFromEvent(event)
     const kinematics = this.getKinematics(values, event)
     this.updateState({ ...sharedPayload }, { first: false, ...kinematics, ...gesturePayload, ...payload })
@@ -131,7 +127,7 @@ export default abstract class Recognizer<GestureType extends Coordinates | Dista
   }
 
   // generic onEnd function
-  protected onEnd = (event: TransformedEvent, payload?: Partial<GestureState<GestureType>>): void => {
+  protected onEnd = (event: UseGestureEvent, payload?: Partial<GestureState<GestureType>>): void => {
     if (!this.state.active) return
     this.removeWindowListeners()
     this.updateState(this.sharedEndState!, { event, ...genericEndState, ...payload } as Partial<GestureState<GestureType>>)
@@ -139,13 +135,13 @@ export default abstract class Recognizer<GestureType extends Coordinates | Dista
   }
 
   // generic cancel function
-  protected onCancel = (event: TransformedEvent): void => {
+  protected onCancel = (event: UseGestureEvent): void => {
     this.updateState(null, { canceled: true, cancel: noop } as Partial<GestureState<GestureType>>)
     requestAnimationFrame(() => this.onEnd(event))
   }
 
   // generic gesture handler for timeout-based gestures
-  protected timeoutHandler = (event: TransformedEvent) => {
+  protected timeoutHandler = (event: UseGestureEvent) => {
     if (!this.enabled) return
 
     this.clearTimeout()

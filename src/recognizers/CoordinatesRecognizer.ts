@@ -1,21 +1,20 @@
 import Recognizer from './Recognizer'
 import { addV, subV, calculateAllKinematics } from '../utils'
 import { initialState } from '../defaults'
-import { Coordinates, GestureState, Vector2, TransformedEvent } from '../types'
+import { Coordinates, GestureState, Vector2, UseGestureEvent } from '../types'
 
 /**
  * Abstract class for coordinates-based gesture recongizers
  */
 export default abstract class CoordinatesRecognizer extends Recognizer<Coordinates> {
-  getKinematics(values: Vector2, event: TransformedEvent): Partial<GestureState<Coordinates>> {
+  getKinematics(values: Vector2, event: UseGestureEvent): Partial<GestureState<Coordinates>> {
     // we get the gesture specific state
     const { xy, initial, offset, time = 0 } = this.state
-    const transform = this.getTransform(event)
 
     // offset is the difference between the current and initial value vectors
-    const movement = subV(values, initial).map((v, i) => Object.values(transform)[i](v)) as Vector2
+    const movement = subV(values, initial)
     // delta is the difference between the current and previous value vectors
-    const delta = subV(values, xy).map((v, i) => Object.values(transform)[i](v)) as Vector2
+    const delta = subV(values, xy)
 
     const delta_t = event.timeStamp - time
     const { velocity, velocities, distance, direction } = calculateAllKinematics(movement, delta, delta_t)
@@ -31,14 +30,12 @@ export default abstract class CoordinatesRecognizer extends Recognizer<Coordinat
       distance,
       direction,
       previous: xy,
-      transform,
       time: event.timeStamp,
     }
   }
 
-  getStartState(xy: Vector2, event: TransformedEvent): GestureState<Coordinates> {
+  getStartState(xy: Vector2, event: UseGestureEvent): GestureState<Coordinates> {
     const initial = initialState[this.stateKey] as GestureState<Coordinates>
-    const transform = this.getTransform(event)
 
     return {
       ...initial,
@@ -49,7 +46,6 @@ export default abstract class CoordinatesRecognizer extends Recognizer<Coordinat
       offset: this.state.offset,
       first: true,
       active: true,
-      transform,
       time: event.timeStamp,
       args: this.args,
     }

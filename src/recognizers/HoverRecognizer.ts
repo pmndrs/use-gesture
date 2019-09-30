@@ -1,7 +1,7 @@
 import CoordinatesRecognizer from './CoordinatesRecognizer'
 import { getPointerEventData } from '../utils'
 import GestureController from '../controllers/GestureController'
-import { GestureFlag, TransformedEvent, ReactEventHandlerKey, Fn } from '../types'
+import { GestureFlag, UseGestureEvent, ReactEventHandlerKey, Fn } from '../types'
 import { genericEndState } from '../defaults'
 
 export default class HoverRecognizer extends CoordinatesRecognizer {
@@ -9,19 +9,19 @@ export default class HoverRecognizer extends CoordinatesRecognizer {
     super('hover', controller, args)
   }
 
-  getPayloadFromEvent(event: TransformedEvent) {
+  getPayloadFromEvent(event: UseGestureEvent) {
     const { xy, ...sharedPayload } = getPointerEventData(event)
     return { values: xy, sharedPayload }
   }
 
-  onMouseEnter = (event: TransformedEvent): void => {
+  onPointerEnter = (event: UseGestureEvent): void => {
     if (!this.enabled) return
     const { values, sharedPayload } = this.getPayloadFromEvent(event)
     this.updateState({ hovering: true, ...sharedPayload }, { xy: values, event, args: this.args })
     this.fireGestureHandler(GestureFlag.OnChange)
   }
 
-  onMouseLeave = (event: TransformedEvent): void => {
+  onPointerLeave = (event: UseGestureEvent): void => {
     if (!this.enabled) return
     const { values, sharedPayload } = this.getPayloadFromEvent(event)
     const kinematics = this.getKinematics(values, event)
@@ -35,6 +35,9 @@ export default class HoverRecognizer extends CoordinatesRecognizer {
   }
 
   getEventBindings(): [ReactEventHandlerKey | ReactEventHandlerKey[], Fn][] {
-    return [['onMouseEnter', this.onMouseEnter], ['onMouseLeave', this.onMouseLeave]]
+    if (this.controller.config.pointerEvents) {
+      return [['onPointerEnter', this.onPointerEnter], ['onPointerLeave', this.onEnd]]
+    }
+    return [['onMouseEnter', this.onPointerEnter], ['onMouseLeave', this.onPointerLeave]]
   }
 }

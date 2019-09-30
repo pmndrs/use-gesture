@@ -5,16 +5,15 @@ export type AtLeastOneOf<T, U = { [K in keyof T]: Pick<T, K> }> = Partial<T> & U
 
 export type Vector2 = [number, number]
 export type Fn = (...args: any[]) => any
-export type TransformType = { x(x: number): number; y(y: number): number }
 
-export type EventOptions = { capture: boolean; passive: boolean }
+export type EventOptions = { capture?: boolean; passive?: boolean }
 
 export interface GestureConfig {
   domTarget?: EventTarget | React.RefObject<EventTarget> | null
   event: EventOptions
   window?: EventTarget | null
   passiveEvents: boolean
-  transform: TransformType
+  pointerEvents: boolean
   enabled: boolean
   drag: boolean
   pinch: boolean
@@ -30,11 +29,10 @@ export enum GestureFlag {
   OnEnd = 'end',
 }
 
-export type GestureEvent = React.TouchEvent & { scale: number; rotation: number }
-export type TransformedEvent<
-  T extends React.SyntheticEvent = React.MouseEvent | React.TouchEvent | React.WheelEvent | React.PointerEvent | GestureEvent
+export type WebKitGestureEvent = React.TouchEvent & { scale: number; rotation: number }
+export type UseGestureEvent<
+  T extends React.SyntheticEvent = React.MouseEvent | React.TouchEvent | React.WheelEvent | React.PointerEvent | WebKitGestureEvent
 > = T & {
-  transform?: TransformType
   gesture?: GestureKey
 }
 
@@ -120,7 +118,7 @@ export interface SharedGestureState {
 }
 
 export interface CommonGestureState {
-  event?: TransformedEvent
+  event?: UseGestureEvent
   currentTarget?: EventTarget | null
   pointerId?: number | null
   delta: Vector2
@@ -129,7 +127,6 @@ export interface CommonGestureState {
   initial: Vector2
   previous: Vector2
   direction: Vector2
-  transform?: TransformType
   first: boolean
   last: boolean
   active: boolean

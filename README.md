@@ -39,7 +39,7 @@ function PullRelease() {
     <animated.div
       // 2. Bind it to a component
       {...bind()}
-      style={{ transform: xy.interpolate((x, y) => `translate3D(${x}px, ${y}px, 0)`) }} />
+      style={{ transform: xy.to((x, y) => `translate3D(${x}px, ${y}px, 0)`) }} />
 ```
 
 The example above makes a `div` draggable so that it follows your mouse on drag, and returns to its initial position on release.
@@ -125,8 +125,6 @@ const bind = useScroll(handler, {
   domTarget: undefined,
   // the event config attribute lets you configure `passive` and `capture` options passed to event listeners
   event: { passive: true, capture: false },
-  // transform functions you can pass to modify `x` and `y` values
-  transform: { x: x => x, y => y },
   // lets you specify which window element the gesture should use.
   window: window,
   // enables or disables gestures
@@ -219,7 +217,7 @@ const bind = useDrag(({ active, movement, velocity, direction, memo = pos.getVal
   })
   return memo
 })
-return <animated.div {...bind()} style={{ transform: pos.interpolate((x, y) => `translate3d(${x}px,${y}px,0)`) }} />
+return <animated.div {...bind()} style={{ transform: pos.to((x, y) => `translate3d(${x}px,${y}px,0)`) }} />
 ```
 
 ### Other examples

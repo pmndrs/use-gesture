@@ -1,6 +1,6 @@
 import Recognizer from './Recognizer'
 import { addV, calculateVelocities, calculateDirection } from '../utils'
-import { DistanceAngle, GestureState, Vector2, TransformedEvent, GestureKey } from '../types'
+import { DistanceAngle, GestureState, Vector2, UseGestureEvent, GestureKey } from '../types'
 import { initialState } from '../defaults'
 import GestureController from 'controllers/GestureController'
 
@@ -14,7 +14,7 @@ export default abstract class DistanceAngleRecognizer extends Recognizer<Distanc
     this.getStartState = this.getStartState.bind(this)
   }
 
-  getKinematics([d, a]: [number, number?], event: TransformedEvent): Partial<GestureState<DistanceAngle>> {
+  getKinematics([d, a]: [number, number?], event: UseGestureEvent): Partial<GestureState<DistanceAngle>> {
     const { da, turns, initial, offset, time = 0 } = this.state
 
     // angle might not be defined when ctrl wheel is used for zoom only
@@ -56,9 +56,8 @@ export default abstract class DistanceAngleRecognizer extends Recognizer<Distanc
     }
   }
 
-  getStartState(da: Vector2, event: TransformedEvent): GestureState<DistanceAngle> {
+  getStartState(da: Vector2, event: UseGestureEvent): GestureState<DistanceAngle> {
     const initial = initialState[this.stateKey] as GestureState<DistanceAngle>
-    const transform = this.getTransform(event)
     return {
       ...initial,
       event,
@@ -69,7 +68,6 @@ export default abstract class DistanceAngleRecognizer extends Recognizer<Distanc
       origin: this.state.origin,
       first: true,
       active: true,
-      transform,
       time: event.timeStamp,
       args: this.args,
     }

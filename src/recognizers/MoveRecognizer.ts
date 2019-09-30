@@ -1,7 +1,7 @@
 import CoordinatesRecognizer from './CoordinatesRecognizer'
 import { getPointerEventData } from '../utils'
 import GestureController from '../controllers/GestureController'
-import { TransformedEvent, ReactEventHandlerKey, Fn } from '../types'
+import { UseGestureEvent, ReactEventHandlerKey, Fn } from '../types'
 
 export default class MoveRecognizer extends CoordinatesRecognizer {
   sharedStartState = { moving: true }
@@ -11,12 +11,15 @@ export default class MoveRecognizer extends CoordinatesRecognizer {
     super('move', controller, args)
   }
 
-  getPayloadFromEvent(event: TransformedEvent) {
+  getPayloadFromEvent(event: UseGestureEvent) {
     const { xy, ...sharedPayload } = getPointerEventData(event)
     return { values: xy, sharedPayload }
   }
 
   getEventBindings(): [ReactEventHandlerKey | ReactEventHandlerKey[], Fn][] {
+    if (this.controller.config.pointerEvents) {
+      return [['onPointerMove', this.timeoutHandler]]
+    }
     return [['onMouseMove', this.timeoutHandler]]
   }
 }

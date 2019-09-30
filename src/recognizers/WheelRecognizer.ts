@@ -2,7 +2,7 @@ import { WheelEvent } from 'react'
 import CoordinatesRecognizer from './CoordinatesRecognizer'
 import { addV, getWheelEventData } from '../utils'
 import GestureController from '../controllers/GestureController'
-import { TransformedEvent, ReactEventHandlerKey, Fn } from '../types'
+import { UseGestureEvent, ReactEventHandlerKey, Fn } from '../types'
 
 export default class WheelRecognizer extends CoordinatesRecognizer {
   sharedStartState = { wheeling: true }
@@ -12,7 +12,7 @@ export default class WheelRecognizer extends CoordinatesRecognizer {
     super('wheel', controller, args)
   }
 
-  getPayloadFromEvent(event: TransformedEvent<WheelEvent>) {
+  getPayloadFromEvent(event: UseGestureEvent<WheelEvent>) {
     const { xy: prevXY } = this.state
     const { xy, ...sharedPayload } = getWheelEventData(event)
     const values = addV(xy, prevXY)
@@ -20,7 +20,7 @@ export default class WheelRecognizer extends CoordinatesRecognizer {
     return { values, sharedPayload }
   }
 
-  onWheel = (event: TransformedEvent<WheelEvent>): void => {
+  onWheel = (event: UseGestureEvent<WheelEvent>): void => {
     if (event.ctrlKey && this.controller.actions.has('onPinch')) return
     this.timeoutHandler(event)
   }

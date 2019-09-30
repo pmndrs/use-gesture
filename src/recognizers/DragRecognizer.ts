@@ -1,7 +1,8 @@
+import { PointerEvent } from 'react'
 import CoordinatesRecognizer from './CoordinatesRecognizer'
 import { getPointerEventData } from '../utils'
 import GestureController from '../controllers/GestureController'
-import { TransformedEvent, ReactEventHandlerKey, Fn } from '../types'
+import { UseGestureEvent, ReactEventHandlerKey, Fn } from '../types'
 
 export default class DragRecognizer extends CoordinatesRecognizer {
   sharedStartState = { dragging: true, down: true }
@@ -11,32 +12,38 @@ export default class DragRecognizer extends CoordinatesRecognizer {
     super('drag', controller, args)
   }
 
-  getPayloadFromEvent(event: TransformedEvent) {
+  getPayloadFromEvent(event: UseGestureEvent) {
     const { xy, ...sharedPayload } = getPointerEventData(event)
     return { values: xy, sharedPayload }
   }
 
-  onDragStart = (event: TransformedEvent): void => {
+  onDragStart = (event: UseGestureEvent): void => {
     if (!this.enabled) return
 
     // making sure we're not dragging the element when more than one finger press the screen
     const { touches } = getPointerEventData(event)
     if (touches > 1) return
 
-    this.removeWindowListeners()
-    const dragListeners: [string, Fn][] = [
-      ['mousemove', this.onDragChange],
-      ['mouseup', this.onEnd],
-      ['touchmove', this.onDragChange],
-      ['touchend', this.onEnd],
-      ['touchcancel', this.onEnd],
-    ]
-    this.addWindowListeners(dragListeners)
+    const { currentTarget, pointerId } = event as PointerEvent
+    if (this.controller.config.pointerEvents) {
+      // if pointers events
+      currentTarget && (currentTarget as any).setPointerCapture(pointerId)
+    } else {
+      this.removeWindowListeners()
+      const dragListeners: [string, Fn][] = [
+        ['mousemove', this.onDragChange],
+        ['touchmove', this.onDragChange],
+        ['mouseup', this.onDragEnd],
+        ['touchend', this.onDragEnd],
+        ['touchcancel', this.onDragEnd],
+      ]
+      this.addWindowListeners(dragListeners)
+    }
 
-    this.onStart(event, { cancel: () => this.onCancel(event) })
+    this.onStart(event, { currentTarget, pointerId, cancel: () => this.onCancel(event) })
   }
 
-  onDragChange = (event: TransformedEvent): void => {
+  onDragChange = (event: UseGestureEvent): void => {
     const { canceled, active } = this.state
     if (canceled || !active) return
 
@@ -50,7 +57,17 @@ export default class DragRecognizer extends CoordinatesRecognizer {
     this.onChange(event, { cancel: () => this.onCancel(event) })
   }
 
+  onDragEnd = (event: UseGestureEvent): void => {
+    if (!this.state.active) return
+    const { currentTarget, pointerId } = this.state
+    if (currentTarget && this.controller.config.pointerEvents) (currentTarget as any).releasePointerCapture(pointerId)
+    this.onEnd(event)
+  }
+
   getEventBindings(): [ReactEventHandlerKey | ReactEventHandlerKey[], Fn][] {
+    if (this.controller.config.pointerEvents) {
+      return [['onPointerDown', this.onDragStart], ['onPointerMove', this.onDragChange], [['onPointerUp'], this.onDragEnd]]
+    }
     return [[['onMouseDown', 'onTouchStart'], this.onDragStart]]
   }
 }

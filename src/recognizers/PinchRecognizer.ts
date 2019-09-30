@@ -2,7 +2,7 @@ import { TouchEvent } from 'react'
 import DistanceAngleRecognizer from './DistanceAngleRecognizer'
 import { getTwoTouchesEventData } from '../utils'
 import GestureController from '../controllers/GestureController'
-import { TransformedEvent, ReactEventHandlerKey, Fn } from '../types'
+import { UseGestureEvent, ReactEventHandlerKey, Fn } from '../types'
 
 export default class PinchRecognizer extends DistanceAngleRecognizer {
   sharedStartState = { pinching: true }
@@ -12,17 +12,17 @@ export default class PinchRecognizer extends DistanceAngleRecognizer {
     super('pinch', controller, args)
   }
 
-  getPayloadFromEvent(event: TransformedEvent<TouchEvent>) {
+  getPayloadFromEvent(event: UseGestureEvent<TouchEvent>) {
     const { da, origin, ...sharedPayload } = getTwoTouchesEventData(event)
     return { values: da, gesturePayload: { origin }, sharedPayload }
   }
 
-  onPinchStart = (event: TransformedEvent<TouchEvent>): void => {
+  onPinchStart = (event: UseGestureEvent<TouchEvent>): void => {
     if (!this.enabled || event.touches.length !== 2) return
     this.onStart(event, { cancel: () => this.onCancel(event) })
   }
 
-  onPinchChange = (event: TransformedEvent<TouchEvent>): void => {
+  onPinchChange = (event: UseGestureEvent<TouchEvent>): void => {
     const { canceled, active, time } = this.state
     if (canceled || !active || event.touches.length !== 2 || event.timeStamp === time) return
 

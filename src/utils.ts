@@ -1,5 +1,5 @@
 import React from 'react'
-import { Fn, Vector2, EventOptions, Coordinates, FullGestureState, DistanceAngle, TransformedEvent } from './types'
+import { Fn, Vector2, EventOptions, Coordinates, FullGestureState, DistanceAngle, UseGestureEvent } from './types'
 
 // blank function
 export const noop = () => {}
@@ -33,7 +33,7 @@ interface ModifierKeys {
  * @param event
  * @returns modifier keys
  */
-export function getModifierKeys(event: TransformedEvent): ModifierKeys {
+export function getModifierKeys(event: UseGestureEvent): ModifierKeys {
   const { shiftKey, altKey, metaKey, ctrlKey } = event
   return { shiftKey, altKey, metaKey, ctrlKey }
 }
@@ -44,7 +44,7 @@ type ScrollEventData = Pick<FullGestureState<Coordinates>, 'xy'> & ModifierKeys
  * @param event
  * @returns scroll event data
  */
-export function getScrollEventData(event: TransformedEvent): ScrollEventData {
+export function getScrollEventData(event: UseGestureEvent): ScrollEventData {
   // If the currentTarget is the window then we return the scrollX/Y position.
   // If not (ie the currentTarget is a DOM element), then we return scrollLeft/Top
   const { scrollX, scrollY, scrollLeft, scrollTop } = <Element & Window>event.currentTarget
@@ -58,7 +58,7 @@ type WheelEventData = Pick<FullGestureState<Coordinates>, 'xy'> & ModifierKeys
  * @param event
  * @returns wheel event data
  */
-export function getWheelEventData(event: TransformedEvent<React.WheelEvent>): WheelEventData {
+export function getWheelEventData(event: UseGestureEvent<React.WheelEvent>): WheelEventData {
   const { deltaX, deltaY } = event
   //TODO implement polyfill ?
   // https://developer.mozilla.org/en-US/docs/Web/Events/wheel#Polyfill

@@ -1,7 +1,7 @@
 import CoordinatesRecognizer from './CoordinatesRecognizer'
 import { getScrollEventData } from '../utils'
 import GestureController from '../controllers/GestureController'
-import { TransformedEvent, ReactEventHandlerKey, Fn } from '../types'
+import { UseGestureEvent, ReactEventHandlerKey, Fn } from '../types'
 
 export default class ScrollRecognizer extends CoordinatesRecognizer {
   sharedStartState = { scrolling: true }
@@ -11,7 +11,7 @@ export default class ScrollRecognizer extends CoordinatesRecognizer {
     super('scroll', controller, args)
   }
 
-  getPayloadFromEvent(event: TransformedEvent) {
+  getPayloadFromEvent(event: UseGestureEvent) {
     const { xy, ...sharedPayload } = getScrollEventData(event)
     return { values: xy, sharedPayload }
   }
