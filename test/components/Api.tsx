@@ -9,7 +9,7 @@ interface Props {
 
 export const BindProps: React.FunctionComponent<Props> = ({ args1 = [], args2 = [] }) => {
   const [state, set] = React.useState({})
-  const bind = useDrag(({ event, transform, cancel, currentTarget, ...rest }) => void set(rest))
+  const bind = useDrag(({ event, cancel, currentTarget, ...rest }) => void set(rest))
 
   return (
     <>
@@ -25,7 +25,7 @@ export const GenuineHandlers: React.FunctionComponent = () => {
   const [state3, set3] = React.useState('not clicked')
 
   const bind = useGesture({
-    onDrag: ({ event, transform, cancel, currentTarget, ...rest }) => void set(rest),
+    onDrag: ({ event, cancel, currentTarget, ...rest }) => void set(rest),
     onMouseDown: () => set2('mouse down'),
     onClick: () => set3('clicked'),
   })

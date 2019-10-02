@@ -1,5 +1,5 @@
 import React, { ReactChild } from 'react'
-import { Fn, TransformType } from '../../src/types'
+import { Fn } from '../../src/types'
 import { GestureHandlersPartial } from '../../src/types'
 
 export const createHandlers = ({
@@ -20,14 +20,12 @@ export const createHandlers = ({
       const gesture = {
         [`on${g}`]: ({
           event,
-          transform,
           cancel,
           currentTarget,
           memo = memoArg,
           ...rest
         }: {
           event: Event
-          transform: TransformType
           cancel: Fn
           currentTarget: EventTarget
           memo: any
