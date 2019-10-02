@@ -125,6 +125,8 @@ const bind = useScroll(handler, {
   domTarget: undefined,
   // the event config attribute lets you configure `passive` and `capture` options passed to event listeners
   event: { passive: true, capture: false },
+  // uses PointerEvent handlers for compatible gestures (disabled by default)
+  pointerEvents: false,
   // lets you specify which window element the gesture should use.
   window: window,
   // enables or disables gestures
@@ -220,6 +222,14 @@ const bind = useDrag(({ active, movement, velocity, direction, memo = pos.getVal
 return <animated.div {...bind()} style={{ transform: pos.to((x, y) => `translate3d(${x}px,${y}px,0)`) }} />
 ```
 
+#### Using PointerEvents
+
+You can set gestures to use [PointerEvent](https://developer.mozilla.org/fr/docs/Web/API/PointerEvent) instead of traditional mouse or touch events. It might be useful if you use [React-three-fiber](https://github.com/react-spring/react-three-fiber). Note that only drag, move and hover gestures currently support this option.
+
+```jsx
+const bind = useDrag(fn, { pointerEvents: true })
+```
+
 ### Other examples
 
 - [Locking Axis](https://codesandbox.io/s/25n4m933j)
@@ -233,8 +243,8 @@ React-use-gesture also exports two methods that add or substract vectors formed 
 ```jsx
 import { addV, subV } from 'react-use-gesture'
 
-const sum = addV([10, 10], [5, 5])
-const sub = subV([10, 10], [5, 5])
+const sum = addV([10, 10], [5, 5]) // => [15, 15]
+const sub = subV([10, 10], [5, 5]) // => [5, 5]
 ```
 
 ## Frequently Asked Questions
