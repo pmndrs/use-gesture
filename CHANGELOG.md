@@ -1,5 +1,13 @@
 # Changelog
 
+## 6.0.3 Release
+
+**Summary:** Minor additions.
+
+### Added
+
+1. Adding `origin` for wheel pinching (matching cursor position).
+
 ## 6.0.2 Release
 
 **Summary:** Re-introducing pointer-events.
