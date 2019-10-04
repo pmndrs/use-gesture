@@ -22,7 +22,8 @@ export default class PinchWheelRecognizer extends DistanceAngleRecognizer {
     } = this.state
     const d = prev_d - delta_d
     const a = prev_a !== void 0 ? prev_a : 0
-    return { values: [d, a] as [number, number], sharedPayload }
+    const origin: [number, number] = [event.clientX, event.clientY]
+    return { values: [d, a] as [number, number], gesturePayload: { origin }, sharedPayload }
   }
 
   onWheel = (event: UseGestureEvent<WheelEvent>): void => {
