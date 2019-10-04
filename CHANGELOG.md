@@ -7,6 +7,7 @@
 ### Added
 
 1. Adding `origin` for wheel pinching (matching cursor position).
+2. Adding `origin` for trackpad gesture event pinching (matching cursor position).
 
 ## 6.0.2 Release
 
