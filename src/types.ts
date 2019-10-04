@@ -29,7 +29,7 @@ export enum GestureFlag {
   OnEnd = 'end',
 }
 
-export type WebKitGestureEvent = React.TouchEvent & { scale: number; rotation: number }
+export type WebKitGestureEvent = React.PointerEvent & { scale: number; rotation: number }
 export type UseGestureEvent<
   T extends React.SyntheticEvent = React.MouseEvent | React.TouchEvent | React.WheelEvent | React.PointerEvent | WebKitGestureEvent
 > = T & {
@@ -147,7 +147,7 @@ export interface Coordinates {
 export interface DistanceAngle {
   da: Vector2
   vdva: Vector2
-  origin: Vector2
+  origin?: Vector2
   turns: number
 }
 

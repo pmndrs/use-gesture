@@ -58,7 +58,7 @@ export const initialCommon: CommonGestureState = {
 const initialCoordinates: Coordinates = { xy: [0, 0], vxvy: [0, 0], velocity: 0, distance: 0 } // xy coordinates
 
 // initial state for distance and angle-based gestures (pinch)
-const initialDistanceAngle: DistanceAngle = { da: [0, 0], vdva: [0, 0], origin: [0, 0], turns: 0 } // distance and angle
+const initialDistanceAngle: DistanceAngle = { da: [0, 0], vdva: [0, 0], origin: undefined, turns: 0 } // distance and angle
 
 // initial state object (used by the gesture controller)
 export const initialState: StateObject = {
