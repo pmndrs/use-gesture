@@ -1,3 +1,4 @@
+import { TouchEvent } from 'react'
 import DistanceAngleRecognizer from './DistanceAngleRecognizer'
 import { getTwoTouchesEventData } from '../utils'
 import GestureController from '../controllers/GestureController'
@@ -8,6 +9,7 @@ const SCALE_FACTOR = 260
 export default class PinchWebKitGestureRecognizer extends DistanceAngleRecognizer {
   sharedStartState = { pinching: true, down: true, touches: 2 }
   sharedEndState = { pinching: false, down: false, touches: 0 }
+  private origin?: Vector2
 
   constructor(controller: GestureController, args: any[]) {
     super('pinch', controller, args)
@@ -17,14 +19,15 @@ export default class PinchWebKitGestureRecognizer extends DistanceAngleRecognize
     return { values: [event.scale * SCALE_FACTOR, event.rotation] as Vector2 }
   }
 
-  onPinchStart = (event: UseGestureEvent): void => {
+  onPinchStart = (event: WebKitGestureEvent): void => {
     if (!this.enabled) return
     event.preventDefault()
+    const origin: Vector2 = this.origin ? this.origin : [event.clientX, event.clientY]
 
-    this.onStart(event, { cancel: () => this.onCancel(event) })
+    this.onStart(event, { origin, cancel: () => this.onCancel(event) })
   }
 
-  onPinchChange = (event: UseGestureEvent): void => {
+  onPinchChange = (event: WebKitGestureEvent): void => {
     const { canceled, active } = this.state
     if (canceled || !active) return
     event.preventDefault()
@@ -32,15 +35,16 @@ export default class PinchWebKitGestureRecognizer extends DistanceAngleRecognize
     this.onChange(event, { cancel: () => this.onCancel(event) })
   }
 
-  onGestureEnd = (event: UseGestureEvent): void => {
+  onGestureEnd = (event: WebKitGestureEvent): void => {
     this.onEnd(event)
     event.preventDefault()
+    this.origin = undefined
   }
 
-  updateTouchData = (event: UseGestureEvent<WebKitGestureEvent>): void => {
+  updateTouchData = (event: UseGestureEvent<TouchEvent>): void => {
     if (!this.enabled || event.touches.length !== 2) return
     const { origin } = getTwoTouchesEventData(event)
-    this.updateState(null, { origin })
+    this.origin = origin
   }
 
   getEventBindings(): [ReactEventHandlerKey | ReactEventHandlerKey[], Fn][] {
