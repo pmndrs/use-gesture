@@ -12,6 +12,7 @@ export interface GestureConfig {
   domTarget?: EventTarget | React.RefObject<EventTarget> | null
   event: EventOptions
   window?: EventTarget
+  dragDelay: boolean | number
   passiveEvents: boolean
   pointerEvents: boolean
   enabled: boolean

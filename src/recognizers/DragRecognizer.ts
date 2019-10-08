@@ -4,9 +4,13 @@ import { getPointerEventData } from '../utils'
 import GestureController from '../controllers/GestureController'
 import { UseGestureEvent, ReactEventHandlerKey, Fn } from '../types'
 
+const DEFAULT_DRAG_DELAY = 180
+
 export default class DragRecognizer extends CoordinatesRecognizer {
   sharedStartState = { dragging: true, down: true }
   sharedEndState = { dragging: false, down: false, buttons: 0, touches: 0 }
+
+  delayedEvent?: UseGestureEvent
 
   constructor(controller: GestureController, args: any[]) {
     super('drag', controller, args)
@@ -40,7 +44,17 @@ export default class DragRecognizer extends CoordinatesRecognizer {
       this.addWindowListeners(dragListeners)
     }
 
-    this.onStart(event, { currentTarget, pointerId, cancel: () => this.onCancel(event) })
+    if (this.controller.config.dragDelay) {
+      const dragDelay = typeof this.controller.config.dragDelay === 'number' ? this.controller.config.dragDelay : DEFAULT_DRAG_DELAY
+      if (typeof event.persist === 'function') event.persist()
+      this.delayedEvent = event
+
+      this.setTimeout(() => {
+        this.onStart(this.delayedEvent!, { currentTarget, pointerId, cancel: () => this.onCancel(this.delayedEvent!) })
+      }, dragDelay)
+    } else {
+      this.onStart(event, { currentTarget, pointerId, cancel: () => this.onCancel(event) })
+    }
   }
 
   onDragChange = (event: UseGestureEvent): void => {
@@ -58,7 +72,11 @@ export default class DragRecognizer extends CoordinatesRecognizer {
   }
 
   onDragEnd = (event: UseGestureEvent): void => {
-    if (!this.state.active) return
+    if (!this.state.active) {
+      this.clearTimeout()
+      return
+    }
+
     const { currentTarget, pointerId } = this.state
     if (currentTarget && this.controller.config.pointerEvents) (currentTarget as any).releasePointerCapture(pointerId)
     this.onEnd(event)
