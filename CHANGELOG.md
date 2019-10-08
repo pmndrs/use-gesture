@@ -1,13 +1,21 @@
 # Changelog
 
+## 6.0.4 Release
+
+**Summary:** Added option to detect clicks from drag triggers.
+
+### Added
+
+1. Added `dragDelay` config attribute to trigger drag after a given delay.
+
 ## 6.0.3 Release
 
 **Summary:** Minor additions.
 
 ### Added
 
-1. Adding `origin` for wheel pinching (matching cursor position).
-2. Adding `origin` for trackpad gesture event pinching (matching cursor position).
+1. Added `origin` for wheel pinching (matching cursor position).
+2. Added `origin` for trackpad gesture event pinching (matching cursor position).
 
 ## 6.0.2 Release
 
