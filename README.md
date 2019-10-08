@@ -126,6 +126,7 @@ const bind = useScroll(handler, {
   // the event config attribute lets you configure `passive` and `capture` options passed to event listeners
   event: { passive: true, capture: false },
   // uses PointerEvent handlers for compatible gestures (disabled by default)
+  dragDelay: false // you can set a delay in ms that will prevent drag from triggering if you just "click" on your element
   pointerEvents: false,
   // lets you specify which window element the gesture should use.
   window: window,
@@ -292,6 +293,22 @@ const bind = useDrag(({ movement: [mx], memo = x.getValue() }) => {
 If we don’t return `memo`, then `memo` will remain undefined and in the next drag frame `memo` will take again the value of x, which will have updated in the meantime (therefore not being the point of reference when the gesture starts anymore).
 
 It may sound silly but returning `memo` makes sure that we continue holding a reference to the initial value of `memo`, ie the original value of x when the gesture started.
+
+#### Why is drag being triggered whe I just click on an element?
+
+This is typically a-feature-not-a-bug situation 🙃 Drag is triggered as soon as you mouse down on your component, which means it will be triggered when you "just" briefly click on it. However, there is an option to not trigger the drag before a certain delay, using the config option `dragDelay`.
+
+```jsx
+// using the default delay
+const bind = useDrag(() => {
+  console.log(`Won't show if you hold your mouse less than 180ms`)
+}, { dragDelay: true })
+
+// using a custom delay
+const bind = useDrag(() => {
+  console.log(`Won't show if you hold your mouse less than 1000ms`)
+}, { dragDelay: 1000 })
+```
 
 #### Why am I getting warnings from `preventDefault()` after I pass `{ passive: false }`
 
