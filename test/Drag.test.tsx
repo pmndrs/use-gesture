@@ -10,6 +10,8 @@ import { InteractiveType } from './components/types'
 
 afterAll(cleanup)
 
+const later = (fn: () => any, delay: number) => new Promise(resolve => setTimeout(() => resolve(fn()), delay))
+
 describe.each([['attached to component', Interactive, false], ['attached to node', InteractiveDom, true]])(
   'testing onDrag %s',
   (_testName, C, domTarget): any => {
@@ -101,15 +103,23 @@ describe.each([['attached to component', Interactive, false], ['attached to node
     test('Applying a dragDelay should start the gesture after a delay', async () => {
       rerender(<Component gestures={['Drag']} config={{ dragDelay: 180 }} />)
       fireEvent.mouseDown(element, { clientX: 100, clientY: 200 })
-      fireEvent.mouseMove(window, { clientX: 20, clientY: 50, buttons: 1 })
       expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('false')
-      await wait(
-        () => [
-          expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('true'),
-          expect(getByTestId(`${prefix}drag-xy`)).toHaveTextContent('100,200'),
-        ],
-        { timeout: 180 }
-      )
+      await wait(() => [
+        expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('true'),
+        expect(getByTestId(`${prefix}drag-xy`)).toHaveTextContent('100,200'),
+      ])
+      fireEvent.mouseUp(window)
+    })
+    test('Applying a dragDelay should start the gesture after a delay', () => {
+      fireEvent.mouseDown(element, { clientX: 100, clientY: 200 })
+      fireEvent.mouseMove(window, { clientX: 20, clientY: 50, buttons: 1 })
+      expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('true')
+      expect(getByTestId(`${prefix}drag-xy`)).toHaveTextContent('20,50')
+      fireEvent.mouseUp(window)
+    })
+    test(`Quickly clicking shouldn't trigger a drag`, async () => {
+      fireEvent.click(element, { clientX: 100, clientY: 200 })
+      await later(() => expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('false'), 200)
     })
   }
 )

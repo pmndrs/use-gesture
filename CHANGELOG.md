@@ -1,5 +1,13 @@
 # Changelog
 
+## 6.0.5 Release
+
+**Summary:** Tweak of 6.0.4.
+
+### Improved
+
+1. Moving the cursor when dragging doesn't wait for `dragDelay` timeout.
+
 ## 6.0.4 Release
 
 **Summary:** Added option to detect clicks from drag triggers.

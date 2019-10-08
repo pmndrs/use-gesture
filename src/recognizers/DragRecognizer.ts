@@ -48,18 +48,25 @@ export default class DragRecognizer extends CoordinatesRecognizer {
       const dragDelay = typeof this.controller.config.dragDelay === 'number' ? this.controller.config.dragDelay : DEFAULT_DRAG_DELAY
       if (typeof event.persist === 'function') event.persist()
       this.delayedEvent = event
-
-      this.setTimeout(() => {
-        this.onStart(this.delayedEvent!, { currentTarget, pointerId, cancel: () => this.onCancel(this.delayedEvent!) })
-      }, dragDelay)
+      this.setTimeout(() => this.startDrag(this.delayedEvent!), dragDelay)
     } else {
-      this.onStart(event, { currentTarget, pointerId, cancel: () => this.onCancel(event) })
+      this.startDrag(event)
     }
+  }
+
+  startDrag = (event: UseGestureEvent): void => {
+    const { currentTarget, pointerId } = event as PointerEvent
+    this.onStart(event, { currentTarget, pointerId, cancel: () => this.onCancel(event) })
   }
 
   onDragChange = (event: UseGestureEvent): void => {
     const { canceled, active } = this.state
-    if (canceled || !active) return
+    if (canceled) return
+
+    if (!active) {
+      if (!!this.delayedEvent) this.startDrag(event)
+      return
+    }
 
     const { buttons, touches } = getPointerEventData(event)
 
@@ -72,10 +79,10 @@ export default class DragRecognizer extends CoordinatesRecognizer {
   }
 
   onDragEnd = (event: UseGestureEvent): void => {
-    if (!this.state.active) {
-      this.clearTimeout()
-      return
-    }
+    this.clearTimeout()
+    this.delayedEvent = undefined
+
+    if (!this.state.active) return
 
     const { currentTarget, pointerId } = this.state
     if (currentTarget && this.controller.config.pointerEvents) (currentTarget as any).releasePointerCapture(pointerId)
