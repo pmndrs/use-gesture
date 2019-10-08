@@ -98,5 +98,18 @@ describe.each([['attached to component', Interactive, false], ['attached to node
         expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('false'),
       ])
     })
+    test('Applying a dragDelay should start the gesture after a delay', async () => {
+      rerender(<Component gestures={['Drag']} config={{ dragDelay: 180 }} />)
+      fireEvent.mouseDown(element, { clientX: 100, clientY: 200 })
+      fireEvent.mouseMove(window, { clientX: 20, clientY: 50, buttons: 1 })
+      expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('false')
+      await wait(
+        () => [
+          expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('true'),
+          expect(getByTestId(`${prefix}drag-xy`)).toHaveTextContent('100,200'),
+        ],
+        { timeout: 180 }
+      )
+    })
   }
 )
