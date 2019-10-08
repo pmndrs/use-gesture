@@ -1,5 +1,9 @@
 # Changelog
 
+## 6.0.6 Release
+
+**Summary:** Fixes types 🤦‍
+
 ## 6.0.5 Release
 
 **Summary:** Tweak of 6.0.4.
