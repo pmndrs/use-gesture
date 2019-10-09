@@ -1,5 +1,13 @@
 # Changelog
 
+## 6.0.7 Release
+
+**Summary:** Fixes bug with `dragDelay`.
+
+### Fixed
+
+1. Drag no longer reset after `dragDelay` when drag is forced with mouse move.
+
 ## 6.0.6 Release
 
 **Summary:** Fixes types 🤦‍
