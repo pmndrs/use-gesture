@@ -10,7 +10,7 @@ export default class DragRecognizer extends CoordinatesRecognizer {
   sharedStartState = { dragging: true, down: true }
   sharedEndState = { dragging: false, down: false, buttons: 0, touches: 0 }
 
-  delayedEvent?: UseGestureEvent
+  delayedEvent = false
 
   constructor(controller: GestureController, args: any[]) {
     super('drag', controller, args)
@@ -47,8 +47,8 @@ export default class DragRecognizer extends CoordinatesRecognizer {
     if (this.controller.config.dragDelay) {
       const dragDelay = typeof this.controller.config.dragDelay === 'number' ? this.controller.config.dragDelay : DEFAULT_DRAG_DELAY
       if (typeof event.persist === 'function') event.persist()
-      this.delayedEvent = event
-      this.setTimeout(() => this.startDrag(this.delayedEvent!), dragDelay)
+      this.delayedEvent = true
+      this.setTimeout(() => this.startDrag(event), dragDelay)
     } else {
       this.startDrag(event)
     }
@@ -57,6 +57,7 @@ export default class DragRecognizer extends CoordinatesRecognizer {
   startDrag = (event: UseGestureEvent): void => {
     const { currentTarget, pointerId } = event as PointerEvent
     this.onStart(event, { currentTarget, pointerId, cancel: () => this.onCancel(event) })
+    this.delayedEvent = false
   }
 
   onDragChange = (event: UseGestureEvent): void => {
@@ -64,7 +65,10 @@ export default class DragRecognizer extends CoordinatesRecognizer {
     if (canceled) return
 
     if (!active) {
-      if (!!this.delayedEvent) this.startDrag(event)
+      if (this.delayedEvent) {
+        this.clearTimeout()
+        this.startDrag(event)
+      }
       return
     }
 
@@ -80,7 +84,7 @@ export default class DragRecognizer extends CoordinatesRecognizer {
 
   onDragEnd = (event: UseGestureEvent): void => {
     this.clearTimeout()
-    this.delayedEvent = undefined
+    this.delayedEvent = false
 
     if (!this.state.active) return
 
