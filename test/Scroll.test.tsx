@@ -28,7 +28,8 @@ describe.each([['attached to component', Interactive, false], ['attached to node
       expect(getByTestId(`${prefix}scroll-scrolling`)).toHaveTextContent('true')
       expect(getByTestId(`${prefix}scroll-first`)).toHaveTextContent('true')
       expect(getByTestId(`${prefix}scroll-xy`)).toHaveTextContent('10,30')
-      expect(getByTestId(`${prefix}scroll-initial`)).toHaveTextContent('10,30')
+      expect(getByTestId(`${prefix}scroll-delta`)).toHaveTextContent('10,30')
+      expect(getByTestId(`${prefix}scroll-initial`)).toHaveTextContent('0,0')
     })
 
     test('initiating the gesture should fire onScrollStart', () => {
@@ -53,7 +54,8 @@ describe.each([['attached to component', Interactive, false], ['attached to node
 
     test('xy should update to latest scrollLeft and scrollTop', () => {
       expect(getByTestId(`${prefix}scroll-xy`)).toHaveTextContent('40,50')
-      expect(getByTestId(`${prefix}scroll-movement`)).toHaveTextContent('30,20')
+      expect(getByTestId(`${prefix}scroll-delta`)).toHaveTextContent('30,20')
+      expect(getByTestId(`${prefix}scroll-movement`)).toHaveTextContent('40,50')
     })
 
     test('kinematics should update', () => {

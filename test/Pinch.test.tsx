@@ -32,6 +32,7 @@ describe.each([['attached to component', Interactive, false], ['attached to node
       expect(getByTestId(`${prefix}pinch-pinching`)).toHaveTextContent('true')
       expect(getByTestId(`${prefix}pinch-first`)).toHaveTextContent('true')
       expect(getByTestId(`${prefix}pinch-da`)).toHaveTextContent(`40,0`)
+      expect(getByTestId(`${prefix}pinch-delta`)).toHaveTextContent('0,0')
       expect(getByTestId(`${prefix}pinch-origin`)).toHaveTextContent(`0,20`)
       expect(getByTestId(`${prefix}pinch-initial`)).toHaveTextContent(`40,0`)
     })

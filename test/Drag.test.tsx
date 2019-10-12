@@ -32,6 +32,7 @@ describe.each([['attached to component', Interactive, false], ['attached to node
       expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('true')
       expect(getByTestId(`${prefix}drag-first`)).toHaveTextContent('true')
       expect(getByTestId(`${prefix}drag-xy`)).toHaveTextContent('10,20')
+      expect(getByTestId(`${prefix}drag-delta`)).toHaveTextContent('0,0')
       expect(getByTestId(`${prefix}drag-down`)).toHaveTextContent('true')
       expect(getByTestId(`${prefix}drag-initial`)).toHaveTextContent('10,20')
     })

@@ -26,7 +26,8 @@ describe.each([['attached to component', Interactive, false], ['attached to node
       expect(getByTestId(`${prefix}wheel-wheeling`)).toHaveTextContent('true')
       expect(getByTestId(`${prefix}wheel-first`)).toHaveTextContent('true')
       expect(getByTestId(`${prefix}wheel-xy`)).toHaveTextContent('1,-1')
-      expect(getByTestId(`${prefix}wheel-initial`)).toHaveTextContent('1,-1')
+      expect(getByTestId(`${prefix}wheel-delta`)).toHaveTextContent('1,-1')
+      expect(getByTestId(`${prefix}wheel-initial`)).toHaveTextContent('0,0')
     })
 
     test('initiating the gesture should fire onWheelStart', () => {
@@ -48,7 +49,8 @@ describe.each([['attached to component', Interactive, false], ['attached to node
 
     test('xy should add wheel event offset', () => {
       expect(getByTestId(`${prefix}wheel-xy`)).toHaveTextContent('5,-6')
-      expect(getByTestId(`${prefix}wheel-offset`)).toHaveTextContent('4,-5')
+      expect(getByTestId(`${prefix}wheel-delta`)).toHaveTextContent('4,-5')
+      expect(getByTestId(`${prefix}wheel-offset`)).toHaveTextContent('5,-6')
     })
 
     test('kinematics should update', () => {

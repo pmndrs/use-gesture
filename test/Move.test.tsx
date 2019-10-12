@@ -25,6 +25,7 @@ describe.each([['attached to component', Interactive, false], ['attached to node
       expect(getByTestId(`${prefix}move-moving`)).toHaveTextContent('true')
       expect(getByTestId(`${prefix}move-first`)).toHaveTextContent('true')
       expect(getByTestId(`${prefix}move-xy`)).toHaveTextContent('20,50')
+      expect(getByTestId(`${prefix}move-delta`)).toHaveTextContent('0,0')
       expect(getByTestId(`${prefix}move-initial`)).toHaveTextContent('20,50')
     })
 
