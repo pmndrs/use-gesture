@@ -6,6 +6,7 @@ import { UseGestureEvent, ReactEventHandlerKey, Fn } from '../types'
 export default class ScrollRecognizer extends CoordinatesRecognizer {
   sharedStartState = { scrolling: true }
   sharedEndState = { scrolling: false, velocity: 0, vxvy: [0, 0] }
+  continuousGesture = true
 
   constructor(controller: GestureController, args: any[]) {
     super('scroll', controller, args)

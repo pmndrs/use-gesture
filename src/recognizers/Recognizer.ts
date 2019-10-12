@@ -1,4 +1,4 @@
-import { mappedKeys, genericEndState } from '../defaults'
+import { mappedKeys, genericEndState, initialState } from '../defaults'
 import GestureController from '../controllers/GestureController'
 import {
   Coordinates,
@@ -13,7 +13,7 @@ import {
   UseGestureEvent,
   Vector2,
 } from '../types'
-import { noop } from '../utils'
+import { noop, subV } from '../utils'
 
 type PayloadFromEvent = {
   values: Vector2
@@ -29,6 +29,12 @@ export default abstract class Recognizer<GestureType extends Coordinates | Dista
   protected stateKey: StateKey
   protected sharedStartState?: Partial<SharedGestureState>
   protected sharedEndState?: Partial<SharedGestureState>
+
+  /**
+   * Continuous gestures are scroll or wheel, where the next gesture continues the previous one.
+   * In other words, these gestures also start with a delta.
+   */
+  protected continuousGesture = false
 
   /**
    * Creates an instance of a gesture recognizer.
@@ -85,13 +91,6 @@ export default abstract class Recognizer<GestureType extends Coordinates | Dista
    */
   protected abstract getKinematics(values: [number, number | undefined], event: UseGestureEvent): Partial<GestureState<GestureType>>
 
-  /**
-   * returns the start state for a given gesture
-   * @param values the xy values of the start state
-   * @param event the event that triggers the gesture start
-   */
-  protected abstract getStartState(values: [number, number | undefined], event: UseGestureEvent): Partial<GestureState<GestureType>>
-
   // should return the bindings for a given gesture
   public abstract getEventBindings(): [ReactEventHandlerKey | ReactEventHandlerKey[], Fn][]
 
@@ -112,7 +111,27 @@ export default abstract class Recognizer<GestureType extends Coordinates | Dista
   // generic onStart function
   protected onStart = (event: UseGestureEvent, payload?: Partial<GestureState<GestureType>>): void => {
     const { values, gesturePayload, sharedPayload } = this.getPayloadFromEvent(event)
-    const startState = this.getStartState(values, event)
+
+    const startState: GestureState<GestureType> = {
+      ...(initialState[this.stateKey] as GestureState<GestureType>),
+      values,
+      event,
+      first: true,
+      active: true,
+      time: event.timeStamp,
+      args: this.args,
+    }
+
+    const { values: prevValues, offset } = this.state
+
+    if (this.continuousGesture) {
+      startState.initial = prevValues
+      startState.delta = startState.movement = subV(values, prevValues)
+      startState.offset = values
+    } else {
+      startState.initial = values
+      startState.offset = offset
+    }
 
     this.updateState({ ...this.sharedStartState, ...sharedPayload }, { ...startState, ...gesturePayload, ...payload })
     this.fireGestureHandler(GestureFlag.OnStart)

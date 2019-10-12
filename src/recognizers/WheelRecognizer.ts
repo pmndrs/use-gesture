@@ -7,6 +7,7 @@ import { UseGestureEvent, ReactEventHandlerKey, Fn } from '../types'
 export default class WheelRecognizer extends CoordinatesRecognizer {
   sharedStartState = { wheeling: true }
   sharedEndState = { wheeling: false, velocity: 0, vxvy: [0, 0] }
+  continuousGesture = true
 
   constructor(controller: GestureController, args: any[]) {
     super('wheel', controller, args)
