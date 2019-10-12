@@ -17,7 +17,7 @@ export default class HoverRecognizer extends CoordinatesRecognizer {
   onPointerEnter = (event: UseGestureEvent): void => {
     if (!this.enabled) return
     const { values, sharedPayload } = this.getPayloadFromEvent(event)
-    this.updateState({ hovering: true, ...sharedPayload }, { xy: values, values, event, args: this.args })
+    this.updateState({ hovering: true, ...sharedPayload }, { values, event, args: this.args })
     this.fireGestureHandler(GestureFlag.OnChange)
   }
 
