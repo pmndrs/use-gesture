@@ -1,5 +1,13 @@
 # Changelog
 
+## 6.0.8 Release
+
+**Summary:** Fixes bug with timeout events.
+
+### Fixed
+
+1. Timed out events would
+
 ## 6.0.7 Release
 
 **Summary:** Fixes bug with `dragDelay`.
