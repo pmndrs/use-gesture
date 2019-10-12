@@ -80,6 +80,9 @@ export default class GestureController {
    * @param stateKey the state key ('drag', 'move'...)
    */
   public updateState = (sharedState: Partial<SharedGestureState> | null, gestureState: Partial<GestureState>, stateKey: StateKey): void => {
+    if ('da' in gestureState) gestureState.da = gestureState.values
+    else if ('xy' in gestureState) gestureState.xy = gestureState.values
+
     this.state = {
       ...this.state,
       shared: { ...this.state.shared, ...sharedState },

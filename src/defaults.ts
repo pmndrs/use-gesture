@@ -39,6 +39,7 @@ export const initialCommon: CommonGestureState = {
   event: undefined,
   currentTarget: undefined,
   pointerId: undefined,
+  values: [0, 0],
   delta: [0, 0],
   movement: [0, 0],
   offset: [0, 0],

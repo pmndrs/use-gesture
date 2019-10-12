@@ -1,7 +1,6 @@
 import Recognizer from './Recognizer'
 import { addV, calculateVelocities, calculateDirection } from '../utils'
 import { DistanceAngle, GestureState, Vector2, UseGestureEvent, GestureKey } from '../types'
-import { initialState } from '../defaults'
 import GestureController from 'controllers/GestureController'
 
 /**
@@ -10,12 +9,10 @@ import GestureController from 'controllers/GestureController'
 export default abstract class DistanceAngleRecognizer extends Recognizer<DistanceAngle> {
   constructor(gestureKey: GestureKey, controller: GestureController, args: any[] = []) {
     super(gestureKey, controller, args)
-    this.getKinematics = this.getKinematics.bind(this)
-    this.getStartState = this.getStartState.bind(this)
   }
 
   getKinematics([d, a]: [number, number?], event: UseGestureEvent): Partial<GestureState<DistanceAngle>> {
-    const { da, turns, initial, offset, time = 0 } = this.state
+    const { values: da, turns, initial, offset, time } = this.state
 
     // angle might not be defined when ctrl wheel is used for zoom only
     // in that case we set it to the previous angle value
@@ -39,11 +36,12 @@ export default abstract class DistanceAngleRecognizer extends Recognizer<Distanc
     const movement_a = a - 360 * newTurns - initial[1]
     const movement: Vector2 = [movement_d, movement_a]
 
-    const delta_t = event.timeStamp - time
+    const delta_t = event.timeStamp - time!
     const vdva = calculateVelocities(delta, delta_t)
     const direction = calculateDirection(delta)
     return {
       event,
+      values: [d, a],
       da: [d, a],
       movement,
       delta,
@@ -53,23 +51,6 @@ export default abstract class DistanceAngleRecognizer extends Recognizer<Distanc
       turns: newTurns,
       previous: da,
       time: event.timeStamp,
-    }
-  }
-
-  getStartState(da: Vector2, event: UseGestureEvent): GestureState<DistanceAngle> {
-    const initial = initialState[this.stateKey] as GestureState<DistanceAngle>
-    return {
-      ...initial,
-      event,
-      da,
-      initial: da,
-      previous: da,
-      offset: this.state.offset,
-      origin: this.state.origin,
-      first: true,
-      active: true,
-      time: event.timeStamp,
-      args: this.args,
     }
   }
 }

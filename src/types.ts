@@ -122,6 +122,7 @@ export interface CommonGestureState {
   event?: UseGestureEvent
   currentTarget?: EventTarget | null
   pointerId?: number | null
+  values: Vector2
   delta: Vector2
   movement: Vector2
   offset: Vector2
