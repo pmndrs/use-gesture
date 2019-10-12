@@ -21,7 +21,6 @@ export default abstract class CoordinatesRecognizer extends Recognizer<Coordinat
     return {
       event,
       values,
-      xy: values,
       movement,
       offset: addV(offset, delta),
       delta,

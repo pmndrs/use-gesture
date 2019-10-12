@@ -1,7 +1,7 @@
 import Recognizer from './Recognizer'
 import { addV, calculateVelocities, calculateDirection } from '../utils'
 import { DistanceAngle, GestureState, Vector2, UseGestureEvent, GestureKey } from '../types'
-import GestureController from 'controllers/GestureController'
+import GestureController from '../controllers/GestureController'
 
 /**
  * Abstract class for distance/angle-based gesture recongizers
@@ -42,7 +42,6 @@ export default abstract class DistanceAngleRecognizer extends Recognizer<Distanc
     return {
       event,
       values: [d, a],
-      da: [d, a],
       movement,
       delta,
       offset: addV(offset, delta),
