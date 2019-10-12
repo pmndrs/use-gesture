@@ -1,5 +1,9 @@
 # Changelog
 
+## 6.0.9 Release
+
+**Summary:** Fixes refactoring of 6.0.8.
+
 ## 6.0.8 Release
 
 **Summary:** Fixes bug with continuous gestures.
