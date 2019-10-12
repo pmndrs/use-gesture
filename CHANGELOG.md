@@ -2,11 +2,11 @@
 
 ## 6.0.8 Release
 
-**Summary:** Fixes bug with timeout events.
+**Summary:** Fixes bug with continuous gestures.
 
 ### Fixed
 
-1. Timed out events would
+1. Scroll and wheel are continuous gestures and should therefore init delta, movement and offset as soon as they start ([#96](https://github.com/react-spring/react-use-gesture/issues/96))
 
 ## 6.0.7 Release
 
