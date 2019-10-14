@@ -32,6 +32,7 @@ describe.each([['attached to component', Interactive, false], ['attached to node
       expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('true')
       expect(getByTestId(`${prefix}drag-first`)).toHaveTextContent('true')
       expect(getByTestId(`${prefix}drag-xy`)).toHaveTextContent('10,20')
+      expect(getByTestId(`${prefix}drag-previous`)).toHaveTextContent('10,20')
       expect(getByTestId(`${prefix}drag-delta`)).toHaveTextContent('0,0')
       expect(getByTestId(`${prefix}drag-down`)).toHaveTextContent('true')
       expect(getByTestId(`${prefix}drag-initial`)).toHaveTextContent('10,20')
@@ -89,6 +90,8 @@ describe.each([['attached to component', Interactive, false], ['attached to node
     test('restarting the gesture should book-keep offset and reset movement', () => {
       rerender(<Component gestures={['Drag']} />)
       fireEvent.mouseDown(element, { clientX: 30, clientY: 60 })
+      // TODO - not so sure drag-previous should be 30, 60, it should actually be the previous value
+      expect(getByTestId(`${prefix}drag-previous`)).toHaveTextContent('30,60')
       fireEvent.mouseMove(window, { clientX: 20, clientY: 50, buttons: 1 })
       expect(getByTestId(`${prefix}drag-offset`)).toHaveTextContent('-30,0')
       expect(getByTestId(`${prefix}drag-movement`)).toHaveTextContent('-10,-10')

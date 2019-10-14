@@ -26,6 +26,7 @@ describe.each([['attached to component', Interactive, false], ['attached to node
       expect(getByTestId(`${prefix}wheel-wheeling`)).toHaveTextContent('true')
       expect(getByTestId(`${prefix}wheel-first`)).toHaveTextContent('true')
       expect(getByTestId(`${prefix}wheel-xy`)).toHaveTextContent('1,-1')
+      expect(getByTestId(`${prefix}wheel-previous`)).toHaveTextContent('0,0')
       expect(getByTestId(`${prefix}wheel-delta`)).toHaveTextContent('1,-1')
       expect(getByTestId(`${prefix}wheel-initial`)).toHaveTextContent('0,0')
     })
@@ -68,6 +69,13 @@ describe.each([['attached to component', Interactive, false], ['attached to node
 
     test('terminating the gesture should fire onWheelEnd', async () => {
       await wait(() => expect(getByTestId(`${prefix}wheel-end`)).toHaveTextContent(/^fired$/))
+    })
+
+    test('wheeling again should restart the gesture', async () => {
+      fireEvent.wheel(element, { deltaX: 10, deltaY: 0 })
+      expect(getByTestId(`${prefix}wheel-first`)).toHaveTextContent('true')
+      expect(getByTestId(`${prefix}wheel-previous`)).toHaveTextContent('5,-6')
+      await wait(() => expect(getByTestId(`${prefix}wheel-active`)).toHaveTextContent('false'))
     })
 
     test('disabling all gestures should prevent state from updating', () => {
