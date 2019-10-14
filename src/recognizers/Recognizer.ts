@@ -112,6 +112,8 @@ export default abstract class Recognizer<GestureType extends Coordinates | Dista
   protected onStart = (event: UseGestureEvent, payload?: Partial<GestureState<GestureType>>): void => {
     const { values, gesturePayload, sharedPayload } = this.getPayloadFromEvent(event)
 
+    // TODO probably needs some rework, initialState and resetState should be different
+
     const startState: GestureState<GestureType> = {
       ...(initialState[this.stateKey] as GestureState<GestureType>),
       values,
@@ -125,12 +127,12 @@ export default abstract class Recognizer<GestureType extends Coordinates | Dista
     const { values: prevValues, offset } = this.state
 
     if (this.continuousGesture) {
-      startState.initial = prevValues
+      startState.initial = startState.previous = prevValues
       startState.delta = startState.movement = subV(values, prevValues)
       startState.offset = values
       Object.assign(startState, calculateAllKinematics(startState.movement, startState.delta, 0))
     } else {
-      startState.initial = values
+      startState.initial = startState.previous = values
       startState.offset = offset
     }
 
