@@ -1,5 +1,13 @@
 # Changelog
 
+## 6.0.10 Release
+
+**Summary:** Fixes refactoring of 6.0.8.
+
+### Fixed
+
+1. Fixes [#97](https://github.com/react-spring/react-use-gesture/issues/97) (follow up of #96 with fixes of distance and direction)
+
 ## 6.0.9 Release
 
 **Summary:** Fixes refactoring of 6.0.8.

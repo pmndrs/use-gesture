@@ -13,7 +13,7 @@ import {
   UseGestureEvent,
   Vector2,
 } from '../types'
-import { noop, subV } from '../utils'
+import { noop, subV, calculateAllKinematics } from '../utils'
 
 type PayloadFromEvent = {
   values: Vector2
@@ -128,6 +128,7 @@ export default abstract class Recognizer<GestureType extends Coordinates | Dista
       startState.initial = prevValues
       startState.delta = startState.movement = subV(values, prevValues)
       startState.offset = values
+      Object.assign(startState, calculateAllKinematics(startState.movement, startState.delta, 0))
     } else {
       startState.initial = values
       startState.offset = offset
