@@ -1,8 +1,16 @@
 # Changelog
 
+## 6.0.11 Release
+
+**Summary:** Continues fixing of start state.
+
+### Fixed
+
+1. Fixes `previous` attribute in start state.
+
 ## 6.0.10 Release
 
-**Summary:** Fixes refactoring of 6.0.8.
+**Summary:** Fixes start state.
 
 ### Fixed
 
