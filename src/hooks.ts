@@ -1,6 +1,6 @@
 import React from 'react'
 import GestureController from './controllers/GestureController'
-import { Handler, GestureHandlersPartial, GestureConfig, Coordinates, Fn, ReactEventHandlers, DistanceAngle } from './types'
+import { Handler, GestureHandlersPartial, GestureConfig, Coordinates, Fn, ReactEventHandlers, DistanceAngle, Omit } from './types'
 import { defaultConfig } from './defaults'
 
 /** API
