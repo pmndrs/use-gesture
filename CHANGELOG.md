@@ -1,5 +1,13 @@
 # Changelog
 
+## 6.0.12 Release
+
+**Summary:** Fixes Typescript import.
+
+### Fixed
+
+1. Added `Omit` to the types import list.
+
 ## 6.0.11 Release
 
 **Summary:** Continues fixing of start state.
