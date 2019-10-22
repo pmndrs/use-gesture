@@ -294,7 +294,7 @@ If we don’t return `memo`, then `memo` will remain undefined and in the next d
 
 It may sound silly but returning `memo` makes sure that we continue holding a reference to the initial value of `memo`, ie the original value of x when the gesture started.
 
-#### Why is drag being triggered whe I just click on an element?
+#### Why is drag being triggered when I just click on an element?
 
 This is typically a-feature-not-a-bug situation 🙃 Drag is triggered as soon as you mouse down on your component, which means it will be triggered when you "just" briefly click on it. However, there is an option to not trigger the drag before a certain delay, using the config option `dragDelay`.
 
