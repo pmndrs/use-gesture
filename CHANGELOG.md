@@ -1,5 +1,15 @@
 # Changelog
 
+## 6.0.14 Release
+
+**Summary:** Fixes Pointer Events on hover.
+
+### Fixed
+
+1. Fixes getEventBindings/this.onEnd -> this.onPointerLeave
+
+### 6.0.13 Invalid Release
+
 ## 6.0.12 Release
 
 **Summary:** Fixes Typescript import.
