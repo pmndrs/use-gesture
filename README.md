@@ -30,16 +30,16 @@ import { useSpring, animated } from 'react-spring'
 import { useDrag } from 'react-use-gesture'
 
 function PullRelease() {
-  const [{ xy }, set] = useSpring(() => ({ xy: [0, 0] }))
+  const [{ xy }, set] = useSpring(() => ({ x: 0, y: 0 }))
 
   // 1. Define the gesture
-  const bind = useDrag(({ down, movement }) => set({ xy: down ? movement : [0, 0] }))
+  const bind = useDrag(({ down, movement: [mx, my] }) => set({ x: down ? mx : 0, y: down ? y : 0 }))
 
   return (
     <animated.div
       // 2. Bind it to a component
       {...bind()}
-      style={{ transform: xy.to((x, y) => `translate3D(${x}px, ${y}px, 0)`) }} />
+      style={{ x, y }} />
 ```
 
 The example above makes a `div` draggable so that it follows your mouse on drag, and returns to its initial position on release.
