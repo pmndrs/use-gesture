@@ -39,7 +39,7 @@ function PullRelease() {
     <animated.div
       // 2. Bind it to a component
       {...bind()}
-      style={{ transform: xy.to((x, y) => `translate3D(${x}px, ${y}px, 0)`) }} />
+      style={{ transform: xy.interpolate((x, y) => `translate3D(${x}px, ${y}px, 0)`) }} />
 ```
 
 The example above makes a `div` draggable so that it follows your mouse on drag, and returns to its initial position on release.
@@ -220,7 +220,7 @@ const bind = useDrag(({ active, movement, velocity, direction, memo = pos.getVal
   })
   return memo
 })
-return <animated.div {...bind()} style={{ transform: pos.to((x, y) => `translate3d(${x}px,${y}px,0)`) }} />
+return <animated.div {...bind()} style={{ transform: pos.interpolate((x, y) => `translate3d(${x}px,${y}px,0)`) }} />
 ```
 
 #### Using PointerEvents
