@@ -72,7 +72,7 @@ type PointerEventData = Pick<FullGestureState<Coordinates>, 'xy' | 'touches' | '
  * @returns pointer event data
  */
 export function getPointerEventData(event: React.MouseEvent | React.TouchEvent | React.PointerEvent): PointerEventData {
-  const { eventTouches, buttons, changedTouches } = event as any
+  const { touches: eventTouches, buttons, changedTouches } = event as any
   const touchEvents =
     eventTouches && eventTouches.length > 0 ? eventTouches : changedTouches && changedTouches.length > 0 ? changedTouches : null
   const { clientX, clientY } = touchEvents ? touchEvents[0] : event
