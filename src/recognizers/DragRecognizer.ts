@@ -72,9 +72,9 @@ export default class DragRecognizer extends CoordinatesRecognizer {
       return
     }
 
-    const { buttons, touches } = getPointerEventData(event)
+    const { down } = getPointerEventData(event)
 
-    if (buttons === 0 && touches === 0) {
+    if (!down) {
       this.onEnd(event)
       return
     }
