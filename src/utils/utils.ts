@@ -1,9 +1,8 @@
 import React from 'react'
-import { Fn, Vector2, EventOptions, Coordinates, FullGestureState, DistanceAngle, UseGestureEvent } from './types'
+import { Fn, Vector2, EventOptions, Coordinates, FullGestureState, DistanceAngle, UseGestureEvent } from '../types'
 
 // blank function
 export const noop = () => {}
-
 // returns a function that chains all functions given as parameters
 export const chainFns = (...fns: Fn[]): Fn => (...args: any[]) => fns.forEach(fn => fn(...args))
 
@@ -182,7 +181,7 @@ export function calculateAllKinematics<T extends number[]>(movement: T, delta: T
 export function gestureEventSupported(): boolean {
   try {
     // TODO [TS] possibly find GestureEvent definitions?
-    // @ts-ignore: Unreachable code error
+    // @ts-ignore: no type definitions for webkit GestureEvents
     return 'constructor' in GestureEvent
   } catch (e) {
     return false

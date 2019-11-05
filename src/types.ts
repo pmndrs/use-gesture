@@ -8,26 +8,32 @@ export type Fn = (...args: any[]) => any
 
 export type EventOptions = { capture?: boolean; passive?: boolean }
 
-export interface GestureConfig {
+export interface GenericConfig {
   domTarget?: EventTarget | React.RefObject<EventTarget> | null
-  event: EventOptions
   window?: EventTarget
-  dragDelay: boolean | number
-  passiveEvents: boolean
-  pointerEvents: boolean
+  eventOptions: EventOptions & { pointer: boolean }
   enabled: boolean
-  drag: boolean
-  pinch: boolean
-  scroll: boolean
-  wheel: boolean
-  hover: boolean
-  move: boolean
 }
 
-export enum GestureFlag {
-  OnStart = 'start',
-  OnChange = 'change',
-  OnEnd = 'end',
+export interface DragConfig {
+  enabled: boolean
+  filterClick: boolean
+  intentionalThreshold: Vector2
+  swipeVelocity: Vector2
+  delay: boolean | number
+}
+
+export type PartialUserConfig = Partial<GenericConfig> & { drag?: Partial<DragConfig> }
+export type FullUserConfig = GenericConfig & { drag: DragConfig }
+
+export interface InternalConfig {
+  domTarget?: EventTarget | React.RefObject<EventTarget> | null
+  eventOptions: EventOptions
+  window?: EventTarget
+  pointer: boolean
+  captureString: string
+  enabled: boolean
+  drag: DragConfig
 }
 
 export type WebKitGestureEvent = React.PointerEvent & { scale: number; rotation: number }
@@ -99,7 +105,8 @@ export interface ReactEventHandlers {
 
 export type ReactEventHandlerKey = keyof ReactEventHandlers
 
-export type GestureKey = 'drag' | 'pinch' | 'move' | 'scroll' | 'wheel' | 'hover'
+// export type GestureKey = 'drag' | 'pinch' | 'move' | 'scroll' | 'wheel' | 'hover'
+export type GestureKey = 'drag'
 export type StateKey = Exclude<GestureKey, 'hover'>
 
 export interface SharedGestureState {
@@ -144,6 +151,8 @@ export interface Coordinates {
   velocity: number
   vxvy: Vector2
   distance: number
+  click?: boolean
+  swipe?: Vector2
 }
 
 export interface DistanceAngle {

@@ -1,18 +1,19 @@
 import { PointerEvent } from 'react'
 import CoordinatesRecognizer from './CoordinatesRecognizer'
-import { getPointerEventData } from '../utils'
-import GestureController from '../controllers/GestureController'
-import { UseGestureEvent, ReactEventHandlerKey, Fn } from '../types'
+import { getPointerEventData, noop } from '../utils/utils'
+import Controller from '../Controller'
+import { UseGestureEvent, Fn, StateKey } from '../types'
 
 const DEFAULT_DRAG_DELAY = 180
+const CLICK_THRESHOLD = 2
 
 export default class DragRecognizer extends CoordinatesRecognizer {
-  sharedStartState = { dragging: true, down: true }
+  stateKey = 'drag' as StateKey
   sharedEndState = { dragging: false, down: false, buttons: 0, touches: 0 }
+  _delayedEvent = false
+  private _mightBeAClick = true
 
-  delayedEvent = false
-
-  constructor(controller: GestureController, args: any[]) {
+  constructor(controller: Controller, args: any[]) {
     super('drag', controller, args)
   }
 
@@ -29,8 +30,8 @@ export default class DragRecognizer extends CoordinatesRecognizer {
     if (touches > 1) return
 
     const { currentTarget, pointerId } = event as PointerEvent
-    if (this.controller.config.pointerEvents) {
-      // if pointers events
+    // if pointers events
+    if (this.controller.config.pointer) {
       currentTarget && (currentTarget as any).setPointerCapture(pointerId)
     } else {
       this.removeWindowListeners()
@@ -44,10 +45,12 @@ export default class DragRecognizer extends CoordinatesRecognizer {
       this.addWindowListeners(dragListeners)
     }
 
-    if (this.controller.config.dragDelay) {
-      const dragDelay = typeof this.controller.config.dragDelay === 'number' ? this.controller.config.dragDelay : DEFAULT_DRAG_DELAY
+    let dragDelay = this.controller.config.drag.delay
+
+    if (dragDelay) {
+      dragDelay = typeof dragDelay === 'number' ? dragDelay : DEFAULT_DRAG_DELAY
       if (typeof event.persist === 'function') event.persist()
-      this.delayedEvent = true
+      this._delayedEvent = true
       this.setTimeout(() => this.startDrag(event), dragDelay)
     } else {
       this.startDrag(event)
@@ -55,17 +58,28 @@ export default class DragRecognizer extends CoordinatesRecognizer {
   }
 
   startDrag = (event: UseGestureEvent): void => {
+    this._active = true
+    this._delayedEvent = false
+    this._mightBeAClick = true
+
     const { currentTarget, pointerId } = event as PointerEvent
-    this.onStart(event, { currentTarget, pointerId, cancel: () => this.onCancel(event) })
-    this.delayedEvent = false
+    const { values, sharedPayload } = this.getPayloadFromEvent(event)
+
+    const kinematics = this.getKinematics(values, event, true)
+
+    this.updateState(
+      { ...this.sharedStartState, ...sharedPayload },
+      { ...kinematics, click: false, currentTarget, pointerId, cancel: () => this.onCancel(event) }
+    )
+    this.fireGestureHandler()
   }
 
   onDragChange = (event: UseGestureEvent): void => {
-    const { canceled, active } = this.state
+    const { canceled } = this.state
     if (canceled) return
 
-    if (!active) {
-      if (this.delayedEvent) {
+    if (!this._active) {
+      if (this._delayedEvent) {
         this.clearTimeout()
         this.startDrag(event)
       }
@@ -75,28 +89,57 @@ export default class DragRecognizer extends CoordinatesRecognizer {
     const { down } = getPointerEventData(event)
 
     if (!down) {
-      this.onEnd(event)
+      this.onDragEnd(event)
       return
     }
 
-    this.onChange(event, { cancel: () => this.onCancel(event) })
+    const { values, sharedPayload } = this.getPayloadFromEvent(event)
+    const kinematics = this.getKinematics(values, event)
+
+    if (this._mightBeAClick && kinematics.distance! > CLICK_THRESHOLD) this._mightBeAClick = false
+
+    this.updateState({ ...sharedPayload }, { ...kinematics, cancel: () => this.onCancel(event) })
+
+    this.fireGestureHandler()
   }
 
   onDragEnd = (event: UseGestureEvent): void => {
+    if (!this._active) return
     this.clearTimeout()
-    this.delayedEvent = false
+    this._delayedEvent = false
+    this._active = false
 
-    if (!this.state.active) return
+    if (this.controller.config.pointer) {
+      const { currentTarget, pointerId } = this.state
+      if (currentTarget) (currentTarget as any).releasePointerCapture(pointerId)
+    } else {
+      this.removeWindowListeners()
+    }
 
-    const { currentTarget, pointerId } = this.state
-    if (currentTarget && this.controller.config.pointerEvents) (currentTarget as any).releasePointerCapture(pointerId)
-    this.onEnd(event)
+    const {
+      vxvy: [vx, vy],
+    } = this.state
+    const [svx, svy] = this.config.swipeVelocity
+    const swipe: [number, number] = [0, 0]
+    if (Math.abs(vx) > svx) swipe[0] = Math.sign(vx)
+    if (Math.abs(vy) > svy) swipe[1] = Math.sign(vy)
+
+    this.updateState(this.sharedEndState, { event, click: this._mightBeAClick, swipe, active: false, last: true })
+    this.fireGestureHandler(this._mightBeAClick)
   }
 
-  getEventBindings(): [ReactEventHandlerKey | ReactEventHandlerKey[], Fn][] {
-    if (this.controller.config.pointerEvents) {
-      return [['onPointerDown', this.onDragStart], ['onPointerMove', this.onDragChange], [['onPointerUp'], this.onDragEnd]]
+  onCancel = (event: UseGestureEvent): void => {
+    this.updateState(null, { canceled: true, cancel: noop })
+    requestAnimationFrame(() => this.onDragEnd(event))
+  }
+
+  addBindings(): void {
+    if (this.controller.config.pointer) {
+      this.controller.addBindings('onPointerDown', this.onDragStart)
+      this.controller.addBindings('onPointerMove', this.onDragChange)
+      this.controller.addBindings('onPointerUp', this.onDragEnd)
+    } else {
+      this.controller.addBindings(['onMouseDown', 'onTouchStart'], this.onDragStart)
     }
-    return [[['onMouseDown', 'onTouchStart'], this.onDragStart]]
   }
 }
