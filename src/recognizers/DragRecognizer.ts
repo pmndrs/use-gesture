@@ -125,7 +125,7 @@ export default class DragRecognizer extends CoordinatesRecognizer {
     if (Math.abs(vy) > svy) swipe[1] = Math.sign(vy)
 
     this.updateState(this.sharedEndState, { event, click: this._mightBeAClick, swipe, active: false, last: true })
-    this.fireGestureHandler(this._mightBeAClick)
+    this.fireGestureHandler(this.config.filterClick && this._mightBeAClick)
   }
 
   onCancel = (event: UseGestureEvent): void => {
