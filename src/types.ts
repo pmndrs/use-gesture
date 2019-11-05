@@ -18,7 +18,7 @@ export interface GenericConfig {
 export interface DragConfig {
   enabled: boolean
   filterClick: boolean
-  intentionalThreshold: Vector2
+  intentionalThreshold?: Vector2
   swipeVelocity: Vector2
   delay: boolean | number
 }

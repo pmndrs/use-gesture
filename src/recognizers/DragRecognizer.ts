@@ -5,7 +5,7 @@ import Controller from '../Controller'
 import { UseGestureEvent, Fn, StateKey } from '../types'
 
 const DEFAULT_DRAG_DELAY = 180
-const CLICK_THRESHOLD = 2
+const CLICK_THRESHOLD = 3
 
 export default class DragRecognizer extends CoordinatesRecognizer {
   stateKey = 'drag' as StateKey
@@ -96,7 +96,7 @@ export default class DragRecognizer extends CoordinatesRecognizer {
     const { values, sharedPayload } = this.getPayloadFromEvent(event)
     const kinematics = this.getKinematics(values, event)
 
-    if (this._mightBeAClick && kinematics.distance! > CLICK_THRESHOLD) this._mightBeAClick = false
+    if (this._mightBeAClick && kinematics.distance! >= CLICK_THRESHOLD) this._mightBeAClick = false
 
     this.updateState({ ...sharedPayload }, { ...kinematics, cancel: () => this.onCancel(event) })
 

@@ -8,8 +8,8 @@ export const defaultConfig: FullUserConfig = {
   enabled: true,
   drag: {
     enabled: true,
-    filterClick: true,
-    intentionalThreshold: [0, 0],
+    filterClick: false,
+    intentionalThreshold: undefined,
     delay: false,
     swipeVelocity: [0.5, 0.5],
   },
@@ -47,6 +47,10 @@ export function getDerivedConfig(config: PartialUserConfig): InternalConfig {
     eventOptions: { passive: !mergedConfig.domTarget || passive, capture },
     pointer: pointer,
     captureString: capture ? 'Capture' : '',
+  }
+
+  if (derivedConfig.drag.intentionalThreshold === void 0) {
+    derivedConfig.drag.intentionalThreshold = derivedConfig.drag.filterClick ? [3, 3] : [0, 0]
   }
 
   return derivedConfig

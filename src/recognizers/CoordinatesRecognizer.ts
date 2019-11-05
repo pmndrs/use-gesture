@@ -52,7 +52,7 @@ export default abstract class CoordinatesRecognizer extends Recognizer<Coordinat
 
     let [intentionalX, intentionalY] = this._intentional
     const [movementX, movementY] = newState.movement
-    const [thresholdX, thresholdY] = this.config.intentionalThreshold
+    const [thresholdX, thresholdY] = this.config.intentionalThreshold!
 
     if (!intentionalX && Math.abs(movementX) >= thresholdX) intentionalX = movementX
     if (!intentionalY && Math.abs(movementY) >= thresholdY) intentionalY = movementY
