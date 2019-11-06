@@ -57,8 +57,11 @@ export function getDerivedConfig(config: PartialUserConfig): InternalConfig {
   // TODO utility that does that
   if (intentionalThreshold === void 0) {
     derivedConfig.drag.intentionalThreshold = derivedConfig.drag.filterClicks ? [3, 3] : [0, 0]
-  } else if (typeof intentionalThreshold === 'number') {
-    derivedConfig.drag.intentionalThreshold = [intentionalThreshold, intentionalThreshold]
+  } else {
+    derivedConfig.drag.filterClicks = true
+    if (typeof intentionalThreshold === 'number') {
+      derivedConfig.drag.intentionalThreshold = [intentionalThreshold, intentionalThreshold]
+    }
   }
 
   if (typeof swipeVelocity === 'number') {
