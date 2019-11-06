@@ -27,11 +27,11 @@ export default function useRecognizers<Config extends PartialUserConfig>(
 
   if (!controller.current) {
     // we initialize the gesture controller once
-    controller.current = new Controller()
+    controller.current = new Controller(getDerivedConfig(config))
   }
 
   React.useEffect(() => {
-    // every time handlers or config change, we let the gesture controller compute
+    // every time the config changes, we let the gesture controller compute
     // them so that the gesture handlers functions are aware of the changes
     controller.current!.config = getDerivedConfig(config)
   }, [config])
