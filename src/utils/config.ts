@@ -1,4 +1,4 @@
-import { FullUserConfig, PartialUserConfig, InternalConfig } from '../types'
+import { FullUserConfig, PartialUserConfig, InternalConfig, Vector2 } from '../types'
 
 const DEFAULT_DRAG_DELAY = 180
 
@@ -33,6 +33,10 @@ const merge = <T>(a1: Partial<T>, a2: T): T =>
     return { ...acc, [name]: a2[name] || value }
   }, a2)
 
+const def = {
+  array: <T>(value: T | T[]): T[] => (Array.isArray(value) ? value : [value, value]),
+}
+
 export function getDerivedConfig(config: PartialUserConfig): InternalConfig {
   // first we merge the config with the default config
   const mergedConfig = merge(config, defaultConfig)
@@ -54,24 +58,15 @@ export function getDerivedConfig(config: PartialUserConfig): InternalConfig {
 
   const { intentionalThreshold, swipeVelocity, swipeDistance, delay } = derivedConfig.drag
 
-  // TODO utility that does that
   if (intentionalThreshold === void 0) {
     derivedConfig.drag.intentionalThreshold = derivedConfig.drag.filterClicks ? [3, 3] : [0, 0]
   } else {
     derivedConfig.drag.filterClicks = true
-    if (typeof intentionalThreshold === 'number') {
-      derivedConfig.drag.intentionalThreshold = [intentionalThreshold, intentionalThreshold]
-    }
+    derivedConfig.drag.intentionalThreshold = def.array(intentionalThreshold) as Vector2
   }
 
-  if (typeof swipeVelocity === 'number') {
-    derivedConfig.drag.swipeVelocity = [swipeVelocity, swipeVelocity]
-  }
-
-  if (typeof swipeDistance === 'number') {
-    derivedConfig.drag.swipeDistance = [swipeDistance, swipeDistance]
-  }
-
+  derivedConfig.drag.swipeVelocity = def.array(swipeVelocity) as Vector2
+  derivedConfig.drag.swipeDistance = def.array(swipeDistance) as Vector2
   derivedConfig.drag.delay = typeof delay === 'number' ? delay : delay ? DEFAULT_DRAG_DELAY : 0
 
   return <InternalConfig>derivedConfig
