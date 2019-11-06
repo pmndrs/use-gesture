@@ -4,7 +4,6 @@ import { getPointerEventData, noop } from '../utils/utils'
 import Controller from '../Controller'
 import { UseGestureEvent, Fn, StateKey } from '../types'
 
-const DEFAULT_DRAG_DELAY = 180
 const CLICK_THRESHOLD = 3
 
 export default class DragRecognizer extends CoordinatesRecognizer {
@@ -45,13 +44,12 @@ export default class DragRecognizer extends CoordinatesRecognizer {
       this.addWindowListeners(dragListeners)
     }
 
-    let dragDelay = this.controller.config.drag.delay
+    const { delay } = this.controller.config.drag
 
-    if (dragDelay) {
-      dragDelay = typeof dragDelay === 'number' ? dragDelay : DEFAULT_DRAG_DELAY
-      if (typeof event.persist === 'function') event.persist()
+    if (delay > 0) {
       this._delayedEvent = true
-      this.setTimeout(() => this.startDrag(event), dragDelay)
+      if (typeof event.persist === 'function') event.persist()
+      this.setTimeout(() => this.startDrag(event), delay)
     } else {
       this.startDrag(event)
     }
@@ -117,15 +115,21 @@ export default class DragRecognizer extends CoordinatesRecognizer {
     }
 
     const {
+      movement: [mx, my],
       vxvy: [vx, vy],
     } = this.state
-    const [svx, svy] = this.config.swipeVelocity
+
+    const {
+      swipeVelocity: [svx, svy],
+      swipeDistance: [sx, sy],
+    } = this.config
+
     const swipe: [number, number] = [0, 0]
-    if (Math.abs(vx) > svx) swipe[0] = Math.sign(vx)
-    if (Math.abs(vy) > svy) swipe[1] = Math.sign(vy)
+    if (Math.abs(vx) > svx && Math.abs(mx) > sx) swipe[0] = Math.sign(vx)
+    if (Math.abs(vy) > svy && Math.abs(my) > sy) swipe[1] = Math.sign(vy)
 
     this.updateState(this.sharedEndState, { event, click: this._mightBeAClick, swipe, active: false, last: true })
-    this.fireGestureHandler(this.config.filterClick && this._mightBeAClick)
+    this.fireGestureHandler(this.config.filterClicks && this._mightBeAClick)
   }
 
   onCancel = (event: UseGestureEvent): void => {

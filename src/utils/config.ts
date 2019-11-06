@@ -1,5 +1,7 @@
 import { FullUserConfig, PartialUserConfig, InternalConfig } from '../types'
 
+const DEFAULT_DRAG_DELAY = 180
+
 // default config (will extend user config)
 export const defaultConfig: FullUserConfig = {
   domTarget: undefined,
@@ -8,10 +10,11 @@ export const defaultConfig: FullUserConfig = {
   enabled: true,
   drag: {
     enabled: true,
-    filterClick: false,
+    filterClicks: false,
     intentionalThreshold: undefined,
     delay: false,
-    swipeVelocity: [0.5, 0.5],
+    swipeVelocity: 0.5,
+    swipeDistance: 100,
   },
 }
 
@@ -49,9 +52,24 @@ export function getDerivedConfig(config: PartialUserConfig): InternalConfig {
     captureString: capture ? 'Capture' : '',
   }
 
-  if (derivedConfig.drag.intentionalThreshold === void 0) {
-    derivedConfig.drag.intentionalThreshold = derivedConfig.drag.filterClick ? [3, 3] : [0, 0]
+  const { intentionalThreshold, swipeVelocity, swipeDistance, delay } = derivedConfig.drag
+
+  // TODO utility that does that
+  if (intentionalThreshold === void 0) {
+    derivedConfig.drag.intentionalThreshold = derivedConfig.drag.filterClicks ? [3, 3] : [0, 0]
+  } else if (typeof intentionalThreshold === 'number') {
+    derivedConfig.drag.intentionalThreshold = [intentionalThreshold, intentionalThreshold]
   }
 
-  return derivedConfig
+  if (typeof swipeVelocity === 'number') {
+    derivedConfig.drag.swipeVelocity = [swipeVelocity, swipeVelocity]
+  }
+
+  if (typeof swipeDistance === 'number') {
+    derivedConfig.drag.swipeDistance = [swipeDistance, swipeDistance]
+  }
+
+  derivedConfig.drag.delay = typeof delay === 'number' ? delay : delay ? DEFAULT_DRAG_DELAY : 0
+
+  return <InternalConfig>derivedConfig
 }

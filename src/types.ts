@@ -17,9 +17,10 @@ export interface GenericConfig {
 
 export interface DragConfig {
   enabled: boolean
-  filterClick: boolean
-  intentionalThreshold?: Vector2
-  swipeVelocity: Vector2
+  filterClicks: boolean
+  intentionalThreshold?: number | Vector2
+  swipeVelocity: number | Vector2
+  swipeDistance: number | Vector2
   delay: boolean | number
 }
 
@@ -33,7 +34,14 @@ export interface InternalConfig {
   pointer: boolean
   captureString: string
   enabled: boolean
-  drag: DragConfig
+  drag: {
+    enabled: boolean
+    filterClicks: boolean
+    intentionalThreshold: Vector2
+    swipeVelocity: Vector2
+    swipeDistance: Vector2
+    delay: number
+  }
 }
 
 export type WebKitGestureEvent = React.PointerEvent & { scale: number; rotation: number }
