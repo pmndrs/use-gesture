@@ -1,7 +1,7 @@
 import React from 'react'
 import Controller from '../Controller'
 import Recognizer from 'recognizers/Recognizer'
-import { PartialUserConfig, Handler, Coordinates, DistanceAngle } from '../types'
+import { PartialUserConfig, Handler, Coordinates, DistanceAngle, Fn, ReactEventHandlers } from '../types'
 import { getDerivedConfig } from '../utils/config'
 
 type CreateRecognizer = (controller: Controller, args: any[]) => Recognizer<Coordinates> | Recognizer<DistanceAngle>
@@ -15,7 +15,12 @@ export const createRecognizer = <T extends Coordinates | DistanceAngle>(
   return recognizer
 }
 
-export default function useRecognizers(createRecognizers: CreateRecognizer | CreateRecognizer[], config: PartialUserConfig) {
+type GetBinderTypeFromDomTarget<T extends PartialUserConfig> = T['domTarget'] extends object ? Fn : ReactEventHandlers
+
+export default function useRecognizers<Config extends PartialUserConfig>(
+  createRecognizers: CreateRecognizer | CreateRecognizer[],
+  config: PartialUserConfig
+): (...args: any[]) => GetBinderTypeFromDomTarget<Config> {
   // the gesture controller will keep track of all gesture states
   const controller = React.useRef<Controller>()
   const createRecognizersArray = Array.isArray(createRecognizers) ? createRecognizers : [createRecognizers]
@@ -25,7 +30,7 @@ export default function useRecognizers(createRecognizers: CreateRecognizer | Cre
     controller.current = new Controller()
   }
 
-  React.useMemo(() => {
+  React.useEffect(() => {
     // every time handlers or config change, we let the gesture controller compute
     // them so that the gesture handlers functions are aware of the changes
     controller.current!.config = getDerivedConfig(config)
@@ -41,7 +46,7 @@ export default function useRecognizers(createRecognizers: CreateRecognizer | Cre
       recognizer.addBindings()
     })
 
-    return controller.current!.getBindings()
+    return controller.current!.getBind() as GetBinderTypeFromDomTarget<Config>
   }
 
   // we return the bind function of our controller, which returns an binding object or

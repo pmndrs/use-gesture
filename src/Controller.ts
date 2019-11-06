@@ -137,4 +137,16 @@ export default class Controller {
 
     return bindings
   }
+
+  public getBind = () => {
+    const { domTarget } = this.config
+    // if config.domTarget is set we add event listeners to it and return the clean function
+    if (domTarget) {
+      this.addDomTargetListeners()
+      return this.clean
+    }
+
+    // if not, we return an object that contains gesture handlers mapped to react handler event keys
+    return this.getBindings()
+  }
 }
