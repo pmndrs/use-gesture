@@ -27,7 +27,7 @@ const merge = <T>(a1: Partial<T>, a2: T): T =>
   Object.entries(a1).reduce((acc, [name, value]) => {
     // @ts-ignore
     // if value is an object (and not the window key object) we merge it with default
-    if (typeof value === 'object' && name !== 'window') return { ...acc, [name]: { ...a2[name], ...value } }
+    if (typeof value === 'object' && name !== 'window' && name !== 'domTarget') return { ...acc, [name]: { ...a2[name], ...value } }
     // @ts-ignore
     // otherwise we just take the config value if it exists
     return { ...acc, [name]: a2[name] || value }
@@ -43,13 +43,11 @@ export function getDerivedConfig(config: PartialUserConfig): InternalConfig {
 
   const {
     eventOptions: { passive, capture, pointer },
-    domTarget,
     ...rest
   } = mergedConfig
 
   const derivedConfig = {
     ...rest,
-    domTarget: domTarget && 'current' in domTarget ? domTarget.current : domTarget,
     // if there isn't a domtarget or if event.passive is true, then passiveEvents is true
     eventOptions: { passive: !mergedConfig.domTarget || passive, capture },
     pointer: pointer,

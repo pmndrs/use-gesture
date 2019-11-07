@@ -28,7 +28,7 @@ export type PartialUserConfig = Partial<GenericConfig> & { drag?: Partial<DragCo
 export type FullUserConfig = GenericConfig & { drag: DragConfig }
 
 export interface InternalConfig {
-  domTarget?: EventTarget | React.RefObject<EventTarget> | null
+  domTarget?: EventTarget | React.RefObject<EventTarget>
   eventOptions: EventOptions
   window?: EventTarget
   pointer: boolean

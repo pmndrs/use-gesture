@@ -23,13 +23,13 @@ type Bindings = Partial<{ [eventName in ReactEventHandlerKey]: Fn[] }>
  * @template BinderType the type the bind function should return
  */
 export default class Controller {
+  public config!: InternalConfig
   public state: StateObject = initialState // state for all gestures
   public timeouts: GestureTimeouts = {} // keeping track of timeouts for debounced gestures (such as move, scroll, wheel)
   private bindings: Bindings = {} // an object holding the handlers associated to the gestures
   private domListeners: [string, Fn][] = [] // when config.domTarget is set, we attach events directly to the dom
   private windowListeners: WindowListeners = {} // keeps track of window listeners added by gestures (drag only at the moment)
 
-  constructor(public config: InternalConfig) {}
   /**
    * Function run on component unmount
    * Cleans timeouts and removes dom listeners set by the bind function
@@ -46,11 +46,16 @@ export default class Controller {
    */
   public resetBindings = (): void => {
     this.bindings = {}
-    const { domTarget } = this.config
-    if (this.config && this.config.domTarget) {
-      removeListeners(<EventTarget>domTarget, this.domListeners, this.config.eventOptions)
+    const domTarget = this.getDomTarget()
+    if (domTarget) {
+      removeListeners(domTarget, this.domListeners, this.config.eventOptions)
       this.domListeners = []
     }
+  }
+
+  private getDomTarget = () => {
+    const { domTarget } = this.config
+    return domTarget && 'current' in domTarget ? domTarget.current : domTarget
   }
 
   /**
@@ -94,9 +99,7 @@ export default class Controller {
   /**
    * When config.domTarget is set, this function will add dom listeners to it
    */
-  public addDomTargetListeners = (): void => {
-    const { domTarget } = this.config
-
+  public addDomTargetListeners = (target: EventTarget): void => {
     // we iterate on the entries of this.binding
     // for each event, we chain the array of functions mapped to it
     // and push it to this.domListeners
@@ -104,7 +107,7 @@ export default class Controller {
       this.domListeners.push([event.substr(2).toLowerCase(), chainFns(...(<Fn[]>fns))])
     })
 
-    addListeners(<EventTarget>domTarget, this.domListeners, this.config.eventOptions)
+    addListeners(target, this.domListeners, this.config.eventOptions)
   }
 
   /**
@@ -139,10 +142,10 @@ export default class Controller {
   }
 
   public getBind = () => {
-    const { domTarget } = this.config
+    const domTarget = this.getDomTarget()
     // if config.domTarget is set we add event listeners to it and return the clean function
     if (domTarget) {
-      this.addDomTargetListeners()
+      this.addDomTargetListeners(domTarget)
       return this.clean
     }
 
