@@ -26,9 +26,11 @@ export const defaultConfig: FullUserConfig = {
  */
 const merge = <T>(a1: Partial<T>, a2: T): T =>
   Object.entries(a1).reduce((acc, [name, value]) => {
-    // @ts-ignore
     // if value is an object (and not the window key object) we merge it with default
-    if (typeof value === 'object' && name !== 'window' && name !== 'domTarget') return { ...acc, [name]: { ...a2[name], ...value } }
+    if (typeof value === 'object' && name !== 'window' && name !== 'domTarget') {
+      // @ts-ignore
+      return { ...acc, [name]: { ...a2[name], ...value } }
+    }
     // @ts-ignore
     // otherwise we just take the config value if it exists
     return { ...acc, [name]: a2[name] || value }

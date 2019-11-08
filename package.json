@@ -1,6 +1,6 @@
 {
   "name": "react-use-gesture",
-  "version": "7.0.0-alpha.9",
+  "version": "7.0.0-alpha.10",
   "description": "React hook for receiving gestures",
   "main": "dist/index.js",
   "module": "dist/react-use-gesture.esm.js",

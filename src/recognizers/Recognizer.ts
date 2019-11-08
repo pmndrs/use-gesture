@@ -35,10 +35,6 @@ export default abstract class Recognizer<GestureType extends Coordinates | Dista
    */
   protected _continuousGesture = false
 
-  protected _active = false
-  protected _blocked = false
-  protected _intentional: [false | number, false | number] = [false, false]
-
   /**
    * Creates an instance of a gesture recognizer.
    * @param gestureKey drag, move, hover, pinch, etc.
@@ -101,24 +97,24 @@ export default abstract class Recognizer<GestureType extends Coordinates | Dista
    * @param [gestureFlag] if set, will also fire the gesture handler set by the user
    */
   protected updateState = (sharedState: Partial<SharedGestureState> | null, gestureState: Partial<GestureState<GestureType>>): void => {
-    this.controller.updateState(sharedState, gestureState, this.stateKey)
+    Object.assign(this.controller.state.shared, sharedState)
+    Object.assign(this.state, gestureState)
   }
 
   // fire the gesture handler defined by the user
   protected fireGestureHandler = (forceFlag?: boolean): void => {
-    if (this._blocked) return this.reset()
+    if (this.state._blocked) return
 
-    const [intentionalX, intentionalY] = this._intentional
+    const [intentionalX, intentionalY] = this.state._intentional
 
     if (!forceFlag && intentionalX === false && intentionalY === false) return
 
-    if (this._active) {
+    if (this.state._active) {
       this.state.first = !this.state.active
       this.state.active = true
     } else {
       this.state.active = false
       this.state.last = true
-      this.reset()
     }
 
     const state = { ...this.controller.state.shared, ...this.state }
@@ -136,10 +132,4 @@ export default abstract class Recognizer<GestureType extends Coordinates | Dista
   }
 
   protected clean = noop
-
-  protected reset = (): void => {
-    this._intentional = [false, false]
-    this._blocked = false
-    this.clean()
-  }
 }

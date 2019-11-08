@@ -3,6 +3,9 @@ import { CommonGestureState, Coordinates, StateObject } from '../types'
 
 // common initial state for all gestures
 export const initialCommon: CommonGestureState = {
+  _active: false,
+  _blocked: false,
+  _intentional: [false, false],
   event: undefined,
   currentTarget: undefined,
   pointerId: undefined,
@@ -46,7 +49,7 @@ export const initialState: StateObject = {
     metaKey: false,
     ctrlKey: false,
   },
-  drag: { ...initialCommon, ...initialCoordinates, click: false, swipe: [0, 0] },
+  drag: { ...initialCommon, ...initialCoordinates, _isClick: true, _delayedEvent: false, click: false, swipe: [0, 0] },
   // move: { ...initialCommon, ...initialCoordinates },
   // scroll: { ...initialCommon, ...initialCoordinates },
   // wheel: { ...initialCommon, ...initialCoordinates },

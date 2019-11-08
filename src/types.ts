@@ -136,6 +136,9 @@ export interface SharedGestureState {
 }
 
 export interface CommonGestureState {
+  _active: boolean
+  _blocked: boolean
+  _intentional: [false | number, false | number]
   event?: UseGestureEvent
   currentTarget?: EventTarget | null
   pointerId?: number | null
@@ -161,6 +164,8 @@ export interface Coordinates {
   velocity: number
   vxvy: Vector2
   distance: number
+  _isClick?: boolean
+  _delayedEvent?: boolean
   click?: boolean
   swipe?: Vector2
 }
@@ -175,7 +180,9 @@ export interface DistanceAngle {
 export type GestureState<T extends Coordinates | DistanceAngle = Coordinates | DistanceAngle> = T & CommonGestureState
 export type FullGestureState<T extends Coordinates | DistanceAngle> = SharedGestureState & GestureState<T>
 
-export type StateObject = { shared: SharedGestureState } & { [K in StateKey]: GestureState<Coordinates | DistanceAngle> }
+export type StateObject = { shared: SharedGestureState } & {
+  drag: GestureState<Coordinates>
+}
 
 export type Handler<T extends Coordinates | DistanceAngle> = (state: FullGestureState<T>) => any | void
 export type HandlerKey = 'onDrag' | 'onPinch' | 'onMove' | 'onHover' | 'onScroll' | 'onWheel'

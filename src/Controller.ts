@@ -1,13 +1,4 @@
-import {
-  StateKey,
-  StateObject,
-  GestureState,
-  SharedGestureState,
-  Fn,
-  ReactEventHandlerKey,
-  ReactEventHandlers,
-  InternalConfig,
-} from './types'
+import { StateKey, StateObject, Fn, ReactEventHandlerKey, ReactEventHandlers, InternalConfig } from './types'
 
 import { initialState } from './utils/state'
 import { addListeners, removeListeners, chainFns } from './utils/utils'
@@ -15,6 +6,12 @@ import { addListeners, removeListeners, chainFns } from './utils/utils'
 type GestureTimeouts = Partial<{ [stateKey in StateKey]: number }>
 type WindowListeners = Partial<{ [stateKey in StateKey]: [string, Fn][] }>
 type Bindings = Partial<{ [eventName in ReactEventHandlerKey]: Fn[] }>
+
+const clone = <T>(arr: T): T =>
+  Object.entries(arr).reduce((acc, [name, value]) => {
+    // @ts-ignore
+    return { ...acc, [name]: { ...arr[name], ...value } }
+  }, arr)
 
 /**
  * Gesture controller will create gesture recognizers (which handle the gesture logic)
@@ -24,7 +21,7 @@ type Bindings = Partial<{ [eventName in ReactEventHandlerKey]: Fn[] }>
  */
 export default class Controller {
   public config!: InternalConfig
-  public state: StateObject = initialState // state for all gestures
+  public state: StateObject = clone(initialState) // state for all gestures
   public timeouts: GestureTimeouts = {} // keeping track of timeouts for debounced gestures (such as move, scroll, wheel)
   private bindings: Bindings = {} // an object holding the handlers associated to the gestures
   private domListeners: [string, Fn][] = [] // when config.domTarget is set, we attach events directly to the dom
@@ -64,15 +61,15 @@ export default class Controller {
    * @param gestureState partial gesture specific state object
    * @param stateKey the state key ('drag', 'move'...)
    */
-  public updateState = (sharedState: Partial<SharedGestureState> | null, gestureState: Partial<GestureState>, stateKey: StateKey): void => {
-    const newGestureState = { ...this.state[stateKey], ...gestureState }
+  // public updateState = (sharedState: Partial<SharedGestureState> | null, gestureState: Partial<GestureState>, stateKey: StateKey): void => {
+  //   const newGestureState = { ...this.state[stateKey], ...gestureState }
 
-    this.state = {
-      ...this.state,
-      shared: { ...this.state.shared, ...sharedState },
-      [stateKey]: newGestureState,
-    }
-  }
+  //   this.state = {
+  //     ...this.state,
+  //     shared: { ...this.state.shared, ...sharedState },
+  //     [stateKey]: newGestureState,
+  //   }
+  // }
 
   /**
    * Commodity function to let recognizers simply add listeners to config.window

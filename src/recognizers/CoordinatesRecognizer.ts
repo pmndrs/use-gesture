@@ -10,11 +10,12 @@ export default abstract class CoordinatesRecognizer extends Recognizer<Coordinat
   protected _axis?: 'x' | 'y'
 
   getKinematics(values: Vector2, event: UseGestureEvent, isStart?: boolean): Partial<GestureState<Coordinates>> {
-    let newState
+    let newState: Partial<GestureState<Coordinates>>
 
     if (isStart) {
       newState = {
         ...initialState[this.stateKey],
+        _active: true,
         event,
         values,
         initial: values,
@@ -24,7 +25,7 @@ export default abstract class CoordinatesRecognizer extends Recognizer<Coordinat
       }
     } else {
       // we get the gesture specific state
-      const { values: xy, initial, offset, time } = this.state
+      const { values: xy, initial, offset, time, _intentional } = this.state
 
       // offset is the difference between the current and initial value vectors
       const movement = subV(values, initial)
@@ -35,6 +36,7 @@ export default abstract class CoordinatesRecognizer extends Recognizer<Coordinat
       const { velocity, velocities, distance, direction } = calculateAllKinematics(movement, delta, delta_t)
 
       newState = {
+        _intentional,
         event,
         values,
         movement,
@@ -49,8 +51,8 @@ export default abstract class CoordinatesRecognizer extends Recognizer<Coordinat
       }
     }
 
-    let [intentionalX, intentionalY] = this._intentional
-    const [movementX, movementY] = newState.movement
+    let [intentionalX, intentionalY] = newState._intentional!
+    const [movementX, movementY] = newState.movement!
     const [thresholdX, thresholdY] = this.config.intentionalThreshold!
 
     const absX = Math.abs(movementX)
@@ -59,7 +61,7 @@ export default abstract class CoordinatesRecognizer extends Recognizer<Coordinat
     if (!intentionalX && absX >= thresholdX) intentionalX = movementX
     if (!intentionalY && absY >= thresholdY) intentionalY = movementY
 
-    this._intentional = [intentionalX, intentionalY]
+    newState._intentional = [intentionalX, intentionalY]
 
     const { axis: configAxis } = this.config
 
@@ -68,13 +70,15 @@ export default abstract class CoordinatesRecognizer extends Recognizer<Coordinat
     if (!!configAxis && intentionalMovement) {
       if (!this._axis) {
         this._axis = absX > absY ? 'x' : absX < absY ? 'y' : undefined
-        if (this._axis !== configAxis) this._blocked = true
+        if (this._axis !== configAxis) newState._blocked = true
       } else {
         const lockedIndex = configAxis === 'x' ? 1 : 0
-        this._intentional[lockedIndex] = false
+        newState._intentional[lockedIndex] = false
       }
     }
 
-    return { ...newState, xy: newState.values }
+    newState.xy = newState.values
+
+    return newState
   }
 }
