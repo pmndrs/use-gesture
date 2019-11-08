@@ -102,17 +102,7 @@ export default class DragRecognizer extends CoordinatesRecognizer {
   }
 
   onDragEnd = (event: UseGestureEvent): void => {
-    if (!this._active) return
-    this.clearTimeout()
-    this._delayedEvent = false
     this._active = false
-
-    if (this.controller.config.pointer) {
-      const { currentTarget, pointerId } = this.state
-      if (currentTarget) (currentTarget as any).releasePointerCapture(pointerId)
-    } else {
-      this.removeWindowListeners()
-    }
 
     const {
       movement: [mx, my],
@@ -128,8 +118,21 @@ export default class DragRecognizer extends CoordinatesRecognizer {
     if (Math.abs(vx) > svx && Math.abs(mx) > sx) swipe[0] = Math.sign(vx)
     if (Math.abs(vy) > svy && Math.abs(my) > sy) swipe[1] = Math.sign(vy)
 
-    this.updateState(this.sharedEndState, { event, click: this._mightBeAClick, swipe, last: true })
+    this.updateState(this.sharedEndState, { event, click: this._mightBeAClick, swipe })
     this.fireGestureHandler(this.config.filterClicks && this._mightBeAClick)
+  }
+
+  clean = (): void => {
+    this.clearTimeout()
+    this._delayedEvent = false
+    this._axis = undefined
+
+    if (this.controller.config.pointer) {
+      const { currentTarget, pointerId } = this.state
+      if (currentTarget) (currentTarget as any).releasePointerCapture(pointerId)
+    } else {
+      this.removeWindowListeners()
+    }
   }
 
   onCancel = (event: UseGestureEvent): void => {

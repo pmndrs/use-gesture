@@ -7,6 +7,8 @@ import { initialState } from '../utils/state'
  * Abstract class for coordinates-based gesture recongizers
  */
 export default abstract class CoordinatesRecognizer extends Recognizer<Coordinates> {
+  protected _axis?: 'x' | 'y'
+
   getKinematics(values: Vector2, event: UseGestureEvent, isStart?: boolean): Partial<GestureState<Coordinates>> {
     let newState
 
@@ -57,26 +59,19 @@ export default abstract class CoordinatesRecognizer extends Recognizer<Coordinat
     if (!intentionalX && absX >= thresholdX) intentionalX = movementX
     if (!intentionalY && absY >= thresholdY) intentionalY = movementY
 
-    const intentionalMovement = intentionalX !== false || intentionalY !== false
-
     this._intentional = [intentionalX, intentionalY]
 
     const { axis: configAxis } = this.config
 
-    if (!!configAxis) {
+    const intentionalMovement = intentionalX !== false || intentionalY !== false
+
+    if (!!configAxis && intentionalMovement) {
       if (!this._axis) {
-        const axis = absX > absY ? 'x' : absX < absY ? 'y' : undefined
-        if (intentionalMovement) {
-          this._axis = axis
-        }
-      }
-      if (this._axis) {
+        this._axis = absX > absY ? 'x' : absX < absY ? 'y' : undefined
+        if (this._axis !== configAxis) this._blocked = true
+      } else {
         const lockedIndex = configAxis === 'x' ? 1 : 0
-        if (this._axis === configAxis) {
-          this._intentional[lockedIndex] = false
-        } else {
-          this._intentional = [false, false]
-        }
+        this._intentional[lockedIndex] = false
       }
     }
 

@@ -11,6 +11,7 @@ import {
   Vector2,
   Handler,
 } from '../types'
+import { noop } from '../utils/utils'
 
 type PayloadFromEvent = {
   values: Vector2
@@ -35,8 +36,8 @@ export default abstract class Recognizer<GestureType extends Coordinates | Dista
   protected _continuousGesture = false
 
   protected _active = false
+  protected _blocked = false
   protected _intentional: [false | number, false | number] = [false, false]
-  protected _axis?: 'x' | 'y'
 
   /**
    * Creates an instance of a gesture recognizer.
@@ -105,29 +106,40 @@ export default abstract class Recognizer<GestureType extends Coordinates | Dista
 
   // fire the gesture handler defined by the user
   protected fireGestureHandler = (forceFlag?: boolean): void => {
+    if (this._blocked) return this.reset()
+
     const [intentionalX, intentionalY] = this._intentional
 
-    if (forceFlag || intentionalX !== false || intentionalY !== false) {
+    if (!forceFlag && intentionalX === false && intentionalY === false) return
+
+    if (this._active) {
       this.state.first = !this.state.active
-      this.state.active = this._active
-
-      const state = { ...this.controller.state.shared, ...this.state }
-
-      const {
-        movement: [movX, movY],
-        offset: [offX, offY],
-      } = state
-
-      state.movement = [intentionalX ? movX : 0, intentionalY ? movY : 0]
-      state.offset = [intentionalX ? offX : offX - movX, intentionalY ? offY : offY - movY]
-
-      const newMemo = this.handler(state)
-      this.state.memo = newMemo !== void 0 ? newMemo : this.state.memo
+      this.state.active = true
+    } else {
+      this.state.active = false
+      this.state.last = true
+      this.reset()
     }
 
-    if (!this._active) {
-      this._intentional = [false, false]
-      this._axis = undefined
-    }
+    const state = { ...this.controller.state.shared, ...this.state }
+
+    const {
+      movement: [movX, movY],
+      offset: [offX, offY],
+    } = state
+
+    state.movement = [intentionalX ? movX : 0, intentionalY ? movY : 0]
+    state.offset = [intentionalX ? offX : offX - movX, intentionalY ? offY : offY - movY]
+
+    const newMemo = this.handler(state)
+    this.state.memo = newMemo !== void 0 ? newMemo : this.state.memo
+  }
+
+  protected clean = noop
+
+  protected reset = (): void => {
+    this._intentional = [false, false]
+    this._blocked = false
+    this.clean()
   }
 }
