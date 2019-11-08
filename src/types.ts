@@ -160,12 +160,13 @@ export interface CommonGestureState {
 }
 
 export interface Coordinates {
+  _isClick?: boolean
+  _delayedEvent?: boolean
+  axis?: 'x' | 'y'
   xy: Vector2
   velocity: number
   vxvy: Vector2
   distance: number
-  _isClick?: boolean
-  _delayedEvent?: boolean
   click?: boolean
   swipe?: Vector2
 }

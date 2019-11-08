@@ -25,8 +25,6 @@ type PayloadFromEvent = {
  */
 export default abstract class Recognizer<GestureType extends Coordinates | DistanceAngle = Coordinates | DistanceAngle> {
   protected stateKey!: StateKey
-  protected sharedStartState?: Partial<SharedGestureState>
-  protected sharedEndState?: Partial<SharedGestureState>
   public handler!: Handler<GestureType>
 
   /**
