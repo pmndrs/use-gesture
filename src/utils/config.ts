@@ -15,6 +15,7 @@ export const defaultConfig: FullUserConfig = {
     delay: false,
     swipeVelocity: 0.5,
     swipeDistance: 100,
+    axis: undefined,
   },
 }
 

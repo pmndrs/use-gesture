@@ -51,10 +51,34 @@ export default abstract class CoordinatesRecognizer extends Recognizer<Coordinat
     const [movementX, movementY] = newState.movement
     const [thresholdX, thresholdY] = this.config.intentionalThreshold!
 
-    if (!intentionalX && Math.abs(movementX) >= thresholdX) intentionalX = movementX
-    if (!intentionalY && Math.abs(movementY) >= thresholdY) intentionalY = movementY
+    const absX = Math.abs(movementX)
+    const absY = Math.abs(movementY)
+
+    if (!intentionalX && absX >= thresholdX) intentionalX = movementX
+    if (!intentionalY && absY >= thresholdY) intentionalY = movementY
+
+    const intentionalMovement = intentionalX !== false || intentionalY !== false
 
     this._intentional = [intentionalX, intentionalY]
+
+    const { axis: configAxis } = this.config
+
+    if (!!configAxis) {
+      if (!this._axis) {
+        const axis = absX > absY ? 'x' : absX < absY ? 'y' : undefined
+        if (intentionalMovement) {
+          this._axis = axis
+        }
+      }
+      if (this._axis) {
+        const lockedIndex = configAxis === 'x' ? 1 : 0
+        if (this._axis === configAxis) {
+          this._intentional[lockedIndex] = false
+        } else {
+          this._intentional = [false, false]
+        }
+      }
+    }
 
     return { ...newState, xy: newState.values }
   }

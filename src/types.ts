@@ -22,6 +22,7 @@ export interface DragConfig {
   swipeVelocity: number | Vector2
   swipeDistance: number | Vector2
   delay: boolean | number
+  axis?: 'x' | 'y'
 }
 
 export type PartialUserConfig = Partial<GenericConfig> & { drag?: Partial<DragConfig> }
@@ -41,6 +42,7 @@ export interface InternalConfig {
     swipeVelocity: Vector2
     swipeDistance: Vector2
     delay: number
+    axis?: 'x' | 'y'
   }
 }
 

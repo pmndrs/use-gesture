@@ -36,6 +36,8 @@ export default abstract class Recognizer<GestureType extends Coordinates | Dista
 
   protected _active = false
   protected _intentional: [false | number, false | number] = [false, false]
+  protected _axis?: 'x' | 'y'
+
   /**
    * Creates an instance of a gesture recognizer.
    * @param gestureKey drag, move, hover, pinch, etc.
@@ -105,23 +107,27 @@ export default abstract class Recognizer<GestureType extends Coordinates | Dista
   protected fireGestureHandler = (forceFlag?: boolean): void => {
     const [intentionalX, intentionalY] = this._intentional
 
-    if (!forceFlag && intentionalX === false && intentionalY === false) return
+    if (forceFlag || intentionalX !== false || intentionalY !== false) {
+      this.state.first = !this.state.active
+      this.state.active = this._active
 
-    this.state.first = !this.state.active
-    this.state.active = this._active
+      const state = { ...this.controller.state.shared, ...this.state }
 
-    const state = { ...this.controller.state.shared, ...this.state }
+      const {
+        movement: [movX, movY],
+        offset: [offX, offY],
+      } = state
 
-    const {
-      movement: [movX, movY],
-      offset: [offX, offY],
-    } = state
+      state.movement = [intentionalX ? movX : 0, intentionalY ? movY : 0]
+      state.offset = [intentionalX ? offX : offX - movX, intentionalY ? offY : offY - movY]
 
-    state.movement = [intentionalX ? movX : 0, intentionalY ? movY : 0]
-    state.offset = [intentionalX ? offX : offX - movX, intentionalY ? offY : offY - movY]
+      const newMemo = this.handler(state)
+      this.state.memo = newMemo !== void 0 ? newMemo : this.state.memo
+    }
 
-    const newMemo = this.handler(state)
-    this.state.memo = newMemo !== void 0 ? newMemo : this.state.memo
-    if (!this._active) this._intentional = [false, false]
+    if (!this._active) {
+      this._intentional = [false, false]
+      this._axis = undefined
+    }
   }
 }
