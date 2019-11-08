@@ -104,7 +104,6 @@ export default abstract class Recognizer<GestureType extends Coordinates | Dista
   // fire the gesture handler defined by the user
   protected fireGestureHandler = (forceFlag?: boolean): void => {
     const [intentionalX, intentionalY] = this._intentional
-    if (!this._active) this._intentional = [false, false]
 
     if (!forceFlag && intentionalX === false && intentionalY === false) return
 
@@ -123,5 +122,6 @@ export default abstract class Recognizer<GestureType extends Coordinates | Dista
 
     const newMemo = this.handler(state)
     this.state.memo = newMemo !== void 0 ? newMemo : this.state.memo
+    if (!this._active) this._intentional = [false, false]
   }
 }
