@@ -128,7 +128,7 @@ export default class DragRecognizer extends CoordinatesRecognizer {
     if (Math.abs(vx) > svx && Math.abs(mx) > sx) swipe[0] = Math.sign(vx)
     if (Math.abs(vy) > svy && Math.abs(my) > sy) swipe[1] = Math.sign(vy)
 
-    this.updateState(this.sharedEndState, { event, click: this._mightBeAClick, swipe, active: false, last: true })
+    this.updateState(this.sharedEndState, { event, click: this._mightBeAClick, swipe, last: true })
     this.fireGestureHandler(this.config.filterClicks && this._mightBeAClick)
   }
 

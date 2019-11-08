@@ -13,8 +13,6 @@ export default abstract class CoordinatesRecognizer extends Recognizer<Coordinat
     if (isStart) {
       newState = {
         ...initialState[this.stateKey],
-        first: true,
-        active: true,
         event,
         values,
         initial: values,
@@ -36,7 +34,6 @@ export default abstract class CoordinatesRecognizer extends Recognizer<Coordinat
 
       newState = {
         event,
-        first: false,
         values,
         movement,
         offset: addV(offset, delta),

@@ -108,6 +108,9 @@ export default abstract class Recognizer<GestureType extends Coordinates | Dista
 
     if (!forceFlag && intentionalX === false && intentionalY === false) return
 
+    this.state.first = !this.state.active
+    this.state.active = this._active
+
     const state = { ...this.controller.state.shared, ...this.state }
 
     const {
