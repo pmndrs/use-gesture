@@ -12,6 +12,7 @@
     "start": "tsdx watch",
     "build": "tsdx build",
     "lint": "tsdx lint",
+    "prepare": "yarn build",
     "test": "tsdx test --env=jsdom",
     "test:watch": "tsdx test --env=jsdom --watchAll"
   },
