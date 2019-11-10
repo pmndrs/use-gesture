@@ -1,6 +1,6 @@
 import { PointerEvent } from 'react'
 import CoordinatesRecognizer from './CoordinatesRecognizer'
-import { getPointerEventData, noop } from '../utils/utils'
+import { getPointerEventData, noop } from '../utils/events'
 import Controller from '../Controller'
 import { UseGestureEvent, Fn, StateKey } from '../types'
 

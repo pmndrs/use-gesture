@@ -1,5 +1,5 @@
 import Recognizer from './Recognizer'
-import { subV, calculateAllKinematics } from '../utils/utils'
+import { subV, calculateAllKinematics } from '../utils/maths'
 import { Coordinates, GestureState, Vector2, UseGestureEvent } from '../types'
 import { initialState } from '../utils/state'
 
