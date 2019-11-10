@@ -11,11 +11,12 @@ export const defaultConfig: FullUserConfig = {
   drag: {
     enabled: true,
     filterClicks: false,
-    intentionalThreshold: undefined,
+    threshold: undefined,
     delay: false,
     swipeVelocity: 0.5,
     swipeDistance: 100,
     axis: undefined,
+    lockDirection: false,
   },
 }
 
@@ -46,29 +47,39 @@ export function getDerivedConfig(config: PartialUserConfig): InternalConfig {
 
   const {
     eventOptions: { passive, capture, pointer },
-    ...rest
+    drag: dragConfig,
+    ...restConfig
   } = mergedConfig
 
+  let { threshold, swipeVelocity, swipeDistance, delay, filterClicks, axis, lockDirection, ...restDrag } = dragConfig
+
+  if (threshold === void 0) {
+    threshold = Math.max(0, filterClicks ? 3 : 0, lockDirection || axis ? 1 : 0)
+  } else {
+    filterClicks = true
+  }
+
+  const thresholdArray = def.array(threshold) as Vector2
+
+  const drag = {
+    ...restDrag,
+    filterClicks: filterClicks || thresholdArray[0] + thresholdArray[1] > 0,
+    axis,
+    lockDirection,
+    threshold: thresholdArray,
+    swipeVelocity: def.array(swipeVelocity) as Vector2,
+    swipeDistance: def.array(swipeDistance) as Vector2,
+    delay: typeof delay === 'number' ? delay : delay ? DEFAULT_DRAG_DELAY : 0,
+  }
+
   const derivedConfig = {
-    ...rest,
+    ...restConfig,
     // if there isn't a domtarget or if event.passive is true, then passiveEvents is true
     eventOptions: { passive: !mergedConfig.domTarget || passive, capture },
     pointer: pointer,
     captureString: capture ? 'Capture' : '',
+    drag,
   }
 
-  const { intentionalThreshold, swipeVelocity, swipeDistance, delay } = derivedConfig.drag
-
-  if (intentionalThreshold === void 0) {
-    derivedConfig.drag.intentionalThreshold = derivedConfig.drag.filterClicks ? [3, 3] : [0, 0]
-  } else {
-    derivedConfig.drag.filterClicks = true
-    derivedConfig.drag.intentionalThreshold = def.array(intentionalThreshold) as Vector2
-  }
-
-  derivedConfig.drag.swipeVelocity = def.array(swipeVelocity) as Vector2
-  derivedConfig.drag.swipeDistance = def.array(swipeDistance) as Vector2
-  derivedConfig.drag.delay = typeof delay === 'number' ? delay : delay ? DEFAULT_DRAG_DELAY : 0
-
-  return <InternalConfig>derivedConfig
+  return derivedConfig
 }

@@ -9,7 +9,7 @@ export type Fn = (...args: any[]) => any
 export type EventOptions = { capture?: boolean; passive?: boolean }
 
 export interface GenericConfig {
-  domTarget?: EventTarget | React.RefObject<EventTarget> | null
+  domTarget?: EventTarget | React.RefObject<EventTarget>
   window?: EventTarget
   eventOptions: EventOptions & { pointer: boolean }
   enabled: boolean
@@ -18,9 +18,10 @@ export interface GenericConfig {
 export interface DragConfig {
   enabled: boolean
   filterClicks: boolean
-  intentionalThreshold?: number | Vector2
+  threshold?: number | Vector2
   swipeVelocity: number | Vector2
   swipeDistance: number | Vector2
+  lockDirection: boolean
   delay: boolean | number
   axis?: 'x' | 'y'
 }
@@ -38,7 +39,8 @@ export interface InternalConfig {
   drag: {
     enabled: boolean
     filterClicks: boolean
-    intentionalThreshold: Vector2
+    lockDirection: boolean
+    threshold: Vector2
     swipeVelocity: Vector2
     swipeDistance: Vector2
     delay: number

@@ -1,5 +1,5 @@
 import Recognizer from './Recognizer'
-import { addV, subV, calculateAllKinematics } from '../utils/utils'
+import { subV, calculateAllKinematics } from '../utils/utils'
 import { Coordinates, GestureState, Vector2, UseGestureEvent } from '../types'
 import { initialState } from '../utils/state'
 
@@ -23,7 +23,7 @@ export default abstract class CoordinatesRecognizer extends Recognizer<Coordinat
       }
     } else {
       // we get the gesture specific state
-      const { values: xy, axis, initial, offset, time, _intentional } = this.state
+      const { values: xy, axis, initial, time, offset, _intentional } = this.state
 
       // offset is the difference between the current and initial value vectors
       const movement = subV(values, initial)
@@ -39,7 +39,7 @@ export default abstract class CoordinatesRecognizer extends Recognizer<Coordinat
         axis,
         values,
         movement,
-        offset: addV(offset, delta),
+        offset,
         delta,
         velocity,
         vxvy: velocities,
@@ -52,7 +52,7 @@ export default abstract class CoordinatesRecognizer extends Recognizer<Coordinat
 
     let [intentionalX, intentionalY] = newState._intentional!
     const [movementX, movementY] = newState.movement!
-    const [thresholdX, thresholdY] = this.config.intentionalThreshold!
+    const [thresholdX, thresholdY] = this.config.threshold!
 
     const absX = Math.abs(movementX)
     const absY = Math.abs(movementY)
@@ -62,19 +62,22 @@ export default abstract class CoordinatesRecognizer extends Recognizer<Coordinat
 
     newState._intentional = [intentionalX, intentionalY]
 
-    const { axis: configAxis } = this.config
-
     const intentionalMovement = intentionalX !== false || intentionalY !== false
 
-    if (!!configAxis && intentionalMovement) {
-      if (!newState.axis) {
-        newState.axis = absX > absY ? 'x' : absX < absY ? 'y' : undefined
-        if (newState.axis !== configAxis) newState._blocked = true
-      } else {
-        const lockedIndex = configAxis === 'x' ? 1 : 0
-        newState._intentional[lockedIndex] = false
+    if (intentionalMovement) {
+      newState.axis = newState.axis || (absX > absY ? 'x' : absX < absY ? 'y' : undefined)
+      const { axis: configAxis, lockDirection } = this.config
+      if (!!newState.axis && (!!configAxis || lockDirection)) {
+        if (!!configAxis && newState.axis !== configAxis) newState._blocked = true
+        else {
+          const lockedIndex = newState.axis === 'x' ? 1 : 0
+          newState._intentional[lockedIndex] = false
+        }
       }
     }
+
+    if (newState._intentional[0] !== false) newState.offset![0] = this.state.offset[0] + newState.delta![0]
+    if (newState._intentional[1] !== false) newState.offset![1] = this.state.offset[1] + newState.delta![1]
 
     newState.xy = newState.values
 

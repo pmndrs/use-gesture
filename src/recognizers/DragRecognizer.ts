@@ -99,6 +99,7 @@ export default class DragRecognizer extends CoordinatesRecognizer {
     const {
       movement: [mx, my],
       vxvy: [vx, vy],
+      _intentional: [ix, iy],
     } = this.state
 
     const {
@@ -107,8 +108,8 @@ export default class DragRecognizer extends CoordinatesRecognizer {
     } = this.config
 
     const swipe: [number, number] = [0, 0]
-    if (Math.abs(vx) > svx && Math.abs(mx) > sx) swipe[0] = Math.sign(vx)
-    if (Math.abs(vy) > svy && Math.abs(my) > sy) swipe[1] = Math.sign(vy)
+    if (ix !== false && Math.abs(vx) > svx && Math.abs(mx) > sx) swipe[0] = Math.sign(vx)
+    if (iy !== false && Math.abs(vy) > svy && Math.abs(my) > sy) swipe[1] = Math.sign(vy)
 
     this.updateState(this.sharedEndState, { event, click: this.state._isClick, swipe })
     this.fireGestureHandler(this.config.filterClicks && this.state._isClick)

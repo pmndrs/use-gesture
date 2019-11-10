@@ -101,7 +101,11 @@ export default abstract class Recognizer<GestureType extends Coordinates | Dista
 
   // fire the gesture handler defined by the user
   protected fireGestureHandler = (forceFlag?: boolean): void => {
-    if (this.state._blocked) return
+    if (this.state._blocked) {
+      console.log(this.state._active, this.state.active)
+      this.clean()
+      return
+    }
 
     const [intentionalX, intentionalY] = this.state._intentional
 
@@ -113,17 +117,16 @@ export default abstract class Recognizer<GestureType extends Coordinates | Dista
     } else {
       this.state.active = false
       this.state.last = true
+      this.clean()
     }
 
     const state = { ...this.controller.state.shared, ...this.state }
 
     const {
       movement: [movX, movY],
-      offset: [offX, offY],
     } = state
 
     state.movement = [intentionalX ? movX : 0, intentionalY ? movY : 0]
-    state.offset = [intentionalX ? offX : offX - movX, intentionalY ? offY : offY - movY]
 
     const newMemo = this.handler(state)
     this.state.memo = newMemo !== void 0 ? newMemo : this.state.memo
