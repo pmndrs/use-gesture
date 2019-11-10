@@ -102,7 +102,7 @@ export default abstract class Recognizer<GestureType extends Coordinates | Dista
   // fire the gesture handler defined by the user
   protected fireGestureHandler = (forceFlag?: boolean): void => {
     if (this.state._blocked) {
-      console.log(this.state._active, this.state.active)
+      this.state._active = false
       this.clean()
       return
     }
