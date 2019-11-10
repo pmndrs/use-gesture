@@ -56,22 +56,6 @@ export default class Controller {
   }
 
   /**
-   * Commodity function to let gesture recognizer update global state
-   * @param sharedState shared partial state object
-   * @param gestureState partial gesture specific state object
-   * @param stateKey the state key ('drag', 'move'...)
-   */
-  // public updateState = (sharedState: Partial<SharedGestureState> | null, gestureState: Partial<GestureState>, stateKey: StateKey): void => {
-  //   const newGestureState = { ...this.state[stateKey], ...gestureState }
-
-  //   this.state = {
-  //     ...this.state,
-  //     shared: { ...this.state.shared, ...sharedState },
-  //     [stateKey]: newGestureState,
-  //   }
-  // }
-
-  /**
    * Commodity function to let recognizers simply add listeners to config.window
    * @param stateKey
    * @param listeners
