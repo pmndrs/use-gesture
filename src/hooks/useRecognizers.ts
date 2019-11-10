@@ -39,7 +39,7 @@ export default function useRecognizers<Config extends PartialUserConfig>(
   // when the user component unmounts, we run our gesture controller clean function
   React.useEffect(() => controller.current!.clean, [])
 
-  const bind = (...args: any[]) => {
+  const [bind] = React.useState(() => (...args: any[]) => {
     controller.current!.resetBindings()
     createRecognizersArray.forEach(createRecognizer => {
       const recognizer = createRecognizer(controller.current!, args)
@@ -47,7 +47,7 @@ export default function useRecognizers<Config extends PartialUserConfig>(
     })
 
     return controller.current!.getBind() as GetBinderTypeFromDomTarget<Config>
-  }
+  })
 
   // we return the bind function of our controller, which returns an binding object or
   // a cleaning function depending on whether config.domTarget is set
