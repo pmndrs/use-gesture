@@ -1,7 +1,7 @@
-import { StateKey, StateObject, Fn, ReactEventHandlerKey, ReactEventHandlers, InternalConfig } from './types'
-
+import { StateKey, StateObject, Fn, ReactEventHandlerKey, ReactEventHandlers, InternalFullConfig } from './types'
 import { initialState } from './utils/state'
-import { addListeners, removeListeners, chainFns } from './utils/utils'
+import { addListeners, removeListeners } from './utils/event'
+import { chainFns } from './utils/utils'
 
 type GestureTimeouts = Partial<{ [stateKey in StateKey]: number }>
 type WindowListeners = Partial<{ [stateKey in StateKey]: [string, Fn][] }>
@@ -20,7 +20,7 @@ const clone = <T>(arr: T): T =>
  * @template BinderType the type the bind function should return
  */
 export default class Controller {
-  public config!: InternalConfig
+  public config!: InternalFullConfig
   public state: StateObject = clone(initialState) // state for all gestures
   public timeouts: GestureTimeouts = {} // keeping track of timeouts for debounced gestures (such as move, scroll, wheel)
   private bindings: Bindings = {} // an object holding the handlers associated to the gestures

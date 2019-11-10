@@ -1,8 +1,9 @@
 import { PointerEvent } from 'react'
 import CoordinatesRecognizer from './CoordinatesRecognizer'
-import { getPointerEventData, noop } from '../utils/events'
 import Controller from '../Controller'
 import { UseGestureEvent, Fn, StateKey } from '../types'
+import { noop } from '../utils/utils'
+import { getPointerEventData } from '../utils/event'
 
 const CLICK_THRESHOLD = 3
 
@@ -42,7 +43,7 @@ export default class DragRecognizer extends CoordinatesRecognizer {
       this.addWindowListeners(dragListeners)
     }
 
-    const { delay } = this.controller.config.drag
+    const { delay } = this.config
 
     if (delay > 0) {
       this.state._delayedEvent = true

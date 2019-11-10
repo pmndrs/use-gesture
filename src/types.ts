@@ -27,26 +27,28 @@ export interface DragConfig {
 }
 
 export type PartialUserConfig = Partial<GenericConfig> & { drag?: Partial<DragConfig> }
-export type FullUserConfig = GenericConfig & { drag: DragConfig }
 
-export interface InternalConfig {
+export interface InternalGenericConfig {
   domTarget?: EventTarget | React.RefObject<EventTarget>
   eventOptions: EventOptions
   window?: EventTarget
   pointer: boolean
   captureString: string
   enabled: boolean
-  drag: {
-    enabled: boolean
-    filterClicks: boolean
-    lockDirection: boolean
-    threshold: Vector2
-    swipeVelocity: Vector2
-    swipeDistance: Vector2
-    delay: number
-    axis?: 'x' | 'y'
-  }
 }
+
+export interface InternalDragConfig {
+  enabled: boolean
+  filterClicks: boolean
+  lockDirection: boolean
+  threshold: Vector2
+  swipeVelocity: Vector2
+  swipeDistance: Vector2
+  delay: number
+  axis?: 'x' | 'y'
+}
+
+export type InternalFullConfig = InternalGenericConfig & { drag?: InternalDragConfig }
 
 export type WebKitGestureEvent = React.PointerEvent & { scale: number; rotation: number }
 export type UseGestureEvent<

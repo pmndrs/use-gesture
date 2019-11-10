@@ -1,8 +1,7 @@
 import React from 'react'
 import Controller from '../Controller'
 import Recognizer from 'recognizers/Recognizer'
-import { PartialUserConfig, Handler, Coordinates, DistanceAngle, Fn, ReactEventHandlers } from '../types'
-import { getDerivedConfig } from '../utils/config'
+import { InternalFullConfig, Handler, Coordinates, DistanceAngle, Fn, ReactEventHandlers } from '../types'
 
 type CreateRecognizer = (controller: Controller, args: any[]) => Recognizer<Coordinates> | Recognizer<DistanceAngle>
 
@@ -15,11 +14,11 @@ export const createRecognizer = <T extends Coordinates | DistanceAngle>(
   return recognizer
 }
 
-type GetBinderTypeFromDomTarget<T extends PartialUserConfig> = T['domTarget'] extends object ? Fn : ReactEventHandlers
+type GetBinderTypeFromDomTarget<T extends InternalFullConfig> = T['domTarget'] extends object ? Fn : ReactEventHandlers
 
-export default function useRecognizers<Config extends PartialUserConfig>(
+export default function useRecognizers<Config extends InternalFullConfig>(
   createRecognizers: CreateRecognizer | CreateRecognizer[],
-  config: PartialUserConfig
+  config: InternalFullConfig
 ): (...args: any[]) => GetBinderTypeFromDomTarget<Config> {
   // the gesture controller will keep track of all gesture states
   const controller = React.useRef<Controller>()
@@ -30,11 +29,7 @@ export default function useRecognizers<Config extends PartialUserConfig>(
     controller.current = new Controller()
   }
 
-  React.useMemo(() => {
-    // every time the config changes, we let the gesture controller compute
-    // them so that the gesture handlers functions are aware of the changes
-    controller.current!.config = getDerivedConfig(config)
-  }, [config])
+  controller.current!.config = config
 
   // when the user component unmounts, we run our gesture controller clean function
   React.useEffect(() => controller.current!.clean, [])

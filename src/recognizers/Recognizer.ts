@@ -43,7 +43,7 @@ export default abstract class Recognizer<GestureType extends Coordinates | Dista
 
   // get the gesture config
   protected get config() {
-    return this.controller.config[this.gestureKey]
+    return this.controller.config[this.gestureKey]!
   }
 
   // is the gesture enabled
