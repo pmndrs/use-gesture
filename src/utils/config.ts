@@ -32,13 +32,13 @@ export const getGenericConfig = (config: Partial<GenericConfig>): InternalGeneri
     ...restDefault,
     ...restConfig,
     window: window || defaultWindow,
-    eventOptions: { passive: !config.domTarget || passive, capture },
+    eventOptions: { passive: !config.domTarget || !!passive, capture: !!capture },
     captureString: capture ? 'Capture' : '',
-    pointer: pointer,
+    pointer: !!pointer,
   }
 }
 
-export const getDragConfig = (dragConfig: Partial<DragConfig>): InternalDragConfig => {
+export const getDragConfig = (dragConfig?: Partial<DragConfig>): InternalDragConfig => {
   const config = { ...defaultDragConfig, ...dragConfig }
   let { threshold, swipeVelocity, swipeDistance, delay, filterClicks, axis, lockDirection, ...restDrag } = config
 
