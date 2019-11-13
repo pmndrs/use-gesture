@@ -1,12 +1,12 @@
 import React from 'react'
 import useRecognizers, { createRecognizer } from './useRecognizers'
 import DragRecognizer from '../recognizers/DragRecognizer'
-import { GenericConfig, DragConfig, InternalFullConfig, GestureHandlers, HandlerKey } from '../types'
+import { GenericConfig, DragConfig, InternalFullConfig, HandlerKey, GestureHandlersPartial } from '../types'
 import { getGenericConfig, getDragConfig } from '../utils/config'
 
 type UseGestureUserConfig = Partial<GenericConfig & { drag: DragConfig }>
 
-export function useGesture(handlers: GestureHandlers, config: UseGestureUserConfig = {}) {
+export function useGesture(handlers: GestureHandlersPartial, config: UseGestureUserConfig = {}) {
   const actions = React.useRef<Set<HandlerKey>>()
 
   if (!actions.current) {
@@ -20,7 +20,7 @@ export function useGesture(handlers: GestureHandlers, config: UseGestureUserConf
   const recognizerCreators = []
 
   if (actions.current.has('onDrag')) {
-    recognizerCreators.push(createRecognizer(handlers.onDrag, DragRecognizer))
+    recognizerCreators.push(createRecognizer(handlers.onDrag!, DragRecognizer))
     mergedConfig.drag = getDragConfig(drag)
   }
 

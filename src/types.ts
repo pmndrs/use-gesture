@@ -8,8 +8,10 @@ export type Fn = (...args: any[]) => any
 
 export type EventOptions = { capture: boolean; passive: boolean }
 
+type DomTarget = EventTarget | React.RefObject<EventTarget>
+
 export interface GenericConfig {
-  domTarget?: EventTarget | React.RefObject<EventTarget>
+  domTarget?: DomTarget
   window?: EventTarget
   eventOptions: Partial<EventOptions & { pointer: boolean }>
   enabled: boolean
@@ -29,7 +31,7 @@ export interface DragConfig {
 export type PartialUserConfig = Partial<GenericConfig> & { drag?: Partial<DragConfig> }
 
 export interface InternalGenericConfig {
-  domTarget?: EventTarget | React.RefObject<EventTarget>
+  domTarget?: DomTarget
   eventOptions: EventOptions
   window?: EventTarget
   pointer: boolean
@@ -210,6 +212,8 @@ export type GestureHandlers = {
   onPinchStart: Handler<DistanceAngle>
   onPinchEnd: Handler<DistanceAngle>
 }
+
+export type HookReturnType<T extends { domTarget?: DomTarget }> = T['domTarget'] extends object ? Fn : ReactEventHandlers
 
 /* Handlers should also accept DomAttributes to prevent overrides */
 export type GestureHandlersPartial = AtLeastOneOf<GestureHandlers> &

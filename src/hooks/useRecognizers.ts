@@ -1,7 +1,7 @@
 import React from 'react'
 import Controller from '../Controller'
 import Recognizer from 'recognizers/Recognizer'
-import { InternalFullConfig, Handler, Coordinates, DistanceAngle, Fn, ReactEventHandlers } from '../types'
+import { InternalFullConfig, Handler, Coordinates, DistanceAngle, HookReturnType, GenericConfig } from '../types'
 
 type CreateRecognizer = (controller: Controller, args: any[]) => Recognizer<Coordinates> | Recognizer<DistanceAngle>
 
@@ -14,12 +14,10 @@ export const createRecognizer = <T extends Coordinates | DistanceAngle>(
   return recognizer
 }
 
-type GetBinderTypeFromDomTarget<T extends InternalFullConfig> = T['domTarget'] extends object ? Fn : ReactEventHandlers
-
-export default function useRecognizers<Config extends InternalFullConfig>(
+export default function useRecognizers<Config extends Partial<GenericConfig>>(
   createRecognizers: CreateRecognizer | CreateRecognizer[],
   config: InternalFullConfig
-): (...args: any[]) => GetBinderTypeFromDomTarget<Config> {
+): (...args: any[]) => HookReturnType<Config> {
   // the gesture controller will keep track of all gesture states
   const controller = React.useRef<Controller>()
   const createRecognizersArray = Array.isArray(createRecognizers) ? createRecognizers : [createRecognizers]
@@ -41,7 +39,7 @@ export default function useRecognizers<Config extends InternalFullConfig>(
       recognizer.addBindings()
     })
 
-    return controller.current!.getBind() as GetBinderTypeFromDomTarget<Config>
+    return controller.current!.getBind() as HookReturnType<Config>
   })
 
   // we return the bind function of our controller, which returns an binding object or

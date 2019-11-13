@@ -1,14 +1,16 @@
 import React from 'react'
 import useRecognizers, { createRecognizer } from './useRecognizers'
 import DragRecognizer from '../recognizers/DragRecognizer'
-import { Handler, Coordinates, GenericConfig, DragConfig, InternalFullConfig } from '../types'
+import { Handler, Coordinates, GenericConfig, DragConfig, InternalFullConfig, HookReturnType } from '../types'
 import { getGenericConfig, getDragConfig } from '../utils/config'
 
 type UseDragUserConfig = Partial<GenericConfig & DragConfig>
 
-export function useDrag(handler: Handler<Coordinates>, config: UseDragUserConfig = {}) {
-  const { domTarget, eventOptions, window, ...drag } = config
-
+export function useDrag<Config extends UseDragUserConfig>(
+  handler: Handler<Coordinates>,
+  config: Config | {} = {}
+): (...args: any[]) => HookReturnType<Config> {
+  const { domTarget, eventOptions, window, ...drag } = <UseDragUserConfig>config
   // every time the config changes, we update the controller config (might be optimized)
   const mergedConfig: InternalFullConfig = React.useMemo(
     () => ({
@@ -18,5 +20,5 @@ export function useDrag(handler: Handler<Coordinates>, config: UseDragUserConfig
     [config]
   )
 
-  return useRecognizers(createRecognizer(handler, DragRecognizer), mergedConfig)
+  return useRecognizers<Config>(createRecognizer(handler, DragRecognizer), mergedConfig)
 }
