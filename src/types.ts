@@ -125,13 +125,9 @@ export type ReactEventHandlerKey = keyof ReactEventHandlers
 export type GestureKey = 'drag'
 export type StateKey = Exclude<GestureKey, 'hover'>
 
-export interface SharedGestureState {
-  hovering: boolean
-  scrolling: boolean
-  wheeling: boolean
-  dragging: boolean
-  moving: boolean
-  pinching: boolean
+export type IngKey = 'hovering' | 'scrolling' | 'wheeling' | 'dragging' | 'moving' | 'pinching'
+
+export type SharedGestureState = { [ingKey in IngKey]: boolean } & {
   touches: number
   down: boolean
   buttons: number

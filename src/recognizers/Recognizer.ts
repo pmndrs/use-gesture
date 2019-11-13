@@ -10,6 +10,7 @@ import {
   UseGestureEvent,
   Vector2,
   Handler,
+  IngKey,
 } from '../types'
 import { noop } from '../utils/utils'
 
@@ -25,6 +26,7 @@ type PayloadFromEvent = {
  */
 export default abstract class Recognizer<GestureType extends Coordinates | DistanceAngle = Coordinates | DistanceAngle> {
   protected stateKey!: StateKey
+  protected ingKey!: IngKey
   public handler!: Handler<GestureType>
 
   /**
@@ -119,6 +121,8 @@ export default abstract class Recognizer<GestureType extends Coordinates | Dista
       this.state.last = true
       this.clean()
     }
+
+    this.controller.state.shared[this.ingKey] = this.state.active
 
     const state = { ...this.controller.state.shared, ...this.state }
 
