@@ -10,6 +10,7 @@ const CLICK_THRESHOLD = 3
 export default class DragRecognizer extends CoordinatesRecognizer {
   stateKey = 'drag' as StateKey
   ingKey = 'dragging' as IngKey
+
   protected sharedEndState = { dragging: false, down: false, buttons: 0, touches: 0 }
 
   constructor(controller: Controller, args: any[]) {
@@ -90,7 +91,7 @@ export default class DragRecognizer extends CoordinatesRecognizer {
 
     if (this.state._isClick && kinematics.distance! >= CLICK_THRESHOLD) this.state._isClick = false
 
-    this.updateState({ ...sharedPayload }, { ...kinematics, cancel: () => this.onCancel(event) })
+    this.updateState(sharedPayload, { ...kinematics, cancel: () => this.onCancel(event) })
 
     this.fireGestureHandler()
   }
@@ -129,7 +130,8 @@ export default class DragRecognizer extends CoordinatesRecognizer {
   }
 
   onCancel = (event: UseGestureEvent): void => {
-    this.updateState(null, { canceled: true, cancel: noop })
+    this.state.canceled = true
+    this.state.cancel = noop
     requestAnimationFrame(() => this.onDragEnd(event))
   }
 

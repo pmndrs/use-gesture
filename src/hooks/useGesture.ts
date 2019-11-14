@@ -1,12 +1,25 @@
 import React from 'react'
-import useRecognizers, { createRecognizer } from './useRecognizers'
+import useRecognizers from './useRecognizers'
 import DragRecognizer from '../recognizers/DragRecognizer'
-import { GenericConfig, DragConfig, InternalFullConfig, HandlerKey, GestureHandlersPartial } from '../types'
+import {
+  GenericConfig,
+  DragConfig,
+  InternalFullConfig,
+  HandlerKey,
+  Fn,
+  UserHandlersPartial,
+  InternalHandlers,
+  RecognizerClass,
+  Coordinates,
+  DistanceAngle,
+  UserHandlers,
+} from '../types'
 import { getGenericConfig, getDragConfig } from '../utils/config'
+import { chainFns } from '../utils/utils'
 
-type UseGestureUserConfig = Partial<GenericConfig & { drag: DragConfig }>
+type UseGestureUserConfig = Partial<GenericConfig> & { drag?: Partial<DragConfig> }
 
-export function useGesture(handlers: GestureHandlersPartial, config: UseGestureUserConfig = {}) {
+export function useGesture(handlers: UserHandlersPartial, config: UseGestureUserConfig = {}) {
   const actions = React.useRef<Set<HandlerKey>>()
 
   if (!actions.current) {
@@ -17,12 +30,25 @@ export function useGesture(handlers: GestureHandlersPartial, config: UseGestureU
 
   const mergedConfig: InternalFullConfig = getGenericConfig(restConfig)
 
-  const recognizerCreators = []
+  const classes: (RecognizerClass<Coordinates> | RecognizerClass<DistanceAngle>)[] = []
+  const internalHandlers: Partial<InternalHandlers> = {}
 
   if (actions.current.has('onDrag')) {
-    recognizerCreators.push(createRecognizer(handlers.onDrag!, DragRecognizer))
+    classes.push(DragRecognizer)
+    internalHandlers.drag = fillGestureActions(handlers, 'onDrag')
     mergedConfig.drag = getDragConfig(drag)
   }
 
-  return useRecognizers(recognizerCreators, mergedConfig)
+  return useRecognizers(internalHandlers, classes, mergedConfig)
+}
+
+const fillGestureActions = (handlers: UserHandlersPartial, handlerKey: HandlerKey) => {
+  const gestureActions: Fn[] = []
+  const startKey = (handlerKey + 'Start') as keyof UserHandlers
+  const endKey = (handlerKey + 'End') as keyof UserHandlers
+  if (handlers[startKey]) gestureActions.push((state: any) => state.first && handlers[startKey]!(state))
+  if (handlers[handlerKey]) gestureActions.push(handlers[handlerKey]!)
+  if (handlers[endKey]) gestureActions.push((state: any) => state.last && handlers[endKey]!(state))
+
+  return chainFns(...gestureActions)
 }

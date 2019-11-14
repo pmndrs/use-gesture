@@ -1,4 +1,6 @@
 import React from 'react'
+import Controller from './Controller'
+import Recognizer from './recognizers/Recognizer'
 
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
 export type AtLeastOneOf<T, U = { [K in keyof T]: Pick<T, K> }> = Partial<T> & U[keyof U]
@@ -190,7 +192,7 @@ export type StateObject = { shared: SharedGestureState } & {
 export type Handler<T extends Coordinates | DistanceAngle> = (state: FullGestureState<T>) => any | void
 export type HandlerKey = 'onDrag' | 'onPinch' | 'onMove' | 'onHover' | 'onScroll' | 'onWheel'
 
-export type GestureHandlers = {
+export type UserHandlers = {
   onDrag: Handler<Coordinates>
   onDragStart: Handler<Coordinates>
   onDragEnd: Handler<Coordinates>
@@ -209,8 +211,19 @@ export type GestureHandlers = {
   onPinchEnd: Handler<DistanceAngle>
 }
 
-export type HookReturnType<T extends { domTarget?: DomTarget }> = T['domTarget'] extends object ? Fn : ReactEventHandlers
+export type InternalHandlers = {
+  drag: Handler<Coordinates>
+  move: Handler<Coordinates>
+  hover: Handler<Coordinates>
+  scroll: Handler<Coordinates>
+  wheel: Handler<Coordinates>
+  pinch: Handler<DistanceAngle>
+}
+
+export type RecognizerClass<T extends Coordinates | DistanceAngle> = { new (controller: Controller, args: any[]): Recognizer<T> }
 
 /* Handlers should also accept DomAttributes to prevent overrides */
-export type GestureHandlersPartial = AtLeastOneOf<GestureHandlers> &
+export type UserHandlersPartial = AtLeastOneOf<UserHandlers> &
   Partial<Omit<React.DOMAttributes<Element>, 'onDrag' | 'onScroll' | 'onWheel'>>
+
+export type HookReturnType<T extends { domTarget?: DomTarget }> = T['domTarget'] extends object ? Fn : ReactEventHandlers

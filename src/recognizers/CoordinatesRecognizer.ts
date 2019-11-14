@@ -17,6 +17,7 @@ export default abstract class CoordinatesRecognizer extends Recognizer<Coordinat
         event,
         values,
         initial: values,
+        previous: this.state.values,
         offset: this.state.offset,
         time: event.timeStamp,
         args: this.args,

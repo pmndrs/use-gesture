@@ -1,4 +1,4 @@
-import { StateKey, StateObject, Fn, ReactEventHandlerKey, ReactEventHandlers, InternalFullConfig } from './types'
+import { StateKey, StateObject, Fn, ReactEventHandlerKey, ReactEventHandlers, InternalFullConfig, InternalHandlers } from './types'
 import { initialState } from './utils/state'
 import { addListeners, removeListeners } from './utils/event'
 import { chainFns } from './utils/utils'
@@ -21,6 +21,7 @@ const clone = <T>(arr: T): T =>
  */
 export default class Controller {
   public config!: InternalFullConfig
+  public handlers!: Partial<InternalHandlers>
   public state: StateObject = clone(initialState) // state for all gestures
   public timeouts: GestureTimeouts = {} // keeping track of timeouts for debounced gestures (such as move, scroll, wheel)
   private bindings: Bindings = {} // an object holding the handlers associated to the gestures

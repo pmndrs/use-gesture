@@ -1,5 +1,5 @@
 import React from 'react'
-import useRecognizers, { createRecognizer } from './useRecognizers'
+import useRecognizers from './useRecognizers'
 import DragRecognizer from '../recognizers/DragRecognizer'
 import { Handler, Coordinates, GenericConfig, DragConfig, InternalFullConfig, HookReturnType } from '../types'
 import { getGenericConfig, getDragConfig } from '../utils/config'
@@ -20,5 +20,5 @@ export function useDrag<Config extends UseDragUserConfig>(
     [config]
   )
 
-  return useRecognizers<Config>(createRecognizer(handler, DragRecognizer), mergedConfig)
+  return useRecognizers<Config>({ drag: handler }, [DragRecognizer], mergedConfig)
 }

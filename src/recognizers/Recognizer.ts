@@ -9,8 +9,8 @@ import {
   Fn,
   UseGestureEvent,
   Vector2,
-  Handler,
   IngKey,
+  Handler,
 } from '../types'
 import { noop } from '../utils/utils'
 
@@ -24,10 +24,9 @@ type PayloadFromEvent = {
  * Recognizer abstract class
  * @template GestureType whether the Recognizer should deal with coordinates or distance / angle
  */
-export default abstract class Recognizer<GestureType extends Coordinates | DistanceAngle = Coordinates | DistanceAngle> {
+export default abstract class Recognizer<GestureType extends Coordinates | DistanceAngle> {
   protected stateKey!: StateKey
   protected ingKey!: IngKey
-  public handler!: Handler<GestureType>
 
   /**
    * Continuous gestures are scroll or wheel, where the next gesture continues the previous one.
@@ -47,7 +46,6 @@ export default abstract class Recognizer<GestureType extends Coordinates | Dista
   protected get config() {
     return this.controller.config[this.gestureKey]!
   }
-
   // is the gesture enabled
   protected get enabled(): boolean {
     return this.controller.config.enabled && this.config.enabled
@@ -55,6 +53,10 @@ export default abstract class Recognizer<GestureType extends Coordinates | Dista
   // get the controller state for a given gesture
   protected get state() {
     return this.controller.state[this.stateKey] as GestureState<GestureType>
+  }
+  // get the gesture handler
+  protected get handler() {
+    return this.controller.handlers[this.gestureKey]! as Handler<GestureType>
   }
 
   // convenience method to set a timeout for a given gesture
