@@ -20,11 +20,7 @@ import { chainFns } from '../utils/utils'
 type UseGestureUserConfig = Partial<GenericConfig> & { drag?: Partial<DragConfig> }
 
 export function useGesture(handlers: UserHandlersPartial, config: UseGestureUserConfig = {}) {
-  const actions = React.useRef<Set<HandlerKey>>()
-
-  if (!actions.current) {
-    actions.current = new Set(Object.keys(handlers).map(k => <HandlerKey>k.replace(/End|Start/, '')))
-  }
+  const [actions] = React.useState(() => new Set(Object.keys(handlers).map(k => <HandlerKey>k.replace(/End|Start/, ''))))
 
   const { drag, ...restConfig } = config
 
@@ -33,7 +29,7 @@ export function useGesture(handlers: UserHandlersPartial, config: UseGestureUser
   const classes: (RecognizerClass<Coordinates> | RecognizerClass<DistanceAngle>)[] = []
   const internalHandlers: Partial<InternalHandlers> = {}
 
-  if (actions.current.has('onDrag')) {
+  if (actions.has('onDrag')) {
     classes.push(DragRecognizer)
     internalHandlers.drag = fillGestureActions(handlers, 'onDrag')
     mergedConfig.drag = getDragConfig(drag)
