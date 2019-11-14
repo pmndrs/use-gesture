@@ -8,7 +8,7 @@ import { InteractiveType } from './components/types'
 // TODO - test drag with touch events
 // TODO - test with pointerEvents
 
-// afterAll(cleanup)
+afterAll(cleanup)
 
 const later = (fn: () => any, delay: number) => new Promise(resolve => setTimeout(() => resolve(fn()), delay))
 
@@ -125,7 +125,6 @@ describe.each([['attached to component', Interactive, false], ['attached to node
     test(`quickly clicking shouldn't trigger a drag`, async () => {
       fireEvent.click(element, { clientX: 100, clientY: 200 })
       await later(() => expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('false'), 200)
-      cleanup()
     })
   }
 )
