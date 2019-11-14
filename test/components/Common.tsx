@@ -1,6 +1,6 @@
 import React, { ReactChild } from 'react'
 import { Fn } from '../../src/types'
-import { GestureHandlersPartial } from '../../src/types'
+import { UserHandlersPartial } from '../../src/types'
 
 export const createHandlers = ({
   gestures,
@@ -14,9 +14,9 @@ export const createHandlers = ({
   canceled?: boolean
   set: Fn
   setStartEnd: React.Dispatch<React.SetStateAction<[number, number]>>
-}): GestureHandlersPartial => {
+}): UserHandlersPartial => {
   return gestures.reduce(
-    (acc: GestureHandlersPartial, g) => {
+    (acc: UserHandlersPartial, g) => {
       const gesture = {
         [`on${g}`]: ({
           event,
@@ -50,7 +50,7 @@ export const createHandlers = ({
         ...gesture,
       }
     },
-    {} as GestureHandlersPartial
+    {} as UserHandlersPartial
   )
 }
 
