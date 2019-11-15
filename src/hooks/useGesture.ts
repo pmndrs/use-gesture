@@ -6,7 +6,6 @@ import {
   DragConfig,
   InternalFullConfig,
   HandlerKey,
-  Fn,
   UserHandlersPartial,
   InternalHandlers,
   RecognizerClass,
@@ -15,7 +14,6 @@ import {
   UserHandlers,
 } from '../types'
 import { getGenericConfig, getDragConfig } from '../utils/config'
-import { chainFns } from '../utils/utils'
 
 type UseGestureUserConfig = Partial<GenericConfig> & { drag?: Partial<DragConfig> }
 
@@ -31,20 +29,22 @@ export function useGesture(handlers: UserHandlersPartial, config: UseGestureUser
 
   if (actions.has('onDrag')) {
     classes.push(DragRecognizer)
-    internalHandlers.drag = fillGestureActions(handlers, 'onDrag')
+    internalHandlers.drag = includeStartEndHandlers(handlers, 'onDrag')
     mergedConfig.drag = getDragConfig(drag)
   }
 
   return useRecognizers(internalHandlers, classes, mergedConfig)
 }
 
-const fillGestureActions = (handlers: UserHandlersPartial, handlerKey: HandlerKey) => {
-  const gestureActions: Fn[] = []
+const includeStartEndHandlers = (handlers: UserHandlersPartial, handlerKey: HandlerKey) => {
   const startKey = (handlerKey + 'Start') as keyof UserHandlers
   const endKey = (handlerKey + 'End') as keyof UserHandlers
-  if (handlers[startKey]) gestureActions.push((state: any) => state.first && handlers[startKey]!(state))
-  if (handlers[handlerKey]) gestureActions.push(handlers[handlerKey]!)
-  if (handlers[endKey]) gestureActions.push((state: any) => state.last && handlers[endKey]!(state))
-
-  return chainFns(...gestureActions)
+  const fn = (state: any) => {
+    let memo: any
+    if (state.first && startKey in handlers) memo = handlers[startKey]!(state)
+    if (handlerKey in handlers) memo = handlers[handlerKey]!(state)
+    if (state.last && endKey in handlers) memo = handlers[endKey]!(state)
+    return memo
+  }
+  return fn
 }
