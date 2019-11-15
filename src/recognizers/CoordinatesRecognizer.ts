@@ -59,18 +59,18 @@ export default abstract class CoordinatesRecognizer extends Recognizer<Coordinat
     const absX = Math.abs(movementX)
     const absY = Math.abs(movementY)
 
-    if (!intentionalX && absX >= thresholdX) {
-      intentionalX = true
-      newState.delta![0] = movementX - Math.sign(movementX) * thresholdX
+    if (intentionalX === false && absX >= thresholdX) {
+      intentionalX = Math.sign(movementX) * thresholdX
+      newState.delta![0] = movementX - intentionalX
     }
-    if (!intentionalY && absY >= thresholdY) {
-      intentionalY = true
-      newState.delta![1] = movementY - Math.sign(movementY) * thresholdY
+    if (intentionalY === false && absY >= thresholdY) {
+      intentionalY = Math.sign(movementY) * thresholdY
+      newState.delta![1] = movementY - intentionalY
     }
 
     newState._intentional = [intentionalX, intentionalY]
 
-    const intentionalMovement = intentionalX || intentionalY
+    const intentionalMovement = intentionalX !== false || intentionalY !== false
 
     if (intentionalMovement) {
       newState.axis = newState.axis || (absX > absY ? 'x' : absX < absY ? 'y' : undefined)
@@ -89,8 +89,8 @@ export default abstract class CoordinatesRecognizer extends Recognizer<Coordinat
     }
 
     if (!newState._blocked) {
-      if (newState._intentional[0]) newState.offset![0] += newState.delta![0]
-      if (newState._intentional[1]) newState.offset![1] += newState.delta![1]
+      if (newState._intentional[0] !== false) newState.offset![0] += newState.delta![0]
+      if (newState._intentional[1] !== false) newState.offset![1] += newState.delta![1]
     }
 
     newState.xy = newState.values

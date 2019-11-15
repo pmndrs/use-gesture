@@ -139,10 +139,12 @@ export type SharedGestureState = { [ingKey in IngKey]: boolean } & {
   ctrlKey: boolean
 }
 
+type Intentional = false | number
+
 export interface CommonGestureState {
   _active: boolean
   _blocked: boolean
-  _intentional: [boolean, boolean]
+  _intentional: [Intentional, Intentional]
   event?: UseGestureEvent
   currentTarget?: EventTarget | null
   pointerId?: number | null

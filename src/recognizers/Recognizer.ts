@@ -132,8 +132,7 @@ export default abstract class Recognizer<GestureType extends Coordinates | Dista
       movement: [movX, movY],
     } = state
 
-    const [thresholdX, thresholdY] = this.config.threshold
-    state.movement = [intentionalX ? movX - thresholdX : 0, intentionalY ? movY - thresholdY : 0]
+    state.movement = [intentionalX !== false ? movX - intentionalX : 0, intentionalY !== false ? movY - intentionalY : 0]
 
     const newMemo = this.handler(state)
     this.state.memo = newMemo !== void 0 ? newMemo : this.state.memo
