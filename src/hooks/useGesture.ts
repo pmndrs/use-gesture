@@ -40,10 +40,10 @@ const includeStartEndHandlers = (handlers: UserHandlersPartial, handlerKey: Hand
   const startKey = (handlerKey + 'Start') as keyof UserHandlers
   const endKey = (handlerKey + 'End') as keyof UserHandlers
   const fn = (state: any) => {
-    let memo: any
-    if (state.first && startKey in handlers) memo = handlers[startKey]!(state)
+    let memo: any = undefined
+    if (state.first && startKey in handlers) handlers[startKey]!(state)
     if (handlerKey in handlers) memo = handlers[handlerKey]!(state)
-    if (state.last && endKey in handlers) memo = handlers[endKey]!(state)
+    if (state.last && endKey in handlers) handlers[endKey]!(state)
     return memo
   }
   return fn
