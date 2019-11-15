@@ -119,6 +119,7 @@ export default class DragRecognizer extends CoordinatesRecognizer {
 
   clean = (): void => {
     this.clearTimeout()
+    this.state._delayedEvent = false
 
     if (this.controller.config.pointer) {
       const { currentTarget, pointerId } = this.state
