@@ -28,11 +28,13 @@ describe.each([['attached to component', Interactive, false], ['attached to node
       const event = createEvent.mouseDown(element, { clientX: 10, clientY: 20, buttons: 1 })
       fireEvent(element, event)
       delta_t = event.timeStamp
+
       expect(getByTestId(`${prefix}drag-active`)).toHaveTextContent('true')
       expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('true')
       expect(getByTestId(`${prefix}drag-first`)).toHaveTextContent('true')
       expect(getByTestId(`${prefix}drag-xy`)).toHaveTextContent('10,20')
       expect(getByTestId(`${prefix}drag-previous`)).toHaveTextContent('0,0')
+      expect(getByTestId(`${prefix}drag-offset`)).toHaveTextContent('0,0')
       expect(getByTestId(`${prefix}drag-delta`)).toHaveTextContent('0,0')
       expect(getByTestId(`${prefix}drag-down`)).toHaveTextContent('true')
       expect(getByTestId(`${prefix}drag-initial`)).toHaveTextContent('10,20')
@@ -41,7 +43,6 @@ describe.each([['attached to component', Interactive, false], ['attached to node
       expect(getByTestId(`${prefix}drag-start`)).toHaveTextContent(/^fired$/)
       expect(getByTestId(`${prefix}drag-end`)).toHaveTextContent(/^not fired$/)
     })
-
     test('testing memo value is passed', () => {
       expect(getByTestId(`${prefix}drag-memo`)).toHaveTextContent('memo')
     })
