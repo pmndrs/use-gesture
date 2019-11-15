@@ -18,6 +18,15 @@
     "test:watch": "tsdx test --env=jsdom --watchAll"
   },
   "jest": {
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "Move",
+      "Hover",
+      "Api",
+      "Scroll",
+      "Wheel",
+      "Pinch"
+    ],
     "setupFiles": [
       "@testing-library/react/dont-cleanup-after-each"
     ]
