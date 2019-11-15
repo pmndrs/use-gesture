@@ -12,7 +12,6 @@ export default function useRecognizers<Config extends Partial<GenericConfig>>(
 
   if (!controller.current) {
     // we initialize the gesture controller once
-
     controller.current = new Controller()
   }
 

@@ -2,6 +2,7 @@ import Recognizer from './Recognizer'
 import { subV, calculateAllKinematics } from '../utils/math'
 import { Coordinates, GestureState, Vector2, UseGestureEvent } from '../types'
 import { initialState } from '../utils/state'
+import { clone } from '../utils/utils'
 
 /**
  * Abstract class for coordinates-based gesture recongizers
@@ -12,7 +13,7 @@ export default abstract class CoordinatesRecognizer extends Recognizer<Coordinat
 
     if (isStart) {
       newState = {
-        ...initialState[this.stateKey],
+        ...clone(initialState[this.stateKey]),
         _active: true,
         event,
         values,

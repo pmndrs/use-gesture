@@ -17,6 +17,7 @@ export interface GenericConfig {
   window?: EventTarget
   eventOptions: Partial<EventOptions & { pointer: boolean }>
   enabled: boolean
+  label?: string
 }
 
 export interface DragConfig {
@@ -52,7 +53,7 @@ export interface InternalDragConfig {
   axis?: 'x' | 'y'
 }
 
-export type InternalFullConfig = InternalGenericConfig & { drag?: InternalDragConfig }
+export type InternalFullConfig = InternalGenericConfig & { drag?: InternalDragConfig; label?: string }
 
 export type WebKitGestureEvent = React.PointerEvent & { scale: number; rotation: number }
 export type UseGestureEvent<

@@ -79,14 +79,13 @@ export default class DragRecognizer extends CoordinatesRecognizer {
       return
     }
 
-    const { down } = getPointerEventData(event)
+    const { values, sharedPayload } = this.getPayloadFromEvent(event)
 
-    if (!down) {
+    if (!sharedPayload.down) {
       this.onDragEnd(event)
       return
     }
 
-    const { values, sharedPayload } = this.getPayloadFromEvent(event)
     const kinematics = this.getKinematics(values, event)
 
     if (this.state._isClick && kinematics.distance! >= CLICK_THRESHOLD) this.state._isClick = false

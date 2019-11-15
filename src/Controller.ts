@@ -1,17 +1,11 @@
 import { StateKey, StateObject, Fn, ReactEventHandlerKey, ReactEventHandlers, InternalFullConfig, InternalHandlers } from './types'
 import { initialState } from './utils/state'
 import { addListeners, removeListeners } from './utils/event'
-import { chainFns } from './utils/utils'
+import { chainFns, clone } from './utils/utils'
 
 type GestureTimeouts = Partial<{ [stateKey in StateKey]: number }>
 type WindowListeners = Partial<{ [stateKey in StateKey]: [string, Fn][] }>
 type Bindings = Partial<{ [eventName in ReactEventHandlerKey]: Fn[] }>
-
-const clone = <T>(arr: T): T =>
-  Object.entries(arr).reduce((acc, [name, value]) => {
-    // @ts-ignore
-    return { ...acc, [name]: { ...arr[name], ...value } }
-  }, arr)
 
 /**
  * Gesture controller will create gesture recognizers (which handle the gesture logic)
