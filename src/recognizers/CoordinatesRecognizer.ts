@@ -75,11 +75,15 @@ export default abstract class CoordinatesRecognizer extends Recognizer<Coordinat
     if (intentionalMovement) {
       newState.axis = newState.axis || (absX > absY ? 'x' : absX < absY ? 'y' : undefined)
       const { axis: configAxis, lockDirection } = this.config
-      if (!!newState.axis && (!!configAxis || lockDirection)) {
-        if (!!configAxis && newState.axis !== configAxis) newState._blocked = true
-        else {
-          const lockedIndex = newState.axis === 'x' ? 1 : 0
-          newState._intentional[lockedIndex] = false
+      if (!!configAxis || lockDirection) {
+        if (!!newState.axis) {
+          if (!!configAxis && newState.axis !== configAxis) newState._blocked = true
+          else {
+            const lockedIndex = newState.axis === 'x' ? 1 : 0
+            newState._intentional[lockedIndex] = false
+          }
+        } else {
+          newState._intentional = [false, false]
         }
       }
     }
