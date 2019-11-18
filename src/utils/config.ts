@@ -11,15 +11,15 @@ export const defaultConfig: GenericConfig = {
   enabled: true,
 }
 
-export const defaultDragConfig = {
+export const defaultDragConfig: DragConfig = {
   enabled: true,
   filterClicks: false,
   threshold: undefined,
-  delay: false,
   swipeVelocity: 0.5,
   swipeDistance: 100,
   axis: undefined,
   lockDirection: false,
+  delay: false,
 }
 
 export const getGenericConfig = (config: Partial<GenericConfig>): InternalGenericConfig => {

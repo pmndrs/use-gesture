@@ -8,7 +8,10 @@ export type AtLeastOneOf<T, U = { [K in keyof T]: Pick<T, K> }> = Partial<T> & U
 export type Vector2 = [number, number]
 export type Fn = (...args: any[]) => any
 
-export type EventOptions = { capture: boolean; passive: boolean }
+export interface EventOptions {
+  capture: boolean
+  passive: boolean
+}
 
 type DomTarget = EventTarget | React.RefObject<EventTarget>
 
