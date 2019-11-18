@@ -18,8 +18,8 @@ export default class DragRecognizer extends CoordinatesRecognizer {
   }
 
   getPayloadFromEvent(event: UseGestureEvent) {
-    const { xy, ...sharedPayload } = getPointerEventData(event)
-    return { values: xy, sharedPayload }
+    const { values, ...sharedPayload } = getPointerEventData(event)
+    return { values, sharedPayload }
   }
 
   onDragStart = (event: UseGestureEvent): void => {
@@ -62,7 +62,7 @@ export default class DragRecognizer extends CoordinatesRecognizer {
 
     const kinematics = this.getKinematics(values, event, true)
 
-    this.updateState(sharedPayload, { ...kinematics, click: false, currentTarget, pointerId, cancel: () => this.onCancel(event) })
+    this.updateState(sharedPayload, { ...kinematics, currentTarget, pointerId, cancel: () => this.onCancel(event) })
 
     this.fireGestureHandler()
   }

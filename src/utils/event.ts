@@ -66,7 +66,7 @@ export function getWheelEventData(event: UseGestureEvent<React.WheelEvent>): Whe
   return { xy: [deltaX, deltaY], ...getModifierKeys(event) }
 }
 
-type PointerEventData = Pick<FullGestureState<Coordinates>, 'xy' | 'touches' | 'down' | 'buttons'> & ModifierKeys
+type PointerEventData = Pick<FullGestureState<Coordinates>, 'values' | 'touches' | 'down' | 'buttons'> & ModifierKeys
 /**
  * Gets pointer event data
  * @param event
@@ -80,7 +80,7 @@ export function getPointerEventData(event: React.MouseEvent | React.TouchEvent |
   const touches = (touchEvents && touchEvents.length) || 0
   const down = touches > 0 || buttons > 0
   return {
-    xy: [clientX, clientY],
+    values: [clientX, clientY],
     touches,
     down,
     buttons,
@@ -88,7 +88,7 @@ export function getPointerEventData(event: React.MouseEvent | React.TouchEvent |
   }
 }
 
-type TwoTouchesEventData = Pick<FullGestureState<DistanceAngle>, 'da' | 'touches' | 'down' | 'origin'> & ModifierKeys
+type TwoTouchesEventData = Pick<FullGestureState<DistanceAngle>, 'values' | 'touches' | 'down' | 'origin'> & ModifierKeys
 
 /**
  * Gets two touches event data
@@ -100,8 +100,8 @@ export function getTwoTouchesEventData(event: React.TouchEvent): TwoTouchesEvent
   const dx = touches[1].clientX - touches[0].clientX
   const dy = touches[1].clientY - touches[0].clientY
 
-  const da: Vector2 = [Math.hypot(dx, dy), -(Math.atan2(dx, dy) * 180) / Math.PI]
+  const values: Vector2 = [Math.hypot(dx, dy), -(Math.atan2(dx, dy) * 180) / Math.PI]
   const origin: Vector2 = [(touches[1].clientX + touches[0].clientX) / 2, (touches[1].clientY + touches[0].clientY) / 2]
 
-  return { da, origin, touches: 2, down: touches.length > 0, ...getModifierKeys(event) }
+  return { values, origin, touches: 2, down: touches.length > 0, ...getModifierKeys(event) }
 }
