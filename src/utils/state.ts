@@ -6,7 +6,6 @@ export const initialCommon: CommonGestureState = {
   _active: false,
   _blocked: false,
   _intentional: [false, false],
-  _movement: [0, 0],
   event: undefined,
   // currentTarget: undefined,
   // pointerId: undefined,

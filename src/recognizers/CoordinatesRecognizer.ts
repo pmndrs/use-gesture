@@ -1,5 +1,5 @@
 import Recognizer from './Recognizer'
-import { subV, calculateAllKinematics, addV } from '../utils/math'
+import { calculateAllKinematics } from '../utils/math'
 import { Vector2, UseGestureEvent, ValueKey, CoordinatesKey, PartialGestureState, FalseOrNumber } from '../types'
 
 /**
@@ -8,7 +8,7 @@ import { Vector2, UseGestureEvent, ValueKey, CoordinatesKey, PartialGestureState
 export default abstract class CoordinatesRecognizer<T extends CoordinatesKey> extends Recognizer<T> {
   valueKey = 'xy' as ValueKey<T>
 
-  protected getExtraIntentionality(
+  protected checkIntentionality(
     _intentional: [FalseOrNumber, FalseOrNumber],
     _movement: Vector2,
     state: PartialGestureState<T>
@@ -40,25 +40,21 @@ export default abstract class CoordinatesRecognizer<T extends CoordinatesKey> ex
   }
 
   getKinematics(values: Vector2, event: UseGestureEvent): PartialGestureState<T> {
-    const { offset, movement: prevMovement, time } = this.state
+    const { time } = this.state
 
-    const detection = this.getIntentionality(values, this.state)
-    const { _blocked, movement } = detection
+    const movementDetection = this.getMovement(values, this.state)
+    const { _blocked, delta, movement } = movementDetection
 
-    if (_blocked) return { _blocked } as PartialGestureState<T>
-
-    // delta is the difference between the current and previous value vectors
-    const delta = subV(movement!, prevMovement)
+    if (_blocked) return movementDetection
 
     const delta_t = event.timeStamp - time!
-    const kinematics = calculateAllKinematics(movement!, delta, delta_t)
+    const kinematics = calculateAllKinematics(movement!, delta!, delta_t)
 
     return {
       values,
-      offset: addV(offset, delta),
       delta,
       vxvy: kinematics.velocities,
-      ...detection,
+      ...movementDetection,
       ...kinematics,
     } as PartialGestureState<T>
   }

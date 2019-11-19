@@ -73,7 +73,7 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
 
     this.updateGestureState({
       ...startState,
-      ...this.getIntentionality(values!, startState),
+      ...this.getMovement(values!, startState),
       cancel: () => this.onCancel(event),
     })
 
@@ -108,7 +108,6 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
     if (_isClick && kinematics.distance! >= CLICK_DISTANCE_THRESHOLD) _isClick = false
 
     this.updateGestureState({
-      ...this.getIntentionality(values!),
       ...this.getGenericPayload(event),
       ...kinematics,
       _isClick,

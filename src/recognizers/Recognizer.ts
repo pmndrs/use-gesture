@@ -16,7 +16,7 @@ import {
 } from '../types'
 import { noop, clone } from '../utils/utils'
 import { initialState } from '../utils/state'
-import { subV, getIntentional } from '../utils/math'
+import { subV, getIntentional, addV } from '../utils/math'
 
 /**
  * Recognizer abstract class
@@ -89,31 +89,43 @@ export default abstract class Recognizer<T extends GestureKey> {
   // should return the bindings for a given gesture
   public abstract addBindings(): void
 
-  protected getIntentionality(values: Vector2, state: PartialGestureState<T> = this.state): PartialGestureState<T> {
+  protected getMovement(values: Vector2, state: GestureState<T> = this.state): PartialGestureState<T> {
     const { threshold } = this.config
     const [t0, t1] = threshold
-    const { _intentional: intentional, initial } = state
-    let [i0, i1] = intentional!
-    const [_m0, _m1] = subV(values, initial!)
+    const { _intentional: intentional, initial, offset: prevOffset, movement: prevMovement } = state
+    let [i0, i1] = intentional
+    const [_m0, _m1] = subV(values, initial)
 
     if (i0 === false) i0 = getIntentional(_m0, t0)
     if (i1 === false) i1 = getIntentional(_m1, t1)
 
-    const extraIntentionality = this.getExtraIntentionality([i0, i1], [_m0, _m1], state)
+    const intentionalityCheck = this.checkIntentionality([i0, i1], [_m0, _m1], state)
 
-    const { _intentional } = extraIntentionality
+    const { _intentional, _blocked } = intentionalityCheck
     const [_i0, _i1] = _intentional!
 
+    if (_blocked) return intentionalityCheck
+
     const movement = [_i0 !== false ? _m0 - _i0 : 0, _i1 !== false ? _m1 - _i1 : 0]
-    return { ...extraIntentionality, movement }
+    // delta is the difference between the current and previous value vectors
+    const delta = subV(movement, prevMovement)
+
+    const offset = addV(prevOffset, delta)
+
+    return {
+      ...intentionalityCheck,
+      movement,
+      offset,
+      delta,
+    } as PartialGestureState<T>
   }
 
-  protected getExtraIntentionality(
+  protected checkIntentionality(
     _intentional: [FalseOrNumber, FalseOrNumber],
     _movement: Vector2,
     _state: PartialGestureState<T>
   ): PartialGestureState<T> {
-    return { _intentional } as PartialGestureState<T>
+    return { _intentional, _blocked: false } as PartialGestureState<T>
   }
 
   protected getGenericPayload(event: UseGestureEvent) {
