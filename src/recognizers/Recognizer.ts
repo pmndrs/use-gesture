@@ -6,15 +6,17 @@ import {
   Fn,
   UseGestureEvent,
   IngKey,
-  StatePayload,
   ValueKey,
   InternalFullConfig,
   Handler,
   GestureState,
   PartialGestureState,
+  Vector2,
+  FalseOrNumber,
 } from '../types'
 import { noop, clone } from '../utils/utils'
 import { initialState } from '../utils/state'
+import { subV, getIntentional } from '../utils/math'
 
 /**
  * Recognizer abstract class
@@ -76,71 +78,57 @@ export default abstract class Recognizer<T extends GestureKey> {
     this.controller.removeWindowListeners(this.stateKey)
   }
 
-  protected abstract getPayloadFromEvent(event: UseGestureEvent): StatePayload<T>
-
   /**
    * Utility function to get kinematics of the gesture
    * @values values we want to calculate the kinematics from
    * @event
    * @returns set of values including movement, velocity, velocities, distance and direction
    */
-  protected abstract getKinematics(values: [number, number | undefined], event: UseGestureEvent): PartialGestureState<T>
+  protected abstract getKinematics(values: Vector2, event: UseGestureEvent): PartialGestureState<T>
 
   // should return the bindings for a given gesture
   public abstract addBindings(): void
 
-  protected abstract startGesture(event: UseGestureEvent): StatePayload<T>
+  protected getIntentionality(values: Vector2, state: PartialGestureState<T> = this.state): PartialGestureState<T> {
+    const { threshold } = this.config
+    const [t0, t1] = threshold
+    const { _intentional: intentional, initial } = state
+    let [i0, i1] = intentional!
+    const [_m0, _m1] = subV(values, initial!)
 
-  protected onStart = (event: UseGestureEvent) => {
-    const { sharedPayload, gesturePayload } = this.startGesture(event)
-    const { values } = gesturePayload
+    if (i0 === false) i0 = getIntentional(_m0, t0)
+    if (i1 === false) i1 = getIntentional(_m1, t1)
 
-    const generic = this.getGenericStatePayload(event)
+    const extraIntentionality = this.getExtraIntentionality([i0, i1], [_m0, _m1], state)
 
-    this.updateSharedState(sharedPayload)
-    const init = {
-      ...clone(initialState[this.stateKey]),
-      ...gesturePayload,
-      _active: true,
-      event,
-      values,
-      initial: values,
-      offset: this.state.offset,
-      ...generic,
-    }
+    const { _intentional } = extraIntentionality
+    const [_i0, _i1] = _intentional!
 
-    this.updateGestureState({
-      ...init,
-      ...this.getIntentionality(init.values, init),
-    })
-
-    this.fireGestureHandler()
+    const movement = [_i0 !== false ? _m0 - _i0 : 0, _i1 !== false ? _m1 - _i1 : 0]
+    return { ...extraIntentionality, movement }
   }
 
-  protected getGenericStatePayload(event: UseGestureEvent) {
+  protected getExtraIntentionality(
+    _intentional: [FalseOrNumber, FalseOrNumber],
+    _movement: Vector2,
+    _state: PartialGestureState<T>
+  ): PartialGestureState<T> {
+    return { _intentional } as PartialGestureState<T>
+  }
+
+  protected getGenericPayload(event: UseGestureEvent) {
     return { event, time: event.timeStamp, args: this.args, previous: this.state.values }
   }
 
-  protected abstract getIntentionality(...args: any): PartialGestureState<T>
+  protected getStartGestureState = (values: Vector2) => {
+    return { ...clone(initialState[this.stateKey]), _active: true, values, initial: values, offset: this.state.offset }
+  }
 
   protected updateSharedState(sharedState: Partial<SharedGestureState> | null) {
     Object.assign(this.controller.state.shared, sharedState)
   }
 
   protected updateGestureState(gestureState: PartialGestureState<T> | null) {
-    Object.assign(this.state, gestureState)
-  }
-
-  /**
-   * convenience method to update the controller state for a given gesture
-   * @param sharedState shared partial state object
-   * @param gestureState partial state object for the gesture handled by the recognizer
-   */
-  protected updateState = (
-    sharedState: Partial<SharedGestureState> | null = null,
-    gestureState: PartialGestureState<T> | null = null
-  ): void => {
-    Object.assign(this.controller.state.shared, sharedState)
     Object.assign(this.state, gestureState)
   }
 
@@ -156,25 +144,22 @@ export default abstract class Recognizer<T extends GestureKey> {
 
     if (!forceFlag && intentionalX === false && intentionalY === false) return
 
-    if (this.state._active) {
-      this.state.first = !this.state.active
-      this.state.active = true
-    } else {
-      this.state.active = false
-      this.state.last = true
-      this.clean()
+    const { _active, active, values } = this.state
+
+    this.state.active = _active
+    this.state.first = _active && !active
+    this.state.last = !_active
+
+    const state = {
+      ...this.controller.state.shared,
+      ...this.state,
+      [this.ingKey]: _active,
+      [this.valueKey]: values,
     }
-
-    this.controller.state.shared[this.ingKey] = this.state.active
-
-    const state = { ...this.controller.state.shared, ...this.state }
-
-    // TODO possibly check this
-    // @ts-ignore
-    state[this.valueKey] = state.values
 
     const newMemo = this.handler(state)
     this.state.memo = newMemo !== void 0 ? newMemo : this.state.memo
+    if (!_active) this.clean()
   }
 
   protected clean = noop

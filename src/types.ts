@@ -5,7 +5,8 @@ import Recognizer from './recognizers/Recognizer'
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
 export type AtLeastOneOf<T, U = { [K in keyof T]: Pick<T, K> }> = Partial<T> & U[keyof U]
 
-export type Vector2 = [number, number]
+export type Tuple<T> = [T,T]
+export type Vector2 = Tuple<number>
 export type Fn = (...args: any[]) => any
 
 export interface EventOptions {
@@ -26,10 +27,12 @@ export interface DragConfig {
   enabled: boolean
   filterClicks: boolean
   threshold?: number | Vector2
-
   swipeVelocity: number | Vector2
   swipeDistance: number | Vector2
   lockDirection: boolean
+  xBounds: Tuple<FalseOrNumber> 
+  yBounds: Tuple<FalseOrNumber>
+  rubberband: boolean | number | Vector2
   delay: boolean | number
   axis?: 'x' | 'y'
 }
@@ -48,6 +51,9 @@ export interface InternalGenericConfig {
 export interface InternalCommonConfig {
   enabled: boolean
   threshold: Vector2
+  bounds1: Tuple<FalseOrNumber> 
+  bounds2: Tuple<FalseOrNumber>
+  rubberband: Vector2
 }
 
 export interface InternalDragConfig extends InternalCommonConfig {
@@ -151,12 +157,12 @@ export type SharedGestureState = { [ingKey in IngKey]: boolean } & {
   ctrlKey: boolean
 }
 
-export type Intentional = false | number
+export type FalseOrNumber = false | number
 
 export interface CommonGestureState {
   _active: boolean
   _blocked: boolean
-  _intentional: [Intentional, Intentional]
+  _intentional: [FalseOrNumber, FalseOrNumber]
   _movement: Vector2
   event?: UseGestureEvent
   currentTarget?: EventTarget | null
@@ -176,11 +182,6 @@ export interface CommonGestureState {
   canceled: boolean
   memo?: any
   args?: any
-}
-
-export interface StatePayload<T extends GestureKey> {
-  sharedPayload: Partial<SharedGestureState>
-  gesturePayload: Partial<State[StateKey<T>]>
 }
 
 export interface Coordinates {

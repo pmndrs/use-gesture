@@ -78,3 +78,20 @@ export function getIntentional(movement: number, threshold: number): number | fa
   const abs = Math.abs(movement)
   return abs >= threshold ? Math.sign(movement) * threshold : false
 }
+
+// Based on @aholachek ;)
+// https://twitter.com/chpwn/status/285540192096497664
+// iOS constant = 0.55
+export const rubberBand = (distance: number, dimension: number, constant = 0.15) => {
+  return (distance * dimension * constant) / (dimension + constant * distance)
+}
+
+export const rubberBandIfOutOfBounds = (min: number, max: number, delta: number, constant?: number) => {
+  if (delta < min) {
+    return -rubberBand(min - delta, max - min, constant) + min
+  }
+  if (delta > max) {
+    return rubberBand(delta - max, max - min, constant) + max
+  }
+  return delta
+}

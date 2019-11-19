@@ -1,6 +1,6 @@
 import Recognizer from './Recognizer'
-import { subV, calculateAllKinematics, getIntentional, addV } from '../utils/math'
-import { Vector2, UseGestureEvent, ValueKey, CoordinatesKey, PartialGestureState } from '../types'
+import { subV, calculateAllKinematics, addV } from '../utils/math'
+import { Vector2, UseGestureEvent, ValueKey, CoordinatesKey, PartialGestureState, FalseOrNumber } from '../types'
 
 /**
  * Abstract class for coordinates-based gesture recongizers
@@ -8,23 +8,20 @@ import { Vector2, UseGestureEvent, ValueKey, CoordinatesKey, PartialGestureState
 export default abstract class CoordinatesRecognizer<T extends CoordinatesKey> extends Recognizer<T> {
   valueKey = 'xy' as ValueKey<T>
 
-  protected getIntentionality(values: Vector2, state: PartialGestureState<T>): PartialGestureState<T> {
-    let { _intentional, initial, axis } = state
-    const _movement = subV(values, initial!)
-
-    const { axis: configAxis, lockDirection, threshold } = this.config
-    const [tx, ty] = threshold
-
-    if (_intentional![0] === false) _intentional![0] = getIntentional(_movement![0], tx)
-    if (_intentional![1] === false) _intentional![1] = getIntentional(_movement![1], ty)
-
-    const absX = Math.abs(_movement![0])
-    const absY = Math.abs(_movement![1])
-
-    const intentionalMovement = _intentional![0] !== false || _intentional![1] !== false
+  protected getExtraIntentionality(
+    _intentional: [FalseOrNumber, FalseOrNumber],
+    _movement: Vector2,
+    state: PartialGestureState<T>
+  ): PartialGestureState<T> {
+    let [_ix, _iy] = _intentional
+    const intentionalMovement = _ix !== false || _iy !== false
+    let { axis } = state
     let _blocked = false
-
     if (intentionalMovement) {
+      const [absX, absY] = _movement.map(Math.abs)
+
+      const { axis: configAxis, lockDirection } = this.config
+
       axis = axis || (absX > absY ? 'x' : absX < absY ? 'y' : undefined)
       if (!!configAxis || lockDirection) {
         if (!!axis) {
@@ -39,12 +36,7 @@ export default abstract class CoordinatesRecognizer<T extends CoordinatesKey> ex
       }
     }
 
-    const movement = [
-      _intentional![0] !== false ? _movement![0] - _intentional![0] : 0,
-      _intentional![1] !== false ? _movement![1] - _intentional![1] : 0,
-    ]
-
-    return { _movement, movement, _intentional, _blocked, axis } as PartialGestureState<T>
+    return { _intentional, _blocked, axis } as PartialGestureState<T>
   }
 
   getKinematics(values: Vector2, event: UseGestureEvent): PartialGestureState<T> {
@@ -68,7 +60,6 @@ export default abstract class CoordinatesRecognizer<T extends CoordinatesKey> ex
       vxvy: kinematics.velocities,
       ...detection,
       ...kinematics,
-      ...this.getGenericStatePayload(event),
     } as PartialGestureState<T>
   }
 }

@@ -3,7 +3,7 @@ import CoordinatesRecognizer from './CoordinatesRecognizer'
 import Controller from '../Controller'
 import { UseGestureEvent, Fn, StateKey, IngKey } from '../types'
 import { noop } from '../utils/utils'
-import { getPointerEventData } from '../utils/event'
+import { getPointerEventData, getGenericEventData } from '../utils/event'
 
 const CLICK_DISTANCE_THRESHOLD = 3
 
@@ -11,57 +11,73 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
   stateKey = 'drag' as StateKey<'drag'>
   ingKey = 'dragging' as IngKey
 
-  protected sharedEndState = { dragging: false, down: false, buttons: 0, touches: 0 }
-
   constructor(controller: Controller, args: any[]) {
     super('drag', controller, args)
   }
 
-  getPayloadFromEvent(event: UseGestureEvent) {
-    return getPointerEventData(event)
-  }
-
-  shouldStart(event: UseGestureEvent) {
-    const {
-      sharedPayload: { touches },
-    } = getPointerEventData(event)
+  private dragShouldStart = (event: UseGestureEvent) => {
+    const { touches } = getGenericEventData(event)
     return this.enabled && touches! < 2
   }
 
+  private setPointers = (event: UseGestureEvent) => {
+    const { currentTarget, pointerId } = event as PointerEvent
+    console.log(currentTarget)
+    // @ts-ignore
+    currentTarget.setPointerCapture(pointerId)
+    this.updateGestureState({ currentTarget, pointerId })
+  }
+
+  private removePointers = () => {
+    const { currentTarget, pointerId } = this.state
+    // @ts-ignore
+    currentTarget.releasePointerCapture(pointerId)
+  }
+
+  private setListeners = () => {
+    this.removeWindowListeners()
+    const dragListeners: [string, Fn][] = [
+      ['mousemove', this.onDragChange],
+      ['touchmove', this.onDragChange],
+      ['mouseup', this.onDragEnd],
+      ['touchend', this.onDragEnd],
+      ['touchcancel', this.onDragEnd],
+    ]
+    this.addWindowListeners(dragListeners)
+  }
+
   onDragStart = (event: UseGestureEvent): void => {
-    if (!this.shouldStart(event)) return
+    if (!this.dragShouldStart(event)) return
     // if pointers events
-    if (this.controller.config.pointer) {
-      const { currentTarget, pointerId } = event as PointerEvent
-      currentTarget && (currentTarget as any).setPointerCapture(pointerId)
-      this.state.currentTarget = currentTarget
-      this.state.pointerId = pointerId
-    } else {
-      this.removeWindowListeners()
-      const dragListeners: [string, Fn][] = [
-        ['mousemove', this.onDragChange],
-        ['touchmove', this.onDragChange],
-        ['mouseup', this.onDragEnd],
-        ['touchend', this.onDragEnd],
-        ['touchcancel', this.onDragEnd],
-      ]
-      this.addWindowListeners(dragListeners)
-    }
+    if (this.controller.config.pointer) this.setPointers(event)
+    else this.setListeners()
 
-    const { delay } = this.config
-
-    if (delay > 0) {
+    if (this.config.delay > 0) {
       this.state._delayedEvent = true
       if (typeof event.persist === 'function') event.persist()
-      this.setTimeout(() => this.onStart(event), delay)
+      this.setTimeout(() => this.startDrag(event), this.config.delay)
     } else {
-      this.onStart(event)
+      this.startDrag(event)
     }
   }
 
-  startGesture(event: UseGestureEvent) {
-    const { sharedPayload, gesturePayload } = this.getPayloadFromEvent(event)
-    return { sharedPayload, gesturePayload: { ...gesturePayload, cancel: () => this.onCancel(event) } }
+  startDrag(event: UseGestureEvent) {
+    const { values } = getPointerEventData(event)
+
+    this.updateSharedState(getGenericEventData(event))
+
+    const startState = {
+      ...this.getStartGestureState(values!),
+      ...this.getGenericPayload(event),
+    }
+
+    this.updateGestureState({
+      ...startState,
+      ...this.getIntentionality(values!, startState),
+      cancel: () => this.onCancel(event),
+    })
+
+    this.fireGestureHandler()
   }
 
   onDragChange = (event: UseGestureEvent): void => {
@@ -71,30 +87,41 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
     if (!this.state._active) {
       if (this.state._delayedEvent) {
         this.clearTimeout()
-        this.onStart(event)
+        this.startDrag(event)
       }
       return
     }
 
-    const { gesturePayload, sharedPayload } = this.getPayloadFromEvent(event)
+    const genericEventData = getGenericEventData(event)
 
-    if (!sharedPayload.down) {
+    if (!genericEventData.down) {
       this.onDragEnd(event)
       return
     }
 
-    const kinematics = this.getKinematics(gesturePayload!.values!, event)
+    this.updateSharedState(genericEventData)
+
+    const { values } = getPointerEventData(event)
+    const kinematics = this.getKinematics(values!, event)
 
     let { _isClick } = this.state
     if (_isClick && kinematics.distance! >= CLICK_DISTANCE_THRESHOLD) _isClick = false
 
-    this.updateState(sharedPayload, { ...kinematics, _isClick, cancel: () => this.onCancel(event) })
+    this.updateGestureState({
+      ...this.getIntentionality(values!),
+      ...this.getGenericPayload(event),
+      ...kinematics,
+      _isClick,
+      cancel: () => this.onCancel(event),
+    })
 
     this.fireGestureHandler()
   }
 
   onDragEnd = (event: UseGestureEvent): void => {
     this.state._active = false
+
+    this.updateSharedState({ dragging: false, down: false, buttons: 0, touches: 0 })
 
     const {
       movement: [mx, my],
@@ -111,7 +138,7 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
     if (ix !== false && Math.abs(vx) > svx && Math.abs(mx) > sx) swipe[0] = Math.sign(vx)
     if (iy !== false && Math.abs(vy) > svy && Math.abs(my) > sy) swipe[1] = Math.sign(vy)
 
-    this.updateState(this.sharedEndState, { event, click: this.state._isClick, swipe })
+    this.updateGestureState({ event, click: this.state._isClick, swipe })
     this.fireGestureHandler(this.config.filterClicks && this.state._isClick)
   }
 
@@ -119,17 +146,12 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
     this.clearTimeout()
     this.state._delayedEvent = false
 
-    if (this.controller.config.pointer) {
-      const { currentTarget, pointerId } = this.state
-      if (currentTarget) (currentTarget as any).releasePointerCapture(pointerId)
-    } else {
-      this.removeWindowListeners()
-    }
+    if (this.controller.config.pointer) this.removePointers()
+    else this.removeWindowListeners()
   }
 
   onCancel = (event: UseGestureEvent): void => {
-    this.state.canceled = true
-    this.state.cancel = noop
+    this.updateGestureState({ canceled: true, cancel: noop })
     requestAnimationFrame(() => this.onDragEnd(event))
   }
 

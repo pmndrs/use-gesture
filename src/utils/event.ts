@@ -1,4 +1,4 @@
-import { Fn, EventOptions, UseGestureEvent, StatePayload, CoordinatesKey } from '../types'
+import { Fn, EventOptions, UseGestureEvent, CoordinatesKey, SharedGestureState, PartialGestureState } from '../types'
 
 const setListeners = (add: boolean) => (el: EventTarget, listeners: [string, Fn][], options: EventOptions): void => {
   const action = add ? 'addEventListener' : 'removeEventListener'
@@ -67,22 +67,31 @@ export function getModifierKeys(event: UseGestureEvent): ModifierKeys {
 //   return { xy: [deltaX, deltaY], ...getModifierKeys(event) }
 // }
 
+function getTouchEvents(event: UseGestureEvent) {
+  if ('touches' in event) {
+    const { touches, changedTouches } = event
+    return touches.length > 0 ? touches : changedTouches
+  }
+  return null
+}
+
+export function getGenericEventData(event: React.MouseEvent | React.TouchEvent | React.PointerEvent): Partial<SharedGestureState> {
+  const buttons = 'buttons' in event ? event.buttons : 0
+  const touchEvents = getTouchEvents(event)
+  const touches = (touchEvents && touchEvents.length) || 0
+  const down = touches > 0 || buttons > 0
+  return { touches, down, buttons, ...getModifierKeys(event) }
+}
+
 /**
  * Gets pointer event data
  * @param event
  * @returns pointer event data
  */
-export function getPointerEventData(event: React.MouseEvent | React.TouchEvent | React.PointerEvent): StatePayload<CoordinatesKey> {
-  const { touches: eventTouches, buttons, changedTouches } = event as any
-  const touchEvents =
-    eventTouches && eventTouches.length > 0 ? eventTouches : changedTouches && changedTouches.length > 0 ? changedTouches : null
-  const { clientX, clientY } = touchEvents ? touchEvents[0] : event
-  const touches = (touchEvents && touchEvents.length) || 0
-  const down = touches > 0 || buttons > 0
-  return {
-    gesturePayload: { values: [clientX, clientY] },
-    sharedPayload: { touches, down, buttons, ...getModifierKeys(event) },
-  }
+export function getPointerEventData(event: React.MouseEvent | React.TouchEvent | React.PointerEvent): PartialGestureState<CoordinatesKey> {
+  const touchEvents = getTouchEvents(event)
+  const { clientX, clientY } = touchEvents ? touchEvents[0] : (event as any)
+  return { values: [clientX, clientY] }
 }
 
 // type TwoTouchesEventData = Pick<FullGestureState<DistanceAngle>, 'values' | 'touches' | 'down' | 'origin'> & ModifierKeys
