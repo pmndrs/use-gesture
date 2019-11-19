@@ -8,10 +8,8 @@ import {
   HandlerKey,
   UserHandlersPartial,
   InternalHandlers,
-  RecognizerClass,
-  Coordinates,
-  DistanceAngle,
   UserHandlers,
+  RecognizerClasses,
 } from '../types'
 import { getGenericConfig, getDragConfig } from '../utils/config'
 
@@ -24,7 +22,7 @@ export function useGesture(handlers: UserHandlersPartial, config: UseGestureUser
 
   const mergedConfig: InternalFullConfig = getGenericConfig(restConfig)
 
-  const classes: (RecognizerClass<Coordinates> | RecognizerClass<DistanceAngle>)[] = []
+  const classes: RecognizerClasses = []
   const internalHandlers: Partial<InternalHandlers> = {}
 
   if (actions.has('onDrag')) {

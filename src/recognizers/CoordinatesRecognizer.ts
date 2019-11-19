@@ -1,100 +1,74 @@
 import Recognizer from './Recognizer'
-import { subV, calculateAllKinematics } from '../utils/math'
-import { Coordinates, GestureState, Vector2, UseGestureEvent } from '../types'
-import { initialState } from '../utils/state'
-import { clone } from '../utils/utils'
+import { subV, calculateAllKinematics, getIntentional, addV } from '../utils/math'
+import { Vector2, UseGestureEvent, ValueKey, CoordinatesKey, PartialGestureState } from '../types'
 
 /**
  * Abstract class for coordinates-based gesture recongizers
  */
-export default abstract class CoordinatesRecognizer extends Recognizer<Coordinates> {
-  getKinematics(values: Vector2, event: UseGestureEvent, isStart?: boolean): Partial<GestureState<Coordinates>> {
-    let newState: Partial<GestureState<Coordinates>>
+export default abstract class CoordinatesRecognizer<T extends CoordinatesKey> extends Recognizer<T> {
+  valueKey = 'xy' as ValueKey<T>
 
-    if (isStart) {
-      newState = {
-        ...clone(initialState[this.stateKey]),
-        _active: true,
-        event,
-        values,
-        initial: values,
-        previous: this.state.values,
-        offset: this.state.offset,
-        time: event.timeStamp,
-        args: this.args,
-      }
-    } else {
-      // we get the gesture specific state
-      const { values: xy, axis, initial, time, offset, _intentional } = this.state
+  protected getIntentionality(values: Vector2, state: PartialGestureState<T>): PartialGestureState<T> {
+    let { _intentional, initial, axis } = state
+    const _movement = subV(values, initial!)
 
-      // offset is the difference between the current and initial value vectors
-      const movement = subV(values, initial)
-      // delta is the difference between the current and previous value vectors
-      const delta = subV(values, xy)
+    const { axis: configAxis, lockDirection, threshold } = this.config
+    const [tx, ty] = threshold
 
-      const delta_t = event.timeStamp - time!
-      const { velocity, velocities, distance, direction } = calculateAllKinematics(movement, delta, delta_t)
+    if (_intentional![0] === false) _intentional![0] = getIntentional(_movement![0], tx)
+    if (_intentional![1] === false) _intentional![1] = getIntentional(_movement![1], ty)
 
-      newState = {
-        _intentional,
-        event,
-        axis,
-        values,
-        movement,
-        offset,
-        delta,
-        velocity,
-        vxvy: velocities,
-        distance,
-        direction,
-        previous: xy,
-        time: event.timeStamp,
-      }
-    }
+    const absX = Math.abs(_movement![0])
+    const absY = Math.abs(_movement![1])
 
-    let [intentionalX, intentionalY] = newState._intentional!
-    const [movementX, movementY] = newState.movement!
-    const [thresholdX, thresholdY] = this.config.threshold!
-
-    const absX = Math.abs(movementX)
-    const absY = Math.abs(movementY)
-
-    if (intentionalX === false && absX >= thresholdX) {
-      intentionalX = Math.sign(movementX) * thresholdX
-      newState.delta![0] = movementX - intentionalX
-    }
-    if (intentionalY === false && absY >= thresholdY) {
-      intentionalY = Math.sign(movementY) * thresholdY
-      newState.delta![1] = movementY - intentionalY
-    }
-
-    newState._intentional = [intentionalX, intentionalY]
-
-    const intentionalMovement = intentionalX !== false || intentionalY !== false
+    const intentionalMovement = _intentional![0] !== false || _intentional![1] !== false
+    let _blocked = false
 
     if (intentionalMovement) {
-      newState.axis = newState.axis || (absX > absY ? 'x' : absX < absY ? 'y' : undefined)
-      const { axis: configAxis, lockDirection } = this.config
+      axis = axis || (absX > absY ? 'x' : absX < absY ? 'y' : undefined)
       if (!!configAxis || lockDirection) {
-        if (!!newState.axis) {
-          if (!!configAxis && newState.axis !== configAxis) newState._blocked = true
+        if (!!axis) {
+          if (!!configAxis && axis !== configAxis) _blocked = true
           else {
-            const lockedIndex = newState.axis === 'x' ? 1 : 0
-            newState._intentional[lockedIndex] = false
+            const lockedIndex = axis === 'x' ? 1 : 0
+            _intentional![lockedIndex] = false
           }
         } else {
-          newState._intentional = [false, false]
+          _intentional = [false, false]
         }
       }
     }
 
-    if (!newState._blocked) {
-      if (newState._intentional[0] !== false) newState.offset![0] += newState.delta![0]
-      if (newState._intentional[1] !== false) newState.offset![1] += newState.delta![1]
-    }
+    const movement = [
+      _intentional![0] !== false ? _movement![0] - _intentional![0] : 0,
+      _intentional![1] !== false ? _movement![1] - _intentional![1] : 0,
+    ]
 
-    newState.xy = newState.values
+    return { _movement, movement, _intentional, _blocked, axis } as PartialGestureState<T>
+  }
 
-    return newState
+  getKinematics(values: Vector2, event: UseGestureEvent): PartialGestureState<T> {
+    const { offset, movement: prevMovement, time } = this.state
+
+    const detection = this.getIntentionality(values, this.state)
+    const { _blocked, movement } = detection
+
+    if (_blocked) return { _blocked } as PartialGestureState<T>
+
+    // delta is the difference between the current and previous value vectors
+    const delta = subV(movement!, prevMovement)
+
+    const delta_t = event.timeStamp - time!
+    const kinematics = calculateAllKinematics(movement!, delta, delta_t)
+
+    return {
+      values,
+      offset: addV(offset, delta),
+      delta,
+      vxvy: kinematics.velocities,
+      ...detection,
+      ...kinematics,
+      ...this.getGenericStatePayload(event),
+    } as PartialGestureState<T>
   }
 }

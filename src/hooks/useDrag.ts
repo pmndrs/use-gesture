@@ -1,13 +1,13 @@
 import React from 'react'
 import useRecognizers from './useRecognizers'
 import DragRecognizer from '../recognizers/DragRecognizer'
-import { Handler, Coordinates, GenericConfig, DragConfig, InternalFullConfig, HookReturnType } from '../types'
+import { Handler, GenericConfig, DragConfig, InternalFullConfig, HookReturnType } from '../types'
 import { getGenericConfig, getDragConfig } from '../utils/config'
 
 type UseDragUserConfig = Partial<GenericConfig & DragConfig>
 
 export function useDrag<Config extends UseDragUserConfig>(
-  handler: Handler<Coordinates>,
+  handler: Handler<'drag'>,
   config: Config | {} = {}
 ): (...args: any[]) => HookReturnType<Config> {
   const { domTarget, eventOptions, window, ...drag } = <UseDragUserConfig>config

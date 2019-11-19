@@ -1,10 +1,10 @@
 import React from 'react'
 import Controller from '../Controller'
-import { InternalFullConfig, Coordinates, DistanceAngle, HookReturnType, GenericConfig, InternalHandlers, RecognizerClass } from '../types'
+import { InternalFullConfig, HookReturnType, GenericConfig, InternalHandlers, RecognizerClasses } from '../types'
 
 export default function useRecognizers<Config extends Partial<GenericConfig>>(
   handlers: Partial<InternalHandlers>,
-  classes: (RecognizerClass<Coordinates> | RecognizerClass<DistanceAngle>)[],
+  classes: RecognizerClasses,
   config: InternalFullConfig
 ): (...args: any[]) => HookReturnType<Config> {
   // the gesture controller will keep track of all gesture states

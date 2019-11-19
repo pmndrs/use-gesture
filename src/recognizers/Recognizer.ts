@@ -1,32 +1,29 @@
 import Controller from '../Controller'
 import {
-  Coordinates,
-  DistanceAngle,
   StateKey,
-  GestureState,
   GestureKey,
   SharedGestureState,
   Fn,
   UseGestureEvent,
-  Vector2,
   IngKey,
+  StatePayload,
+  ValueKey,
+  InternalFullConfig,
   Handler,
+  GestureState,
+  PartialGestureState,
 } from '../types'
-import { noop } from '../utils/utils'
-
-type PayloadFromEvent = {
-  values: Vector2
-  gesturePayload?: Partial<GestureState>
-  sharedPayload?: Partial<SharedGestureState>
-}
+import { noop, clone } from '../utils/utils'
+import { initialState } from '../utils/state'
 
 /**
  * Recognizer abstract class
  * @template GestureType whether the Recognizer should deal with coordinates or distance / angle
  */
-export default abstract class Recognizer<GestureType extends Coordinates | DistanceAngle> {
-  protected stateKey!: StateKey
-  protected ingKey!: IngKey
+export default abstract class Recognizer<T extends GestureKey> {
+  protected abstract stateKey: StateKey<T>
+  protected abstract ingKey: IngKey
+  protected abstract valueKey: ValueKey<T>
 
   /**
    * Continuous gestures are scroll or wheel, where the next gesture continues the previous one.
@@ -40,10 +37,10 @@ export default abstract class Recognizer<GestureType extends Coordinates | Dista
    * @param controller the controller attached to the gesture
    * @param [args] the args that should be passed to the gesture handler
    */
-  constructor(protected readonly gestureKey: GestureKey, protected readonly controller: Controller, protected readonly args: any[] = []) {}
+  constructor(protected readonly gestureKey: T, protected readonly controller: Controller, protected readonly args: any[] = []) {}
 
   // get the gesture config
-  protected get config() {
+  protected get config(): NonNullable<InternalFullConfig[T]> {
     return this.controller.config[this.gestureKey]!
   }
   // is the gesture enabled
@@ -51,12 +48,12 @@ export default abstract class Recognizer<GestureType extends Coordinates | Dista
     return this.controller.config.enabled && this.config.enabled
   }
   // get the controller state for a given gesture
-  protected get state() {
-    return this.controller.state[this.stateKey] as GestureState<GestureType>
+  protected get state(): GestureState<T> {
+    return this.controller.state[this.stateKey]
   }
   // get the gesture handler
-  protected get handler() {
-    return this.controller.handlers[this.gestureKey]! as Handler<GestureType>
+  protected get handler(): Handler<T> {
+    return this.controller.handlers[this.gestureKey] as Handler<T>
   }
 
   // convenience method to set a timeout for a given gesture
@@ -79,7 +76,7 @@ export default abstract class Recognizer<GestureType extends Coordinates | Dista
     this.controller.removeWindowListeners(this.stateKey)
   }
 
-  protected abstract getPayloadFromEvent(event: UseGestureEvent): PayloadFromEvent
+  protected abstract getPayloadFromEvent(event: UseGestureEvent): StatePayload<T>
 
   /**
    * Utility function to get kinematics of the gesture
@@ -87,18 +84,62 @@ export default abstract class Recognizer<GestureType extends Coordinates | Dista
    * @event
    * @returns set of values including movement, velocity, velocities, distance and direction
    */
-  protected abstract getKinematics(values: [number, number | undefined], event: UseGestureEvent): Partial<GestureState<GestureType>>
+  protected abstract getKinematics(values: [number, number | undefined], event: UseGestureEvent): PartialGestureState<T>
 
   // should return the bindings for a given gesture
   public abstract addBindings(): void
+
+  protected abstract startGesture(event: UseGestureEvent): StatePayload<T>
+
+  protected onStart = (event: UseGestureEvent) => {
+    const { sharedPayload, gesturePayload } = this.startGesture(event)
+    const { values } = gesturePayload
+
+    const generic = this.getGenericStatePayload(event)
+
+    this.updateSharedState(sharedPayload)
+    const init = {
+      ...clone(initialState[this.stateKey]),
+      ...gesturePayload,
+      _active: true,
+      event,
+      values,
+      initial: values,
+      offset: this.state.offset,
+      ...generic,
+    }
+
+    this.updateGestureState({
+      ...init,
+      ...this.getIntentionality(init.values, init),
+    })
+
+    this.fireGestureHandler()
+  }
+
+  protected getGenericStatePayload(event: UseGestureEvent) {
+    return { event, time: event.timeStamp, args: this.args, previous: this.state.values }
+  }
+
+  protected abstract getIntentionality(...args: any): PartialGestureState<T>
+
+  protected updateSharedState(sharedState: Partial<SharedGestureState> | null) {
+    Object.assign(this.controller.state.shared, sharedState)
+  }
+
+  protected updateGestureState(gestureState: PartialGestureState<T> | null) {
+    Object.assign(this.state, gestureState)
+  }
 
   /**
    * convenience method to update the controller state for a given gesture
    * @param sharedState shared partial state object
    * @param gestureState partial state object for the gesture handled by the recognizer
-   * @param [gestureFlag] if set, will also fire the gesture handler set by the user
    */
-  protected updateState = (sharedState: Partial<SharedGestureState> | null, gestureState: Partial<GestureState<GestureType>>): void => {
+  protected updateState = (
+    sharedState: Partial<SharedGestureState> | null = null,
+    gestureState: PartialGestureState<T> | null = null
+  ): void => {
     Object.assign(this.controller.state.shared, sharedState)
     Object.assign(this.state, gestureState)
   }
@@ -128,11 +169,9 @@ export default abstract class Recognizer<GestureType extends Coordinates | Dista
 
     const state = { ...this.controller.state.shared, ...this.state }
 
-    const {
-      movement: [movX, movY],
-    } = state
-
-    state.movement = [intentionalX !== false ? movX - intentionalX : 0, intentionalY !== false ? movY - intentionalY : 0]
+    // TODO possibly check this
+    // @ts-ignore
+    state[this.valueKey] = state.values
 
     const newMemo = this.handler(state)
     this.state.memo = newMemo !== void 0 ? newMemo : this.state.memo

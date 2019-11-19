@@ -1,4 +1,4 @@
-import { StateKey, StateObject, Fn, ReactEventHandlerKey, ReactEventHandlers, InternalFullConfig, InternalHandlers } from './types'
+import { StateKey, State, Fn, ReactEventHandlerKey, ReactEventHandlers, InternalFullConfig, InternalHandlers } from './types'
 import { initialState } from './utils/state'
 import { addListeners, removeListeners } from './utils/event'
 import { chainFns, clone } from './utils/utils'
@@ -16,7 +16,7 @@ type Bindings = Partial<{ [eventName in ReactEventHandlerKey]: Fn[] }>
 export default class Controller {
   public config!: InternalFullConfig
   public handlers!: Partial<InternalHandlers>
-  public state: StateObject = clone(initialState) // state for all gestures
+  public state: State = clone(initialState) // state for all gestures
   public timeouts: GestureTimeouts = {} // keeping track of timeouts for debounced gestures (such as move, scroll, wheel)
   private bindings: Bindings = {} // an object holding the handlers associated to the gestures
   private domListeners: [string, Fn][] = [] // when config.domTarget is set, we attach events directly to the dom
