@@ -169,7 +169,6 @@ export interface CommonGestureState {
   _blocked: boolean
   _intentional: [FalseOrNumber, FalseOrNumber]
   _movement: Vector2
-  _previousOffset: Vector2
   event?: UseGestureEvent
   currentTarget?: EventTarget | null
   pointerId?: number | null

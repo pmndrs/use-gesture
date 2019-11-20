@@ -98,7 +98,6 @@ export default abstract class Recognizer<T extends GestureKey> {
     return {
       ...clone(initialState[this.stateKey]),
       _active: true,
-      _previousOffset: offset,
       values,
       initial: values,
       offset,
