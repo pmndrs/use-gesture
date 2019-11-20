@@ -8,6 +8,14 @@ export type AtLeastOneOf<T, U = { [K in keyof T]: Pick<T, K> }> = Partial<T> & U
 export type Tuple<T> = [T,T]
 export type Vector2 = Tuple<number>
 export type Fn = (...args: any[]) => any
+export type FalseOrNumber = false | number
+
+export interface AxisBounds {
+  top?: number,
+  bottom?: number,
+  left?: number,
+  right?: number
+}
 
 export interface EventOptions {
   capture: boolean
@@ -30,8 +38,7 @@ export interface DragConfig {
   swipeVelocity: number | Vector2
   swipeDistance: number | Vector2
   lockDirection: boolean
-  xBounds: Tuple<FalseOrNumber> 
-  yBounds: Tuple<FalseOrNumber>
+  bounds?: AxisBounds 
   rubberband: boolean | number | Vector2
   delay: boolean | number
   axis?: 'x' | 'y'
@@ -51,8 +58,7 @@ export interface InternalGenericConfig {
 export interface InternalCommonConfig {
   enabled: boolean
   threshold: Vector2
-  bounds1: Tuple<FalseOrNumber> 
-  bounds2: Tuple<FalseOrNumber>
+  bounds: Tuple<Vector2> 
   rubberband: Vector2
 }
 
@@ -157,12 +163,13 @@ export type SharedGestureState = { [ingKey in IngKey]: boolean } & {
   ctrlKey: boolean
 }
 
-export type FalseOrNumber = false | number
 
 export interface CommonGestureState {
   _active: boolean
   _blocked: boolean
   _intentional: [FalseOrNumber, FalseOrNumber]
+  _movement: Vector2
+  _previousOffset: Vector2
   event?: UseGestureEvent
   currentTarget?: EventTarget | null
   pointerId?: number | null

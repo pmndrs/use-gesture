@@ -4,6 +4,7 @@ import Controller from '../Controller'
 import { UseGestureEvent, Fn, StateKey, IngKey } from '../types'
 import { noop } from '../utils/utils'
 import { getPointerEventData, getGenericEventData } from '../utils/event'
+import { calculateDistance } from '../utils/math'
 
 const CLICK_DISTANCE_THRESHOLD = 3
 
@@ -22,7 +23,6 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
 
   private setPointers = (event: UseGestureEvent) => {
     const { currentTarget, pointerId } = event as PointerEvent
-    console.log(currentTarget)
     // @ts-ignore
     currentTarget.setPointerCapture(pointerId)
     this.updateGestureState({ currentTarget, pointerId })
@@ -105,7 +105,7 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
     const kinematics = this.getKinematics(values!, event)
 
     let { _isClick } = this.state
-    if (_isClick && kinematics.distance! >= CLICK_DISTANCE_THRESHOLD) _isClick = false
+    if (_isClick && calculateDistance(kinematics._movement!) >= CLICK_DISTANCE_THRESHOLD) _isClick = false
 
     this.updateGestureState({
       ...this.getGenericPayload(event),
@@ -119,10 +119,10 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
 
   onDragEnd = (event: UseGestureEvent): void => {
     this.state._active = false
-
     this.updateSharedState({ dragging: false, down: false, buttons: 0, touches: 0 })
 
     const {
+      _isClick,
       movement: [mx, my],
       vxvy: [vx, vy],
       _intentional: [ix, iy],
@@ -137,7 +137,7 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
     if (ix !== false && Math.abs(vx) > svx && Math.abs(mx) > sx) swipe[0] = Math.sign(vx)
     if (iy !== false && Math.abs(vy) > svy && Math.abs(my) > sy) swipe[1] = Math.sign(vy)
 
-    this.updateGestureState({ event, click: this.state._isClick, swipe })
+    this.updateGestureState({ event, ...this.getMovement(this.state.values), click: _isClick, swipe })
     this.fireGestureHandler(this.config.filterClicks && this.state._isClick)
   }
 

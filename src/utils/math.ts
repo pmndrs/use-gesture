@@ -83,14 +83,15 @@ export function getIntentional(movement: number, threshold: number): number | fa
 // https://twitter.com/chpwn/status/285540192096497664
 // iOS constant = 0.55
 export const rubberBand = (distance: number, dimension: number, constant = 0.15) => {
+  if (distance === 0 && dimension === 0) return 0
   return (distance * dimension * constant) / (dimension + constant * distance)
 }
 
-export const rubberBandIfOutOfBounds = (min: number, max: number, delta: number, constant?: number) => {
-  if (delta < min) {
+export const rubberBandIfOutOfBounds = (delta: number, min: number, max: number, constant?: number) => {
+  if (min !== Infinity && delta < min) {
     return -rubberBand(min - delta, max - min, constant) + min
   }
-  if (delta > max) {
+  if (max !== Infinity && delta > max) {
     return rubberBand(delta - max, max - min, constant) + max
   }
   return delta

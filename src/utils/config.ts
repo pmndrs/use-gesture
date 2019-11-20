@@ -21,8 +21,7 @@ export const defaultDragConfig: DragConfig = {
   axis: undefined,
   lockDirection: false,
   delay: false,
-  xBounds: [false, false],
-  yBounds: [false, false],
+  bounds: undefined,
   rubberband: 0,
 }
 
@@ -44,19 +43,14 @@ export const getGenericConfig = (config: Partial<GenericConfig>): InternalGeneri
 
 export const getDragConfig = (dragConfig?: Partial<DragConfig>): InternalDragConfig => {
   const config = { ...defaultDragConfig, ...dragConfig }
-  let {
-    threshold,
-    swipeVelocity,
-    swipeDistance,
-    delay,
-    filterClicks,
-    axis,
-    lockDirection,
-    xBounds,
-    yBounds,
-    rubberband,
-    ...restDrag
-  } = config
+  let { threshold, swipeVelocity, swipeDistance, delay, filterClicks, axis, lockDirection, bounds, rubberband, ...restDrag } = config
+
+  bounds = bounds || {}
+
+  const boundsArray = [
+    [bounds.left || Infinity, bounds!.right || Infinity],
+    [bounds.bottom || Infinity, bounds!.top || Infinity],
+  ]
 
   if (threshold === void 0) {
     threshold = Math.max(0, filterClicks ? 3 : 0, lockDirection || axis ? 1 : 0)
@@ -76,11 +70,8 @@ export const getDragConfig = (dragConfig?: Partial<DragConfig>): InternalDragCon
     threshold: thresholdArray,
     swipeVelocity: def.array(swipeVelocity) as Vector2,
     swipeDistance: def.array(swipeDistance) as Vector2,
-    bounds1: replaceWithInfinity(xBounds),
-    bounds2: replaceWithInfinity(yBounds),
+    bounds: boundsArray as Tuple<Vector2>,
     rubberband: def.array(rubberband) as Vector2,
     delay: typeof delay === 'number' ? delay : delay ? DEFAULT_DRAG_DELAY : 0,
   }
 }
-
-const replaceWithInfinity = (array: Tuple<number | boolean>): Vector2 => array.map(v => (typeof v === 'boolean' ? Infinity : v)) as Vector2

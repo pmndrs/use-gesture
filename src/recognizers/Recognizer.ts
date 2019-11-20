@@ -16,7 +16,7 @@ import {
 } from '../types'
 import { noop, clone } from '../utils/utils'
 import { initialState } from '../utils/state'
-import { subV, getIntentional, addV } from '../utils/math'
+import { subV, getIntentional, addV, rubberBandIfOutOfBounds } from '../utils/math'
 
 /**
  * Recognizer abstract class
@@ -89,10 +89,26 @@ export default abstract class Recognizer<T extends GestureKey> {
   // should return the bindings for a given gesture
   public abstract addBindings(): void
 
+  protected getGenericPayload(event: UseGestureEvent) {
+    return { event, time: event.timeStamp, args: this.args, previous: this.state.values }
+  }
+
+  protected getStartGestureState = (values: Vector2) => {
+    const { offset } = this.state
+    return {
+      ...clone(initialState[this.stateKey]),
+      _active: true,
+      _previousOffset: offset,
+      values,
+      initial: values,
+      offset,
+    }
+  }
+
   protected getMovement(values: Vector2, state: GestureState<T> = this.state): PartialGestureState<T> {
-    const { threshold } = this.config
+    let { threshold, rubberband } = this.config
     const [t0, t1] = threshold
-    const { _intentional: intentional, initial, offset: prevOffset, movement: prevMovement } = state
+    const { _active, _intentional: intentional, initial, offset: prevOffset, movement: prevMovement } = state
     let [i0, i1] = intentional
     const [_m0, _m1] = subV(values, initial)
 
@@ -106,18 +122,23 @@ export default abstract class Recognizer<T extends GestureKey> {
 
     if (_blocked) return intentionalityCheck
 
-    const movement = [_i0 !== false ? _m0 - _i0 : 0, _i1 !== false ? _m1 - _i1 : 0]
-    // delta is the difference between the current and previous value vectors
+    rubberband = _active ? rubberband : [0, 0]
+    const movement = [_i0 !== false ? _m0 - _i0 : 0, _i1 !== false ? _m1 - _i1 : 0] as Vector2
     const delta = subV(movement, prevMovement)
-
-    const offset = addV(prevOffset, delta)
+    const offset = addV(delta, prevOffset) as Vector2
 
     return {
       ...intentionalityCheck,
-      movement,
-      offset,
+      _movement: [_m0, _m1],
+      movement: this.rubberband(movement, rubberband),
+      offset: this.rubberband(offset, rubberband),
       delta,
     } as PartialGestureState<T>
+  }
+
+  protected rubberband = (array: Vector2, rubberband: Vector2): Vector2 => {
+    const { bounds } = this.config
+    return array.map((v, i) => rubberBandIfOutOfBounds(v, bounds[i][0], bounds[i][1], rubberband[i])) as Vector2
   }
 
   protected checkIntentionality(
@@ -126,14 +147,6 @@ export default abstract class Recognizer<T extends GestureKey> {
     _state: PartialGestureState<T>
   ): PartialGestureState<T> {
     return { _intentional, _blocked: false } as PartialGestureState<T>
-  }
-
-  protected getGenericPayload(event: UseGestureEvent) {
-    return { event, time: event.timeStamp, args: this.args, previous: this.state.values }
-  }
-
-  protected getStartGestureState = (values: Vector2) => {
-    return { ...clone(initialState[this.stateKey]), _active: true, values, initial: values, offset: this.state.offset }
   }
 
   protected updateSharedState(sharedState: Partial<SharedGestureState> | null) {
