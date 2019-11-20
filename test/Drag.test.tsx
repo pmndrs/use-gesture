@@ -2,7 +2,7 @@ import React from 'react'
 import { render, cleanup, fireEvent, createEvent, wait } from '@testing-library/react'
 import '@testing-library/jest-dom/extend-expect'
 import Interactive from './components/Interactive'
-// import InteractiveDom from './components/InteractiveDom'
+import InteractiveDom from './components/InteractiveDom'
 import { InteractiveType } from './components/types'
 
 // TODO - test drag with touch events
@@ -14,7 +14,7 @@ const later = (fn: () => any, delay: number) => new Promise(resolve => setTimeou
 
 describe.each([
   ['attached to component', Interactive, false],
-  // ['attached to node', InteractiveDom, true],
+  ['attached to node', InteractiveDom, true],
 ])('testing onDrag %s', (_testName, C, domTarget): any => {
   const Component = C as InteractiveType
   const prefix = domTarget ? 'dom-' : ''
