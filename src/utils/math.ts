@@ -1,8 +1,8 @@
 // vector add
-export const addV = <T extends number[]>(v1: T, v2: T): T => <T>v1.map((v, i) => v + v2[i])
+export const addV = <T extends number[]>(v1: T, v2: T): T => v1.map((v, i) => v + v2[i]) as T
 
 // vector substract
-export const subV = <T extends number[]>(v1: T, v2: T): T => <T>v1.map((v, i) => v - v2[i])
+export const subV = <T extends number[]>(v1: T, v2: T): T => v1.map((v, i) => v - v2[i]) as T
 
 /**
  * Calculates velocity
@@ -24,7 +24,7 @@ export function calculateVelocity(delta: number[], delta_t: number, len: number)
  * @returns velocities vector
  */
 export function calculateVelocities<T extends number[]>(delta: T, delta_t: number): T {
-  return delta_t ? <T>delta.map(v => v / delta_t) : <T>Array(delta.length).fill(0)
+  return (delta_t ? delta.map(v => v / delta_t) : Array(delta.length).fill(0)) as T
 }
 
 /**
@@ -45,7 +45,7 @@ export function calculateDistance(movement: number[]): number {
  */
 export function calculateDirection<T extends number[]>(delta: T, len?: number): T {
   len = len || Math.hypot(...delta) || 1
-  return <T>delta.map(v => v / len!)
+  return delta.map(v => v / len!) as T
 }
 
 interface Kinematics<T extends number[]> {

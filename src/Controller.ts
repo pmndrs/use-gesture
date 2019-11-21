@@ -29,7 +29,7 @@ export default class Controller {
   public clean = (): void => {
     this.resetBindings()
     Object.values(this.timeouts).forEach(clearTimeout)
-    Object.keys(this.windowListeners).forEach(stateKey => this.removeWindowListeners(<StateKey>stateKey))
+    Object.keys(this.windowListeners).forEach(stateKey => this.removeWindowListeners(stateKey as StateKey))
   }
 
   /**
@@ -80,7 +80,7 @@ export default class Controller {
     // for each event, we chain the array of functions mapped to it
     // and push it to this.domListeners
     Object.entries(this.bindings).forEach(([event, fns]) => {
-      this.domListeners.push([event.substr(2).toLowerCase(), chainFns(...(<Fn[]>fns))])
+      this.domListeners.push([event.substr(2).toLowerCase(), chainFns(...(fns as Fn[]))])
     })
 
     addListeners(target, this.domListeners, this.config.eventOptions)
@@ -111,7 +111,7 @@ export default class Controller {
     Object.entries(this.bindings).forEach(([event, fns]) => {
       const fnsArray = Array.isArray(fns) ? fns : [fns]
       const key = (event + captureString) as ReactEventHandlerKey
-      bindings[key] = chainFns(...(<Fn[]>fnsArray))
+      bindings[key] = chainFns(...(fnsArray as Fn[]))
     })
 
     return bindings

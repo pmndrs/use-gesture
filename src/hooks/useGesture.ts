@@ -16,7 +16,7 @@ import { getGenericConfig, getDragConfig } from '../utils/config'
 type UseGestureUserConfig = Partial<GenericConfig> & { drag?: Partial<DragConfig> }
 
 export function useGesture(handlers: UserHandlersPartial, config: UseGestureUserConfig = {}) {
-  const [actions] = React.useState(() => new Set(Object.keys(handlers).map(k => <HandlerKey>k.replace(/End|Start/, ''))))
+  const [actions] = React.useState(() => new Set(Object.keys(handlers).map(k => k.replace(/End|Start/, ''))))
 
   const { drag, ...restConfig } = config
 

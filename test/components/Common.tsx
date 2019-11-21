@@ -15,43 +15,40 @@ export const createHandlers = ({
   set: Fn
   setStartEnd: React.Dispatch<React.SetStateAction<[number, number]>>
 }): UserHandlersPartial => {
-  return gestures.reduce(
-    (acc: UserHandlersPartial, g) => {
-      const gesture = {
-        [`on${g}`]: ({
-          event,
-          cancel,
-          currentTarget,
-          memo = memoArg,
-          ...rest
-        }: {
-          event: Event
-          cancel: Fn
-          currentTarget: EventTarget
-          memo: any
-        }) => {
-          set({ ...rest, memo })
-          if (canceled) {
-            cancel()
-          }
-          return memo
-        },
-      }
-      if (g !== 'Hover') {
-        gesture[`on${g}Start`] = () => {
-          setStartEnd(([startFired, endFired]) => [startFired + 1, endFired])
+  return gestures.reduce((acc: UserHandlersPartial, g) => {
+    const gesture = {
+      [`on${g}`]: ({
+        event,
+        cancel,
+        currentTarget,
+        memo = memoArg,
+        ...rest
+      }: {
+        event: Event
+        cancel: Fn
+        currentTarget: EventTarget
+        memo: any
+      }) => {
+        set({ ...rest, memo })
+        if (canceled) {
+          cancel()
         }
-        gesture[`on${g}End`] = () => {
-          setStartEnd(([, endFired]) => [0, endFired + 1])
-        }
+        return memo
+      },
+    }
+    if (g !== 'Hover') {
+      gesture[`on${g}Start`] = () => {
+        setStartEnd(([startFired, endFired]) => [startFired + 1, endFired])
       }
-      return {
-        ...acc,
-        ...gesture,
+      gesture[`on${g}End`] = () => {
+        setStartEnd(([, endFired]) => [0, endFired + 1])
       }
-    },
-    {} as UserHandlersPartial
-  )
+    }
+    return {
+      ...acc,
+      ...gesture,
+    }
+  }, {} as UserHandlersPartial)
 }
 
 export const Common = React.forwardRef(

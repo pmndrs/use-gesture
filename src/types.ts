@@ -5,15 +5,15 @@ import Recognizer from './recognizers/Recognizer'
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
 export type AtLeastOneOf<T, U = { [K in keyof T]: Pick<T, K> }> = Partial<T> & U[keyof U]
 
-export type Tuple<T> = [T,T]
+export type Tuple<T> = [T, T]
 export type Vector2 = Tuple<number>
 export type Fn = (...args: any[]) => any
 export type FalseOrNumber = false | number
 
 export interface AxisBounds {
-  top?: number,
-  bottom?: number,
-  left?: number,
+  top?: number
+  bottom?: number
+  left?: number
   right?: number
 }
 
@@ -38,7 +38,7 @@ export interface DragConfig {
   swipeVelocity: number | Vector2
   swipeDistance: number | Vector2
   lockDirection: boolean
-  bounds?: AxisBounds 
+  bounds?: AxisBounds
   rubberband: boolean | number | Vector2
   delay: boolean | number
   axis?: 'x' | 'y'
@@ -58,7 +58,7 @@ export interface InternalGenericConfig {
 export interface InternalCommonConfig {
   enabled: boolean
   threshold: Vector2
-  bounds: Tuple<Vector2> 
+  bounds: Tuple<Vector2>
   rubberband: Vector2
 }
 
@@ -163,7 +163,6 @@ export type SharedGestureState = { [ingKey in IngKey]: boolean } & {
   ctrlKey: boolean
 }
 
-
 export interface CommonGestureState {
   _active: boolean
   _blocked: boolean
@@ -254,6 +253,7 @@ export type InternalHandlers = {
 }
 
 export type RecognizerClass<T extends GestureKey> = { new (controller: Controller, args: any[]): Recognizer<T> }
+// export type RecognizerClasses = RecognizerClass<GestureKey>[]
 export type RecognizerClasses = (RecognizerClass<'drag'> | RecognizerClass<'pinch'>)[]
 
 /* Handlers should also accept DomAttributes to prevent overrides */
