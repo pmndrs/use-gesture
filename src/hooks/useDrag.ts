@@ -1,4 +1,3 @@
-import React from 'react'
 import useRecognizers from './useRecognizers'
 import DragRecognizer from '../recognizers/DragRecognizer'
 import { Handler, GenericConfig, DragConfig, InternalFullConfig, HookReturnType } from '../types'
@@ -12,13 +11,10 @@ export function useDrag<Config extends UseDragUserConfig>(
 ): (...args: any[]) => HookReturnType<Config> {
   const { domTarget, eventOptions, window, ...drag } = <UseDragUserConfig>config
   // every time the config changes, we update the controller config (might be optimized)
-  const mergedConfig: InternalFullConfig = React.useMemo(
-    () => ({
-      ...getGenericConfig({ domTarget, eventOptions, window }),
-      drag: getDragConfig(drag),
-    }),
-    [config]
-  )
+  const mergedConfig: InternalFullConfig = {
+    ...getGenericConfig({ domTarget, eventOptions, window }),
+    drag: getDragConfig(drag),
+  }
 
   return useRecognizers<Config>({ drag: handler }, [DragRecognizer], mergedConfig)
 }
