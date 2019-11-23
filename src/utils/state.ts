@@ -21,6 +21,8 @@ export const initialCommon: CommonGestureState = {
   last: false,
   active: false,
   timeStamp: undefined,
+  startTime: undefined,
+  elapsedTime: 0,
   cancel: noop,
   canceled: false,
   memo: undefined,

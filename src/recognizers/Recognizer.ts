@@ -89,11 +89,13 @@ export default abstract class Recognizer<T extends GestureKey> {
   // should return the bindings for a given gesture
   public abstract addBindings(): void
 
-  protected getGenericPayload(event: UseGestureEvent) {
-    return { event, time: event.timeStamp, args: this.args, previous: this.state.values }
+  protected getGenericPayload(event: UseGestureEvent, isStartEvent?: boolean) {
+    const { timeStamp } = event
+    const { values, startTime } = this.state
+    return { event, timeStamp, elapsedTime: isStartEvent ? 0 : timeStamp - startTime!, args: this.args, previous: values }
   }
 
-  protected getStartGestureState = (values: Vector2) => {
+  protected getStartGestureState = (values: Vector2, event: UseGestureEvent) => {
     const { offset } = this.state
     return {
       ...clone(initialState[this.stateKey]),
@@ -101,6 +103,7 @@ export default abstract class Recognizer<T extends GestureKey> {
       values,
       initial: values,
       offset,
+      startTime: event.timeStamp,
     }
   }
 

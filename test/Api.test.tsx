@@ -1,7 +1,7 @@
 import React from 'react'
-import { render, cleanup, fireEvent } from '@testing-library/react'
+import { render, cleanup, fireEvent, createEvent } from '@testing-library/react'
 import '@testing-library/jest-dom/extend-expect'
-import { BindProps, GenuineHandlers } from './components/Api'
+import { BindProps } from './components/Api'
 import Interactive from './components/Interactive'
 
 afterEach(cleanup)
@@ -24,6 +24,9 @@ test('bind should dispatch its arguments', () => {
   expect(getByTestId('drag-args')).toHaveTextContent('args1')
 })
 
+// TODO remove comments
+
+/*
 test('genuine handlers should correctly execute', () => {
   const { getByTestId } = render(<GenuineHandlers />)
   const element = getByTestId('drag-el')
@@ -34,8 +37,9 @@ test('genuine handlers should correctly execute', () => {
   fireEvent.click(element)
   expect(getByTestId('click')).toHaveTextContent(/^clicked$/)
 })
+*/
 
-test('Testing memo', () => {
+test('testing memo', () => {
   const { getByTestId, rerender } = render(<Interactive gestures={['Drag']} memoArg="memo" />)
   const element = getByTestId('drag-el')
   fireEvent.mouseDown(element)
@@ -49,4 +53,22 @@ test('Testing memo', () => {
   rerender(<Interactive gestures={['Drag']} memoArg={''} />)
   fireEvent.mouseDown(element)
   expect(getByTestId('drag-memo')).toHaveTextContent(/^$/)
+})
+
+test('testing timestamp', () => {
+  const { getByTestId } = render(<Interactive gestures={['Drag']} memoArg="memo" />)
+  const element = getByTestId('drag-el')
+  let event = createEvent.mouseDown(element, { clientX: 10, clientY: 20, buttons: 1 })
+  fireEvent(element, event)
+  const start = event.timeStamp
+  expect(getByTestId('drag-timeStamp').innerHTML).toBe(String(start))
+  expect(getByTestId('drag-startTime').innerHTML).toBe(String(start))
+  expect(getByTestId('drag-elapsedTime').innerHTML).toBe('0')
+
+  event = createEvent.mouseMove(window, { clientX: 20, clientY: 50, buttons: 1 })
+  fireEvent(window, event)
+  let time = event.timeStamp
+  expect(getByTestId('drag-timeStamp').innerHTML).toBe(String(time))
+  expect(getByTestId('drag-startTime').innerHTML).toBe(String(start))
+  expect(getByTestId('drag-elapsedTime').innerHTML).toBe(String(time - start))
 })

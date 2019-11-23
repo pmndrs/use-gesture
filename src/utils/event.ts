@@ -1,4 +1,4 @@
-import { Fn, EventOptions, UseGestureEvent, CoordinatesKey, SharedGestureState, PartialGestureState } from '../types'
+import { Fn, EventOptions, UseGestureEvent, CoordinatesKey, SharedGestureState, GestureState, GestureKey } from '../types'
 
 const setListeners = (add: boolean) => (el: EventTarget, listeners: [string, Fn][], options: EventOptions): void => {
   const action = add ? 'addEventListener' : 'removeEventListener'
@@ -83,12 +83,14 @@ export function getGenericEventData(event: React.MouseEvent | React.TouchEvent |
   return { touches, down, buttons, ...getModifierKeys(event) }
 }
 
+type Values<T extends GestureKey> = Pick<GestureState<T>, 'values'>
+
 /**
  * Gets pointer event data
  * @param event
  * @returns pointer event data
  */
-export function getPointerEventData(event: React.MouseEvent | React.TouchEvent | React.PointerEvent): PartialGestureState<CoordinatesKey> {
+export function getPointerEventData(event: React.MouseEvent | React.TouchEvent | React.PointerEvent): Values<CoordinatesKey> {
   const touchEvents = getTouchEvents(event)
   const { clientX, clientY } = touchEvents ? touchEvents[0] : (event as any)
   return { values: [clientX, clientY] }

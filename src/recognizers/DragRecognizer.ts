@@ -67,13 +67,13 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
     this.updateSharedState(getGenericEventData(event))
 
     const startState = {
-      ...this.getStartGestureState(values!),
-      ...this.getGenericPayload(event),
+      ...this.getStartGestureState(values, event),
+      ...this.getGenericPayload(event, true),
     }
 
     this.updateGestureState({
       ...startState,
-      ...this.getMovement(values!, startState),
+      ...this.getMovement(values, startState),
       cancel: () => this.onCancel(event),
     })
 
@@ -102,7 +102,7 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
     this.updateSharedState(genericEventData)
 
     const { values } = getPointerEventData(event)
-    const kinematics = this.getKinematics(values!, event)
+    const kinematics = this.getKinematics(values, event)
 
     let { _isClick } = this.state
     if (_isClick && calculateDistance(kinematics._movement!) >= CLICK_DISTANCE_THRESHOLD) _isClick = false
