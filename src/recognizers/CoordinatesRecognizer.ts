@@ -40,14 +40,14 @@ export default abstract class CoordinatesRecognizer<T extends CoordinatesKey> ex
   }
 
   getKinematics(values: Vector2, event: UseGestureEvent): PartialGestureState<T> {
-    const { time } = this.state
+    const { timeStamp } = this.state
 
     const movementDetection = this.getMovement(values, this.state)
     const { _blocked, delta, movement } = movementDetection
 
     if (_blocked) return movementDetection
 
-    const delta_t = event.timeStamp - time!
+    const delta_t = event.timeStamp - timeStamp!
     const kinematics = calculateAllKinematics(movement!, delta!, delta_t)
 
     return {

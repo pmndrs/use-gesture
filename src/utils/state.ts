@@ -20,7 +20,7 @@ export const initialCommon: CommonGestureState = {
   first: false,
   last: false,
   active: false,
-  time: undefined,
+  timeStamp: undefined,
   cancel: noop,
   canceled: false,
   memo: undefined,
