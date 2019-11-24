@@ -3,7 +3,7 @@ import CoordinatesRecognizer from './CoordinatesRecognizer'
 import Controller from '../Controller'
 import { UseGestureEvent, Fn, StateKey, IngKey } from '../types'
 import { noop } from '../utils/utils'
-import { getPointerEventData, getGenericEventData } from '../utils/event'
+import { getPointerEventValues, getGenericEventData } from '../utils/event'
 import { calculateDistance } from '../utils/math'
 
 const CLICK_DISTANCE_THRESHOLD = 3
@@ -63,7 +63,7 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
   }
 
   startDrag(event: UseGestureEvent) {
-    const { values } = getPointerEventData(event)
+    const { values } = getPointerEventValues(event)
 
     this.updateSharedState(getGenericEventData(event))
 
@@ -102,7 +102,7 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
 
     this.updateSharedState(genericEventData)
 
-    const { values } = getPointerEventData(event)
+    const { values } = getPointerEventValues(event)
     const kinematics = this.getKinematics(values, event)
 
     let { _isClick } = this.state

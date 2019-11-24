@@ -98,9 +98,9 @@ type Values<T extends GestureKey> = Pick<GestureState<T>, 'values'>
 /**
  * Gets pointer event data
  * @param event
- * @returns pointer event data
+ * @returns pointer event values
  */
-export function getPointerEventData(
+export function getPointerEventValues(
   event: React.MouseEvent | React.TouchEvent | React.PointerEvent
 ): Values<CoordinatesKey> {
   const touchEvents = getTouchEvents(event)
