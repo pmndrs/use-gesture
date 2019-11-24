@@ -1,6 +1,6 @@
 import Recognizer from './Recognizer'
 import { calculateAllKinematics } from '../utils/math'
-import { Vector2, UseGestureEvent, ValueKey, CoordinatesKey, PartialGestureState, FalseOrNumber } from '../types'
+import { Vector2, UseGestureEvent, CoordinatesKey, PartialGestureState, FalseOrNumber } from '../types'
 
 /**
  * 
@@ -13,8 +13,6 @@ import { Vector2, UseGestureEvent, ValueKey, CoordinatesKey, PartialGestureState
  * @template T
  */
 export default abstract class CoordinatesRecognizer<T extends CoordinatesKey> extends Recognizer<T> {
-  valueKey = 'xy' as ValueKey<T>
-
   protected checkIntentionality(
     _intentional: [FalseOrNumber, FalseOrNumber],
     _movement: Vector2,
@@ -64,5 +62,9 @@ export default abstract class CoordinatesRecognizer<T extends CoordinatesKey> ex
       ...movementDetection,
       ...kinematics,
     } as PartialGestureState<T>
+  }
+
+  protected mapStateValues(values: Vector2): PartialGestureState<T> {
+    return { xy: values } as PartialGestureState<T>
   }
 }

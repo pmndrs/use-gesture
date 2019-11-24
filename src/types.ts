@@ -167,8 +167,6 @@ export type DistanceAngleKey = 'pinch'
 export type GestureKey = CoordinatesKey | DistanceAngleKey
 export type StateKey<T extends GestureKey = GestureKey> = T extends 'hover' ? 'move' : T
 
-export type ValueKey<T extends GestureKey> = StateKey<T> extends CoordinatesKey ? 'xy' : 'da'
-
 export type SharedGestureState = { [ingKey in IngKey]: boolean } & {
   touches: number
   down: boolean

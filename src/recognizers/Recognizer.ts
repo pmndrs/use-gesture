@@ -6,7 +6,6 @@ import {
   Fn,
   UseGestureEvent,
   IngKey,
-  ValueKey,
   InternalConfig,
   Handler,
   GestureState,
@@ -29,7 +28,6 @@ import { subV, getIntentional, addV, rubberBandIfOutOfBounds } from '../utils/ma
 export default abstract class Recognizer<T extends GestureKey> {
   protected abstract stateKey: StateKey<T> // the state key used by the recognizer (the same as gesture key for all gestures but hover)
   protected abstract ingKey: IngKey // dragging, scrolling, etc.
-  protected abstract valueKey: ValueKey<T> // either 'xy' for coordinates or 'da' for distance and angle
 
   /**
    * Continuous gestures are scroll or wheel, where the next gesture continues the previous one.
@@ -108,6 +106,8 @@ export default abstract class Recognizer<T extends GestureKey> {
    * @returns - set of values including movement, velocity, velocities, distance and direction
    */
   protected abstract getKinematics(values: Vector2, event: UseGestureEvent): PartialGestureState<T>
+
+  protected abstract mapStateValues(values: Vector2): PartialGestureState<T>
 
   // Should return the bindings to be added for a given gesture
   public abstract addBindings(): void
@@ -261,8 +261,8 @@ export default abstract class Recognizer<T extends GestureKey> {
     const state = {
       ...this.controller.state.shared,
       ...this.state,
+      ...this.mapStateValues(values), // Sets xy or da to the gesture state values
       [this.ingKey]: _active, // Sets dragging, pinching, etc. to the gesture active state
-      [this.valueKey]: values, // Sets xy or da to the gesture state values
     }
 
     const newMemo = this.handler(state)
