@@ -7,6 +7,7 @@ import { getPointerEventData, getGenericEventData } from '../utils/event'
 import { calculateDistance } from '../utils/math'
 
 const CLICK_DISTANCE_THRESHOLD = 3
+const SWIPE_MAX_ELAPSED_TIME = 220
 
 export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
   stateKey = 'drag' as StateKey<'drag'>
@@ -123,6 +124,7 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
 
     const {
       _isClick,
+      elapsedTime,
       movement: [mx, my],
       vxvy: [vx, vy],
       _intentional: [ix, iy],
@@ -134,8 +136,13 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
     } = this.config
 
     const swipe: [number, number] = [0, 0]
-    if (ix !== false && Math.abs(vx) > svx && Math.abs(mx) > sx) swipe[0] = Math.sign(vx)
-    if (iy !== false && Math.abs(vy) > svy && Math.abs(my) > sy) swipe[1] = Math.sign(vy)
+
+    if (elapsedTime < SWIPE_MAX_ELAPSED_TIME) {
+      if (ix !== false && Math.abs(vx) > svx && Math.abs(mx) > sx) swipe[0] = Math.sign(vx)
+      if (iy !== false && Math.abs(vy) > svy && Math.abs(my) > sy) swipe[1] = Math.sign(vy)
+    }
+
+    console.log(elapsedTime, vx, vy)
 
     this.updateGestureState({ event, ...this.getMovement(this.state.values), click: _isClick, swipe })
     this.fireGestureHandler(this.config.filterClicks && this.state._isClick)
