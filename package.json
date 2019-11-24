@@ -34,7 +34,7 @@
     "react": ">= 16.8.0"
   },
   "prettier": {
-    "printWidth": 140,
+    "printWidth": 120,
     "semi": false,
     "singleQuote": true,
     "trailingComma": "es5"
@@ -67,6 +67,11 @@
     "url": "https://github.com/react-spring/react-use-gesture/issues"
   },
   "homepage": "https://github.com/react-spring/react-use-gesture#readme",
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
+    }
+  },
   "devDependencies": {
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
