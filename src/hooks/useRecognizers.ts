@@ -1,26 +1,42 @@
 import React from 'react'
 import Controller from '../Controller'
-import { InternalConfig, HookReturnType, InternalHandlers, RecognizerClasses } from '../types'
-
-export default function useRecognizers<Config extends Partial<InternalConfig>>(
+import { InternalConfig, HookReturnType, InternalHandlers, RecognizerClasses, GenericOptions } from '../types'
+/**
+ * @private
+ *
+ * Utility hook called by all gesture hooks and that will be responsible for the internals.
+ *
+ * @param {Partial<InternalHandlers>} handlers
+ * @param {RecognizerClasses} classes
+ * @param {InternalConfig} config
+ * @returns {(...args: any[]) => HookReturnType<Config>}
+ */
+export default function useRecognizers<Config extends Partial<GenericOptions>>(
   handlers: Partial<InternalHandlers>,
   classes: RecognizerClasses,
   config: InternalConfig
 ): (...args: any[]) => HookReturnType<Config> {
-  // the gesture controller will keep track of all gesture states
-  const controller = React.useRef<Controller>()
+  const controller = React.useRef<Controller>() // The gesture controller keeping track of all gesture states
 
   if (!controller.current) {
-    // we initialize the gesture controller once
+    // We only initialize the gesture controller once
     controller.current = new Controller()
   }
 
+  // We reassign the config and handlers to the controller on every render.
   controller.current!.config = config
   controller.current!.handlers = handlers
 
-  // when the user component unmounts, we run our gesture controller clean function
+  /**
+   * When the component unmounts, we run the controller clean functions that will be responsible
+   * for removing listeners, clearing timeouts etc.
+   */
   React.useEffect(() => controller.current!.clean, [])
 
+  /**
+   * The bind function will create gesture recognizers and return the right
+   * bind object depending on whether `domTarget` was specified in the config object.
+   */
   const [bind] = React.useState(() => (...args: any[]) => {
     controller.current!.resetBindings()
     classes.forEach(RecognizerClass => {
@@ -31,7 +47,5 @@ export default function useRecognizers<Config extends Partial<InternalConfig>>(
     return controller.current!.getBind() as HookReturnType<Config>
   })
 
-  // we return the bind function of our controller, which returns an binding object or
-  // a cleaning function depending on whether config.domTarget is set
   return bind
 }

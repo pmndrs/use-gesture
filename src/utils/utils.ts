@@ -19,6 +19,8 @@ export const clone = <T>(obj: T): T => {
 
 export const matchKeysFromObject = <T extends object, K extends object>(obj: T, matchingObject: K): Partial<T> => {
   const o: Partial<T> = {}
-  Object.entries(obj).forEach(([key, value]) => (value !== void 0 || key in matchingObject) && (o[key as keyof T] = value))
+  Object.entries(obj).forEach(
+    ([key, value]) => (value !== void 0 || key in matchingObject) && (o[key as keyof T] = value)
+  )
   return o
 }

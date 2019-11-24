@@ -120,7 +120,12 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
 
   onDragEnd = (event: UseGestureEvent): void => {
     this.state._active = false
-    this.updateSharedState({ dragging: false, down: false, buttons: 0, touches: 0 })
+    this.updateSharedState({
+      dragging: false,
+      down: false,
+      buttons: 0,
+      touches: 0,
+    })
 
     const {
       _isClick,
@@ -142,18 +147,20 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
       if (iy !== false && Math.abs(vy) > svy && Math.abs(my) > sy) swipe[1] = Math.sign(vy)
     }
 
-    console.log(elapsedTime, vx, vy)
-
-    this.updateGestureState({ event, ...this.getMovement(this.state.values), click: _isClick, swipe })
+    this.updateGestureState({
+      event,
+      ...this.getMovement(this.state.values),
+      click: _isClick,
+      swipe,
+    })
     this.fireGestureHandler(this.config.filterClicks && this.state._isClick)
   }
 
   clean = (): void => {
-    this.clearTimeout()
+    super.clean()
     this.state._delayedEvent = false
 
     if (this.controller.config.pointer) this.removePointers()
-    else this.removeWindowListeners()
   }
 
   onCancel = (event: UseGestureEvent): void => {

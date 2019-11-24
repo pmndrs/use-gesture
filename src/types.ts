@@ -17,6 +17,11 @@ export interface AxisBounds {
   right?: number
 }
 
+export interface Bounds {
+  min?: number
+  max?: number
+}
+
 export interface EventOptions {
   capture: boolean
   passive: boolean
@@ -81,7 +86,12 @@ export type InternalConfig = InternalGenericOptions & { drag?: InternalDragOptio
 
 export type WebKitGestureEvent = React.PointerEvent & { scale: number; rotation: number }
 export type UseGestureEvent<
-  T extends React.SyntheticEvent = React.MouseEvent | React.TouchEvent | React.WheelEvent | React.PointerEvent | WebKitGestureEvent
+  T extends React.SyntheticEvent =
+    | React.MouseEvent
+    | React.TouchEvent
+    | React.WheelEvent
+    | React.PointerEvent
+    | WebKitGestureEvent
 > = T & {
   gesture?: GestureKey
 }
@@ -268,4 +278,6 @@ export type RecognizerClasses = (RecognizerClass<'drag'> | RecognizerClass<'pinc
 export type UserHandlersPartial = AtLeastOneOf<UserHandlers> &
   Partial<Omit<React.DOMAttributes<Element>, 'onDrag' | 'onScroll' | 'onWheel'>>
 
-export type HookReturnType<T extends { domTarget?: DomTarget }> = T['domTarget'] extends object ? Fn : ReactEventHandlers
+export type HookReturnType<T extends { domTarget?: DomTarget }> = T['domTarget'] extends object
+  ? Fn
+  : ReactEventHandlers

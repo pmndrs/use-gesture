@@ -1,5 +1,5 @@
 import { getInternalGenericOptions, getInternalDragOptions } from '../src/utils/config'
-import { DragConfig } from '../src/types'
+import { DragConfig, GenericOptions } from '../src/types'
 
 describe('testing derived config', () => {
   describe('testing derived generic configuration', () => {
@@ -14,7 +14,9 @@ describe('testing derived config', () => {
       })
     })
     test(`derived passive is true if target isn't specified`, () => {
-      const config = { eventOptions: { passive: false } }
+      let config: Partial<GenericOptions> = { eventOptions: { capture: false } }
+      expect(getInternalGenericOptions(config)).toHaveProperty('eventOptions.passive', true)
+      config = { eventOptions: { passive: false } }
       expect(getInternalGenericOptions(config)).toHaveProperty('eventOptions.passive', true)
     })
 

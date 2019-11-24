@@ -3,7 +3,14 @@ import { calculateAllKinematics } from '../utils/math'
 import { Vector2, UseGestureEvent, ValueKey, CoordinatesKey, PartialGestureState, FalseOrNumber } from '../types'
 
 /**
+ * 
+/**
+ * @private
  * Abstract class for coordinates-based gesture recongizers
+ * @abstract
+ * @class CoordinatesRecognizer
+ * @extends {Recognizer<T>}
+ * @template T
  */
 export default abstract class CoordinatesRecognizer<T extends CoordinatesKey> extends Recognizer<T> {
   valueKey = 'xy' as ValueKey<T>

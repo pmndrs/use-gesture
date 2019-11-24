@@ -1,4 +1,12 @@
-import { StateKey, State, Fn, ReactEventHandlerKey, ReactEventHandlers, InternalConfig, InternalHandlers } from './types'
+import {
+  StateKey,
+  State,
+  Fn,
+  ReactEventHandlerKey,
+  ReactEventHandlers,
+  InternalConfig,
+  InternalHandlers,
+} from './types'
 import { initialState } from './utils/state'
 import { addListeners, removeListeners } from './utils/event'
 import { chainFns, clone } from './utils/utils'
@@ -8,8 +16,8 @@ type WindowListeners = Partial<{ [stateKey in StateKey]: [string, Fn][] }>
 type Bindings = Partial<{ [eventName in ReactEventHandlerKey]: Fn[] }>
 
 /**
- * Gesture controller will create gesture recognizers (which handle the gesture logic)
- * and keep track of the state for all gestures
+ * The controller will keep track of the state for all gestures and also keep
+ * track of timeouts, and window listeners.
  *
  * @template BinderType the type the bind function should return
  */
@@ -18,13 +26,12 @@ export default class Controller {
   public handlers!: Partial<InternalHandlers>
   public state: State = clone(initialState) // state for all gestures
   public timeouts: GestureTimeouts = {} // keeping track of timeouts for debounced gestures (such as move, scroll, wheel)
-  private bindings: Bindings = {} // an object holding the handlers associated to the gestures
   private domListeners: [string, Fn][] = [] // when config.domTarget is set, we attach events directly to the dom
   private windowListeners: WindowListeners = {} // keeps track of window listeners added by gestures (drag only at the moment)
+  private bindings: Bindings = {} // an object holding the handlers associated to the gestures
 
   /**
-   * Function run on component unmount
-   * Cleans timeouts and removes dom listeners set by the bind function
+   * Function ran on component unmount: cleans timeouts and removes dom listeners set by the bind function.
    */
   public clean = (): void => {
     this.resetBindings()
@@ -33,8 +40,8 @@ export default class Controller {
   }
 
   /**
-   * Function run every time the bind function is run (ie on every render)
-   * Reset the binding object and remove dom listeners attached to config.domTarget
+   * Function run every time the bind function is run (ie on every render).
+   * Resets the binding object and remove dom listeners attached to config.domTarget
    */
   public resetBindings = (): void => {
     this.bindings = {}
@@ -45,15 +52,16 @@ export default class Controller {
     }
   }
 
-  private getDomTarget = () => {
+  /**
+   * Returns the domTarget element and parses a ref if needed.
+   */
+  private getDomTarget = (): EventTarget | null | undefined => {
     const { domTarget } = this.config
     return domTarget && 'current' in domTarget ? domTarget.current : domTarget
   }
 
   /**
-   * Commodity function to let recognizers simply add listeners to config.window
-   * @param stateKey
-   * @param listeners
+   * Commodity function to let recognizers simply add listeners to config.window.
    */
   public addWindowListeners = (stateKey: StateKey, listeners: [string, Fn][]): void => {
     if (!this.config.window) return
@@ -62,7 +70,9 @@ export default class Controller {
     addListeners(this.config.window, listeners, this.config.eventOptions)
   }
 
-  // commodity function to let recognizers simply remove listeners from config.window
+  /**
+   * Commodity function to let recognizers simply remove listeners to config.window.
+   */
   public removeWindowListeners = (stateKey: StateKey): void => {
     if (!this.config.window) return
     const listeners = this.windowListeners[stateKey]
@@ -76,9 +86,9 @@ export default class Controller {
    * When config.domTarget is set, this function will add dom listeners to it
    */
   public addDomTargetListeners = (target: EventTarget): void => {
-    // we iterate on the entries of this.binding
-    // for each event, we chain the array of functions mapped to it
-    // and push it to this.domListeners
+    /** We iterate on the entries of this.binding for each event, then we chain
+     * the array of functions mapped to it and push them to this.domListeners
+     */
     Object.entries(this.bindings).forEach(([event, fns]) => {
       this.domListeners.push([event.substr(2).toLowerCase(), chainFns(...(fns as Fn[]))])
     })
@@ -87,7 +97,7 @@ export default class Controller {
   }
 
   /**
-   * this.bindings is an object which keys match ReactEventHandlerKeys (onMouseMove, onTouchStart...).
+   * this.bindings is an object which keys match ReactEventHandlerKeys.
    * Since a recognizer might want to bind a handler function to an event key already used by a previously
    * added recognizer, we need to make sure that each event key is an array of all the functions mapped for
    * that key.
@@ -102,7 +112,7 @@ export default class Controller {
 
   /**
    * getBindings will return an object that will be bound by users
-   * to the react component they want to interact with
+   * to the react component they want to interact with.
    */
   public getBindings = (): ReactEventHandlers => {
     const bindings: ReactEventHandlers = {}
@@ -119,13 +129,13 @@ export default class Controller {
 
   public getBind = () => {
     const domTarget = this.getDomTarget()
-    // if config.domTarget is set we add event listeners to it and return the clean function
+    // If config.domTarget is set we add event listeners to it and return the clean function.
     if (domTarget) {
       this.addDomTargetListeners(domTarget)
       return this.clean
     }
 
-    // if not, we return an object that contains gesture handlers mapped to react handler event keys
+    // If not, we return an object that contains gesture handlers mapped to react handler event keys.
     return this.getBindings()
   }
 }

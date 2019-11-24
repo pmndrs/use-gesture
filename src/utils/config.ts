@@ -1,3 +1,4 @@
+import { def, matchKeysFromObject } from './utils'
 import {
   Vector2,
   GenericOptions,
@@ -9,12 +10,10 @@ import {
   InternalDragOptions,
   InternalGestureOptions,
 } from '../types'
-import { def, matchKeysFromObject } from './utils'
 
 const DEFAULT_DRAG_DELAY = 180
 const DEFAULT_RUBBERBAND = 0.15
 
-// default config (will extend user config)
 const defaultOptions: GenericOptions = {
   domTarget: undefined,
   eventOptions: { passive: true, capture: false, pointer: false },
@@ -37,17 +36,24 @@ const defaultDragOptions: DragOptions = {
   axis: undefined,
   delay: false,
 }
-
+/**
+ * @private
+ *
+ * Returns the internal generic option object.
+ *
+ * @param {Partial<GenericOptions>} [config={}]
+ * @returns {InternalGenericOptions}
+ */
 export const getInternalGenericOptions = (config: Partial<GenericOptions> = {}): InternalGenericOptions => {
   const { eventOptions: defaultEventOptions, window: defaultWindow, ...restDefault } = defaultOptions
   const { eventOptions, window, ...restConfig } = config
-
   const { passive, capture, pointer } = { ...defaultEventOptions, ...eventOptions }
 
   return {
     ...restDefault,
     ...restConfig,
     window: window || defaultWindow,
+    // passive is always true if there's no domTarget
     eventOptions: { passive: !config.domTarget || !!passive, capture: !!capture },
     captureString: capture ? 'Capture' : '',
     pointer: !!pointer,
@@ -77,7 +83,10 @@ const getInternalGestureOptions = (gestureConfig: Partial<GestureOptions>): Inte
 
 export const getInternalDragOptions = (dragConfig: DragConfig = {}): InternalDragOptions => {
   let { enabled, threshold, bounds, rubberband, ...dragOptions } = dragConfig
-  let { swipeVelocity, swipeDistance, delay, filterClicks, axis, lockDirection } = { ...defaultDragOptions, ...dragOptions }
+  let { swipeVelocity, swipeDistance, delay, filterClicks, axis, lockDirection } = {
+    ...defaultDragOptions,
+    ...dragOptions,
+  }
 
   if (threshold === void 0) {
     threshold = Math.max(0, filterClicks ? 3 : 0, lockDirection || axis ? 1 : 0)
@@ -85,7 +94,9 @@ export const getInternalDragOptions = (dragConfig: DragConfig = {}): InternalDra
     filterClicks = true
   }
 
-  const internalGestureOptions = getInternalGestureOptions(matchKeysFromObject({ enabled, threshold, bounds, rubberband }, dragConfig))
+  const internalGestureOptions = getInternalGestureOptions(
+    matchKeysFromObject({ enabled, threshold, bounds, rubberband }, dragConfig)
+  )
 
   return {
     ...internalGestureOptions,

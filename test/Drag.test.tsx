@@ -26,7 +26,11 @@ describe.each([
     expect(queryByTestId(`${prefix}drag-active`)).not.toBeInTheDocument()
   })
   test('mouseDown should initiate the gesture', () => {
-    const event = createEvent.mouseDown(element, { clientX: 10, clientY: 20, buttons: 1 })
+    const event = createEvent.mouseDown(element, {
+      clientX: 10,
+      clientY: 20,
+      buttons: 1,
+    })
     fireEvent(element, event)
     delta_t = event.timeStamp
 
@@ -49,7 +53,11 @@ describe.each([
     expect(getByTestId(`${prefix}drag-memo`)).toHaveTextContent('memo')
   })
   test('moving should set first to false', () => {
-    const event = createEvent.mouseMove(window, { clientX: 20, clientY: 50, buttons: 1 })
+    const event = createEvent.mouseMove(window, {
+      clientX: 20,
+      clientY: 50,
+      buttons: 1,
+    })
     fireEvent(window, event)
     delta_t = event.timeStamp - delta_t
     expect(getByTestId(`${prefix}drag-first`)).toHaveTextContent('false')
