@@ -24,29 +24,35 @@ export interface EventOptions {
 
 type DomTarget = EventTarget | React.RefObject<EventTarget>
 
-export interface GenericConfig {
+export interface GenericOptions {
   domTarget?: DomTarget
   window?: EventTarget
   eventOptions: Partial<EventOptions & { pointer: boolean }>
   enabled: boolean
 }
 
-export interface DragConfig {
+export interface GestureOptions {
   enabled: boolean
-  filterClicks: boolean
   threshold?: number | Vector2
+  bounds?: AxisBounds
+  rubberband: boolean | number | Vector2
+}
+
+export interface DragOptions {
+  filterClicks: boolean
   swipeVelocity: number | Vector2
   swipeDistance: number | Vector2
   lockDirection: boolean
-  bounds?: AxisBounds
-  rubberband: boolean | number | Vector2
   delay: boolean | number
   axis?: 'x' | 'y'
 }
 
-export type PartialUserConfig = Partial<GenericConfig> & { drag?: Partial<DragConfig> }
+export type DragConfig = Partial<GestureOptions & DragOptions>
 
-export interface InternalGenericConfig {
+export type UseDragConfig = Partial<GenericOptions> & DragConfig
+export type UseGestureConfig = Partial<GenericOptions> & { drag?: DragConfig }
+
+export interface InternalGenericOptions {
   domTarget?: DomTarget
   eventOptions: EventOptions
   window?: EventTarget
@@ -55,14 +61,14 @@ export interface InternalGenericConfig {
   enabled: boolean
 }
 
-export interface InternalCommonConfig {
+export interface InternalGestureOptions {
   enabled: boolean
   threshold: Vector2
   bounds: Tuple<Vector2>
   rubberband: Vector2
 }
 
-export interface InternalDragConfig extends InternalCommonConfig {
+export interface InternalDragOptions extends InternalGestureOptions {
   filterClicks: boolean
   lockDirection: boolean
   swipeVelocity: Vector2
@@ -71,7 +77,7 @@ export interface InternalDragConfig extends InternalCommonConfig {
   axis?: 'x' | 'y'
 }
 
-export type InternalFullConfig = InternalGenericConfig & { drag?: InternalDragConfig; pinch?: InternalCommonConfig }
+export type InternalConfig = InternalGenericOptions & { drag?: InternalDragOptions; pinch?: InternalGestureOptions }
 
 export type WebKitGestureEvent = React.PointerEvent & { scale: number; rotation: number }
 export type UseGestureEvent<

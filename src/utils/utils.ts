@@ -9,11 +9,16 @@ export const def = {
   array: <T>(value: T | T[]): T[] => (Array.isArray(value) ? value : [value, value]),
 }
 
-export const clone = <T>(arr: T): T => {
+export const clone = <T>(obj: T): T => {
   const cloned: T = {} as T
-  Object.entries(arr).forEach(([name, value]) => {
-    // @ts-ignore
-    cloned[name] = typeof value !== 'object' ? value : Array.isArray(value) ? [...value] : clone(value)
+  Object.entries(obj).forEach(([name, value]) => {
+    cloned[name as keyof T] = typeof value !== 'object' ? value : Array.isArray(value) ? [...value] : clone(value)
   })
   return cloned
+}
+
+export const matchKeysFromObject = <T extends object, K extends object>(obj: T, matchingObject: K): Partial<T> => {
+  const o: Partial<T> = {}
+  Object.entries(obj).forEach(([key, value]) => (value !== void 0 || key in matchingObject) && (o[key as keyof T] = value))
+  return o
 }

@@ -7,7 +7,7 @@ import {
   UseGestureEvent,
   IngKey,
   ValueKey,
-  InternalFullConfig,
+  InternalConfig,
   Handler,
   GestureState,
   PartialGestureState,
@@ -42,7 +42,7 @@ export default abstract class Recognizer<T extends GestureKey> {
   constructor(protected readonly gestureKey: T, protected readonly controller: Controller, protected readonly args: any[] = []) {}
 
   // get the gesture config
-  protected get config(): NonNullable<InternalFullConfig[T]> {
+  protected get config(): NonNullable<InternalConfig[T]> {
     return this.controller.config[this.gestureKey]!
   }
   // is the gesture enabled

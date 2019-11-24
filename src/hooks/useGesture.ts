@@ -2,25 +2,23 @@ import React from 'react'
 import useRecognizers from './useRecognizers'
 import DragRecognizer from '../recognizers/DragRecognizer'
 import {
-  GenericConfig,
-  DragConfig,
-  InternalFullConfig,
+  InternalConfig,
   HandlerKey,
   UserHandlersPartial,
   InternalHandlers,
   UserHandlers,
   RecognizerClasses,
+  UseGestureConfig,
 } from '../types'
-import { getGenericConfig, getDragConfig } from '../utils/config'
 
-type UseGestureUserConfig = Partial<GenericConfig> & { drag?: Partial<DragConfig> }
+import { getInternalGenericOptions, getInternalDragOptions } from '../utils/config'
 
-export function useGesture(handlers: UserHandlersPartial, config: UseGestureUserConfig = {}) {
+export function useGesture(handlers: UserHandlersPartial, config: UseGestureConfig = {}) {
   const [actions] = React.useState(() => new Set(Object.keys(handlers).map(k => k.replace(/End|Start/, ''))))
 
   const { drag, ...restConfig } = config
 
-  const mergedConfig: InternalFullConfig = getGenericConfig(restConfig)
+  const mergedConfig: InternalConfig = getInternalGenericOptions(restConfig)
 
   const classes: RecognizerClasses = []
   const internalHandlers: Partial<InternalHandlers> = {}
@@ -28,7 +26,7 @@ export function useGesture(handlers: UserHandlersPartial, config: UseGestureUser
   if (actions.has('onDrag')) {
     classes.push(DragRecognizer)
     internalHandlers.drag = includeStartEndHandlers(handlers, 'onDrag')
-    mergedConfig.drag = getDragConfig(drag)
+    mergedConfig.drag = getInternalDragOptions(drag)
   }
 
   return useRecognizers(internalHandlers, classes, mergedConfig)

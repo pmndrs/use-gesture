@@ -1,4 +1,4 @@
-import { StateKey, State, Fn, ReactEventHandlerKey, ReactEventHandlers, InternalFullConfig, InternalHandlers } from './types'
+import { StateKey, State, Fn, ReactEventHandlerKey, ReactEventHandlers, InternalConfig, InternalHandlers } from './types'
 import { initialState } from './utils/state'
 import { addListeners, removeListeners } from './utils/event'
 import { chainFns, clone } from './utils/utils'
@@ -14,7 +14,7 @@ type Bindings = Partial<{ [eventName in ReactEventHandlerKey]: Fn[] }>
  * @template BinderType the type the bind function should return
  */
 export default class Controller {
-  public config!: InternalFullConfig
+  public config!: InternalConfig
   public handlers!: Partial<InternalHandlers>
   public state: State = clone(initialState) // state for all gestures
   public timeouts: GestureTimeouts = {} // keeping track of timeouts for debounced gestures (such as move, scroll, wheel)

@@ -1,32 +1,45 @@
-import { Vector2, GenericConfig, InternalGenericConfig, InternalDragConfig, DragConfig, Tuple } from '../types'
-import { def } from './utils'
+import {
+  Vector2,
+  GenericOptions,
+  InternalGenericOptions,
+  DragConfig,
+  Tuple,
+  GestureOptions,
+  DragOptions,
+  InternalDragOptions,
+  InternalGestureOptions,
+} from '../types'
+import { def, matchKeysFromObject } from './utils'
 
 const DEFAULT_DRAG_DELAY = 180
 const DEFAULT_RUBBERBAND = 0.15
 
 // default config (will extend user config)
-export const defaultConfig: GenericConfig = {
+const defaultOptions: GenericOptions = {
   domTarget: undefined,
   eventOptions: { passive: true, capture: false, pointer: false },
   window: typeof window !== 'undefined' ? window : undefined,
   enabled: true,
 }
 
-export const defaultDragConfig: DragConfig = {
+const defaultGestureOptions: GestureOptions = {
   enabled: true,
-  filterClicks: false,
   threshold: undefined,
-  swipeVelocity: 0.5,
-  swipeDistance: 100,
-  axis: undefined,
-  lockDirection: false,
-  delay: false,
   bounds: undefined,
   rubberband: 0,
 }
 
-export const getGenericConfig = (config: Partial<GenericConfig>): InternalGenericConfig => {
-  const { eventOptions: defaultEventOptions, window: defaultWindow, ...restDefault } = defaultConfig
+const defaultDragOptions: DragOptions = {
+  filterClicks: false,
+  swipeVelocity: 0.5,
+  swipeDistance: 100,
+  lockDirection: false,
+  axis: undefined,
+  delay: false,
+}
+
+export const getInternalGenericOptions = (config: Partial<GenericOptions> = {}): InternalGenericOptions => {
+  const { eventOptions: defaultEventOptions, window: defaultWindow, ...restDefault } = defaultOptions
   const { eventOptions, window, ...restConfig } = config
 
   const { passive, capture, pointer } = { ...defaultEventOptions, ...eventOptions }
@@ -41,9 +54,9 @@ export const getGenericConfig = (config: Partial<GenericConfig>): InternalGeneri
   }
 }
 
-export const getDragConfig = (dragConfig?: Partial<DragConfig>): InternalDragConfig => {
-  const config = { ...defaultDragConfig, ...dragConfig }
-  let { threshold, swipeVelocity, swipeDistance, delay, filterClicks, axis, lockDirection, bounds, rubberband, ...restDrag } = config
+const getInternalGestureOptions = (gestureConfig: Partial<GestureOptions>): InternalGestureOptions => {
+  const config = { ...defaultGestureOptions, ...gestureConfig }
+  let { threshold, bounds, rubberband, enabled } = config
 
   bounds = bounds || {}
 
@@ -52,26 +65,35 @@ export const getDragConfig = (dragConfig?: Partial<DragConfig>): InternalDragCon
     [bounds.bottom || Infinity, bounds!.top || Infinity],
   ]
 
+  if (typeof rubberband === 'boolean') rubberband = rubberband ? DEFAULT_RUBBERBAND : 0
+
+  return {
+    enabled,
+    threshold: def.array(threshold) as Vector2,
+    bounds: boundsArray as Tuple<Vector2>,
+    rubberband: def.array(rubberband) as Vector2,
+  }
+}
+
+export const getInternalDragOptions = (dragConfig: DragConfig = {}): InternalDragOptions => {
+  let { enabled, threshold, bounds, rubberband, ...dragOptions } = dragConfig
+  let { swipeVelocity, swipeDistance, delay, filterClicks, axis, lockDirection } = { ...defaultDragOptions, ...dragOptions }
+
   if (threshold === void 0) {
     threshold = Math.max(0, filterClicks ? 3 : 0, lockDirection || axis ? 1 : 0)
   } else {
     filterClicks = true
   }
 
-  if (typeof rubberband === 'boolean') rubberband = DEFAULT_RUBBERBAND
-
-  const thresholdArray = def.array(threshold) as Vector2
+  const internalGestureOptions = getInternalGestureOptions(matchKeysFromObject({ enabled, threshold, bounds, rubberband }, dragConfig))
 
   return {
-    ...restDrag,
-    filterClicks: filterClicks || thresholdArray[0] + thresholdArray[1] > 0,
+    ...internalGestureOptions,
+    filterClicks: filterClicks || internalGestureOptions.threshold[0] + internalGestureOptions.threshold[1] > 0,
     axis,
     lockDirection,
-    threshold: thresholdArray,
     swipeVelocity: def.array(swipeVelocity) as Vector2,
     swipeDistance: def.array(swipeDistance) as Vector2,
-    bounds: boundsArray as Tuple<Vector2>,
-    rubberband: def.array(rubberband) as Vector2,
     delay: typeof delay === 'number' ? delay : delay ? DEFAULT_DRAG_DELAY : 0,
   }
 }

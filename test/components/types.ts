@@ -1,5 +1,5 @@
 import React from 'react'
-import { Fn, PartialUserConfig } from '../../src/types'
+import { Fn, UseGestureConfig } from '../../src/types'
 
 interface Props {
   bindArgs?: any[]
@@ -7,7 +7,7 @@ interface Props {
   cancel?: Fn
   canceled?: boolean
   memoArg?: any
-  config?: PartialUserConfig
+  config?: UseGestureConfig
 }
 
 export type InteractiveType = React.FunctionComponent<Props>

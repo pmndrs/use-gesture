@@ -1,20 +1,20 @@
 import useRecognizers from './useRecognizers'
 import DragRecognizer from '../recognizers/DragRecognizer'
-import { Handler, GenericConfig, DragConfig, InternalFullConfig, HookReturnType } from '../types'
-import { getGenericConfig, getDragConfig } from '../utils/config'
+import { Handler, InternalConfig, HookReturnType, UseDragConfig } from '../types'
+import { getInternalGenericOptions, getInternalDragOptions } from '../utils/config'
 
-type UseDragUserConfig = Partial<GenericConfig & DragConfig>
-
-export function useDrag<Config extends UseDragUserConfig>(
+export function useDrag<Config extends UseDragConfig>(
   handler: Handler<'drag'>,
   config: Config | {} = {}
 ): (...args: any[]) => HookReturnType<Config> {
-  const { domTarget, eventOptions, window, ...drag } = config as UseDragUserConfig
+  const { domTarget, eventOptions, window, ...drag } = config as UseDragConfig
   // every time the config changes, we update the controller config (might be optimized)
-  const mergedConfig: InternalFullConfig = {
-    ...getGenericConfig({ domTarget, eventOptions, window }),
-    drag: getDragConfig(drag),
+  const mergedConfig: InternalConfig = {
+    ...getInternalGenericOptions({ domTarget, eventOptions, window }),
+    drag: getInternalDragOptions(drag),
   }
+
+  console.log(mergedConfig)
 
   return useRecognizers<Config>({ drag: handler }, [DragRecognizer], mergedConfig)
 }
