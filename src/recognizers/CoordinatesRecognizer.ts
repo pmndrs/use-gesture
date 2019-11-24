@@ -3,8 +3,6 @@ import { calculateAllKinematics } from '../utils/math'
 import { Vector2, UseGestureEvent, CoordinatesKey, PartialGestureState, FalseOrNumber } from '../types'
 
 /**
- * 
-/**
  * @private
  * Abstract class for coordinates-based gesture recongizers
  * @abstract
@@ -13,6 +11,15 @@ import { Vector2, UseGestureEvent, CoordinatesKey, PartialGestureState, FalseOrN
  * @template T
  */
 export default abstract class CoordinatesRecognizer<T extends CoordinatesKey> extends Recognizer<T> {
+  /**
+   * In coordinates-based gesture, this function will detect the first intentional axis,
+   * lock the gesture axis if lockDirection is specified in the config, block the gesture
+   * if the first intentional axis doesn't match the specified axis in config.
+   *
+   * @param {[FalseOrNumber, FalseOrNumber]} _intentional
+   * @param {Vector2} _movement
+   * @param {PartialGestureState<T>} state
+   */
   protected checkIntentionality(
     _intentional: [FalseOrNumber, FalseOrNumber],
     _movement: Vector2,
@@ -22,20 +29,26 @@ export default abstract class CoordinatesRecognizer<T extends CoordinatesKey> ex
     const intentionalMovement = _ix !== false || _iy !== false
     let { axis } = state
     let _blocked = false
+
+    // If the movement is intentional, we can compute axis.
     if (intentionalMovement) {
       const [absX, absY] = _movement.map(Math.abs)
 
       const { axis: configAxis, lockDirection } = this.config
 
+      // We make sure we only set axis value if it hadn't been detected before.
       axis = axis || (absX > absY ? 'x' : absX < absY ? 'y' : undefined)
       if (!!configAxis || lockDirection) {
         if (!!axis) {
+          // If the detected axis doesn't match the config axis we block the gesture
           if (!!configAxis && axis !== configAxis) _blocked = true
           else {
+            // Otherwise we prevent the gesture from updating the unwanted axis.
             const lockedIndex = axis === 'x' ? 1 : 0
             _intentional![lockedIndex] = false
           }
         } else {
+          // Until we've detected the axis, we prevent the hnadler from updating.
           _intentional = [false, false]
         }
       }
