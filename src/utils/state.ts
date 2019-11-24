@@ -54,7 +54,7 @@ export const initialState: State = {
   },
   drag: { ...initialCommon, ...initialCoordinates, _isClick: true, _delayedEvent: false, click: false, swipe: [0, 0] },
   pinch: { ...initialCommon, ...initialDistanceAngle },
+  wheel: { ...initialCommon, ...initialCoordinates },
   // move: { ...initialCommon, ...initialCoordinates },
   // scroll: { ...initialCommon, ...initialCoordinates },
-  // wheel: { ...initialCommon, ...initialCoordinates },
 }

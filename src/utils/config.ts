@@ -9,6 +9,9 @@ import {
   DragOptions,
   InternalDragOptions,
   InternalGestureOptions,
+  CoordinatesConfig,
+  CoordinatesOptions,
+  InternalCoordinatesOptions,
 } from '../types'
 
 const DEFAULT_DRAG_DELAY = 180
@@ -28,12 +31,15 @@ const defaultGestureOptions: GestureOptions = {
   rubberband: 0,
 }
 
+const defaultCoordinatesOptions: CoordinatesOptions = {
+  lockDirection: false,
+  axis: undefined,
+}
+
 const defaultDragOptions: DragOptions = {
   filterClicks: false,
   swipeVelocity: 0.5,
   swipeDistance: 100,
-  lockDirection: false,
-  axis: undefined,
   delay: false,
 }
 /**
@@ -81,6 +87,17 @@ const getInternalGestureOptions = (gestureConfig: Partial<GestureOptions>): Inte
   }
 }
 
+export const getInternalCoordinatesOptions = (
+  coordinatesConfig: Partial<CoordinatesConfig>
+): InternalCoordinatesOptions => {
+  const { axis, lockDirection, ...internalOptions } = coordinatesConfig
+  return {
+    ...getInternalGestureOptions(internalOptions),
+    ...defaultCoordinatesOptions,
+    ...matchKeysFromObject({ axis, lockDirection }, coordinatesConfig),
+  }
+}
+
 export const getInternalDragOptions = (dragConfig: DragConfig = {}): InternalDragOptions => {
   let { enabled, threshold, bounds, rubberband, ...dragOptions } = dragConfig
   let { swipeVelocity, swipeDistance, delay, filterClicks, axis, lockDirection } = {
@@ -94,15 +111,13 @@ export const getInternalDragOptions = (dragConfig: DragConfig = {}): InternalDra
     filterClicks = true
   }
 
-  const internalGestureOptions = getInternalGestureOptions(
-    matchKeysFromObject({ enabled, threshold, bounds, rubberband }, dragConfig)
+  const internalCoordinatesOptions = getInternalCoordinatesOptions(
+    matchKeysFromObject({ enabled, threshold, bounds, rubberband, axis, lockDirection }, dragConfig)
   )
 
   return {
-    ...internalGestureOptions,
-    filterClicks: filterClicks || internalGestureOptions.threshold[0] + internalGestureOptions.threshold[1] > 0,
-    axis,
-    lockDirection,
+    ...internalCoordinatesOptions,
+    filterClicks: filterClicks || internalCoordinatesOptions.threshold[0] + internalCoordinatesOptions.threshold[1] > 0,
     swipeVelocity: def.array(swipeVelocity) as Vector2,
     swipeDistance: def.array(swipeDistance) as Vector2,
     delay: typeof delay === 'number' ? delay : delay ? DEFAULT_DRAG_DELAY : 0,
