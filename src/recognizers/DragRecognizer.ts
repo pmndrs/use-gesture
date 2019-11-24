@@ -121,7 +121,6 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
   onDragEnd = (event: UseGestureEvent): void => {
     this.state._active = false
     this.updateSharedState({
-      dragging: false,
       down: false,
       buttons: 0,
       touches: 0,
