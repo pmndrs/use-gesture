@@ -71,9 +71,18 @@ export const Common = React.forwardRef(
     ref
   ) => {
     return (
-      <div ref={ref as React.RefObject<HTMLDivElement>} {...listeners} data-testid={`${testKey}-el`} style={{ height: 400, width: 400 }}>
-        <div data-testid={`${testKey}-start`}>{startFired === 0 ? 'not fired' : startFired > 1 ? 'fired too much' : 'fired'}</div>
-        <div data-testid={`${testKey}-end`}>{endFired === 0 ? 'not fired' : endFired > 1 ? 'fired too much' : 'fired'}</div>
+      <div
+        ref={ref as React.RefObject<HTMLDivElement>}
+        {...listeners}
+        data-testid={`${testKey}-el`}
+        style={{ height: 400, width: 400 }}
+      >
+        <div data-testid={`${testKey}-start`}>
+          {startFired === 0 ? 'not fired' : startFired > 1 ? 'fired too much' : 'fired'}
+        </div>
+        <div data-testid={`${testKey}-end`}>
+          {endFired === 0 ? 'not fired' : endFired > 1 ? 'fired too much' : 'fired'}
+        </div>
         {Object.entries(state).map(([k, v]) => (
           <div key={k} data-testid={`${testKey}-${k}`}>
             {String(v)}

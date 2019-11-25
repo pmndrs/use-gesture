@@ -10,7 +10,15 @@ const Interactive: InteractiveType = ({ bindArgs = [], gestures, canceled, memoA
   const bind = useGesture(createHandlers({ gestures, memoArg, set, setStartEnd, canceled }), config)
   const testKey = gestures.join('').toLowerCase()
 
-  return <Common listeners={{ ...bind(...bindArgs) }} state={state} testKey={testKey} startFired={startFired} endFired={endFired} />
+  return (
+    <Common
+      listeners={{ ...bind(...bindArgs) }}
+      state={state}
+      testKey={testKey}
+      startFired={startFired}
+      endFired={endFired}
+    />
+  )
 }
 
 export default Interactive
