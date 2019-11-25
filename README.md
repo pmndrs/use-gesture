@@ -1,7 +1,6 @@
 # react-use-gesture
 
-![npm (tag)](https://img.shields.io/npm/v/react-use-gesture/alpha) ![npm bundle size](https://img.shields.io/bundlephobia/minzip/react-use-gesture/7.0.0-alpha.18) ![NPM](https://img.shields.io/npm/l/react-use-gesture.svg) ![Travis (.org) branch](https://img.shields.io/travis/react-spring/react-use-gesture/v7)
-
+![npm (tag)](https://img.shields.io/npm/v/react-use-gesture/alpha) ![npm bundle size](https://img.shields.io/bundlephobia/minzip/react-use-gesture/7.0.0-alpha.21) ![NPM](https://img.shields.io/npm/l/react-use-gesture.svg) ![Travis (.org) branch](https://img.shields.io/travis/react-spring/react-use-gesture/v7)
 
 React-use-gesture is a hook that lets you bind richer mouse and touch events to any component or view. With the data you receive, it becomes trivial to set up gestures, and often takes no more than a few lines of code.
 
@@ -52,7 +51,7 @@ The example above makes a `div` draggable so that it follows your mouse on drag,
 React-use-gesture exports several hooks that can handle different gestures.
 
 | Hook         | Description                                                                                                     |
-|--------------|-----------------------------------------------------------------------------------------------------------------|
+| ------------ | --------------------------------------------------------------------------------------------------------------- |
 | `useDrag`    | Handles the drag gesture                                                                                        |
 | `useMove`    | Handles mouse move events (touch devices not supported)                                                         |
 | `useHover`   | Handles mouse over events (touch devices not supported)                                                         |
@@ -106,12 +105,13 @@ const bind = useDrag(({
 Pinch is about scaling and rotating, therefore the keys `xy` and `vxvy` are renamed `da` (for distance and angle) and `vdva` respectively.
 
 ```jsx
-const bind = usePinch(({
-  da,         // [d,a] absolute distance and angle of the two pointers
-  vdva,       // momentum / speed of the distance and rotation
-  origin      // coordinates of the center between the two touch event
-}) => {
-  /* gesture logic */
+const bind = usePinch(
+  ({
+    da, // [d,a] absolute distance and angle of the two pointers
+    vdva, // momentum / speed of the distance and rotation
+    origin, // coordinates of the center between the two touch event
+  }) => {
+    /* gesture logic */
   }
 )
 ```
@@ -301,14 +301,20 @@ This is typically a-feature-not-a-bug situation 🙃 Drag is triggered as soon a
 
 ```jsx
 // using the default delay
-const bind = useDrag(() => {
-  console.log(`Won't show if you hold your mouse less than 180ms`)
-}, { dragDelay: true })
+const bind = useDrag(
+  () => {
+    console.log(`Won't show if you hold your mouse less than 180ms`)
+  },
+  { dragDelay: true }
+)
 
 // using a custom delay
-const bind = useDrag(() => {
-  console.log(`Won't show if you hold your mouse less than 1000ms`)
-}, { dragDelay: 1000 })
+const bind = useDrag(
+  () => {
+    console.log(`Won't show if you hold your mouse less than 1000ms`)
+  },
+  { dragDelay: 1000 }
+)
 ```
 
 #### Why am I getting warnings from `preventDefault()` after I pass `{ passive: false }`
