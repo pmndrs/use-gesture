@@ -23,7 +23,6 @@
       "Move",
       "Hover",
       "Scroll",
-      "Wheel",
       "Pinch"
     ],
     "setupFiles": [

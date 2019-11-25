@@ -78,6 +78,7 @@ const getInternalGestureOptions = (gestureConfig: Partial<GestureOptions>): Inte
   ]
 
   if (typeof rubberband === 'boolean') rubberband = rubberband ? DEFAULT_RUBBERBAND : 0
+  if (threshold === void 0) threshold = 0
 
   return {
     enabled,
@@ -88,7 +89,7 @@ const getInternalGestureOptions = (gestureConfig: Partial<GestureOptions>): Inte
 }
 
 export const getInternalCoordinatesOptions = (
-  coordinatesConfig: Partial<CoordinatesConfig>
+  coordinatesConfig: CoordinatesConfig = {}
 ): InternalCoordinatesOptions => {
   const { axis, lockDirection, ...internalOptions } = coordinatesConfig
   return {

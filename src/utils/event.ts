@@ -63,18 +63,6 @@ export function getModifierKeys(event: UseGestureEvent): ModifierKeys {
 
 // type WheelEventData = Pick<FullGestureState<Coordinates>, 'xy'> & ModifierKeys
 
-// /**
-//  * Gets wheel event data
-//  * @param event
-//  * @returns wheel event data
-//  */
-// export function getWheelEventData(event: UseGestureEvent<React.WheelEvent>): WheelEventData {
-//   const { deltaX, deltaY } = event
-//   //TODO implement polyfill ?
-//   // https://developer.mozilla.org/en-US/docs/Web/Events/wheel#Polyfill
-//   return { xy: [deltaX, deltaY], ...getModifierKeys(event) }
-// }
-
 function getTouchEvents(event: UseGestureEvent) {
   if ('touches' in event) {
     const { touches, changedTouches } = event
@@ -96,7 +84,19 @@ export function getGenericEventData(
 type Values<T extends GestureKey> = Pick<GestureState<T>, 'values'>
 
 /**
- * Gets pointer event data
+ * Gets wheel event values.
+ * @param event
+ * @returns wheel event values
+ */
+export function getWheelEventValues(event: UseGestureEvent<React.WheelEvent>): Values<CoordinatesKey> {
+  const { deltaX, deltaY } = event
+  //TODO implement polyfill ?
+  // https://developer.mozilla.org/en-US/docs/Web/Events/wheel#Polyfill
+  return { values: [deltaX, deltaY] }
+}
+
+/**
+ * Gets pointer event values.
  * @param event
  * @returns pointer event values
  */

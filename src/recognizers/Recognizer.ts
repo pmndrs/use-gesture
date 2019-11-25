@@ -30,12 +30,6 @@ export default abstract class Recognizer<T extends GestureKey> {
   protected abstract ingKey: IngKey // dragging, scrolling, etc.
 
   /**
-   * Continuous gestures are scroll or wheel, where the next gesture continues the previous one.
-   * In other words, these gestures also start with a delta.
-   */
-  protected _continuousGesture = false
-
-  /**
    * Creates an instance of a gesture recognizer.
    * @param gestureKey drag, move, hover, pinch, etc.
    * @param controller the controller attached to the gesture

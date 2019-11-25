@@ -60,7 +60,10 @@ export type DragConfig = CoordinatesConfig & Partial<DragOptions>
 
 export type UseDragConfig = Partial<GenericOptions> & DragConfig
 export type UseWheelConfig = Partial<GenericOptions> & CoordinatesConfig
-export type UseGestureConfig = Partial<GenericOptions> & { drag?: DragConfig }
+export type UseGestureConfig = Partial<GenericOptions> & {
+  drag?: DragConfig
+  wheel?: CoordinatesConfig
+}
 
 export interface InternalGenericOptions {
   domTarget?: DomTarget
@@ -249,7 +252,7 @@ export type FullGestureState<T extends GestureKey> = SharedGestureState & State[
 
 export type Handler<T extends GestureKey> = (state: FullGestureState<T>) => any | void
 // export type HandlerKey = 'onDrag' | 'onPinch' | 'onMove' | 'onHover' | 'onScroll' | 'onWheel'
-export type HandlerKey = 'onDrag' | 'onPinch'
+export type HandlerKey = 'onDrag' | 'onPinch' | 'onWheel'
 
 export type UserHandlers = {
   onDrag: Handler<'drag'>
@@ -281,7 +284,7 @@ export type InternalHandlers = {
 
 export type RecognizerClass<T extends GestureKey> = { new (controller: Controller, args: any[]): Recognizer<T> }
 // export type RecognizerClasses = RecognizerClass<GestureKey>[]
-export type RecognizerClasses = (RecognizerClass<'drag'> | RecognizerClass<'pinch'>)[]
+export type RecognizerClasses = (RecognizerClass<'drag'> | RecognizerClass<'pinch'> | RecognizerClass<'wheel'>)[]
 
 /* Handlers should also accept DomAttributes to prevent overrides */
 export type UserHandlersPartial = AtLeastOneOf<UserHandlers> &

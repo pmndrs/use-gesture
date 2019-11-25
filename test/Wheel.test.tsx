@@ -86,7 +86,7 @@ describe.each([
   })
 
   test('disabling the wheel gesture should prevent state from updating', () => {
-    rerender(<Component gestures={['Wheel']} config={{ wheel: false }} />)
+    rerender(<Component gestures={['Wheel']} config={{ wheel: { enabled: false } }} />)
     fireEvent.wheel(element)
     expect(getByTestId(`${prefix}wheel-wheeling`)).toHaveTextContent('false')
   })

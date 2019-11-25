@@ -11,7 +11,8 @@ import {
   UseGestureConfig,
   HookReturnType,
 } from '../types'
-import { getInternalGenericOptions, getInternalDragOptions } from '../utils/config'
+import { getInternalGenericOptions, getInternalDragOptions, getInternalCoordinatesOptions } from '../utils/config'
+import WheelRecognizer from '../recognizers/WheelRecognizer'
 
 /**
  * @public
@@ -37,7 +38,7 @@ export function useGesture<Config extends UseGestureConfig>(
    * We decompose the config into its generic and gesture options and compute each.
    * TODO: this is currently done on every render!
    */
-  const { drag, ...restConfig } = config
+  const { drag, wheel, ...restConfig } = config
 
   const mergedConfig: InternalConfig = getInternalGenericOptions(restConfig)
 
@@ -48,6 +49,11 @@ export function useGesture<Config extends UseGestureConfig>(
     classes.push(DragRecognizer)
     internalHandlers.drag = includeStartEndHandlers(handlers, 'onDrag')
     mergedConfig.drag = getInternalDragOptions(drag)
+  }
+  if (actions.has('onWheel')) {
+    classes.push(WheelRecognizer)
+    internalHandlers.wheel = includeStartEndHandlers(handlers, 'onWheel')
+    mergedConfig.wheel = getInternalCoordinatesOptions(wheel)
   }
 
   return useRecognizers<Config>(internalHandlers, classes, mergedConfig)
