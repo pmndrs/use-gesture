@@ -87,14 +87,17 @@ export function getIntentional(movement: number, threshold: number): number | fa
 // iOS constant = 0.55
 export function rubberBand(distance: number, dimension: number, constant = 0.15) {
   if (distance === 0 && dimension === 0) return 0
+  dimension = dimension === Infinity ? 0 : dimension
   return (distance * dimension * constant) / (dimension + constant * distance)
 }
 
 export function rubberBandIfOutOfBounds(delta: number, min: number, max: number, constant?: number) {
   if (min !== Infinity && delta < min) {
+    max = max !== Infinity ? max : -min // if the opposite bound isn't set then fake dimension as if they were both equals
     return -rubberBand(min - delta, max - min, constant) + min
   }
   if (max !== Infinity && delta > max) {
+    min = min !== Infinity ? min : -max // id
     return rubberBand(delta - max, max - min, constant) + max
   }
   return delta
