@@ -1,9 +1,12 @@
 // vector add
-export const addV = <T extends number[]>(v1: T, v2: T): T => v1.map((v, i) => v + v2[i]) as T
+export function addV<T extends number[]>(v1: T, v2: T): T {
+  return v1.map((v, i) => v + v2[i]) as T
+}
 
 // vector substract
-export const subV = <T extends number[]>(v1: T, v2: T): T => v1.map((v, i) => v - v2[i]) as T
-
+export function subV<T extends number[]>(v1: T, v2: T): T {
+  return v1.map((v, i) => v - v2[i]) as T
+}
 /**
  * Calculates velocity
  * @param delta the difference between current and previous vectors
@@ -82,12 +85,12 @@ export function getIntentional(movement: number, threshold: number): number | fa
 // Based on @aholachek ;)
 // https://twitter.com/chpwn/status/285540192096497664
 // iOS constant = 0.55
-export const rubberBand = (distance: number, dimension: number, constant = 0.15) => {
+export function rubberBand(distance: number, dimension: number, constant = 0.15) {
   if (distance === 0 && dimension === 0) return 0
   return (distance * dimension * constant) / (dimension + constant * distance)
 }
 
-export const rubberBandIfOutOfBounds = (delta: number, min: number, max: number, constant?: number) => {
+export function rubberBandIfOutOfBounds(delta: number, min: number, max: number, constant?: number) {
   if (min !== Infinity && delta < min) {
     return -rubberBand(min - delta, max - min, constant) + min
   }

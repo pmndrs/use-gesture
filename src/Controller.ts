@@ -7,9 +7,9 @@ import {
   InternalConfig,
   InternalHandlers,
 } from './types'
-import { initialState } from './utils/state'
+import { getInitialState } from './utils/state'
 import { addListeners, removeListeners } from './utils/event'
-import { chainFns, clone } from './utils/utils'
+import { chainFns } from './utils/utils'
 
 type GestureTimeouts = Partial<{ [stateKey in StateKey]: number }>
 type WindowListeners = Partial<{ [stateKey in StateKey]: [string, Fn][] }>
@@ -24,7 +24,7 @@ type Bindings = Partial<{ [eventName in ReactEventHandlerKey]: Fn[] }>
 export default class Controller {
   public config!: InternalConfig
   public handlers!: Partial<InternalHandlers>
-  public state: State = clone(initialState) // state for all gestures
+  public state: State = getInitialState() // state for all gestures
   public timeouts: GestureTimeouts = {} // keeping track of timeouts for debounced gestures (such as move, scroll, wheel)
   private domListeners: [string, Fn][] = [] // when config.domTarget is set, we attach events directly to the dom
   private windowListeners: WindowListeners = {} // keeps track of window listeners added by gestures (drag only at the moment)

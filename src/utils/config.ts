@@ -17,31 +17,6 @@ import {
 const DEFAULT_DRAG_DELAY = 180
 const DEFAULT_RUBBERBAND = 0.15
 
-const defaultOptions: GenericOptions = {
-  domTarget: undefined,
-  eventOptions: { passive: true, capture: false, pointer: false },
-  window: typeof window !== 'undefined' ? window : undefined,
-  enabled: true,
-}
-
-const defaultGestureOptions: GestureOptions = {
-  enabled: true,
-  threshold: undefined,
-  bounds: undefined,
-  rubberband: 0,
-}
-
-const defaultCoordinatesOptions: CoordinatesOptions = {
-  lockDirection: false,
-  axis: undefined,
-}
-
-const defaultDragOptions: DragOptions = {
-  filterClicks: false,
-  swipeVelocity: 0.5,
-  swipeDistance: 100,
-  delay: false,
-}
 /**
  * @private
  *
@@ -50,7 +25,14 @@ const defaultDragOptions: DragOptions = {
  * @param {Partial<GenericOptions>} [config={}]
  * @returns {InternalGenericOptions}
  */
-export const getInternalGenericOptions = (config: Partial<GenericOptions> = {}): InternalGenericOptions => {
+export function getInternalGenericOptions(config: Partial<GenericOptions> = {}): InternalGenericOptions {
+  const defaultOptions: GenericOptions = {
+    domTarget: undefined,
+    eventOptions: { passive: true, capture: false, pointer: false },
+    window: typeof globalThis.window !== 'undefined' ? globalThis.window : undefined,
+    enabled: true,
+  }
+
   const { eventOptions: defaultEventOptions, window: defaultWindow, ...restDefault } = defaultOptions
   const { eventOptions, window, ...restConfig } = config
   const { passive, capture, pointer } = { ...defaultEventOptions, ...eventOptions }
@@ -66,7 +48,14 @@ export const getInternalGenericOptions = (config: Partial<GenericOptions> = {}):
   }
 }
 
-const getInternalGestureOptions = (gestureConfig: Partial<GestureOptions>): InternalGestureOptions => {
+export function getInternalGestureOptions(gestureConfig: Partial<GestureOptions>): InternalGestureOptions {
+  const defaultGestureOptions: GestureOptions = {
+    enabled: true,
+    threshold: undefined,
+    bounds: undefined,
+    rubberband: 0,
+  }
+
   const config = { ...defaultGestureOptions, ...gestureConfig }
   let { threshold, bounds, rubberband, enabled } = config
 
@@ -88,9 +77,12 @@ const getInternalGestureOptions = (gestureConfig: Partial<GestureOptions>): Inte
   }
 }
 
-export const getInternalCoordinatesOptions = (
-  coordinatesConfig: CoordinatesConfig = {}
-): InternalCoordinatesOptions => {
+export function getInternalCoordinatesOptions(coordinatesConfig: CoordinatesConfig = {}): InternalCoordinatesOptions {
+  const defaultCoordinatesOptions: CoordinatesOptions = {
+    lockDirection: false,
+    axis: undefined,
+  }
+
   const { axis, lockDirection, ...internalOptions } = coordinatesConfig
   return {
     ...getInternalGestureOptions(internalOptions),
@@ -99,7 +91,14 @@ export const getInternalCoordinatesOptions = (
   }
 }
 
-export const getInternalDragOptions = (dragConfig: DragConfig = {}): InternalDragOptions => {
+export function getInternalDragOptions(dragConfig: DragConfig = {}): InternalDragOptions {
+  const defaultDragOptions: DragOptions = {
+    filterClicks: false,
+    swipeVelocity: 0.5,
+    swipeDistance: 100,
+    delay: false,
+  }
+
   let { enabled, threshold, bounds, rubberband, ...dragOptions } = dragConfig
   let { swipeVelocity, swipeDistance, delay, filterClicks, axis, lockDirection } = {
     ...defaultDragOptions,

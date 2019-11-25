@@ -13,8 +13,7 @@ import {
   Vector2,
   FalseOrNumber,
 } from '../types'
-import { clone } from '../utils/utils'
-import { initialState } from '../utils/state'
+import { getInitialState } from '../utils/state'
 import { subV, getIntentional, addV, rubberBandIfOutOfBounds } from '../utils/math'
 
 /**
@@ -135,7 +134,7 @@ export default abstract class Recognizer<T extends GestureKey> {
    */
   protected getStartGestureState = (values: Vector2, event: UseGestureEvent) => {
     return {
-      ...clone(initialState[this.stateKey]),
+      ...getInitialState()[this.stateKey],
       _active: true,
       values,
       initial: values,

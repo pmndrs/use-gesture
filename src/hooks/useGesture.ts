@@ -68,7 +68,7 @@ export function useGesture<Config extends UseGestureConfig>(
  * @param {HandlerKey} handlerKey - the key for which to integrate start and end handlers
  * @returns
  */
-const includeStartEndHandlers = (handlers: UserHandlersPartial, handlerKey: HandlerKey) => {
+function includeStartEndHandlers(handlers: UserHandlersPartial, handlerKey: HandlerKey) {
   const startKey = (handlerKey + 'Start') as keyof UserHandlers
   const endKey = (handlerKey + 'End') as keyof UserHandlers
   const fn = (state: any) => {
