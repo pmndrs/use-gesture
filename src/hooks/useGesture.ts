@@ -1,6 +1,9 @@
 import React from 'react'
 import useRecognizers from './useRecognizers'
 import DragRecognizer from '../recognizers/DragRecognizer'
+import WheelRecognizer from '../recognizers/WheelRecognizer'
+import MoveRecognizer from '../recognizers/MoveRecognizer'
+import { getInternalGenericOptions, getInternalDragOptions, getInternalCoordinatesOptions } from '../utils/config'
 import {
   InternalConfig,
   HandlerKey,
@@ -11,8 +14,7 @@ import {
   UseGestureConfig,
   HookReturnType,
 } from '../types'
-import { getInternalGenericOptions, getInternalDragOptions, getInternalCoordinatesOptions } from '../utils/config'
-import WheelRecognizer from '../recognizers/WheelRecognizer'
+import ScrollRecognizer from '../recognizers/ScrollRecognizer'
 
 /**
  * @public
@@ -38,7 +40,7 @@ export function useGesture<Config extends UseGestureConfig>(
    * We decompose the config into its generic and gesture options and compute each.
    * TODO: this is currently done on every render!
    */
-  const { drag, wheel, ...restConfig } = config
+  const { drag, wheel, move, scroll, ...restConfig } = config
 
   const mergedConfig: InternalConfig = getInternalGenericOptions(restConfig)
 
@@ -54,6 +56,16 @@ export function useGesture<Config extends UseGestureConfig>(
     classes.push(WheelRecognizer)
     internalHandlers.wheel = includeStartEndHandlers(handlers, 'onWheel')
     mergedConfig.wheel = getInternalCoordinatesOptions(wheel)
+  }
+  if (actions.has('onScroll')) {
+    classes.push(ScrollRecognizer)
+    internalHandlers.scroll = includeStartEndHandlers(handlers, 'onScroll')
+    mergedConfig.scroll = getInternalCoordinatesOptions(scroll)
+  }
+  if (actions.has('onMove')) {
+    classes.push(MoveRecognizer)
+    internalHandlers.move = includeStartEndHandlers(handlers, 'onMove')
+    mergedConfig.move = getInternalCoordinatesOptions(move)
   }
 
   return useRecognizers<Config>(internalHandlers, classes, mergedConfig)

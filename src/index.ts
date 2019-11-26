@@ -1,4 +1,6 @@
 export { addV, subV } from './utils/math'
 export { useDrag } from './hooks/useDrag'
 export { useWheel } from './hooks/useWheel'
+export { useMove } from './hooks/useMove'
+export { useScroll } from './hooks/useScroll'
 export { useGesture } from './hooks/useGesture'

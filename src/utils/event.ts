@@ -47,22 +47,6 @@ export function getModifierKeys(event: UseGestureEvent): ModifierKeys {
   return { shiftKey, altKey, metaKey, ctrlKey }
 }
 
-// type ScrollEventData = Pick<FullGestureState<Coordinates>, 'xy'> & ModifierKeys
-
-// /**
-//  * Gets scroll event data
-//  * @param event
-//  * @returns scroll event data
-//  */
-// export function getScrollEventData(event: UseGestureEvent): ScrollEventData {
-//   // If the currentTarget is the window then we return the scrollX/Y position.
-//   // If not (ie the currentTarget is a DOM element), then we return scrollLeft/Top
-//   const { scrollX, scrollY, scrollLeft, scrollTop } = <Element & Window>event.currentTarget
-//   return { xy: [scrollX || scrollLeft || 0, scrollY || scrollTop || 0], ...getModifierKeys(event) }
-// }
-
-// type WheelEventData = Pick<FullGestureState<Coordinates>, 'xy'> & ModifierKeys
-
 function getTouchEvents(event: UseGestureEvent) {
   if ('touches' in event) {
     const { touches, changedTouches } = event
@@ -82,6 +66,18 @@ export function getGenericEventData(
 }
 
 type Values<T extends GestureKey> = Pick<GestureState<T>, 'values'>
+
+/**
+ * Gets scroll event values
+ * @param event
+ * @returns scroll event values
+ */
+export function getScrollEventValues(event: UseGestureEvent): Values<CoordinatesKey> {
+  // If the currentTarget is the window then we return the scrollX/Y position.
+  // If not (ie the currentTarget is a DOM element), then we return scrollLeft/Top
+  const { scrollX, scrollY, scrollLeft, scrollTop } = event.currentTarget as Element & Window
+  return { values: [scrollX || scrollLeft || 0, scrollY || scrollTop || 0] }
+}
 
 /**
  * Gets wheel event values.

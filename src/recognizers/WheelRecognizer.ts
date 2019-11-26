@@ -14,7 +14,7 @@ export default class WheelRecognizer extends CoordinatesRecognizer<'wheel'> {
   }
 
   private wheelShouldRun = (event: UseGestureEvent<WheelEvent>) => {
-    if (event.ctrlKey && 'pinch' in this.controller.handlers) return
+    if (event.ctrlKey && 'pinch' in this.controller.handlers) return false
     return this.enabled
   }
 

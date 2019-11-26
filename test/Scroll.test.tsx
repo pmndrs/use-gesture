@@ -83,7 +83,7 @@ describe.each([
   })
 
   test('disabling the scroll gesture should prevent state from updating', () => {
-    rerender(<Component gestures={['Scroll']} config={{ scroll: false }} />)
+    rerender(<Component gestures={['Scroll']} config={{ scroll: { enabled: false } }} />)
     fireEvent.scroll(element)
     expect(getByTestId(`${prefix}scroll-scrolling`)).toHaveTextContent('false')
   })

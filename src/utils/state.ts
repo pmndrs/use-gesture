@@ -63,7 +63,7 @@ export function getInitialState(): State {
     },
     pinch: { ...initialCommon, ...initialDistanceAngle },
     wheel: { ...initialCommon, ...initialCoordinates },
-    // move: { ...initialCommon, ...initialCoordinates },
-    // scroll: { ...initialCommon, ...initialCoordinates },
+    move: { ...initialCommon, ...initialCoordinates },
+    scroll: { ...initialCommon, ...initialCoordinates },
   }
 }

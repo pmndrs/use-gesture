@@ -77,7 +77,7 @@ describe.each([
   })
 
   test('disabling the move gesture should prevent state from updating', () => {
-    rerender(<Component gestures={['Move']} config={{ move: false }} />)
+    rerender(<Component gestures={['Move']} config={{ move: { enabled: false } }} />)
     fireEvent.mouseMove(element)
     expect(getByTestId(`${prefix}move-moving`)).toHaveTextContent('false')
   })

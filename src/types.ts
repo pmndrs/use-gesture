@@ -60,9 +60,13 @@ export type DragConfig = CoordinatesConfig & Partial<DragOptions>
 
 export type UseDragConfig = Partial<GenericOptions> & DragConfig
 export type UseWheelConfig = Partial<GenericOptions> & CoordinatesConfig
+export type UseScrollConfig = Partial<GenericOptions> & CoordinatesConfig
+export type UseMoveConfig = Partial<GenericOptions> & CoordinatesConfig
 export type UseGestureConfig = Partial<GenericOptions> & {
   drag?: DragConfig
   wheel?: CoordinatesConfig
+  scroll?: CoordinatesConfig
+  move?: CoordinatesConfig
 }
 
 export interface InternalGenericOptions {
@@ -96,6 +100,8 @@ export interface InternalDragOptions extends InternalCoordinatesOptions {
 export type InternalConfig = InternalGenericOptions & {
   drag?: InternalDragOptions
   wheel?: InternalCoordinatesOptions
+  scroll?: InternalCoordinatesOptions
+  move?: InternalCoordinatesOptions
   pinch?: InternalGestureOptions
 }
 
@@ -175,7 +181,7 @@ export type ReactEventHandlerKey = keyof ReactEventHandlers
 
 export type IngKey = 'hovering' | 'scrolling' | 'wheeling' | 'dragging' | 'moving' | 'pinching'
 
-export type CoordinatesKey = 'drag' | 'wheel'
+export type CoordinatesKey = 'drag' | 'wheel' | 'move' | 'scroll'
 export type DistanceAngleKey = 'pinch'
 export type GestureKey = CoordinatesKey | DistanceAngleKey
 export type StateKey<T extends GestureKey = GestureKey> = T extends 'hover' ? 'move' : T
@@ -242,6 +248,8 @@ export interface DistanceAngle {
 export type State = { shared: SharedGestureState } & {
   drag: CommonGestureState & Coordinates & DragState
   wheel: CommonGestureState & Coordinates
+  scroll: CommonGestureState & Coordinates
+  move: CommonGestureState & Coordinates
   pinch: CommonGestureState & DistanceAngle
 }
 
@@ -252,7 +260,7 @@ export type FullGestureState<T extends GestureKey> = SharedGestureState & State[
 
 export type Handler<T extends GestureKey> = (state: FullGestureState<T>) => any | void
 // export type HandlerKey = 'onDrag' | 'onPinch' | 'onMove' | 'onHover' | 'onScroll' | 'onWheel'
-export type HandlerKey = 'onDrag' | 'onPinch' | 'onWheel'
+export type HandlerKey = 'onDrag' | 'onPinch' | 'onWheel' | 'onMove' | 'onScroll'
 
 export type UserHandlers = {
   onDrag: Handler<'drag'>
@@ -264,27 +272,26 @@ export type UserHandlers = {
   onWheel: Handler<'wheel'>
   onWheelStart: Handler<'wheel'>
   onWheelEnd: Handler<'wheel'>
+  onMove: Handler<'move'>
+  onMoveStart: Handler<'move'>
+  onMoveEnd: Handler<'move'>
+  onScroll: Handler<'scroll'>
+  onScrollStart: Handler<'scroll'>
+  onScrollEnd: Handler<'scroll'>
   // onHover: Handler<'hover'>
-  // onMove: Handler<'move'>
-  // onMoveStart: Handler<'move'>
-  // onMoveEnd: Handler<'move'>
-  // onScroll: Handler<'scroll'>
-  // onScrollStart: Handler<'scroll'>
-  // onScrollEnd: Handler<'scroll'>
 }
 
-export type InternalHandlers = {
-  drag: Handler<'drag'>
-  pinch: Handler<'pinch'>
-  wheel: Handler<'wheel'>
-  // move: Handler<'move'>
-  // hover: Handler<'hover'>
-  // scroll: Handler<'scroll'>
-}
+export type InternalHandlers = { [Key in GestureKey]: Handler<Key> }
 
 export type RecognizerClass<T extends GestureKey> = { new (controller: Controller, args: any[]): Recognizer<T> }
 // export type RecognizerClasses = RecognizerClass<GestureKey>[]
-export type RecognizerClasses = (RecognizerClass<'drag'> | RecognizerClass<'pinch'> | RecognizerClass<'wheel'>)[]
+export type RecognizerClasses = (
+  | RecognizerClass<'drag'>
+  | RecognizerClass<'pinch'>
+  | RecognizerClass<'wheel'>
+  | RecognizerClass<'move'>
+  | RecognizerClass<'scroll'>
+)[]
 
 /* Handlers should also accept DomAttributes to prevent overrides */
 export type UserHandlersPartial = AtLeastOneOf<UserHandlers> &
