@@ -5,7 +5,6 @@ import WheelRecognizer from '../recognizers/WheelRecognizer'
 import MoveRecognizer from '../recognizers/MoveRecognizer'
 import PinchRecognizer from '../recognizers/PinchRecognizer'
 import ScrollRecognizer from '../recognizers/ScrollRecognizer'
-import PinchWheelRecognizer from '../recognizers/PinchWheelRecognizer'
 import { getInternalGenericOptions, getInternalDragOptions, getInternalCoordinatesOptions } from '../utils/config'
 import {
   InternalConfig,
@@ -71,7 +70,6 @@ export function useGesture<Config extends UseGestureConfig>(
   }
   if (actions.has('onPinch')) {
     classes.push(PinchRecognizer)
-    classes.push(PinchWheelRecognizer)
     internalHandlers.pinch = includeStartEndHandlers(handlers, 'onPinch')
     mergedConfig.pinch = getInternalCoordinatesOptions(pinch)
   }
