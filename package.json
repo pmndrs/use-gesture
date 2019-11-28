@@ -20,8 +20,7 @@
   "jest": {
     "testPathIgnorePatterns": [
       "/node_modules/",
-      "Hover",
-      "Pinch"
+      "Hover"
     ],
     "setupFiles": [
       "@testing-library/react/dont-cleanup-after-each"

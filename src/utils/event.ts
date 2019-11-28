@@ -1,12 +1,4 @@
-import {
-  Fn,
-  EventOptions,
-  UseGestureEvent,
-  CoordinatesKey,
-  SharedGestureState,
-  GestureState,
-  GestureKey,
-} from '../types'
+import { Fn, EventOptions, UseGestureEvent, Vector2 } from '../types'
 
 const setListeners = (add: boolean) => (el: EventTarget, listeners: [string, Fn][], options: EventOptions): void => {
   const action = add ? 'addEventListener' : 'removeEventListener'
@@ -55,9 +47,7 @@ function getTouchEvents(event: UseGestureEvent) {
   return null
 }
 
-export function getGenericEventData(
-  event: React.MouseEvent | React.TouchEvent | React.PointerEvent
-): Partial<SharedGestureState> {
+export function getGenericEventData(event: React.MouseEvent | React.TouchEvent | React.PointerEvent) {
   const buttons = 'buttons' in event ? event.buttons : 0
   const touchEvents = getTouchEvents(event)
   const touches = (touchEvents && touchEvents.length) || 0
@@ -65,14 +55,14 @@ export function getGenericEventData(
   return { touches, down, buttons, ...getModifierKeys(event) }
 }
 
-type Values<T extends GestureKey> = Pick<GestureState<T>, 'values'>
+type Values = { values: Vector2 }
 
 /**
  * Gets scroll event values
  * @param event
  * @returns scroll event values
  */
-export function getScrollEventValues(event: UseGestureEvent): Values<CoordinatesKey> {
+export function getScrollEventValues(event: UseGestureEvent): Values {
   // If the currentTarget is the window then we return the scrollX/Y position.
   // If not (ie the currentTarget is a DOM element), then we return scrollLeft/Top
   const { scrollX, scrollY, scrollLeft, scrollTop } = event.currentTarget as Element & Window
@@ -84,7 +74,7 @@ export function getScrollEventValues(event: UseGestureEvent): Values<Coordinates
  * @param event
  * @returns wheel event values
  */
-export function getWheelEventValues(event: UseGestureEvent<React.WheelEvent>): Values<CoordinatesKey> {
+export function getWheelEventValues(event: UseGestureEvent<React.WheelEvent>): Values {
   const { deltaX, deltaY } = event
   //TODO implement polyfill ?
   // https://developer.mozilla.org/en-US/docs/Web/Events/wheel#Polyfill
@@ -96,28 +86,26 @@ export function getWheelEventValues(event: UseGestureEvent<React.WheelEvent>): V
  * @param event
  * @returns pointer event values
  */
-export function getPointerEventValues(
-  event: React.MouseEvent | React.TouchEvent | React.PointerEvent
-): Values<CoordinatesKey> {
+export function getPointerEventValues(event: React.MouseEvent | React.TouchEvent | React.PointerEvent): Values {
   const touchEvents = getTouchEvents(event)
-  const { clientX, clientY } = touchEvents ? touchEvents[0] : (event as any)
+  const { clientX, clientY } = touchEvents ? touchEvents[0] : (event as React.PointerEvent)
   return { values: [clientX, clientY] }
 }
 
 // type TwoTouchesEventData = Pick<FullGestureState<DistanceAngle>, 'values' | 'touches' | 'down' | 'origin'> & ModifierKeys
 
-// /**
-//  * Gets two touches event data
-//  * @param event
-//  * @returns two touches event data
-//  */
-// export function getTwoTouchesEventData(event: React.TouchEvent): TwoTouchesEventData {
-//   const { touches } = event
-//   const dx = touches[1].clientX - touches[0].clientX
-//   const dy = touches[1].clientY - touches[0].clientY
+/**
+ * Gets two touches event data
+ * @param event
+ * @returns two touches event data
+ */
+export function getTwoTouchesEventData(event: React.TouchEvent) {
+  const { touches } = event
+  const dx = touches[1].clientX - touches[0].clientX
+  const dy = touches[1].clientY - touches[0].clientY
 
-//   const values: Vector2 = [Math.hypot(dx, dy), -(Math.atan2(dx, dy) * 180) / Math.PI]
-//   const origin: Vector2 = [(touches[1].clientX + touches[0].clientX) / 2, (touches[1].clientY + touches[0].clientY) / 2]
+  const values: Vector2 = [Math.hypot(dx, dy), -(Math.atan2(dx, dy) * 180) / Math.PI]
+  const origin: Vector2 = [(touches[1].clientX + touches[0].clientX) / 2, (touches[1].clientY + touches[0].clientY) / 2]
 
-//   return { values, origin, touches: 2, down: touches.length > 0, ...getModifierKeys(event) }
-// }
+  return { values, origin }
+}

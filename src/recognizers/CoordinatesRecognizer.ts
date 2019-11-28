@@ -1,6 +1,6 @@
 import Recognizer from './Recognizer'
-import { calculateAllKinematics } from '../utils/math'
-import { Vector2, UseGestureEvent, CoordinatesKey, PartialGestureState, FalseOrNumber } from '../types'
+import { calculateAllKinematics, subV } from '../utils/math'
+import { Vector2, UseGestureEvent, PartialGestureState, FalseOrNumber, GestureState, CoordinatesKey } from '../types'
 
 /**
  * @private
@@ -11,6 +11,13 @@ import { Vector2, UseGestureEvent, CoordinatesKey, PartialGestureState, FalseOrN
  * @template T
  */
 export default abstract class CoordinatesRecognizer<T extends CoordinatesKey> extends Recognizer<T> {
+  /**
+   * Returns the real movement (without taking intentionality into acount)
+   */
+  protected getInternalMovement(values: Vector2, state: GestureState<T>): Vector2 {
+    return subV(values, state.initial)
+  }
+
   /**
    * In coordinates-based gesture, this function will detect the first intentional axis,
    * lock the gesture axis if lockDirection is specified in the config, block the gesture
@@ -71,13 +78,12 @@ export default abstract class CoordinatesRecognizer<T extends CoordinatesKey> ex
     return {
       values,
       delta,
-      vxvy: kinematics.velocities,
       ...movementDetection,
       ...kinematics,
-    } as PartialGestureState<T>
+    }
   }
 
-  protected mapStateValues(values: Vector2): PartialGestureState<T> {
-    return { xy: values } as PartialGestureState<T>
+  protected mapStateValues(state: GestureState<T>): PartialGestureState<T> {
+    return { xy: state.values, vxvy: state.velocities } as PartialGestureState<T>
   }
 }

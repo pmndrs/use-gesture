@@ -19,7 +19,7 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
 
   private dragShouldStart = (event: UseGestureEvent) => {
     const { touches } = getGenericEventData(event)
-    return this.enabled && touches! < 2
+    return this.enabled && touches < 2
   }
 
   private setPointers = (event: UseGestureEvent) => {

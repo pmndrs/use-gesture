@@ -3,6 +3,8 @@ import useRecognizers from './useRecognizers'
 import DragRecognizer from '../recognizers/DragRecognizer'
 import WheelRecognizer from '../recognizers/WheelRecognizer'
 import MoveRecognizer from '../recognizers/MoveRecognizer'
+import PinchRecognizer from '../recognizers/PinchRecognizer'
+import ScrollRecognizer from '../recognizers/ScrollRecognizer'
 import { getInternalGenericOptions, getInternalDragOptions, getInternalCoordinatesOptions } from '../utils/config'
 import {
   InternalConfig,
@@ -14,7 +16,6 @@ import {
   UseGestureConfig,
   HookReturnType,
 } from '../types'
-import ScrollRecognizer from '../recognizers/ScrollRecognizer'
 
 /**
  * @public
@@ -40,7 +41,7 @@ export function useGesture<Config extends UseGestureConfig>(
    * We decompose the config into its generic and gesture options and compute each.
    * TODO: this is currently done on every render!
    */
-  const { drag, wheel, move, scroll, ...restConfig } = config
+  const { drag, wheel, move, scroll, pinch, ...restConfig } = config
 
   const mergedConfig: InternalConfig = getInternalGenericOptions(restConfig)
 
@@ -66,6 +67,11 @@ export function useGesture<Config extends UseGestureConfig>(
     classes.push(MoveRecognizer)
     internalHandlers.move = includeStartEndHandlers(handlers, 'onMove')
     mergedConfig.move = getInternalCoordinatesOptions(move)
+  }
+  if (actions.has('onPinch')) {
+    classes.push(PinchRecognizer)
+    internalHandlers.pinch = includeStartEndHandlers(handlers, 'onPinch')
+    mergedConfig.pinch = getInternalCoordinatesOptions(pinch)
   }
 
   return useRecognizers<Config>(internalHandlers, classes, mergedConfig)

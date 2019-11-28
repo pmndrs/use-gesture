@@ -100,7 +100,7 @@ export default abstract class Recognizer<T extends GestureKey> {
    */
   protected abstract getKinematics(values: Vector2, event: UseGestureEvent): PartialGestureState<T>
 
-  protected abstract mapStateValues(values: Vector2): PartialGestureState<T>
+  protected abstract mapStateValues(state: GestureState<T>): PartialGestureState<T>
 
   // Should return the bindings to be added for a given gesture
   public abstract addBindings(): void
@@ -157,6 +157,8 @@ export default abstract class Recognizer<T extends GestureKey> {
     return { _intentional, _blocked: false } as PartialGestureState<T>
   }
 
+  protected abstract getInternalMovement(values: Vector2, state: GestureState<T>): Vector2
+
   /**
    * Returns basic movement properties for the gesture based on the next values and current state.
    */
@@ -164,10 +166,10 @@ export default abstract class Recognizer<T extends GestureKey> {
     let { threshold, rubberband } = this.config
     const [t0, t1] = threshold
 
-    const { _active, _intentional: intentional, initial, offset: prevOffset, movement: prevMovement } = state
+    const { _active, _intentional: intentional, offset: prevOffset, movement: prevMovement } = state
     let [i0, i1] = intentional
 
-    const [_m0, _m1] = subV(values, initial) // the real movement of the gesture
+    const [_m0, _m1] = this.getInternalMovement(values, state)
 
     /**
      * For both dimensions of the gesture, check its intentionality on each frame.
@@ -245,7 +247,7 @@ export default abstract class Recognizer<T extends GestureKey> {
     const [intentionalX, intentionalY] = this.state._intentional
     if (!forceFlag && intentionalX === false && intentionalY === false) return
 
-    const { _active, active, values } = this.state
+    const { _active, active } = this.state
 
     this.state.active = _active
     this.state.first = _active && !active // `first` is true when the gesture becomes active
@@ -254,7 +256,7 @@ export default abstract class Recognizer<T extends GestureKey> {
     const state = {
       ...this.controller.state.shared,
       ...this.state,
-      ...this.mapStateValues(values), // Sets xy or da to the gesture state values
+      ...this.mapStateValues(this.state), // Sets xy or da to the gesture state values
       [this.ingKey]: _active, // Sets dragging, pinching, etc. to the gesture active state
     }
 

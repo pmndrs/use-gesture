@@ -1,5 +1,5 @@
 import { noop } from './utils'
-import { CommonGestureState, Coordinates, State, DistanceAngle } from '../types'
+import { CommonGestureState, Coordinates, State, DistanceAngle, Vector2 } from '../types'
 
 export function getInitialState(): State {
   // common initial state for all gestures
@@ -12,6 +12,7 @@ export function getInitialState(): State {
     // currentTarget: undefined,
     // pointerId: undefined,
     values: [0, 0],
+    velocities: [0, 0],
     delta: [0, 0],
     movement: [0, 0],
     offset: [0, 0],
@@ -31,10 +32,21 @@ export function getInitialState(): State {
   }
 
   // initial state for coordinates-based gestures
-  const initialCoordinates = { axis: undefined, xy: [0, 0], vxvy: [0, 0], velocity: 0, distance: 0 } as Coordinates
+  const initialCoordinates: Coordinates = {
+    axis: undefined,
+    xy: [0, 0] as Vector2,
+    vxvy: [0, 0] as Vector2,
+    velocity: 0,
+    distance: 0,
+  }
 
   // initial state for distance and angle-based gestures (pinch)
-  const initialDistanceAngle = { da: [0, 0], vdva: [0, 0], origin: undefined, turns: 0 } as DistanceAngle
+  const initialDistanceAngle: DistanceAngle = {
+    da: [0, 0] as Vector2,
+    vdva: [0, 0] as Vector2,
+    origin: undefined,
+    turns: 0,
+  }
 
   // initial state object (used by the gesture controller)
   return {

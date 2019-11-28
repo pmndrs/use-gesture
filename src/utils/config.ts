@@ -12,6 +12,9 @@ import {
   CoordinatesConfig,
   CoordinatesOptions,
   InternalCoordinatesOptions,
+  DistanceAngleConfig,
+  InternalDistanceAngleOptions,
+  DistanceAngleOptions,
 } from '../types'
 
 const DEFAULT_DRAG_DELAY = 180
@@ -52,19 +55,11 @@ export function getInternalGestureOptions(gestureConfig: Partial<GestureOptions>
   const defaultGestureOptions: GestureOptions = {
     enabled: true,
     threshold: undefined,
-    bounds: undefined,
     rubberband: 0,
   }
 
   const config = { ...defaultGestureOptions, ...gestureConfig }
-  let { threshold, bounds, rubberband, enabled } = config
-
-  bounds = bounds || {}
-
-  const boundsArray = [
-    [bounds.left || Infinity, bounds!.right || Infinity],
-    [bounds.bottom || Infinity, bounds!.top || Infinity],
-  ]
+  let { threshold, rubberband, enabled } = config
 
   if (typeof rubberband === 'boolean') rubberband = rubberband ? DEFAULT_RUBBERBAND : 0
   if (threshold === void 0) threshold = 0
@@ -72,7 +67,6 @@ export function getInternalGestureOptions(gestureConfig: Partial<GestureOptions>
   return {
     enabled,
     threshold: def.array(threshold) as Vector2,
-    bounds: boundsArray as Tuple<Vector2>,
     rubberband: def.array(rubberband) as Vector2,
   }
 }
@@ -81,13 +75,41 @@ export function getInternalCoordinatesOptions(coordinatesConfig: CoordinatesConf
   const defaultCoordinatesOptions: CoordinatesOptions = {
     lockDirection: false,
     axis: undefined,
+    bounds: undefined,
   }
 
-  const { axis, lockDirection, ...internalOptions } = coordinatesConfig
+  const { axis, lockDirection, bounds = {}, ...internalOptions } = coordinatesConfig
+
+  const boundsArray = [
+    [bounds.left || Infinity, bounds.right || Infinity],
+    [bounds.bottom || Infinity, bounds.top || Infinity],
+  ]
+
   return {
     ...getInternalGestureOptions(internalOptions),
     ...defaultCoordinatesOptions,
     ...matchKeysFromObject({ axis, lockDirection }, coordinatesConfig),
+    bounds: boundsArray as Tuple<Vector2>,
+  }
+}
+
+export function getDistanceAngleOptions(distanceAngleConfig: DistanceAngleConfig = {}): InternalDistanceAngleOptions {
+  const defaultDistanceAngleOptions: DistanceAngleOptions = {
+    distanceBounds: undefined,
+    angleBounds: undefined,
+  }
+
+  const { distanceBounds = {}, angleBounds = {}, ...internalOptions } = distanceAngleConfig
+
+  const boundsArray = [
+    [distanceBounds.min || Infinity, distanceBounds.max || Infinity],
+    [angleBounds.min || Infinity, angleBounds!.max || Infinity],
+  ]
+
+  return {
+    ...getInternalGestureOptions(internalOptions),
+    ...defaultDistanceAngleOptions,
+    bounds: boundsArray as Tuple<Vector2>,
   }
 }
 

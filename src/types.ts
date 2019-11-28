@@ -39,13 +39,18 @@ export interface GenericOptions {
 export interface GestureOptions {
   enabled: boolean
   threshold?: number | Vector2
-  bounds?: AxisBounds
   rubberband: boolean | number | Vector2
 }
 
 export interface CoordinatesOptions {
   axis?: 'x' | 'y'
   lockDirection: boolean
+  bounds?: AxisBounds
+}
+
+export interface DistanceAngleOptions {
+  distanceBounds?: Bounds
+  angleBounds?: Bounds
 }
 
 export interface DragOptions {
@@ -56,9 +61,11 @@ export interface DragOptions {
 }
 
 export type CoordinatesConfig = Partial<GestureOptions & CoordinatesOptions>
+export type DistanceAngleConfig = Partial<GestureOptions & DistanceAngleOptions>
 export type DragConfig = CoordinatesConfig & Partial<DragOptions>
 
 export type UseDragConfig = Partial<GenericOptions> & DragConfig
+export type UsePinchConfig = Partial<GenericOptions> & DragConfig
 export type UseWheelConfig = Partial<GenericOptions> & CoordinatesConfig
 export type UseScrollConfig = Partial<GenericOptions> & CoordinatesConfig
 export type UseMoveConfig = Partial<GenericOptions> & CoordinatesConfig
@@ -67,6 +74,7 @@ export type UseGestureConfig = Partial<GenericOptions> & {
   wheel?: CoordinatesConfig
   scroll?: CoordinatesConfig
   move?: CoordinatesConfig
+  pinch?: DistanceAngleConfig
 }
 
 export interface InternalGenericOptions {
@@ -81,13 +89,17 @@ export interface InternalGenericOptions {
 export interface InternalGestureOptions {
   enabled: boolean
   threshold: Vector2
-  bounds: Tuple<Vector2>
   rubberband: Vector2
 }
 
 export interface InternalCoordinatesOptions extends InternalGestureOptions {
   axis?: 'x' | 'y'
+  bounds: Tuple<Vector2>
   lockDirection: boolean
+}
+
+export interface InternalDistanceAngleOptions extends InternalGestureOptions {
+  bounds: Tuple<Vector2>
 }
 
 export interface InternalDragOptions extends InternalCoordinatesOptions {
@@ -102,7 +114,7 @@ export type InternalConfig = InternalGenericOptions & {
   wheel?: InternalCoordinatesOptions
   scroll?: InternalCoordinatesOptions
   move?: InternalCoordinatesOptions
-  pinch?: InternalGestureOptions
+  pinch?: InternalDistanceAngleOptions
 }
 
 export type WebKitGestureEvent = React.PointerEvent & { scale: number; rotation: number }
@@ -205,6 +217,7 @@ export interface CommonGestureState {
   currentTarget?: EventTarget | null
   pointerId?: number | null
   values: Vector2
+  velocities: Vector2
   delta: Vector2
   movement: Vector2
   offset: Vector2
