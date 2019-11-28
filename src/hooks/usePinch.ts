@@ -1,5 +1,6 @@
 import useRecognizers from './useRecognizers'
 import PinchRecognizer from '../recognizers/PinchRecognizer'
+import PinchWheelRecognizer from '../recognizers/PinchWheelRecognizer'
 import { Handler, InternalConfig, HookReturnType, UsePinchConfig } from '../types'
 import { getInternalGenericOptions, getInternalDragOptions } from '../utils/config'
 
@@ -31,5 +32,5 @@ export function usePinch<Config extends UsePinchConfig>(
     pinch: getInternalDragOptions(pinch),
   }
 
-  return useRecognizers<Config>({ pinch: handler }, [PinchRecognizer], mergedConfig)
+  return useRecognizers<Config>({ pinch: handler }, [PinchRecognizer, PinchWheelRecognizer], mergedConfig)
 }
