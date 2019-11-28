@@ -1,9 +1,15 @@
 import { TouchEvent, WheelEvent } from 'react'
 import DistanceAngleRecognizer from './DistanceAngleRecognizer'
 import Controller from '../Controller'
-import { UseGestureEvent, StateKey, IngKey, Vector2 } from '../types'
+import { UseGestureEvent, StateKey, IngKey, Vector2, WebKitGestureEvent } from '../types'
 import { noop } from '../utils/utils'
-import { getGenericEventData, getTwoTouchesEventData, getWheelEventValues } from '../utils/event'
+import {
+  getGenericEventData,
+  getTwoTouchesEventData,
+  getWheelEventValues,
+  gestureEventSupported,
+  getWebkitGestureEventValues,
+} from '../utils/event'
 
 export default class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
   stateKey = 'pinch' as StateKey<'pinch'>
@@ -76,12 +82,76 @@ export default class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
     this.updateGestureState({ canceled: true, cancel: noop })
     requestAnimationFrame(() => this.onPinchEnd(event))
   }
+  /**
+   * PINCH WITH WEBKIT GESTURES
+   */
 
+  onGestureStart = (event: WebKitGestureEvent): void => {
+    if (!this.enabled) return
+    event.preventDefault()
+
+    const { values } = getWebkitGestureEventValues(event)
+
+    this.updateSharedState(getGenericEventData(event))
+
+    const startState = {
+      ...this.getStartGestureState(values, event),
+      ...this.getGenericPayload(event, true),
+    }
+
+    this.updateGestureState({
+      ...startState,
+      ...this.getMovement(values, startState),
+      cancel: () => this.onCancel(event),
+    })
+
+    this.fireGestureHandler()
+  }
+
+  onGestureChange = (event: WebKitGestureEvent): void => {
+    const { canceled, _active } = this.state
+    if (canceled || !_active) return
+    const genericEventData = getGenericEventData(event)
+
+    this.updateSharedState(genericEventData)
+
+    const { values } = getWebkitGestureEventValues(event)
+    const kinematics = this.getKinematics(values, event)
+
+    this.updateGestureState({
+      ...this.getGenericPayload(event),
+      ...kinematics,
+      cancel: () => this.onCancel(event),
+    })
+
+    this.fireGestureHandler()
+  }
+
+  onGestureEnd = (event: WebKitGestureEvent): void => {
+    this.state._active = false
+    this.updateSharedState({ down: false, touches: 0 })
+
+    this.updateGestureState({
+      event,
+      ...this.getMovement(this.state.values),
+    })
+    this.fireGestureHandler()
+  }
+
+  updateTouchData = (event: UseGestureEvent<TouchEvent>): void => {
+    if (!this.enabled || event.touches.length !== 2) return
+    const { origin } = getTwoTouchesEventData(event)
+    this.state.origin = origin
+  }
+
+  /**
+   * PINCH WITH WHEEL
+   */
   private wheelShouldRun = (event: UseGestureEvent<WheelEvent>) => {
     return this.enabled && event.ctrlKey
   }
 
-  private getValuesFromEvent = (event: UseGestureEvent<WheelEvent>) => {
+  private getWheelValuesFromEvent = (event: UseGestureEvent<WheelEvent>) => {
     const {
       values: [, delta_d],
     } = getWheelEventValues(event)
@@ -108,7 +178,7 @@ export default class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
   }
 
   onWheelStart = (event: UseGestureEvent<WheelEvent>): void => {
-    const { values, delta, origin } = this.getValuesFromEvent(event)
+    const { values, delta, origin } = this.getWheelValuesFromEvent(event)
 
     if (!this.controller.config.eventOptions.passive) {
       event.preventDefault()
@@ -142,7 +212,7 @@ export default class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
 
     this.updateSharedState(genericEventData)
 
-    const { values, origin, delta } = this.getValuesFromEvent(event)
+    const { values, origin, delta } = this.getWheelValuesFromEvent(event)
     const kinematics = this.getKinematics(values, event)
 
     this.updateGestureState({
@@ -166,10 +236,17 @@ export default class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
   }
 
   addBindings(): void {
-    this.controller.addBindings('onTouchStart', this.onPinchStart)
-    this.controller.addBindings('onTouchMove', this.onPinchChange)
-    this.controller.addBindings(['onTouchEnd', 'onTouchCancel'], this.onPinchEnd)
+    if (gestureEventSupported()) {
+      this.controller.addBindings('onGestureStart', this.onGestureStart)
+      this.controller.addBindings('onGestureChange', this.onGestureChange)
+      this.controller.addBindings(['onGestureEnd', 'onTouchCancel'], this.onGestureEnd)
+      this.controller.addBindings(['onTouchStart', 'onTouchMove'], this.updateTouchData)
+    } else {
+      this.controller.addBindings('onTouchStart', this.onPinchStart)
+      this.controller.addBindings('onTouchMove', this.onPinchChange)
+      this.controller.addBindings(['onTouchEnd', 'onTouchCancel'], this.onPinchEnd)
 
-    this.controller.addBindings('onWheel', this.onWheel)
+      this.controller.addBindings('onWheel', this.onWheel)
+    }
   }
 }

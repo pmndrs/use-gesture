@@ -1,4 +1,4 @@
-import { Fn, EventOptions, UseGestureEvent, Vector2 } from '../types'
+import { Fn, EventOptions, UseGestureEvent, Vector2, WebKitGestureEvent } from '../types'
 
 const setListeners = (add: boolean) => (el: EventTarget, listeners: [string, Fn][], options: EventOptions): void => {
   const action = add ? 'addEventListener' : 'removeEventListener'
@@ -92,7 +92,16 @@ export function getPointerEventValues(event: React.MouseEvent | React.TouchEvent
   return { values: [clientX, clientY] }
 }
 
-// type TwoTouchesEventData = Pick<FullGestureState<DistanceAngle>, 'values' | 'touches' | 'down' | 'origin'> & ModifierKeys
+const WEBKIT_DISTANCE_SCALE_FACTOR = 260
+
+/**
+ * Gets webkit gesture event values.
+ * @param event
+ * @returns webkit gesture event values
+ */
+export function getWebkitGestureEventValues(event: WebKitGestureEvent): Values {
+  return { values: [event.scale * WEBKIT_DISTANCE_SCALE_FACTOR, event.rotation] as Vector2 }
+}
 
 /**
  * Gets two touches event data
