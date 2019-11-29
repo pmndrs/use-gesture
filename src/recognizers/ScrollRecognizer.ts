@@ -3,7 +3,7 @@ import CoordinatesRecognizer from './CoordinatesRecognizer'
 import Controller from '../Controller'
 import { UseGestureEvent, StateKey, IngKey } from '../types'
 import { getGenericEventData, getScrollEventValues } from '../utils/event'
-import { calculateDistance, calculateDirection, subV } from '../utils/math'
+import { calculateDistance, calculateDirection } from '../utils/math'
 
 export default class ScrollRecognizer extends CoordinatesRecognizer<'scroll'> {
   stateKey = 'scroll' as StateKey<'scroll'>
@@ -31,20 +31,20 @@ export default class ScrollRecognizer extends CoordinatesRecognizer<'scroll'> {
 
     this.updateSharedState(getGenericEventData(event))
 
-    const delta = subV(values, this.state.values)
-
     const startState = {
       ...this.getStartGestureState(values, event),
       ...this.getGenericPayload(event, true),
       initial: this.state.values,
-      offset: values,
-      distance: calculateDistance(delta),
-      direction: calculateDirection(delta),
     }
+
+    const movementDetection = this.getMovement(values, startState)
+    const delta = movementDetection.delta!
 
     this.updateGestureState({
       ...startState,
-      ...this.getMovement(values, startState),
+      ...movementDetection,
+      distance: calculateDistance(delta),
+      direction: calculateDirection(delta),
     })
 
     this.fireGestureHandler()

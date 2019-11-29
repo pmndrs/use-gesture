@@ -21,7 +21,7 @@ export default class WheelRecognizer extends CoordinatesRecognizer<'wheel'> {
   private getValuesFromEvent = (event: UseGestureEvent<WheelEvent>) => {
     const { values: prevValues } = this.state
     const { values } = getWheelEventValues(event)
-    return { values: addV(values, prevValues), delta: values }
+    return { values: addV(values, prevValues) }
   }
 
   onWheel = (event: UseGestureEvent<WheelEvent>): void => {
@@ -34,7 +34,7 @@ export default class WheelRecognizer extends CoordinatesRecognizer<'wheel'> {
   }
 
   onWheelStart = (event: UseGestureEvent<WheelEvent>): void => {
-    const { values, delta } = this.getValuesFromEvent(event)
+    const { values } = this.getValuesFromEvent(event)
 
     this.updateSharedState(getGenericEventData(event))
 
@@ -44,10 +44,12 @@ export default class WheelRecognizer extends CoordinatesRecognizer<'wheel'> {
       initial: this.state.values,
     }
 
+    const movementDetection = this.getMovement(values, startState)
+    const delta = movementDetection.delta!
+
     this.updateGestureState({
       ...startState,
-      ...this.getMovement(values, startState),
-      offset: values,
+      ...movementDetection,
       distance: calculateDistance(delta),
       direction: calculateDirection(delta),
     })
