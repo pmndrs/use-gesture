@@ -1,6 +1,15 @@
 import React from 'react'
 import Controller from '../Controller'
-import { InternalConfig, HookReturnType, InternalHandlers, RecognizerClasses, GenericOptions } from '../types'
+import {
+  InternalConfig,
+  HookReturnType,
+  InternalHandlers,
+  RecognizerClasses,
+  GenericOptions,
+  NativeHandlersPartial,
+  ReactEventHandlerKey,
+  Fn,
+} from '../types'
 /**
  * @private
  *
@@ -14,7 +23,8 @@ import { InternalConfig, HookReturnType, InternalHandlers, RecognizerClasses, Ge
 export default function useRecognizers<Config extends Partial<GenericOptions>>(
   handlers: Partial<InternalHandlers>,
   classes: RecognizerClasses,
-  config: InternalConfig
+  config: InternalConfig,
+  nativeHandlers?: NativeHandlersPartial
 ): (...args: any[]) => HookReturnType<Config> {
   const controller = React.useRef<Controller>() // The gesture controller keeping track of all gesture states
 
@@ -43,6 +53,14 @@ export default function useRecognizers<Config extends Partial<GenericOptions>>(
       const recognizer = new RecognizerClass(controller.current!, args)
       recognizer.addBindings()
     })
+
+    if (nativeHandlers) {
+      // we also add event bindings for native handlers
+      Object.entries(nativeHandlers).forEach(([eventName, fn]) => {
+        // we're cheating when it comes to event type :(
+        controller.current!.addBindings(eventName as ReactEventHandlerKey, fn as Fn)
+      })
+    }
 
     return controller.current!.getBind() as HookReturnType<Config>
   })

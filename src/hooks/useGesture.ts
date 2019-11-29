@@ -48,38 +48,41 @@ export function useGesture<Config extends UseGestureConfig>(
   const classes: RecognizerClasses = []
   const internalHandlers: Partial<InternalHandlers> = {}
 
+  const _nativeHandlers = { ...handlers }
+
   if (actions.has('onDrag')) {
     classes.push(DragRecognizer)
-    internalHandlers.drag = includeStartEndHandlers(handlers, 'onDrag')
+    internalHandlers.drag = includeStartEndHandlers(handlers, 'onDrag', _nativeHandlers)
     mergedConfig.drag = getInternalDragOptions(drag)
   }
   if (actions.has('onWheel')) {
     classes.push(WheelRecognizer)
-    internalHandlers.wheel = includeStartEndHandlers(handlers, 'onWheel')
+    internalHandlers.wheel = includeStartEndHandlers(handlers, 'onWheel', _nativeHandlers)
     mergedConfig.wheel = getInternalCoordinatesOptions(wheel)
   }
   if (actions.has('onScroll')) {
     classes.push(ScrollRecognizer)
-    internalHandlers.scroll = includeStartEndHandlers(handlers, 'onScroll')
+    internalHandlers.scroll = includeStartEndHandlers(handlers, 'onScroll', _nativeHandlers)
     mergedConfig.scroll = getInternalCoordinatesOptions(scroll)
   }
   if (actions.has('onMove')) {
     classes.push(MoveRecognizer)
-    internalHandlers.move = includeStartEndHandlers(handlers, 'onMove')
+    internalHandlers.move = includeStartEndHandlers(handlers, 'onMove', _nativeHandlers)
     mergedConfig.move = getInternalCoordinatesOptions(move)
   }
   if (actions.has('onPinch')) {
     classes.push(PinchRecognizer)
-    internalHandlers.pinch = includeStartEndHandlers(handlers, 'onPinch')
+    internalHandlers.pinch = includeStartEndHandlers(handlers, 'onPinch', _nativeHandlers)
     mergedConfig.pinch = getInternalCoordinatesOptions(pinch)
   }
   if (actions.has('onHover')) {
     if (!actions.has('onMove')) classes.push(MoveRecognizer)
     internalHandlers.hover = handlers.onHover
     mergedConfig.hover = { enabled: true, ...hover }
+    delete _nativeHandlers.onHover
   }
 
-  return useRecognizers<Config>(internalHandlers, classes, mergedConfig)
+  return useRecognizers<Config>(internalHandlers, classes, mergedConfig, _nativeHandlers)
 }
 /**
  * @private
@@ -91,9 +94,18 @@ export function useGesture<Config extends UseGestureConfig>(
  * @param {HandlerKey} handlerKey - the key for which to integrate start and end handlers
  * @returns
  */
-function includeStartEndHandlers(handlers: UserHandlersPartial, handlerKey: HandlerKey) {
+function includeStartEndHandlers(
+  handlers: UserHandlersPartial,
+  handlerKey: HandlerKey,
+  _nativeHandlers: UserHandlersPartial
+) {
   const startKey = (handlerKey + 'Start') as keyof UserHandlers
   const endKey = (handlerKey + 'End') as keyof UserHandlers
+
+  delete _nativeHandlers[handlerKey]
+  delete _nativeHandlers[startKey]
+  delete _nativeHandlers[endKey]
+
   const fn = (state: any) => {
     let memo: any = undefined
     if (state.first && startKey in handlers) handlers[startKey]!(state)

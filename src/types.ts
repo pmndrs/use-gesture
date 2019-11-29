@@ -306,9 +306,9 @@ export type RecognizerClasses = (
   | RecognizerClass<'scroll'>
 )[]
 
+export type NativeHandlersPartial = Partial<Omit<React.DOMAttributes<Element>, 'onDrag' | 'onScroll' | 'onWheel'>>
 /* Handlers should also accept DomAttributes to prevent overrides */
-export type UserHandlersPartial = AtLeastOneOf<UserHandlers> &
-  Partial<Omit<React.DOMAttributes<Element>, 'onDrag' | 'onScroll' | 'onWheel'>>
+export type UserHandlersPartial = AtLeastOneOf<UserHandlers> & NativeHandlersPartial
 
 export type HookReturnType<T extends { domTarget?: DomTarget }> = T['domTarget'] extends object
   ? Fn

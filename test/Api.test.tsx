@@ -1,7 +1,7 @@
 import React from 'react'
 import { render, cleanup, fireEvent, createEvent } from '@testing-library/react'
 import '@testing-library/jest-dom/extend-expect'
-import { BindProps } from './components/Api'
+import { BindProps, GenuineHandlers } from './components/Api'
 import Interactive from './components/Interactive'
 
 afterEach(cleanup)
@@ -24,9 +24,6 @@ test('bind should dispatch its arguments', () => {
   expect(getByTestId('drag-args')).toHaveTextContent('args1')
 })
 
-// TODO remove comments
-
-/*
 test('genuine handlers should correctly execute', () => {
   const { getByTestId } = render(<GenuineHandlers />)
   const element = getByTestId('drag-el')
@@ -37,7 +34,6 @@ test('genuine handlers should correctly execute', () => {
   fireEvent.click(element)
   expect(getByTestId('click')).toHaveTextContent(/^clicked$/)
 })
-*/
 
 test('testing memo', () => {
   const { getByTestId, rerender } = render(<Interactive gestures={['Drag']} memoArg="memo" />)
