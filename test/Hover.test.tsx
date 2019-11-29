@@ -38,7 +38,7 @@ describe.each([
   })
 
   test('disabling the hover gesture should prevent state from updating', () => {
-    rerender(<Component gestures={['Hover']} config={{ hover: false }} />)
+    rerender(<Component gestures={['Hover']} config={{ hover: { enabled: false } }} />)
     fireEvent.mouseEnter(element)
     expect(getByTestId(`${prefix}hover-hovering`)).toHaveTextContent('false')
   })

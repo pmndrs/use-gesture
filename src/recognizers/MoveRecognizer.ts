@@ -69,11 +69,60 @@ export default class MoveRecognizer extends CoordinatesRecognizer<'move'> {
     this.fireGestureHandler()
   }
 
+  onPointerEnter = (event: UseGestureEvent): void => {
+    if (!this.controller.config.enabled || !this.controller.config.hover!.enabled) return
+    if ('move' in this.controller.handlers) this.onMoveStart(event)
+
+    this.controller.state.shared.hovering = true
+    const { values } = getPointerEventValues(event)
+
+    const state = {
+      ...this.controller.state.shared,
+      ...this.state,
+      ...this.getGenericPayload(event, true),
+      values,
+      active: true,
+      hovering: true,
+    }
+
+    this.controller.handlers.hover!({ ...state, ...this.mapStateValues(state) })
+  }
+
+  onPointerLeave = (event: UseGestureEvent): void => {
+    if ('move' in this.controller.handlers) this.onMoveEnd(event)
+
+    this.controller.state.shared.hovering = false
+
+    const { values } = getPointerEventValues(event)
+
+    const state = {
+      ...this.controller.state.shared,
+      ...this.state,
+      ...this.getGenericPayload(event),
+      values,
+      active: false,
+    }
+
+    this.controller.handlers.hover!({ ...state, ...this.mapStateValues(state) })
+  }
+
   addBindings(): void {
     if (this.controller.config.pointer) {
-      this.controller.addBindings('onPointerMove', this.onMove)
+      if ('move' in this.controller.handlers) {
+        this.controller.addBindings('onPointerMove', this.onMove)
+      }
+      if ('hover' in this.controller.handlers) {
+        this.controller.addBindings('onPointerEnter', this.onPointerEnter)
+        this.controller.addBindings('onPointerLeave', this.onPointerLeave)
+      }
     } else {
-      this.controller.addBindings('onMouseMove', this.onMove)
+      if ('move' in this.controller.handlers) {
+        this.controller.addBindings('onMouseMove', this.onMove)
+      }
+      if ('hover' in this.controller.handlers) {
+        this.controller.addBindings('onMouseEnter', this.onPointerEnter)
+        this.controller.addBindings('onMouseLeave', this.onPointerLeave)
+      }
     }
   }
 }

@@ -75,6 +75,7 @@ export type UseGestureConfig = Partial<GenericOptions> & {
   scroll?: CoordinatesConfig
   move?: CoordinatesConfig
   pinch?: DistanceAngleConfig
+  hover?: { enabled?: boolean }
 }
 
 export interface InternalGenericOptions {
@@ -115,6 +116,7 @@ export type InternalConfig = InternalGenericOptions & {
   scroll?: InternalCoordinatesOptions
   move?: InternalCoordinatesOptions
   pinch?: InternalDistanceAngleOptions
+  hover?: { enabled: boolean }
 }
 
 export type WebKitGestureEvent = React.PointerEvent & { scale: number; rotation: number }
@@ -272,8 +274,8 @@ export type PartialGestureState<T extends GestureKey> = Partial<GestureState<T>>
 export type FullGestureState<T extends GestureKey> = SharedGestureState & State[StateKey<T>]
 
 export type Handler<T extends GestureKey> = (state: FullGestureState<T>) => any | void
-// export type HandlerKey = 'onDrag' | 'onPinch' | 'onMove' | 'onHover' | 'onScroll' | 'onWheel'
-export type HandlerKey = 'onDrag' | 'onPinch' | 'onWheel' | 'onMove' | 'onScroll'
+
+export type HandlerKey = 'onDrag' | 'onPinch' | 'onWheel' | 'onMove' | 'onScroll' | 'onHover'
 
 export type UserHandlers = {
   onDrag: Handler<'drag'>
@@ -291,10 +293,10 @@ export type UserHandlers = {
   onScroll: Handler<'scroll'>
   onScrollStart: Handler<'scroll'>
   onScrollEnd: Handler<'scroll'>
-  // onHover: Handler<'hover'>
+  onHover: Handler<'move'>
 }
 
-export type InternalHandlers = { [Key in GestureKey]: Handler<Key> }
+export type InternalHandlers = { [Key in GestureKey]: Handler<Key> } & { hover: Handler<'move'> }
 
 export type RecognizerClass<T extends GestureKey> = { new (controller: Controller, args: any[]): Recognizer<T> }
 // export type RecognizerClasses = RecognizerClass<GestureKey>[]

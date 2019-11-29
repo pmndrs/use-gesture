@@ -41,7 +41,7 @@ export function useGesture<Config extends UseGestureConfig>(
    * We decompose the config into its generic and gesture options and compute each.
    * TODO: this is currently done on every render!
    */
-  const { drag, wheel, move, scroll, pinch, ...restConfig } = config
+  const { drag, wheel, move, scroll, pinch, hover, ...restConfig } = config
 
   const mergedConfig: InternalConfig = getInternalGenericOptions(restConfig)
 
@@ -72,6 +72,11 @@ export function useGesture<Config extends UseGestureConfig>(
     classes.push(PinchRecognizer)
     internalHandlers.pinch = includeStartEndHandlers(handlers, 'onPinch')
     mergedConfig.pinch = getInternalCoordinatesOptions(pinch)
+  }
+  if (actions.has('onHover')) {
+    if (!actions.has('onMove')) classes.push(MoveRecognizer)
+    internalHandlers.hover = handlers.onHover
+    mergedConfig.hover = { enabled: true, ...hover }
   }
 
   return useRecognizers<Config>(internalHandlers, classes, mergedConfig)
