@@ -82,7 +82,7 @@ export function getInternalCoordinatesOptions(coordinatesConfig: CoordinatesConf
 
   const boundsArray = [
     [def.withDefault(bounds.left, -Infinity), def.withDefault(bounds.right, Infinity)],
-    [def.withDefault(bounds.bottom, -Infinity), def.withDefault(bounds.top, Infinity)],
+    [def.withDefault(bounds.top, -Infinity), def.withDefault(bounds.bottom, Infinity)],
   ]
 
   return {
