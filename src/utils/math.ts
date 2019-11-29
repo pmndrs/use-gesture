@@ -97,23 +97,19 @@ function rubberband2(offset: number, constant: number) {
 }
 
 function rubberBand(distance: number, dimension: number, constant: number) {
-  if (dimension === 0) return rubberband2(distance, constant)
+  // if the opposite bound isn't set then fake dimension as if they were both equals
+  if (dimension === 0 || Math.abs(dimension) === Infinity) return rubberband2(distance, constant)
   return (distance * dimension * constant) / (dimension + constant * distance)
 }
 
 export function rubberBandIfOutOfBounds(delta: number, min: number, max: number, constant = 0.15) {
   if (constant === 0) return minMax(delta, min, max)
 
-  if (min !== -Infinity && delta < min) {
-    // if the opposite bound isn't set then fake dimension as if they were both equals
-    const rubberOffset =
-      max === Infinity ? -rubberband2(min - delta, constant) : -rubberBand(min - delta, max - min, constant)
-    return rubberOffset + min
+  if (delta < min) {
+    return -rubberBand(min - delta, max - min, constant)
   }
-  if (max !== Infinity && delta > max) {
-    const rubberOffset =
-      min === Infinity ? rubberband2(delta - max, constant) : -rubberBand(delta - max, max - min, constant)
-    return rubberOffset + max
+  if (delta > max) {
+    return rubberBand(delta - max, max - min, constant)
   }
   return delta
 }
