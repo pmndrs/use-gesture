@@ -254,11 +254,12 @@ export default abstract class Recognizer<T extends GestureKey> {
     this.state.first = _active && !active // `first` is true when the gesture becomes active
     this.state.last = !_active // `last` is true when the gesture becomes inactive
 
+    this.controller.state.shared[this.ingKey] = _active // Sets dragging, pinching, etc. to the gesture active state
+
     const state = {
       ...this.controller.state.shared,
       ...this.state,
       ...this.mapStateValues(this.state), // Sets xy or da to the gesture state values
-      [this.ingKey]: _active, // Sets dragging, pinching, etc. to the gesture active state
     }
 
     const newMemo = this.handler(state)
