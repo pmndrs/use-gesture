@@ -2,7 +2,7 @@ import React from 'react'
 import { render, cleanup, fireEvent, createEvent, wait } from '@testing-library/react'
 import '@testing-library/jest-dom/extend-expect'
 import Interactive from './components/Interactive'
-// import InteractiveDom from './components/InteractiveDom'
+import InteractiveDom from './components/InteractiveDom'
 import { InteractiveType } from './components/types'
 
 afterAll(cleanup)
@@ -11,7 +11,7 @@ afterAll(cleanup)
 
 describe.each([
   ['attached to component', Interactive, false],
-  // ['attached to node', InteractiveDom, true],
+  ['attached to node', InteractiveDom, true],
 ])('testing onPinch %s)', (_testName, C, domTarget) => {
   const Component = C as InteractiveType
   const prefix = domTarget ? 'dom-' : ''
