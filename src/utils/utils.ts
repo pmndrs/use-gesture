@@ -7,6 +7,7 @@ export const chainFns = (...fns: Fn[]): Fn => (...args: any[]) => fns.forEach(fn
 
 export const def = {
   array: <T>(value: T | T[]): T[] => (Array.isArray(value) ? value : [value, value]),
+  withDefault: <T>(value: T | undefined, defaultIfUndefined: T): T => (value !== void 0 ? value : defaultIfUndefined),
 }
 
 export function matchKeysFromObject<T extends object, K extends object>(obj: T, matchingObject: K): Partial<T> {

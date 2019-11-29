@@ -39,8 +39,8 @@ describe('testing derived config', () => {
       expect(getInternalDragOptions(undefined)).toStrictEqual({
         enabled: true,
         bounds: [
-          [Infinity, Infinity],
-          [Infinity, Infinity],
+          [-Infinity, Infinity],
+          [-Infinity, Infinity],
         ],
         delay: 0,
         swipeDistance: [100, 100],

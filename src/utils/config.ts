@@ -81,8 +81,8 @@ export function getInternalCoordinatesOptions(coordinatesConfig: CoordinatesConf
   const { axis, lockDirection, bounds = {}, ...internalOptions } = coordinatesConfig
 
   const boundsArray = [
-    [bounds.left || Infinity, bounds.right || Infinity],
-    [bounds.bottom || Infinity, bounds.top || Infinity],
+    [def.withDefault(bounds.left, -Infinity), def.withDefault(bounds.right, Infinity)],
+    [def.withDefault(bounds.bottom, -Infinity), def.withDefault(bounds.top, Infinity)],
   ]
 
   return {
@@ -102,8 +102,8 @@ export function getDistanceAngleOptions(distanceAngleConfig: DistanceAngleConfig
   const { distanceBounds = {}, angleBounds = {}, ...internalOptions } = distanceAngleConfig
 
   const boundsArray = [
-    [distanceBounds.min || Infinity, distanceBounds.max || Infinity],
-    [angleBounds.min || Infinity, angleBounds!.max || Infinity],
+    [def.withDefault(distanceBounds.min, -Infinity), def.withDefault(distanceBounds.max, Infinity)],
+    [def.withDefault(angleBounds.min, -Infinity), def.withDefault(angleBounds.max, Infinity)],
   ]
 
   return {
