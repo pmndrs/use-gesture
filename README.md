@@ -33,7 +33,7 @@ function PullRelease() {
   const [{ x, y }, set] = useSpring(() => ({ x: 0, y: 0 }))
 
   // 1. Define the gesture
-  const bind = useDrag(({ down, movement: [mx, my] }) => set({ x: down ? mx : 0, y: down ? y : 0 }))
+  const bind = useDrag(({ down, movement: [mx, my] }) => set({ x: down ? mx : 0, y: down ? my : 0 }))
 
   return (
     <animated.div
