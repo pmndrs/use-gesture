@@ -82,22 +82,38 @@ export function getIntentional(movement: number, threshold: number): number | fa
   return abs >= threshold ? Math.sign(movement) * threshold : false
 }
 
+function minMax(value: number, min: number, max: number) {
+  return Math.max(min, Math.min(value, max))
+}
+
 // Based on @aholachek ;)
 // https://twitter.com/chpwn/status/285540192096497664
 // iOS constant = 0.55
-export function rubberBand(distance: number, dimension: number, constant = 0.15) {
-  if (dimension + constant * distance === 0) return 0
+
+// https://medium.com/@nathangitter/building-fluid-interfaces-ios-swift-9732bb934bf5
+function rubberband2(offset: number, constant: number) {
+  // default constant from the article is 0.7
+  return Math.pow(offset, constant * 5)
+}
+
+function rubberBand(distance: number, dimension: number, constant: number) {
+  if (dimension === 0) return rubberband2(distance, constant)
   return (distance * dimension * constant) / (dimension + constant * distance)
 }
 
-export function rubberBandIfOutOfBounds(delta: number, min: number, max: number, constant?: number) {
+export function rubberBandIfOutOfBounds(delta: number, min: number, max: number, constant = 0.15) {
+  if (constant === 0) return minMax(delta, min, max)
+
   if (min !== -Infinity && delta < min) {
-    max = max !== Infinity ? max : -min // if the opposite bound isn't set then fake dimension as if they were both equals
-    return -rubberBand(min - delta, max - min, constant) + min
+    // if the opposite bound isn't set then fake dimension as if they were both equals
+    const rubberOffset =
+      max === Infinity ? -rubberband2(min - delta, constant) : -rubberBand(min - delta, max - min, constant)
+    return rubberOffset + min
   }
   if (max !== Infinity && delta > max) {
-    min = min !== -Infinity ? min : -max // id
-    return rubberBand(delta - max, max - min, constant) + max
+    const rubberOffset =
+      min === Infinity ? rubberband2(delta - max, constant) : -rubberBand(delta - max, max - min, constant)
+    return rubberOffset + max
   }
   return delta
 }
