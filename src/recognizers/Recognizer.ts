@@ -12,6 +12,7 @@ import {
   PartialGestureState,
   Vector2,
   FalseOrNumber,
+  FullGestureState,
 } from '../types'
 import { getInitialState } from '../utils/state'
 import { subV, getIntentional, addV, rubberBandIfOutOfBounds } from '../utils/math'
@@ -232,7 +233,7 @@ export default abstract class Recognizer<T extends GestureKey> {
    *
    * @param {boolean} [forceFlag] - if true, then the handler will fire even if the gesture is not intentional
    */
-  protected fireGestureHandler = (forceFlag?: boolean): void => {
+  protected fireGestureHandler = (forceFlag?: boolean): FullGestureState<T> | null => {
     /**
      * If the gesture has been blocked (this can happen when the gesture has started in an unwanted direction),
      * clean everything and don't do anything.
@@ -240,12 +241,12 @@ export default abstract class Recognizer<T extends GestureKey> {
     if (this.state._blocked) {
       this.state._active = false
       this.clean()
-      return
+      return null
     }
 
     // If the gesture has no intentional dimension, don't do fire the handler.
     const [intentionalX, intentionalY] = this.state._intentional
-    if (!forceFlag && intentionalX === false && intentionalY === false) return
+    if (!forceFlag && intentionalX === false && intentionalY === false) return null
 
     const { _active, active } = this.state
 
@@ -267,5 +268,7 @@ export default abstract class Recognizer<T extends GestureKey> {
 
     // Cleans the gesture when the gesture is no longer active.
     if (!_active) this.clean()
+
+    return state
   }
 }
