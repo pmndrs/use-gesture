@@ -190,17 +190,17 @@ export default abstract class Recognizer<T extends GestureKey> {
     if (_blocked) return intentionalityCheck
 
     /**
-     * Rubberband should be 0 when the gesture is no longer active, so that movement
-     * and offset can return within their bounds.
-     */
-    rubberband = _active ? rubberband : [0, 0]
-
-    /**
      * The movement sent to the handler has 0 in its dimension when intentionality is false.
      */
     const movement = [_i0 !== false ? _m0 - _i0 : 0, _i1 !== false ? _m1 - _i1 : 0] as Vector2
     const delta = subV(movement, prevMovement) // delta is the difference between next and current movements
     const offset = addV(delta, prevOffset) as Vector2 // offset is the sum of next delta and current offset
+
+    /**
+     * Rubberband should be 0 when the gesture is no longer active, so that movement
+     * and offset can return within their bounds.
+     */
+    rubberband = _active ? rubberband : [0, 0]
 
     return {
       ...intentionalityCheck,
