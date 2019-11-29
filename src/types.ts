@@ -127,9 +127,7 @@ export type UseGestureEvent<
     | React.WheelEvent
     | React.PointerEvent
     | WebKitGestureEvent
-> = T & {
-  gesture?: GestureKey
-}
+> = T
 
 export interface ReactEventHandlers {
   // Mouse Events
