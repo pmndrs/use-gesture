@@ -1,5 +1,10 @@
-import { getInternalGenericOptions, getInternalDragOptions } from '../src/utils/config'
-import { DragConfig, GenericOptions } from '../src/types'
+import {
+  getInternalGenericOptions,
+  getInternalDragOptions,
+  getInternalDistanceAngleOptions,
+  getInternalGestureOptions,
+} from '../src/utils/config'
+import { DragConfig, GenericOptions, DistanceAngleConfig, GestureOptions } from '../src/types'
 
 describe('testing derived config', () => {
   describe('testing derived generic configuration', () => {
@@ -34,6 +39,21 @@ describe('testing derived config', () => {
     })
   })
 
+  describe('testing internal gesture configuration', () => {
+    let config: Partial<GestureOptions>
+    test(`derived threshold array is set when threshold is a number`, () => {
+      config = { threshold: 10 }
+      expect(getInternalGestureOptions(config)).toHaveProperty('threshold', [10, 10])
+    })
+
+    test(`derived rubberband should be set to array, and defaulted when set to true`, () => {
+      config = { rubberband: 0.3 }
+      expect(getInternalGestureOptions(config)).toHaveProperty('rubberband', [0.3, 0.3])
+      config = { rubberband: true }
+      expect(getInternalGestureOptions(config)).toHaveProperty('rubberband', [0.15, 0.15])
+    })
+  })
+
   describe('testing drag configuration', () => {
     test(`empty config should return default drag config`, () => {
       expect(getInternalDragOptions(undefined)).toStrictEqual({
@@ -53,11 +73,7 @@ describe('testing derived config', () => {
       })
     })
 
-    let dragConfig: Partial<DragConfig>
-    test(`derived threshold array is set when threshold is a number`, () => {
-      dragConfig = { threshold: 10 }
-      expect(getInternalDragOptions(dragConfig)).toHaveProperty('threshold', [10, 10])
-    })
+    let dragConfig: DragConfig
 
     test(`derived threshold is set when filterClicks, lockDirection or axis are not falsey`, () => {
       dragConfig = { lockDirection: true }
@@ -80,6 +96,29 @@ describe('testing derived config', () => {
       expect(getInternalDragOptions(dragConfig)).toHaveProperty('delay', 180)
       dragConfig = { delay: false }
       expect(getInternalDragOptions(dragConfig)).toHaveProperty('delay', 0)
+    })
+  })
+
+  describe('testing distance / angle configuration', () => {
+    test(`empty config should return default distance / angle config`, () => {
+      expect(getInternalDistanceAngleOptions(undefined)).toStrictEqual({
+        enabled: true,
+        bounds: [
+          [-Infinity, Infinity],
+          [-Infinity, Infinity],
+        ],
+        threshold: [0, 0],
+        rubberband: [0, 0],
+      })
+    })
+
+    let config: DistanceAngleConfig
+    test(`derived bounds array matches [[distanceBounds], [angleBounds]]`, () => {
+      config = { distanceBounds: { min: -100, max: 200 }, angleBounds: { min: -50, max: 60 } }
+      expect(getInternalDistanceAngleOptions(config)).toHaveProperty('bounds', [
+        [-100, 200],
+        [-50, 60],
+      ])
     })
   })
 })
