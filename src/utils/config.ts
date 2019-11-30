@@ -92,7 +92,9 @@ export function getInternalCoordinatesOptions(coordinatesConfig: CoordinatesConf
   }
 }
 
-export function getDistanceAngleOptions(distanceAngleConfig: DistanceAngleConfig = {}): InternalDistanceAngleOptions {
+export function getInternalDistanceAngleOptions(
+  distanceAngleConfig: DistanceAngleConfig = {}
+): InternalDistanceAngleOptions {
   const { distanceBounds = {}, angleBounds = {}, ...internalOptions } = distanceAngleConfig
 
   const boundsArray = [

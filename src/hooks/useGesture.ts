@@ -9,7 +9,7 @@ import {
   getInternalGenericOptions,
   getInternalDragOptions,
   getInternalCoordinatesOptions,
-  getDistanceAngleOptions,
+  getInternalDistanceAngleOptions,
 } from '../utils/config'
 import {
   InternalConfig,
@@ -78,7 +78,7 @@ export function useGesture<Config extends UseGestureConfig>(
   if (actions.has('onPinch')) {
     classes.push(PinchRecognizer)
     internalHandlers.pinch = includeStartEndHandlers(handlers, 'onPinch', _nativeHandlers)
-    mergedConfig.pinch = getDistanceAngleOptions(pinch)
+    mergedConfig.pinch = getInternalDistanceAngleOptions(pinch)
   }
   if (actions.has('onHover')) {
     if (!actions.has('onMove')) classes.push(MoveRecognizer)
