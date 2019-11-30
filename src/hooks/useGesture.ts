@@ -87,8 +87,6 @@ export function useGesture<Config extends UseGestureConfig>(
     delete _nativeHandlers.onHover
   }
 
-  console.log(mergedConfig.pinch)
-
   return useRecognizers<Config>(internalHandlers, classes, mergedConfig, _nativeHandlers)
 }
 /**
