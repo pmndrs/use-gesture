@@ -111,6 +111,9 @@ export default class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
   onGestureChange = (event: WebKitGestureEvent): void => {
     const { canceled, _active } = this.state
     if (canceled || !_active) return
+
+    event.preventDefault()
+
     const genericEventData = getGenericEventData(event)
 
     this.updateSharedState(genericEventData)
@@ -128,6 +131,7 @@ export default class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
   }
 
   onGestureEnd = (event: WebKitGestureEvent): void => {
+    event.preventDefault()
     this.state._active = false
     this.updateSharedState({ down: false, touches: 0 })
 
