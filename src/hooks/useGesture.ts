@@ -5,7 +5,12 @@ import WheelRecognizer from '../recognizers/WheelRecognizer'
 import MoveRecognizer from '../recognizers/MoveRecognizer'
 import PinchRecognizer from '../recognizers/PinchRecognizer'
 import ScrollRecognizer from '../recognizers/ScrollRecognizer'
-import { getInternalGenericOptions, getInternalDragOptions, getInternalCoordinatesOptions } from '../utils/config'
+import {
+  getInternalGenericOptions,
+  getInternalDragOptions,
+  getInternalCoordinatesOptions,
+  getDistanceAngleOptions,
+} from '../utils/config'
 import {
   InternalConfig,
   HandlerKey,
@@ -73,7 +78,7 @@ export function useGesture<Config extends UseGestureConfig>(
   if (actions.has('onPinch')) {
     classes.push(PinchRecognizer)
     internalHandlers.pinch = includeStartEndHandlers(handlers, 'onPinch', _nativeHandlers)
-    mergedConfig.pinch = getInternalCoordinatesOptions(pinch)
+    mergedConfig.pinch = getDistanceAngleOptions(pinch)
   }
   if (actions.has('onHover')) {
     if (!actions.has('onMove')) classes.push(MoveRecognizer)
@@ -81,6 +86,8 @@ export function useGesture<Config extends UseGestureConfig>(
     mergedConfig.hover = { enabled: true, ...hover }
     delete _nativeHandlers.onHover
   }
+
+  console.log(mergedConfig.pinch)
 
   return useRecognizers<Config>(internalHandlers, classes, mergedConfig, _nativeHandlers)
 }

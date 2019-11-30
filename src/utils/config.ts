@@ -14,7 +14,6 @@ import {
   InternalCoordinatesOptions,
   DistanceAngleConfig,
   InternalDistanceAngleOptions,
-  DistanceAngleOptions,
 } from '../types'
 
 const DEFAULT_DRAG_DELAY = 180
@@ -94,11 +93,6 @@ export function getInternalCoordinatesOptions(coordinatesConfig: CoordinatesConf
 }
 
 export function getDistanceAngleOptions(distanceAngleConfig: DistanceAngleConfig = {}): InternalDistanceAngleOptions {
-  const defaultDistanceAngleOptions: DistanceAngleOptions = {
-    distanceBounds: undefined,
-    angleBounds: undefined,
-  }
-
   const { distanceBounds = {}, angleBounds = {}, ...internalOptions } = distanceAngleConfig
 
   const boundsArray = [
@@ -108,7 +102,6 @@ export function getDistanceAngleOptions(distanceAngleConfig: DistanceAngleConfig
 
   return {
     ...getInternalGestureOptions(internalOptions),
-    ...defaultDistanceAngleOptions,
     bounds: boundsArray as Tuple<Vector2>,
   }
 }
