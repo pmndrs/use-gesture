@@ -1,7 +1,7 @@
 import useRecognizers from './useRecognizers'
 import PinchRecognizer from '../recognizers/PinchRecognizer'
 import { Handler, InternalConfig, HookReturnType, UsePinchConfig } from '../types'
-import { getInternalGenericOptions, getInternalDragOptions } from '../utils/config'
+import { getInternalGenericOptions, getInternalDistanceAngleOptions } from '../utils/config'
 
 /**
  * @public
@@ -28,7 +28,7 @@ export function usePinch<Config extends UsePinchConfig>(
       eventOptions,
       window,
     }),
-    pinch: getInternalDragOptions(pinch),
+    pinch: getInternalDistanceAngleOptions(pinch),
   }
 
   return useRecognizers<Config>({ pinch: handler }, [PinchRecognizer], mergedConfig)
