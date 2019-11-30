@@ -91,9 +91,9 @@ function minMax(value: number, min: number, max: number) {
 // iOS constant = 0.55
 
 // https://medium.com/@nathangitter/building-fluid-interfaces-ios-swift-9732bb934bf5
-function rubberband2(offset: number, constant: number) {
+function rubberband2(distance: number, constant: number) {
   // default constant from the article is 0.7
-  return Math.pow(offset, constant * 5)
+  return Math.pow(distance, constant * 5)
 }
 
 function rubberBand(distance: number, dimension: number, constant: number) {
