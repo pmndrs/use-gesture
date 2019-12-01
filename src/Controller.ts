@@ -128,10 +128,10 @@ export default class Controller {
   }
 
   public getBind = () => {
-    const domTarget = this.getDomTarget()
     // If config.domTarget is set we add event listeners to it and return the clean function.
-    if (domTarget) {
-      this.addDomTargetListeners(domTarget)
+    if (this.config.domTarget) {
+      const domTarget = this.getDomTarget()
+      domTarget && this.addDomTargetListeners(domTarget)
       return this.clean
     }
 
