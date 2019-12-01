@@ -3,6 +3,7 @@ import { render, cleanup, fireEvent, createEvent } from '@testing-library/react'
 import '@testing-library/jest-dom/extend-expect'
 import { BindProps, GenuineHandlers } from './components/Api'
 import Interactive from './components/Interactive'
+import InteractiveDom from './components/InteractiveDom'
 
 afterEach(cleanup)
 
@@ -75,4 +76,13 @@ test('testing timestamp', () => {
   expect(getByTestId('drag-timeStamp').innerHTML).toBe(String(time))
   expect(getByTestId('drag-startTime').innerHTML).toBe(String(start))
   expect(getByTestId('drag-elapsedTime').innerHTML).toBe(String(time - start))
+})
+
+test('testing unmount with domTarget', () => {
+  const { getByTestId, unmount } = render(<InteractiveDom gestures={['Drag']} />)
+  const element = getByTestId('dom-drag-el')
+  fireEvent.mouseDown(element)
+  fireEvent.mouseMove(window, { clientX: 20, clientY: 50, buttons: 1 })
+  expect(getByTestId('dom-drag-dragging')).toHaveTextContent('true')
+  unmount()
 })
