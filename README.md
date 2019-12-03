@@ -126,8 +126,9 @@ const bind = useScroll(handler, {
   // the event config attribute lets you configure `passive` and `capture` options passed to event listeners
   event: { passive: true, capture: false },
   // uses PointerEvent handlers for compatible gestures (disabled by default)
-  dragDelay: false // you can set a delay in ms that will prevent drag from triggering if you just "click" on your element
   pointerEvents: false,
+  // you can set a delay in ms that will prevent drag from triggering if you just "click" on your element
+  dragDelay: false
   // lets you specify which window element the gesture should use.
   window: window,
   // enables or disables gestures
@@ -285,7 +286,7 @@ In many use cases, we want `memo` to hold the original value of our element posi
 ```jsx
 const [{ x }, set] = useSpring(() => ({ x: 0 }))
 const bind = useDrag(({ movement: [mx], memo = x.getValue() }) => {
-  set({ x: ox + memo })
+  set({ x: mx + memo })
   return memo
 })
 ```
