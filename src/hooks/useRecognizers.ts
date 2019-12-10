@@ -27,6 +27,7 @@ export default function useRecognizers<Config extends Partial<GenericOptions>>(
   nativeHandlers?: NativeHandlersPartial
 ): (...args: any[]) => HookReturnType<Config> {
   const controller = React.useRef<Controller>() // The gesture controller keeping track of all gesture states
+  const nativeRefs = React.useRef<NativeHandlersPartial>()
 
   if (!controller.current) {
     // We only initialize the gesture controller once
@@ -36,6 +37,7 @@ export default function useRecognizers<Config extends Partial<GenericOptions>>(
   // We reassign the config and handlers to the controller on every render.
   controller.current!.config = config
   controller.current!.handlers = handlers
+  nativeRefs.current = nativeHandlers
 
   /**
    * When the component unmounts, we run the controller clean functions that will be responsible
@@ -54,9 +56,9 @@ export default function useRecognizers<Config extends Partial<GenericOptions>>(
       recognizer.addBindings()
     })
 
-    if (nativeHandlers) {
+    if (nativeRefs.current) {
       // we also add event bindings for native handlers
-      Object.entries(nativeHandlers).forEach(([eventName, fn]) => {
+      Object.entries(nativeRefs.current).forEach(([eventName, fn]) => {
         // we're cheating when it comes to event type :(
         controller.current!.addBindings(eventName as ReactEventHandlerKey, fn as Fn)
       })
