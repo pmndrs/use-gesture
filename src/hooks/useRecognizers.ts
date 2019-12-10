@@ -37,6 +37,11 @@ export default function useRecognizers<Config extends Partial<GenericOptions>>(
   // We reassign the config and handlers to the controller on every render.
   controller.current!.config = config
   controller.current!.handlers = handlers
+
+  /**
+   * We also assign nativeHandlers to a ref, otherwise it they won't be refreshed
+   * on the next render.
+   */
   nativeRefs.current = nativeHandlers
 
   /**

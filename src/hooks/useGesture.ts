@@ -53,6 +53,7 @@ export function useGesture<Config extends UseGestureConfig>(
   const classes: RecognizerClasses = []
   const internalHandlers: Partial<InternalHandlers> = {}
 
+  // will hold reference to native handlers such as onClick, onMouseDown, etc.
   const _nativeHandlers = { ...handlers }
 
   if (actions.has('onDrag')) {
