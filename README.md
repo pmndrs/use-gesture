@@ -219,7 +219,7 @@ const bind = useDrag(({ active, movement, velocity, direction, memo = pos.getVal
   set({
     pos: addV(movement, memo),
     immediate: active,
-    config: { velocity: scale(direction, velocity), decay: true },
+    config: { velocity: direction.map(d => d * velocity), decay: true },
   })
   return memo
 })
