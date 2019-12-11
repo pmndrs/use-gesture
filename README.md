@@ -90,7 +90,7 @@ const bind = useDrag(({
   cancel,     // * function you can call to interrupt relevant gestures (drag and pinch only)
   canceled,   // * whether the gesture has been canceled (drag and pinch only)
   down,       // * true when a mouse button or touch is down
-  buttons,    // * buttons pressed (see https://developer.mozilla.org/fr/docs/Web/API/MouseEvent/button)
+  buttons,    // * buttons pressed (see https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/buttons)
   touches     // * numbers of touches pressing the screen
   shiftKey, altKey, ctrlKey, metaKey,    // * true when modifier keys are pressed
   args        // * arguments you passed to bind
