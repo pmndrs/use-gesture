@@ -130,7 +130,7 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
       _isClick,
       elapsedTime,
       movement: [mx, my],
-      vxvy: [vx, vy],
+      velocities: [vx, vy],
       _intentional: [ix, iy],
     } = this.state
 
