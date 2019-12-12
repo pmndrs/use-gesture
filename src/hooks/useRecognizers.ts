@@ -18,6 +18,7 @@ import {
  * @param {Partial<InternalHandlers>} handlers
  * @param {RecognizerClasses} classes
  * @param {InternalConfig} config
+ * @param {NativeHandlersPartial} nativeHandlers - native handlers such as onClick, onMouseDown, etc.
  * @returns {(...args: any[]) => HookReturnType<Config>}
  */
 export default function useRecognizers<Config extends Partial<GenericOptions>>(
