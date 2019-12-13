@@ -1,5 +1,5 @@
 import useRecognizers from './useRecognizers'
-import MoveRecognizer from '../recognizers/MoveRecognizer'
+import ScrollRecognizer from '../recognizers/ScrollRecognizer'
 import { Handler, InternalConfig, HookReturnType, UseScrollConfig } from '../types'
 import { getInternalGenericOptions, getInternalCoordinatesOptions } from '../utils/config'
 
@@ -16,7 +16,7 @@ export function useScroll<Config extends UseScrollConfig>(
   handler: Handler<'scroll'>,
   config: Config | {} = {}
 ): (...args: any[]) => HookReturnType<Config> {
-  const { domTarget, eventOptions, window, axis, lockDirection, ...move } = config as UseScrollConfig
+  const { domTarget, eventOptions, window, ...scroll } = config as UseScrollConfig
 
   /**
    * TODO: at the moment we recompute the config object at every render
@@ -28,8 +28,8 @@ export function useScroll<Config extends UseScrollConfig>(
       eventOptions,
       window,
     }),
-    move: getInternalCoordinatesOptions(move),
+    scroll: getInternalCoordinatesOptions(scroll),
   }
 
-  return useRecognizers<Config>({ scroll: handler }, [MoveRecognizer], mergedConfig)
+  return useRecognizers<Config>({ scroll: handler }, [ScrollRecognizer], mergedConfig)
 }

@@ -2,7 +2,7 @@ import { Fn, EventOptions, UseGestureEvent, Vector2, WebKitGestureEvent } from '
 
 const setListeners = (add: boolean) => (el: EventTarget, listeners: [string, Fn][], options: EventOptions): void => {
   const action = add ? 'addEventListener' : 'removeEventListener'
-  listeners.forEach(([type, fn]) => el[action](type, fn, options))
+  listeners.forEach(([eventName, fn]) => el[action](eventName, fn, options))
 }
 
 /**

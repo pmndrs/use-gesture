@@ -16,7 +16,7 @@ export function useWheel<Config extends UseWheelConfig>(
   handler: Handler<'wheel'>,
   config: Config | {} = {}
 ): (...args: any[]) => HookReturnType<Config> {
-  const { domTarget, eventOptions, window, axis, lockDirection, ...wheel } = config as UseWheelConfig
+  const { domTarget, eventOptions, window, ...wheel } = config as UseWheelConfig
 
   /**
    * TODO: at the moment we recompute the config object at every render

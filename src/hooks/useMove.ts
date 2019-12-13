@@ -16,7 +16,7 @@ export function useMove<Config extends UseMoveConfig>(
   handler: Handler<'move'>,
   config: Config | {} = {}
 ): (...args: any[]) => HookReturnType<Config> {
-  const { domTarget, eventOptions, window, axis, lockDirection, ...move } = config as UseMoveConfig
+  const { domTarget, eventOptions, window, ...move } = config as UseMoveConfig
 
   /**
    * TODO: at the moment we recompute the config object at every render
