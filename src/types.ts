@@ -221,6 +221,7 @@ export interface CommonGestureState {
   delta: Vector2
   movement: Vector2
   offset: Vector2
+  lastOffset: Vector2
   initial: Vector2
   previous: Vector2
   direction: Vector2

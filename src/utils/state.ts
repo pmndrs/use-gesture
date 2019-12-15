@@ -16,6 +16,7 @@ export function getInitialState(): State {
     delta: [0, 0],
     movement: [0, 0],
     offset: [0, 0],
+    lastOffset: [0, 0],
     direction: [0, 0],
     initial: [0, 0],
     previous: [0, 0],
