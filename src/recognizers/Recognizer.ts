@@ -248,7 +248,15 @@ export default abstract class Recognizer<T extends GestureKey> {
     const [intentionalX, intentionalY] = this.state._intentional
     if (!forceFlag && intentionalX === false && intentionalY === false) return null
 
-    const { _active, active } = this.state
+    const { _active, active, delta } = this.state
+
+    /**
+     * Makes sure we're not firing the user handler for no reason.
+     * Without this check, if a movement was found intentional on only one axis,
+     * the handler would fire even if the intentional axis wasn't updated and
+     * the other threshold wasn't exceeded.
+     */
+    if (_active && active && delta[0] === 0 && delta[1] === 0) return null
 
     this.state.active = _active
     this.state.first = _active && !active // `first` is true when the gesture becomes active
