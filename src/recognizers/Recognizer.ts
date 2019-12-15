@@ -15,7 +15,7 @@ import {
   FullGestureState,
 } from '../types'
 import { getInitialState } from '../utils/state'
-import { subV, getIntentional, addV, rubberBandIfOutOfBounds } from '../utils/math'
+import { subV, addV, getIntentional, rubberBandIfOutOfBounds } from '../utils/math'
 
 /**
  * @private
@@ -140,6 +140,7 @@ export default abstract class Recognizer<T extends GestureKey> {
       values,
       initial: values,
       offset: this.state.offset,
+      lastOffset: this.state.offset,
       startTime: event.timeStamp,
     }
   }
@@ -167,7 +168,7 @@ export default abstract class Recognizer<T extends GestureKey> {
     let { threshold, rubberband } = this.config
     const [t0, t1] = threshold
 
-    const { _active, _intentional: intentional, offset: prevOffset, movement: prevMovement } = state
+    const { _active, _intentional: intentional, lastOffset, movement: prevMovement } = state
     let [i0, i1] = intentional
 
     const [_m0, _m1] = this.getInternalMovement(values, state)
@@ -191,24 +192,25 @@ export default abstract class Recognizer<T extends GestureKey> {
     if (_blocked) return intentionalityCheck
 
     /**
-     * The movement sent to the handler has 0 in its dimension when intentionality is false.
+     * The movement sent to the handler has 0 in its dimensions when intentionality is false.
+     * It is calculated from the actual movement minus the threshold.
      */
-    const movement = [_i0 !== false ? _m0 - _i0 : 0, _i1 !== false ? _m1 - _i1 : 0] as Vector2
-    const delta = subV(movement, prevMovement) // delta is the difference between next and current movements
-    const offset = addV(delta, prevOffset) as Vector2 // offset is the sum of next delta and current offset
+    let movement = [_i0 !== false ? _m0 - _i0 : 0, _i1 !== false ? _m1 - _i1 : 0] as Vector2
+    const offset = addV(movement, lastOffset)
 
     /**
      * Rubberband should be 0 when the gesture is no longer active, so that movement
      * and offset can return within their bounds.
      */
     rubberband = _active ? rubberband : [0, 0]
+    movement = this.rubberband(movement, rubberband) // rubberbanded movement
 
     return {
       ...intentionalityCheck,
       _movement: [_m0, _m1],
-      movement: this.rubberband(movement, rubberband), // rubberbanded movement
+      movement,
       offset: this.rubberband(offset, rubberband), // rubberbanded offset
-      delta,
+      delta: subV(movement, prevMovement),
     } as PartialGestureState<T>
   }
 
