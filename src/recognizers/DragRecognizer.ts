@@ -6,7 +6,7 @@ import { noop } from '../utils/utils'
 import { getPointerEventValues, getGenericEventData } from '../utils/event'
 import { calculateDistance } from '../utils/math'
 
-const CLICK_DISTANCE_THRESHOLD = 3
+const TAP_DISTANCE_THRESHOLD = 3
 const SWIPE_MAX_ELAPSED_TIME = 220
 
 export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
@@ -105,13 +105,13 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
     const { values } = getPointerEventValues(event)
     const kinematics = this.getKinematics(values, event)
 
-    let { _isClick } = this.state
-    if (_isClick && calculateDistance(kinematics._movement!) >= CLICK_DISTANCE_THRESHOLD) _isClick = false
+    let { _isTap } = this.state
+    if (_isTap && calculateDistance(kinematics._movement!) >= TAP_DISTANCE_THRESHOLD) _isTap = false
 
     this.updateGestureState({
       ...this.getGenericPayload(event),
       ...kinematics,
-      _isClick,
+      _isTap,
       cancel: () => this.onCancel(event),
     })
 
@@ -127,7 +127,7 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
     })
 
     const {
-      _isClick,
+      _isTap,
       elapsedTime,
       movement: [mx, my],
       velocities: [vx, vy],
@@ -149,10 +149,10 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
     this.updateGestureState({
       event,
       ...this.getMovement(this.state.values),
-      click: _isClick,
+      tap: _isTap,
       swipe,
     })
-    this.fireGestureHandler(this.config.filterClicks && this.state._isClick)
+    this.fireGestureHandler(this.config.filterTaps && this.state._isTap)
   }
 
   clean = (): void => {

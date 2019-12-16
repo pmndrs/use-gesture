@@ -54,7 +54,7 @@ export interface DistanceAngleOptions {
 }
 
 export interface DragOptions {
-  filterClicks: boolean
+  filterTaps: boolean
   swipeVelocity: number | Vector2
   swipeDistance: number | Vector2
   delay: boolean | number
@@ -104,7 +104,7 @@ export interface InternalDistanceAngleOptions extends InternalGestureOptions {
 }
 
 export interface InternalDragOptions extends InternalCoordinatesOptions {
-  filterClicks: boolean
+  filterTaps: boolean
   swipeVelocity: Vector2
   swipeDistance: Vector2
   delay: number
@@ -246,9 +246,9 @@ export interface Coordinates {
 }
 
 export interface DragState {
-  _isClick?: boolean
+  _isTap?: boolean
   _delayedEvent?: boolean
-  click?: boolean
+  tap?: boolean
   swipe?: Vector2
 }
 

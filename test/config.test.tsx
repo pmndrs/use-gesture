@@ -69,26 +69,26 @@ describe('testing derived config', () => {
         rubberband: [0, 0],
         axis: undefined,
         lockDirection: false,
-        filterClicks: false,
+        filterTaps: false,
       })
     })
 
     let dragConfig: DragConfig
 
-    test(`derived threshold is set when filterClicks, lockDirection or axis are not falsey`, () => {
+    test(`derived threshold is set when filterTaps, lockDirection or axis are not falsey`, () => {
       dragConfig = { lockDirection: true }
       expect(getInternalDragOptions(dragConfig)).toHaveProperty('threshold', [1, 1])
 
-      dragConfig = { filterClicks: true, lockDirection: true }
+      dragConfig = { filterTaps: true, lockDirection: true }
       expect(getInternalDragOptions(dragConfig)).toHaveProperty('threshold', [3, 3])
 
       dragConfig = { axis: 'y' }
       expect(getInternalDragOptions(dragConfig)).toHaveProperty('threshold', [1, 1])
     })
 
-    test(`filterClicks is set to true when threshold is positive`, () => {
+    test(`filterTaps is set to true when threshold is positive`, () => {
       dragConfig = { threshold: [0, 1] }
-      expect(getInternalDragOptions(dragConfig)).toHaveProperty('filterClicks', true)
+      expect(getInternalDragOptions(dragConfig)).toHaveProperty('filterTaps', true)
     })
 
     test(`derived delay is set to default when boolean`, () => {

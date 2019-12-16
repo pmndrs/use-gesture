@@ -69,9 +69,9 @@ export function getInitialState(): State {
     drag: {
       ...initialCommon,
       ...initialCoordinates,
-      _isClick: true,
+      _isTap: true,
       _delayedEvent: false,
-      click: false,
+      tap: false,
       swipe: [0, 0],
     },
     pinch: { ...initialCommon, ...initialDistanceAngle },

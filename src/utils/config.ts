@@ -110,22 +110,22 @@ export function getInternalDistanceAngleOptions(
 
 export function getInternalDragOptions(dragConfig: DragConfig = {}): InternalDragOptions {
   const defaultDragOptions: DragOptions = {
-    filterClicks: false,
+    filterTaps: false,
     swipeVelocity: 0.5,
     swipeDistance: 100,
     delay: false,
   }
 
   let { enabled, threshold, bounds, rubberband, ...dragOptions } = dragConfig
-  let { swipeVelocity, swipeDistance, delay, filterClicks, axis, lockDirection } = {
+  let { swipeVelocity, swipeDistance, delay, filterTaps, axis, lockDirection } = {
     ...defaultDragOptions,
     ...dragOptions,
   }
 
   if (threshold === void 0) {
-    threshold = Math.max(0, filterClicks ? 3 : 0, lockDirection || axis ? 1 : 0)
+    threshold = Math.max(0, filterTaps ? 3 : 0, lockDirection || axis ? 1 : 0)
   } else {
-    filterClicks = true
+    filterTaps = true
   }
 
   const internalCoordinatesOptions = getInternalCoordinatesOptions(
@@ -134,7 +134,7 @@ export function getInternalDragOptions(dragConfig: DragConfig = {}): InternalDra
 
   return {
     ...internalCoordinatesOptions,
-    filterClicks: filterClicks || internalCoordinatesOptions.threshold[0] + internalCoordinatesOptions.threshold[1] > 0,
+    filterTaps: filterTaps || internalCoordinatesOptions.threshold[0] + internalCoordinatesOptions.threshold[1] > 0,
     swipeVelocity: def.array(swipeVelocity) as Vector2,
     swipeDistance: def.array(swipeDistance) as Vector2,
     delay: typeof delay === 'number' ? delay : delay ? DEFAULT_DRAG_DELAY : 0,

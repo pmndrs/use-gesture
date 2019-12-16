@@ -147,7 +147,7 @@ describe.each([
     fireEvent.mouseUp(window)
   })
 
-  test(`quickly clicking shouldn't trigger a drag`, async () => {
+  test(`quickly tapping shouldn't trigger a drag`, async () => {
     fireEvent.click(element, { clientX: 100, clientY: 200 })
     await later(() => expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('false'), 200)
   })
@@ -205,24 +205,24 @@ describe.each([
     fireEvent.mouseUp(window)
   })
 
-  test(`filtering clicks should NOT fire a click if pointer has moved more than 3px`, () => {
-    expect(getByTestId(`${prefix}drag-click`)).toHaveTextContent('false')
-    rerender(<Component gestures={['Drag']} config={{ drag: { filterClicks: true, threshold: 10 } }} />)
+  test(`filtering taps should NOT fire a tap if pointer has moved more than 3px`, () => {
+    expect(getByTestId(`${prefix}drag-tap`)).toHaveTextContent('false')
+    rerender(<Component gestures={['Drag']} config={{ drag: { filterTaps: true, threshold: 10 } }} />)
     fireEvent.mouseDown(element, { clientX: 0, clientY: 0 })
     fireEvent.mouseMove(window, { clientX: 8, clientY: 1, buttons: 1 })
     expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('false')
     fireEvent.mouseUp(window)
     expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('false')
-    expect(getByTestId(`${prefix}drag-click`)).toHaveTextContent('false')
+    expect(getByTestId(`${prefix}drag-tap`)).toHaveTextContent('false')
   })
 
   test(`filtering clicks should fire a click if pointer has moved less than 3px`, () => {
     fireEvent.mouseDown(element, { clientX: 0, clientY: 0 })
     fireEvent.mouseMove(window, { clientX: 2, clientY: 1, buttons: 1 })
     expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('false')
-    expect(getByTestId(`${prefix}drag-click`)).toHaveTextContent('false')
+    expect(getByTestId(`${prefix}drag-tap`)).toHaveTextContent('false')
     fireEvent.mouseUp(window)
-    expect(getByTestId(`${prefix}drag-click`)).toHaveTextContent('true')
+    expect(getByTestId(`${prefix}drag-tap`)).toHaveTextContent('true')
     expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('false')
   })
 
