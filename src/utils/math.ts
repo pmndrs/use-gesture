@@ -101,14 +101,14 @@ function rubberband(distance: number, dimension: number, constant: number) {
   return (distance * dimension * constant) / (dimension + constant * distance)
 }
 
-export function rubberbandIfOutOfBounds(delta: number, min: number, max: number, constant = 0.15) {
-  if (constant === 0) return minMax(delta, min, max)
+export function rubberbandIfOutOfBounds(position: number, min: number, max: number, constant = 0.15) {
+  if (constant === 0) return minMax(position, min, max)
 
-  if (delta < min) {
-    return -rubberband(min - delta, max - min, constant) + min
+  if (position < min) {
+    return -rubberband(min - position, max - min, constant) + min
   }
-  if (delta > max) {
-    return rubberband(delta - max, max - min, constant) + max
+  if (position > max) {
+    return rubberband(position - max, max - min, constant) + max
   }
-  return delta
+  return position
 }
