@@ -275,5 +275,14 @@ describe.each([
     const rubberband = Math.pow(delta - 200, 0.15 * 5) + 200
 
     expect(getByTestId(`${prefix}drag-movement`)).toHaveTextContent(`0,${rubberband}`)
+    fireEvent.mouseUp(window)
+  })
+
+  test(`passing an initial position should affect the movement`, () => {
+    rerender(<Component gestures={['Drag']} config={{ drag: { initial: () => [5, 10] } }} />)
+    fireEvent.mouseDown(element, { clientX: 0, clientY: 0 })
+    expect(getByTestId(`${prefix}drag-movement`)).toHaveTextContent(`5,10`)
+    fireEvent.mouseMove(window, { clientX: 10, clientY: 20, buttons: 1 })
+    expect(getByTestId(`${prefix}drag-movement`)).toHaveTextContent(`15,30`)
   })
 })
