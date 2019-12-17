@@ -134,12 +134,15 @@ export default abstract class Recognizer<T extends GestureKey> {
    * @returns - the start state for the gesture
    */
   protected getStartGestureState = (values: Vector2, event: UseGestureEvent) => {
+    const { initial } = this.config
+    const _initial = typeof initial === 'function' ? initial() : initial
+
     return {
       ...getInitialState()[this.stateKey],
       _active: true,
       values,
       initial: values,
-      _initial: this.config.initial ? this.config.initial() : [0, 0],
+      _initial,
       offset: this.state.offset,
       lastOffset: this.state.offset,
       startTime: event.timeStamp,

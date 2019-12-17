@@ -38,7 +38,7 @@ export interface GenericOptions {
 
 export interface GestureOptions {
   enabled: boolean
-  initial?: () => Vector2
+  initial: Vector2 | (() => Vector2)
   threshold?: number | Vector2
   rubberband: boolean | number | Vector2
 }
@@ -90,7 +90,7 @@ export interface InternalGenericOptions {
 
 export interface InternalGestureOptions {
   enabled: boolean
-  initial?: () => Vector2
+  initial?: Vector2 | (() => Vector2)
   threshold: Vector2
   rubberband: Vector2
 }

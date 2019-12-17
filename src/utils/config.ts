@@ -53,7 +53,7 @@ export function getInternalGenericOptions(config: Partial<GenericOptions> = {}):
 export function getInternalGestureOptions(gestureConfig: Partial<GestureOptions>): InternalGestureOptions {
   const defaultGestureOptions: GestureOptions = {
     enabled: true,
-    initial: undefined,
+    initial: [0, 0],
     threshold: undefined,
     rubberband: 0,
   }
