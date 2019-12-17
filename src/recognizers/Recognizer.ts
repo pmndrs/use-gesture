@@ -15,7 +15,7 @@ import {
   FullGestureState,
 } from '../types'
 import { getInitialState } from '../utils/state'
-import { subV, addV, getIntentional, rubberBandIfOutOfBounds } from '../utils/math'
+import { subV, addV, getIntentional, rubberbandIfOutOfBounds } from '../utils/math'
 
 /**
  * @private
@@ -221,7 +221,7 @@ export default abstract class Recognizer<T extends GestureKey> {
     /**
      * [x, y]: [rubberband(x, min, max), rubberband(y, min, max)]
      */
-    return vector.map((v, i) => rubberBandIfOutOfBounds(v, bounds[i][0], bounds[i][1], rubberband[i])) as Vector2
+    return vector.map((v, i) => rubberbandIfOutOfBounds(v, bounds[i][0], bounds[i][1], rubberband[i])) as Vector2
   }
 
   // Cleans the gesture. Can be overriden by gestures.

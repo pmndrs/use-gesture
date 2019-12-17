@@ -1,4 +1,4 @@
-export { addV, subV, rubberBandIfOutOfBounds } from './utils/math'
+export { addV, subV, rubberbandIfOutOfBounds } from './utils/math'
 export { useDrag } from './hooks/useDrag'
 export { usePinch } from './hooks/usePinch'
 export { useWheel } from './hooks/useWheel'

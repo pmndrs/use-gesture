@@ -96,19 +96,19 @@ function rubberband2(distance: number, constant: number) {
   return Math.pow(distance, constant * 5)
 }
 
-function rubberBand(distance: number, dimension: number, constant: number) {
+function rubberband(distance: number, dimension: number, constant: number) {
   if (dimension === 0 || Math.abs(dimension) === Infinity) return rubberband2(distance, constant)
   return (distance * dimension * constant) / (dimension + constant * distance)
 }
 
-export function rubberBandIfOutOfBounds(delta: number, min: number, max: number, constant = 0.15) {
+export function rubberbandIfOutOfBounds(delta: number, min: number, max: number, constant = 0.15) {
   if (constant === 0) return minMax(delta, min, max)
 
   if (delta < min) {
-    return -rubberBand(min - delta, max - min, constant) + min
+    return -rubberband(min - delta, max - min, constant) + min
   }
   if (delta > max) {
-    return rubberBand(delta - max, max - min, constant) + max
+    return rubberband(delta - max, max - min, constant) + max
   }
   return delta
 }
