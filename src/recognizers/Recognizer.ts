@@ -139,6 +139,7 @@ export default abstract class Recognizer<T extends GestureKey> {
       _active: true,
       values,
       initial: values,
+      _initial: this.config.initial ? this.config.initial() : [0, 0],
       offset: this.state.offset,
       lastOffset: this.state.offset,
       startTime: event.timeStamp,
@@ -184,6 +185,7 @@ export default abstract class Recognizer<T extends GestureKey> {
 
     const { _intentional, _blocked } = intentionalityCheck
     const [_i0, _i1] = _intentional!
+    const [_init0 = 0, _init1 = 0] = state._initial
 
     /**
      * If the gesture has been blocked (from gesture specific checkIntentionality),
@@ -195,7 +197,7 @@ export default abstract class Recognizer<T extends GestureKey> {
      * The movement sent to the handler has 0 in its dimensions when intentionality is false.
      * It is calculated from the actual movement minus the threshold.
      */
-    let movement = [_i0 !== false ? _m0 - _i0 : 0, _i1 !== false ? _m1 - _i1 : 0] as Vector2
+    let movement = [_i0 !== false ? _m0 - _i0 + _init0 : 0, _i1 !== false ? _m1 - _i1 + _init1 : 0] as Vector2
     const offset = addV(movement, lastOffset)
 
     /**

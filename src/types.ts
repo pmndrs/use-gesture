@@ -38,6 +38,7 @@ export interface GenericOptions {
 
 export interface GestureOptions {
   enabled: boolean
+  initial?: () => Vector2
   threshold?: number | Vector2
   rubberband: boolean | number | Vector2
 }
@@ -89,6 +90,7 @@ export interface InternalGenericOptions {
 
 export interface InternalGestureOptions {
   enabled: boolean
+  initial?: () => Vector2
   threshold: Vector2
   rubberband: Vector2
 }
@@ -213,6 +215,7 @@ export interface CommonGestureState {
   _blocked: boolean
   _intentional: [FalseOrNumber, FalseOrNumber]
   _movement: Vector2
+  _initial: Vector2
   event?: UseGestureEvent
   currentTarget?: EventTarget | null
   pointerId?: number | null

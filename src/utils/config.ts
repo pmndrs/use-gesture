@@ -53,18 +53,20 @@ export function getInternalGenericOptions(config: Partial<GenericOptions> = {}):
 export function getInternalGestureOptions(gestureConfig: Partial<GestureOptions>): InternalGestureOptions {
   const defaultGestureOptions: GestureOptions = {
     enabled: true,
+    initial: undefined,
     threshold: undefined,
     rubberband: 0,
   }
 
   const config = { ...defaultGestureOptions, ...gestureConfig }
-  let { threshold, rubberband, enabled } = config
+  let { threshold, rubberband, enabled, initial } = config
 
   if (typeof rubberband === 'boolean') rubberband = rubberband ? DEFAULT_RUBBERBAND : 0
   if (threshold === void 0) threshold = 0
 
   return {
     enabled,
+    initial,
     threshold: def.array(threshold) as Vector2,
     rubberband: def.array(rubberband) as Vector2,
   }
@@ -116,7 +118,7 @@ export function getInternalDragOptions(dragConfig: DragConfig = {}): InternalDra
     delay: false,
   }
 
-  let { enabled, threshold, bounds, rubberband, ...dragOptions } = dragConfig
+  let { enabled, threshold, bounds, rubberband, initial, ...dragOptions } = dragConfig
   let { swipeVelocity, swipeDistance, delay, filterTaps, axis, lockDirection } = {
     ...defaultDragOptions,
     ...dragOptions,
@@ -129,7 +131,7 @@ export function getInternalDragOptions(dragConfig: DragConfig = {}): InternalDra
   }
 
   const internalCoordinatesOptions = getInternalCoordinatesOptions(
-    matchKeysFromObject({ enabled, threshold, bounds, rubberband, axis, lockDirection }, dragConfig)
+    matchKeysFromObject({ enabled, threshold, bounds, rubberband, axis, lockDirection, initial }, dragConfig)
   )
 
   return {

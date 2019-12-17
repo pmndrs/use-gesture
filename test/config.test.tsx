@@ -68,6 +68,7 @@ describe('testing derived config', () => {
         threshold: [0, 0],
         rubberband: [0, 0],
         axis: undefined,
+        initial: undefined,
         lockDirection: false,
         filterTaps: false,
       })
@@ -107,6 +108,7 @@ describe('testing derived config', () => {
           [-Infinity, Infinity],
           [-Infinity, Infinity],
         ],
+        initial: undefined,
         threshold: [0, 0],
         rubberband: [0, 0],
       })
