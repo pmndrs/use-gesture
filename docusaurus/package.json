@@ -1,0 +1,54 @@
+{
+  "name": "website",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "docusaurus start",
+    "build": "docusaurus build",
+    "swizzle": "docusaurus swizzle",
+    "deploy": "docusaurus deploy"
+  },
+  "dependencies": {
+    "@docusaurus/core": "^2.0.0-alpha.39",
+    "@docusaurus/preset-classic": "^2.0.0-alpha.39",
+    "@tim-soft/react-dat-gui": "^4.0.11",
+    "classnames": "^2.2.6",
+    "react": "^16.8.4",
+    "react-dom": "^16.8.4",
+    "react-player": "^1.14.2",
+    "react-spring": "^9.0.0-canary.808.14.192785c",
+    "react-use-gesture": "^7.0.0-beta.1"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "prettier": {
+    "printWidth": 80,
+    "semi": false,
+    "singleQuote": true,
+    "trailingComma": "none"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "2.12.0",
+    "@typescript-eslint/parser": "2.12.0",
+    "babel-eslint": "10.x",
+    "eslint": "6.x",
+    "eslint-config-react-app": "^5.1.0",
+    "eslint-mdx": "^1.6.5",
+    "eslint-plugin-flowtype": "4.5.2",
+    "eslint-plugin-import": "2.19.1",
+    "eslint-plugin-jsx-a11y": "6.x",
+    "eslint-plugin-mdx": "^1.6.5",
+    "eslint-plugin-react": "7.x",
+    "eslint-plugin-react-hooks": "2.3.0"
+  }
+}

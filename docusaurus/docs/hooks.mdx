@@ -1,0 +1,104 @@
+---
+id: hooks
+title: Available hooks
+sidebar_label: Available hooks
+---
+
+## List of hooks
+
+React-use-gesture exports several hooks that can handle different gestures:
+
+| Hook         | Description                                |
+| ------------ | ------------------------------------------ |
+| `useDrag`    | Handles the drag gesture                   |
+| `useMove`    | Handles mouse move events                  |
+| `useHover`   | Handles mouse enter and mouse leave events |
+| `useScroll`  | Handles scroll events                      |
+| `useWheel`   | Handles wheel events                       |
+| `usePinch`   | Handles the pinch gesture                  |
+| `useGesture` | Handles multiple gestures in one hook      |
+
+## Usage
+
+With the exception of `useGesture` which is a special hook, all other hooks share the same API:
+
+```jsx {1-100}
+const bind = useDrag(state => doSomethingWith(state), config)
+return <div {...bind(arg)} />
+```
+
+- _`state`_ is an object containing all attributes of the gesture, including the original event. That state is passed to your handler every time the gesture updates. You can find all state attributes.
+- _`config`_ is an object containing options for the gesture. You can find all config options here.
+- _`arg`_ is a custom argument you can pass to the bind function. See this example to see where it can be useful.
+
+## Handling multiple gestures in one hook with useGesture
+
+_`useGesture`_ is a hook that allows you to manage different gestures at once: for example you might want to enable pinching and dragging on the same component, in that case `useGesture` is the way to go.
+
+```jsx {1-100}
+const bind = useGesture(
+  {
+    onDrag: state => doSomethingWith(state),
+    onDragStart: state => doSomethingWith(state),
+    onDragEnd: state => doSomethingWith(state),
+    onPinch: state => doSomethingWith(state),
+    onPinchStart: state => doSomethingWith(state),
+    onPinchEnd: state => doSomethingWith(state),
+    onScroll: state => doSomethingWith(state),
+    onScrollStart: state => doSomethingWith(state),
+    onScrollEnd: state => doSomethingWith(state),
+    onMove: state => doSomethingWith(state),
+    onMoveStart: state => doSomethingWith(state),
+    onMoveEnd: state => doSomethingWith(state),
+    onWheel: state => doSomethingWith(state),
+    onWheelStart: state => doSomethingWith(state),
+    onWheelEnd: state => doSomethingWith(state),
+    onHover: state => doSomethingWith(state)
+  },
+  config
+)
+return <div {...bind()} />
+```
+
+The _`config`_ object passed to `useGesture` has `drag`, `wheel`, `scroll`, `pinch` and `move` keys for specific gesture options. See here for more details.
+
+### Start and end handlers
+
+As you can see from the snippet above, the `useGesture` hook allows `drag`, `wheel`, `scroll`, `pinch` and `move` gestures to have two additional handlers that let you perform actions when they start or end. For example, _`onScrollEnd`_ fires when the user just finished scrolling.
+
+Note that **end event handlers** for `wheel`, `scroll` and `move` are **debounced** because of the way these events work in the DOM.
+
+### Native React event handlers
+
+Imagine you want to add an action when you mouse down on a draggable component. You'll probably be tempted to try the following code at first:
+
+```jsx {1,4-11}
+// This won't work as you'd expect
+function DragAndMouseDown() {
+  const [{ x, y }, set] = useSpring(() => ({ x: 0, y: 0 }))
+  const bind = useDrag(({ down, offset: [x, y] }) => set({ x, y }))
+  return (
+    <animated.div
+      {...bind()}
+      onMouseDown={() => console.log('mouse down')}
+      style={{ x, y }}
+    />
+  )
+}
+```
+
+This looks fine on paper, but it actually won't work: the reason is that the attribute _`onMouseDown`_ will overwrite the one created by expanding _`{...bind()}`_ and therefore the drag gesture won't start.
+
+Fortunately, the hook _`useGesture`_ supports native React event handlers, and will make sure they are executed on the side without overwriting anything:
+
+```jsx {1,4-7}
+// This will work as intended
+function DragAndMouseDown() {
+  const [{ x, y }, set] = useSpring(() => ({ x: 0, y: 0 }))
+  const bind = useGesture({
+    onDrag: ({ down, offset: [x, y] }) => set({ x, y }),
+    onMouseDown: () => console.log('mouse down')
+  })
+  return <animated.div {...bind()} style={{ x, y }} />
+}
+```

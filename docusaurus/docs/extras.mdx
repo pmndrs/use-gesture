@@ -1,0 +1,19 @@
+---
+id: extras
+title: Useful extras
+sidebar_label: Useful extras
+---
+
+These tips aren't specific to React-use-gesture but might come handy to anyone building mobile-friendly UI interfaces.
+
+### `touch-action`
+
+[_`touch-action`_](https://developer.mozilla.org/en-US/docs/Web/CSS/touch-action) is a CSS property that sets how an element's region can be manipulated by a touchscreen user.
+
+In many cases you don't want the `body` of your page to scroll along with the user manipulating a draggable item. Setting _`touch-action: none`_ on your draggable element class or style indicates the browser that it shouldn't try to do anything when interacting with the element. No need for `event.preventDefault()`.
+
+### Body Scroll Lock
+
+When you have a menu overlay on top of your page you generally don't want the `body` to scroll along with the menu content. [Body scroll lock](https://github.com/willmcpo/body-scroll-lock) is a javascript library that disable body scroll.
+
+Make sure you can't solve your problem scroll problem with [_`touch-action`_](#touch-action) before using this library though.

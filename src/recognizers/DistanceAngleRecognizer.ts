@@ -1,24 +1,26 @@
 import Recognizer from './Recognizer'
-import { addV, calculateVelocities, calculateDirection } from '../utils'
-import { DistanceAngle, GestureState, Vector2, UseGestureEvent, GestureKey } from '../types'
-import GestureController from '../controllers/GestureController'
+import { calculateAllKinematics } from '../utils/math'
+import { Vector2, UseGestureEvent, PartialGestureState, DistanceAngleKey, GestureState } from '../types'
 
 /**
+ * @private
  * Abstract class for distance/angle-based gesture recongizers
+ * @abstract
+ * @class DistanceAngleRecognizer
+ * @extends {Recognizer<T>}
+ * @template T
  */
-export default abstract class DistanceAngleRecognizer extends Recognizer<DistanceAngle> {
-  constructor(gestureKey: GestureKey, controller: GestureController, args: any[] = []) {
-    super(gestureKey, controller, args)
-  }
-
-  getKinematics([d, a]: [number, number?], event: UseGestureEvent): Partial<GestureState<DistanceAngle>> {
-    const { values: da, turns, initial, offset, time } = this.state
+export default abstract class DistanceAngleRecognizer<T extends DistanceAngleKey> extends Recognizer<T> {
+  /**
+   * Returns the real movement (without taking intentionality into acount)
+   */
+  protected getInternalMovement([d, a]: [number, number?], state: GestureState<T>): Vector2 {
+    const { values: da, turns, initial } = state
 
     // angle might not be defined when ctrl wheel is used for zoom only
     // in that case we set it to the previous angle value
     a = a !== void 0 ? a : da[1]
 
-    const delta_d = d - da[0]
     let delta_a = a - da[1]
 
     /**
@@ -29,27 +31,33 @@ export default abstract class DistanceAngleRecognizer extends Recognizer<Distanc
     const newTurns = Math.abs(delta_a) > 270 ? turns + Math.sign(delta_a) : turns
 
     // we update the angle difference to its corrected value
-    delta_a -= 360 * (newTurns - turns)
-    const delta = [delta_d, delta_a] as Vector2
 
     const movement_d = d - initial[0]
     const movement_a = a - 360 * newTurns - initial[1]
-    const movement: Vector2 = [movement_d, movement_a]
+    return [movement_d, movement_a]
+  }
 
-    const delta_t = event.timeStamp - time!
-    const vdva = calculateVelocities(delta, delta_t)
-    const direction = calculateDirection(delta)
+  getKinematics(values: Vector2, event: UseGestureEvent): PartialGestureState<T> {
+    const { timeStamp, initial } = this.state
+
+    const movementDetection = this.getMovement(values, this.state)
+    const { delta, movement } = movementDetection
+
+    const turns = (values[1] - movement![1] - initial[1]) / 360
+
+    const delta_t = event.timeStamp - timeStamp!
+    const kinematics = calculateAllKinematics(movement!, delta!, delta_t)
+
     return {
-      event,
-      values: [d, a],
-      movement,
+      values,
       delta,
-      offset: addV(offset, delta),
-      vdva,
-      direction,
-      turns: newTurns,
-      previous: da,
-      time: event.timeStamp,
+      turns,
+      ...movementDetection,
+      ...kinematics,
     }
+  }
+
+  protected mapStateValues(state: GestureState<T>): PartialGestureState<T> {
+    return { da: state.values, vdva: state.velocities } as PartialGestureState<T>
   }
 }

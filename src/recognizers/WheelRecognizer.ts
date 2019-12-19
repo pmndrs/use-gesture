@@ -1,32 +1,89 @@
 import { WheelEvent } from 'react'
 import CoordinatesRecognizer from './CoordinatesRecognizer'
-import { addV, getWheelEventData } from '../utils'
-import GestureController from '../controllers/GestureController'
-import { UseGestureEvent, ReactEventHandlerKey, Fn } from '../types'
+import Controller from '../Controller'
+import { UseGestureEvent, StateKey, IngKey } from '../types'
+import { getWheelEventValues, getGenericEventData } from '../utils/event'
+import { addV, calculateDistance, calculateDirection } from '../utils/math'
 
-export default class WheelRecognizer extends CoordinatesRecognizer {
-  sharedStartState = { wheeling: true }
-  sharedEndState = { wheeling: false, velocity: 0, vxvy: [0, 0] }
-  continuousGesture = true
+export default class WheelRecognizer extends CoordinatesRecognizer<'wheel'> {
+  stateKey = 'wheel' as StateKey<'wheel'>
+  ingKey = 'wheeling' as IngKey
 
-  constructor(controller: GestureController, args: any[]) {
+  constructor(controller: Controller, args: any[]) {
     super('wheel', controller, args)
   }
 
-  getPayloadFromEvent(event: UseGestureEvent<WheelEvent>) {
-    const { xy: prevXY } = this.state
-    const { xy, ...sharedPayload } = getWheelEventData(event)
-    const values = addV(xy, prevXY)
+  private wheelShouldRun = (event: UseGestureEvent<WheelEvent>) => {
+    if (event.ctrlKey && 'pinch' in this.controller.handlers) return false
+    return this.enabled
+  }
 
-    return { values, sharedPayload }
+  private getValuesFromEvent = (event: UseGestureEvent<WheelEvent>) => {
+    const { values: prevValues } = this.state
+    const { values } = getWheelEventValues(event)
+    return { values: addV(values, prevValues) }
   }
 
   onWheel = (event: UseGestureEvent<WheelEvent>): void => {
-    if (event.ctrlKey && this.controller.actions.has('onPinch')) return
-    this.timeoutHandler(event)
+    if (!this.wheelShouldRun(event)) return
+    this.clearTimeout()
+    this.setTimeout(this.onWheelEnd)
+
+    if (!this.state._active) this.onWheelStart(event)
+    else this.onWheelChange(event)
   }
 
-  getEventBindings(): [ReactEventHandlerKey | ReactEventHandlerKey[], Fn][] {
-    return [['onWheel', this.onWheel]]
+  onWheelStart = (event: UseGestureEvent<WheelEvent>): void => {
+    const { values } = this.getValuesFromEvent(event)
+
+    this.updateSharedState(getGenericEventData(event))
+
+    const startState = {
+      ...this.getStartGestureState(values, event),
+      ...this.getGenericPayload(event, true),
+      initial: this.state.values,
+    }
+
+    const movementDetection = this.getMovement(values, startState)
+    const delta = movementDetection.delta!
+
+    this.updateGestureState({
+      ...startState,
+      ...movementDetection,
+      distance: calculateDistance(delta),
+      direction: calculateDirection(delta),
+    })
+
+    this.fireGestureHandler()
+  }
+
+  onWheelChange = (event: UseGestureEvent<WheelEvent>): void => {
+    const genericEventData = getGenericEventData(event)
+
+    this.updateSharedState(genericEventData)
+
+    const { values } = this.getValuesFromEvent(event)
+    const kinematics = this.getKinematics(values, event)
+
+    this.updateGestureState({
+      ...this.getGenericPayload(event),
+      ...kinematics,
+    })
+
+    this.fireGestureHandler()
+  }
+
+  onWheelEnd = (event: UseGestureEvent): void => {
+    this.state._active = false
+
+    this.updateGestureState({
+      event,
+      ...this.getMovement(this.state.values),
+    })
+    this.fireGestureHandler()
+  }
+
+  addBindings(): void {
+    this.controller.addBindings('onWheel', this.onWheel)
   }
 }

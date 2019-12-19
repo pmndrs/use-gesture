@@ -1,25 +1,128 @@
+import {} from 'react'
 import CoordinatesRecognizer from './CoordinatesRecognizer'
-import { getPointerEventData } from '../utils'
-import GestureController from '../controllers/GestureController'
-import { UseGestureEvent, ReactEventHandlerKey, Fn } from '../types'
+import Controller from '../Controller'
+import { UseGestureEvent, StateKey, IngKey } from '../types'
+import { getGenericEventData, getPointerEventValues } from '../utils/event'
 
-export default class MoveRecognizer extends CoordinatesRecognizer {
-  sharedStartState = { moving: true }
-  sharedEndState = { moving: false, velocity: 0, vxvy: [0, 0] }
+export default class MoveRecognizer extends CoordinatesRecognizer<'move'> {
+  stateKey = 'move' as StateKey<'move'>
+  ingKey = 'moving' as IngKey
 
-  constructor(controller: GestureController, args: any[]) {
+  constructor(controller: Controller, args: any[]) {
     super('move', controller, args)
   }
 
-  getPayloadFromEvent(event: UseGestureEvent) {
-    const { xy, ...sharedPayload } = getPointerEventData(event)
-    return { values: xy, sharedPayload }
+  private moveShouldRun = () => {
+    return this.enabled
   }
 
-  getEventBindings(): [ReactEventHandlerKey | ReactEventHandlerKey[], Fn][] {
-    if (this.controller.config.pointerEvents) {
-      return [['onPointerMove', this.timeoutHandler]]
+  onMove = (event: UseGestureEvent): void => {
+    if (!this.moveShouldRun()) return
+    this.clearTimeout()
+    this.setTimeout(this.onMoveEnd)
+
+    if (!this.state._active) this.onMoveStart(event)
+    else this.onMoveChange(event)
+  }
+
+  onMoveStart = (event: UseGestureEvent): void => {
+    const { values } = getPointerEventValues(event)
+
+    this.updateSharedState(getGenericEventData(event))
+
+    const startState = {
+      ...this.getStartGestureState(values, event),
+      ...this.getGenericPayload(event, true),
     }
-    return [['onMouseMove', this.timeoutHandler]]
+
+    this.updateGestureState({
+      ...startState,
+      ...this.getMovement(values, startState),
+    })
+
+    this.fireGestureHandler()
+  }
+
+  onMoveChange = (event: UseGestureEvent): void => {
+    const genericEventData = getGenericEventData(event)
+
+    this.updateSharedState(genericEventData)
+
+    const { values } = getPointerEventValues(event)
+    const kinematics = this.getKinematics(values, event)
+
+    this.updateGestureState({
+      ...this.getGenericPayload(event),
+      ...kinematics,
+    })
+
+    this.fireGestureHandler()
+  }
+
+  onMoveEnd = (event: UseGestureEvent): void => {
+    this.state._active = false
+
+    this.updateGestureState({
+      event,
+      ...this.getMovement(this.state.values),
+    })
+    this.fireGestureHandler()
+  }
+
+  onPointerEnter = (event: UseGestureEvent): void => {
+    if (!this.controller.config.enabled || !this.controller.config.hover!.enabled) return
+    if ('move' in this.controller.handlers) this.onMoveStart(event)
+
+    this.controller.state.shared.hovering = true
+    const { values } = getPointerEventValues(event)
+
+    const state = {
+      ...this.controller.state.shared,
+      ...this.state,
+      ...this.getGenericPayload(event, true),
+      values,
+      active: true,
+      hovering: true,
+    }
+
+    this.controller.handlers.hover!({ ...state, ...this.mapStateValues(state) })
+  }
+
+  onPointerLeave = (event: UseGestureEvent): void => {
+    if ('move' in this.controller.handlers) this.onMoveEnd(event)
+
+    this.controller.state.shared.hovering = false
+
+    const { values } = getPointerEventValues(event)
+
+    const state = {
+      ...this.controller.state.shared,
+      ...this.state,
+      ...this.getGenericPayload(event),
+      values,
+      active: false,
+    }
+
+    this.controller.handlers.hover!({ ...state, ...this.mapStateValues(state) })
+  }
+
+  addBindings(): void {
+    if (this.controller.config.pointer) {
+      if ('move' in this.controller.handlers) {
+        this.controller.addBindings('onPointerMove', this.onMove)
+      }
+      if ('hover' in this.controller.handlers) {
+        this.controller.addBindings('onPointerEnter', this.onPointerEnter)
+        this.controller.addBindings('onPointerLeave', this.onPointerLeave)
+      }
+    } else {
+      if ('move' in this.controller.handlers) {
+        this.controller.addBindings('onMouseMove', this.onMove)
+      }
+      if ('hover' in this.controller.handlers) {
+        this.controller.addBindings('onMouseEnter', this.onPointerEnter)
+        this.controller.addBindings('onMouseLeave', this.onPointerLeave)
+      }
+    }
   }
 }

@@ -1,0 +1,32 @@
+.wrapper {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: url('https://uploads.codesandbox.io/uploads/user/b3e56831-8b98-4fee-b941-0e27f39883ab/Ad1_-cursor.png')
+      39 39,
+    auto;
+}
+
+.bounds {
+  position: absolute;
+  border: 2px solid slateblue;
+}
+
+.drag {
+  width: 80px;
+  height: 80px;
+  background: hotpink;
+  border-radius: 16px;
+  touch-action: none;
+  -webkit-user-select: none;
+  user-select: none;
+  position: absolute;
+}
+
+:global(.react-dat-gui) {
+  z-index: 100;
+  position: absolute;
+}

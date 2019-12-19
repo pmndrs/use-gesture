@@ -1,40 +1,33 @@
-import { mappedKeys, genericEndState, initialState } from '../defaults'
-import GestureController from '../controllers/GestureController'
+import Controller from '../Controller'
 import {
-  Coordinates,
-  DistanceAngle,
   StateKey,
-  GestureState,
   GestureKey,
   SharedGestureState,
   Fn,
-  ReactEventHandlerKey,
-  GestureFlag,
   UseGestureEvent,
+  IngKey,
+  InternalConfig,
+  Handler,
+  GestureState,
+  PartialGestureState,
   Vector2,
+  FalseOrNumber,
+  FullGestureState,
 } from '../types'
-import { noop, subV, calculateAllKinematics } from '../utils'
-
-type PayloadFromEvent = {
-  values: Vector2
-  gesturePayload?: Partial<GestureState>
-  sharedPayload?: Partial<SharedGestureState>
-}
+import { getInitialState } from '../utils/state'
+import { subV, addV, getIntentional, rubberbandIfOutOfBounds } from '../utils/math'
 
 /**
- * Recognizer abstract class
- * @template GestureType whether the Recognizer should deal with coordinates or distance / angle
+ * @private
+ * Recognizer abstract class.
+ *
+ * @protected
+ * @abstract
+ * @type {StateKey<T>} whether the Recognizer should deal with coordinates or distance / angle
  */
-export default abstract class Recognizer<GestureType extends Coordinates | DistanceAngle = Coordinates | DistanceAngle> {
-  protected stateKey: StateKey
-  protected sharedStartState?: Partial<SharedGestureState>
-  protected sharedEndState?: Partial<SharedGestureState>
-
-  /**
-   * Continuous gestures are scroll or wheel, where the next gesture continues the previous one.
-   * In other words, these gestures also start with a delta.
-   */
-  protected continuousGesture = false
+export default abstract class Recognizer<T extends GestureKey> {
+  protected abstract stateKey: StateKey<T> // the state key used by the recognizer (the same as gesture key for all gestures but hover)
+  protected abstract ingKey: IngKey // dragging, scrolling, etc.
 
   /**
    * Creates an instance of a gesture recognizer.
@@ -43,133 +36,255 @@ export default abstract class Recognizer<GestureType extends Coordinates | Dista
    * @param [args] the args that should be passed to the gesture handler
    */
   constructor(
-    protected readonly gestureKey: GestureKey,
-    protected readonly controller: GestureController,
+    protected readonly gestureKey: T,
+    protected readonly controller: Controller,
     protected readonly args: any[] = []
-  ) {
-    // mapping this.stateKey to the state key the gesture handles
-    // (ie hover actually deals with the move gesture state)
-    this.stateKey = mappedKeys[gestureKey].stateKey
+  ) {}
+
+  // Returns the gesture config
+  protected get config(): NonNullable<InternalConfig[T]> {
+    return this.controller.config[this.gestureKey]!
   }
 
-  // is the gesture enabled
+  // Is the gesture enabled
   protected get enabled(): boolean {
-    return this.controller.config.enabled && this.controller.config[this.gestureKey]
-  }
-  // get the controller state for a given gesture
-  protected get state() {
-    return this.controller.state[this.stateKey] as GestureState<GestureType>
+    return this.controller.config.enabled && this.config.enabled
   }
 
-  // convenience method to set a timeout for a given gesture
+  // Returns the controller state for a given gesture
+  protected get state(): GestureState<T> {
+    return this.controller.state[this.stateKey]
+  }
+
+  // Returns the gesture handler
+  protected get handler(): Handler<T> {
+    return this.controller.handlers[this.gestureKey] as Handler<T>
+  }
+
+  // Conveninence method to update the shared state
+  protected updateSharedState(sharedState: Partial<SharedGestureState> | null) {
+    Object.assign(this.controller.state.shared, sharedState)
+  }
+
+  // Conveninence method to update the gesture state
+  protected updateGestureState(gestureState: PartialGestureState<T> | null) {
+    Object.assign(this.state, gestureState)
+  }
+
+  // Convenience method to set a timeout for a given gesture
   protected setTimeout = (callback: (...args: any[]) => void, ms: number = 140, ...args: any[]): void => {
     this.controller.timeouts[this.stateKey] = window.setTimeout(callback, ms, ...args)
   }
 
-  // convenience method to clear a timeout for a given gesture
+  // Convenience method to clear a timeout for a given gesture
   protected clearTimeout = () => {
     clearTimeout(this.controller.timeouts[this.stateKey])
   }
 
-  // convenience method to add window listeners for a given gesture
+  // Convenience method to add window listeners for a given gesture
   protected addWindowListeners = (listeners: [string, Fn][]) => {
     this.controller.addWindowListeners(this.stateKey, listeners)
   }
 
-  // convenience method to remove window listeners for a given gesture
+  // Convenience method to remove window listeners for a given gesture
   protected removeWindowListeners = () => {
     this.controller.removeWindowListeners(this.stateKey)
   }
 
-  protected abstract getPayloadFromEvent(event: UseGestureEvent): PayloadFromEvent
+  /**
+   * Utility function to get kinematics of the gesture.
+   *
+   * @abstract
+   * @values - values we want to calculate the kinematics from
+   * @event - the pointer event
+   * @returns - set of values including movement, velocity, velocities, distance and direction
+   */
+  protected abstract getKinematics(values: Vector2, event: UseGestureEvent): PartialGestureState<T>
+
+  protected abstract mapStateValues(state: GestureState<T>): PartialGestureState<T>
+
+  // Should return the bindings to be added for a given gesture
+  public abstract addBindings(): void
 
   /**
-   * Utility function to get kinematics of the gesture
-   * @values values we want to calculate the kinematics from
-   * @event
-   * @returns set of values including movement, velocity, velocities, distance and direction
+   * Returns a generic, common payload for all gestures from an event.
+   *
+   * @param {UseGestureEvent} event
+   * @param {boolean} [isStartEvent]
+   * @returns - the generic gesture payload
    */
-  protected abstract getKinematics(values: [number, number | undefined], event: UseGestureEvent): Partial<GestureState<GestureType>>
+  protected getGenericPayload(event: UseGestureEvent, isStartEvent?: boolean) {
+    const { timeStamp } = event
+    const { values, startTime } = this.state
 
-  // should return the bindings for a given gesture
-  public abstract getEventBindings(): [ReactEventHandlerKey | ReactEventHandlerKey[], Fn][]
-
-  /**
-   * convenience method to update the controller state for a given gesture
-   * @param sharedState shared partial state object
-   * @param gestureState partial state object for the gesture handled by the recognizer
-   * @param [gestureFlag] if set, will also fire the gesture handler set by the user
-   */
-  protected updateState = (sharedState: Partial<SharedGestureState> | null, gestureState: Partial<GestureState<GestureType>>): void => {
-    this.controller.updateState(sharedState, gestureState, this.stateKey)
-  }
-
-  protected fireGestureHandler = (gestureFlag: GestureFlag): void => {
-    this.controller.fireGestureHandler(this.gestureKey, gestureFlag)
-  }
-
-  // generic onStart function
-  protected onStart = (event: UseGestureEvent, payload?: Partial<GestureState<GestureType>>): void => {
-    const { values, gesturePayload, sharedPayload } = this.getPayloadFromEvent(event)
-
-    // TODO probably needs some rework, initialState and resetState should be different
-
-    const startState: GestureState<GestureType> = {
-      ...(initialState[this.stateKey] as GestureState<GestureType>),
-      values,
+    return {
       event,
-      first: true,
-      active: true,
-      time: event.timeStamp,
+      timeStamp,
+      elapsedTime: isStartEvent ? 0 : timeStamp - startTime!,
       args: this.args,
+      previous: values,
     }
+  }
+  /**
+   * Returns the reinitialized start state for the gesture.
+   * Should be common to all gestures.
+   *
+   * @param {Vector2} values
+   * @param {UseGestureEvent} event
+   * @returns - the start state for the gesture
+   */
+  protected getStartGestureState = (values: Vector2, event: UseGestureEvent) => {
+    const { initial } = this.config
+    const _initial = typeof initial === 'function' ? initial() : initial
 
-    const { values: prevValues, offset } = this.state
-
-    if (this.continuousGesture) {
-      startState.initial = startState.previous = prevValues
-      startState.delta = startState.movement = subV(values, prevValues)
-      startState.offset = values
-      Object.assign(startState, calculateAllKinematics(startState.movement, startState.delta, 0))
-    } else {
-      startState.initial = startState.previous = values
-      startState.offset = offset
+    return {
+      ...getInitialState()[this.stateKey],
+      _active: true,
+      values,
+      initial: values,
+      _initial,
+      offset: this.state.offset,
+      lastOffset: this.state.offset,
+      startTime: event.timeStamp,
     }
-
-    this.updateState({ ...this.sharedStartState, ...sharedPayload }, { ...startState, ...gesturePayload, ...payload })
-    this.fireGestureHandler(GestureFlag.OnStart)
   }
 
-  // generic onChange function
-  protected onChange = (event: UseGestureEvent, payload?: Partial<GestureState<GestureType>>): void => {
-    const { values, gesturePayload, sharedPayload } = this.getPayloadFromEvent(event)
-    const kinematics = this.getKinematics(values, event)
-    this.updateState({ ...sharedPayload }, { first: false, ...kinematics, ...gesturePayload, ...payload })
-    this.fireGestureHandler(GestureFlag.OnChange)
+  /**
+   * Returns state properties depending on the movement and state.
+   *
+   * Should be overriden for custom behavior, doesn't do anything in the implementation
+   * below.
+   */
+  protected checkIntentionality(
+    _intentional: [FalseOrNumber, FalseOrNumber],
+    _movement: Vector2,
+    _state: PartialGestureState<T>
+  ): PartialGestureState<T> {
+    return { _intentional, _blocked: false } as PartialGestureState<T>
   }
 
-  // generic onEnd function
-  protected onEnd = (event: UseGestureEvent, payload?: Partial<GestureState<GestureType>>): void => {
-    if (!this.state.active) return
-    this.removeWindowListeners()
-    this.updateState(this.sharedEndState!, { event, ...genericEndState, ...payload } as Partial<GestureState<GestureType>>)
-    this.fireGestureHandler(GestureFlag.OnEnd)
+  protected abstract getInternalMovement(values: Vector2, state: GestureState<T>): Vector2
+
+  /**
+   * Returns basic movement properties for the gesture based on the next values and current state.
+   */
+  protected getMovement(values: Vector2, state: GestureState<T> = this.state): PartialGestureState<T> {
+    let { threshold, rubberband } = this.config
+    const [t0, t1] = threshold
+
+    const { _active, _intentional: intentional, lastOffset, movement: prevMovement } = state
+    let [i0, i1] = intentional
+
+    const [_m0, _m1] = this.getInternalMovement(values, state)
+
+    /**
+     * For both dimensions of the gesture, check its intentionality on each frame.
+     */
+    if (i0 === false) i0 = getIntentional(_m0, t0)
+    if (i1 === false) i1 = getIntentional(_m1, t1)
+
+    // Get gesture specific state properties based on intentionality and movement.
+    const intentionalityCheck = this.checkIntentionality([i0, i1], [_m0, _m1], state)
+
+    const { _intentional, _blocked } = intentionalityCheck
+    const [_i0, _i1] = _intentional!
+    const [_init0 = 0, _init1 = 0] = state._initial
+
+    /**
+     * If the gesture has been blocked (from gesture specific checkIntentionality),
+     * stop right there.
+     */
+    if (_blocked) return intentionalityCheck
+
+    /**
+     * The movement sent to the handler has 0 in its dimensions when intentionality is false.
+     * It is calculated from the actual movement minus the threshold.
+     */
+    let movement = [_i0 !== false ? _m0 - _i0 + _init0 : 0, _i1 !== false ? _m1 - _i1 + _init1 : 0] as Vector2
+    const offset = addV(movement, lastOffset)
+
+    /**
+     * Rubberband should be 0 when the gesture is no longer active, so that movement
+     * and offset can return within their bounds.
+     */
+    rubberband = _active ? rubberband : [0, 0]
+    movement = this.rubberband(movement, rubberband) // rubberbanded movement
+
+    return {
+      ...intentionalityCheck,
+      _movement: [_m0, _m1],
+      movement,
+      offset: this.rubberband(offset, rubberband), // rubberbanded offset
+      delta: subV(movement, prevMovement),
+    } as PartialGestureState<T>
   }
 
-  // generic cancel function
-  protected onCancel = (event: UseGestureEvent): void => {
-    this.updateState(null, { canceled: true, cancel: noop } as Partial<GestureState<GestureType>>)
-    requestAnimationFrame(() => this.onEnd(event))
+  // Runs rubberband on a vector
+  protected rubberband = (vector: Vector2, rubberband: Vector2): Vector2 => {
+    const { bounds } = this.config
+
+    /**
+     * [x, y]: [rubberband(x, min, max), rubberband(y, min, max)]
+     */
+    return vector.map((v, i) => rubberbandIfOutOfBounds(v, bounds[i][0], bounds[i][1], rubberband[i])) as Vector2
   }
 
-  // generic gesture handler for timeout-based gestures
-  protected timeoutHandler = (event: UseGestureEvent) => {
-    if (!this.enabled) return
-
+  // Cleans the gesture. Can be overriden by gestures.
+  protected clean() {
     this.clearTimeout()
-    this.setTimeout(this.onEnd)
+    this.removeWindowListeners()
+  }
 
-    if (!this.state.active) this.onStart(event)
-    else this.onChange(event)
+  /**
+   * Fires the gesture handler
+   *
+   * @param {boolean} [forceFlag] - if true, then the handler will fire even if the gesture is not intentional
+   */
+  protected fireGestureHandler = (forceFlag?: boolean): FullGestureState<T> | null => {
+    /**
+     * If the gesture has been blocked (this can happen when the gesture has started in an unwanted direction),
+     * clean everything and don't do anything.
+     */
+    if (this.state._blocked) {
+      this.state._active = false
+      this.clean()
+      return null
+    }
+
+    // If the gesture has no intentional dimension, don't do fire the handler.
+    const [intentionalX, intentionalY] = this.state._intentional
+    if (!forceFlag && intentionalX === false && intentionalY === false) return null
+
+    const { _active, active, delta } = this.state
+
+    /**
+     * Makes sure we're not firing the user handler for no reason.
+     * Without this check, if a movement was found intentional on only one axis,
+     * the handler would fire even if the intentional axis wasn't updated and
+     * the other threshold wasn't exceeded.
+     */
+    if (_active && active && delta[0] === 0 && delta[1] === 0) return null
+
+    this.state.active = _active
+    this.state.first = _active && !active // `first` is true when the gesture becomes active
+    this.state.last = !_active // `last` is true when the gesture becomes inactive
+
+    this.controller.state.shared[this.ingKey] = _active // Sets dragging, pinching, etc. to the gesture active state
+
+    const state = {
+      ...this.controller.state.shared,
+      ...this.state,
+      ...this.mapStateValues(this.state), // Sets xy or da to the gesture state values
+    }
+
+    const newMemo = this.handler(state)
+
+    // Sets memo to the returned value of the handler (unless it's not undefined)
+    this.state.memo = newMemo !== void 0 ? newMemo : this.state.memo
+
+    // Cleans the gesture when the gesture is no longer active.
+    if (!_active) this.clean()
+
+    return state
   }
 }

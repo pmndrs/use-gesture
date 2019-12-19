@@ -1,0 +1,67 @@
+---
+id: faq
+title: Frequently Asked Questions
+sidebar_label: FAQ
+---
+
+### Index
+
+- [Why use react-spring instead of React.useState?](#why-use-react-spring-instead-of-reactusestate)
+- [What are the differences between using `use[Gesture]` hooks and adding listeners manually?](#what-are-the-differences-between-using-usegesture-hooks-and-adding-listeners-manually)
+- [Why `onMove` when `onDrag` already exists?](#why-onmove-when-ondrag-already-exists)
+- [Why `onWheel` and `onScroll`?](#why-onwheel-and-onscroll)
+- [Accessing source event triggers a warning in the console!](#accessing-source-event-triggers-a-warning-in-the-console)
+- [Why do I need to return `memo`?](#why-do-i-need-to-return-memo)
+- [Why is drag being triggered when I just click on an element?](#why-is-drag-being-triggered-when-i-just-click-on-an-element)
+- [Why am I getting warnings from `preventDefault()` after I pass `{passive:false}`](#why-am-i-getting-warnings-from-preventdefault-after-i-pass-passivefalse)
+
+### Why use react-spring instead of React.useState?
+
+Simply because setting state in the gesture handler would re-render the component on each gesture frame, which isn't always good for performance. React-spring lets us animate components without triggering renders. You could still use `useState` if you'd like though!
+
+### What are the differences between using `use[Gesture]` hooks and adding listeners manually?
+
+Not a lot! Essentially these `useXXXX` hooks simplify the implementation of the drag and pinch gestures, calculate kinematics values you wouldn't get out of the box from the listeners, and debounce move, scroll and wheel events to let you know when they end.
+
+### Why `onMove` when `onDrag` already exists?
+
+_`onDrag`_ only fires while you touch or press the element. You just need to hover your mouse above the element to trigger _`onMove`_.
+
+### Why `onWheel` and `onScroll`?
+
+Scrolling and wheeling are structurally different events although they produce similar results (i.e. scrolling a page). First of all, `wheel` is a mouse-only event. Then, for `onScroll` to be fired, the element you're scrolling needs to actually scroll, therefore have content overflowing, while you just need to wheel over an element to trigger `onWheel`. If you use [react-three-fiber](https://github.com/drcmda/react-three-fiber), `onWheel` might prove useful to simulate scroll on canvas elements.
+
+### Accessing source event triggers a warning in the console!
+
+You're probably trying to access an event in `onScroll`, `onMove` or `onWheel` handlers. The last event is debounced, and therefore not accessible asynchronously because of how React pools events. A possible solution would be to make sure the event is not part of the last state update:
+
+```jsx {1-100}
+useScroll(
+  ({ event, last }) => {
+    !last && event.preventDefault() // <-- event will not be accessed in the last event
+  },
+  { domTarget: myRef }
+)
+```
+
+### Why do I need to return `memo`?
+
+As you've seen in some examples, whenever _`memo`_ is used, it is always returned in the handler function. Essentially _`memo`_ is a gesture state attribute that is `undefined` when the gesture starts, but then takes the return value of the handler function.
+
+It may sound silly but returning _`memo`_ makes sure that we continue holding a reference to the initial value of _`memo`_.
+
+### Why is drag being triggered when I just click on an element?
+
+This is typically a-feature-not-a-bug situation 🙃 Drag is triggered as soon as you mouse down on your component, which means it will be triggered when you _just_ briefly click on it. However, there is an option to not trigger the drag handler before a certain delay, using the config option [_`delay`_](options.mdx/delay-drag-only).
+
+```jsx {1-100}
+// using the default delay
+const bind = useDrag(
+  () => console.log(`Won't show if you hold your mouse less than 180ms`),
+  { delay: true }
+)
+```
+
+### Why am I getting warnings from `preventDefault()` after I pass `{passive:false}`
+
+The basic use of `<Component {...bind()) />` passes the task of attaching listeners to React. React does not [yet](https://github.com/facebook/react/issues/6436) support binding passive listeners via props. To have _`useGesture`_ attach the listeners, you must also [use the `domTarget` option](options.mdx/#domtarget). This is only required if you plan to `preventDefault` or cancel the event.

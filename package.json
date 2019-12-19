@@ -1,17 +1,20 @@
 {
   "name": "react-use-gesture",
-  "version": "6.0.14",
-  "description": "React hook for receiving gestures",
+  "version": "7.0.0-beta.1",
+  "description": "React hook for receiving gestures https://use-gesture.netlify.com",
   "main": "dist/index.js",
   "module": "dist/react-use-gesture.esm.js",
   "typings": "dist/index.d.ts",
   "files": [
     "dist"
   ],
+  "sideEffects": false,
   "scripts": {
     "start": "tsdx watch",
     "build": "tsdx build",
     "lint": "tsdx lint",
+    "prepare": "yarn build",
+    "build-docs": "cd ./docusaurus && yarn build",
     "test": "tsdx test --env=jsdom",
     "test:watch": "tsdx test --env=jsdom --watchAll"
   },
@@ -24,7 +27,7 @@
     "react": ">= 16.8.0"
   },
   "prettier": {
-    "printWidth": 140,
+    "printWidth": 120,
     "semi": false,
     "singleQuote": true,
     "trailingComma": "es5"
@@ -56,23 +59,21 @@
   "bugs": {
     "url": "https://github.com/react-spring/react-use-gesture/issues"
   },
-  "homepage": "https://github.com/react-spring/react-use-gesture#readme",
+  "homepage": "https://use-gesture.netlify.com",
   "devDependencies": {
-    "@testing-library/jest-dom": "^4.1.0",
-    "@testing-library/react": "^9.1.4",
-    "@types/jest": "^24.0.15",
-    "@types/react": "^16.9.1",
-    "@types/react-dom": "^16.9.0",
-    "husky": "^3.0.5",
-    "jest": "^24.8.0",
-    "json": "^9.0.6",
-    "npm-run-all": "^4.1.5",
-    "prettier": "^1.18.2",
-    "pretty-quick": "^1.11.1",
-    "react": "^16.9.0",
-    "react-dom": "^16.9.0",
-    "tsdx": "^0.9.2",
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.3.2",
+    "@types/jest": "^24.0.23",
+    "@types/react": "^16.9.15",
+    "@types/react-dom": "^16.9.4",
+    "eslint-plugin-prettier": "^3.1.1",
+    "husky": "^3.1.0",
+    "prettier": "^1.19.1",
+    "pretty-quick": "^2.0.1",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
+    "tsdx": "^0.11.0",
     "tslib": "^1.10.0",
-    "typescript": "^3.6.3"
+    "typescript": "^3.7.3"
   }
 }

@@ -1,0 +1,23 @@
+---
+id: motivation
+title: Why use React-use-gesture
+sidebar_label: Motivation
+---
+
+import ReactPlayer from 'react-player'
+
+## Simplifying gestures
+
+React-use-gesture is a library that focuses on making complex gestures such as drag and pinch easy to configure: in most situations, `onDrag` becomes as easy to set up as `onMouseMove`. However, you remain in control of the full gesture logic, which allows you to make your components behave exactly the way you want.
+
+## Augmenting events
+
+A secondary aspect of React-use-gesture is to upgrade gestures with additional kinematics attributes, such as **velocity**, **distance**, **delta** and more, that don't come with native browser events.
+
+React-use-gesture also debounces _`scroll`_, _`wheel`_ and _`move`_ events, which gives you the capacity to [trigger logic when the gesture starts or ends out of the box](hooks.mdx#start-and-end-handlers).
+
+## Going further
+
+[Alexandra Holachek](https://github.com/aholachek/) gave a great talk at React Conf about Progressive Web Animations, where she explains the principles of her approach on creating native-like UI. Her demos use React-spring and React-use-gesture. Alex's talk strongly influenced some of the features in React-use-gesture.
+
+<ReactPlayer light playing url='https://www.youtube.com/watch?v=laPsceJ4tTY' style={{margin: '0 auto'}} />
