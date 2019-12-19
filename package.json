@@ -1,7 +1,7 @@
 {
   "name": "react-use-gesture",
   "version": "7.0.0-beta.1",
-  "description": "React hook for receiving gestures",
+  "description": "React hook for receiving gestures https://use-gesture.netlify.com",
   "main": "dist/index.js",
   "module": "dist/react-use-gesture.esm.js",
   "typings": "dist/index.d.ts",
@@ -59,7 +59,7 @@
   "bugs": {
     "url": "https://github.com/react-spring/react-use-gesture/issues"
   },
-  "homepage": "https://github.com/react-spring/react-use-gesture#readme",
+  "homepage": "https://use-gesture.netlify.com",
   "husky": {
     "hooks": {
       "pre-commit": "pretty-quick --staged"
