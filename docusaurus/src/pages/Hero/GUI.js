@@ -9,7 +9,7 @@ import DatGui, {
 export default ({ data = {}, onUpdate }) => (
   <DatGui data={data} onUpdate={onUpdate}>
     <DatFolder title="Drag Detection" closed={false}>
-      <DatBoolean path="fliterTaps" label="Filter Clicks" />
+      <DatBoolean path="fliterTaps" label="Filter Taps" />
       <DatNumber path="delay" label="Drag Delay (ms)" min={0} max={1000} />
       <DatNumber
         path="threshold"
