@@ -1,0 +1,164 @@
+.example {
+  background-color: var(--ifm-code-background);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3em;
+  border-radius: var(--ifm-global-radius);
+  margin-bottom: var(--ifm-leading);
+  position: relative;
+}
+
+.easter {
+  display: inline-block;
+  position: relative;
+  cursor: grab;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.drag {
+  background: var(--ifm-color-primary-light);
+  border-radius: 16px;
+  height: 80px;
+  width: 80px;
+  touch-action: none;
+  cursor: grab;
+  -webkit-user-select: none;
+  user-select: none;
+  z-index: 10000;
+  position: relative;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 100;
+  background: rgba(1, 22, 39, 0.5);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 300ms ease;
+}
+
+.overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+  transition-duration: 800ms;
+}
+
+.ui {
+  background: var(--ifm-color-primary-darkest);
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  border-radius: var(--ifm-global-radius) var(--ifm-global-radius) 0 0;
+  color: var(--ifm-color-primary-light);
+  padding: 0.5em 2em;
+  font-size: 0.9em;
+  font-family: var(--ifm-font-family-monospace);
+}
+
+.ui.horizontal {
+  display: flex;
+}
+
+.ui.horizontal > *:not(:first-child) {
+  margin-left: 1em;
+}
+
+.ui label {
+  display: flex;
+  align-items: center;
+}
+
+.ui label > input {
+  margin-right: 1em;
+}
+
+.cancelLimit {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background-color: hotpink;
+  width: calc(50% - 200px);
+  opacity: 0.5;
+  border-radius: 0 var(--ifm-global-radius) var(--ifm-global-radius) 0;
+}
+
+.Swipe .left,
+.Swipe .right,
+.Swipe .center {
+  position: absolute;
+  height: 80px;
+  width: 80px;
+  border: 2px solid var(--ifm-color-primary-dark);
+  transform: scale(1.2);
+  opacity: 0.4;
+  transition: all 350ms ease;
+}
+
+.Swipe .right {
+  transform: translateX(200px) scale(1.2);
+}
+
+.Swipe .left {
+  transform: translateX(-200px) scale(1.2);
+}
+
+.Swipe .left.active,
+.Swipe .right.active,
+.Swipe .center.active {
+  background: var(--ifm-color-primary-dark);
+}
+
+.scroll {
+  background: var(--ifm-color-primary-dark);
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  border-radius: var(--ifm-global-radius);
+  opacity: 0.8;
+}
+
+.Threshold .drag > div {
+  height: 100%;
+  width: 100%;
+  border-radius: 16px;
+  background: #91c9f97a;
+}
+
+.Threshold .drag > div > div {
+  background: #fff;
+  padding: 0.4em;
+  position: absolute;
+  top: -10px;
+  right: -5px;
+  transform: translate(100%, 0);
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.7em;
+}
+
+.Bounds .drag,
+.Rubberband .drag {
+  position: absolute;
+}
+
+.limits {
+  height: 190px;
+  width: 290px;
+  border: 4px solid var(--ifm-color-primary-darkest);
+}
+
+.Initial .drag,
+.Axis .drag,
+.Axis2 .drag,
+.FilterTaps .drag,
+.Delay .drag {
+  margin-top: 20px;
+}

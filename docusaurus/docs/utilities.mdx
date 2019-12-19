@@ -1,0 +1,40 @@
+---
+id: utilities
+title: Utilities
+sidebar_label: Utilities
+---
+
+React-use-gesture uses a set of utility functions internally that are exposed for anybody's convenience.
+
+### `addV`
+
+Adds two vectors.
+
+```jsx {1-100}
+import { addV } from 'react-use-gesture'
+
+addV([10, 5], [5, 7]) // returns [15, 12]
+```
+
+### `subV`
+
+Substracts two vectors.
+
+```jsx {1-100}
+import { subV } from 'react-use-gesture'
+
+subV([10, 5], [1, 2]) // returns [9, 3]
+```
+
+### `rubberbandIfOutOfBounds`
+
+Calculates the rubberbanding effect from a given _`position`_ value, two bounds _`min`_, _`max`_ and an elasticity _`constant`_.
+
+```ts {1-100}
+function rubberbandIfOutOfBounds(
+  position: number,
+  min: number,
+  max: number,
+  constant = 0.15
+): number
+```

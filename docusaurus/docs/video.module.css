@@ -1,0 +1,23 @@
+.videos {
+  display: grid;
+  align-items: flex-start;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  grid-gap: 1rem;
+}
+
+.videos > div video {
+  transition: filter 400ms ease;
+}
+
+.videos > div:hover video {
+  filter: brightness(1.1);
+}
+
+.badges {
+  display: flex;
+  margin: 0.4em -0.3rem;
+}
+
+.badges > * {
+  margin: 0 0.3rem;
+}

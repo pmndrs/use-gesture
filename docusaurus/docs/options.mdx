@@ -1,0 +1,303 @@
+---
+id: options
+title: Gesture options
+sidebar_label: Gesture options
+---
+
+import Example from './examples/'
+
+React-use-gesture offers different options to configure the gestures. Some options are generic to the way React-use-gesture behaves while some other options can be configured per gesture.
+
+## Structure of the config object
+
+Depending on whether you use gesture-specific hooks or if you use the _`useGesture`_ hook, you'll need to structure the config option object differently.
+
+```jsx {1-100}
+// when you use a gesture-specific hook
+useDrag(state => doSomethingWith(state), { ...genericOptions, ...dragOptions })
+
+// when you use the useGesture hook
+useGesture(state => doSomethingWith(state), {
+  ...genericOptions,
+  drag: dragOptions,
+  wheel: wheelOptions,
+  pinch: pinchOptions
+  // etc.
+})
+```
+
+## Generic options
+
+Generic options deal with how React-use-gesture will set event listeners.
+
+| Option                      |     Type      | Default value | Description                                                                                                                                                                                                                                                                                  |
+| --------------------------- | :-----------: | :-----------: | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [_`domTarget`_](#domtarget) | `node`\|`Ref` |  `undefined`  | Lets you specify a dom node or React ref you want to attach the gesture to.                                                                                                                                                                                                                  |
+| _`eventOptions.capture`_    |   `boolean`   |    `false`    | If `true`, [events will be captured](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Building_blocks/Events#Event_bubbling_and_capture).                                                                                                                                           |
+| _`eventOptions.passive`_    |   `boolean`   |    `true`     | Sets whether events are [passive](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener). Note that if you want events not to be passive, you will need to use `domTarget` because of [the way React handles events](https://github.com/facebook/react/issues/6436). |
+| _`eventOptions.pointer`_    |   `boolean`   |    `false`    | If `true`, gestures will use pointer events instead of mouse or touch events where possible.                                                                                                                                                                                                 |
+| _`window`_                  |    `node`     |   `window`    | Lets you specify which window element the gesture should bind events to (only relevant for the `drag` gesture).                                                                                                                                                                              |
+| _`enabled`_                 |   `boolean`   |    `true`     | When set to `false` none of your handlers will be fired.                                                                                                                                                                                                                                     |
+
+## Gesture common options
+
+All gestures share a set of common options described below.
+
+| Option                        |             Type              | Default value | Description                                                                                                                                   |
+| ----------------------------- | :---------------------------: | :-----------: | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| _`enabled`_                   |           `boolean`           |    `true`     | Whether the gesture is enabled.                                                                                                               |
+| [_`initial`_](#initial)       |   `vector`\|`() => vector`    |    `[0,0]`    | The initial movement or a function that returns the initial movement.                                                                         |
+| [_`threshold`_](#threshold)   |      `number`\|`vector`       |  `undefined`  | The handler will fire only when the gesture displacement is greater than the threshold.                                                       |
+| [_`rubberband`_](#rubberband) | `boolean`\|`number`\|`vector` |      `0`      | The elasticity coefficient of the gesture when going out of bounds. When set to `true`, the elasticiy coefficient will be defaulted to `0.15` |
+
+## `xy` gestures specific options
+
+Here is the list of options for _`drag`_, _`move`_, _`wheel`_ and _`scroll`_ gestures:
+
+| Option                                               |           Type            | Default value | Description                                                                     |
+| ---------------------------------------------------- | :-----------------------: | :-----------: | ------------------------------------------------------------------------------- |
+| [_`axis`_](#axis-xy-gestures-only)                   |         `x`\|`y`          |  `undefined`  | Your handler will only trigger if a movement is detected on the specified axis. |
+| [_`lockDirection`_](#lockdirection-xy-gestures-only) |         `boolean`         |    `false`    | If `true`, the gesture will lock the first detected direction.                  |
+| [_`bounds`_](#bounds)                                | `{top,bottom,left,right}` |  `Infinity`   | Limits the gesture _`movement`_ and _`offset`_ to the specified bounds.         |
+
+## `pinch` specific options
+
+| Option                        |    Type     | Default value | Description                                                              |
+| ----------------------------- | :---------: | :-----------: | ------------------------------------------------------------------------ |
+| [_`distanceBounds`_](#bounds) | `{min,max}` |  `Infinity`   | Limits the distance _`movement`_ and _`offset`_ to the specified bounds. |
+| [_`angleBounds`_](#bounds)    | `{min,max}` |  `Infinity`   | Limits the angle _`movement`_ and _`offset`_ to the specified bounds.    |
+
+## `drag` specific options
+
+On top of the options for _`xy`_ gestures seen above, _`drag`_ has the following additional options:
+
+| Option             |        Type         | Default value | Description                                                                                                                                                      |
+| ------------------ | :-----------------: | :-----------: | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [_`fliterTaps`_]() |      `boolean`      |    `false`    | If `true`, the component won't trigger your drag logic if the user just clicked on the component.                                                                |
+| [_`delay`_]()      | `boolean`\|`number` |      `0`      | If set, the handler will be delayed for the duration of the delay (in `ms`) — or if the user starts moving. When set to `true`, `delay` is defaulted to `180ms`. |
+| _`swipeDistance`_  | `number`\|`vector`  |  `[100,100]`  | The minimum distance per axis (in `pixels`) the drag gesture needs to travel to trigger a swipe.                                                                 |
+| _`swipeVelocity`_  | `number`\|`vector`  |  `[0.5,0.5]`  | The minimum velocity per axis (in `pixels / ms`) the drag gesture needs to reach before the pointer is released.                                                 |
+
+## Options explained
+
+### `domTarget`
+
+React-use-gesture also supports adding handlers to dom nodes directly (or the `window` or `document` objects). In that case, you shouldn't spread the `bind()` object returned by the hooks as a prop, but use the `React.useEffect` hook as below.
+
+```jsx {5-10}
+function ScrollExample() {
+  const [{ width }, set] = useSpring(() => ({ width: '0%' }))
+  const height = document.documentElement.scrollHeight
+
+  const bind = useScroll(
+    ({ xy: [, y] }) => set({ width: (y / height) * 100 + '%' }),
+    { domTarget: window }
+  )
+
+  React.useEffect(bind, [bind])
+
+  return <animated.div style={{ width }} />
+}
+```
+
+The code above binds the _`scroll`_ gesture to the document `window`, and acts as a scroll indicator. Try scrolling the page and you'll see the blue bar progress.
+
+<Example id="DomTarget" disableOverlay />
+
+You can also directly pass a ref to _`domTarget`_. This is actually usefull when you want your events **not to be passive**.
+
+```jsx {1-100}
+const myRef = React.useRef(null)
+// This will add a scroll listener the div
+const bind = useScroll(({ event }) => event.preventDefault(), {
+  domTarget: myRef,
+  eventOptions: { passive: false }
+})
+
+React.useEffect(bind, [bind])
+return <div ref={myRef} />
+```
+
+### `initial`
+
+Everytime a gesture starts, the _`movement`_ state attribute is set to `[0, 0]`. But in some cases, you might want to calculate _`movement`_ from an initial position that is external to your logic [^1].
+
+[^1]: If you're used to React-use-gesture, this was the most common usecase for _`memo`_.
+
+Let's take a tangible example: say that a draggable component turns back to its initial position **slowly**. In the meantime, the draggable component should still be **interruptible** at any moment. In that case, you can use _`initial`_ to set the position of the component **at the moment** the user drags it to the value of the spring.
+
+<Example id="Initial" />
+
+Drag the blue square and **before it goes back to its origin** drag it again. If you've unticked the checkbox, you'll notice that the square goes back to its origin instead of moving from where you've dragged it: that's because _`movement`_ is by default reset to `[0, 0]`.
+
+The code below shows how the example works:
+
+```jsx {3-7}
+function InitialExample() {
+  const [{ x }, set] = useSpring(() => ({ x: 0 }))
+  const bind = useDrag(
+    ({ down, movement: [mx] }) =>
+      set({ x: down ? mx : 0, immediate: down, config: { duration: 3000 } }),
+    { initial: () => [x.get()] }
+  )
+  return <animated.div {...bind()} style={{ x }} />
+}
+```
+
+> Unless your initial position is static or depends on `state`, make sure you use a function rather than a static array.
+
+### `threshold`
+
+By default, your gesture handler will be triggered as soon as an event is fired. However, there are situations where you want to make sure the user action is **intentional**: that's where _`threshold`_ comes into play.
+
+_`threshold`_ is the minimum displacement the gesture movement needs to travel before your handler is fired.
+
+<Example id="Threshold" />
+
+In this example, we've set the _`threshold`_ to `100`[^2] and made visible when that threshold is exceeded: when you start dragging the blue square, you'll see a ghost square showing how many pixels are left until the blue square starts moving per axis[^3].
+
+[^2]: This is a bit extreme in actual use cases you would be closer to `20`.
+[^3]: As you might have noticed from the example above, _`threshold`_ works **per axis**: if the gesture exceeds the threshold value horizontally, you will get updates for horizontal displacement, but vertical threshold will have to be reached before vertical displacement is registered.
+
+```jsx {3-5}
+function TresholdExample() {
+  const [{ x, y }, set] = useSpring(() => ({ x: 0, y: 0 }))
+  const bind = useDrag(({ offset: [x, y] }) => set({ x, y }), {
+    threshold: 10
+  })
+  return <animated.div {...bind()} style={{ x, y }} />
+}
+```
+
+### `bounds`
+
+If you want to set contraints to the user gesture, then you should use the _`bounds`_ option. In that case, **both** the gesture `movement` and `offset` will be clamped to the specified `bounds`. `bounds` will be defaulted to _`Infinity`_ when not set.
+
+<Example id="Bounds" disableOverlay />
+
+```jsx {3-8}
+function BoundsExample() {
+  const [{ x, y }, set] = useSpring(() => ({ x: 0, y: 0 }))
+  const bind = useDrag(
+    ({ down, movement: [mx, my] }) => {
+      set({ x: down ? mx : 0, y: down ? my : 0, immediate: down })
+    },
+    { bounds: { left: -100, right: 100, top: -50, bottom: 50 } }
+  )
+  return <animated.div {...bind()} style={{ x, y }} />
+}
+```
+
+> _`distanceBounds`_ and _`angleBounds`_ serve the same purpose as `bounds` for the _`pinch`_ gesture, in a `{min,max}` format.
+
+### `rubberband`
+
+In some cases, you may want to simulate resistance when the user drags a component, for example when the end of a content is reached[^4].
+
+[^4]: Have a look at [this article](https://medium.com/@nathangitter/building-fluid-interfaces-ios-swift-9732bb934bf5) for more details about building mobile interfaces.
+
+<Example id="Rubberband" disableOverlay />
+
+You can set _`rubberband`_ to _`true`_ to use the default elasticity coeffecient of `0.15`, or specify your own. The _`rubberband`_ option also accepts a vector if you want to set different elasticity coeffecients per axis.
+
+```jsx {3-11}
+function RubberbandExample() {
+  const [{ x, y }, set] = useSpring(() => ({ x: 0, y: 0 }))
+  const bind = useDrag(
+    ({ down, movement: [mx, my] }) => {
+      set({ x: down ? mx : 0, y: down ? my : 0, immediate: down })
+    },
+    {
+      bounds: { left: -100, right: 100, top: -50, bottom: 50 },
+      rubberband: true
+    }
+  )
+  return <animated.div {...bind()} style={{ x, y }} />
+}
+```
+
+Note that you have to set [_`bounds`_](#bounds) for rubberbanding to take effect.
+
+### `axis` (`xy` gestures only)
+
+_`axis`_ makes it easy to constraint the user gesture to a specific axis.
+
+<Example id="Axis" />
+
+```jsx {3-6}
+function AxisExample() {
+  const [{ x }, set] = useSpring(() => ({ x: 0 }))
+  const bind = useDrag(
+    ({ down, movement: [mx] }) => set({ x: down ? mx : 0 }),
+    { axis: 'x' }
+  )
+  return <animated.div {...bind()} style={{ x }} />
+}
+```
+
+From the code below it isn't obvious to understand why _`axis`_ might be useful, since in any case the `y` movement isn't part of the logic.
+
+But in reality _`axis`_ does slightly more than just locking the gesture direction: if it detects that the user intent is to move the component in a different direction, it will stop firing the gesture handler. Here is an example to show the difference.
+
+<Example id="Axis2" />
+
+The component above can only move along the _`x`_ axis. But try dragging the component on the vertically. Without the _`axis`_ option, you should notice the component movement will slightly jiggle horizontally because you're movement won't be perfectly vertical.
+
+### `lockDirection` (`xy` gestures only)
+
+_`lockDirection`_ allows you to lock the movement of the gesture once a direction has been detected. In other words, if the user starts moving horizontally, the gesture will be locked on the _`x`_ axis.
+
+<Example id="LockDirection" />
+
+```jsx {3-8}
+function LockDirectionExample() {
+  const [{ x, y }, set] = useSpring(() => ({ x: 0, y: 0 }))
+  const bind = useDrag(
+    ({ down, movement: [mx, my] }) => {
+      set({ x: down ? mx : 0, y: down ? my : 0, immediate: down })
+    },
+    { lockDirection: true }
+  )
+  return <animated.div {...bind()} style={{ x, y }} />
+}
+```
+
+### `fliterTaps` (drag only)
+
+Making a draggable component tappable or clickable can be tricky: differenciating a click from a drag is not always trivial. When you set _`fliterTaps`_ to _`true`_, the [_`tap`_](state.mdx#tap-drag-only) state attribute will be `true` on release if the total displacement is inferior to `3 pixels` while _`down`_ will remain `false` all along.
+
+<Example id="FilterTaps" />
+
+```jsx {3-5,7-9}
+function FilterTapsExample() {
+  const [{ x, y }, set] = useSpring(() => ({ x: 0, y: 0 }))
+  const bind = useDrag(
+    ({ down, movement: [mx, my], tap }) => {
+      if (tap) alert('tap!')
+      set({ x: down ? mx : 0, y: down ? my : 0 })
+    },
+    { fliterTaps: true }
+  )
+  return <animated.div {...bind()} style={{ x, y }} />
+}
+```
+
+### `delay` (drag only)
+
+_`delay`_ delays the drag gesture for the amount of milliseconds you specify. This might be useful if you don't want your logic to fire right away. The below example has a _`delay`_ set to `1000`. Try clicking on the square without moving your mouse.
+
+<Example id="Delay" />
+
+Note that if the the pointer is moved by the user, the drag gesture will fire immediately without waiting for the _`delay`_.
+
+```jsx {3,6-7}
+function DelayExample() {
+  const [{ x, y, scale }, set] = useSpring(() => ({ x: 0, y: 0, scale: 1 }))
+  const bind = useDrag(
+    ({ down, movement: [mx, my] }) =>
+      set({ x: down ? mx : 0, y: down ? my : 0, scale: down ? 1.2 : 1 }),
+    { delay: 1000 }
+  )
+  return <animated.div {...bind()} style={{ x, y, scale }} />
+}
+```
