@@ -19,6 +19,10 @@ import {
 const DEFAULT_DRAG_DELAY = 180
 const DEFAULT_RUBBERBAND = 0.15
 
+function getWindow() {
+  return typeof window !== 'undefined' ? window : undefined
+}
+
 /**
  * @private
  *
@@ -31,7 +35,7 @@ export function getInternalGenericOptions(config: Partial<GenericOptions> = {}):
   const defaultOptions: GenericOptions = {
     domTarget: undefined,
     eventOptions: { passive: true, capture: false, pointer: false },
-    window: typeof globalThis.window !== 'undefined' ? globalThis.window : undefined,
+    window: getWindow(),
     enabled: true,
   }
 
