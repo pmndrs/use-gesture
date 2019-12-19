@@ -1,5 +1,71 @@
 # Changelog
 
+## 7.0.0 Release
+
+**Summary:** Major release introducing new features and options renaming. This is a full rewrite.
+
+### Breaking changes
+
+1. Options for `useGesture` are now separated per gesture;
+2. Options for event are now structured differently.
+3. `dragDelay` is now renamed `delay`. 
+
+#### Before
+```jsx
+useGesture(fn, {
+  enabled: true,
+  event: { passive: true, capture: false },
+  pointerEvents: true,
+  wheel: false,
+  dragDelay: 100
+})
+```
+
+#### After
+
+```jsx
+useGesture(fn, {
+  enabled: true,
+  eventOptions: { passive: true, capture: false, pointer: true },
+  wheel: {
+    enabled: false
+  },
+  drag: {
+    delay: 100
+  }
+})
+
+// or
+
+useDrag(fn, { 
+    eventOptions: { passive: true, capture: false, pointer: true },
+    delay: 100
+})
+```
+
+### Added
+
+1. State attribute `lastOffset`: offset when the last gesture started.
+2. State attribute `startTime`: gesture start time.
+3. State attribute `elapsedTime`: gesture elapsed time.
+4. Drag state attribute `swipe`: indicates if the drag was a swipe.
+5. Drag state attribute `tap`: is the drag assimilated to a tap.
+6. Option `initial`: the initial movement or a function that returns the initial movement.
+7. Option `threshold`: the handler will fire only when the gesture displacement is greater than the threshold.
+8. Option `rubberband`: the elasticity coefficient of the gesture when going out of bounds.
+9. XY option `axis`: constraints the gesture to the axis.
+10. XY option `lockDirection`: if true, the gesture will lock the first detected direction.
+11. XY option `bounds`: limits the gesture movement and offset to the specified bounds.
+12. Pinch option `distanceBounds`: limits the distance movement and offset to the specified bounds.
+13. Pinch option `angleBounds`: limits the angle movement and offset to the specified bounds.
+14. [New doc website!](https://use-gesture.netlify.com/)
+
+### Fixed
+
+1. Native handlers now update with state [#117](https://github.com/react-spring/react-use-gesture/issues/117)
+2. When a ref is null on unmount, bind now returns the correct cleaning function [#115](https://github.com/react-spring/react-use-gesture/issues/115)
+
+
 ## 6.0.14 Release
 
 **Summary:** Fixes Pointer Events on hover.
