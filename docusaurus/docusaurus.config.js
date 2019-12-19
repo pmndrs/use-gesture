@@ -73,7 +73,9 @@ module.exports = {
       '@docusaurus/preset-classic',
       {
         docs: {
-          sidebarPath: require.resolve('./sidebars.js')
+          sidebarPath: require.resolve('./sidebars.js'),
+          editUrl:
+            'https://github.com/react-spring/react-use-gesture/edit/v7/docusaurus/',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css')

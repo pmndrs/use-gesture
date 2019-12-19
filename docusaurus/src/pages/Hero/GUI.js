@@ -53,16 +53,10 @@ export default ({ data = {}, onUpdate }) => (
     </DatFolder>
     <DatBoolean path="enabled" label="Enabled" />
     <DatBoolean path="pointer" label="🧪 Use pointers" />
-    <DatSelect
-      path="gesture"
-      label="Gesture"
-      options={['movement', 'offset']}
-    />
   </DatGui>
 )
 
 export const initialConfig = {
-  gesture: 'movement',
   enabled: true,
   pointer: false,
   axis: undefined,

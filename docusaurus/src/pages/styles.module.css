@@ -33,7 +33,7 @@
 .features {
   display: flex;
   align-items: center;
-  padding: 4rem 0;
+  padding-bottom: 4rem;
   width: 100%;
 }
 
@@ -65,4 +65,8 @@ html[data-theme='dark'] .featureImage {
   width: 100%;
   height: 100%;
   transform: scale(0.9);
+}
+
+.linkWrapper {
+  padding: calc(var(--ifm-heading-margin-bottom) * 2);
 }

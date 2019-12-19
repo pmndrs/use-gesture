@@ -8,6 +8,7 @@
 import React from 'react'
 import cn from 'classnames'
 import Layout from '@theme/Layout'
+import Link from '@docusaurus/Link'
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext'
 import useBaseUrl from '@docusaurus/useBaseUrl'
 import Hero from './Hero'
@@ -64,6 +65,8 @@ function Feature({ imageUrl, title, description }) {
 function Home() {
   const context = useDocusaurusContext()
   const { siteConfig = {} } = context
+  const baseUrl = useBaseUrl('/')
+
   return (
     <Layout
       title={`${siteConfig.title} - Documentation`}
@@ -74,17 +77,23 @@ function Home() {
         <Hero />
       </header>
       <main>
-        {features && features.length && (
-          <section className={styles.features}>
-            <div className="container">
-              <div className="row">
-                {features.map((props, idx) => (
-                  <Feature key={idx} {...props} />
-                ))}
-              </div>
+        <div className={cn('text--center', styles.linkWrapper)}>
+          <Link
+            to={`${baseUrl}docs/introduction`}
+            className="button button--primary button--lg"
+          >
+            Read the docs!
+          </Link>
+        </div>
+        <section className={styles.features}>
+          <div className="container">
+            <div className="row">
+              {features.map((props, idx) => (
+                <Feature key={idx} {...props} />
+              ))}
             </div>
-          </section>
-        )}
+          </div>
+        </section>
       </main>
     </Layout>
   )

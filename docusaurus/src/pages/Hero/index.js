@@ -19,7 +19,6 @@ export default function Example() {
   const [props, set] = useSpring(() => ({ x: 0, y: 0, scale: 1 }))
 
   const {
-    gesture,
     threshold,
     swipeDist,
     swipeVel,
@@ -48,9 +47,7 @@ export default function Example() {
       // if (swipeX) toast(`Swipe ${swipeX > 0 ? 'Right' : 'Left'}`)
       // if (swipeY) toast(`Swipe ${swipeY > 0 ? 'Bottom' : 'Top'}`)
 
-      if (gesture === 'movement')
-        set({ x: down ? mx : 0, y: down ? my : 0, scale: down ? 1.2 : 1 })
-      else set({ x, y, scale: down ? 1.2 : 1 })
+      set({ x: down ? mx : 0, y: down ? my : 0, scale: down ? 1.2 : 1 })
     },
     {
       eventOptions: { pointer },

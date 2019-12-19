@@ -46,6 +46,7 @@
 }
 
 .hero.hero--primary {
+  text-align: left;
   --ifm-hero-background-color: var(--ifm-color-gray-100);
 }
 
