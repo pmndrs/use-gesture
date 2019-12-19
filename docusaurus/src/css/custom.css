@@ -45,6 +45,11 @@
   --ifm-footer-link-hover-color: inherit;
 }
 
+html[data-theme="dark"] {
+  --ifm-color-warning-lightest: var(--ifm-color-gray-900);
+  --ifm-color-warning-ultralight: black;
+}
+
 .hero.hero--primary {
   text-align: left;
   --ifm-hero-background-color: var(--ifm-color-gray-100);
