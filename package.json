@@ -1,6 +1,6 @@
 {
   "name": "react-use-gesture",
-  "version": "7.0.0-alpha.37",
+  "version": "7.0.0-beta.1",
   "description": "React hook for receiving gestures",
   "main": "dist/index.js",
   "module": "dist/react-use-gesture.esm.js",
@@ -14,6 +14,7 @@
     "build": "tsdx build",
     "lint": "tsdx lint",
     "prepare": "yarn build",
+    "build-docs": "cd ./docusaurus && yarn build",
     "test": "tsdx test --env=jsdom",
     "test:watch": "tsdx test --env=jsdom --watchAll"
   },
