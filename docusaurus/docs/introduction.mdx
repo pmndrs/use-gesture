@@ -6,6 +6,9 @@ sidebar_label: Getting started
 
 import Example from './examples/'
 import { EasterDiv } from './examples/examples'
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 
 React-use-gesture is a set of hooks that let you bind mouse and touch events to any React component. With the data you receive, it becomes easy to set up complex gestures like dragging and pinching with a few lines of code.
 
@@ -13,14 +16,28 @@ You can use this library stand-alone, but to make the most of it you should comb
 
 ## Installation
 
+<Tabs
+  defaultValue="yarn"
+  values={[
+    { label: 'Yarn', value: 'yarn', },
+    { label: 'NPM', value: 'npm', },
+  ]
+}>
+<TabItem value="yarn">
+
 ```bash {1-100}
-#Yarn
 yarn add react-use-gesture
-
-#NPM
-npm install --save react-use-gesture
-
 ```
+
+</TabItem>
+<TabItem value="npm">
+
+```bash {1-100}
+npm install --save react-use-gesture
+```
+
+</TabItem>
+</Tabs>
 
 ## Simple example
 
