@@ -54,7 +54,6 @@ function PullRelease() {
 
   // Bind it to a component
   return <animated.div {...bind()} style={{ x, y }} />
-}
 ```
 
 The example above makes a `div` draggable so that it follows your mouse on drag, and returns to its initial position on release.
