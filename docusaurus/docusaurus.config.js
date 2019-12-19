@@ -8,7 +8,7 @@
 module.exports = {
   title: 'React Use Gesture',
   tagline: `The only gesture hook you'll need`,
-  url: 'https://react-spring.github.io',
+  url: 'https://use-gesture.netlify.com',
   baseUrl: '/',
   organizationName: 'react-spring', // Usually your GitHub org/user name.
   projectName: 'react-use-gesture', // Usually your repo name.
