@@ -301,3 +301,5 @@ function DelayExample() {
   return <animated.div {...bind()} style={{ x, y, scale }} />
 }
 ```
+
+> Note that _`delay`_ and _`threshold`_ don't play well together: without moving your pointer, your handler will never get triggered.
