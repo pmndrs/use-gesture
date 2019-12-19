@@ -60,11 +60,6 @@
     "url": "https://github.com/react-spring/react-use-gesture/issues"
   },
   "homepage": "https://use-gesture.netlify.com",
-  "husky": {
-    "hooks": {
-      "pre-commit": "pretty-quick --staged"
-    }
-  },
   "devDependencies": {
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
