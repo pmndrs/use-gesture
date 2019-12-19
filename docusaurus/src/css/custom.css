@@ -211,3 +211,7 @@ nav strong {
   font-weight: 600;
   font-size: 1.2em;
 }
+
+nav {
+  white-space: nowrap;
+}
