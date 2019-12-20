@@ -5,11 +5,11 @@
   grid-gap: 1rem;
 }
 
-.videos > div video {
+.videos>div video {
   transition: filter 400ms ease;
 }
 
-.videos > div:hover video {
+.videos>div:hover video {
   filter: brightness(1.1);
 }
 
@@ -18,6 +18,17 @@
   margin: 0.4em -0.3rem;
 }
 
-.badges > * {
+.badges>* {
   margin: 0 0.3rem;
+}
+
+.playerWrapper {
+  position: relative;
+  padding-top: 56.25%/* Player ratio: 100 / (1280 / 720) */
+}
+
+.player {
+  position: absolute;
+  top: 0;
+  left: 0;
 }

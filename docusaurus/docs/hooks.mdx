@@ -27,9 +27,9 @@ const bind = useDrag(state => doSomethingWith(state), config)
 return <div {...bind(arg)} />
 ```
 
-- _`state`_ is an object containing all attributes of the gesture, including the original event. That state is passed to your handler every time the gesture updates. You can find all state attributes.
-- _`config`_ is an object containing options for the gesture. You can find all config options here.
-- _`arg`_ is a custom argument you can pass to the bind function. See this example to see where it can be useful.
+- _`state`_ is an object containing all attributes of the gesture, including the original event. That state is passed to your handler every time the gesture updates. You can find all state attributes in the [Gesture state section](state.mdx).
+- _`config`_ is an object containing options for the gesture. You can find all config options in the [Gesture options section](options.mdx).
+- _`arg`_ is a custom argument you can pass to the bind function. See this [example](https://codesandbox.io/s/fh8r8) to see where it can be useful.
 
 ## Handling multiple gestures in one hook with useGesture
 

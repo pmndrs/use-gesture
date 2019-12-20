@@ -5,6 +5,7 @@ sidebar_label: Motivation
 ---
 
 import ReactPlayer from 'react-player'
+import styles from './video.module.css'
 
 ## Simplifying gestures
 
@@ -20,4 +21,13 @@ React-use-gesture also debounces _`scroll`_, _`wheel`_ and _`move`_ events, whic
 
 [Alexandra Holachek](https://github.com/aholachek/) gave a great talk at React Conf about Progressive Web Animations, where she explains the principles of her approach on creating native-like UI. Her demos use React-spring and React-use-gesture. Alex's talk strongly influenced some of the features in React-use-gesture.
 
-<ReactPlayer light playing url='https://www.youtube.com/watch?v=laPsceJ4tTY' style={{margin: '0 auto'}} />
+<div className={styles.playerWrapper}>
+  <ReactPlayer
+    className={styles.player}
+    light
+    playing
+    url="https://www.youtube.com/watch?v=laPsceJ4tTY"
+    width="100%"
+    height="100%"
+  />
+</div>

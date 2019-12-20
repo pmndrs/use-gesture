@@ -89,13 +89,12 @@ table code:last-child {
   padding-right: 0;
 }
 
-article > header > h1 {
+article>header>h1 {
   font-size: calc(var(--ifm-h1-font-size) * 1.5) !important;
   margin-bottom: 1em !important;
 }
 
-em > code,
-strong {
+em>code, strong {
   color: var(--color-highlight);
   font-style: normal;
   font-weight: normal;
@@ -105,14 +104,12 @@ a {
   position: relative;
 }
 
-h2 > code,
-h3 > code,
-h4 > code {
+h2>code, h3>code, h4>code {
   font-weight: inherit;
   color: var(--color-highlight);
 }
 
-a > code {
+a>code {
   color: inherit;
 }
 
@@ -164,7 +161,7 @@ a.footnote-ref {
   --ifm-heading-font-weight: 500;
 }
 
-.markdown a > em > code {
+.markdown a>em>code {
   color: inherit;
   text-decoration: underline;
 }
@@ -188,7 +185,7 @@ a.footnote-ref {
   margin-top: 4em !important;
 }
 
-p + ul {
+p+ul {
   margin-top: calc(var(--ifm-leading) * -0.5);
 }
 
@@ -214,4 +211,8 @@ nav strong {
 
 nav {
   white-space: nowrap;
+}
+
+.pagination-nav {
+  white-space: normal;
 }

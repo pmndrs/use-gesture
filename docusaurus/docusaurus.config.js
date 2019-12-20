@@ -49,10 +49,10 @@ module.exports = {
         {
           title: 'API Reference',
           items: [
-            { label: 'Available hooks', to: 'api/hooks' },
-            { label: 'Gesture state', to: 'api/state' },
-            { label: 'Gesture options', to: 'api/options' },
-            { label: 'Utilities', to: 'api/utilities' }
+            { label: 'Available hooks', to: 'docs/hooks' },
+            { label: 'Gesture state', to: 'docs/state' },
+            { label: 'Gesture options', to: 'docs/options' },
+            { label: 'Utilities', to: 'docs/utilities' }
           ]
         },
         {
@@ -75,7 +75,7 @@ module.exports = {
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
           editUrl:
-            'https://github.com/react-spring/react-use-gesture/edit/v7/docusaurus/',
+            'https://github.com/react-spring/react-use-gesture/edit/v7/docusaurus/'
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css')

@@ -66,7 +66,7 @@
   display: flex;
 }
 
-.ui.horizontal > *:not(:first-child) {
+.ui.horizontal>*:not(:first-child) {
   margin-left: 1em;
 }
 
@@ -75,7 +75,7 @@
   align-items: center;
 }
 
-.ui label > input {
+.ui label>input {
   margin-right: 1em;
 }
 
@@ -90,30 +90,19 @@
   border-radius: 0 var(--ifm-global-radius) var(--ifm-global-radius) 0;
 }
 
-.Swipe .left,
-.Swipe .right,
-.Swipe .center {
+.Swipe .square {
   position: absolute;
   height: 80px;
   width: 80px;
   border: 2px solid var(--ifm-color-primary-dark);
-  transform: scale(1.2);
+  transform: scale(1.1);
   opacity: 0.4;
   transition: all 350ms ease;
 }
 
-.Swipe .right {
-  transform: translateX(200px) scale(1.2);
-}
-
-.Swipe .left {
-  transform: translateX(-200px) scale(1.2);
-}
-
-.Swipe .left.active,
-.Swipe .right.active,
-.Swipe .center.active {
+.Swipe .square.active {
   background: var(--ifm-color-primary-dark);
+  opacity: 0.6;
 }
 
 .scroll {
@@ -126,14 +115,14 @@
   opacity: 0.8;
 }
 
-.Threshold .drag > div {
+.Threshold .drag>div {
   height: 100%;
   width: 100%;
   border-radius: 16px;
   background: #91c9f97a;
 }
 
-.Threshold .drag > div > div {
+.Threshold .drag>div>div {
   background: #fff;
   padding: 0.4em;
   position: absolute;
@@ -144,8 +133,7 @@
   font-size: 0.7em;
 }
 
-.Bounds .drag,
-.Rubberband .drag {
+.Bounds .drag, .Rubberband .drag {
   position: absolute;
 }
 
@@ -155,10 +143,6 @@
   border: 4px solid var(--ifm-color-primary-darkest);
 }
 
-.Initial .drag,
-.Axis .drag,
-.Axis2 .drag,
-.FilterTaps .drag,
-.Delay .drag {
+.Initial .drag, .Axis .drag, .Axis2 .drag, .FilterTaps .drag, .Delay .drag {
   margin-top: 20px;
 }

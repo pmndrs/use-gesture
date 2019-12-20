@@ -66,8 +66,9 @@ export function Cancel({ setActive }) {
 
 export function Swipe({ setActive }) {
   const [position, setPosition] = useState(0)
+  const space = 100
 
-  const { x } = useSpring({ x: position * 200 })
+  const { x } = useSpring({ x: position * space })
   const bind = useDrag(({ down, swipe: [swipeX] }) => {
     setPosition(p => Math.min(Math.max(-1, p + swipeX), 1))
     setActive && setActive(down)
@@ -75,9 +76,15 @@ export function Swipe({ setActive }) {
 
   return (
     <>
-      <div className={cn(styles.left, { [styles.active]: position === -1 })} />
-      <div className={cn(styles.center, { [styles.active]: position === 0 })} />
-      <div className={cn(styles.right, { [styles.active]: position === 1 })} />
+      <div
+        className={cn(styles.square, { [styles.active]: position === -1 })}
+        style={{ transform: `translateX(-${space}px) scale(1.1)` }}
+      />
+      <div className={cn(styles.square, { [styles.active]: position === 0 })} />
+      <div
+        className={cn(styles.square, { [styles.active]: position === 1 })}
+        style={{ transform: `translateX(${space}px) scale(1.1)` }}
+      />
       <animated.div className={styles.drag} {...bind()} style={{ x }} />
     </>
   )

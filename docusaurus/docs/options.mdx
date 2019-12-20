@@ -71,12 +71,12 @@ Here is the list of options for _`drag`_, _`move`_, _`wheel`_ and _`scroll`_ ges
 
 On top of the options for _`xy`_ gestures seen above, _`drag`_ has the following additional options:
 
-| Option             |        Type         | Default value | Description                                                                                                                                                      |
-| ------------------ | :-----------------: | :-----------: | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [_`fliterTaps`_]() |      `boolean`      |    `false`    | If `true`, the component won't trigger your drag logic if the user just clicked on the component.                                                                |
-| [_`delay`_]()      | `boolean`\|`number` |      `0`      | If set, the handler will be delayed for the duration of the delay (in `ms`) — or if the user starts moving. When set to `true`, `delay` is defaulted to `180ms`. |
-| _`swipeDistance`_  | `number`\|`vector`  |  `[100,100]`  | The minimum distance per axis (in `pixels`) the drag gesture needs to travel to trigger a swipe.                                                                 |
-| _`swipeVelocity`_  | `number`\|`vector`  |  `[0.5,0.5]`  | The minimum velocity per axis (in `pixels / ms`) the drag gesture needs to reach before the pointer is released.                                                 |
+| Option                                  |        Type         | Default value | Description                                                                                                                                                      |
+| --------------------------------------- | :-----------------: | :-----------: | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [_`fliterTaps`_](#flitertaps-drag-only) |      `boolean`      |    `false`    | If `true`, the component won't trigger your drag logic if the user just clicked on the component.                                                                |
+| [_`delay`_](#delay-drag-only)           | `boolean`\|`number` |      `0`      | If set, the handler will be delayed for the duration of the delay (in `ms`) — or if the user starts moving. When set to `true`, `delay` is defaulted to `180ms`. |
+| _`swipeDistance`_                       | `number`\|`vector`  |  `[100,100]`  | The minimum distance per axis (in `pixels`) the drag gesture needs to travel to trigger a swipe.                                                                 |
+| _`swipeVelocity`_                       | `number`\|`vector`  |  `[0.5,0.5]`  | The minimum velocity per axis (in `pixels / ms`) the drag gesture needs to reach before the pointer is released.                                                 |
 
 ## Options explained
 
