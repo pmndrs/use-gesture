@@ -46,7 +46,7 @@ All gestures share a set of common options described below.
 | Option                        |             Type              | Default value | Description                                                                                                                                   |
 | ----------------------------- | :---------------------------: | :-----------: | --------------------------------------------------------------------------------------------------------------------------------------------- |
 | _`enabled`_                   |           `boolean`           |    `true`     | Whether the gesture is enabled.                                                                                                               |
-| [_`initial`_](#initial)       |    `Array<[number`\|`fn]>`    |    `[0,0]`    | The initial position _`movement`_ should start from.                                                                                          |
+| [_`initial`_](#initial)       |   `vector`\|`() => vector`    |    `[0,0]`    | The initial position _`movement`_ should start from.                                                                                          |
 | [_`threshold`_](#threshold)   |      `number`\|`vector`       |  `undefined`  | The handler will fire only when the gesture displacement is greater than the threshold.                                                       |
 | [_`rubberband`_](#rubberband) | `boolean`\|`number`\|`vector` |      `0`      | The elasticity coefficient of the gesture when going out of bounds. When set to `true`, the elasticiy coefficient will be defaulted to `0.15` |
 
@@ -138,13 +138,13 @@ function InitialExample() {
   const bind = useDrag(
     ({ down, movement: [mx] }) =>
       set({ x: down ? mx : 0, immediate: down, config: { duration: 3000 } }),
-    { initial: [() => x.get(), 0] }
+    { initial: () => [x.get()] }
   )
   return <animated.div {...bind()} style={{ x }} />
 }
 ```
 
-> Unless your initial position is static or depends on React `state`, make sure you use _`initial`_ items are functions.
+> Unless your initial position is static or depends on `state`, make sure you use a function rather than a static array.
 
 ### `threshold`
 

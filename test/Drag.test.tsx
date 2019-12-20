@@ -279,7 +279,7 @@ describe.each([
   })
 
   test(`passing an initial position should affect the movement`, () => {
-    rerender(<Component gestures={['Drag']} config={{ drag: { initial: [() => 5, () => 10] } }} />)
+    rerender(<Component gestures={['Drag']} config={{ drag: { initial: () => [5, 10] } }} />)
     fireEvent.mouseDown(element, { clientX: 0, clientY: 0 })
     expect(getByTestId(`${prefix}drag-movement`)).toHaveTextContent(`5,10`)
     fireEvent.mouseMove(window, { clientX: 10, clientY: 20, buttons: 1 })

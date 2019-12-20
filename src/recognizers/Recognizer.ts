@@ -169,7 +169,6 @@ export default abstract class Recognizer<T extends GestureKey> {
     const { initial, threshold, rubberband } = this.config
 
     const [t0, t1] = threshold
-    const [ci0, ci1] = initial
 
     const { _initial, _active, _intentional: intentional, lastOffset, movement: prevMovement } = state
     let [i0, i1] = intentional
@@ -193,8 +192,8 @@ export default abstract class Recognizer<T extends GestureKey> {
     const [_i0, _i1] = _intentional!
     const _movement = [_m0, _m1]
 
-    if (_i0 !== false && intentional[0] === false) _initial[0] = valueFn(ci0)
-    if (_i1 !== false && intentional[1] === false) _initial[1] = valueFn(ci1)
+    if (_i0 !== false && intentional[0] === false) _initial[0] = valueFn(initial)[0]
+    if (_i1 !== false && intentional[1] === false) _initial[1] = valueFn(initial)[1]
 
     /**
      * If the gesture has been blocked (from gesture specific checkIntentionality),
@@ -206,7 +205,10 @@ export default abstract class Recognizer<T extends GestureKey> {
      * The movement sent to the handler has 0 in its dimensions when intentionality is false.
      * It is calculated from the actual movement minus the threshold.
      */
-    let movement = [_i0 !== false ? _m0 - _i0 : valueFn(ci0), _i1 !== false ? _m1 - _i1 : valueFn(ci1)] as Vector2
+    let movement = [
+      _i0 !== false ? _m0 - _i0 : valueFn(initial)[0],
+      _i1 !== false ? _m1 - _i1 : valueFn(initial)[1],
+    ] as Vector2
     const offset = addV(movement, lastOffset)
 
     /**
