@@ -9,6 +9,7 @@ export type Tuple<T> = [T, T]
 export type Vector2 = Tuple<number>
 export type Fn = (...args: any[]) => any
 export type FalseOrNumber = false | number
+export type Initial = Tuple<() => number | number>
 
 export interface AxisBounds {
   top?: number
@@ -38,7 +39,7 @@ export interface GenericOptions {
 
 export interface GestureOptions {
   enabled: boolean
-  initial: Vector2 | (() => Vector2)
+  initial: Initial
   threshold?: number | Vector2
   rubberband: boolean | number | Vector2
 }
@@ -90,7 +91,7 @@ export interface InternalGenericOptions {
 
 export interface InternalGestureOptions {
   enabled: boolean
-  initial?: Vector2 | (() => Vector2)
+  initial: Initial
   threshold: Vector2
   rubberband: Vector2
 }

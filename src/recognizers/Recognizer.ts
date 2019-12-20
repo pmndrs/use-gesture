@@ -16,6 +16,7 @@ import {
 } from '../types'
 import { getInitialState } from '../utils/state'
 import { subV, addV, getIntentional, rubberbandIfOutOfBounds } from '../utils/math'
+import { valueFn } from '../utils/utils'
 
 /**
  * @private
@@ -134,15 +135,11 @@ export default abstract class Recognizer<T extends GestureKey> {
    * @returns - the start state for the gesture
    */
   protected getStartGestureState = (values: Vector2, event: UseGestureEvent) => {
-    const { initial } = this.config
-    const _initial = typeof initial === 'function' ? initial() : initial
-
     return {
       ...getInitialState()[this.stateKey],
       _active: true,
       values,
       initial: values,
-      _initial,
       offset: this.state.offset,
       lastOffset: this.state.offset,
       startTime: event.timeStamp,
@@ -169,10 +166,12 @@ export default abstract class Recognizer<T extends GestureKey> {
    * Returns basic movement properties for the gesture based on the next values and current state.
    */
   protected getMovement(values: Vector2, state: GestureState<T> = this.state): PartialGestureState<T> {
-    let { threshold, rubberband } = this.config
-    const [t0, t1] = threshold
+    const { initial, threshold, rubberband } = this.config
 
-    const { _active, _intentional: intentional, lastOffset, movement: prevMovement } = state
+    const [t0, t1] = threshold
+    const [ci0, ci1] = initial
+
+    const { _initial, _active, _intentional: intentional, lastOffset, movement: prevMovement } = state
     let [i0, i1] = intentional
 
     const [_m0, _m1] = this.getInternalMovement(values, state)
@@ -180,16 +179,22 @@ export default abstract class Recognizer<T extends GestureKey> {
     /**
      * For both dimensions of the gesture, check its intentionality on each frame.
      */
-    if (i0 === false) i0 = getIntentional(_m0, t0)
-    if (i1 === false) i1 = getIntentional(_m1, t1)
+    if (i0 === false) {
+      i0 = getIntentional(_m0, t0)
+    }
+    if (i1 === false) {
+      i1 = getIntentional(_m1, t1)
+    }
 
     // Get gesture specific state properties based on intentionality and movement.
     const intentionalityCheck = this.checkIntentionality([i0, i1], [_m0, _m1], state)
 
     const { _intentional, _blocked } = intentionalityCheck
     const [_i0, _i1] = _intentional!
-    const [_init0 = 0, _init1 = 0] = state._initial
     const _movement = [_m0, _m1]
+
+    if (_i0 !== false && intentional[0] === false) _initial[0] = valueFn(ci0)
+    if (_i1 !== false && intentional[1] === false) _initial[1] = valueFn(ci1)
 
     /**
      * If the gesture has been blocked (from gesture specific checkIntentionality),
@@ -201,18 +206,19 @@ export default abstract class Recognizer<T extends GestureKey> {
      * The movement sent to the handler has 0 in its dimensions when intentionality is false.
      * It is calculated from the actual movement minus the threshold.
      */
-    let movement = [_i0 !== false ? _m0 - _i0 : 0, _i1 !== false ? _m1 - _i1 : 0] as Vector2
+    let movement = [_i0 !== false ? _m0 - _i0 : valueFn(ci0), _i1 !== false ? _m1 - _i1 : valueFn(ci1)] as Vector2
     const offset = addV(movement, lastOffset)
 
     /**
      * Rubberband should be 0 when the gesture is no longer active, so that movement
      * and offset can return within their bounds.
      */
-    rubberband = _active ? rubberband : [0, 0]
-    movement = this.rubberband(addV(movement, [_init0, _init1]), rubberband) // rubberbanded movement
+    const _rubberband: Vector2 = _active ? rubberband : [0, 0]
+    movement = this.rubberband(addV(movement, _initial), _rubberband) // rubberbanded movement
 
     return {
       ...intentionalityCheck,
+      _initial,
       _movement,
       movement,
       offset: this.rubberband(offset, rubberband), // rubberbanded offset

@@ -17,3 +17,7 @@ export function matchKeysFromObject<T extends object, K extends object>(obj: T, 
   )
   return o
 }
+
+export function valueFn<T>(v: () => T | T) {
+  return typeof v === 'function' ? v() : v
+}
