@@ -6,9 +6,9 @@ import DatGui, {
   DatFolder
 } from '@tim-soft/react-dat-gui'
 
-export default ({ data = {}, onUpdate }) => (
-  <DatGui data={data} onUpdate={onUpdate}>
-    <DatFolder title="Drag Detection" closed={false}>
+export default ({ data = {}, onUpdate, className }) => (
+  <DatGui data={data} onUpdate={onUpdate} className={className}>
+    <DatFolder title="Drag Detection">
       <DatBoolean path="fliterTaps" label="Filter Taps" />
       <DatNumber path="delay" label="Drag Delay (ms)" min={0} max={1000} />
       <DatNumber
@@ -22,7 +22,7 @@ export default ({ data = {}, onUpdate }) => (
       <DatSelect path="axis" label="Axis" options={[undefined, 'x', 'y']} />
     </DatFolder>
     {data.activateBounds ? (
-      <DatFolder title="Bounds" closed={false}>
+      <DatFolder title="Bounds">
         <DatBoolean path="activateBounds" label="Activate Bounds" />
         <DatNumber
           path="rubberband"
@@ -37,7 +37,7 @@ export default ({ data = {}, onUpdate }) => (
         <DatNumber path="bounds.left" label="Left" min={-200} max={0} />
       </DatFolder>
     ) : (
-      <DatFolder title="Bounds" closed={false}>
+      <DatFolder title="Bounds">
         <DatBoolean path="activateBounds" label="Activate Bounds" />
       </DatFolder>
     )}
@@ -51,14 +51,10 @@ export default ({ data = {}, onUpdate }) => (
       />
       <DatNumber path="swipeDist" label="Swipe Distance" min={0} max={200} />
     </DatFolder>
-    <DatBoolean path="enabled" label="Enabled" />
-    <DatBoolean path="pointer" label="🧪 Use pointers" />
   </DatGui>
 )
 
 export const initialConfig = {
-  enabled: true,
-  pointer: false,
   axis: undefined,
   delay: 0,
   lockDirection: false,

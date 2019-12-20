@@ -22,7 +22,6 @@ export default function Example() {
     threshold,
     swipeDist,
     swipeVel,
-    pointer,
     bounds,
     activateBounds,
     rubberband,
@@ -50,7 +49,6 @@ export default function Example() {
       set({ x: down ? mx : 0, y: down ? my : 0, scale: down ? 1.2 : 1 })
     },
     {
-      eventOptions: { pointer },
       ...rest,
       swipeVelocity: [swipeVel, swipeVel],
       swipeDistance: [swipeDist, swipeDist],
@@ -62,7 +60,7 @@ export default function Example() {
 
   return (
     <>
-      <GUI data={config} onUpdate={setConfig} />
+      <GUI data={config} onUpdate={setConfig} className={styles.gui} />
       <div className={styles.wrapper}>
         {activateBounds && (
           <div
