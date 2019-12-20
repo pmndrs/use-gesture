@@ -6,8 +6,8 @@ import DatGui, {
   DatFolder
 } from '@tim-soft/react-dat-gui'
 
-export default ({ data = {}, onUpdate, className }) => (
-  <DatGui data={data} onUpdate={onUpdate} className={className}>
+export default ({ data = {}, onUpdate, style }) => (
+  <DatGui data={data} onUpdate={onUpdate} style={style}>
     <DatFolder title="Drag Detection">
       <DatBoolean path="fliterTaps" label="Filter Taps" />
       <DatNumber path="delay" label="Drag Delay (ms)" min={0} max={1000} />

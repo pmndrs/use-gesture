@@ -60,7 +60,11 @@ export default function Example() {
 
   return (
     <>
-      <GUI data={config} onUpdate={setConfig} className={styles.gui} />
+      <GUI
+        data={config}
+        onUpdate={setConfig}
+        style={{ position: 'absolute', zIndex: 100 }}
+      />
       <div className={styles.wrapper}>
         {activateBounds && (
           <div
