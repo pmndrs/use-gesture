@@ -189,18 +189,19 @@ export default abstract class Recognizer<T extends GestureKey> {
     const { _intentional, _blocked } = intentionalityCheck
     const [_i0, _i1] = _intentional!
     const [_init0 = 0, _init1 = 0] = state._initial
+    const _movement = [_m0, _m1]
 
     /**
      * If the gesture has been blocked (from gesture specific checkIntentionality),
      * stop right there.
      */
-    if (_blocked) return intentionalityCheck
+    if (_blocked) return { ...intentionalityCheck, _movement }
 
     /**
      * The movement sent to the handler has 0 in its dimensions when intentionality is false.
      * It is calculated from the actual movement minus the threshold.
      */
-    let movement = [_i0 !== false ? _m0 - _i0 + _init0 : 0, _i1 !== false ? _m1 - _i1 + _init1 : 0] as Vector2
+    let movement = [_i0 !== false ? _m0 - _i0 : 0, _i1 !== false ? _m1 - _i1 : 0] as Vector2
     const offset = addV(movement, lastOffset)
 
     /**
@@ -208,11 +209,11 @@ export default abstract class Recognizer<T extends GestureKey> {
      * and offset can return within their bounds.
      */
     rubberband = _active ? rubberband : [0, 0]
-    movement = this.rubberband(movement, rubberband) // rubberbanded movement
+    movement = this.rubberband(addV(movement, [_init0, _init1]), rubberband) // rubberbanded movement
 
     return {
       ...intentionalityCheck,
-      _movement: [_m0, _m1],
+      _movement,
       movement,
       offset: this.rubberband(offset, rubberband), // rubberbanded offset
       delta: subV(movement, prevMovement),
