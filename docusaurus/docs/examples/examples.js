@@ -112,7 +112,7 @@ export function Initial({ setActive }) {
       setActive && setActive(down)
       set({ x: down ? mx : 0, immediate: down, config: { duration: 3000 } })
     },
-    { initial: usingInitial ? () => [x.get()] : [0, 0] }
+    { initial: usingInitial ? [() => x.get(), 0] : [0, 0] }
   )
   return (
     <>

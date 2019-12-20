@@ -8396,10 +8396,10 @@ react-toggle@^4.1.1:
   dependencies:
     classnames "^2.2.5"
 
-react-use-gesture@^7.0.0-beta.1:
-  version "7.0.0-beta.1"
-  resolved "https://registry.yarnpkg.com/react-use-gesture/-/react-use-gesture-7.0.0-beta.1.tgz#774cc51e14eaeac94ea771a53c2ea4b5a427d0b8"
-  integrity sha512-cozy1eaXFLj5lvtmx1vAISElGej84VwA/TALBF6EE1Jv5GSmStYqxrLOZGfyG1WJ+sCHjYMDOvouQOrG1JAMcQ==
+react-use-gesture@^7.0.0-beta.3:
+  version "7.0.0-beta.3"
+  resolved "https://registry.yarnpkg.com/react-use-gesture/-/react-use-gesture-7.0.0-beta.3.tgz#5769908b41fddf5db8b035b4327ce7b8ddcaba64"
+  integrity sha512-HwnB9d4BHyLIYQLj6gW+bnmincuhS97Ehqt8NHYPYHsvAfLk7oLaYTPLKotMAHNbJKBqa7dFYfwOcMZh8ZJuwQ==
 
 react@^16.8.4:
   version "16.12.0"
