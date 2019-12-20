@@ -65,7 +65,7 @@ module.exports = {
           ]
         }
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} React Spring. Built with Docusaurus.`
+      copyright: `Copyright © ${new Date().getFullYear()} React Spring. Built with Docusaurus. Illustrations by Vijay Verma.`
     }
   },
   presets: [
