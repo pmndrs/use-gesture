@@ -20,7 +20,7 @@ const features = [
     imageUrl: 'img/tools.svg',
     description: (
       <>
-        React use gesture allows you to implement advanced UI interactions with
+        React-use-gesture allows you to implement advanced UI interactions with
         just a few lines of code.
       </>
     )
@@ -36,12 +36,16 @@ const features = [
     )
   },
   {
-    title: 'Plays well with React spring!',
+    title: 'Plays well with any animation library',
     imageUrl: 'img/game.svg',
     description: (
       <>
-        React use gesture is part of the React spring ecosystem and operates
-        nicely with both React spring and React three fiber.
+        Any animation framework can work! React-use-gesture operates nicely with
+        both <a href="https://react-spring.io">React-spring</a> and{' '}
+        <a href="https://github.com/react-spring/react-three-fiber">
+          React-three-fiber
+        </a>
+        .
       </>
     )
   }
