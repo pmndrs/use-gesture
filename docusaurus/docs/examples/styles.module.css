@@ -16,6 +16,7 @@
   cursor: grab;
   -webkit-user-select: none;
   user-select: none;
+  touch-action: none;
 }
 
 .drag {
