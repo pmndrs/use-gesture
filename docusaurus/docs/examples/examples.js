@@ -69,7 +69,8 @@ export function Swipe({ setActive }) {
   const space = 100
 
   const { x } = useSpring({ x: position * space })
-  const bind = useDrag(({ down, swipe: [swipeX] }) => {
+  const bind = useDrag(({ movement, down, swipe: [swipeX], vxvy }) => {
+    !down && console.log(movement)
     setPosition(p => Math.min(Math.max(-1, p + swipeX), 1))
     setActive && setActive(down)
   })

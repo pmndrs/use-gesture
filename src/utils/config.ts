@@ -118,7 +118,7 @@ export function getInternalDragOptions(dragConfig: DragConfig = {}): InternalDra
   const defaultDragOptions: DragOptions = {
     filterTaps: false,
     swipeVelocity: 0.5,
-    swipeDistance: 100,
+    swipeDistance: 60,
     delay: false,
   }
 
