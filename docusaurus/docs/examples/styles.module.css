@@ -7,7 +7,7 @@
   border-radius: var(--ifm-global-radius);
   margin-bottom: var(--ifm-leading);
   position: relative;
-  z-index: 1000;
+  z-index: 10;
 }
 
 .easter {
