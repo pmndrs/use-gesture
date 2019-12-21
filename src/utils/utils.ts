@@ -1,4 +1,4 @@
-import { Fn } from '../types'
+import { Fn, Vector2 } from '../types'
 
 // blank function
 export function noop() {}
@@ -18,6 +18,6 @@ export function matchKeysFromObject<T extends object, K extends object>(obj: T, 
   return o
 }
 
-export function valueFn<T>(v: () => T | T) {
+export function valueFn(v: Vector2 | (() => Vector2)) {
   return typeof v === 'function' ? v() : v
 }
