@@ -12,10 +12,7 @@ export default function Example({ id, disableOverlay }) {
       {!disableOverlay && (
         <div className={cn(styles.overlay, { [styles.active]: active })} />
       )}
-      <div
-        className={cn(styles.example, { [styles[id]]: !!styles[id] })}
-        style={{ zIndex: active ? 10000 : 0 }}
-      >
+      <div className={cn(styles.example, { [styles[id]]: !!styles[id] })}>
         <Component setActive={setActive} />
       </div>
     </>
