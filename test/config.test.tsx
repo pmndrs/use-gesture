@@ -63,7 +63,7 @@ describe('testing derived config', () => {
           [-Infinity, Infinity],
         ],
         delay: 0,
-        swipeDistance: [100, 100],
+        swipeDistance: [60, 60],
         swipeVelocity: [0.5, 0.5],
         threshold: [0, 0],
         rubberband: [0, 0],
