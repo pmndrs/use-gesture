@@ -1,20 +1,20 @@
 import React from 'react'
 import { useSpring, animated } from 'react-spring'
 import { useDrag } from 'react-use-gesture'
-// import { toast } from 'react-toastify'
+import { toast } from 'react-toastify'
 
 import GUI, { initialConfig } from './GUI'
 
-// import 'react-toastify/dist/ReactToastify.css'
+import 'react-toastify/dist/ReactToastify.css'
 import styles from './styles.module.css'
 
-// toast.configure({
-//   position: 'bottom-right',
-//   pauseOnHover: false,
-//   draggable: false
-// })
+toast.configure({
+  position: 'bottom-right',
+  pauseOnHover: false,
+  draggable: false
+})
 
-export default function Example() {
+export default function Hero() {
   const [config, setConfig] = React.useState(initialConfig)
   const [props, set] = useSpring(() => ({ x: 0, y: 0, scale: 1 }))
 
@@ -42,9 +42,9 @@ export default function Example() {
       movement: [mx, my],
       offset: [x, y]
     }) => {
-      // if (click) toast('Click!')
-      // if (swipeX) toast(`Swipe ${swipeX > 0 ? 'Right' : 'Left'}`)
-      // if (swipeY) toast(`Swipe ${swipeY > 0 ? 'Bottom' : 'Top'}`)
+      if (click) toast('Click!')
+      if (swipeX) toast(`Swipe ${swipeX > 0 ? 'Right' : 'Left'}`)
+      if (swipeY) toast(`Swipe ${swipeY > 0 ? 'Bottom' : 'Top'}`)
 
       set({ x: down ? mx : 0, y: down ? my : 0, scale: down ? 1.2 : 1 })
     },

@@ -8,9 +8,9 @@ import DatGui, {
 
 export default ({ data = {}, onUpdate, style }) => (
   <DatGui data={data} onUpdate={onUpdate} style={style}>
-    <DatFolder title="Drag Detection">
-      <DatBoolean path="fliterTaps" label="Filter Taps" />
-      <DatNumber path="delay" label="Drag Delay (ms)" min={0} max={1000} />
+    <DatFolder title="Drag Detection" closed={false}>
+      {/* <DatBoolean path="fliterTaps" label="Filter Taps" /> */}
+      {/* <DatNumber path="delay" label="Drag Delay (ms)" min={0} max={1000} /> */}
       <DatNumber
         path="threshold"
         label="Int. Threshold"
@@ -20,10 +20,10 @@ export default ({ data = {}, onUpdate, style }) => (
       />
       <DatBoolean path="lockDirection" label="Lock direction" />
       <DatSelect path="axis" label="Axis" options={[undefined, 'x', 'y']} />
+      <DatBoolean path="activateBounds" label="Activate Bounds" />
     </DatFolder>
     {data.activateBounds ? (
       <DatFolder title="Bounds">
-        <DatBoolean path="activateBounds" label="Activate Bounds" />
         <DatNumber
           path="rubberband"
           label="Rubberband"
@@ -36,12 +36,8 @@ export default ({ data = {}, onUpdate, style }) => (
         <DatNumber path="bounds.right" label="Right" min={0} max={200} />
         <DatNumber path="bounds.left" label="Left" min={-200} max={0} />
       </DatFolder>
-    ) : (
-      <DatFolder title="Bounds">
-        <DatBoolean path="activateBounds" label="Activate Bounds" />
-      </DatFolder>
-    )}
-    <DatFolder title="Swipes">
+    ) : null}
+    <DatFolder title="Swipe Detection">
       <DatNumber
         path="swipeVel"
         label="Swipe Velocity"
@@ -56,11 +52,11 @@ export default ({ data = {}, onUpdate, style }) => (
 
 export const initialConfig = {
   axis: undefined,
-  delay: 0,
+  // delay: 0,
   lockDirection: false,
-  fliterTaps: true,
+  // fliterTaps: true,
   threshold: 10,
-  swipeDist: 100,
+  swipeDist: 60,
   swipeVel: 0.5,
   activateBounds: false,
   rubberband: 0.15,
