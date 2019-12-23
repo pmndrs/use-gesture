@@ -5,7 +5,10 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  cursor: url('https://uploads.codesandbox.io/uploads/user/b3e56831-8b98-4fee-b941-0e27f39883ab/Ad1_-cursor.png') 39 39, auto;
+  cursor: url('https://uploads.codesandbox.io/uploads/user/b3e56831-8b98-4fee-b941-0e27f39883ab/Ad1_-cursor.png')
+      39 39,
+    auto;
+  perspective: 720px;
 }
 
 .bounds {
@@ -14,14 +17,46 @@
 }
 
 .drag {
-  width: 80px;
-  height: 80px;
-  background: hotpink;
-  border-radius: 16px;
+  width: 240px;
+  height: 180px;
+  background: url('https://images.pexels.com/photos/915015/pexels-photo-915015.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500')
+    center / cover;
+  border-radius: 8px;
   touch-action: none;
   -webkit-user-select: none;
   user-select: none;
   position: absolute;
+  box-shadow: 0 8px 30px rgba(14, 21, 47, 0.3);
+  transition: box-shadow 200ms ease-out;
+  overflow: hidden;
+}
+
+.drag.shadow {
+  box-shadow: 0 45px 100px rgba(14, 21, 47, 0.2),
+    0 16px 40px rgba(14, 21, 47, 0.1);
+}
+
+.drag > div {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+}
+
+.drag > div:last-child {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 30px;
+  text-shadow: 0 0px 20px rgba(14, 21, 47, 0.2);
+  transition: text-shadow 200ms ease;
+  font-weight: bold;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.drag.shadow > div:last-child {
+  text-shadow: 0 0px 100px rgba(14, 21, 47, 0.6);
 }
 
 .gui {
