@@ -19,10 +19,10 @@ You can use it stand-alone, but to make the most of it you should combine it wit
 
 ```bash
 #Yarn
-yarn add react-use-gesture
+yarn add react-use-gesture@beta
 
 #NPM
-npm install --save react-use-gesture
+npm install --save react-use-gesture@beta
 ```
 
 ### [Full documentation website](https://use-gesture.netlify.com)

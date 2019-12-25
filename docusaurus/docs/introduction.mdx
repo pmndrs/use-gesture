@@ -26,14 +26,14 @@ You can use this library stand-alone, but to make the most of it you should comb
 <TabItem value="yarn">
 
 ```bash {1-100}
-yarn add react-use-gesture
+yarn add react-use-gesture@beta
 ```
 
 </TabItem>
 <TabItem value="npm">
 
 ```bash {1-100}
-npm install --save react-use-gesture
+npm install --save react-use-gesture@beta
 ```
 
 </TabItem>
@@ -61,6 +61,8 @@ function PullRelease() {
   return <animated.div {...bind()} style={{ x, y }} />
 }
 ```
+
+> All examples in this documentation use React spring v9, that you can install with the `next` tag: `react-spring@next`. v9 api is more convenient and allows for more compact, less distracting code.
 
 ### How does this work?
 

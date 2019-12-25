@@ -6,7 +6,8 @@ sidebar_label: FAQ
 
 ### Index
 
-- [Why use react-spring instead of React.useState?](#why-use-react-spring-instead-of-reactusestate)
+- [What is the difference the React-with-gesture library?](#what-is-the-difference-the-react-with-gesture-library)
+- [Why use `react-spring` instead of `React.useState`?](#why-use-react-spring-instead-of-reactusestate)
 - [What are the differences between using `use[Gesture]` hooks and adding listeners manually?](#what-are-the-differences-between-using-usegesture-hooks-and-adding-listeners-manually)
 - [Why `onMove` when `onDrag` already exists?](#why-onmove-when-ondrag-already-exists)
 - [Why `onWheel` and `onScroll`?](#why-onwheel-and-onscroll)
@@ -15,7 +16,13 @@ sidebar_label: FAQ
 - [Why is drag being triggered when I just click on an element?](#why-is-drag-being-triggered-when-i-just-click-on-an-element)
 - [Why am I getting warnings from `preventDefault()` after I pass `{passive:false}`](#why-am-i-getting-warnings-from-preventdefault-after-i-pass-passivefalse)
 
-### Why use react-spring instead of React.useState?
+### What is the difference the React-with-gesture library?
+
+`react-with-gesture` is the old name for `react-use-gesture` and is not maintained anymore[^1]. We decided to drop support for render props and focus on hooks as we believe they’re much more convenient. `react-with-gesture` was solely focused on drag, where `react-use-gesture` supports scroll, wheel, pinch and more.
+
+[^1]: it will be deprecated in a few days (26.12.19).
+
+### Why use `react-spring` instead of `React.useState`?
 
 Simply because setting state in the gesture handler would re-render the component on each gesture frame, which isn't always good for performance. React-spring lets us animate components without triggering renders. You could still use `useState` if you'd like though!
 
