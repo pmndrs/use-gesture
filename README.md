@@ -71,3 +71,5 @@ React-use-gesture exports several hooks that can handle different gestures:
 | `useWheel`   | Handles wheel events                       |
 | `usePinch`   | Handles the pinch gesture                  |
 | `useGesture` | Handles multiple gestures in one hook      |
+
+#### [More on the full documentation website...](https://use-gesture.netlify.com)
