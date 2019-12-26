@@ -68,7 +68,7 @@
   display: flex;
 }
 
-.ui.horizontal > *:not(:first-child) {
+.ui.horizontal>*:not(:first-child) {
   margin-left: 1em;
 }
 
@@ -77,7 +77,7 @@
   align-items: center;
 }
 
-.ui label > input {
+.ui label>input {
   margin-right: 1em;
 }
 
@@ -117,14 +117,14 @@
   opacity: 0.8;
 }
 
-.Threshold .drag > div {
+.Threshold .drag>div {
   height: 100%;
   width: 100%;
   border-radius: 16px;
   background: #91c9f97a;
 }
 
-.Threshold .drag > div > div {
+.Threshold .drag>div>div {
   background: #fff;
   padding: 0.4em;
   position: absolute;
@@ -135,8 +135,7 @@
   font-size: 0.7em;
 }
 
-.Bounds .drag,
-.Rubberband .drag {
+.Bounds .drag, .Rubberband .drag {
   position: absolute;
 }
 
@@ -146,10 +145,22 @@
   border: 4px solid var(--ifm-color-primary-darkest);
 }
 
-.Initial .drag,
-.Axis .drag,
-.Axis2 .drag,
-.FilterTaps .drag,
-.Delay .drag {
+.Initial .drag, .Axis .drag, .Axis2 .drag, .FilterTaps .drag, .Delay .drag {
   margin-top: 20px;
+}
+
+.TouchAction {
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.TouchAction .drag {
+  margin: 5px 0;
+  width: 100%;
+  border-radius: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-weight: bold;
 }

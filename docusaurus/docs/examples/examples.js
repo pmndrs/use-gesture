@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { useSpring, animated, to } from 'react-spring'
+import { useSpring, useSprings, animated, to } from 'react-spring'
 import { useDrag, useScroll, useGesture } from 'react-use-gesture'
 import cn from 'classnames'
 import styles from './styles.module.css'
@@ -468,4 +468,28 @@ export function Delay({ setActive }) {
       <animated.div className={styles.drag} {...bind()} style={style} />
     </>
   )
+}
+
+const colors = ['lightcoral', 'cadetblue', 'mediumpurple', 'darkorange']
+
+export function TouchAction() {
+  const [springs, set] = useSprings(colors.length, i => ({
+    x: 0,
+    background: colors[i]
+  }))
+  const bind = useDrag(
+    ({ down, movement: [x], args: [index] }) =>
+      set(i => i === index && { x: down ? x : 0 }),
+    { axis: 'x' }
+  )
+
+  return springs.map((style, i) => (
+    <animated.div
+      className={styles.drag}
+      {...bind(i)}
+      style={{ ...style, touchAction: 'pan-y' }}
+    >
+      ← Drag me →
+    </animated.div>
+  ))
 }
