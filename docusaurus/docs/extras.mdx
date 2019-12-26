@@ -22,6 +22,8 @@ In these situations you don't want the `body` of your page to scroll along with 
 
 Setting _`touch-action: pan-y`_ on your draggable element class or style indicates the browser should only react to vertical scrolling when interacting with the item.
 
+> If you don't want the browser scrolling either vertically or horizontally, set _`touch-action: none`_.
+
 ```jsx {3-12}
 function TouchActionExample() {
   const [springs, set] = useSprings(4, () => ({ x: 0 }))
@@ -40,7 +42,7 @@ function TouchActionExample() {
 
 In your drag options, you should then set [_`{axis:'x'}`_](options.md/#axis-xy-gestures-only). This will result in the browser natively canceling vertical scrolling when it detects movement intent on the horizontal axis, while your handler will trigger your horizontal logic. When movement intent is detected as vertical by the browser, it will allow your body to scroll, but the _`{axis:'x'}`_ option on the drag handler will prevent your item to move horizontally.
 
-> If you don't want the browser reacting at all, set _`touch-action: none`_.
+> Note that you can fail this behaviour by slooowly scrolling sideways and then firmly up or down. But it should work in most situations.
 
 ### Body Scroll Lock
 
