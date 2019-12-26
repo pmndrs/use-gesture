@@ -475,21 +475,27 @@ const colors = ['lightcoral', 'cadetblue', 'mediumpurple', 'darkorange']
 export function TouchAction() {
   const [springs, set] = useSprings(colors.length, i => ({
     x: 0,
+    opacity: 1,
+    moving: false,
     background: colors[i]
   }))
   const bind = useDrag(
     ({ down, movement: [x], args: [index] }) =>
-      set(i => i === index && { x: down ? x : 0, immediate: down }),
+      set(i => {
+        if (i === index)
+          return { x: down ? x : 0, moving: down, immediate: down }
+        else return { opacity: down ? 0.6 : 1 }
+      }),
     { axis: 'x' }
   )
 
-  return springs.map((style, i) => (
+  return springs.map(({ moving, ...style }, i) => (
     <animated.div
       className={styles.drag}
       {...bind(i)}
       style={{ ...style, touchAction: 'pan-y' }}
     >
-      ← Drag me →
+      {moving.to(m => (m ? 'body scroll is frozen' : '← Drag me →'))}
     </animated.div>
   ))
 }
