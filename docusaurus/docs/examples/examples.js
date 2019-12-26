@@ -491,6 +491,7 @@ export function TouchAction() {
 
   return springs.map(({ moving, ...style }, i) => (
     <animated.div
+      key={i}
       className={styles.drag}
       {...bind(i)}
       style={{ ...style, touchAction: 'pan-y' }}
