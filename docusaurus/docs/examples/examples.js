@@ -192,9 +192,9 @@ const bounds = { left: -100, right: 100, top: -50, bottom: 50 }
 export function Bounds({ setActive }) {
   const [{ x, y }, set] = useSpring(() => ({ x: 0, y: 0 }))
   const bind = useDrag(
-    ({ down, movement: [mx, my] }) => {
+    ({ down, offset: [ox, oy] }) => {
       setActive && setActive(down)
-      set({ x: down ? mx : 0, y: down ? my : 0, immediate: down })
+      set({ x: ox, y: oy, immediate: down })
     },
     { bounds }
   )
@@ -228,9 +228,9 @@ const closestLimit = (x, y) =>
 export function Rubberband({ setActive }) {
   const [{ x, y }, set] = useSpring(() => ({ x: 0, y: 0 }))
   const bind = useDrag(
-    ({ down, movement: [mx, my] }) => {
+    ({ down, offset: [ox, oy] }) => {
       setActive && setActive(down)
-      set({ x: down ? mx : 0, y: down ? my : 0, immediate: down })
+      set({ x: ox, y: oy, immediate: down })
     },
     { bounds, rubberband: true }
   )
