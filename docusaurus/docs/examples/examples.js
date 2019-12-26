@@ -479,7 +479,7 @@ export function TouchAction() {
   }))
   const bind = useDrag(
     ({ down, movement: [x], args: [index] }) =>
-      set(i => i === index && { x: down ? x : 0 }),
+      set(i => i === index && { x: down ? x : 0, immediate: down }),
     { axis: 'x' }
   )
 

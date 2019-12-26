@@ -10,9 +10,11 @@ These tips aren't specific to React-use-gesture but might come handy to anyone b
 
 ### `touch-action`
 
-[_`touch-action`_](https://developer.mozilla.org/en-US/docs/Web/CSS/touch-action) is a CSS property that sets how an element's region can be manipulated by a touchscreen user.
+Let's take the mailbox email list: panning vertically should scroll vertically through the emails, and dragging horizontally should unveil options such as delete and mark undread.
 
-In many cases you don't want the `body` of your page to scroll along with the user manipulating a draggable item. Your first instinct might be to prevent the event default action by calling _`event.preventDefault()`_ in your handler. But there is a simpler, more effective solution.
+In these situations you don't want the `body` of your page to scroll along with the user manipulating the item horizontally. Your first instinct might be to prevent the event default action by calling _`event.preventDefault()`_ in your handler. But there is a simpler, more effective solution, which has to do with a simple CSS property.
+
+[_`touch-action`_](https://developer.mozilla.org/en-US/docs/Web/CSS/touch-action) is a CSS property that sets how an element's region can be manipulated by a touchscreen user.
 
 > This demo only makes sense on mobile or when your browser inspector is set for touch devices.
 
@@ -37,6 +39,8 @@ function TouchActionExample() {
 ```
 
 In your drag options, you should then set [_`{axis:'x'}`_](options.md/#axis-xy-gestures-only). This will result in the browser natively canceling vertical scrolling when it detects movement intent on the horizontal axis, while your handler will trigger your horizontal logic. When movement intent is detected as vertical by the browser, it will allow your body to scroll, but the _`{axis:'x'}`_ option on the drag handler will prevent your item to move horizontally.
+
+> If you don't want the browser reacting at all, set _`touch-action: none`_.
 
 ### Body Scroll Lock
 
