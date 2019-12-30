@@ -138,7 +138,7 @@ function InitialExample() {
   const bind = useDrag(
     ({ down, movement: [mx] }) =>
       set({ x: down ? mx : 0, immediate: down, config: { duration: 3000 } }),
-    { initial: () => [x.get()] }
+    { initial: () => [x.get(), 0] }
   )
   return <animated.div {...bind()} style={{ x }} />
 }
