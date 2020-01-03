@@ -9,7 +9,7 @@ import DatGui, {
 export default ({ data = {}, onUpdate, style }) => (
   <DatGui data={data} onUpdate={onUpdate} style={style}>
     <DatFolder title="Drag Detection">
-      {/* <DatBoolean path="fliterTaps" label="Filter Taps" /> */}
+      {/* <DatBoolean path="filterTaps" label="Filter Taps" /> */}
       {/* <DatNumber path="delay" label="Drag Delay (ms)" min={0} max={1000} /> */}
       <DatNumber
         path="threshold"
@@ -54,7 +54,7 @@ export const initialConfig = {
   axis: undefined,
   // delay: 0,
   lockDirection: false,
-  // fliterTaps: true,
+  // filterTaps: true,
   threshold: 10,
   swipeDist: 60,
   swipeVel: 0.5,
