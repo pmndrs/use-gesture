@@ -66,13 +66,9 @@ export default class ScrollRecognizer extends CoordinatesRecognizer<'scroll'> {
     this.fireGestureHandler()
   }
 
-  onScrollEnd = (event: UseGestureEvent): void => {
+  onScrollEnd = (): void => {
     this.state._active = false
-
-    this.updateGestureState({
-      event,
-      ...this.getMovement(this.state.values),
-    })
+    this.updateGestureState(this.getMovement(this.state.values))
     this.fireGestureHandler()
   }
 

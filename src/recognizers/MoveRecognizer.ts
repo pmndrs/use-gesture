@@ -59,13 +59,10 @@ export default class MoveRecognizer extends CoordinatesRecognizer<'move'> {
     this.fireGestureHandler()
   }
 
-  onMoveEnd = (event: UseGestureEvent): void => {
+  onMoveEnd = (): void => {
     this.state._active = false
 
-    this.updateGestureState({
-      event,
-      ...this.getMovement(this.state.values),
-    })
+    this.updateGestureState(this.getMovement(this.state.values))
     this.fireGestureHandler()
   }
 
@@ -89,7 +86,7 @@ export default class MoveRecognizer extends CoordinatesRecognizer<'move'> {
   }
 
   onPointerLeave = (event: UseGestureEvent): void => {
-    if ('move' in this.controller.handlers) this.onMoveEnd(event)
+    if ('move' in this.controller.handlers) this.onMoveEnd()
 
     this.controller.state.shared.hovering = false
 

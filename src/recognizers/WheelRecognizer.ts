@@ -73,13 +73,9 @@ export default class WheelRecognizer extends CoordinatesRecognizer<'wheel'> {
     this.fireGestureHandler()
   }
 
-  onWheelEnd = (event: UseGestureEvent): void => {
+  onWheelEnd = (): void => {
     this.state._active = false
-
-    this.updateGestureState({
-      event,
-      ...this.getMovement(this.state.values),
-    })
+    this.updateGestureState(this.getMovement(this.state.values))
     this.fireGestureHandler()
   }
 
