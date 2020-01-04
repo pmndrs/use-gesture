@@ -75,7 +75,7 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
     this.updateGestureState({
       ...startState,
       ...this.getMovement(values, startState),
-      cancel: () => this.onCancel(event),
+      cancel: () => this.onCancel(),
     })
 
     this.fireGestureHandler()
@@ -112,7 +112,7 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
       ...this.getGenericPayload(event),
       ...kinematics,
       _isTap,
-      cancel: () => this.onCancel(event),
+      cancel: () => this.onCancel(),
     })
 
     this.fireGestureHandler()
@@ -162,9 +162,11 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
     if (this.controller.config.pointer) this.removePointers()
   }
 
-  onCancel = (event: UseGestureEvent): void => {
+  onCancel = (): void => {
     this.updateGestureState({ canceled: true, cancel: noop })
-    requestAnimationFrame(() => this.onDragEnd(event))
+    this.state._active = false
+    this.updateSharedState({ down: false, buttons: 0, touches: 0 })
+    requestAnimationFrame(() => this.fireGestureHandler())
   }
 
   addBindings(): void {

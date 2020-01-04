@@ -40,7 +40,7 @@ export default class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
       ...startState,
       ...this.getMovement(values, startState),
       origin,
-      cancel: () => this.onCancel(event),
+      cancel: () => this.onCancel(),
     })
 
     this.fireGestureHandler()
@@ -61,7 +61,7 @@ export default class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
       ...this.getGenericPayload(event),
       ...kinematics,
       origin,
-      cancel: () => this.onCancel(event),
+      cancel: () => this.onCancel(),
     })
 
     this.fireGestureHandler()
@@ -78,9 +78,12 @@ export default class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
     this.fireGestureHandler()
   }
 
-  onCancel = (event: UseGestureEvent): void => {
+  onCancel = (): void => {
+    this.state._active = false
     this.updateGestureState({ canceled: true, cancel: noop })
-    requestAnimationFrame(() => this.onPinchEnd(event))
+    this.updateSharedState({ down: false, touches: 0 })
+
+    requestAnimationFrame(() => this.fireGestureHandler())
   }
   /**
    * PINCH WITH WEBKIT GESTURES
@@ -102,7 +105,7 @@ export default class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
     this.updateGestureState({
       ...startState,
       ...this.getMovement(values, startState),
-      cancel: () => this.onCancel(event),
+      cancel: () => this.onCancel(),
     })
 
     this.fireGestureHandler()
@@ -124,7 +127,7 @@ export default class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
     this.updateGestureState({
       ...this.getGenericPayload(event),
       ...kinematics,
-      cancel: () => this.onCancel(event),
+      cancel: () => this.onCancel(),
     })
 
     this.fireGestureHandler()
