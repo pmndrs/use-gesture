@@ -216,14 +216,21 @@ describe.each([
     expect(getByTestId(`${prefix}drag-tap`)).toHaveTextContent('false')
   })
 
-  test(`filtering clicks should fire a click if pointer has moved less than 3px`, () => {
-    fireEvent.mouseDown(element, { clientX: 0, clientY: 0 })
+  test(`filtering clicks should fire a click if pointer has moved less than 3px`, async () => {
+    let event = createEvent.mouseDown(element, { clientX: 0, clientY: 0 })
+    fireEvent(element, event)
+    delta_t = event.timeStamp
     fireEvent.mouseMove(window, { clientX: 2, clientY: 1, buttons: 1 })
     expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('false')
     expect(getByTestId(`${prefix}drag-tap`)).toHaveTextContent('false')
-    fireEvent.mouseUp(window)
-    expect(getByTestId(`${prefix}drag-tap`)).toHaveTextContent('true')
-    expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('false')
+    await later(() => {
+      event = createEvent.mouseUp(window)
+      delta_t = event.timeStamp - delta_t
+      fireEvent(window, event)
+      expect(getByTestId(`${prefix}drag-tap`)).toHaveTextContent('true')
+      expect(getByTestId(`${prefix}drag-elapsedTime`)).toHaveTextContent(String(delta_t))
+      expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('false')
+    }, 200)
   })
 
   test(`bounds should limit both offset and movement`, () => {

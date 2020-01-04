@@ -73,6 +73,7 @@ export default class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
 
     this.updateGestureState({
       event,
+      ...this.getGenericPayload(event),
       ...this.getMovement(this.state.values),
     })
     this.fireGestureHandler()
@@ -140,6 +141,7 @@ export default class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
 
     this.updateGestureState({
       event,
+      ...this.getGenericPayload(event),
       ...this.getMovement(this.state.values),
     })
     this.fireGestureHandler()

@@ -120,19 +120,22 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
 
   onDragEnd = (event: UseGestureEvent): void => {
     this.state._active = false
-    this.updateSharedState({
-      down: false,
-      buttons: 0,
-      touches: 0,
-    })
+    this.updateSharedState({ down: false, buttons: 0, touches: 0 })
 
     const {
       _isTap,
-      elapsedTime,
-      movement: [mx, my],
+      values,
       velocities: [vx, vy],
+      movement: [mx, my],
       _intentional: [ix, iy],
     } = this.state
+
+    const endState = {
+      ...this.getGenericPayload(event),
+      ...this.getMovement(values),
+    }
+
+    const { elapsedTime } = endState
 
     const {
       swipeVelocity: [svx, svy],
@@ -148,7 +151,7 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
 
     this.updateGestureState({
       event,
-      ...this.getMovement(this.state.values),
+      ...endState,
       tap: _isTap,
       swipe,
     })
