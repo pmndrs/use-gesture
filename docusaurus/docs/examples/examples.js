@@ -351,9 +351,9 @@ export function FilterTaps({ setActive }) {
   const [{ x, y }, set] = useSpring(() => ({ x: 0, y: 0 }))
   const [status, setStatus] = useState('idle')
   const bind = useDrag(
-    ({ down, movement: [mx, my], tap }) => {
+    ({ down, movement: [mx, my], tap, elapsedTime }) => {
       if (tap) {
-        setStatus('tap registered')
+        setStatus(`tap registered in ${~~elapsedTime}ms`)
         setTimeout(() => setStatus('idle'), 1000)
         return
       }
