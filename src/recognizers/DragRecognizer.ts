@@ -32,7 +32,7 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
   private removePointers = () => {
     const { currentTarget, pointerId } = this.state
     // @ts-ignore
-    currentTarget.releasePointerCapture(pointerId)
+    if (currentTarget) currentTarget.releasePointerCapture(pointerId)
   }
 
   private setListeners = () => {
