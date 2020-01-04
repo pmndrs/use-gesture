@@ -231,8 +231,8 @@ export interface CommonGestureState {
   first: boolean
   last: boolean
   active: boolean
-  startTime?: number
-  timeStamp?: number
+  startTime: number
+  timeStamp: number
   elapsedTime: number
   cancel?(): void
   canceled: boolean
