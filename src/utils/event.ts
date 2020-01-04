@@ -1,5 +1,9 @@
 import { Fn, EventOptions, UseGestureEvent, Vector2, WebKitGestureEvent } from '../types'
 
+const isBrowser = typeof window !== 'undefined'
+
+export const supportsTouchEvents = () => isBrowser && window.ontouchstart === null
+
 const setListeners = (add: boolean) => (el: EventTarget, listeners: [string, Fn][], options: EventOptions): void => {
   const action = add ? 'addEventListener' : 'removeEventListener'
   listeners.forEach(([eventName, fn]) => el[action](eventName, fn, options))

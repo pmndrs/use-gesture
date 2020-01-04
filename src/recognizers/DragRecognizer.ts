@@ -3,7 +3,7 @@ import CoordinatesRecognizer from './CoordinatesRecognizer'
 import Controller from '../Controller'
 import { UseGestureEvent, Fn, StateKey, IngKey } from '../types'
 import { noop } from '../utils/utils'
-import { getPointerEventValues, getGenericEventData } from '../utils/event'
+import { getPointerEventValues, getGenericEventData, supportsTouchEvents } from '../utils/event'
 import { calculateDistance } from '../utils/math'
 
 const TAP_DISTANCE_THRESHOLD = 3
@@ -25,25 +25,28 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
   private setPointers = (event: UseGestureEvent) => {
     const { currentTarget, pointerId } = event as PointerEvent
     // @ts-ignore
-    currentTarget.setPointerCapture(pointerId)
+    if (currentTarget) currentTarget.setPointerCapture(pointerId)
     this.updateGestureState({ currentTarget, pointerId })
   }
 
   private removePointers = () => {
     const { currentTarget, pointerId } = this.state
     // @ts-ignore
-    currentTarget.releasePointerCapture(pointerId)
+    if (currentTarget) currentTarget.releasePointerCapture(pointerId)
   }
 
   private setListeners = () => {
     this.removeWindowListeners()
-    const dragListeners: [string, Fn][] = [
-      ['mousemove', this.onDragChange],
-      ['touchmove', this.onDragChange],
-      ['mouseup', this.onDragEnd],
-      ['touchend', this.onDragEnd],
-      ['touchcancel', this.onDragEnd],
-    ]
+    const dragListeners: [string, Fn][] = supportsTouchEvents()
+      ? [
+          ['touchmove', this.onDragChange],
+          ['touchend', this.onDragEnd],
+          ['touchcancel', this.onDragEnd],
+        ]
+      : [
+          ['mousemove', this.onDragChange],
+          ['mouseup', this.onDragEnd],
+        ]
     this.addWindowListeners(dragListeners)
   }
 
@@ -178,7 +181,8 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
       this.controller.addBindings('onPointerMove', this.onDragChange)
       this.controller.addBindings(['onPointerUp', 'onPointerCancel'], this.onDragEnd)
     } else {
-      this.controller.addBindings(['onMouseDown', 'onTouchStart'], this.onDragStart)
+      if (supportsTouchEvents()) this.controller.addBindings('onTouchStart', this.onDragStart)
+      else this.controller.addBindings('onMouseDown', this.onDragStart)
     }
   }
 }
