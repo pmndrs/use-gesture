@@ -59,6 +59,10 @@ module.exports = {
           title: 'Community',
           items: [
             {
+              label: 'GitHub',
+              href: 'https://github.com/react-spring/react-use-gesture/'
+            },
+            {
               label: 'Spectrum',
               href: 'https://spectrum.chat/react-spring'
             }
