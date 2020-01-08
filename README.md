@@ -1,6 +1,6 @@
 # react-use-gesture
 
-![npm (tag)](https://img.shields.io/npm/v/react-use-gesture/beta) ![npm bundle size](https://img.shields.io/bundlephobia/minzip/react-use-gesture/7.0.0-beta.6) ![NPM](https://img.shields.io/npm/l/react-use-gesture) ![Travis (.org) branch](https://img.shields.io/travis/react-spring/react-use-gesture/master)
+![npm (tag)](https://img.shields.io/npm/v/react-use-gesture/beta) ![npm bundle size](https://img.shields.io/bundlephobia/minzip/react-use-gesture/7.0.0-beta.9) ![NPM](https://img.shields.io/npm/l/react-use-gesture) ![Travis (.org) branch](https://img.shields.io/travis/react-spring/react-use-gesture/master)
 
 React-use-gesture is a hook that lets you bind richer mouse and touch events to any component or view. With the data you receive, it becomes trivial to set up gestures, and often takes no more than a few lines of code.
 
@@ -16,6 +16,8 @@ You can use it stand-alone, but to make the most of it you should combine it wit
 </p>
 
 <p align="middle"><i>The demos are real click them!</i></p>
+
+## ⚠️ This is a beta version. For the documentation of the stable release (v6), [please click here](https://github.com/react-spring/react-use-gesture/blob/v6/README.md).
 
 ```bash
 #Yarn
