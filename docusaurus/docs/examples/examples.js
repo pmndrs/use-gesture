@@ -340,7 +340,7 @@ export function LockDirection({ setActive }) {
   const bind = useDrag(
     ({ down, movement: [mx, my] }) => {
       setActive && setActive(down)
-      set({ x: down ? mx : 0, y: down ? my : 0 })
+      set({ x: down ? mx : 0, y: down ? my : 0, immediate: down })
     },
     { lockDirection: true }
   )
@@ -360,7 +360,7 @@ export function FilterTaps({ setActive }) {
       setStatus(down ? 'dragging' : 'idle')
 
       setActive && setActive(down)
-      set({ x: down ? mx : 0, y: down ? my : 0, immediate: down })
+      set({ x: down ? mx : 0, y: down ? my : 0 })
     },
     { filterTaps: true }
   )
