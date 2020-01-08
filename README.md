@@ -37,7 +37,6 @@ npm install --save react-use-gesture@beta
 - [Gesture State](https://use-gesture.netlify.com/docs/state)
 - [Gesture Options](https://use-gesture.netlify.com/docs/options)
 - [Utilities](https://use-gesture.netlify.com/docs/utilities)
-- [Utilities](https://use-gesture.netlify.com/docs/utilities)
 - [FAQ](https://use-gesture.netlify.com/docs/faq)
 
 ### Simple example
