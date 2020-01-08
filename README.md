@@ -17,7 +17,9 @@ You can use it stand-alone, but to make the most of it you should combine it wit
 
 <p align="middle"><i>The demos are real click them!</i></p>
 
-## ⚠️ This is a beta version. For the documentation of the stable release (v6), [please click here](https://github.com/react-spring/react-use-gesture/blob/v6/README.md).
+## ⚠️ This is a beta version.
+
+### [For the documentation of the stable release (v6), please click here.](https://github.com/react-spring/react-use-gesture/blob/v6/README.md)
 
 ```bash
 #Yarn
