@@ -64,6 +64,7 @@ describe.each([
     await wait(() => {
       expect(getByTestId(`${prefix}wheel-last`)).toHaveTextContent('true')
       expect(getByTestId(`${prefix}wheel-active`)).toHaveTextContent('false')
+      expect(getByTestId(`${prefix}wheel-vxvy`)).toHaveTextContent('0,0')
       expect(getByTestId(`${prefix}wheel-wheeling`)).toHaveTextContent('false')
     })
   })

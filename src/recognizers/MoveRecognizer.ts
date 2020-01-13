@@ -62,7 +62,7 @@ export default class MoveRecognizer extends CoordinatesRecognizer<'move'> {
   onMoveEnd = (): void => {
     this.state._active = false
 
-    this.updateGestureState(this.getMovement(this.state.values))
+    this.updateGestureState({ ...this.getMovement(this.state.values), velocities: [0, 0] })
     this.fireGestureHandler()
   }
 

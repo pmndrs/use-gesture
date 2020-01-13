@@ -59,11 +59,12 @@ describe.each([
   })
 
   test('the last mouseMove event should debounce and terminate the gesture', async () => {
-    await wait(() => [
-      expect(getByTestId(`${prefix}move-last`)).toHaveTextContent('true'),
-      expect(getByTestId(`${prefix}move-active`)).toHaveTextContent('false'),
-      expect(getByTestId(`${prefix}move-moving`)).toHaveTextContent('false'),
-    ])
+    await wait(() => {
+      expect(getByTestId(`${prefix}move-last`)).toHaveTextContent('true')
+      expect(getByTestId(`${prefix}move-active`)).toHaveTextContent('false')
+      expect(getByTestId(`${prefix}move-vxvy`)).toHaveTextContent('0,0')
+      expect(getByTestId(`${prefix}move-moving`)).toHaveTextContent('false')
+    })
   })
 
   test('terminating the gesture should fire onMoveEnd', async () => {

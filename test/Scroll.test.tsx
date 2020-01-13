@@ -65,11 +65,12 @@ describe.each([
   })
 
   test('the last scroll event should debounce and terminate the gesture', async () => {
-    await wait(() => [
-      expect(getByTestId(`${prefix}scroll-last`)).toHaveTextContent('true'),
-      expect(getByTestId(`${prefix}scroll-active`)).toHaveTextContent('false'),
-      expect(getByTestId(`${prefix}scroll-scrolling`)).toHaveTextContent('false'),
-    ])
+    await wait(() => {
+      expect(getByTestId(`${prefix}scroll-last`)).toHaveTextContent('true')
+      expect(getByTestId(`${prefix}scroll-active`)).toHaveTextContent('false')
+      expect(getByTestId(`${prefix}scroll-vxvy`)).toHaveTextContent('0,0')
+      expect(getByTestId(`${prefix}scroll-scrolling`)).toHaveTextContent('false')
+    })
   })
 
   test('terminating the gesture should fire onScrollEnd', async () => {
