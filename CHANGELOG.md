@@ -1,5 +1,13 @@
 # Changelog
 
+## 7.0.1 Release
+
+**Summary:** Fix exporting the `useHover` hook.
+
+### Fixed
+
+1. Exports the `useHover` hook.
+
 ## 7.0.0 Release
 
 **Summary:** Major release introducing new features and options renaming. This is a full rewrite.
@@ -8,16 +16,17 @@
 
 1. Options for `useGesture` are now separated per gesture;
 2. Options for event are now structured differently.
-3. `dragDelay` is now renamed `delay`. 
+3. `dragDelay` is now renamed `delay`.
 
 #### Before
+
 ```jsx
 useGesture(fn, {
   enabled: true,
   event: { passive: true, capture: false },
   pointerEvents: true,
   wheel: false,
-  dragDelay: 100
+  dragDelay: 100,
 })
 ```
 
@@ -28,18 +37,18 @@ useGesture(fn, {
   enabled: true,
   eventOptions: { passive: true, capture: false, pointer: true },
   wheel: {
-    enabled: false
+    enabled: false,
   },
   drag: {
-    delay: 100
-  }
+    delay: 100,
+  },
 })
 
 // or
 
-useDrag(fn, { 
-    eventOptions: { passive: true, capture: false, pointer: true },
-    delay: 100
+useDrag(fn, {
+  eventOptions: { passive: true, capture: false, pointer: true },
+  delay: 100,
 })
 ```
 
@@ -64,7 +73,6 @@ useDrag(fn, {
 
 1. Native handlers now update with state [#117](https://github.com/react-spring/react-use-gesture/issues/117)
 2. When a ref is null on unmount, bind now returns the correct cleaning function [#115](https://github.com/react-spring/react-use-gesture/issues/115)
-
 
 ## 6.0.14 Release
 
@@ -157,10 +165,9 @@ useDrag(fn, {
 
 1. Pointer Events are supported again with `config: { pointerEvents: true }`.
 
-
 ### Breaking
-1. Removed `transform` function: it was originally introduced for `react-three-fiber` support but resulted useless eventually.
 
+1. Removed `transform` function: it was originally introduced for `react-three-fiber` support but resulted useless eventually.
 
 ## 6.0.1 Release
 
