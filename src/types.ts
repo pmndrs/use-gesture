@@ -70,6 +70,7 @@ export type UsePinchConfig = Partial<GenericOptions> & DragConfig
 export type UseWheelConfig = Partial<GenericOptions> & CoordinatesConfig
 export type UseScrollConfig = Partial<GenericOptions> & CoordinatesConfig
 export type UseMoveConfig = Partial<GenericOptions> & CoordinatesConfig
+export type UseHoverConfig = Partial<GenericOptions>
 export type UseGestureConfig = Partial<GenericOptions> & {
   drag?: DragConfig
   wheel?: CoordinatesConfig
@@ -197,7 +198,7 @@ export type IngKey = 'hovering' | 'scrolling' | 'wheeling' | 'dragging' | 'movin
 
 export type CoordinatesKey = 'drag' | 'wheel' | 'move' | 'scroll'
 export type DistanceAngleKey = 'pinch'
-export type GestureKey = CoordinatesKey | DistanceAngleKey
+export type GestureKey = CoordinatesKey | DistanceAngleKey | 'hover'
 export type StateKey<T extends GestureKey = GestureKey> = T extends 'hover' ? 'move' : T
 
 export type SharedGestureState = { [ingKey in IngKey]: boolean } & {
@@ -270,12 +271,12 @@ export type State = { shared: SharedGestureState } & {
   pinch: CommonGestureState & DistanceAngle
 }
 
-export type GestureState<T extends GestureKey> = State[StateKey<T>]
-export type PartialGestureState<T extends GestureKey> = Partial<GestureState<T>>
+export type GestureState<T extends StateKey> = State[T]
+export type PartialGestureState<T extends StateKey> = Partial<GestureState<T>>
 
-export type FullGestureState<T extends GestureKey> = SharedGestureState & State[StateKey<T>]
+export type FullGestureState<T extends StateKey> = SharedGestureState & State[T]
 
-export type Handler<T extends GestureKey> = (state: FullGestureState<T>) => any | void
+export type Handler<T extends GestureKey> = (state: FullGestureState<StateKey<T>>) => any | void
 
 export type HandlerKey = 'onDrag' | 'onPinch' | 'onWheel' | 'onMove' | 'onScroll' | 'onHover'
 
@@ -295,13 +296,13 @@ export type UserHandlers = {
   onScroll: Handler<'scroll'>
   onScrollStart: Handler<'scroll'>
   onScrollEnd: Handler<'scroll'>
-  onHover: Handler<'move'>
+  onHover: Handler<'hover'>
 }
 
-export type InternalHandlers = { [Key in GestureKey]: Handler<Key> } & { hover: Handler<'move'> }
+export type InternalHandlers = { [Key in GestureKey]: Handler<Key> }
 
-export type RecognizerClass<T extends GestureKey> = { new (controller: Controller, args: any[]): Recognizer<T> }
-// export type RecognizerClasses = RecognizerClass<GestureKey>[]
+export type RecognizerClass<T extends StateKey> = { new (controller: Controller, args: any[]): Recognizer<T> }
+
 export type RecognizerClasses = (
   | RecognizerClass<'drag'>
   | RecognizerClass<'pinch'>

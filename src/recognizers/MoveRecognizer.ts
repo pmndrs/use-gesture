@@ -1,11 +1,10 @@
 import {} from 'react'
 import CoordinatesRecognizer from './CoordinatesRecognizer'
 import Controller from '../Controller'
-import { UseGestureEvent, StateKey, IngKey } from '../types'
+import { UseGestureEvent, IngKey } from '../types'
 import { getGenericEventData, getPointerEventValues } from '../utils/event'
 
 export default class MoveRecognizer extends CoordinatesRecognizer<'move'> {
-  stateKey = 'move' as StateKey<'move'>
   ingKey = 'moving' as IngKey
 
   constructor(controller: Controller, args: any[]) {

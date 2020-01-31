@@ -1,7 +1,7 @@
 import { TouchEvent, WheelEvent } from 'react'
 import DistanceAngleRecognizer from './DistanceAngleRecognizer'
 import Controller from '../Controller'
-import { UseGestureEvent, StateKey, IngKey, Vector2, WebKitGestureEvent } from '../types'
+import { UseGestureEvent, IngKey, Vector2, WebKitGestureEvent } from '../types'
 import { noop } from '../utils/utils'
 import {
   getGenericEventData,
@@ -12,7 +12,6 @@ import {
 } from '../utils/event'
 
 export default class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
-  stateKey = 'pinch' as StateKey<'pinch'>
   ingKey = 'pinching' as IngKey
 
   constructor(controller: Controller, args: any[]) {

@@ -1,7 +1,7 @@
 import { PointerEvent } from 'react'
 import CoordinatesRecognizer from './CoordinatesRecognizer'
 import Controller from '../Controller'
-import { UseGestureEvent, Fn, StateKey, IngKey } from '../types'
+import { UseGestureEvent, Fn, IngKey } from '../types'
 import { noop } from '../utils/utils'
 import { getPointerEventValues, getGenericEventData, supportsTouchEvents } from '../utils/event'
 import { calculateDistance } from '../utils/math'
@@ -10,7 +10,6 @@ const TAP_DISTANCE_THRESHOLD = 3
 const SWIPE_MAX_ELAPSED_TIME = 220
 
 export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
-  stateKey = 'drag' as StateKey<'drag'>
   ingKey = 'dragging' as IngKey
 
   constructor(controller: Controller, args: any[]) {

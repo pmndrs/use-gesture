@@ -1,12 +1,11 @@
 import {} from 'react'
 import CoordinatesRecognizer from './CoordinatesRecognizer'
 import Controller from '../Controller'
-import { UseGestureEvent, StateKey, IngKey } from '../types'
+import { UseGestureEvent, IngKey } from '../types'
 import { getGenericEventData, getScrollEventValues } from '../utils/event'
 import { calculateDistance, calculateDirection } from '../utils/math'
 
 export default class ScrollRecognizer extends CoordinatesRecognizer<'scroll'> {
-  stateKey = 'scroll' as StateKey<'scroll'>
   ingKey = 'scrolling' as IngKey
 
   constructor(controller: Controller, args: any[]) {

@@ -1,13 +1,11 @@
 import Controller from '../Controller'
 import {
   StateKey,
-  GestureKey,
   SharedGestureState,
   Fn,
   UseGestureEvent,
   IngKey,
   InternalConfig,
-  Handler,
   GestureState,
   PartialGestureState,
   Vector2,
@@ -26,25 +24,24 @@ import { valueFn } from '../utils/utils'
  * @abstract
  * @type {StateKey<T>} whether the Recognizer should deal with coordinates or distance / angle
  */
-export default abstract class Recognizer<T extends GestureKey> {
-  protected abstract stateKey: StateKey<T> // the state key used by the recognizer (the same as gesture key for all gestures but hover)
+export default abstract class Recognizer<T extends StateKey> {
   protected abstract ingKey: IngKey // dragging, scrolling, etc.
 
   /**
    * Creates an instance of a gesture recognizer.
-   * @param gestureKey drag, move, hover, pinch, etc.
+   * @param stateKey drag, move, pinch, etc.
    * @param controller the controller attached to the gesture
    * @param [args] the args that should be passed to the gesture handler
    */
   constructor(
-    protected readonly gestureKey: T,
+    protected readonly stateKey: T,
     protected readonly controller: Controller,
     protected readonly args: any[] = []
   ) {}
 
   // Returns the gesture config
   protected get config(): NonNullable<InternalConfig[T]> {
-    return this.controller.config[this.gestureKey]!
+    return this.controller.config[this.stateKey]!
   }
 
   // Is the gesture enabled
@@ -58,8 +55,8 @@ export default abstract class Recognizer<T extends GestureKey> {
   }
 
   // Returns the gesture handler
-  protected get handler(): Handler<T> {
-    return this.controller.handlers[this.gestureKey] as Handler<T>
+  protected get handler() {
+    return this.controller.handlers[this.stateKey]!
   }
 
   // Conveninence method to update the shared state
@@ -276,8 +273,9 @@ export default abstract class Recognizer<T extends GestureKey> {
       ...this.controller.state.shared,
       ...this.state,
       ...this.mapStateValues(this.state), // Sets xy or da to the gesture state values
-    }
+    } as FullGestureState<T>
 
+    // @ts-ignore
     const newMemo = this.handler(state)
 
     // Sets memo to the returned value of the handler (unless it's not undefined)
