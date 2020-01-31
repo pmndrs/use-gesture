@@ -6,7 +6,7 @@ import { getInternalGenericOptions, getInternalCoordinatesOptions } from '../uti
 /**
  * @public
  *
- * Moveok.
+ * Move hook.
  *
  * @param {Handler<'move'>} handler - the function fired every time the move gesture updates
  * @param {(Config | {})} [config={}] - the config object including generic options and move options
