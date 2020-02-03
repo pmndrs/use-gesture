@@ -68,41 +68,43 @@ export default class MoveRecognizer extends CoordinatesRecognizer<'move'> {
   onPointerEnter = (event: UseGestureEvent): void => {
     this.controller.state.shared.hovering = true
     if (!this.controller.config.enabled) return
-    if ('move' in this.controller.handlers) this.onMoveStart(event)
 
-    if (!this.controller.config.hover!.enabled) return
+    if (this.controller.config.hover!.enabled) {
+      const { values } = getPointerEventValues(event)
 
-    const { values } = getPointerEventValues(event)
+      const state = {
+        ...this.controller.state.shared,
+        ...this.state,
+        ...this.getGenericPayload(event, true),
+        values,
+        active: true,
+        hovering: true,
+      }
 
-    const state = {
-      ...this.controller.state.shared,
-      ...this.state,
-      ...this.getGenericPayload(event, true),
-      values,
-      active: true,
-      hovering: true,
+      this.controller.handlers.hover!({ ...state, ...this.mapStateValues(state) })
     }
 
-    this.controller.handlers.hover!({ ...state, ...this.mapStateValues(state) })
+    if ('move' in this.controller.handlers) this.onMoveStart(event)
   }
 
   onPointerLeave = (event: UseGestureEvent): void => {
     this.controller.state.shared.hovering = false
-    if ('move' in this.controller.handlers) this.onMoveEnd()
 
-    if (!this.controller.config.hover!.enabled) return
+    if (this.controller.config.hover!.enabled) {
+      const { values } = getPointerEventValues(event)
 
-    const { values } = getPointerEventValues(event)
+      const state = {
+        ...this.controller.state.shared,
+        ...this.state,
+        ...this.getGenericPayload(event),
+        values,
+        active: false,
+      }
 
-    const state = {
-      ...this.controller.state.shared,
-      ...this.state,
-      ...this.getGenericPayload(event),
-      values,
-      active: false,
+      this.controller.handlers.hover!({ ...state, ...this.mapStateValues(state) })
     }
 
-    this.controller.handlers.hover!({ ...state, ...this.mapStateValues(state) })
+    if ('move' in this.controller.handlers) this.onMoveEnd()
   }
 
   addBindings(): void {

@@ -1,5 +1,13 @@
 # Changelog
 
+## 7.0.2 Release
+
+**Summary:** `onHover` fires before `onMove`.
+
+### Fixed
+
+1. `onHover` fires before `onMove`.
+
 ## 7.0.1 Release
 
 **Summary:** Fix exporting the `useHover` hook.
