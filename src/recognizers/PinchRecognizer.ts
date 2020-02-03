@@ -7,7 +7,7 @@ import {
   getGenericEventData,
   getTwoTouchesEventData,
   getWheelEventValues,
-  gestureEventSupported,
+  supportsGestureEvents,
   getWebkitGestureEventValues,
 } from '../utils/event'
 
@@ -240,7 +240,7 @@ export default class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
   }
 
   addBindings(): void {
-    if (gestureEventSupported()) {
+    if (supportsGestureEvents()) {
       this.controller.addBindings('onGestureStart', this.onGestureStart)
       this.controller.addBindings('onGestureChange', this.onGestureChange)
       this.controller.addBindings(['onGestureEnd', 'onTouchCancel'], this.onGestureEnd)

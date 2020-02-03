@@ -13,7 +13,7 @@ const setListeners = (add: boolean) => (el: EventTarget, listeners: [string, Fn]
  * Whether the browser supports GestureEvent (ie Safari)
  * @returns true if the browser supports gesture event
  */
-export function gestureEventSupported(): boolean {
+export function supportsGestureEvents(): boolean {
   try {
     // TODO [TS] possibly find GestureEvent definitions?
     // @ts-ignore: no type definitions for webkit GestureEvents
