@@ -250,10 +250,10 @@ export interface Coordinates {
 }
 
 export interface DragState {
-  _isTap?: boolean
-  _delayedEvent?: boolean
-  tap?: boolean
-  swipe?: Vector2
+  _isTap: boolean
+  _delayedEvent: boolean
+  tap: boolean
+  swipe: Vector2
 }
 
 export interface DistanceAngle {
