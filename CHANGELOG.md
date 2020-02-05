@@ -1,5 +1,13 @@
 # Changelog
 
+## 7.0.3 Release
+
+**Summary:** type fixes.
+
+### Fixed
+
+1. DragState type fix.
+
 ## 7.0.2 Release
 
 **Summary:** `onHover` fires before `onMove`.
