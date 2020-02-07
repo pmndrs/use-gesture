@@ -3,7 +3,7 @@ import CoordinatesRecognizer from './CoordinatesRecognizer'
 import Controller from '../Controller'
 import { UseGestureEvent, Fn, IngKey } from '../types'
 import { noop } from '../utils/utils'
-import { getPointerEventValues, getGenericEventData, supportsTouchEvents } from '../utils/event'
+import { getPointerEventValues, getGenericEventData } from '../utils/event'
 import { calculateDistance } from '../utils/math'
 
 const TAP_DISTANCE_THRESHOLD = 3
@@ -36,16 +36,13 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
 
   private setListeners = () => {
     this.removeWindowListeners()
-    const dragListeners: [string, Fn][] = supportsTouchEvents()
-      ? [
-          ['touchmove', this.onDragChange],
-          ['touchend', this.onDragEnd],
-          ['touchcancel', this.onDragEnd],
-        ]
-      : [
-          ['mousemove', this.onDragChange],
-          ['mouseup', this.onDragEnd],
-        ]
+    const dragListeners: [string, Fn][] = [
+      ['touchmove', this.onDragChange],
+      ['touchend', this.onDragEnd],
+      ['touchcancel', this.onDragEnd],
+      ['mousemove', this.onDragChange],
+      ['mouseup', this.onDragEnd],
+    ]
     this.addWindowListeners(dragListeners)
   }
 
@@ -180,8 +177,7 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
       this.controller.addBindings('onPointerMove', this.onDragChange)
       this.controller.addBindings(['onPointerUp', 'onPointerCancel'], this.onDragEnd)
     } else {
-      if (supportsTouchEvents()) this.controller.addBindings('onTouchStart', this.onDragStart)
-      else this.controller.addBindings('onMouseDown', this.onDragStart)
+      this.controller.addBindings(['onTouchStart', 'onMouseDown'], this.onDragStart)
     }
   }
 }
