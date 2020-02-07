@@ -61,19 +61,19 @@
   },
   "homepage": "https://use-gesture.netlify.com",
   "devDependencies": {
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.3.2",
-    "@types/jest": "^24.0.23",
-    "@types/react": "^16.9.15",
-    "@types/react-dom": "^16.9.4",
-    "eslint-plugin-prettier": "^3.1.1",
-    "husky": "^3.1.0",
+    "@testing-library/jest-dom": "^5.1.1",
+    "@testing-library/react": "^9.4.0",
+    "@types/jest": "^25.1.2",
+    "@types/react": "^16.9.19",
+    "@types/react-dom": "^16.9.5",
+    "eslint-plugin-prettier": "^3.1.2",
+    "husky": "^4.2.1",
     "prettier": "^1.19.1",
     "pretty-quick": "^2.0.1",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
-    "tsdx": "^0.11.0",
+    "tsdx": "^0.12.3",
     "tslib": "^1.10.0",
-    "typescript": "^3.7.3"
+    "typescript": "^3.7.5"
   }
 }
