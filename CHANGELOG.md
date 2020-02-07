@@ -1,5 +1,13 @@
 # Changelog
 
+## 7.0.4 Release
+
+**Summary:** drag **should** work on multi pointers devices.
+
+### Fixed
+
+1. Adds both mouse and touch handlers for drag.
+
 ## 7.0.3 Release
 
 **Summary:** type fixes.
