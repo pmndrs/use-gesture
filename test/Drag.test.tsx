@@ -10,8 +10,6 @@ import { InteractiveType } from './components/types'
 
 afterAll(cleanup)
 
-const later = (fn: () => any, delay: number) => new Promise(resolve => setTimeout(() => resolve(fn()), delay))
-
 describe.each([
   ['attached to component', Interactive, false],
   ['attached to node', InteractiveDom, true],
@@ -149,7 +147,7 @@ describe.each([
 
   test(`quickly tapping shouldn't trigger a drag`, async () => {
     fireEvent.click(element, { clientX: 100, clientY: 200 })
-    await later(() => expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('false'), 200)
+    await wait(() => expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('false'), { timeout: 200 })
   })
 
   test(`applying a threshold should prevent the gesture from starting if it's NOT reached`, () => {
@@ -223,14 +221,17 @@ describe.each([
     fireEvent.mouseMove(window, { clientX: 2, clientY: 1, buttons: 1 })
     expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('false')
     expect(getByTestId(`${prefix}drag-tap`)).toHaveTextContent('false')
-    await later(() => {
-      event = createEvent.mouseUp(window)
-      delta_t = event.timeStamp - delta_t
-      fireEvent(window, event)
-      expect(getByTestId(`${prefix}drag-tap`)).toHaveTextContent('true')
-      expect(getByTestId(`${prefix}drag-elapsedTime`)).toHaveTextContent(String(delta_t))
-      expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('false')
-    }, 200)
+    await wait(
+      () => {
+        event = createEvent.mouseUp(window)
+        delta_t = event.timeStamp - delta_t
+        fireEvent(window, event)
+        expect(getByTestId(`${prefix}drag-tap`)).toHaveTextContent('true')
+        expect(getByTestId(`${prefix}drag-elapsedTime`)).toHaveTextContent(String(delta_t))
+        expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('false')
+      },
+      { timeout: 200 }
+    )
   })
 
   test(`bounds should limit both offset and movement`, () => {

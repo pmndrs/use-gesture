@@ -4,6 +4,7 @@ import '@testing-library/jest-dom/extend-expect'
 import Interactive from './components/Interactive'
 import InteractiveDom from './components/InteractiveDom'
 import { InteractiveType } from './components/types'
+import { later } from './utils'
 
 afterAll(cleanup)
 
@@ -69,6 +70,25 @@ describe.each([
 
   test('terminating the gesture should fire onMoveEnd', async () => {
     await wait(() => expect(getByTestId(`${prefix}move-end`)).toHaveTextContent(/^fired$/))
+  })
+
+  test(`applying an axis SHOULDN'T start the gesture if gesture is not detected first in the right axis`, async () => {
+    rerender(<Component gestures={['Move']} config={{ move: { axis: 'x' } }} />)
+    fireEvent.mouseMove(element, { clientX: 0, clientY: 0 })
+    fireEvent.mouseMove(element, { clientX: 0, clientY: 10 })
+    fireEvent.mouseMove(element, { clientX: 4, clientY: 10 })
+    expect(getByTestId(`${prefix}move-moving`)).toHaveTextContent('false')
+    // allow gesture to finish
+    await later(200)
+  })
+
+  test(`applying an axis SHOULD start the gesture if gesture is detected in the right axis`, async () => {
+    fireEvent.mouseMove(element, { clientX: 0, clientY: 0 })
+    fireEvent.mouseMove(element, { clientX: 10, clientY: 4 })
+    fireEvent.mouseMove(element, { clientX: 13, clientY: 4 })
+    expect(getByTestId(`${prefix}move-moving`)).toHaveTextContent('true')
+    expect(getByTestId(`${prefix}move-movement`)).toHaveTextContent('13,0')
+    await wait(() => expect(getByTestId(`${prefix}move-moving`)).toHaveTextContent('false'))
   })
 
   test('disabling all gestures should prevent state from updating', () => {
