@@ -196,7 +196,7 @@ export default abstract class Recognizer<T extends StateKey> {
      * If the gesture has been blocked (from gesture specific checkIntentionality),
      * stop right there.
      */
-    if (_blocked) return { ...intentionalityCheck, _movement }
+    if (_blocked) return { ...intentionalityCheck, _movement, delta: [0, 0] }
 
     /**
      * The movement sent to the handler has 0 in its dimensions when intentionality is false.
