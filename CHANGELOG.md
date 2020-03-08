@@ -1,5 +1,13 @@
 # Changelog
 
+## 7.0.5 Release
+
+**Summary:** blocked bug fixes on debounced gestures.
+
+### Fixed
+
+1. Passes `delta: [0,0]` when gesture is blocked so debounced gestures can calculate distance. Fixes [#140](https://github.com/react-spring/react-use-gesture/issues/140).
+
 ## 7.0.4 Release
 
 **Summary:** drag **should** work on multi pointers devices.
