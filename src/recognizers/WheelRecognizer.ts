@@ -7,6 +7,7 @@ import { addV, calculateDistance, calculateDirection } from '../utils/math'
 
 export default class WheelRecognizer extends CoordinatesRecognizer<'wheel'> {
   ingKey = 'wheeling' as IngKey
+  debounced = true
 
   constructor(controller: Controller, args: any[]) {
     super('wheel', controller, args)

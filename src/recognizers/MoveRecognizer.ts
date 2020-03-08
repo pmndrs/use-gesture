@@ -6,6 +6,7 @@ import { getGenericEventData, getPointerEventValues } from '../utils/event'
 
 export default class MoveRecognizer extends CoordinatesRecognizer<'move'> {
   ingKey = 'moving' as IngKey
+  debounced = true
 
   constructor(controller: Controller, args: any[]) {
     super('move', controller, args)

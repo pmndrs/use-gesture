@@ -26,6 +26,7 @@ import { valueFn } from '../utils/utils'
  */
 export default abstract class Recognizer<T extends StateKey> {
   protected abstract ingKey: IngKey // dragging, scrolling, etc.
+  protected debounced: Boolean = true
 
   /**
    * Creates an instance of a gesture recognizer.
@@ -252,8 +253,11 @@ export default abstract class Recognizer<T extends StateKey> {
      * clean everything and don't do anything.
      */
     if (this.state._blocked) {
-      this.state._active = false
-      this.clean()
+      // we need debounced gestures to end by themselves
+      if (!this.debounced) {
+        this.state._active = false
+        this.clean()
+      }
       return null
     }
 

@@ -7,6 +7,7 @@ import { calculateDistance, calculateDirection } from '../utils/math'
 
 export default class ScrollRecognizer extends CoordinatesRecognizer<'scroll'> {
   ingKey = 'scrolling' as IngKey
+  debounced = true
 
   constructor(controller: Controller, args: any[]) {
     super('scroll', controller, args)
