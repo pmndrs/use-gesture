@@ -77,7 +77,7 @@ export function calculateAllKinematics<T extends number[]>(movement: T, delta: T
   }
 }
 
-export function getIntentional(movement: number, threshold: number): number | false {
+export function getIntentionalDisplacement(movement: number, threshold: number): number | false {
   const abs = Math.abs(movement)
   return abs >= threshold ? Math.sign(movement) * threshold : false
 }

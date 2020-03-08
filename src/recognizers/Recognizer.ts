@@ -13,7 +13,7 @@ import {
   FullGestureState,
 } from '../types'
 import { getInitialState } from '../utils/state'
-import { subV, addV, getIntentional, rubberbandIfOutOfBounds } from '../utils/math'
+import { subV, addV, getIntentionalDisplacement, rubberbandIfOutOfBounds } from '../utils/math'
 import { valueFn } from '../utils/utils'
 
 /**
@@ -176,10 +176,10 @@ export default abstract class Recognizer<T extends StateKey> {
      * For both dimensions of the gesture, check its intentionality on each frame.
      */
     if (i0 === false) {
-      i0 = getIntentional(_m0, t0)
+      i0 = getIntentionalDisplacement(_m0, t0)
     }
     if (i1 === false) {
-      i1 = getIntentional(_m1, t1)
+      i1 = getIntentionalDisplacement(_m1, t1)
     }
 
     // Get gesture specific state properties based on intentionality and movement.
