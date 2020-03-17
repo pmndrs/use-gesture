@@ -1,0 +1,10 @@
+tasks:
+  - before: cd docusaurus
+    init: gp sync-await install && yarn install
+    command: yarn start
+  - init: yarn install && gp sync-done install
+    command: yarn run start
+
+ports:
+  - port: 3000
+    onOpen: open-preview

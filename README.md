@@ -1,6 +1,6 @@
 # react-use-gesture
 
-![npm (tag)](https://img.shields.io/npm/v/react-use-gesture) ![npm bundle size](https://img.shields.io/bundlephobia/minzip/react-use-gesture) ![NPM](https://img.shields.io/npm/l/react-use-gesture) ![Travis (.org) branch](https://img.shields.io/travis/react-spring/react-use-gesture/master)
+[![Gitpod Ready-to-Code](https://img.shields.io/badge/Gitpod-Ready--to--Code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/react-spring/react-use-gesture) ![npm (tag)](https://img.shields.io/npm/v/react-use-gesture) ![npm bundle size](https://img.shields.io/bundlephobia/minzip/react-use-gesture) ![NPM](https://img.shields.io/npm/l/react-use-gesture) ![Travis (.org) branch](https://img.shields.io/travis/react-spring/react-use-gesture/master)
 
 React-use-gesture is a hook that lets you bind richer mouse and touch events to any component or view. With the data you receive, it becomes trivial to set up gestures, and often takes no more than a few lines of code.
 
@@ -74,3 +74,18 @@ React-use-gesture exports several hooks that can handle different gestures:
 | `useGesture` | Handles multiple gestures in one hook      |
 
 #### [More on the full documentation website...](https://use-gesture.netlify.com)
+
+
+## Contributing
+
+### Contribute using one-click online setup
+
+You can use Gitpod (a free online VS Code-like IDE) for contributing. With a single click it'll launch a workspace and automatically:
+
+- clone the `react-use-gesture` repo.
+- install the dependencies.
+- run `yarn start` in `/` and `/docusaurus`.
+
+So that you can start straight away.
+
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/react-spring/react-use-gesture)
