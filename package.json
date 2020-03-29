@@ -1,6 +1,6 @@
 {
   "name": "react-use-gesture",
-  "version": "7.0.5",
+  "version": "7.0.6",
   "description": "React hook for receiving gestures https://use-gesture.netlify.com",
   "main": "dist/index.js",
   "module": "dist/react-use-gesture.esm.js",
@@ -68,11 +68,11 @@
     "@types/react-dom": "^16.9.5",
     "eslint-plugin-prettier": "^3.1.2",
     "husky": "^4.2.3",
-    "prettier": "^1.19.1",
+    "prettier": "^2.0.2",
     "pretty-quick": "^2.0.1",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
-    "tsdx": "^0.12.3",
+    "tsdx": "^0.13.1",
     "tslib": "^1.11.1",
     "typescript": "^3.8.3"
   }
