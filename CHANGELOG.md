@@ -1,5 +1,14 @@
 # Changelog
 
+## 7.0.6 Release
+
+**Summary:** fixes `onGestureEnd` logic.
+
+### Fixed
+
+1. Prevents `onPinchEnd` from firing when releasing the pointer without actually triggering pinch in the first place. Fixes [#148](https://github.com/react-spring/react-use-gesture/issues/148).
+2. Fixes `onGestureEnd` logic for other gestures.
+
 ## 7.0.5 Release
 
 **Summary:** blocked bug fixes on debounced gestures.

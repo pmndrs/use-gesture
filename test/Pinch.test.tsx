@@ -24,6 +24,11 @@ describe.each([
     expect(queryByTestId(`${prefix}pinch-active`)).not.toBeInTheDocument()
   })
 
+  test('one-finger touch release should NOT trigger on end', () => {
+    fireEvent.touchEnd(element)
+    expect(getByTestId(`${prefix}pinch-end`)).toHaveTextContent(/^not fired$/)
+  })
+
   test('touch with two fingers should initiate the gesture', () => {
     const event = createEvent.touchStart(element, {
       touches: [
