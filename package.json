@@ -15,10 +15,11 @@
     "lint": "tsdx lint",
     "prepare": "yarn build",
     "build-docs": "cd ./docusaurus && yarn build",
-    "test": "tsdx test --env=jsdom",
-    "test:watch": "tsdx test --env=jsdom --watchAll"
+    "test": "tsdx test",
+    "test:watch": "tsdx test --watchAll"
   },
   "jest": {
+    "testEnvironment": "jsdom",
     "setupFiles": [
       "@testing-library/react/dont-cleanup-after-each"
     ]
