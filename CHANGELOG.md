@@ -1,12 +1,20 @@
 # Changelog
 
+## 7.0.8 Release
+
+**Summary:** fixes `7.0.7`.
+
+### Fixed
+
+1. Makes fix of `7.0.7` work for native React handlers. Fixes [#149](https://github.com/react-spring/react-use-gesture/issues/149).
+
 ## 7.0.7 Release
 
 **Summary:** fixes double drag gestures on touch screens.
 
 ### Fixed
 
-1. Prevents touch screens from firing the drag gesture twice. Fixes [#149](https://github.com/react-spring/react-use-gesture/issues/149).
+1. Prevents touch screens from firing the drag gesture twice.
 
 ## 7.0.6 Release
 
