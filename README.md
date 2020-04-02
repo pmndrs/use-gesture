@@ -24,7 +24,7 @@ You can use it stand-alone, but to make the most of it you should combine it wit
 yarn add react-use-gesture
 
 #NPM
-npm i react-use-gesture
+npm install react-use-gesture
 ```
 
 ### [Full documentation website](https://use-gesture.netlify.com)
