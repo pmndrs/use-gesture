@@ -130,7 +130,7 @@ export type UseGestureEvent<
     | React.WheelEvent
     | React.PointerEvent
     | WebKitGestureEvent
-> = T
+> = T & { sourceCapabilities?: { firesTouchEvents: boolean } }
 
 export interface ReactEventHandlers {
   // Mouse Events

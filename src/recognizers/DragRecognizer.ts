@@ -18,7 +18,10 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
 
   private dragShouldStart = (event: UseGestureEvent) => {
     const { touches } = getGenericEventData(event)
-    return this.enabled && touches < 2
+
+    // this tries to filter out mouse events triggered by touch screens
+    const fakeMouseEvent = event.sourceCapabilities && event.sourceCapabilities.firesTouchEvents && !touches
+    return this.enabled && touches < 2 && !fakeMouseEvent
   }
 
   private setPointers = (event: UseGestureEvent) => {
