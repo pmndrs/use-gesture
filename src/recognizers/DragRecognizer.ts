@@ -9,6 +9,8 @@ import { calculateDistance } from '../utils/math'
 const TAP_DISTANCE_THRESHOLD = 3
 const SWIPE_MAX_ELAPSED_TIME = 220
 
+type NativeEvent = React.BaseSyntheticEvent & { sourceCapabilities?: { firesTouchEvents: boolean } }
+
 export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
   ingKey = 'dragging' as IngKey
 
@@ -20,7 +22,8 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
     const { touches } = getGenericEventData(event)
 
     // this tries to filter out mouse events triggered by touch screens
-    const fakeMouseEvent = event.sourceCapabilities && event.sourceCapabilities.firesTouchEvents && !touches
+    const nativeEvent = ((event.nativeEvent || event) as unknown) as NativeEvent
+    const fakeMouseEvent = nativeEvent.sourceCapabilities && nativeEvent.sourceCapabilities.firesTouchEvents && !touches
     return this.enabled && touches < 2 && !fakeMouseEvent
   }
 
