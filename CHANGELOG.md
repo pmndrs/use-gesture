@@ -1,5 +1,13 @@
 # Changelog
 
+## 7.0.7 Release
+
+**Summary:** fixes double drag gestures on touch screens.
+
+### Fixed
+
+1. Prevents touch screens from firing the drag gesture twice. Fixes [#149](https://github.com/react-spring/react-use-gesture/issues/149).
+
 ## 7.0.6 Release
 
 **Summary:** fixes `onGestureEnd` logic.
