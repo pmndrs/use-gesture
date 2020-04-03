@@ -1,8 +1,16 @@
 # Changelog
 
+## 7.0.9 Release
+
+**Summary:** different strategy for fixing #149.
+
+### Fixed
+
+1. Checks on the timestamps to filter emulated `mousedown` events.
+
 ## 7.0.8 Release
 
-**Summary:** fixes `7.0.7`.
+**Summary:** fixes `7.0.7` for native handlers.
 
 ### Fixed
 
