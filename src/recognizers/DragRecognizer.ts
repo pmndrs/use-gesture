@@ -8,11 +8,12 @@ import { calculateDistance } from '../utils/math'
 
 const TAP_DISTANCE_THRESHOLD = 3
 const SWIPE_MAX_ELAPSED_TIME = 220
-
-type NativeEvent = React.BaseSyntheticEvent & { sourceCapabilities?: { firesTouchEvents: boolean } }
+const FILTER_REPEATED_EVENTS_DELAY = 200
 
 export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
   ingKey = 'dragging' as IngKey
+  isTouch = false
+  wasTouch = false
 
   constructor(controller: Controller, args: any[]) {
     super('drag', controller, args)
@@ -21,10 +22,21 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
   private dragShouldStart = (event: UseGestureEvent) => {
     const { touches } = getGenericEventData(event)
 
-    // this tries to filter out mouse events triggered by touch screens
-    const nativeEvent = ((event.nativeEvent || event) as unknown) as NativeEvent
-    const fakeMouseEvent = nativeEvent.sourceCapabilities && nativeEvent.sourceCapabilities.firesTouchEvents && !touches
-    return this.enabled && touches < 2 && !fakeMouseEvent
+    /**
+     * This tries to filter out mouse events triggered by touch screens
+     * */
+
+    this.isTouch = !!touches
+
+    // If the previous gesture was touch-based, and the current one is mouse based,
+    // this means that we might be dealing with mouse simulated events if they're close to
+    // each other. We're only doing this check when we're not using pointer events.
+    if (!this.controller.config.pointer && this.wasTouch && !this.isTouch) {
+      const delay = Math.abs(event.timeStamp - this.state.startTime)
+      if (delay < FILTER_REPEATED_EVENTS_DELAY) return false
+    }
+
+    return this.enabled && touches < 2
   }
 
   private setPointers = (event: UseGestureEvent) => {
@@ -42,13 +54,16 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
 
   private setListeners = () => {
     this.removeWindowListeners()
-    const dragListeners: [string, Fn][] = [
-      ['touchmove', this.onDragChange],
-      ['touchend', this.onDragEnd],
-      ['touchcancel', this.onDragEnd],
-      ['mousemove', this.onDragChange],
-      ['mouseup', this.onDragEnd],
-    ]
+    const dragListeners: [string, Fn][] = this.isTouch
+      ? [
+          ['touchmove', this.onDragChange],
+          ['touchend', this.onDragEnd],
+        ]
+      : [
+          ['touchcancel', this.onDragEnd],
+          ['mousemove', this.onDragChange],
+          ['mouseup', this.onDragEnd],
+        ]
     this.addWindowListeners(dragListeners)
   }
 
@@ -69,7 +84,6 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
 
   startDrag(event: UseGestureEvent) {
     const { values } = getPointerEventValues(event)
-
     this.updateSharedState(getGenericEventData(event))
 
     const startState = {
@@ -166,6 +180,8 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
   clean = (): void => {
     super.clean()
     this.state._delayedEvent = false
+    this.wasTouch = this.isTouch
+    this.isTouch = false
 
     if (this.controller.config.pointer) this.removePointers()
   }
