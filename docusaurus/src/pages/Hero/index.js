@@ -47,10 +47,9 @@ export default function Hero() {
 
   const defaultBgShine = () => {
     prevAngleTurns.current[0] = 135
-    return `linear-gradient(${prevAngleTurns.current[0] -
-      360 *
-        prevAngleTurns
-          .current[1]}deg,rgba(255,255,255,0.25) 0%,rgba(255, 255, 255, 0) 60%)`
+    return `linear-gradient(${
+      prevAngleTurns.current[0] - 360 * prevAngleTurns.current[1]
+    }deg,rgba(255,255,255,0.25) 0%,rgba(255, 255, 255, 0) 60%)`
   }
 
   const bgShine = (px, py) => {
@@ -95,11 +94,7 @@ export default function Hero() {
     {
       onDrag: ({
         hovering,
-        delta,
-        first,
-        last,
         click,
-        currentTarget,
         swipe: [swipeX, swipeY],
         down,
         elapsedTime,
@@ -109,6 +104,7 @@ export default function Hero() {
         if (click) toast('Click!')
         if (swipeX) toast(`Swipe ${swipeX > 0 ? 'Right' : 'Left'}`)
         if (swipeY) toast(`Swipe ${swipeY > 0 ? 'Bottom' : 'Top'}`)
+        document.body.classList.toggle('dragged', down)
         if (down) {
           resetShineAndText()
           set({ x: mx, y: my, scale: 1, rotateX: 0, rotateY: 0 })

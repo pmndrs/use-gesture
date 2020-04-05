@@ -23,8 +23,6 @@
     center / cover;
   border-radius: 8px;
   touch-action: none;
-  -webkit-user-select: none;
-  user-select: none;
   position: absolute;
   box-shadow: 0 8px 30px rgba(14, 21, 47, 0.3);
   transition: box-shadow 200ms ease-out;

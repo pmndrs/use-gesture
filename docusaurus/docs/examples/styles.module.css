@@ -8,16 +8,12 @@
   margin-bottom: var(--ifm-leading);
   position: relative;
   z-index: 10;
-  -webkit-user-select: none;
-  user-select: none;
 }
 
 .easter {
   display: inline-block;
   position: relative;
   cursor: grab;
-  -webkit-user-select: none;
-  user-select: none;
   touch-action: none;
 }
 
@@ -28,8 +24,6 @@
   width: 80px;
   touch-action: none;
   cursor: grab;
-  -webkit-user-select: none;
-  user-select: none;
   z-index: 10000;
   position: relative;
 }
@@ -40,7 +34,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  z-index: 100;
+  z-index: 9;
   background: rgba(1, 22, 39, 0.5);
   opacity: 0;
   pointer-events: none;

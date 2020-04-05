@@ -36,7 +36,8 @@
     "printWidth": 80,
     "semi": false,
     "singleQuote": true,
-    "trailingComma": "none"
+    "trailingComma": "none",
+    "arrowParens": "avoid"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "2.26.0",

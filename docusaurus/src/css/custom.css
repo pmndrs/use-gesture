@@ -215,3 +215,7 @@ nav strong {
 .pagination-nav {
   white-space: normal;
 }
+
+body.dragged {
+  user-select: none;
+}

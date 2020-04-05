@@ -8,6 +8,7 @@ export function EasterDiv({ children }) {
   const [{ x, y, live }, set] = useSpring(() => ({ x: 0, y: 0, live: false }))
 
   const bind = useDrag(({ down, movement: [mx, my] }) => {
+    document.body.classList.toggle('dragged', down)
     set({ x: down ? mx : 0, y: down ? my : 0, live: down })
   })
 

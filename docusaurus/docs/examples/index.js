@@ -7,6 +7,10 @@ export default function Example({ id, disableOverlay }) {
   const Component = Examples[id]
   const [active, setActive] = useState(false)
 
+  React.useLayoutEffect(() => {
+    document.body.classList.toggle('dragged', active)
+  }, [active])
+
   return (
     <>
       {!disableOverlay && (
