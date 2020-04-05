@@ -127,9 +127,9 @@ export default function Hero() {
           setShadow(active)
         }
       },
-      onMove: ({ first, xy: [px, py] }) => {
+      onMove: ({ hovering, first, xy: [px, py] }) => {
         if (first) rect.current = ref.current.getBoundingClientRect()
-        if (!dragging) {
+        if (!dragging && hovering) {
           set({ rotateX: rotX(py), rotateY: rotY(px) })
           setText({ y: yText(py), x: xText(px), scale: 1.6 })
           setShine({ background: bgShine(px, py) })
