@@ -1,5 +1,13 @@
 # Changelog
 
+## 7.0.11 Release
+
+**Summary:** fixes move / hover order.
+
+### Fixed
+
+1. hover in → mouse move → mouse stops → hover out.
+
 ## 7.0.10 Release
 
 **Summary:** doesn't use webkit gesture events when using React native handlers.
