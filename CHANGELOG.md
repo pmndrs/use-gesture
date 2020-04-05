@@ -1,5 +1,13 @@
 # Changelog
 
+## 7.0.10 Release
+
+**Summary:** doesn't use webkit gesture events when using React native handlers.
+
+### Fixed
+
+1. Only uses webkit gesture events on iOS devices when `domTarget` is specified.
+
 ## 7.0.9 Release
 
 **Summary:** different strategy for fixing #149.
