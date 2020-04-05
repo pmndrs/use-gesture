@@ -242,7 +242,9 @@ export default class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
   }
 
   addBindings(): void {
-    if (supportsGestureEvents()) {
+    // Only try to use gesture events when they are supported and domTarget is set
+    // as React doesn't support gesture handlers.
+    if (this.controller.config.domTarget && supportsGestureEvents()) {
       this.controller.addBindings('onGestureStart', this.onGestureStart)
       this.controller.addBindings('onGestureChange', this.onGestureChange)
       this.controller.addBindings(['onGestureEnd', 'onTouchCancel'], this.onGestureEnd)
