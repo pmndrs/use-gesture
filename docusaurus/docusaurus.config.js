@@ -8,14 +8,17 @@
 module.exports = {
   title: 'React Use Gesture',
   tagline: `The only gesture hook you'll need`,
-  url: 'https://use-gesture.netlify.com',
+  url: 'https://use-gesture.netlify.app',
   baseUrl: '/',
-  organizationName: 'react-spring', // Usually your GitHub org/user name.
-  projectName: 'react-use-gesture', // Usually your repo name.
+  organizationName: 'react-spring',
+  projectName: 'react-use-gesture',
   favicon:
     'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/apple/232/raised-back-of-hand_1f91a.png',
   // themes: ['@docusaurus/theme-live-codeblock'],
   themeConfig: {
+    googleAnalytics: {
+      trackingID: 'UA-162749258-1'
+    },
     prism: {
       theme: require('prism-react-renderer/themes/nightOwl')
     },
