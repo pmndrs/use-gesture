@@ -149,7 +149,7 @@ export default class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
   }
 
   updateTouchData = (event: UseGestureEvent<TouchEvent>): void => {
-    if (!this.enabled || event.touches.length !== 2) return
+    if (!this.enabled || event.touches.length !== 2 || !this.state._active) return
     const { origin } = getTwoTouchesEventData(event)
     this.state.origin = origin
   }
