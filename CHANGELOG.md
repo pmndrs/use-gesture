@@ -1,5 +1,13 @@
 # Changelog
 
+## 7.0.12 Release
+
+**Summary:** TS `onDragEnd` and `onDragStart` definition fix.
+
+### Fixed
+
+1. `onDragStart` and `onDragEnd` are also React Handlers, which were overriding Gesture handlers definitions.
+
 ## 7.0.11 Release
 
 **Summary:** fixes move / hover order.
