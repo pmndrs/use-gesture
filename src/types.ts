@@ -311,7 +311,9 @@ export type RecognizerClasses = (
   | RecognizerClass<'scroll'>
 )[]
 
-export type NativeHandlersPartial = Partial<Omit<React.DOMAttributes<Element>, keyof UserHandlers>>
+type ReactDomAttributes = React.DOMAttributes<Element>
+
+export type NativeHandlersPartial = Partial<Omit<ReactDomAttributes, keyof UserHandlers & keyof ReactDomAttributes>>
 /* Handlers should also accept DomAttributes to prevent overrides */
 export type UserHandlersPartial = AtLeastOneOf<UserHandlers> & NativeHandlersPartial
 
