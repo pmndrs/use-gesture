@@ -77,5 +77,8 @@
     "tsdx": "^0.13.1",
     "tslib": "^1.11.1",
     "typescript": "^3.8.3"
+  },
+  "resolutions": {
+    "@types/react": "^16.9.32"
   }
 }
