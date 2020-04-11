@@ -1,5 +1,13 @@
 # Changelog
 
+## 7.0.13 Release
+
+**Summary:** TS type fix. Should fix [#158](https://github.com/react-spring/react-use-gesture/issues/158).
+
+### Fixed
+
+1. Fixes types for `UserHandlersPartial`.
+
 ## 7.0.12 Release
 
 **Summary:** TS `onDragEnd` and `onDragStart` definition fix.
