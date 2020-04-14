@@ -6,7 +6,6 @@ import {
   DragConfig,
   Tuple,
   GestureOptions,
-  DragOptions,
   InternalDragOptions,
   InternalGestureOptions,
   CoordinatesConfig,
@@ -18,9 +17,15 @@ import {
 
 const DEFAULT_DRAG_DELAY = 180
 const DEFAULT_RUBBERBAND = 0.15
+const DEFAULT_SWIPE_VELOCITY = 0.5
+const DEFAULT_SWIPE_DISTANCE = 60
 
-function getWindow() {
-  return typeof window !== 'undefined' ? window : undefined
+const defaultWindow = typeof window !== 'undefined' ? window : undefined
+
+const defaultCoordinatesOptions: CoordinatesOptions = {
+  lockDirection: false,
+  axis: undefined,
+  bounds: undefined,
 }
 
 /**
@@ -32,38 +37,28 @@ function getWindow() {
  * @returns {InternalGenericOptions}
  */
 export function getInternalGenericOptions(config: Partial<GenericOptions> = {}): InternalGenericOptions {
-  const defaultOptions: GenericOptions = {
-    domTarget: undefined,
-    eventOptions: { passive: true, capture: false, pointer: false },
-    window: getWindow(),
-    enabled: true,
-  }
-
-  const { eventOptions: defaultEventOptions, window: defaultWindow, ...restDefault } = defaultOptions
-  const { eventOptions, window, ...restConfig } = config
-  const { passive, capture, pointer } = { ...defaultEventOptions, ...eventOptions }
+  let {
+    eventOptions: { passive = true, capture = false, pointer = false } = {},
+    window = defaultWindow,
+    domTarget = undefined,
+    enabled = true,
+    ...restConfig
+  } = config
 
   return {
-    ...restDefault,
     ...restConfig,
-    window: window || defaultWindow,
+    enabled,
+    domTarget,
+    window,
     // passive is always true if there's no domTarget
-    eventOptions: { passive: !config.domTarget || !!passive, capture: !!capture },
+    eventOptions: { passive: !domTarget || !!passive, capture: !!capture },
     captureString: capture ? 'Capture' : '',
     pointer: !!pointer,
   }
 }
 
 export function getInternalGestureOptions(gestureConfig: Partial<GestureOptions>): InternalGestureOptions {
-  const defaultGestureOptions: GestureOptions = {
-    enabled: true,
-    initial: [0, 0],
-    threshold: undefined,
-    rubberband: 0,
-  }
-
-  const config = { ...defaultGestureOptions, ...gestureConfig }
-  let { threshold, rubberband, enabled, initial } = config
+  let { threshold = undefined, rubberband = 0, enabled = true, initial = [0, 0] } = gestureConfig
 
   if (typeof rubberband === 'boolean') rubberband = rubberband ? DEFAULT_RUBBERBAND : 0
   if (threshold === void 0) threshold = 0
@@ -77,12 +72,6 @@ export function getInternalGestureOptions(gestureConfig: Partial<GestureOptions>
 }
 
 export function getInternalCoordinatesOptions(coordinatesConfig: CoordinatesConfig = {}): InternalCoordinatesOptions {
-  const defaultCoordinatesOptions: CoordinatesOptions = {
-    lockDirection: false,
-    axis: undefined,
-    bounds: undefined,
-  }
-
   const { axis, lockDirection, bounds = {}, ...internalOptions } = coordinatesConfig
 
   const boundsArray = [
@@ -115,18 +104,15 @@ export function getInternalDistanceAngleOptions(
 }
 
 export function getInternalDragOptions(dragConfig: DragConfig = {}): InternalDragOptions {
-  const defaultDragOptions: DragOptions = {
-    filterTaps: false,
-    swipeVelocity: 0.5,
-    swipeDistance: 60,
-    delay: false,
-  }
-
   let { enabled, threshold, bounds, rubberband, initial, ...dragOptions } = dragConfig
-  let { swipeVelocity, swipeDistance, delay, filterTaps, axis, lockDirection } = {
-    ...defaultDragOptions,
-    ...dragOptions,
-  }
+  let {
+    swipeVelocity = DEFAULT_SWIPE_VELOCITY,
+    swipeDistance = DEFAULT_SWIPE_DISTANCE,
+    delay = false,
+    filterTaps = false,
+    axis,
+    lockDirection,
+  } = dragOptions
 
   if (threshold === void 0) {
     threshold = Math.max(0, filterTaps ? 3 : 0, lockDirection || axis ? 1 : 0)
