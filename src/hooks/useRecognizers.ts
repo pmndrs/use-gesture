@@ -39,16 +39,18 @@ export default function useRecognizers<Config extends Partial<GenericOptions>>(
      */
     const bind = (...args: any[]) => {
       current.resetBindings()
-      classes.forEach(RecognizerClass => {
+      for (let RecognizerClass of classes) {
         new RecognizerClass(current, args).addBindings()
-      })
+      }
 
+      // we also add event bindings for native handlers
       if (controller.nativeRefs) {
-        // we also add event bindings for native handlers
-        Object.entries(controller.nativeRefs).forEach(([eventName, fn]) => {
-          // we're cheating when it comes to event type :(
-          current.addBindings(eventName as ReactEventHandlerKey, fn as Fn)
-        })
+        for (let eventName in controller.nativeRefs)
+          current.addBindings(
+            eventName as ReactEventHandlerKey,
+            // @ts-ignore we're cheating when it comes to event type :(
+            controller.nativeRefs[eventName] as Fn
+          )
       }
 
       return current.getBind() as HookReturnType<Config>
