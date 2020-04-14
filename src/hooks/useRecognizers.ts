@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+
 import React from 'react'
 import Controller from '../Controller'
 import {
@@ -27,10 +29,9 @@ export default function useRecognizers<Config extends Partial<GenericOptions>>(
   config: InternalConfig,
   nativeHandlers?: NativeHandlersPartial
 ): (...args: any[]) => HookReturnType<Config> {
-
   // The gesture controller keeping track of all gesture states
   const controller = React.useMemo(() => {
-    const current = new Controller();
+    const current = new Controller()
 
     /**
      * The bind function will create gesture recognizers and return the right
@@ -41,7 +42,7 @@ export default function useRecognizers<Config extends Partial<GenericOptions>>(
       classes.forEach(RecognizerClass => {
         new RecognizerClass(current, args).addBindings()
       })
-  
+
       if (controller.nativeRefs) {
         // we also add event bindings for native handlers
         Object.entries(controller.nativeRefs).forEach(([eventName, fn]) => {
@@ -49,12 +50,12 @@ export default function useRecognizers<Config extends Partial<GenericOptions>>(
           current.addBindings(eventName as ReactEventHandlerKey, fn as Fn)
         })
       }
-  
+
       return current.getBind() as HookReturnType<Config>
     }
 
-    return ({ nativeRefs: nativeHandlers, current, bind })
-  }, []);
+    return { nativeRefs: nativeHandlers, current, bind }
+  }, [])
 
   // We reassign the config and handlers to the controller on every render.
   controller.current!.config = config
