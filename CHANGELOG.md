@@ -1,5 +1,13 @@
 # Changelog
 
+## 7.0.14 Release
+
+**Summary:** Refactoring thanks to [thephoenixofthevoid](https://github.com/thephoenixofthevoid) [[PR #160](https://github.com/react-spring/react-use-gesture/pull/160)] and further fix for on tap recognition on mobile devices.
+
+### Fixed
+
+1. Fixes [#149](https://github.com/react-spring/react-use-gesture/issues/149) when setting state.
+
 ## 7.0.13 Release
 
 **Summary:** TS type fix. Should fix [#158](https://github.com/react-spring/react-use-gesture/issues/158).
