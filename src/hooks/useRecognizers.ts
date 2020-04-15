@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+
 import React from 'react'
 import Controller from '../Controller'
 import {
@@ -27,51 +29,44 @@ export default function useRecognizers<Config extends Partial<GenericOptions>>(
   config: InternalConfig,
   nativeHandlers?: NativeHandlersPartial
 ): (...args: any[]) => HookReturnType<Config> {
-  const controller = React.useRef<Controller>() // The gesture controller keeping track of all gesture states
-  const nativeRefs = React.useRef<NativeHandlersPartial>()
+  // The gesture controller keeping track of all gesture states
+  const controller = React.useMemo(() => {
+    const current = new Controller()
 
-  if (!controller.current) {
-    // We only initialize the gesture controller once
-    controller.current = new Controller()
-  }
+    /**
+     * The bind function will create gesture recognizers and return the right
+     * bind object depending on whether `domTarget` was specified in the config object.
+     */
+    const bind = (...args: any[]) => {
+      current.resetBindings()
+      for (let RecognizerClass of classes) {
+        new RecognizerClass(current, args).addBindings()
+      }
+
+      // we also add event bindings for native handlers
+      if (controller.nativeRefs) {
+        for (let eventName in controller.nativeRefs)
+          current.addBindings(
+            eventName as ReactEventHandlerKey,
+            // @ts-ignore we're cheating when it comes to event type :(
+            controller.nativeRefs[eventName] as Fn
+          )
+      }
+
+      return current.getBind() as HookReturnType<Config>
+    }
+
+    return { nativeRefs: nativeHandlers, current, bind }
+  }, [])
 
   // We reassign the config and handlers to the controller on every render.
   controller.current!.config = config
   controller.current!.handlers = handlers
+  // We assign nativeHandlers, otherwise they won't be refreshed on the next render.
+  controller.nativeRefs = nativeHandlers
 
-  /**
-   * We also assign nativeHandlers to a ref, otherwise it they won't be refreshed
-   * on the next render.
-   */
-  nativeRefs.current = nativeHandlers
-
-  /**
-   * When the component unmounts, we run the controller clean functions that will be responsible
-   * for removing listeners, clearing timeouts etc.
-   */
+  // Run controller clean functions on unmount.
   React.useEffect(() => controller.current!.clean, [])
 
-  /**
-   * The bind function will create gesture recognizers and return the right
-   * bind object depending on whether `domTarget` was specified in the config object.
-   */
-  const [bind] = React.useState(() => (...args: any[]) => {
-    controller.current!.resetBindings()
-    classes.forEach(RecognizerClass => {
-      const recognizer = new RecognizerClass(controller.current!, args)
-      recognizer.addBindings()
-    })
-
-    if (nativeRefs.current) {
-      // we also add event bindings for native handlers
-      Object.entries(nativeRefs.current).forEach(([eventName, fn]) => {
-        // we're cheating when it comes to event type :(
-        controller.current!.addBindings(eventName as ReactEventHandlerKey, fn as Fn)
-      })
-    }
-
-    return controller.current!.getBind() as HookReturnType<Config>
-  })
-
-  return bind
+  return controller.bind
 }
