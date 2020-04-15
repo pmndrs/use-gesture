@@ -39,17 +39,15 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
     return this.enabled && touches < 2
   }
 
-  private setPointers = (event: UseGestureEvent) => {
-    const { currentTarget, pointerId } = event as PointerEvent
-    // @ts-ignore
+  private setPointers = (event: UseGestureEvent<PointerEvent>) => {
+    const { currentTarget, pointerId } = event
     if (currentTarget) currentTarget.setPointerCapture(pointerId)
     this.updateGestureState({ currentTarget, pointerId })
   }
 
   private removePointers = () => {
     const { currentTarget, pointerId } = this.state
-    // @ts-ignore
-    if (currentTarget) currentTarget.releasePointerCapture(pointerId)
+    if (currentTarget && pointerId) currentTarget.releasePointerCapture(pointerId)
   }
 
   private setListeners = () => {
@@ -70,8 +68,8 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
   onDragStart = (event: UseGestureEvent): void => {
     if (!this.dragShouldStart(event)) return
     // if pointers events
-    if (this.controller.config.pointer) this.setPointers(event)
     else this.setListeners()
+    if (this.controller.config.pointer) this.setPointers(event as PointerEvent)
 
     if (this.config.delay > 0) {
       this.state._delayedEvent = true
