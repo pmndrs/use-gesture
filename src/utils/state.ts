@@ -9,6 +9,7 @@ export function getInitialState(): State {
     _intentional: [false, false],
     _movement: [0, 0],
     _initial: [0, 0],
+    _lastEventType: undefined,
     event: undefined,
     // currentTarget: undefined,
     // pointerId: undefined,

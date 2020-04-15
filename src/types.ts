@@ -217,8 +217,9 @@ export interface CommonGestureState {
   _intentional: [FalseOrNumber, FalseOrNumber]
   _movement: Vector2
   _initial: Vector2
+  _lastEventType?: string
   event?: UseGestureEvent
-  currentTarget?: EventTarget | null
+  currentTarget?: (EventTarget & Element) | null
   pointerId?: number | null
   values: Vector2
   velocities: Vector2

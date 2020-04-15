@@ -113,10 +113,11 @@ export default abstract class Recognizer<T extends StateKey> {
    * @returns - the generic gesture payload
    */
   protected getGenericPayload(event: UseGestureEvent, isStartEvent?: boolean) {
-    const { timeStamp } = event
+    const { timeStamp, type } = event
     const { values, startTime } = this.state
 
     return {
+      _lastEventType: type,
       event,
       timeStamp,
       elapsedTime: isStartEvent ? 0 : timeStamp - startTime!,

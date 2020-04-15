@@ -12,26 +12,28 @@ const FILTER_REPEATED_EVENTS_DELAY = 200
 
 export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
   ingKey = 'dragging' as IngKey
-  isTouch = false
   wasTouch = false
 
   constructor(controller: Controller, args: any[]) {
     super('drag', controller, args)
   }
 
+  private isEventTypeTouch = (type?: string) => !!type && type.indexOf('touch') === 0
+
   private dragShouldStart = (event: UseGestureEvent) => {
     const { touches } = getGenericEventData(event)
-
+    const { _lastEventType } = this.state
     /**
      * This tries to filter out mouse events triggered by touch screens
      * */
-
-    this.isTouch = !!touches
-
     // If the previous gesture was touch-based, and the current one is mouse based,
     // this means that we might be dealing with mouse simulated events if they're close to
     // each other. We're only doing this check when we're not using pointer events.
-    if (!this.controller.config.pointer && this.wasTouch && !this.isTouch) {
+    if (
+      !this.controller.config.pointer &&
+      this.isEventTypeTouch(_lastEventType) &&
+      !this.isEventTypeTouch(event.type)
+    ) {
       const delay = Math.abs(event.timeStamp - this.state.startTime)
       if (delay < FILTER_REPEATED_EVENTS_DELAY) return false
     }
@@ -50,9 +52,9 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
     if (currentTarget && pointerId) currentTarget.releasePointerCapture(pointerId)
   }
 
-  private setListeners = () => {
+  private setListeners = (isTouch: boolean) => {
     this.removeWindowListeners()
-    const dragListeners: [string, Fn][] = this.isTouch
+    const dragListeners: [string, Fn][] = isTouch
       ? [
           ['touchmove', this.onDragChange],
           ['touchend', this.onDragEnd],
@@ -68,8 +70,8 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
   onDragStart = (event: UseGestureEvent): void => {
     if (!this.dragShouldStart(event)) return
     // if pointers events
-    else this.setListeners()
     if (this.controller.config.pointer) this.setPointers(event as PointerEvent)
+    else this.setListeners(this.isEventTypeTouch(event.type))
 
     if (this.config.delay > 0) {
       this.state._delayedEvent = true
@@ -178,8 +180,6 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
   clean = (): void => {
     super.clean()
     this.state._delayedEvent = false
-    this.wasTouch = this.isTouch
-    this.isTouch = false
 
     if (this.controller.config.pointer) this.removePointers()
   }
