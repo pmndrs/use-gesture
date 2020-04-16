@@ -6,8 +6,8 @@ sidebar_label: Getting started
 
 import Example from './examples/'
 import { EasterDiv } from './examples/examples'
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
+import Tabs from '@theme/Tabs'
+import TabItem from '@theme/TabItem'
 
 React-use-gesture is a set of hooks that let you bind mouse and touch events to any React component. With the data you receive, it becomes easy to set up complex gestures like dragging and pinching with a few lines of code.
 
@@ -44,6 +44,17 @@ npm install --save react-use-gesture
 
 The following example makes a <EasterDiv>&lt;div/&gt;</EasterDiv> draggable so that it follows your mouse or finger on drag, and returns to its initial position on release.
 
+> All examples in this documentation use React-spring v9, that you can install with the `next` tag: `react-spring@next`. v9 api is more convenient and allows for more compact, less distracting code. The following example is the only one available with React-spring v8.
+
+<Tabs
+  defaultValue="v9"
+  values={[
+    { label: 'With React-spring v9', value: 'v9', },
+    { label: 'With React-spring v8', value: 'v8', },
+  ]
+}>
+<TabItem value="v9">
+
 ```jsx {1-100}
 import { useSpring, animated } from 'react-spring'
 import { useDrag } from 'react-use-gesture'
@@ -61,7 +72,35 @@ function PullRelease() {
 }
 ```
 
-> All examples in this documentation use React-spring v9, that you can install with the `next` tag: `react-spring@next`. v9 api is more convenient and allows for more compact, less distracting code.
+</TabItem>
+<TabItem value="v8">
+
+```jsx {1-100}
+import { useSpring, animated } from 'react-spring'
+import { useDrag } from 'react-use-gesture'
+
+function PullRelease() {
+  const [{ xy }, set] = useSpring(() => ({ xy: [0, 0] }))
+
+  // Set the drag hook and define component movement based on gesture data
+  const bind = useDrag(({ down, movement }) => {
+    set({ xy: down ? movement : [0, 0] })
+  })
+
+  // Bind it to a component
+  return (
+    <animated.div
+      {...bind()}
+      style={{
+        transform: xy.interpolate((x, y) => `translate3d(${x}px, ${y}px, 0)`)
+      }}
+    />
+  )
+}
+```
+
+</TabItem>
+</Tabs>
 
 ### How does this work?
 

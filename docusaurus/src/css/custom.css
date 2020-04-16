@@ -212,8 +212,8 @@ nav strong {
   font-size: 1.2em;
 }
 
-.pagination-nav {
-  white-space: normal;
+.navbar__title {
+  white-space: nowrap;
 }
 
 body.dragged {
