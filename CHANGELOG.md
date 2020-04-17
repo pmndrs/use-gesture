@@ -1,5 +1,13 @@
 # Changelog
 
+## 7.0.15 Release
+
+**Summary:** Fixes touchcancel on drag.
+
+### Fixed
+
+1. Touch cancel listener was set for mouse devices 😅.
+
 ## 7.0.14 Release
 
 **Summary:** Refactoring thanks to [thephoenixofthevoid](https://github.com/thephoenixofthevoid) [[PR #160](https://github.com/react-spring/react-use-gesture/pull/160)] and further fix for on tap recognition on mobile devices.
