@@ -1,7 +1,17 @@
+
+import isEqual from "react-fast-compare"
+import memoize from 'memoize-one'
 import useRecognizers from './useRecognizers'
 import PinchRecognizer from '../recognizers/PinchRecognizer'
 import { Handler, InternalConfig, HookReturnType, UsePinchConfig } from '../types'
 import { getInternalGenericOptions, getInternalDistanceAngleOptions } from '../utils/config'
+
+
+const buildConfig = memoize(({ domTarget, eventOptions, window, ...rest }: UsePinchConfig) => ({
+  ...getInternalGenericOptions({ domTarget, eventOptions, window }),
+  pinch: getInternalDistanceAngleOptions(rest),
+}) as InternalConfig, isEqual)
+
 
 /**
  * @public
@@ -16,20 +26,10 @@ export function usePinch<Config extends UsePinchConfig>(
   handler: Handler<'pinch'>,
   config: Config | {} = {}
 ): (...args: any[]) => HookReturnType<Config> {
-  const { domTarget, eventOptions, window, ...pinch } = config as UsePinchConfig
 
-  /**
-   * TODO: at the moment we recompute the config object at every render
-   * this could probably be optimized
-   */
-  const mergedConfig: InternalConfig = {
-    ...getInternalGenericOptions({
-      domTarget,
-      eventOptions,
-      window,
-    }),
-    pinch: getInternalDistanceAngleOptions(pinch),
-  }
-
-  return useRecognizers<Config>({ pinch: handler }, [PinchRecognizer], mergedConfig)
+  return useRecognizers<Config>(
+    { pinch: handler }, 
+    [PinchRecognizer], 
+    buildConfig(config)
+  )
 }

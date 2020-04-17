@@ -1,7 +1,15 @@
+import isEqual from "react-fast-compare"
+import memoize from 'memoize-one'
+
 import useRecognizers from './useRecognizers'
 import DragRecognizer from '../recognizers/DragRecognizer'
 import { Handler, InternalConfig, HookReturnType, UseDragConfig } from '../types'
 import { getInternalGenericOptions, getInternalDragOptions } from '../utils/config'
+
+const buildConfig = memoize(({ domTarget, eventOptions, window, ...rest }: UseDragConfig) => ({
+  ...getInternalGenericOptions({ domTarget, eventOptions, window }),
+  drag: getInternalDragOptions(rest),
+}) as InternalConfig, isEqual)
 
 /**
  * @public
@@ -16,20 +24,5 @@ export function useDrag<Config extends UseDragConfig>(
   handler: Handler<'drag'>,
   config: Config | {} = {}
 ): (...args: any[]) => HookReturnType<Config> {
-  const { domTarget, eventOptions, window, ...drag } = config as UseDragConfig
-
-  /**
-   * TODO: at the moment we recompute the config object at every render
-   * this could probably be optimized
-   */
-  const mergedConfig: InternalConfig = {
-    ...getInternalGenericOptions({
-      domTarget,
-      eventOptions,
-      window,
-    }),
-    drag: getInternalDragOptions(drag),
-  }
-
-  return useRecognizers<Config>({ drag: handler }, [DragRecognizer], mergedConfig)
+  return useRecognizers<Config>({ drag: handler }, [DragRecognizer], buildConfig(config))
 }

@@ -1,7 +1,17 @@
+import isEqual from "react-fast-compare"
+import memoize from 'memoize-one'
+
 import useRecognizers from './useRecognizers'
 import WheelRecognizer from '../recognizers/WheelRecognizer'
 import { Handler, InternalConfig, HookReturnType, UseWheelConfig } from '../types'
 import { getInternalGenericOptions, getInternalCoordinatesOptions } from '../utils/config'
+
+
+const buildConfig = memoize(({ domTarget, eventOptions, window, ...rest }: UseWheelConfig) => ({
+  ...getInternalGenericOptions({ domTarget, eventOptions, window }),
+  wheel: getInternalCoordinatesOptions(rest),
+}) as InternalConfig, isEqual)
+
 
 /**
  * @public
@@ -16,20 +26,5 @@ export function useWheel<Config extends UseWheelConfig>(
   handler: Handler<'wheel'>,
   config: Config | {} = {}
 ): (...args: any[]) => HookReturnType<Config> {
-  const { domTarget, eventOptions, window, ...wheel } = config as UseWheelConfig
-
-  /**
-   * TODO: at the moment we recompute the config object at every render
-   * this could probably be optimized
-   */
-  const mergedConfig: InternalConfig = {
-    ...getInternalGenericOptions({
-      domTarget,
-      eventOptions,
-      window,
-    }),
-    wheel: getInternalCoordinatesOptions(wheel),
-  }
-
-  return useRecognizers<Config>({ wheel: handler }, [WheelRecognizer], mergedConfig)
+  return useRecognizers<Config>({ wheel: handler }, [WheelRecognizer], buildConfig(config))
 }

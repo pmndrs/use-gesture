@@ -1,7 +1,15 @@
+import isEqual from "react-fast-compare"
+import memoize from 'memoize-one'
+
 import useRecognizers from './useRecognizers'
 import MoveRecognizer from '../recognizers/MoveRecognizer'
 import { Handler, InternalConfig, HookReturnType, UseMoveConfig } from '../types'
 import { getInternalGenericOptions, getInternalCoordinatesOptions } from '../utils/config'
+
+const buildConfig = memoize(({ domTarget, eventOptions, window, ...rest }: UseMoveConfig) => ({
+  ...getInternalGenericOptions({ domTarget, eventOptions, window }),
+  move: getInternalCoordinatesOptions(rest),
+}) as InternalConfig, isEqual)
 
 /**
  * @public
@@ -16,20 +24,5 @@ export function useMove<Config extends UseMoveConfig>(
   handler: Handler<'move'>,
   config: Config | {} = {}
 ): (...args: any[]) => HookReturnType<Config> {
-  const { domTarget, eventOptions, window, ...move } = config as UseMoveConfig
-
-  /**
-   * TODO: at the moment we recompute the config object at every render
-   * this could probably be optimized
-   */
-  const mergedConfig: InternalConfig = {
-    ...getInternalGenericOptions({
-      domTarget,
-      eventOptions,
-      window,
-    }),
-    move: getInternalCoordinatesOptions(move),
-  }
-
-  return useRecognizers<Config>({ move: handler }, [MoveRecognizer], mergedConfig)
+  return useRecognizers<Config>({ move: handler }, [MoveRecognizer], buildConfig(config))
 }
