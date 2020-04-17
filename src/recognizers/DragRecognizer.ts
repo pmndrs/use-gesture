@@ -58,9 +58,9 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
       ? [
           ['touchmove', this.onDragChange],
           ['touchend', this.onDragEnd],
+          ['touchcancel', this.onDragEnd],
         ]
       : [
-          ['touchcancel', this.onDragEnd],
           ['mousemove', this.onDragChange],
           ['mouseup', this.onDragEnd],
         ]
