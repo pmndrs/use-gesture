@@ -1,5 +1,5 @@
-import isEqual from "react-fast-compare"
-import memoize from 'memoize-one'
+import isEqual from "../utils/react-fast-compare"
+import memoize from '../utils/memoize-one'
 
 import useRecognizers from './useRecognizers'
 import DragRecognizer from '../recognizers/DragRecognizer'
