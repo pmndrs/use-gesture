@@ -3,7 +3,7 @@ import CoordinatesRecognizer from './CoordinatesRecognizer'
 import Controller from '../Controller'
 import { UseGestureEvent, IngKey } from '../types'
 import { getGenericEventData, getScrollEventValues } from '../utils/event'
-import { calculateDistance, calculateDirection } from '../utils/math'
+import { calculateAllGeometry } from '../utils/math'
 
 export default class ScrollRecognizer extends CoordinatesRecognizer<'scroll'> {
   ingKey = 'scrolling' as IngKey
@@ -43,8 +43,7 @@ export default class ScrollRecognizer extends CoordinatesRecognizer<'scroll'> {
     this.updateGestureState({
       ...startState,
       ...movementDetection,
-      distance: calculateDistance(delta),
-      direction: calculateDirection(delta),
+      ...calculateAllGeometry(delta)
     })
 
     this.fireGestureHandler()

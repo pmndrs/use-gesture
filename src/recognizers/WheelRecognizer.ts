@@ -3,7 +3,7 @@ import CoordinatesRecognizer from './CoordinatesRecognizer'
 import Controller from '../Controller'
 import { UseGestureEvent, IngKey } from '../types'
 import { getWheelEventValues, getGenericEventData } from '../utils/event'
-import { addV, calculateDistance, calculateDirection } from '../utils/math'
+import { addV, calculateAllGeometry } from '../utils/math'
 
 export default class WheelRecognizer extends CoordinatesRecognizer<'wheel'> {
   ingKey = 'wheeling' as IngKey
@@ -50,8 +50,7 @@ export default class WheelRecognizer extends CoordinatesRecognizer<'wheel'> {
     this.updateGestureState({
       ...startState,
       ...movementDetection,
-      distance: calculateDistance(delta),
-      direction: calculateDirection(delta),
+      ...calculateAllGeometry(delta)
     })
 
     this.fireGestureHandler()
