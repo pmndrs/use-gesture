@@ -14,7 +14,7 @@ export function subV<T extends number[]>(v1: T, v2: T): T {
  * @param len the length of the delta vector
  * @returns velocity
  */
-export function calculateVelocity(delta: number[], delta_t: number, len: number): number {
+function calculateVelocity(delta: number[], delta_t: number, len: number): number {
   len = len || Math.hypot(...delta)
   return delta_t ? len / delta_t : 0
 }
@@ -26,7 +26,7 @@ export function calculateVelocity(delta: number[], delta_t: number, len: number)
  * @param delta_t the time offset
  * @returns velocities vector
  */
-export function calculateVelocities<T extends number[]>(delta: T, delta_t: number): T {
+function calculateVelocities<T extends number[]>(delta: T, delta_t: number): T {
   return (delta_t ? delta.map(v => v / delta_t) : Array(delta.length).fill(0)) as T
 }
 
@@ -77,10 +77,6 @@ export function calculateAllKinematics<T extends number[]>(movement: T, delta: T
   }
 }
 
-export function getIntentionalDisplacement(movement: number, threshold: number): number | false {
-  const abs = Math.abs(movement)
-  return abs >= threshold ? Math.sign(movement) * threshold : false
-}
 
 function minMax(value: number, min: number, max: number) {
   return Math.max(min, Math.min(value, max))

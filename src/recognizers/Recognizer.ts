@@ -13,7 +13,7 @@ import {
   FullGestureState,
 } from '../types'
 import { getInitialState } from '../utils/state'
-import { subV, addV, getIntentionalDisplacement, rubberbandIfOutOfBounds } from '../utils/math'
+import { subV, addV, rubberbandIfOutOfBounds } from '../utils/math'
 import { valueFn } from '../utils/utils'
 
 /**
@@ -290,5 +290,14 @@ export default abstract class Recognizer<T extends StateKey> {
     if (!_active) this.clean()
 
     return state
+  }
+}
+
+
+function getIntentionalDisplacement(movement: number, threshold: number): number | false {
+  if (Math.abs(movement) >= threshold) {
+    return Math.sign(movement) * threshold
+  } else {
+    return false
   }
 }
