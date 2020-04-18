@@ -4,10 +4,6 @@
  * Dropped comments and ArrayBuffer handling
  */
 
-const hasElementType = typeof Element !== 'undefined';
-const hasMap = typeof Map === 'function';
-const hasSet = typeof Set === 'function';
-
 function equal(a: any, b: any): boolean {
   if (a === b) return true;
 
@@ -24,7 +20,7 @@ function equal(a: any, b: any): boolean {
     }
 
     var it;
-    if (hasMap && (a instanceof Map) && (b instanceof Map)) {
+    if (typeof Map === 'function' && a instanceof Map && b instanceof Map) {
       if (a.size !== b.size) return false;
       it = a.entries();
       while (!(i = it.next()).done)
@@ -35,7 +31,7 @@ function equal(a: any, b: any): boolean {
       return true;
     }
 
-    if (hasSet && (a instanceof Set) && (b instanceof Set)) {
+    if (typeof Set === 'function' && a instanceof Set && b instanceof Set) {
       if (a.size !== b.size) return false;
       it = a.entries();
       while (!(i = it.next()).done)
@@ -54,7 +50,7 @@ function equal(a: any, b: any): boolean {
     for (i = length; i-- !== 0;)
       if (!Object.prototype.hasOwnProperty.call(b, keys[i])) return false;
 
-    if (hasElementType && a instanceof Element) return false;
+    if (typeof Element !== 'undefined' && a instanceof Element) return false;
 
     for (i = length; i-- !== 0;) {
       if (keys[i] === '_owner' && a.$$typeof) continue;
