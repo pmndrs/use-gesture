@@ -94,7 +94,7 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
     this.updateGestureState({
       ...startState,
       ...this.getMovement(values, startState),
-      cancel: () => this.onCancel(),
+      cancel: this.onCancel,
     })
 
     this.fireGestureHandler()
@@ -131,7 +131,7 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
       ...this.getGenericPayload(event),
       ...kinematics,
       _isTap,
-      cancel: () => this.onCancel(),
+      cancel: this.onCancel,
     })
 
     this.fireGestureHandler()
