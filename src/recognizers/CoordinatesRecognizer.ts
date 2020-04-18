@@ -1,6 +1,6 @@
 import Recognizer from './Recognizer'
 import { calculateAllKinematics, subV } from '../utils/math'
-import { Vector2, UseGestureEvent, PartialGestureState, FalseOrNumber, GestureState, CoordinatesKey } from '../types'
+import { Vector2, UseGestureEvent, PartialGestureState, GestureState, CoordinatesKey } from '../types'
 
 /**
  * @private
@@ -23,12 +23,12 @@ export default abstract class CoordinatesRecognizer<T extends CoordinatesKey> ex
    * lock the gesture axis if lockDirection is specified in the config, block the gesture
    * if the first intentional axis doesn't match the specified axis in config.
    *
-   * @param {[FalseOrNumber, FalseOrNumber]} _intentional
-   * @param {Vector2} _movement
-   * @param {PartialGestureState<T>} state
+   * @param _intentional
+   * @param  _movement
+   * @param state
    */
   protected checkIntentionality(
-    _intentional: [FalseOrNumber, FalseOrNumber],
+    _intentional: [false|number, false|number],
     _movement: Vector2,
     state: PartialGestureState<T>
   ): PartialGestureState<T> {
