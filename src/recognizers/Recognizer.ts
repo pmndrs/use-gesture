@@ -9,7 +9,6 @@ import {
   GestureState,
   PartialGestureState,
   Vector2,
-  FalseOrNumber,
   FullGestureState,
 } from '../types'
 import { getInitialState } from '../utils/state'
@@ -153,7 +152,7 @@ export default abstract class Recognizer<T extends StateKey> {
    * below.
    */
   protected checkIntentionality(
-    _intentional: [FalseOrNumber, FalseOrNumber],
+    _intentional: [false | number, false | number],
     _movement: Vector2,
     _state: PartialGestureState<T>
   ): PartialGestureState<T> {

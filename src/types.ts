@@ -7,7 +7,6 @@ export type AtLeastOneOf<T, U = { [K in keyof T]: Pick<T, K> }> = Partial<T> & U
 
 export type Vector2 = [ number, number ]
 export type Fn = (...args: any[]) => any
-export type FalseOrNumber = false | number
 
 export interface AxisBounds {
   top?: number
@@ -213,7 +212,7 @@ export type SharedGestureState = { [ingKey in IngKey]: boolean } & {
 export interface CommonGestureState {
   _active: boolean
   _blocked: boolean
-  _intentional: [FalseOrNumber, FalseOrNumber]
+  _intentional: [false | number, false | number]
   _movement: Vector2
   _initial: Vector2
   _lastEventType?: string
