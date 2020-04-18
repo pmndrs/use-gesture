@@ -4,7 +4,6 @@ import {
   GenericOptions,
   InternalGenericOptions,
   DragConfig,
-  Tuple,
   GestureOptions,
   InternalDragOptions,
   InternalGestureOptions,
@@ -83,7 +82,7 @@ export function getInternalCoordinatesOptions(coordinatesConfig: CoordinatesConf
     ...getInternalGestureOptions(internalOptions),
     ...defaultCoordinatesOptions,
     ...matchKeysFromObject({ axis, lockDirection }, coordinatesConfig),
-    bounds: boundsArray as Tuple<Vector2>,
+    bounds: boundsArray as [ Vector2, Vector2 ],
   }
 }
 
@@ -99,7 +98,7 @@ export function getInternalDistanceAngleOptions(
 
   return {
     ...getInternalGestureOptions(internalOptions),
-    bounds: boundsArray as Tuple<Vector2>,
+    bounds: boundsArray as [ Vector2, Vector2 ],
   }
 }
 

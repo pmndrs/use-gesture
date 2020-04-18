@@ -5,8 +5,7 @@ import Recognizer from './recognizers/Recognizer'
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
 export type AtLeastOneOf<T, U = { [K in keyof T]: Pick<T, K> }> = Partial<T> & U[keyof U]
 
-export type Tuple<T> = [T, T]
-export type Vector2 = Tuple<number>
+export type Vector2 = [ number, number ]
 export type Fn = (...args: any[]) => any
 export type FalseOrNumber = false | number
 
@@ -98,12 +97,12 @@ export interface InternalGestureOptions {
 
 export interface InternalCoordinatesOptions extends InternalGestureOptions {
   axis?: 'x' | 'y'
-  bounds: Tuple<Vector2>
+  bounds: [ Vector2, Vector2 ]
   lockDirection: boolean
 }
 
 export interface InternalDistanceAngleOptions extends InternalGestureOptions {
-  bounds: Tuple<Vector2>
+  bounds: [ Vector2, Vector2 ]
 }
 
 export interface InternalDragOptions extends InternalCoordinatesOptions {
