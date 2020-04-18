@@ -13,7 +13,8 @@ import {
   FullGestureState,
 } from '../types'
 import { getInitialState } from '../utils/state'
-import { subV, addV, rubberbandIfOutOfBounds } from '../utils/math'
+import { rubberbandIfOutOfBounds } from '../utils/rubberband'
+import { subV, addV } from '../utils/math'
 import { valueFn } from '../utils/utils'
 
 /**
