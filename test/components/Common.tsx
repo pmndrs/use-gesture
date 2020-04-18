@@ -88,6 +88,7 @@ export const Common = React.forwardRef(
             {String(v)}
           </div>
         ))}
+        <div data-testid={testKey}>{JSON.stringify(state)}</div>
         {children}
       </div>
     )
