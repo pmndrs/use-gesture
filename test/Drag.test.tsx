@@ -71,7 +71,7 @@ describe.each([
     expect(getByTestId(`${prefix}drag-delta`)).toHaveTextContent('10,30')
     expect(getByTestId(`${prefix}drag-previous`)).toHaveTextContent('10,20')
     expect(getByTestId(`${prefix}drag-velocity`)).not.toHaveTextContent(/^0$/)
-    expect(getByTestId(`${prefix}drag-vxvy`)).toHaveTextContent(`${10 / delta_t},${30 / delta_t}`)
+    expect(getByTestId(`${prefix}drag-vxvy`)).toHaveTextContent(`${10*(1/delta_t)},${30*(1/delta_t)}`)
   })
 
   test('moving again should further update xy and movement', () => {

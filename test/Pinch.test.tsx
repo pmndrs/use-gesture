@@ -78,7 +78,7 @@ describe.each([
   })
 
   test('moving should update kinematics', () => {
-    expect(getByTestId(`${prefix}pinch-vdva`)).toHaveTextContent(`${-10 / delta_t},${-90 / delta_t}`)
+    expect(getByTestId(`${prefix}pinch-vdva`)).toHaveTextContent(`${-10*(1/delta_t)},${-90*(1/delta_t)}`)
   })
 
   test('touchEnd should terminate the gesture', () => {

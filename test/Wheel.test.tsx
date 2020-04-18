@@ -58,7 +58,7 @@ describe.each([
 
   test('kinematics should update', () => {
     expect(getByTestId(`${prefix}wheel-velocity`)).not.toHaveTextContent(/^0$/)
-    expect(getByTestId(`${prefix}wheel-vxvy`)).toHaveTextContent(`${4 / delta_t},${-5 / delta_t}`)
+    expect(getByTestId(`${prefix}wheel-vxvy`)).toHaveTextContent(`${4 * (1/ delta_t)},${-5 * (1/ delta_t)}`)
   })
 
   test('the last wheel event should debounce and terminate the gesture', async () => {
