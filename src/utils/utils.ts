@@ -20,8 +20,14 @@ export function chainFns(...fns: Function[]): Function {
   }
 }
 
-
-export function ensureVector<T>(value: T | [ T, T ]): [ T, T ] {
+/**
+ * Expects a simple value or 2D vector (an array with 2 elements) and
+ * always returns 2D vector. If simple value is passed, returns a
+ * vector with this value as both coordinates.
+ * 
+ * @param value
+ */
+export function ensureVector<T>(value: T|[ T, T ]): [ T, T ] {
   if (!Array.isArray(value)) {
     return [ value, value ]
   } else {
@@ -29,6 +35,12 @@ export function ensureVector<T>(value: T | [ T, T ]): [ T, T ] {
   }
 }
 
+/**
+ * Helper for defining a default value
+ * 
+ * @param value 
+ * @param fallback 
+ */
 export function withDefault<T>(value:T|undefined, fallback: T): T {
   if (value === undefined) {
     return fallback
@@ -36,6 +48,7 @@ export function withDefault<T>(value:T|undefined, fallback: T): T {
     return value
   } 
 }
+
 
 export function matchKeysFromObject<T extends object, K extends object>(obj: T, matchingObject: K): Partial<T> {
   const o: Partial<T> = {}
@@ -45,8 +58,12 @@ export function matchKeysFromObject<T extends object, K extends object>(obj: T, 
   return o
 }
 
-
-
+/**
+ * Resolves getters (functions) by calling them
+ * If simple value is given it just pasees through
+ * 
+ * @param v
+ */
 export function valueFn<T>(v: T | (() => T)): T {
   if (typeof v === "function") {
     // @ts-ignore
