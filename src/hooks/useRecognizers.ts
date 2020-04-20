@@ -66,7 +66,24 @@ export default function useRecognizers<Config extends Partial<GenericOptions>>(
   controller.nativeRefs = nativeHandlers
 
   // Run controller clean functions on unmount.
-  React.useEffect(() => controller.current!.clean, [])
+  React.useEffect(() => {
+    if (controller.current.isDomTargetDefined) {
+      controller.bind()
+    }
+    return controller.current!.clean
+  }, [])
 
-  return controller.bind
+  if (controller.current.isDomTargetDefined) {
+    // @ts-ignore
+    return () => (...args: any[]) => {
+      console.warn(
+        `[Deprecation warning] calling useEffect(bind, [bind]) is no longer required. \n`
+       +`In the next major this will lead to an error`
+      )
+    };
+  } else {
+    return controller.bind
+  }
+
+  
 }

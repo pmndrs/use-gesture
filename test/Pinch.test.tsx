@@ -3,6 +3,7 @@ import { render, cleanup, fireEvent, createEvent, wait } from '@testing-library/
 import '@testing-library/jest-dom/extend-expect'
 import Interactive from './components/Interactive'
 import InteractiveDom from './components/InteractiveDom'
+import InteractiveDomBackwardCompat from './components/InteractiveDomBackwardCompat'
 import { InteractiveType } from './components/types'
 
 afterAll(cleanup)
@@ -10,11 +11,11 @@ afterAll(cleanup)
 // TODO test with gesturechange
 
 describe.each([
-  ['attached to component', Interactive, false],
-  ['attached to node', InteractiveDom, true],
-])('testing onPinch %s)', (_testName, C, domTarget) => {
+  ['attached to component', Interactive, ''],
+  ['attached to node', InteractiveDom, 'dom-'],
+  ['attached to node and called effect', InteractiveDomBackwardCompat, 'backward-dom-'],
+])('testing onPinch %s)', (_testName, C, prefix) => {
   const Component = C as InteractiveType
-  const prefix = domTarget ? 'dom-' : ''
   const { getByTestId, queryByTestId, rerender } = render(<Component gestures={['Pinch']} memoArg="memo" />)
   const element = getByTestId(`${prefix}pinch-el`)
   let delta_t: number

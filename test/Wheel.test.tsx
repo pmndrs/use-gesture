@@ -3,17 +3,18 @@ import { render, cleanup, fireEvent, createEvent, wait } from '@testing-library/
 import '@testing-library/jest-dom/extend-expect'
 import Interactive from './components/Interactive'
 import InteractiveDom from './components/InteractiveDom'
+import InteractiveDomBackwardCompat from './components/InteractiveDomBackwardCompat'
 import { InteractiveType } from './components/types'
 import { later } from './utils'
 
 afterAll(cleanup)
 
 describe.each([
-  ['attached to component', Interactive, false],
-  ['attached to node', InteractiveDom, true],
-])('testing onWheel %s)', (_testName, C, domTarget) => {
+  ['attached to component', Interactive, ''],
+  ['attached to node', InteractiveDom, 'dom-'],
+  ['attached to node and called effect', InteractiveDomBackwardCompat, 'backward-dom-'],
+])('testing onWheel %s)', (_testName, C, prefix) => {
   const Component = C as InteractiveType
-  const prefix = domTarget ? 'dom-' : ''
   const { getByTestId, rerender } = render(<Component gestures={['Wheel']} memoArg="memo" />)
   const element = getByTestId(`${prefix}wheel-el`)
 

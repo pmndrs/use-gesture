@@ -134,9 +134,13 @@ export default class Controller {
     return bindings
   }
 
+  public get isDomTargetDefined() {
+    return !!this.config.domTarget
+  }
+
   public getBind = () => {
     // If config.domTarget is set we add event listeners to it and return the clean function.
-    if (this.config.domTarget) {
+    if (this.isDomTargetDefined) {
       const domTarget = this.getDomTarget()
       domTarget && this.addDomTargetListeners(domTarget)
       return this.clean

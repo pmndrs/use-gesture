@@ -9,14 +9,14 @@ const InteractiveDom: InteractiveType = ({ gestures, canceled, memoArg, config }
   const [state, set] = React.useState({})
   const [[startFired, endFired], setStartEnd] = React.useState([0, 0])
 
-  useGesture(createHandlers({ gestures, memoArg, set, setStartEnd, canceled }), {
+  const bind = useGesture(createHandlers({ gestures, memoArg, set, setStartEnd, canceled }), {
     ...config,
     domTarget,
   }) as (...args: any[]) => Fn
 
-  // React.useEffect(bind, [bind])
+  React.useEffect(bind, [bind])
 
-  const testKey = 'dom-' + gestures.join('').toLowerCase()
+  const testKey = 'backward-dom-' + gestures.join('').toLowerCase()
 
   return <Common ref={domTarget} state={state} testKey={testKey} startFired={startFired} endFired={endFired} />
 }
