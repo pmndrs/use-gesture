@@ -1,4 +1,3 @@
-import React from 'react'
 import useRecognizers from './useRecognizers'
 import DragRecognizer from '../recognizers/DragRecognizer'
 import WheelRecognizer from '../recognizers/WheelRecognizer'
@@ -22,6 +21,43 @@ import {
   HookReturnType,
 } from '../types'
 
+
+
+export function wrapStart(fn: Function) {
+  return function (this: any, { first }: any) {
+    if (first) fn.apply(this, arguments)
+  }
+}
+
+export function wrapEnd(fn: Function) {
+  return function (this: any, { first }: any) {
+    if (first) fn.apply(this, arguments)
+  }
+}
+
+
+
+const RE_NOT_NATIVE = /^on(Drag|Wheel|Scroll|Move|Pinch|Hover)/;
+
+function sortHandlers(handlers: UserHandlersPartial) {
+  const native: any = {}
+  const handle: any = {}
+  const actions = new Set();
+
+  for (let key in handlers) {
+    if (RE_NOT_NATIVE.test(key)) {
+      actions.add(RegExp.lastMatch)
+      handle[key] = (handlers as any)[key];
+    } else {
+      native[key] = (handlers as any)[key];
+    }
+  }
+
+  return [ handle, native, actions ]
+}
+
+
+
 /**
  * @public
  *
@@ -32,63 +68,58 @@ import {
  * @returns {(...args: any[]) => HookReturnType<Config>}
  */
 export function useGesture<Config extends UseGestureConfig>(
-  handlers: UserHandlersPartial,
+  _handlers: UserHandlersPartial,
   config: UseGestureConfig = {}
 ): (...args: any[]) => HookReturnType<Config> {
-  /**
-   * If handlers contains {onDragStart, onDrag, onDragEnd, onMoveStart, onMove}
-   * actions will include 'onDrag' and 'onMove.
-   */
-  const [actions] = React.useState(() => new Set(Object.keys(handlers).map(k => k.replace(/End|Start/, ''))))
+
+  const [ handlers, nativeHandlers, actions ] = sortHandlers(_handlers)
 
   /**
    * Here we compute the derived internal config based on the provided config object.
    * We decompose the config into its generic and gesture options and compute each.
    * TODO: this is currently done on every render!
    */
-  const { drag, wheel, move, scroll, pinch, hover, ...restConfig } = config
+  const { drag, wheel, move, scroll, pinch, hover, eventOptions, window, domTarget, enabled } = config
 
-  const mergedConfig: InternalConfig = getInternalGenericOptions(restConfig)
+  const mergedConfig: InternalConfig = getInternalGenericOptions({ eventOptions, window, domTarget, enabled })
 
   const classes: RecognizerClass[] = []
   const internalHandlers: Partial<InternalHandlers> = {}
 
   // will hold reference to native handlers such as onClick, onMouseDown, etc.
-  const _nativeHandlers = { ...handlers }
 
   if (actions.has('onDrag')) {
     classes.push(DragRecognizer)
-    internalHandlers.drag = includeStartEndHandlers(handlers, 'onDrag', _nativeHandlers)
+    internalHandlers.drag = includeStartEndHandlers(handlers, 'onDrag')
     mergedConfig.drag = getInternalDragOptions(drag)
   }
   if (actions.has('onWheel')) {
     classes.push(WheelRecognizer)
-    internalHandlers.wheel = includeStartEndHandlers(handlers, 'onWheel', _nativeHandlers)
+    internalHandlers.wheel = includeStartEndHandlers(handlers, 'onWheel')
     mergedConfig.wheel = getInternalCoordinatesOptions(wheel)
   }
   if (actions.has('onScroll')) {
     classes.push(ScrollRecognizer)
-    internalHandlers.scroll = includeStartEndHandlers(handlers, 'onScroll', _nativeHandlers)
+    internalHandlers.scroll = includeStartEndHandlers(handlers, 'onScroll')
     mergedConfig.scroll = getInternalCoordinatesOptions(scroll)
   }
   if (actions.has('onMove')) {
     classes.push(MoveRecognizer)
-    internalHandlers.move = includeStartEndHandlers(handlers, 'onMove', _nativeHandlers)
+    internalHandlers.move = includeStartEndHandlers(handlers, 'onMove')
     mergedConfig.move = getInternalCoordinatesOptions(move)
   }
   if (actions.has('onPinch')) {
     classes.push(PinchRecognizer)
-    internalHandlers.pinch = includeStartEndHandlers(handlers, 'onPinch', _nativeHandlers)
+    internalHandlers.pinch = includeStartEndHandlers(handlers, 'onPinch')
     mergedConfig.pinch = getInternalDistanceAngleOptions(pinch)
   }
   if (actions.has('onHover')) {
     if (!actions.has('onMove')) classes.push(MoveRecognizer)
     internalHandlers.hover = handlers.onHover
     mergedConfig.hover = { enabled: true, ...hover }
-    delete _nativeHandlers.onHover
   }
 
-  return useRecognizers<Config>(internalHandlers, classes, mergedConfig, _nativeHandlers)
+  return useRecognizers<Config>(internalHandlers, classes, mergedConfig, nativeHandlers)
 }
 /**
  * @private
@@ -102,15 +133,10 @@ export function useGesture<Config extends UseGestureConfig>(
  */
 function includeStartEndHandlers(
   handlers: UserHandlersPartial,
-  handlerKey: HandlerKey,
-  _nativeHandlers: UserHandlersPartial
+  handlerKey: HandlerKey
 ) {
   const startKey = (handlerKey + 'Start') as keyof UserHandlers
   const endKey = (handlerKey + 'End') as keyof UserHandlers
-
-  delete _nativeHandlers[handlerKey]
-  delete _nativeHandlers[startKey]
-  delete _nativeHandlers[endKey]
 
   const fn = (state: any) => {
     let memo: any = undefined
