@@ -1,6 +1,3 @@
-import { Vector2 } from '../types'
-
-// blank function
 export function noop() {}
 
 
@@ -32,7 +29,7 @@ export function ensureVector<T>(value: T | [T,T]): [ T, T ] {
 export function withDefault<T>(value:T|undefined, fallback: T): T {
   if (value !== undefined) return value
   return fallback
-} 
+}
 
 export function matchKeysFromObject<T extends object, K extends object>(obj: T, matchingObject: K): Partial<T> {
   const o: Partial<T> = {}
@@ -42,6 +39,13 @@ export function matchKeysFromObject<T extends object, K extends object>(obj: T, 
   return o
 }
 
-export function valueFn(v: Vector2 | (() => Vector2)) {
-  return typeof v === 'function' ? v() : v
+
+
+export function valueFn<T>(v: T | (() => T)): T {
+  if (typeof v === "function") {
+    // @ts-ignore
+    return v()
+  } else {
+    return v
+  }
 }
