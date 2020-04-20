@@ -1,4 +1,4 @@
-import { def, matchKeysFromObject } from './utils'
+import { ensureVector, withDefault, matchKeysFromObject } from './utils'
 import {
   Vector2,
   GenericOptions,
@@ -65,8 +65,8 @@ export function getInternalGestureOptions(gestureConfig: Partial<GestureOptions>
   return {
     enabled,
     initial,
-    threshold: def.array(threshold) as Vector2,
-    rubberband: def.array(rubberband) as Vector2,
+    threshold: ensureVector(threshold),
+    rubberband: ensureVector(rubberband),
   }
 }
 
@@ -74,8 +74,8 @@ export function getInternalCoordinatesOptions(coordinatesConfig: CoordinatesConf
   const { axis, lockDirection, bounds = {}, ...internalOptions } = coordinatesConfig
 
   const boundsArray = [
-    [def.withDefault(bounds.left, -Infinity), def.withDefault(bounds.right, Infinity)],
-    [def.withDefault(bounds.top, -Infinity), def.withDefault(bounds.bottom, Infinity)],
+    [withDefault(bounds.left, -Infinity), withDefault(bounds.right, Infinity)],
+    [withDefault(bounds.top, -Infinity), withDefault(bounds.bottom, Infinity)],
   ]
 
   return {
@@ -92,8 +92,8 @@ export function getInternalDistanceAngleOptions(
   const { distanceBounds = {}, angleBounds = {}, ...internalOptions } = distanceAngleConfig
 
   const boundsArray = [
-    [def.withDefault(distanceBounds.min, -Infinity), def.withDefault(distanceBounds.max, Infinity)],
-    [def.withDefault(angleBounds.min, -Infinity), def.withDefault(angleBounds.max, Infinity)],
+    [withDefault(distanceBounds.min, -Infinity), withDefault(distanceBounds.max, Infinity)],
+    [withDefault(angleBounds.min, -Infinity), withDefault(angleBounds.max, Infinity)],
   ]
 
   return {
@@ -107,13 +107,16 @@ export function getInternalDragOptions(dragConfig: DragConfig = {}): InternalDra
   let {
     swipeVelocity = DEFAULT_SWIPE_VELOCITY,
     swipeDistance = DEFAULT_SWIPE_DISTANCE,
-    delay = false,
+    delay = 0,
     filterTaps = false,
     axis,
     lockDirection,
   } = dragOptions
 
-  if (threshold === void 0) {
+  if (delay === true)  delay = DEFAULT_DRAG_DELAY
+  if (delay === false) delay = 0
+
+  if (threshold === undefined) {
     threshold = Math.max(0, filterTaps ? 3 : 0, lockDirection || axis ? 1 : 0)
   } else {
     filterTaps = true
@@ -122,12 +125,13 @@ export function getInternalDragOptions(dragConfig: DragConfig = {}): InternalDra
   const internalCoordinatesOptions = getInternalCoordinatesOptions(
     matchKeysFromObject({ enabled, threshold, bounds, rubberband, axis, lockDirection, initial }, dragConfig)
   )
+  
 
   return {
     ...internalCoordinatesOptions,
     filterTaps: filterTaps || internalCoordinatesOptions.threshold[0] + internalCoordinatesOptions.threshold[1] > 0,
-    swipeVelocity: def.array(swipeVelocity) as Vector2,
-    swipeDistance: def.array(swipeDistance) as Vector2,
-    delay: typeof delay === 'number' ? delay : delay ? DEFAULT_DRAG_DELAY : 0,
+    swipeVelocity: ensureVector(swipeVelocity),
+    swipeDistance: ensureVector(swipeDistance),
+    delay,
   }
 }

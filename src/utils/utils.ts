@@ -20,10 +20,15 @@ export function chainFns(...fns: Function[]): Function {
 }
 
 
-export const def = {
-  array: <T>(value: T | T[]): T[] => (Array.isArray(value) ? value : [value, value]),
-  withDefault: <T>(value: T | undefined, defaultIfUndefined: T): T => (value !== void 0 ? value : defaultIfUndefined),
+export function ensureVector<T>(value: T | [T,T]): [ T, T ] {
+  if (Array.isArray(value)) return value
+  return [ value, value ]
 }
+
+export function withDefault<T>(value:T|undefined, fallback: T): T {
+  if (value !== undefined) return value
+  return fallback
+} 
 
 export function matchKeysFromObject<T extends object, K extends object>(obj: T, matchingObject: K): Partial<T> {
   const o: Partial<T> = {}
