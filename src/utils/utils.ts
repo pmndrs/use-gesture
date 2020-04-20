@@ -3,6 +3,13 @@ import { Vector2 } from '../types'
 // blank function
 export function noop() {}
 
+
+/**
+ * TODO Beware that only optimized cases are covered in tests =)
+ * TODO Need to cover general case as well
+ * 
+ * @param fns 
+ */
 export function chainFns(...fns: Function[]): Function {
   if (fns.length === 0) return noop;
   if (fns.length === 1) return fns[0];
