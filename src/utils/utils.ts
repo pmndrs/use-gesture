@@ -3,7 +3,10 @@ import { Vector2 } from '../types'
 // blank function
 export function noop() {}
 
-export function chainFns(...fns: Function[]) {
+export function chainFns(...fns: Function[]): Function {
+  if (fns.length === 0) return noop;
+  if (fns.length === 1) return fns[0];
+
   return function (this: any) {
     for (let fn of fns) fn.apply(this, arguments)
   }
