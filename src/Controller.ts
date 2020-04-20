@@ -89,9 +89,16 @@ export default class Controller {
     /** We iterate on the entries of this.binding for each event, then we chain
      * the array of functions mapped to it and push them to this.domListeners
      */
-    Object.entries(this.bindings).forEach(([event, fns]) => {
-      this.domListeners.push([event.substr(2).toLowerCase(), chainFns(...(fns as Fn[]))])
-    })
+
+    for (let key in this.bindings) {
+      // @ts-ignore
+      const handlers: Function[] = this.bindings[key]
+
+      const eventName = key.substr(2).toLowerCase()
+      const handler = chainFns(...handlers)
+      
+      this.domListeners.push([ eventName, handler ])
+    }
 
     addListeners(target, this.domListeners, this.config.eventOptions)
   }
