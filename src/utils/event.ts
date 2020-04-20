@@ -1,9 +1,5 @@
 import { Fn, EventOptions, UseGestureEvent, Vector2, WebKitGestureEvent } from '../types'
 
-const setListeners = (add: boolean) => (el: EventTarget, listeners: [string, Fn][], options: EventOptions): void => {
-  const action = add ? 'addEventListener' : 'removeEventListener'
-  listeners.forEach(([eventName, fn]) => el[action](eventName, fn, options))
-}
 
 /**
  * Whether the browser supports GestureEvent (ie Safari)
@@ -19,8 +15,17 @@ export function supportsGestureEvents(): boolean {
   }
 }
 
-export const addListeners = setListeners(true)
-export const removeListeners = setListeners(false)
+export function addListeners(el: EventTarget, listeners: Array<[string, Fn]>, options: EventOptions) {
+  for (let [eventName, eventHandler] of listeners) {
+    el.addEventListener(eventName, eventHandler, options)
+  }
+}
+
+export function removeListeners(el: EventTarget, listeners: Array<[string, Fn]>, options: EventOptions) {
+  for (let [eventName, eventHandler] of listeners) {
+    el.removeEventListener(eventName, eventHandler, options)
+  }
+}
 
 interface ModifierKeys {
   shiftKey: boolean
