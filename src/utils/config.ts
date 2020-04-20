@@ -1,4 +1,4 @@
-import { ensureVector, assignDefault, matchKeysFromObject } from './utils'
+import { ensureVector, assignDefault } from './utils'
 import {
   GenericOptions,
   InternalGenericOptions,
@@ -61,7 +61,7 @@ export function getInternalGestureOptions(gestureConfig: Partial<GestureOptions>
 
 
 export function getInternalCoordinatesOptions(coordinatesConfig: CoordinatesConfig = {}): InternalCoordinatesOptions {
-  let { axis, lockDirection,  threshold, rubberband, enabled, initial } = coordinatesConfig
+  let { axis, lockDirection = false,  threshold, rubberband, enabled, initial } = coordinatesConfig
 
   const bounds = assignDefault(coordinatesConfig.bounds, {
     left  : -Infinity,
@@ -73,9 +73,8 @@ export function getInternalCoordinatesOptions(coordinatesConfig: CoordinatesConf
 
   return {
     ...getInternalGestureOptions({ threshold, rubberband, enabled, initial }),
-    lockDirection: false,
-    axis: undefined,
-    ...matchKeysFromObject({ axis, lockDirection }, coordinatesConfig),
+    lockDirection,
+    axis,
     bounds: [
       [bounds.left, bounds.right ],
       [bounds.top , bounds.bottom],
@@ -135,7 +134,7 @@ export function getInternalDragOptions(dragConfig: DragConfig = {}): InternalDra
   }
 
   const internalCoordinatesOptions = getInternalCoordinatesOptions(
-    matchKeysFromObject({ enabled, threshold, bounds, rubberband, axis, lockDirection, initial }, dragConfig)
+    { enabled, threshold, bounds, rubberband, axis, lockDirection, initial }
   )
   
 

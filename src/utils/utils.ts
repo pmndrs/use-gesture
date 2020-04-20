@@ -52,13 +52,6 @@ export function assignDefault<T extends Object>(value: Partial<T>|undefined, fal
 }
 
 
-export function matchKeysFromObject<T extends object, K extends object>(obj: T, matchingObject: K): Partial<T> {
-  const o: Partial<T> = {}
-  Object.entries(obj).forEach(
-    ([key, value]) => (value !== void 0 || key in matchingObject) && (o[key as keyof T] = value)
-  )
-  return o
-}
 
 /**
  * Resolves getters (functions) by calling them
