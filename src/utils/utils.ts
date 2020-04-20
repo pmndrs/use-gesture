@@ -15,7 +15,11 @@ export function chainFns(...fns: Function[]): Function {
   if (fns.length === 1) return fns[0];
 
   return function (this: any) {
-    for (let fn of fns) fn.apply(this, arguments)
+    var result;
+    for (let fn of fns) {
+      result = fn.apply(this, arguments) || result;
+    }
+    return result;
   }
 }
 
