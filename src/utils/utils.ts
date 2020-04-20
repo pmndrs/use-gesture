@@ -21,14 +21,20 @@ export function chainFns(...fns: Function[]): Function {
 }
 
 
-export function ensureVector<T>(value: T | [T,T]): [ T, T ] {
-  if (Array.isArray(value)) return value
-  return [ value, value ]
+export function ensureVector<T>(value: T | [ T, T ]): [ T, T ] {
+  if (!Array.isArray(value)) {
+    return [ value, value ]
+  } else {
+    return value
+  }
 }
 
 export function withDefault<T>(value:T|undefined, fallback: T): T {
-  if (value !== undefined) return value
-  return fallback
+  if (value === undefined) {
+    return fallback
+  } else {
+    return value
+  } 
 }
 
 export function matchKeysFromObject<T extends object, K extends object>(obj: T, matchingObject: K): Partial<T> {
