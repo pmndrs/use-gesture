@@ -38,8 +38,7 @@ interface ModifierKeys {
  * @param event
  * @returns modifier keys
  */
-export function getModifierKeys(event: UseGestureEvent): ModifierKeys {
-  const { shiftKey, altKey, metaKey, ctrlKey } = event
+export function getModifierKeys({ shiftKey, altKey, metaKey, ctrlKey }: UseGestureEvent): ModifierKeys {
   return { shiftKey, altKey, metaKey, ctrlKey }
 }
 
@@ -112,13 +111,19 @@ export function getWebkitGestureEventValues(event: WebKitGestureEvent): Values {
  * @param event
  * @returns two touches event data
  */
-export function getTwoTouchesEventData(event: React.TouchEvent) {
-  const { touches } = event
-  const dx = touches[1].clientX - touches[0].clientX
-  const dy = touches[1].clientY - touches[0].clientY
+export function getTwoTouchesEventData({ touches }: React.TouchEvent) {
+  const A = touches[0], B = touches[1];
 
-  const values: Vector2 = [Math.hypot(dx, dy), -(Math.atan2(dx, dy) * 180) / Math.PI]
-  const origin: Vector2 = [(touches[1].clientX + touches[0].clientX) / 2, (touches[1].clientY + touches[0].clientY) / 2]
+  const dx = B.clientX - A.clientX
+  const dy = B.clientY - A.clientY
+  const cx = (B.clientX + A.clientX)/2
+  const cy = (B.clientY + A.clientY)/2
+
+  const distance =   Math.hypot(dx, dy)
+  const angle    = -(Math.atan2(dx, dy) * 180) / Math.PI
+
+  const values: Vector2 = [ distance, angle ]
+  const origin: Vector2 = [ cx, cy ]
 
   return { values, origin }
 }
