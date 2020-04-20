@@ -107,7 +107,7 @@ export function getInternalDragOptions(dragConfig: DragConfig = {}): InternalDra
   let {
     swipeVelocity = DEFAULT_SWIPE_VELOCITY,
     swipeDistance = DEFAULT_SWIPE_DISTANCE,
-    delay = 0,
+    delay = false,
     filterTaps = false,
     axis,
     lockDirection,

@@ -17,7 +17,7 @@ import {
   UserHandlersPartial,
   InternalHandlers,
   UserHandlers,
-  RecognizerClasses,
+  RecognizerClass,
   UseGestureConfig,
   HookReturnType,
 } from '../types'
@@ -50,7 +50,7 @@ export function useGesture<Config extends UseGestureConfig>(
 
   const mergedConfig: InternalConfig = getInternalGenericOptions(restConfig)
 
-  const classes: RecognizerClasses = []
+  const classes: RecognizerClass[] = []
   const internalHandlers: Partial<InternalHandlers> = {}
 
   // will hold reference to native handlers such as onClick, onMouseDown, etc.

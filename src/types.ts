@@ -8,17 +8,6 @@ export type AtLeastOneOf<T, U = { [K in keyof T]: Pick<T, K> }> = Partial<T> & U
 export type Vector2 = [ number, number ]
 export type Fn = any
 
-export interface AxisBounds {
-  top?: number
-  bottom?: number
-  left?: number
-  right?: number
-}
-
-export interface Bounds {
-  min?: number
-  max?: number
-}
 
 export interface EventOptions {
   capture: boolean
@@ -44,15 +33,26 @@ export interface GestureOptions {
 export interface CoordinatesOptions {
   axis?: 'x' | 'y'
   lockDirection: boolean
-  bounds?: AxisBounds
+  bounds?: {
+    top?: number
+    bottom?: number
+    left?: number
+    right?: number
+  }
 }
 
-export interface DistanceAngleOptions {
-  distanceBounds?: Bounds
-  angleBounds?: Bounds
+interface DistanceAngleOptions {
+  distanceBounds?: {
+    min?: number
+    max?: number
+  }
+  angleBounds?: {
+    min?: number
+    max?: number
+  }
 }
 
-export interface DragOptions {
+interface DragOptions {
   filterTaps: boolean
   swipeVelocity: number | Vector2
   swipeDistance: number | Vector2
@@ -196,7 +196,7 @@ export type IngKey = 'hovering' | 'scrolling' | 'wheeling' | 'dragging' | 'movin
 
 export type CoordinatesKey = 'drag' | 'wheel' | 'move' | 'scroll'
 export type DistanceAngleKey = 'pinch'
-export type GestureKey = CoordinatesKey | DistanceAngleKey | 'hover'
+type GestureKey = CoordinatesKey | DistanceAngleKey | 'hover'
 export type StateKey<T extends GestureKey = GestureKey> = T extends 'hover' ? 'move' : T
 
 export type SharedGestureState = { [ingKey in IngKey]: boolean } & {
@@ -262,7 +262,8 @@ export interface DistanceAngle {
   turns: number
 }
 
-export type State = { shared: SharedGestureState } & {
+export type State = { 
+  shared: SharedGestureState
   drag: CommonGestureState & Coordinates & DragState
   wheel: CommonGestureState & Coordinates
   scroll: CommonGestureState & Coordinates
@@ -300,15 +301,7 @@ export type UserHandlers = {
 
 export type InternalHandlers = { [Key in GestureKey]: Handler<Key> }
 
-export type RecognizerClass<T extends StateKey> = { new (controller: Controller, args: any[]): Recognizer<T> }
-
-export type RecognizerClasses = (
-  | RecognizerClass<'drag'>
-  | RecognizerClass<'pinch'>
-  | RecognizerClass<'wheel'>
-  | RecognizerClass<'move'>
-  | RecognizerClass<'scroll'>
-)[]
+export type RecognizerClass<T extends StateKey = StateKey> = { new (controller: Controller, args: any[]): Recognizer<T> }
 
 type ReactDomAttributes = React.DOMAttributes<Element>
 
