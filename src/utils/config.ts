@@ -19,6 +19,20 @@ const DEFAULT_SWIPE_DISTANCE = 60
 
 const defaultWindow = typeof window !== 'undefined' ? window : undefined
 
+
+function getInternalGestureOptions(gestureConfig: Partial<GestureOptions>): InternalGestureOptions {
+  let { threshold, rubberband, enabled = true, initial = [0, 0] } = gestureConfig
+
+  if (typeof rubberband === 'boolean') rubberband = rubberband ? DEFAULT_RUBBERBAND : 0
+
+  return {
+    enabled,
+    initial,
+    threshold : ensureVector(threshold, 0),
+    rubberband: ensureVector(rubberband, 0),
+  }
+}
+
 /**
  * @private
  *
@@ -43,19 +57,6 @@ export function getInternalGenericOptions(config: Partial<GenericOptions> = {}):
     eventOptions: { passive: !domTarget || !!passive, capture: !!capture },
     captureString: capture ? 'Capture' : '',
     pointer: !!pointer,
-  }
-}
-
-export function getInternalGestureOptions(gestureConfig: Partial<GestureOptions>): InternalGestureOptions {
-  let { threshold, rubberband, enabled = true, initial = [0, 0] } = gestureConfig
-
-  if (typeof rubberband === 'boolean') rubberband = rubberband ? DEFAULT_RUBBERBAND : 0
-
-  return {
-    enabled,
-    initial,
-    threshold : ensureVector(threshold, 0),
-    rubberband: ensureVector(rubberband, 0),
   }
 }
 
