@@ -4,7 +4,7 @@ import memoize from '../utils/memoize-one'
 
 import useRecognizers from './useRecognizers'
 import ScrollRecognizer from '../recognizers/ScrollRecognizer'
-import { Handler, InternalConfig, HookReturnType, UseScrollConfig } from '../types'
+import { Handler, InternalConfig, UseScrollConfig } from '../types'
 import { getInternalGenericOptions, getInternalCoordinatesOptions } from '../utils/config'
 
 const buildScrollConfig = memoize(({ domTarget, eventOptions, window, ...rest }: UseScrollConfig) => ({
@@ -21,9 +21,6 @@ const buildScrollConfig = memoize(({ domTarget, eventOptions, window, ...rest }:
  * @param {(Config | {})} [config={}] - the config object including generic options and scroll options
  * @returns {(...args: any[]) => HookReturnType<Config>}
  */
-export function useScroll(
-  handler: Handler<'scroll'>, 
-  config: UseScrollConfig | {} = {}
-): (...args: any[]) => HookReturnType<UseScrollConfig> {
+export function useScroll(handler: Handler<'scroll'>, config: UseScrollConfig | {} = {}) {
   return useRecognizers<UseScrollConfig>({ scroll: handler }, [ScrollRecognizer], buildScrollConfig(config))
 }

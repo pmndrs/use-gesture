@@ -1,9 +1,8 @@
-
 import isEqual from "../utils/react-fast-compare"
 import memoize from '../utils/memoize-one'
 import useRecognizers from './useRecognizers'
 import PinchRecognizer from '../recognizers/PinchRecognizer'
-import { Handler, InternalConfig, HookReturnType, UsePinchConfig } from '../types'
+import { Handler, InternalConfig, UsePinchConfig } from '../types'
 import { getInternalGenericOptions, getInternalDistanceAngleOptions } from '../utils/config'
 
 
@@ -22,14 +21,6 @@ const buildConfig = memoize(({ domTarget, eventOptions, window, ...rest }: UsePi
  * @param {(Config | {})} [config={}] - the config object including generic options and pinch options
  * @returns {(...args: any[]) => HookReturnType<Config>}
  */
-export function usePinch<Config extends UsePinchConfig>(
-  handler: Handler<'pinch'>,
-  config: Config | {} = {}
-): (...args: any[]) => HookReturnType<Config> {
-
-  return useRecognizers<Config>(
-    { pinch: handler }, 
-    [PinchRecognizer], 
-    buildConfig(config)
-  )
+export function usePinch(handler: Handler<'pinch'>, config: UsePinchConfig|{} = {}) {
+  return useRecognizers<UsePinchConfig>({ pinch: handler }, [PinchRecognizer], buildConfig(config))
 }

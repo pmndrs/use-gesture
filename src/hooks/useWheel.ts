@@ -3,7 +3,7 @@ import memoize from '../utils/memoize-one'
 
 import useRecognizers from './useRecognizers'
 import WheelRecognizer from '../recognizers/WheelRecognizer'
-import { Handler, InternalConfig, HookReturnType, UseWheelConfig } from '../types'
+import { Handler, InternalConfig, UseWheelConfig } from '../types'
 import { getInternalGenericOptions, getInternalCoordinatesOptions } from '../utils/config'
 
 
@@ -22,9 +22,6 @@ const buildConfig = memoize(({ domTarget, eventOptions, window, ...rest }: UseWh
  * @param {(Config | {})} [config={}] - the config object including generic options and wheel options
  * @returns {(...args: any[]) => HookReturnType<Config>}
  */
-export function useWheel<Config extends UseWheelConfig>(
-  handler: Handler<'wheel'>,
-  config: Config | {} = {}
-): (...args: any[]) => HookReturnType<Config> {
-  return useRecognizers<Config>({ wheel: handler }, [WheelRecognizer], buildConfig(config))
+export function useWheel(handler: Handler<'wheel'>, config: UseWheelConfig | {} = {}) {
+  return useRecognizers<UseWheelConfig>({ wheel: handler }, [WheelRecognizer], buildConfig(config))
 }

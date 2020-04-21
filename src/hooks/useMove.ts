@@ -3,7 +3,7 @@ import memoize from '../utils/memoize-one'
 
 import useRecognizers from './useRecognizers'
 import MoveRecognizer from '../recognizers/MoveRecognizer'
-import { Handler, InternalConfig, HookReturnType, UseMoveConfig } from '../types'
+import { Handler, InternalConfig, UseMoveConfig } from '../types'
 import { getInternalGenericOptions, getInternalCoordinatesOptions } from '../utils/config'
 
 const buildConfig = memoize(({ domTarget, eventOptions, window, ...rest }: UseMoveConfig) => ({
@@ -20,9 +20,6 @@ const buildConfig = memoize(({ domTarget, eventOptions, window, ...rest }: UseMo
  * @param {(Config | {})} [config={}] - the config object including generic options and move options
  * @returns {(...args: any[]) => HookReturnType<Config>}
  */
-export function useMove<Config extends UseMoveConfig>(
-  handler: Handler<'move'>,
-  config: Config | {} = {}
-): (...args: any[]) => HookReturnType<Config> {
-  return useRecognizers<Config>({ move: handler }, [MoveRecognizer], buildConfig(config))
+export function useMove(handler: Handler<'move'>, config: UseMoveConfig | {} = {}) {
+  return useRecognizers<UseMoveConfig>({ move: handler }, [MoveRecognizer], buildConfig(config))
 }
