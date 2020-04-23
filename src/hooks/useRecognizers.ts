@@ -8,9 +8,7 @@ import {
   InternalHandlers,
   RecognizerClass,
   GenericOptions,
-  NativeHandlersPartial,
-  ReactEventHandlerKey,
-  Fn,
+  NativeHandlersPartial
 } from '../types'
 import { noop } from '../utils/utils'
 /**
@@ -31,54 +29,28 @@ export default function useRecognizers<Config extends Partial<GenericOptions>>(
   nativeHandlers?: NativeHandlersPartial
 ): (...args: any[]) => HookReturnType<Config> {
   // The gesture controller keeping track of all gesture states
-  const controller = React.useMemo(() => {
-    const current = new Controller()
-
-    /**
-     * The bind function will create gesture recognizers and return the right
-     * bind object depending on whether `domTarget` was specified in the config object.
-     */
-    const bind = (...args: any[]) => {
-      current.resetBindings()
-      for (let RecognizerClass of classes) {
-        new RecognizerClass(current, args).addBindings()
-      }
-
-      // we also add event bindings for native handlers
-      if (controller.nativeRefs) {
-        for (let eventName in controller.nativeRefs)
-          current.addBindings(
-            eventName as ReactEventHandlerKey,
-            // @ts-ignore we're cheating when it comes to event type :(
-            controller.nativeRefs[eventName] as Fn
-          )
-      }
-
-      return current.getBind() as HookReturnType<Config>
-    }
-
-    return { nativeRefs: nativeHandlers, current, bind }
-  }, [])
+  const controller = React.useMemo(() => new Controller(classes), [])
 
   // We reassign the config and handlers to the controller on every render.
-  controller.current!.config = config
-  controller.current!.handlers = handlers
   // We assign nativeHandlers, otherwise they won't be refreshed on the next render.
-  controller.nativeRefs = nativeHandlers
+  controller!.config = config
+  controller!.handlers = handlers
+  controller!.nativeRefs = nativeHandlers
 
   // Run controller clean functions on unmount.
   React.useEffect(() => {
-    if (controller.current.isDomTargetDefined) {
+    if (controller.isDomTargetDefined) {
       controller.bind()
     }
-    return controller.current!.clean
+    return controller!.clean
   }, [])
 
-  if (controller.current.isDomTargetDefined) {
+  if (controller.isDomTargetDefined) {
     // @ts-ignore
     return noop
   } else {
-    return controller.bind
+    // @ts-ignore
+    return controller.bind as HookReturnType<Config>
   }
 
   

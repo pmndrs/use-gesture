@@ -6,6 +6,8 @@ import {
   ReactEventHandlers,
   InternalConfig,
   InternalHandlers,
+  RecognizerClass,
+  NativeHandlersPartial
 } from './types'
 import { getInitialState } from './utils/state'
 import { addListeners, removeListeners } from './utils/event'
@@ -22,6 +24,29 @@ type Bindings = Partial<{ [eventName in ReactEventHandlerKey]: Fn[] }>
  * @template BinderType the type the bind function should return
  */
 export default class Controller {
+
+  constructor(private classes: RecognizerClass[]) {}
+
+  public bind = (...args: any[]) => {
+    this.resetBindings()
+    for (let RecognizerClass of this.classes) {
+      new RecognizerClass(this, args).addBindings()
+    }
+
+    // we also add event bindings for native handlers
+    if (this.nativeRefs) {
+      for (let eventName in this.nativeRefs)
+        this.addBindings(
+          eventName as ReactEventHandlerKey,
+          // @ts-ignore we're cheating when it comes to event type :(
+          this.nativeRefs[eventName] as Fn
+        )
+    }
+
+    return this.getBind()
+  }
+
+  public nativeRefs?: NativeHandlersPartial;
   public config!: InternalConfig
   public handlers!: Partial<InternalHandlers>
   public state: State = getInitialState() // state for all gestures
@@ -149,4 +174,5 @@ export default class Controller {
     // If not, we return an object that contains gesture handlers mapped to react handler event keys.
     return this.getBindings()
   }
+
 }
