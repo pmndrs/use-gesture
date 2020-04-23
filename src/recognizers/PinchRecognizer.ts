@@ -12,6 +12,7 @@ import {
 } from '../utils/event'
 
 export default class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
+
   ingKey = 'pinching' as IngKey
 
   constructor(controller: Controller, args: any[]) {
@@ -39,7 +40,7 @@ export default class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
       ...startState,
       ...this.getMovement(values, startState),
       origin,
-      cancel: () => this.onCancel(),
+      cancel: this.onCancel,
     })
 
     this.fireGestureHandler()
@@ -60,7 +61,7 @@ export default class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
       ...this.getGenericPayload(event),
       ...kinematics,
       origin,
-      cancel: () => this.onCancel(),
+      cancel: this.onCancel,
     })
 
     this.fireGestureHandler()
@@ -72,7 +73,6 @@ export default class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
     this.updateSharedState({ down: false, touches: 0 })
 
     this.updateGestureState({
-      event,
       ...this.getGenericPayload(event),
       ...this.getMovement(this.state.values),
     })
@@ -106,7 +106,7 @@ export default class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
     this.updateGestureState({
       ...startState,
       ...this.getMovement(values, startState),
-      cancel: () => this.onCancel(),
+      cancel: this.onCancel,
     })
 
     this.fireGestureHandler()
@@ -128,7 +128,7 @@ export default class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
     this.updateGestureState({
       ...this.getGenericPayload(event),
       ...kinematics,
-      cancel: () => this.onCancel(),
+      cancel: this.onCancel,
     })
 
     this.fireGestureHandler()
@@ -141,7 +141,6 @@ export default class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
     this.updateSharedState({ down: false, touches: 0 })
 
     this.updateGestureState({
-      event,
       ...this.getGenericPayload(event),
       ...this.getMovement(this.state.values),
     })

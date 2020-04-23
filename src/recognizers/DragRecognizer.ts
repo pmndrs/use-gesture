@@ -169,7 +169,6 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
     }
 
     this.updateGestureState({
-      event,
       ...endState,
       tap: _isTap,
       swipe,
