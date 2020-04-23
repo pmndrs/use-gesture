@@ -43,8 +43,30 @@ export default class Controller {
         )
     }
 
-    return this.getBind()
+    // If config.domTarget is set we add event listeners to it and return the clean function.
+    if (this.isDomTargetDefined) return
+    // If not, we return an object that contains gesture handlers mapped to react handler event keys.
+   
+    const bindings: ReactEventHandlers = {}
+    const { captureString } = this.config
+
+    Object.entries(this.bindings).forEach(([event, fns]) => {
+      const fnsArray = Array.isArray(fns) ? fns : [fns]
+      const key = (event + captureString) as ReactEventHandlerKey
+      bindings[key] = chainFns(...(fnsArray as Fn[]))
+    })
+
+    return bindings
   }
+
+  public effect = () => {
+    if (this.isDomTargetDefined) {
+      this.bind()
+      this.addDomTargetListeners()
+    }
+    return this!.clean
+  }
+
 
   public nativeRefs?: NativeHandlersPartial;
   public config!: InternalConfig
@@ -110,7 +132,9 @@ export default class Controller {
   /**
    * When config.domTarget is set, this function will add dom listeners to it
    */
-  public addDomTargetListeners = (target: EventTarget): void => {
+  public addDomTargetListeners = (): void => {
+    const target = this.getDomTarget()
+    if (!target) return
     /** We iterate on the entries of this.binding for each event, then we chain
      * the array of functions mapped to it and push them to this.domListeners
      */
@@ -142,37 +166,10 @@ export default class Controller {
     })
   }
 
-  /**
-   * getBindings will return an object that will be bound by users
-   * to the react component they want to interact with.
-   */
-  public getBindings = (): ReactEventHandlers => {
-    const bindings: ReactEventHandlers = {}
-    const { captureString } = this.config
-
-    Object.entries(this.bindings).forEach(([event, fns]) => {
-      const fnsArray = Array.isArray(fns) ? fns : [fns]
-      const key = (event + captureString) as ReactEventHandlerKey
-      bindings[key] = chainFns(...(fnsArray as Fn[]))
-    })
-
-    return bindings
-  }
 
   public get isDomTargetDefined() {
     return !!this.config.domTarget
   }
 
-  public getBind = () => {
-    // If config.domTarget is set we add event listeners to it and return the clean function.
-    if (this.isDomTargetDefined) {
-      const domTarget = this.getDomTarget()
-      domTarget && this.addDomTargetListeners(domTarget)
-      return this.clean
-    }
-
-    // If not, we return an object that contains gesture handlers mapped to react handler event keys.
-    return this.getBindings()
-  }
 
 }

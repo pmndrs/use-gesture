@@ -2,14 +2,8 @@
 
 import React from 'react'
 import Controller from '../Controller'
-import {
-  InternalConfig,
-  HookReturnType,
-  InternalHandlers,
-  RecognizerClass,
-  GenericOptions,
-  NativeHandlersPartial
-} from '../types'
+import { InternalConfig, HookReturnType, InternalHandlers, RecognizerClass, GenericOptions, NativeHandlersPartial } from '../types'
+
 import { noop } from '../utils/utils'
 /**
  * @private
@@ -38,20 +32,10 @@ export default function useRecognizers<Config extends Partial<GenericOptions>>(
   controller!.nativeRefs = nativeHandlers
 
   // Run controller clean functions on unmount.
-  React.useEffect(() => {
-    if (controller.isDomTargetDefined) {
-      controller.bind()
-    }
-    return controller!.clean
-  }, [])
+  React.useEffect(controller.effect, [])
 
-  if (controller.isDomTargetDefined) {
-    // @ts-ignore
-    return noop
-  } else {
-    // @ts-ignore
-    return controller.bind as HookReturnType<Config>
-  }
-
-  
+  // @ts-ignore
+  if (controller.isDomTargetDefined) return noop
+  // @ts-ignore
+  return controller.bind
 }
