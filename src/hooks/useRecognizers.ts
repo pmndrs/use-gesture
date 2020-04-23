@@ -12,6 +12,7 @@ import {
   ReactEventHandlerKey,
   Fn,
 } from '../types'
+import { noop } from '../utils/utils'
 /**
  * @private
  *
@@ -75,12 +76,7 @@ export default function useRecognizers<Config extends Partial<GenericOptions>>(
 
   if (controller.current.isDomTargetDefined) {
     // @ts-ignore
-    return () => (...args: any[]) => {
-      console.warn(
-        `[Deprecation warning] calling useEffect(bind, [bind]) is no longer required. \n`
-       +`In the next major this will lead to an error`
-      )
-    };
+    return noop
   } else {
     return controller.bind
   }
