@@ -1,16 +1,7 @@
-
-import isEqual from "../utils/react-fast-compare"
-import memoize from '../utils/memoize-one'
-
 import useRecognizers from './useRecognizers'
 import ScrollRecognizer from '../recognizers/ScrollRecognizer'
-import { Handler, InternalConfig, UseScrollConfig } from '../types'
-import { getInternalGenericOptions, getInternalCoordinatesOptions } from '../utils/config'
-
-const buildScrollConfig = memoize(({ domTarget, eventOptions, window, ...rest }: UseScrollConfig) => ({
-  ...getInternalGenericOptions({ domTarget, eventOptions, window }),
-  scroll: getInternalCoordinatesOptions(rest),
-}) as InternalConfig, isEqual)
+import { Handler, UseScrollConfig } from '../types'
+import { buildScrollConfig } from './buildConfig'
 
 /**
  * Scroll hook.

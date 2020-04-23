@@ -1,16 +1,7 @@
-import isEqual from "../utils/react-fast-compare"
-import memoize from '../utils/memoize-one'
-
 import useRecognizers from './useRecognizers'
 import WheelRecognizer from '../recognizers/WheelRecognizer'
-import { Handler, InternalConfig, UseWheelConfig } from '../types'
-import { getInternalGenericOptions, getInternalCoordinatesOptions } from '../utils/config'
-
-
-const buildConfig = memoize(({ domTarget, eventOptions, window, ...rest }: UseWheelConfig) => ({
-  ...getInternalGenericOptions({ domTarget, eventOptions, window }),
-  wheel: getInternalCoordinatesOptions(rest),
-}) as InternalConfig, isEqual)
+import { Handler, UseWheelConfig } from '../types'
+import { buildWheelConfig } from './buildConfig'
 
 
 /**
@@ -20,5 +11,5 @@ const buildConfig = memoize(({ domTarget, eventOptions, window, ...rest }: UseWh
  * @param the config object including generic options and wheel options
  */
 export function useWheel(handler: Handler<'wheel'>, config: UseWheelConfig | {} = {}) {
-  return useRecognizers<UseWheelConfig>({ wheel: handler }, [WheelRecognizer], buildConfig(config))
+  return useRecognizers<UseWheelConfig>({ wheel: handler }, [WheelRecognizer], buildWheelConfig(config))
 }

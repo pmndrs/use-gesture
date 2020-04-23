@@ -1,15 +1,7 @@
-import isEqual from "../utils/react-fast-compare"
-import memoize from '../utils/memoize-one'
-
 import useRecognizers from './useRecognizers'
 import DragRecognizer from '../recognizers/DragRecognizer'
-import { Handler, InternalConfig, UseDragConfig } from '../types'
-import { getInternalGenericOptions, getInternalDragOptions } from '../utils/config'
-
-const buildConfig = memoize(({ domTarget, eventOptions, window, ...rest }: UseDragConfig) => ({
-  ...getInternalGenericOptions({ domTarget, eventOptions, window }),
-  drag: getInternalDragOptions(rest),
-}) as InternalConfig, isEqual)
+import { Handler, UseDragConfig } from '../types'
+import { buildDragConfig } from './buildConfig'
 
 /**
  * Drag hook.
@@ -18,5 +10,5 @@ const buildConfig = memoize(({ domTarget, eventOptions, window, ...rest }: UseDr
  * @param [config={}] - the config object including generic options and drag options
  */
 export function useDrag(handler: Handler<'drag'>, config: UseDragConfig | {} = {}) {
-  return useRecognizers<UseDragConfig>({ drag: handler }, [DragRecognizer], buildConfig(config))
+  return useRecognizers<UseDragConfig>({ drag: handler }, [DragRecognizer], buildDragConfig(config))
 }
