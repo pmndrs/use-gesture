@@ -20,7 +20,7 @@ const DEFAULT_SWIPE_DISTANCE = 60
 const defaultWindow = typeof window !== 'undefined' ? window : undefined
 
 
-function getInternalGestureOptions(gestureConfig: Partial<GestureOptions>): InternalGestureOptions {
+export function getInternalGestureOptions(gestureConfig: Partial<GestureOptions>): InternalGestureOptions {
   let { threshold, rubberband, enabled = true, initial = [0, 0] } = gestureConfig
 
   if (typeof rubberband === 'boolean') rubberband = rubberband ? DEFAULT_RUBBERBAND : 0
