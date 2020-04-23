@@ -13,13 +13,10 @@ const buildConfig = memoize(({ domTarget, eventOptions, window, ...rest }: UsePi
 
 
 /**
- * @public
- *
  * Pinch hook.
  *
- * @param {Handler<'pinch'>} handler - the function fired every time the pinch gesture updates
- * @param {(Config | {})} [config={}] - the config object including generic options and pinch options
- * @returns {(...args: any[]) => HookReturnType<Config>}
+ * @param handler - the function fired every time the pinch gesture updates
+ * @param [config={}] - the config object including generic options and pinch options
  */
 export function usePinch(handler: Handler<'pinch'>, config: UsePinchConfig|{} = {}) {
   return useRecognizers<UsePinchConfig>({ pinch: handler }, [PinchRecognizer], buildConfig(config))

@@ -14,13 +14,10 @@ const buildConfig = memoize(({ domTarget, eventOptions, window, ...rest }: UseWh
 
 
 /**
- * @public
- *
  * Wheel hook.
  *
- * @param {Handler<'wheel'>} handler - the function fired every time the wheel gesture updates
- * @param {(Config | {})} [config={}] - the config object including generic options and wheel options
- * @returns {(...args: any[]) => HookReturnType<Config>}
+ * @param handler - the function fired every time the wheel gesture updates
+ * @param the config object including generic options and wheel options
  */
 export function useWheel(handler: Handler<'wheel'>, config: UseWheelConfig | {} = {}) {
   return useRecognizers<UseWheelConfig>({ wheel: handler }, [WheelRecognizer], buildConfig(config))

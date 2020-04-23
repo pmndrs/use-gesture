@@ -12,13 +12,10 @@ const buildConfig = memoize(({ domTarget, eventOptions, window, ...rest }: UseDr
 }) as InternalConfig, isEqual)
 
 /**
- * @public
- *
  * Drag hook.
  *
- * @param {Handler<'drag'>} handler - the function fired every time the drag gesture updates
- * @param {(Config | {})} [config={}] - the config object including generic options and drag options
- * @returns {(...args: any[]) => HookReturnType<Config>}
+ * @param handler - the function fired every time the drag gesture updates
+ * @param [config={}] - the config object including generic options and drag options
  */
 export function useDrag(handler: Handler<'drag'>, config: UseDragConfig | {} = {}) {
   return useRecognizers<UseDragConfig>({ drag: handler }, [DragRecognizer], buildConfig(config))

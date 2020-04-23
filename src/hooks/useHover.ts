@@ -13,13 +13,10 @@ const buildConfig = memoize(({ domTarget, eventOptions, window, ...rest }: UseHo
 
 
 /**
- * @public
- *
  * Hover hook.
  *
- * @param {Handler<'hover'>} handler - the function fired every time the hover gesture updates
- * @param {(Config | {})} [config={}] - the config object including generic options and hover options
- * @returns {(...args: any[]) => HookReturnType<Config>}
+ * @param handler - the function fired every time the hover gesture updates
+ * @param [config={}] - the config object including generic options and hover options
  */
 export function useHover(handler: Handler<'hover'>, config: UseHoverConfig | {} = {}) {
   return useRecognizers<UseHoverConfig>({ hover: handler }, [MoveRecognizer], buildConfig(config))

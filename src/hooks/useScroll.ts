@@ -13,13 +13,10 @@ const buildScrollConfig = memoize(({ domTarget, eventOptions, window, ...rest }:
 }) as InternalConfig, isEqual)
 
 /**
- * @public
- *
  * Scroll hook.
  *
- * @param {Handler<'scroll'>} handler - the function fired every time the scroll gesture updates
- * @param {(Config | {})} [config={}] - the config object including generic options and scroll options
- * @returns {(...args: any[]) => HookReturnType<Config>}
+ * @param handler - the function fired every time the scroll gesture updates
+ * @param [config={}] - the config object including generic options and scroll options
  */
 export function useScroll(handler: Handler<'scroll'>, config: UseScrollConfig | {} = {}) {
   return useRecognizers<UseScrollConfig>({ scroll: handler }, [ScrollRecognizer], buildScrollConfig(config))

@@ -12,13 +12,10 @@ const buildConfig = memoize(({ domTarget, eventOptions, window, ...rest }: UseMo
 }) as InternalConfig, isEqual)
 
 /**
- * @public
- *
  * Move hook.
  *
- * @param {Handler<'move'>} handler - the function fired every time the move gesture updates
- * @param {(Config | {})} [config={}] - the config object including generic options and move options
- * @returns {(...args: any[]) => HookReturnType<Config>}
+ * @param handler - the function fired every time the move gesture updates
+ * @param [config={}] - the config object including generic options and move options
  */
 export function useMove(handler: Handler<'move'>, config: UseMoveConfig | {} = {}) {
   return useRecognizers<UseMoveConfig>({ move: handler }, [MoveRecognizer], buildConfig(config))
