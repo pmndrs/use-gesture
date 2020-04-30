@@ -5,7 +5,6 @@ import { UseGestureEvent, IngKey } from '../types'
 import { getGenericEventData, getPointerEventValues } from '../utils/event'
 
 export default class MoveRecognizer extends CoordinatesRecognizer<'move'> {
-  
   ingKey = 'moving' as IngKey
   debounced = true
 

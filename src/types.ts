@@ -5,9 +5,8 @@ import Recognizer from './recognizers/Recognizer'
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
 export type AtLeastOneOf<T, U = { [K in keyof T]: Pick<T, K> }> = Partial<T> & U[keyof U]
 
-export type Vector2 = [ number, number ]
+export type Vector2 = [number, number]
 export type Fn = any
-
 
 export interface EventOptions {
   capture: boolean
@@ -96,12 +95,12 @@ export interface InternalGestureOptions {
 
 export interface InternalCoordinatesOptions extends InternalGestureOptions {
   axis?: 'x' | 'y'
-  bounds: [ Vector2, Vector2 ]
+  bounds: [Vector2, Vector2]
   lockDirection: boolean
 }
 
 export interface InternalDistanceAngleOptions extends InternalGestureOptions {
-  bounds: [ Vector2, Vector2 ]
+  bounds: [Vector2, Vector2]
 }
 
 export interface InternalDragOptions extends InternalCoordinatesOptions {
@@ -262,7 +261,7 @@ export interface DistanceAngle {
   turns: number
 }
 
-export type State = { 
+export type State = {
   shared: SharedGestureState
   drag: CommonGestureState & Coordinates & DragState
   wheel: CommonGestureState & Coordinates
@@ -301,7 +300,9 @@ export type UserHandlers = {
 
 export type InternalHandlers = { [Key in GestureKey]: Handler<Key> }
 
-export type RecognizerClass<T extends StateKey = StateKey> = { new (controller: Controller, args: any[]): Recognizer<T> }
+export type RecognizerClass<T extends StateKey = StateKey> = {
+  new (controller: Controller, args: any[]): Recognizer<T>
+}
 
 type ReactDomAttributes = React.DOMAttributes<Element>
 

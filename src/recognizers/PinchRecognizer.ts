@@ -12,7 +12,6 @@ import {
 } from '../utils/event'
 
 export default class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
-
   ingKey = 'pinching' as IngKey
 
   constructor(controller: Controller, args: any[]) {

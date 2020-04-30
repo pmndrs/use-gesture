@@ -7,7 +7,7 @@ import {
   InternalConfig,
   InternalHandlers,
   RecognizerClass,
-  NativeHandlersPartial
+  NativeHandlersPartial,
 } from './types'
 import { getInitialState } from './utils/state'
 import { addListeners, removeListeners } from './utils/event'
@@ -24,7 +24,6 @@ type Bindings = Partial<{ [eventName in ReactEventHandlerKey]: Fn[] }>
  * @template BinderType the type the bind function should return
  */
 export default class Controller {
-
   constructor(private classes: RecognizerClass[]) {}
 
   public bind = (...args: any[]) => {
@@ -46,7 +45,7 @@ export default class Controller {
     // If config.domTarget is set we add event listeners to it and return the clean function.
     if (this.isDomTargetDefined) return
     // If not, we return an object that contains gesture handlers mapped to react handler event keys.
-   
+
     const bindings: ReactEventHandlers = {}
     const { captureString } = this.config
 
@@ -67,8 +66,7 @@ export default class Controller {
     return this!.clean
   }
 
-
-  public nativeRefs?: NativeHandlersPartial;
+  public nativeRefs?: NativeHandlersPartial
   public config!: InternalConfig
   public handlers!: Partial<InternalHandlers>
   public state: State = getInitialState() // state for all gestures
@@ -145,8 +143,8 @@ export default class Controller {
 
       const eventName = key.substr(2).toLowerCase()
       const handler = chainFns(...handlers)
-      
-      this.domListeners.push([ eventName, handler ])
+
+      this.domListeners.push([eventName, handler])
     }
 
     addListeners(target, this.domListeners, this.config.eventOptions)
@@ -166,10 +164,7 @@ export default class Controller {
     })
   }
 
-
   public get isDomTargetDefined() {
     return !!this.config.domTarget
   }
-
-
 }

@@ -10,7 +10,7 @@ import { buildMoveConfig } from './buildConfig'
  * @param [config={}] - the config object including generic options and move options
  */
 export function useMove(handler: Handler<'move'>, config: UseMoveConfig | {} = {}) {
-  const handlers = ({ move: handler })
+  const handlers = { move: handler }
   const classes = [MoveRecognizer]
   const options = buildMoveConfig(config)
 

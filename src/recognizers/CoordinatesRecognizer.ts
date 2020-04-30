@@ -28,7 +28,7 @@ export default abstract class CoordinatesRecognizer<T extends CoordinatesKey> ex
    * @param state
    */
   protected checkIntentionality(
-    _intentional: [false|number, false|number],
+    _intentional: [false | number, false | number],
     _movement: Vector2,
     state: PartialGestureState<T>
   ): PartialGestureState<T> {

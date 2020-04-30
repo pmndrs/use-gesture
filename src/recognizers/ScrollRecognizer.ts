@@ -5,7 +5,6 @@ import { getGenericEventData, getScrollEventValues } from '../utils/event'
 import { calculateAllGeometry } from '../utils/math'
 
 export default class ScrollRecognizer extends CoordinatesRecognizer<'scroll'> {
-
   ingKey = 'scrolling' as IngKey
   debounced = true
 
@@ -43,7 +42,7 @@ export default class ScrollRecognizer extends CoordinatesRecognizer<'scroll'> {
     this.updateGestureState({
       ...startState,
       ...movementDetection,
-      ...calculateAllGeometry(delta)
+      ...calculateAllGeometry(delta),
     })
 
     this.fireGestureHandler()

@@ -293,7 +293,6 @@ export default abstract class Recognizer<T extends StateKey> {
   }
 }
 
-
 function getIntentionalDisplacement(movement: number, threshold: number): number | false {
   if (Math.abs(movement) >= threshold) {
     return Math.sign(movement) * threshold

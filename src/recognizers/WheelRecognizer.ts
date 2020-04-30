@@ -50,7 +50,7 @@ export default class WheelRecognizer extends CoordinatesRecognizer<'wheel'> {
     this.updateGestureState({
       ...startState,
       ...movementDetection,
-      ...calculateAllGeometry(delta)
+      ...calculateAllGeometry(delta),
     })
 
     this.fireGestureHandler()

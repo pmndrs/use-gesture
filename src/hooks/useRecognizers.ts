@@ -2,7 +2,14 @@
 
 import React from 'react'
 import Controller from '../Controller'
-import { InternalConfig, HookReturnType, InternalHandlers, RecognizerClass, GenericOptions, NativeHandlersPartial } from '../types'
+import {
+  InternalConfig,
+  HookReturnType,
+  InternalHandlers,
+  RecognizerClass,
+  GenericOptions,
+  NativeHandlersPartial,
+} from '../types'
 
 import { noop } from '../utils/utils'
 /**
@@ -19,7 +26,6 @@ export default function useRecognizers<Config extends Partial<GenericOptions>>(
   config: InternalConfig,
   nativeHandlers?: NativeHandlersPartial
 ): (...args: any[]) => HookReturnType<Config> {
-  
   const controller = React.useMemo(() => new Controller(classes), [])
   controller!.config = config
   controller!.handlers = handlers

@@ -3,7 +3,6 @@ import WheelRecognizer from '../recognizers/WheelRecognizer'
 import { Handler, UseWheelConfig } from '../types'
 import { buildWheelConfig } from './buildConfig'
 
-
 /**
  * Wheel hook.
  *

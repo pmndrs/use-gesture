@@ -57,7 +57,7 @@ describe.each([
 
   test('kinematics should update', () => {
     expect(getByTestId(`${prefix}move-velocity`)).not.toHaveTextContent(/^0$/)
-    expect(getByTestId(`${prefix}move-vxvy`)).toHaveTextContent(`${10*(1/delta_t)},${30*(1/delta_t)}`)
+    expect(getByTestId(`${prefix}move-vxvy`)).toHaveTextContent(`${10 * (1 / delta_t)},${30 * (1 / delta_t)}`)
   })
 
   test('the last mouseMove event should debounce and terminate the gesture', async () => {

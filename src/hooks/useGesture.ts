@@ -21,8 +21,6 @@ import {
   HookReturnType,
 } from '../types'
 
-
-
 export function wrapStart(fn: Function) {
   return function (this: any, { first }: any) {
     if (first) fn.apply(this, arguments)
@@ -35,28 +33,24 @@ export function wrapEnd(fn: Function) {
   }
 }
 
-
-
-const RE_NOT_NATIVE = /^on(Drag|Wheel|Scroll|Move|Pinch|Hover)/;
+const RE_NOT_NATIVE = /^on(Drag|Wheel|Scroll|Move|Pinch|Hover)/
 
 function sortHandlers(handlers: UserHandlersPartial) {
   const native: any = {}
   const handle: any = {}
-  const actions = new Set();
+  const actions = new Set()
 
   for (let key in handlers) {
     if (RE_NOT_NATIVE.test(key)) {
       actions.add(RegExp.lastMatch)
-      handle[key] = (handlers as any)[key];
+      handle[key] = (handlers as any)[key]
     } else {
-      native[key] = (handlers as any)[key];
+      native[key] = (handlers as any)[key]
     }
   }
 
-  return [ handle, native, actions ]
+  return [handle, native, actions]
 }
-
-
 
 /**
  * @public
@@ -71,8 +65,7 @@ export function useGesture<Config extends UseGestureConfig>(
   _handlers: UserHandlersPartial,
   config: UseGestureConfig = {}
 ): (...args: any[]) => HookReturnType<Config> {
-
-  const [ handlers, nativeHandlers, actions ] = sortHandlers(_handlers)
+  const [handlers, nativeHandlers, actions] = sortHandlers(_handlers)
 
   /**
    * Here we compute the derived internal config based on the provided config object.
@@ -131,10 +124,7 @@ export function useGesture<Config extends UseGestureConfig>(
  * @param {HandlerKey} handlerKey - the key for which to integrate start and end handlers
  * @returns
  */
-function includeStartEndHandlers(
-  handlers: UserHandlersPartial,
-  handlerKey: HandlerKey
-) {
+function includeStartEndHandlers(handlers: UserHandlersPartial, handlerKey: HandlerKey) {
   const startKey = (handlerKey + 'Start') as keyof UserHandlers
   const endKey = (handlerKey + 'End') as keyof UserHandlers
 
