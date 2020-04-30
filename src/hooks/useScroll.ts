@@ -9,6 +9,6 @@ import { buildScrollConfig } from './buildConfig'
  * @param handler - the function fired every time the scroll gesture updates
  * @param [config={}] - the config object including generic options and scroll options
  */
-export function useScroll(handler: Handler<'scroll'>, config: UseScrollConfig | {} = {}) {
-  return useRecognizers<UseScrollConfig>({ scroll: handler }, [ScrollRecognizer], buildScrollConfig(config))
+export function useScroll<Config = UseScrollConfig>(handler: Handler<'scroll'>, config: Config | {} = {}) {
+  return useRecognizers<Config>({ scroll: handler }, [ScrollRecognizer], buildScrollConfig(config))
 }

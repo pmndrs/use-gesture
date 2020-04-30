@@ -9,6 +9,6 @@ import { buildDragConfig } from './buildConfig'
  * @param handler - the function fired every time the drag gesture updates
  * @param [config={}] - the config object including generic options and drag options
  */
-export function useDrag(handler: Handler<'drag'>, config: UseDragConfig | {} = {}) {
-  return useRecognizers<UseDragConfig>({ drag: handler }, [DragRecognizer], buildDragConfig(config))
+export function useDrag<Config = UseDragConfig>(handler: Handler<'drag'>, config: Config | {} = {}) {
+  return useRecognizers<Config>({ drag: handler }, [DragRecognizer], buildDragConfig(config))
 }

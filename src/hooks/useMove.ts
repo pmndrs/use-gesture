@@ -9,10 +9,6 @@ import { buildMoveConfig } from './buildConfig'
  * @param handler - the function fired every time the move gesture updates
  * @param [config={}] - the config object including generic options and move options
  */
-export function useMove(handler: Handler<'move'>, config: UseMoveConfig | {} = {}) {
-  const handlers = { move: handler }
-  const classes = [MoveRecognizer]
-  const options = buildMoveConfig(config)
-
-  return useRecognizers<UseMoveConfig>(handlers, classes, options)
+export function useMove<Config = UseMoveConfig>(handler: Handler<'move'>, config: Config | {} = {}) {
+  return useRecognizers<Config>({ move: handler }, [MoveRecognizer], buildMoveConfig(config))
 }

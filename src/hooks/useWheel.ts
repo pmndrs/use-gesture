@@ -9,6 +9,6 @@ import { buildWheelConfig } from './buildConfig'
  * @param handler - the function fired every time the wheel gesture updates
  * @param the config object including generic options and wheel options
  */
-export function useWheel(handler: Handler<'wheel'>, config: UseWheelConfig | {} = {}) {
-  return useRecognizers<UseWheelConfig>({ wheel: handler }, [WheelRecognizer], buildWheelConfig(config))
+export function useWheel<Config = UseWheelConfig>(handler: Handler<'wheel'>, config: Config | {} = {}) {
+  return useRecognizers<Config>({ wheel: handler }, [WheelRecognizer], buildWheelConfig(config))
 }

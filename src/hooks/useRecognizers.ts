@@ -11,7 +11,6 @@ import {
   NativeHandlersPartial,
 } from '../types'
 
-import { noop } from '../utils/utils'
 /**
  * Utility hook called by all gesture hooks and that will be responsible for the internals.
  *
@@ -34,7 +33,15 @@ export default function useRecognizers<Config extends Partial<GenericOptions>>(
   React.useEffect(controller.effect, [])
 
   // @ts-ignore
-  if (controller.isDomTargetDefined) return noop
+  if (controller.isDomTargetDefined) return deprecationNoticeForDomTarget
   // @ts-ignore
   return controller.bind
+}
+
+function deprecationNoticeForDomTarget() {
+  if (process.env.NODE_ENV === 'development') {
+    console.warn(
+      `Deprecation notice: When the \`domTarget\` option is specified, you don't need to write \`useEffect(bind, [bind])\` anymore: event binding is now made handled internally to this lib.\n\nNext version won't return anything when \`domTarget\` is provided, therefore your code will break if you try to call \`useEffect\`.`
+    )
+  }
 }
