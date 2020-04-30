@@ -19,7 +19,6 @@ const DEFAULT_SWIPE_DISTANCE = 60
 
 const defaultWindow = typeof window !== 'undefined' ? window : undefined
 
-
 export function getInternalGestureOptions(gestureConfig: Partial<GestureOptions>): InternalGestureOptions {
   let { threshold, rubberband, enabled = true, initial = [0, 0] } = gestureConfig
 
@@ -28,7 +27,7 @@ export function getInternalGestureOptions(gestureConfig: Partial<GestureOptions>
   return {
     enabled,
     initial,
-    threshold : ensureVector(threshold, 0),
+    threshold: ensureVector(threshold, 0),
     rubberband: ensureVector(rubberband, 0),
   }
 }
@@ -46,7 +45,7 @@ export function getInternalGenericOptions(config: Partial<GenericOptions> = {}):
     eventOptions: { passive = true, capture = false, pointer = false } = {},
     window = defaultWindow,
     domTarget = undefined,
-    enabled = true
+    enabled = true,
   } = config
 
   return {
@@ -60,26 +59,24 @@ export function getInternalGenericOptions(config: Partial<GenericOptions> = {}):
   }
 }
 
-
 export function getInternalCoordinatesOptions(coordinatesConfig: CoordinatesConfig = {}): InternalCoordinatesOptions {
-  let { axis, lockDirection = false,  threshold, rubberband, enabled, initial } = coordinatesConfig
+  let { axis, lockDirection = false, threshold, rubberband, enabled, initial } = coordinatesConfig
 
   const bounds = assignDefault(coordinatesConfig.bounds, {
-    left  : -Infinity,
-    right :  Infinity,
-    top   : -Infinity,
-    bottom:  Infinity,
+    left: -Infinity,
+    right: Infinity,
+    top: -Infinity,
+    bottom: Infinity,
   })
-
 
   return {
     ...getInternalGestureOptions({ threshold, rubberband, enabled, initial }),
     lockDirection,
     axis,
     bounds: [
-      [bounds.left, bounds.right ],
-      [bounds.top , bounds.bottom],
-    ]
+      [bounds.left, bounds.right],
+      [bounds.top, bounds.bottom],
+    ],
   }
 }
 
@@ -87,35 +84,30 @@ export function getInternalDistanceAngleOptions(config: DistanceAngleConfig = {}
   const { threshold, rubberband, enabled, initial } = config
 
   const distanceBounds = assignDefault(config.distanceBounds, {
-    min  : -Infinity,
-    max :  Infinity,
+    min: -Infinity,
+    max: Infinity,
   })
 
-
   const angleBounds = assignDefault(config.angleBounds, {
-    min  : -Infinity,
-    max :  Infinity,
+    min: -Infinity,
+    max: Infinity,
   })
 
   return {
     ...getInternalGestureOptions({ threshold, rubberband, enabled, initial }),
     bounds: [
       [distanceBounds.min, distanceBounds.max],
-      [angleBounds.min   , angleBounds.max   ],
+      [angleBounds.min, angleBounds.max],
     ],
   }
 }
 
-
-
-
-
 export function getInternalDragOptions(dragConfig: DragConfig = {}): InternalDragOptions {
   let {
-    enabled, 
-    threshold, 
-    bounds, 
-    rubberband, 
+    enabled,
+    threshold,
+    bounds,
+    rubberband,
     initial,
     swipeVelocity = DEFAULT_SWIPE_VELOCITY,
     swipeDistance = DEFAULT_SWIPE_DISTANCE,
@@ -125,7 +117,7 @@ export function getInternalDragOptions(dragConfig: DragConfig = {}): InternalDra
     lockDirection,
   } = dragConfig
 
-  if (delay === true)  delay = DEFAULT_DRAG_DELAY
+  if (delay === true) delay = DEFAULT_DRAG_DELAY
   if (delay === false) delay = 0
 
   if (threshold === undefined) {
@@ -134,10 +126,15 @@ export function getInternalDragOptions(dragConfig: DragConfig = {}): InternalDra
     filterTaps = true
   }
 
-  const internalCoordinatesOptions = getInternalCoordinatesOptions(
-    { enabled, threshold, bounds, rubberband, axis, lockDirection, initial }
-  )
-  
+  const internalCoordinatesOptions = getInternalCoordinatesOptions({
+    enabled,
+    threshold,
+    bounds,
+    rubberband,
+    axis,
+    lockDirection,
+    initial,
+  })
 
   return {
     ...internalCoordinatesOptions,

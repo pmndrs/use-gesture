@@ -31,13 +31,11 @@ function getInitial<T>(mixed: T): T & CommonGestureState {
     canceled: false,
     memo: undefined,
     args: undefined,
-    ...mixed
+    ...mixed,
   }
 }
 
-
 export function getInitialState(): State {
-
   const shared = {
     hovering: false,
     scrolling: false,
@@ -96,7 +94,6 @@ export function getInitialState(): State {
     velocity: 0,
     distance: 0,
   })
-
 
   return { shared, drag, pinch, wheel, move, scroll }
 }

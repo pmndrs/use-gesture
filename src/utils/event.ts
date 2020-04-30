@@ -1,6 +1,5 @@
 import { Fn, EventOptions, UseGestureEvent, Vector2, WebKitGestureEvent } from '../types'
 
-
 /**
  * Whether the browser supports GestureEvent (ie Safari)
  * @returns true if the browser supports gesture event
@@ -113,18 +112,19 @@ export function getWebkitGestureEventValues(event: WebKitGestureEvent): Values {
  * @returns two touches event data
  */
 export function getTwoTouchesEventData({ touches }: React.TouchEvent) {
-  const A = touches[0], B = touches[1];
+  const A = touches[0],
+    B = touches[1]
 
   const dx = B.clientX - A.clientX
   const dy = B.clientY - A.clientY
-  const cx = (B.clientX + A.clientX)/2
-  const cy = (B.clientY + A.clientY)/2
+  const cx = (B.clientX + A.clientX) / 2
+  const cy = (B.clientY + A.clientY) / 2
 
-  const distance =   Math.hypot(dx, dy)
-  const angle    = -(Math.atan2(dx, dy) * 180) / Math.PI
+  const distance = Math.hypot(dx, dy)
+  const angle = -(Math.atan2(dx, dy) * 180) / Math.PI
 
-  const values: Vector2 = [ distance, angle ]
-  const origin: Vector2 = [ cx, cy ]
+  const values: Vector2 = [distance, angle]
+  const origin: Vector2 = [cx, cy]
 
   return { values, origin }
 }

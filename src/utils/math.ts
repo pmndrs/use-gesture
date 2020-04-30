@@ -25,13 +25,13 @@ interface Kinematics {
 }
 
 export function calculateAllGeometry<T extends number[]>(movement: T, delta: T = movement) {
-  const dl = calculateDistance(delta);
+  const dl = calculateDistance(delta)
 
-  const alpha = dl === 0 ? 0 : 1/dl;
+  const alpha = dl === 0 ? 0 : 1 / dl
 
-  const direction  = delta.map(v => alpha* v) as T
-  const distance   = calculateDistance(movement)
-  
+  const direction = delta.map(v => alpha * v) as T
+  const distance = calculateDistance(movement)
+
   return { distance, direction }
 }
 
@@ -46,15 +46,13 @@ export function calculateAllGeometry<T extends number[]>(movement: T, delta: T =
 export function calculateAllKinematics<T extends number[]>(movement: T, delta: T, dt: number): Kinematics {
   const dl = calculateDistance(delta)
 
-  const alpha = dl === 0 ? 0 : 1/dl;
-  const beta  = dt === 0 ? 0 : 1/dt;
+  const alpha = dl === 0 ? 0 : 1 / dl
+  const beta = dt === 0 ? 0 : 1 / dt
 
-  const velocity   = beta * dl
+  const velocity = beta * dl
   const velocities = delta.map(v => beta * v)
-  const direction  = delta.map(v => alpha* v)
-  const distance   = calculateDistance(movement)
+  const direction = delta.map(v => alpha * v)
+  const distance = calculateDistance(movement)
 
   return { velocities, velocity, distance, direction }
 }
-
-
