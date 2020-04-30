@@ -233,7 +233,7 @@ export interface CommonGestureState {
   startTime: number
   timeStamp: number
   elapsedTime: number
-  cancel?(): void
+  cancel(): void
   canceled: boolean
   memo?: any
   args?: any
