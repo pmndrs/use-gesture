@@ -1,0 +1,40 @@
+.multi-gesture-card > div {
+  position: relative;
+  width: 50vw;
+  height: 50vw;
+  background: grey;
+  border-radius: 5px;
+  box-shadow: 0px 10px 30px -5px rgba(0, 0, 0, 0.3);
+  transition: box-shadow 0.5s, opacity 0.5s;
+  will-change: transform;
+  border: 10px solid white;
+  cursor: grab;
+  overflow: hidden;
+  touch-action: none;
+}
+
+.multi-gesture-card > div > div {
+  will-change: transform;
+  height: 100%;
+  margin: 0vw 0;
+}
+
+.multi-gesture-card > div > div > * {
+  height: 100%;
+  background-size: cover;
+  background-position: center center;
+  margin: 0vw 0;
+}
+
+.multi-gesture-card > div.dragging {
+  cursor: grabbing;
+}
+
+.multi-gesture-card > div.disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.multi-gesture-card > div:hover {
+  box-shadow: 0px 30px 100px -10px rgba(0, 0, 0, 0.4);
+}
