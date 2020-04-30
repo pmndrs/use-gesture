@@ -311,5 +311,5 @@ export type NativeHandlersPartial = Partial<Omit<ReactDomAttributes, keyof UserH
 export type UserHandlersPartial = AtLeastOneOf<UserHandlers> & NativeHandlersPartial
 
 export type HookReturnType<T extends { domTarget?: DomTarget }> = T['domTarget'] extends object
-  ? Fn
+  ? void | undefined
   : ReactEventHandlers
