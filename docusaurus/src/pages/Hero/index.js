@@ -94,14 +94,14 @@ export default function Hero() {
     {
       onDrag: ({
         hovering,
-        click,
+        tap,
         swipe: [swipeX, swipeY],
         down,
         elapsedTime,
         movement: [mx, my],
         offset: [x, y]
       }) => {
-        if (click) toast('Click!')
+        if (tap) toast('Tap!')
         if (swipeX) toast(`Swipe ${swipeX > 0 ? 'Right' : 'Left'}`)
         if (swipeY) toast(`Swipe ${swipeY > 0 ? 'Bottom' : 'Top'}`)
         document.body.classList.toggle('dragged', down)
