@@ -1,13 +1,27 @@
 import useRecognizers from './useRecognizers'
-import { Handler, UseDragConfig, UseHoverConfig, UseScrollConfig, UseWheelConfig, UseMoveConfig, UsePinchConfig } from '../types'
-import { buildDragConfig, buildHoverConfig, buildScrollConfig, buildWheelConfig, buildMoveConfig, buildPinchConfig } from './buildConfig'
+import {
+  Handler,
+  UseDragConfig,
+  UseHoverConfig,
+  UseScrollConfig,
+  UseWheelConfig,
+  UseMoveConfig,
+  UsePinchConfig,
+} from '../types'
+import {
+  buildDragConfig,
+  buildHoverConfig,
+  buildScrollConfig,
+  buildWheelConfig,
+  buildMoveConfig,
+  buildPinchConfig,
+} from './buildConfig'
 
 import DragRecognizer from '../recognizers/DragRecognizer'
 import MoveRecognizer from '../recognizers/MoveRecognizer'
 import ScrollRecognizer from '../recognizers/ScrollRecognizer'
 import WheelRecognizer from '../recognizers/WheelRecognizer'
 import PinchRecognizer from '../recognizers/PinchRecognizer'
-
 
 /**
  * Drag hook.
@@ -68,6 +82,5 @@ export function useWheel<Config = UseWheelConfig>(handler: Handler<'wheel'>, con
 export function useMove<Config = UseMoveConfig>(handler: Handler<'move'>, config: Config | {} = {}) {
   return useRecognizers<Config>({ move: handler }, [MoveRecognizer], buildMoveConfig(config))
 }
-
 
 export { useGesture } from './useGesture'
