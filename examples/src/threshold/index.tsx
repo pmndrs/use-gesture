@@ -4,15 +4,15 @@ import { useDrag } from 'react-use-gesture'
 import styles from './styles.css'
 
 export default function Threshold() {
-  const [{ x, y }, set] = useSpring(() => ({ x: 0, y: 0 }))
-  const [props, setL] = useSpring(() => ({ x: 0, y: 0, opacity: 0 }))
+  const [{ x, y }, set] = useSpring(() => ({ x: 0, y: 0, immediate: true }))
+  const [props, setL] = useSpring(() => ({ x: 0, y: 0, opacity: 0, immediate: true }))
 
   const [movX, setMovX] = React.useState(false)
   const [movY, setMovY] = React.useState(false)
 
   const bind = useDrag(
     ({ down, movement: [mx, my] }) => {
-      set({ x: down ? mx : 0, y: down ? my : 0 })
+      set({ x: down ? mx : 0, y: down ? my : 0, immediate: true })
     },
     { threshold: 100 }
   )
@@ -29,10 +29,10 @@ export default function Threshold() {
     //@ts-ignore
     if (Math.abs(mx) >= 100) setMovX(true)
     //@ts-ignore
-    else setL({ x: mx })
+    else if (!movX) setL({ x: mx })
     if (Math.abs(my) >= 100) setMovY(true)
     //@ts-ignore
-    else setL({ y: my })
+    else if (!movY) setL({ y: my })
   })
 
   const th = (index: number) => (v: number) => {
