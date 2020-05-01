@@ -10,7 +10,7 @@ function equal(a: any, b: any): boolean {
   if (a && b && typeof a == 'object' && typeof b == 'object') {
     if (a.constructor !== b.constructor) return false
 
-    var length, i, keys
+    let length, i, keys
     if (Array.isArray(a)) {
       length = a.length
       if (length !== b.length) return false
@@ -18,7 +18,7 @@ function equal(a: any, b: any): boolean {
       return true
     }
 
-    var it
+    let it
     if (typeof Map === 'function' && a instanceof Map && b instanceof Map) {
       if (a.size !== b.size) return false
       it = a.entries()
@@ -54,6 +54,9 @@ function equal(a: any, b: any): boolean {
     return true
   }
 
+  // true if both NaN, false otherwise — NaN !== NaN → true
+  // eslint-disable-next-line no-self-compare
+  return a !== a && b !== b
 }
 
 export default function isEqual(a: any, b: any) {
