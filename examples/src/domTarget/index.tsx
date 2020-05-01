@@ -14,7 +14,7 @@ export default function Simple() {
     { domTarget }
   )
 
-  // React.useEffect(bind, [bind]) <-- shows deprecation notics
+  // React.useEffect(bind, [bind]) <-- shows deprecation notice
 
   return (
     <div className={`${styles.simple} flex`}>
