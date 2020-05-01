@@ -3,7 +3,7 @@ import { useSpring, animated } from 'react-spring'
 import { useDrag } from 'react-use-gesture'
 import styles from './styles.css'
 
-export default function Boundaries() {
+export default function Threshold() {
   const [{ x, y }, set] = useSpring(() => ({ x: 0, y: 0 }))
   const [props, setL] = useSpring(() => ({ x: 0, y: 0, opacity: 0 }))
 

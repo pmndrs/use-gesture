@@ -1,4 +1,4 @@
-export { default as boundaries } from './boundaries'
+export { default as threshold } from './threshold'
 export { default as cards } from './cards'
 export { default as draggableList } from './draggable-list'
 export { default as domTarget } from './domTarget'
