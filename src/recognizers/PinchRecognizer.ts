@@ -10,6 +10,7 @@ import {
   supportsGestureEvents,
   getWebkitGestureEventValues,
 } from '../utils/event'
+import { getStartGestureState, getGenericPayload } from './Recognizer'
 
 export default class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
   ingKey = 'pinching' as IngKey
@@ -31,8 +32,8 @@ export default class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
     this.updateSharedState(getGenericEventData(event))
 
     const startState = {
-      ...this.getStartGestureState(values, event),
-      ...this.getGenericPayload(event, true),
+      ...getStartGestureState(this, values, event),
+      ...getGenericPayload(this, event, true),
     }
 
     this.updateGestureState({
@@ -57,7 +58,7 @@ export default class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
     const kinematics = this.getKinematics(values, event)
 
     this.updateGestureState({
-      ...this.getGenericPayload(event),
+      ...getGenericPayload(this, event),
       ...kinematics,
       origin,
       cancel: this.onCancel,
@@ -72,7 +73,7 @@ export default class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
     this.updateSharedState({ down: false, touches: 0 })
 
     this.updateGestureState({
-      ...this.getGenericPayload(event),
+      ...getGenericPayload(this, event),
       ...this.getMovement(this.state.values),
     })
     this.fireGestureHandler()
@@ -98,8 +99,8 @@ export default class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
     this.updateSharedState(getGenericEventData(event))
 
     const startState = {
-      ...this.getStartGestureState(values, event),
-      ...this.getGenericPayload(event, true),
+      ...getStartGestureState(this, values, event),
+      ...getGenericPayload(this, event, true),
     }
 
     this.updateGestureState({
@@ -125,7 +126,7 @@ export default class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
     const kinematics = this.getKinematics(values, event)
 
     this.updateGestureState({
-      ...this.getGenericPayload(event),
+      ...getGenericPayload(this, event),
       ...kinematics,
       cancel: this.onCancel,
     })
@@ -140,7 +141,7 @@ export default class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
     this.updateSharedState({ down: false, touches: 0 })
 
     this.updateGestureState({
-      ...this.getGenericPayload(event),
+      ...getGenericPayload(this, event),
       ...this.getMovement(this.state.values),
     })
     this.fireGestureHandler()
@@ -199,8 +200,8 @@ export default class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
     this.updateSharedState(getGenericEventData(event))
 
     const startState = {
-      ...this.getStartGestureState(values, event),
-      ...this.getGenericPayload(event, true),
+      ...getStartGestureState(this, values, event),
+      ...getGenericPayload(this, event, true),
       initial: this.state.values,
     }
 
@@ -224,7 +225,7 @@ export default class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
     const kinematics = this.getKinematics(values, event)
 
     this.updateGestureState({
-      ...this.getGenericPayload(event),
+      ...getGenericPayload(this, event),
       ...kinematics,
       origin,
       delta,

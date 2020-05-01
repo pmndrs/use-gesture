@@ -4,6 +4,7 @@ import { UseGestureEvent, Fn, IngKey } from '../types'
 import { noop } from '../utils/utils'
 import { getPointerEventValues, getGenericEventData } from '../utils/event'
 import { calculateDistance } from '../utils/math'
+import { getStartGestureState, getGenericPayload } from './Recognizer'
 
 const TAP_DISTANCE_THRESHOLD = 3
 const SWIPE_MAX_ELAPSED_TIME = 220
@@ -15,6 +16,17 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
 
   constructor(controller: Controller, args: any[]) {
     super('drag', controller, args)
+  }
+
+
+  // Convenience method to add window listeners for a given gesture
+  protected addWindowListeners = (listeners: [string, Fn][]) => {
+    this.controller.addWindowListeners(this.stateKey, listeners)
+  }
+
+  // Convenience method to remove window listeners for a given gesture
+  protected removeWindowListeners = () => {
+    this.controller.removeWindowListeners(this.stateKey)
   }
 
   private isEventTypeTouch = (type?: string) => !!type && type.indexOf('touch') === 0
@@ -97,8 +109,8 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
     this.updateSharedState(getGenericEventData(event))
 
     const startState = {
-      ...this.getStartGestureState(values, event),
-      ...this.getGenericPayload(event, true),
+      ...getStartGestureState(this, values, event),
+      ...getGenericPayload(this, event, true),
     }
 
     this.updateGestureState({
@@ -138,7 +150,7 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
     if (_isTap && calculateDistance(kinematics._movement!) >= TAP_DISTANCE_THRESHOLD) _isTap = false
 
     this.updateGestureState({
-      ...this.getGenericPayload(event),
+      ...getGenericPayload(this, event),
       ...kinematics,
       _isTap,
       cancel: this.onCancel,
@@ -160,7 +172,7 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
     } = this.state
 
     const endState = {
-      ...this.getGenericPayload(event),
+      ...getGenericPayload(this, event),
       ...this.getMovement(values),
     }
 
@@ -189,7 +201,7 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
   clean = (): void => {
     super.clean()
     this.state._delayedEvent = false
-
+    this.removeWindowListeners()
     // TODO add back when setPointerCapture is widely wupported
 
     // if (this.controller.config.pointer) this.removePointers()

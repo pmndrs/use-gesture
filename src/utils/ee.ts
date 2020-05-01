@@ -15,3 +15,24 @@ export default function EE <T>() {
     },
   }
 }
+
+
+export function LifeTimeNotify<T> () {
+  const ctx:any = {}
+
+  ctx.promise = new Promise(resolve => {
+    ctx.resolve = resolve
+  })
+
+  function emit(data: T) {
+    if (ctx.resolve) return ctx.resolve(data)
+    setTimeout(ctx.resolve, 1, data)
+  }
+
+  function once(handler: any) {
+    ctx.promise.then(handler)
+  }
+
+  return [ emit, once ]
+}
+
