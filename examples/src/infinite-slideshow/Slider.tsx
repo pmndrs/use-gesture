@@ -26,7 +26,7 @@ type SliderProps = {
  * @param {Array} items - display items
  * @param {Function} children - render child
  * @param {number} width - fixed item with
- * @param {number} visible - number of items that muste be visible on screen
+ * @param {number} visible - number of items that must be visible on screen
  */
 export default function Slider({ items, width = 600, visible = 4, style, children }: SliderProps) {
   const idx = useCallback((x, l = items.length) => (x < 0 ? x + l : x) % l, [items])

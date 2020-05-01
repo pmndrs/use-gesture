@@ -18,7 +18,9 @@
     "lodash-move": "^1.1.1",
     "react-app-polyfill": "^1.0.6",
     "react-spring": "^9.0.0-canary.808.17.55c5691",
+    "react-three-fiber": "^4.1.4",
     "react-toastify": "^5.5.0",
+    "three": "^0.116.0",
     "yarn": "^1.22.4"
   },
   "devDependencies": {
