@@ -28,8 +28,8 @@ export function wrapStart(fn: Function) {
 }
 
 export function wrapEnd(fn: Function) {
-  return function (this: any, { first }: any) {
-    if (first) fn.apply(this, arguments)
+  return function (this: any, { last }: any) {
+    if (last) fn.apply(this, arguments)
   }
 }
 
