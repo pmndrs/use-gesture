@@ -1,7 +1,7 @@
 import React, { useRef } from 'react'
 import { useSpring, a, config } from 'react-spring'
 import { useDrag } from 'react-use-gesture'
-import './styles.css'
+import styles from './styles.css'
 
 const items = ['save item', 'open item', 'share item', 'delete item', 'cancel']
 const height = items.length * 60 + 80
@@ -49,7 +49,7 @@ export default function ActionSheet() {
   }
   return (
     <>
-      <a.div className="bg" onClick={() => close()} style={bgStyle}>
+      <a.div className={styles.bg} onClick={() => close()} style={bgStyle}>
         <img
           src="https://images.pexels.com/photos/1170831/pexels-photo-1170831.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
           alt=""
@@ -59,8 +59,8 @@ export default function ActionSheet() {
           alt=""
         />
       </a.div>
-      <div className="action-btn" onClick={() => open()} />
-      <a.div className="sheet" {...bind()} style={{ display, bottom: `calc(-100vh + ${height - 100}px)`, y }}>
+      <div className={styles.actionBtn} onClick={() => open()} />
+      <a.div className={styles.sheet} {...bind()} style={{ display, bottom: `calc(-100vh + ${height - 100}px)`, y }}>
         {items.map(entry => (
           <div key={entry} onClick={() => !draggingRef.current && close()} children={entry} />
         ))}

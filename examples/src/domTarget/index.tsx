@@ -1,7 +1,7 @@
 import React from 'react'
 import { useSpring, animated } from 'react-spring'
 import { useDrag } from 'react-use-gesture'
-import './styles.css'
+import styles from './styles.css'
 
 export default function Simple() {
   const domTarget = React.useRef(null)
@@ -17,7 +17,7 @@ export default function Simple() {
   // React.useEffect(bind, [bind]) <-- shows deprecation notics
 
   return (
-    <div className="simple flex-content">
+    <div className={`${styles.simple} flex`}>
       <animated.div ref={domTarget} style={{ x, y }} />
     </div>
   )

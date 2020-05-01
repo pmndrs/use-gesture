@@ -5,7 +5,7 @@ import { clamp } from 'lodash'
 import swap from 'lodash-move'
 import { useDrag } from 'react-use-gesture'
 import { useSprings, animated } from 'react-spring'
-import './styles.css'
+import styles from './styles.css'
 
 // Returns fitting styles for dragged/idle items
 const fn = (order: number[], down?: boolean, originalIndex?: number, curIndex?: number, y?: number) => (
@@ -38,7 +38,7 @@ export default function DraggableList({ items = 'Lorem ipsum dolor sit'.split(' 
     if (!down) order.current = newOrder
   })
   return (
-    <div className="drag-list flex-content" style={{ height: items.length * 100 }}>
+    <div className={`${styles.dragList} flex`} style={{ height: items.length * 100 }}>
       {springs.map(({ zIndex, shadow, y, scale }, i) => (
         <animated.div
           {...bind(i)}

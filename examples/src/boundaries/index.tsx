@@ -1,7 +1,7 @@
 import React from 'react'
 import { useSpring, animated } from 'react-spring'
 import { useDrag } from 'react-use-gesture'
-import './styles.css'
+import styles from './styles.css'
 
 export default function Boundaries() {
   const [{ x, y }, set] = useSpring(() => ({ x: 0, y: 0 }))
@@ -44,8 +44,8 @@ export default function Boundaries() {
   }
 
   return (
-    <div className="boundaries flex">
-      <animated.div className="drag" {...bind()} style={{ x, y }}>
+    <div className="flex">
+      <animated.div className={styles.drag} {...bind()} style={{ x, y }}>
         <animated.div {...bindL()} style={props}>
           <div>
             <animated.div style={{ color: movX ? 'red' : 'black' }}>{props.x.to(th(0))}</animated.div>

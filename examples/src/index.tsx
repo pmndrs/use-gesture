@@ -4,11 +4,11 @@ import * as Examples from './examples'
 import { sentenceCase } from 'change-case'
 import { Router, Link, RouteComponentProps } from '@reach/router'
 
-import './styles.css'
+import styles from './styles.css'
 
 function List(_props: RouteComponentProps) {
   return (
-    <div className="list">
+    <div className={styles.list}>
       <h1>React Use Gesture Examples</h1>
       <ul>
         {Object.keys(Examples).map(k => (
@@ -26,7 +26,7 @@ function Page(props: RouteComponentProps) {
   const Component = Examples[props.path]
   return (
     <>
-      <Link className="back-btn" to="/">
+      <Link className={styles.backBtn} to="/">
         ← Back to List of Examples
       </Link>
       <Component />

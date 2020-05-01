@@ -6,8 +6,8 @@
 
 html,
 body,
-#root,
-#root > div {
+:global(#root),
+:global(#root) > div {
   width: 100%;
   height: 100%;
   margin: 0;
@@ -19,17 +19,17 @@ body {
     segoe ui, arial, sans-serif;
 }
 
-.list {
-  padding: 40px 25px;
-}
-
 ul {
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
-.back-btn {
+.list {
+  padding: 40px 25px;
+}
+
+.backBtn {
   position: fixed;
   top: 25px;
   left: 25px;
@@ -46,16 +46,10 @@ ul {
   text-transform: capitalize;
 }
 
-.flex-content {
+:global(.flex) {
   width: 100%;
   height: 100%;
   position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.flex {
   display: flex;
   justify-content: center;
   align-items: center;

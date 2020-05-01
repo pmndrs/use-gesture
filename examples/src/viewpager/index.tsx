@@ -2,7 +2,7 @@ import React, { useRef } from 'react'
 import { clamp } from 'lodash'
 import { useSprings, animated } from 'react-spring'
 import { useDrag } from 'react-use-gesture'
-import './styles.css'
+import styles from './styles.css'
 
 const pages = [
   'https://images.pexels.com/photos/62689/pexels-photo-62689.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
@@ -34,7 +34,7 @@ export default function Viewpager() {
     })
   })
   return (
-    <div className="flex-content viewpager">
+    <div className={`flex ${styles.viewpager}`}>
       {props.map(({ x, display, scale }, i) => (
         <animated.div {...bind()} key={i} style={{ display, x }}>
           <animated.div style={{ scale, backgroundImage: `url(${pages[i]})` }} />

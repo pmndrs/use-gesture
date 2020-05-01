@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useSprings, animated, to as interpolate } from 'react-spring'
 import { useDrag } from 'react-use-gesture'
-import './styles.css'
+import styles from './styles.css'
 
 const cards = [
   'https://upload.wikimedia.org/wikipedia/en/f/f5/RWS_Tarot_08_Strength.jpg',
@@ -56,7 +56,7 @@ export default function Deck() {
   })
   // Now we're just mapping the animated values to our view, that's it. Btw, this component only renders once. :-)
   return (
-    <div className="cards flex-content">
+    <div className={`${styles.cards} flex`}>
       {props.map(({ x, y, rot, scale }, i) => (
         <animated.div key={i} style={{ x, y }}>
           {/* This is the card itself, we're binding our gesture to it (and inject its index so we know which is which) */}

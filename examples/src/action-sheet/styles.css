@@ -1,4 +1,4 @@
-.action-btn {
+.actionBtn {
   position: fixed;
   z-index: 100;
   bottom: 80px;
@@ -14,7 +14,7 @@
   justify-content: center;
 }
 
-.action-btn:after {
+.actionBtn:after {
   content: ' ';
   display: block;
   background: #fff;
