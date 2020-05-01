@@ -45,10 +45,11 @@ export default function ActionSheet() {
   const bgStyle = {
     transform: y.to([0, height], ['translateY(-8%) scale(1.16)', 'translateY(0px) scale(1)']),
     opacity: y.to([0, height], [0.4, 1], 'clamp'),
-    touchAction: y.to(v => (v > 0 ? 'auto' : 'none')),
+    // TODO check this on react-spring
+    // touchAction: y.to(v => (v > 0 ? 'auto' : 'none')),
   }
   return (
-    <>
+    <div className={styles.wrapper}>
       <a.div className={styles.bg} onClick={() => close()} style={bgStyle}>
         <img
           src="https://images.pexels.com/photos/1170831/pexels-photo-1170831.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
@@ -65,6 +66,6 @@ export default function ActionSheet() {
           <div key={entry} onClick={() => !draggingRef.current && close()} children={entry} />
         ))}
       </a.div>
-    </>
+    </div>
   )
 }

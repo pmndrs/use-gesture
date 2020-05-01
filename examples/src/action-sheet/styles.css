@@ -1,3 +1,7 @@
+.wrapper {
+  background-color: #000;
+}
+
 .actionBtn {
   position: fixed;
   z-index: 100;
@@ -38,6 +42,7 @@
   border-radius: 12px 12px 0px;
   background: #fff;
   touch-action: none;
+  will-change: transform;
 }
 
 .sheet > div {
