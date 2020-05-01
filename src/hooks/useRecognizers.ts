@@ -21,7 +21,7 @@ import {
  */
 export default function useRecognizers<Config extends Partial<GenericOptions>>(
   handlers: Partial<InternalHandlers>,
-  classes: RecognizerClass[],
+  classes: Set<RecognizerClass>,
   config: InternalConfig,
   nativeHandlers?: NativeHandlersPartial
 ): (...args: any[]) => HookReturnType<Config> {
