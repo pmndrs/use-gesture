@@ -10,22 +10,16 @@
     "sourceMap": true,
     "rootDir": "../.",
     "strict": true,
-    "noImplicitAny": true,
-    "strictNullChecks": true,
-    "strictFunctionTypes": true,
-    "strictPropertyInitialization": true,
-    "noImplicitThis": true,
-    "alwaysStrict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "moduleResolution": "node",
     "baseUrl": "./",
-    "jsx": "react",
-    "esModuleInterop": true,
     "paths": {
       "react-use-gesture": ["../src"]
-    }
+    },
+    "jsx": "react",
+    "esModuleInterop": true
   }
 }
