@@ -1,6 +1,5 @@
 import { TouchEvent, WheelEvent } from 'react'
 import DistanceAngleRecognizer from './DistanceAngleRecognizer'
-import Controller from '../Controller'
 import { UseGestureEvent, IngKey, Vector2, WebKitGestureEvent } from '../types'
 import { noop } from '../utils/utils'
 import {
@@ -14,10 +13,8 @@ import { getStartGestureState, getGenericPayload } from './Recognizer'
 
 export default class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
   ingKey = 'pinching' as IngKey
+  readonly stateKey = 'pinch'
 
-  constructor(controller: Controller, args: any[]) {
-    super('pinch', controller, args)
-  }
 
   private pinchShouldStart = (event: UseGestureEvent) => {
     const { touches } = getGenericEventData(event)

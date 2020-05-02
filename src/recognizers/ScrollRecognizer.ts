@@ -1,5 +1,4 @@
 import CoordinatesRecognizer from './CoordinatesRecognizer'
-import Controller from '../Controller'
 import { UseGestureEvent, IngKey } from '../types'
 import { getGenericEventData, getScrollEventValues } from '../utils/event'
 import { calculateAllGeometry } from '../utils/math'
@@ -7,11 +6,8 @@ import { getStartGestureState, getGenericPayload } from './Recognizer'
 
 export default class ScrollRecognizer extends CoordinatesRecognizer<'scroll'> {
   ingKey = 'scrolling' as IngKey
+  readonly stateKey = 'scroll'
   debounced = true
-
-  constructor(controller: Controller, args: any[]) {
-    super('scroll', controller, args)
-  }
 
   private scrollShouldRun = () => {
     return this.enabled

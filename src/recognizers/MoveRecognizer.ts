@@ -7,11 +7,9 @@ import { getStartGestureState, getGenericPayload } from './Recognizer'
 
 export default class MoveRecognizer extends CoordinatesRecognizer<'move'> {
   ingKey = 'moving' as IngKey
-  debounced = true
+  readonly stateKey = 'move'
 
-  constructor(controller: Controller, args: any[]) {
-    super('move', controller, args)
-  }
+  debounced = true
 
   private moveShouldRun = () => {
     return this.enabled

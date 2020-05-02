@@ -27,6 +27,7 @@ import { valueFn } from '../utils/utils'
 export default abstract class Recognizer<T extends StateKey> {
   protected abstract ingKey: IngKey // dragging, scrolling, etc.
   protected debounced: Boolean = true
+  readonly abstract stateKey: T
 
   /**
    * Creates an instance of a gesture recognizer.
@@ -34,7 +35,7 @@ export default abstract class Recognizer<T extends StateKey> {
    * @param controller the controller attached to the gesture
    * @param [args] the args that should be passed to the gesture handler
    */
-  constructor(readonly stateKey: T, readonly controller: Controller, readonly args: any[] = []) {}
+  constructor(readonly controller: Controller, readonly args: any[] = []) {}
 
   // Returns the gesture config
   get config(): NonNullable<InternalConfig[T]> {

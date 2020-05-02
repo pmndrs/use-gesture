@@ -8,11 +8,8 @@ import { getStartGestureState, getGenericPayload } from './Recognizer'
 
 export default class WheelRecognizer extends CoordinatesRecognizer<'wheel'> {
   ingKey = 'wheeling' as IngKey
+  readonly stateKey = 'wheel'
   debounced = true
-
-  constructor(controller: Controller, args: any[]) {
-    super('wheel', controller, args)
-  }
 
   private wheelShouldRun = (event: UseGestureEvent<WheelEvent>) => {
     if (event.ctrlKey && 'pinch' in this.controller.handlers) return false
@@ -63,11 +60,10 @@ export default class WheelRecognizer extends CoordinatesRecognizer<'wheel'> {
     this.updateSharedState(genericEventData)
 
     const { values } = this.getValuesFromEvent(event)
-    const kinematics = this.getKinematics(values, event)
 
     this.updateGestureState({
       ...getGenericPayload(this, event),
-      ...kinematics,
+      ...this.getKinematics(values, event),
     })
 
     this.fireGestureHandler()
