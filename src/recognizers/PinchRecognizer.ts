@@ -214,16 +214,13 @@ export default class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
   }
 
   onWheelChange = (event: UseGestureEvent<WheelEvent>): void => {
-    const genericEventData = getGenericEventData(event)
-
-    this.updateSharedState(genericEventData)
+    this.updateSharedState(getGenericEventData(event))
 
     const { values, origin, delta } = this.getWheelValuesFromEvent(event)
-    const kinematics = this.getKinematics(values, event)
 
     this.updateGestureState({
       ...getGenericPayload(this, event),
-      ...kinematics,
+      ...this.getKinematics(values, event),
       origin,
       delta,
     })
