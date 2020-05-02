@@ -1,6 +1,6 @@
 type Handler<T> = (data: T) => void
 
-export default function EE <T>() {
+export default function EE<T>() {
   let S = new Set<Handler<T>>()
 
   return {
