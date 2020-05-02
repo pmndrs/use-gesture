@@ -2,7 +2,6 @@ import Controller from '../Controller'
 import {
   StateKey,
   SharedGestureState,
-  Fn,
   UseGestureEvent,
   IngKey,
   InternalConfig,
@@ -25,7 +24,7 @@ import { valueFn } from '../utils/utils'
  * @type {StateKey<T>} whether the Recognizer should deal with coordinates or distance / angle
  */
 export default abstract class Recognizer<T extends StateKey> {
-  protected abstract ingKey: IngKey // dragging, scrolling, etc.
+  readonly abstract ingKey: IngKey // dragging, scrolling, etc.
   protected debounced: Boolean = true
   readonly abstract stateKey: T
 

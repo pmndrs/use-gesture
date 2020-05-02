@@ -1,5 +1,4 @@
 import CoordinatesRecognizer from './CoordinatesRecognizer'
-import Controller from '../Controller'
 import { UseGestureEvent, Fn, IngKey } from '../types'
 import { noop } from '../utils/utils'
 import { getPointerEventValues, getGenericEventData } from '../utils/event'
@@ -11,7 +10,7 @@ const SWIPE_MAX_ELAPSED_TIME = 220
 const FILTER_REPEATED_EVENTS_DELAY = 200
 
 export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
-  ingKey = 'dragging' as IngKey
+  readonly ingKey = 'dragging' as IngKey
   readonly stateKey = 'drag'
   wasTouch = false
 

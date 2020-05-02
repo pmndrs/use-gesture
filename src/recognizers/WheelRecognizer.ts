@@ -1,13 +1,12 @@
 import { WheelEvent } from 'react'
 import CoordinatesRecognizer from './CoordinatesRecognizer'
-import Controller from '../Controller'
 import { UseGestureEvent, IngKey } from '../types'
 import { getWheelEventValues, getGenericEventData } from '../utils/event'
 import { addV, calculateAllGeometry } from '../utils/math'
 import { getStartGestureState, getGenericPayload } from './Recognizer'
 
 export default class WheelRecognizer extends CoordinatesRecognizer<'wheel'> {
-  ingKey = 'wheeling' as IngKey
+  readonly ingKey = 'wheeling' as IngKey
   readonly stateKey = 'wheel'
   debounced = true
 

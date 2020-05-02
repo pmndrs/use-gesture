@@ -5,7 +5,7 @@ import { calculateAllGeometry } from '../utils/math'
 import { getStartGestureState, getGenericPayload } from './Recognizer'
 
 export default class ScrollRecognizer extends CoordinatesRecognizer<'scroll'> {
-  ingKey = 'scrolling' as IngKey
+  readonly ingKey = 'scrolling' as IngKey
   readonly stateKey = 'scroll'
   debounced = true
 

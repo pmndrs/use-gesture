@@ -12,7 +12,7 @@ import {
 import { getStartGestureState, getGenericPayload } from './Recognizer'
 
 export default class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
-  ingKey = 'pinching' as IngKey
+  readonly ingKey = 'pinching' as IngKey
   readonly stateKey = 'pinch'
 
 

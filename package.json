@@ -80,5 +80,8 @@
   },
   "resolutions": {
     "@types/react": "^16.9.32"
+  },
+  "dependencies": {
+    "utils": "^0.3.1"
   }
 }
