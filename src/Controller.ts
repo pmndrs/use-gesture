@@ -63,7 +63,7 @@ export default class Controller {
       this.bind()
       this.addDomTargetListeners()
     }
-    return this!.clean
+    return this.clean
   }
 
   public nativeRefs?: NativeHandlersPartial
