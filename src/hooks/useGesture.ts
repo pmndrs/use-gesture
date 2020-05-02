@@ -62,7 +62,7 @@ function sortHandlers(handlers: UserHandlersPartial) {
  * @returns {(...args: any[]) => HookReturnType<Config>}
  */
 export function useGesture<Config extends UseGestureConfig>(
-  _handlers: UserHandlersPartial, 
+  _handlers: UserHandlersPartial,
   config: UseGestureConfig = {}
 ): (...args: any[]) => HookReturnType<Config> {
   const [handlers, nativeHandlers, actions] = sortHandlers(_handlers)

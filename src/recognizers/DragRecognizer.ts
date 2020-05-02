@@ -18,7 +18,6 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
     super('drag', controller, args)
   }
 
-
   // Convenience method to add window listeners for a given gesture
   protected addWindowListeners = (listeners: [string, Fn][]) => {
     this.controller.addWindowListeners(this.stateKey, listeners)

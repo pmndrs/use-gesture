@@ -37,7 +37,6 @@ export default class ScrollRecognizer extends CoordinatesRecognizer<'scroll'> {
       initial: this.state.values,
     }
 
-
     const movementDetection = this.getMovement(values, startState)
     const delta = movementDetection.delta!
 

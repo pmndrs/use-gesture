@@ -60,7 +60,7 @@ export function usePinch<Config = UsePinchConfig>(handler: Handler<'pinch'>, con
  * @param [config={}] - the config object including generic options and scroll options
  */
 export function useScroll<Config = UseScrollConfig>(handler: Handler<'scroll'>, config: Config | {} = {}) {
-  return useRecognizers<Config>({ scroll: handler },new Set( [ScrollRecognizer]), buildScrollConfig(config))
+  return useRecognizers<Config>({ scroll: handler }, new Set([ScrollRecognizer]), buildScrollConfig(config))
 }
 
 /**

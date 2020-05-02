@@ -1,6 +1,6 @@
 type Handler<T> = (data: T) => void
 
-export default function EE <T>() {
+export default function EE<T>() {
   let S = new Set<Handler<T>>()
 
   return {
@@ -16,9 +16,8 @@ export default function EE <T>() {
   }
 }
 
-
-export function LifeTimeNotify<T> () {
-  const ctx:any = {}
+export function LifeTimeNotify<T>() {
+  const ctx: any = {}
 
   ctx.promise = new Promise(resolve => {
     ctx.resolve = resolve
@@ -33,6 +32,5 @@ export function LifeTimeNotify<T> () {
     ctx.promise.then(handler)
   }
 
-  return [ emit, once ]
+  return [emit, once]
 }
-
