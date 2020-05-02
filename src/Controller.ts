@@ -24,7 +24,7 @@ type Bindings = Partial<{ [eventName in ReactEventHandlerKey]: Fn[] }>
  * @template BinderType the type the bind function should return
  */
 export default class Controller {
-  constructor(private classes: RecognizerClass[]) {}
+  constructor(private classes: Set<RecognizerClass>) {}
 
   public bind = (...args: any[]) => {
     this.resetBindings()

@@ -76,38 +76,38 @@ export function useGesture<Config extends UseGestureConfig>(
 
   const mergedConfig: InternalConfig = getInternalGenericOptions({ eventOptions, window, domTarget, enabled })
 
-  const classes: RecognizerClass[] = []
+  const classes = new Set<RecognizerClass>()
   const internalHandlers: Partial<InternalHandlers> = {}
 
   // will hold reference to native handlers such as onClick, onMouseDown, etc.
 
   if (actions.has('onDrag')) {
-    classes.push(DragRecognizer)
+    classes.add(DragRecognizer)
     internalHandlers.drag = includeStartEndHandlers(handlers, 'onDrag')
     mergedConfig.drag = getInternalDragOptions(drag)
   }
   if (actions.has('onWheel')) {
-    classes.push(WheelRecognizer)
+    classes.add(WheelRecognizer)
     internalHandlers.wheel = includeStartEndHandlers(handlers, 'onWheel')
     mergedConfig.wheel = getInternalCoordinatesOptions(wheel)
   }
   if (actions.has('onScroll')) {
-    classes.push(ScrollRecognizer)
+    classes.add(ScrollRecognizer)
     internalHandlers.scroll = includeStartEndHandlers(handlers, 'onScroll')
     mergedConfig.scroll = getInternalCoordinatesOptions(scroll)
   }
   if (actions.has('onMove')) {
-    classes.push(MoveRecognizer)
+    classes.add(MoveRecognizer)
     internalHandlers.move = includeStartEndHandlers(handlers, 'onMove')
     mergedConfig.move = getInternalCoordinatesOptions(move)
   }
   if (actions.has('onPinch')) {
-    classes.push(PinchRecognizer)
+    classes.add(PinchRecognizer)
     internalHandlers.pinch = includeStartEndHandlers(handlers, 'onPinch')
     mergedConfig.pinch = getInternalDistanceAngleOptions(pinch)
   }
   if (actions.has('onHover')) {
-    if (!actions.has('onMove')) classes.push(MoveRecognizer)
+    classes.add(MoveRecognizer)
     internalHandlers.hover = handlers.onHover
     mergedConfig.hover = { enabled: true, ...hover }
   }

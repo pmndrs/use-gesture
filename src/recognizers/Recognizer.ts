@@ -2,7 +2,6 @@ import Controller from '../Controller'
 import {
   StateKey,
   SharedGestureState,
-  Fn,
   UseGestureEvent,
   IngKey,
   InternalConfig,
@@ -25,8 +24,9 @@ import { valueFn } from '../utils/utils'
  * @type {StateKey<T>} whether the Recognizer should deal with coordinates or distance / angle
  */
 export default abstract class Recognizer<T extends StateKey> {
-  protected abstract ingKey: IngKey // dragging, scrolling, etc.
+  readonly abstract ingKey: IngKey // dragging, scrolling, etc.
   protected debounced: Boolean = true
+  readonly abstract stateKey: T
 
   /**
    * Creates an instance of a gesture recognizer.
@@ -34,29 +34,25 @@ export default abstract class Recognizer<T extends StateKey> {
    * @param controller the controller attached to the gesture
    * @param [args] the args that should be passed to the gesture handler
    */
-  constructor(
-    protected readonly stateKey: T,
-    protected readonly controller: Controller,
-    protected readonly args: any[] = []
-  ) {}
+  constructor(readonly controller: Controller, readonly args: any[] = []) {}
 
   // Returns the gesture config
-  protected get config(): NonNullable<InternalConfig[T]> {
+  get config(): NonNullable<InternalConfig[T]> {
     return this.controller.config[this.stateKey]!
   }
 
   // Is the gesture enabled
-  protected get enabled(): boolean {
+  get enabled(): boolean {
     return this.controller.config.enabled && this.config.enabled
   }
 
   // Returns the controller state for a given gesture
-  protected get state(): GestureState<T> {
+  get state(): GestureState<T> {
     return this.controller.state[this.stateKey]
   }
 
   // Returns the gesture handler
-  protected get handler() {
+  get handler() {
     return this.controller.handlers[this.stateKey]!
   }
 
@@ -80,16 +76,6 @@ export default abstract class Recognizer<T extends StateKey> {
     clearTimeout(this.controller.timeouts[this.stateKey])
   }
 
-  // Convenience method to add window listeners for a given gesture
-  protected addWindowListeners = (listeners: [string, Fn][]) => {
-    this.controller.addWindowListeners(this.stateKey, listeners)
-  }
-
-  // Convenience method to remove window listeners for a given gesture
-  protected removeWindowListeners = () => {
-    this.controller.removeWindowListeners(this.stateKey)
-  }
-
   /**
    * Utility function to get kinematics of the gesture.
    *
@@ -104,46 +90,6 @@ export default abstract class Recognizer<T extends StateKey> {
 
   // Should return the bindings to be added for a given gesture
   public abstract addBindings(): void
-
-  /**
-   * Returns a generic, common payload for all gestures from an event.
-   *
-   * @param {UseGestureEvent} event
-   * @param {boolean} [isStartEvent]
-   * @returns - the generic gesture payload
-   */
-  protected getGenericPayload(event: UseGestureEvent, isStartEvent?: boolean) {
-    const { timeStamp, type } = event
-    const { values, startTime } = this.state
-
-    return {
-      _lastEventType: type,
-      event,
-      timeStamp,
-      elapsedTime: isStartEvent ? 0 : timeStamp - startTime!,
-      args: this.args,
-      previous: values,
-    }
-  }
-  /**
-   * Returns the reinitialized start state for the gesture.
-   * Should be common to all gestures.
-   *
-   * @param {Vector2} values
-   * @param {UseGestureEvent} event
-   * @returns - the start state for the gesture
-   */
-  protected getStartGestureState = (values: Vector2, event: UseGestureEvent) => {
-    return {
-      ...getInitialState()[this.stateKey],
-      _active: true,
-      values,
-      initial: values,
-      offset: this.state.offset,
-      lastOffset: this.state.offset,
-      startTime: event.timeStamp,
-    }
-  }
 
   /**
    * Returns state properties depending on the movement and state.
@@ -215,32 +161,21 @@ export default abstract class Recognizer<T extends StateKey> {
      * and offset can return within their bounds.
      */
     const _rubberband: Vector2 = _active ? rubberband : [0, 0]
-    movement = this.rubberband(addV(movement, _initial), _rubberband) // rubberbanded movement
+    movement = computeRubberband(this, addV(movement, _initial), _rubberband) // rubberbanded movement
 
     return {
       ...intentionalityCheck,
       _initial,
       _movement,
       movement,
-      offset: this.rubberband(offset, _rubberband), // rubberbanded offset
+      offset: computeRubberband(this, offset, _rubberband), // rubberbanded offset
       delta: subV(movement, prevMovement),
     } as PartialGestureState<T>
-  }
-
-  // Runs rubberband on a vector
-  protected rubberband = (vector: Vector2, rubberband: Vector2): Vector2 => {
-    const { bounds } = this.config
-
-    /**
-     * [x, y]: [rubberband(x, min, max), rubberband(y, min, max)]
-     */
-    return vector.map((v, i) => rubberbandIfOutOfBounds(v, bounds[i][0], bounds[i][1], rubberband[i])) as Vector2
   }
 
   // Cleans the gesture. Can be overriden by gestures.
   protected clean() {
     this.clearTimeout()
-    this.removeWindowListeners()
   }
 
   /**
@@ -298,5 +233,72 @@ function getIntentionalDisplacement(movement: number, threshold: number): number
     return Math.sign(movement) * threshold
   } else {
     return false
+  }
+}
+
+function computeRubberband<T extends StateKey>(
+  recognizer: Recognizer<T>,
+  vector: Vector2,
+  rubberband: Vector2
+): Vector2 {
+  const bounds = recognizer.config.bounds
+
+  /**
+   * [x, y]: [rubberband(x, min, max), rubberband(y, min, max)]
+   */
+  return vector.map((v, i) => rubberbandIfOutOfBounds(v, bounds[i][0], bounds[i][1], rubberband[i])) as Vector2
+}
+
+/**
+ * Returns a generic, common payload for all gestures from an event.
+ *
+ * @param {UseGestureEvent} event
+ * @param {boolean} [isStartEvent]
+ * @returns - the generic gesture payload
+ */
+export function getGenericPayload<T extends StateKey>(
+  recognizer: Recognizer<T>,
+  event: UseGestureEvent,
+  isStartEvent?: boolean
+) {
+  const { timeStamp, type } = event
+  const {
+    args,
+    state: { values, startTime },
+  } = recognizer
+
+  return {
+    _lastEventType: type,
+    event,
+    timeStamp,
+    elapsedTime: isStartEvent ? 0 : timeStamp - startTime!,
+    args,
+    previous: values,
+  }
+}
+
+/**
+ * Returns the reinitialized start state for the gesture.
+ * Should be common to all gestures.
+ *
+ * @param {Vector2} values
+ * @param {UseGestureEvent} event
+ * @returns - the start state for the gesture
+ */
+export function getStartGestureState<T extends StateKey>(
+  recognizer: Recognizer<T>,
+  values: Vector2,
+  event: UseGestureEvent
+) {
+  const { stateKey, state } = recognizer
+
+  return {
+    ...getInitialState()[stateKey],
+    _active: true,
+    values,
+    initial: values,
+    offset: state.offset,
+    lastOffset: state.offset,
+    startTime: event.timeStamp,
   }
 }

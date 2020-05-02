@@ -1,6 +1,5 @@
 import { TouchEvent, WheelEvent } from 'react'
 import DistanceAngleRecognizer from './DistanceAngleRecognizer'
-import Controller from '../Controller'
 import { UseGestureEvent, IngKey, Vector2, WebKitGestureEvent } from '../types'
 import { noop } from '../utils/utils'
 import {
@@ -10,13 +9,12 @@ import {
   supportsGestureEvents,
   getWebkitGestureEventValues,
 } from '../utils/event'
+import { getStartGestureState, getGenericPayload } from './Recognizer'
 
 export default class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
-  ingKey = 'pinching' as IngKey
+  readonly ingKey = 'pinching' as IngKey
+  readonly stateKey = 'pinch'
 
-  constructor(controller: Controller, args: any[]) {
-    super('pinch', controller, args)
-  }
 
   private pinchShouldStart = (event: UseGestureEvent) => {
     const { touches } = getGenericEventData(event)
@@ -31,8 +29,8 @@ export default class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
     this.updateSharedState(getGenericEventData(event))
 
     const startState = {
-      ...this.getStartGestureState(values, event),
-      ...this.getGenericPayload(event, true),
+      ...getStartGestureState(this, values, event),
+      ...getGenericPayload(this, event, true),
     }
 
     this.updateGestureState({
@@ -57,7 +55,7 @@ export default class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
     const kinematics = this.getKinematics(values, event)
 
     this.updateGestureState({
-      ...this.getGenericPayload(event),
+      ...getGenericPayload(this, event),
       ...kinematics,
       origin,
       cancel: this.onCancel,
@@ -72,7 +70,7 @@ export default class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
     this.updateSharedState({ down: false, touches: 0 })
 
     this.updateGestureState({
-      ...this.getGenericPayload(event),
+      ...getGenericPayload(this, event),
       ...this.getMovement(this.state.values),
     })
     this.fireGestureHandler()
@@ -98,8 +96,8 @@ export default class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
     this.updateSharedState(getGenericEventData(event))
 
     const startState = {
-      ...this.getStartGestureState(values, event),
-      ...this.getGenericPayload(event, true),
+      ...getStartGestureState(this, values, event),
+      ...getGenericPayload(this, event, true),
     }
 
     this.updateGestureState({
@@ -125,7 +123,7 @@ export default class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
     const kinematics = this.getKinematics(values, event)
 
     this.updateGestureState({
-      ...this.getGenericPayload(event),
+      ...getGenericPayload(this, event),
       ...kinematics,
       cancel: this.onCancel,
     })
@@ -140,7 +138,7 @@ export default class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
     this.updateSharedState({ down: false, touches: 0 })
 
     this.updateGestureState({
-      ...this.getGenericPayload(event),
+      ...getGenericPayload(this, event),
       ...this.getMovement(this.state.values),
     })
     this.fireGestureHandler()
@@ -199,8 +197,8 @@ export default class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
     this.updateSharedState(getGenericEventData(event))
 
     const startState = {
-      ...this.getStartGestureState(values, event),
-      ...this.getGenericPayload(event, true),
+      ...getStartGestureState(this, values, event),
+      ...getGenericPayload(this, event, true),
       initial: this.state.values,
     }
 
@@ -216,16 +214,13 @@ export default class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
   }
 
   onWheelChange = (event: UseGestureEvent<WheelEvent>): void => {
-    const genericEventData = getGenericEventData(event)
-
-    this.updateSharedState(genericEventData)
+    this.updateSharedState(getGenericEventData(event))
 
     const { values, origin, delta } = this.getWheelValuesFromEvent(event)
-    const kinematics = this.getKinematics(values, event)
 
     this.updateGestureState({
-      ...this.getGenericPayload(event),
-      ...kinematics,
+      ...getGenericPayload(this, event),
+      ...this.getKinematics(values, event),
       origin,
       delta,
     })

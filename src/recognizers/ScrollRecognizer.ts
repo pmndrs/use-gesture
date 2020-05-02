@@ -1,16 +1,13 @@
 import CoordinatesRecognizer from './CoordinatesRecognizer'
-import Controller from '../Controller'
 import { UseGestureEvent, IngKey } from '../types'
 import { getGenericEventData, getScrollEventValues } from '../utils/event'
 import { calculateAllGeometry } from '../utils/math'
+import { getStartGestureState, getGenericPayload } from './Recognizer'
 
 export default class ScrollRecognizer extends CoordinatesRecognizer<'scroll'> {
-  ingKey = 'scrolling' as IngKey
+  readonly ingKey = 'scrolling' as IngKey
+  readonly stateKey = 'scroll'
   debounced = true
-
-  constructor(controller: Controller, args: any[]) {
-    super('scroll', controller, args)
-  }
 
   private scrollShouldRun = () => {
     return this.enabled
@@ -31,8 +28,8 @@ export default class ScrollRecognizer extends CoordinatesRecognizer<'scroll'> {
     this.updateSharedState(getGenericEventData(event))
 
     const startState = {
-      ...this.getStartGestureState(values, event),
-      ...this.getGenericPayload(event, true),
+      ...getStartGestureState(this, values, event),
+      ...getGenericPayload(this, event, true),
       initial: this.state.values,
     }
 
@@ -57,7 +54,7 @@ export default class ScrollRecognizer extends CoordinatesRecognizer<'scroll'> {
     const kinematics = this.getKinematics(values, event)
 
     this.updateGestureState({
-      ...this.getGenericPayload(event),
+      ...getGenericPayload(this, event),
       ...kinematics,
     })
 

@@ -1,16 +1,14 @@
 import {} from 'react'
 import CoordinatesRecognizer from './CoordinatesRecognizer'
-import Controller from '../Controller'
 import { UseGestureEvent, IngKey } from '../types'
 import { getGenericEventData, getPointerEventValues } from '../utils/event'
+import { getStartGestureState, getGenericPayload } from './Recognizer'
 
 export default class MoveRecognizer extends CoordinatesRecognizer<'move'> {
-  ingKey = 'moving' as IngKey
-  debounced = true
+  readonly ingKey = 'moving' as IngKey
+  readonly stateKey = 'move'
 
-  constructor(controller: Controller, args: any[]) {
-    super('move', controller, args)
-  }
+  debounced = true
 
   private moveShouldRun = () => {
     return this.enabled
@@ -31,8 +29,8 @@ export default class MoveRecognizer extends CoordinatesRecognizer<'move'> {
     this.updateSharedState(getGenericEventData(event))
 
     const startState = {
-      ...this.getStartGestureState(values, event),
-      ...this.getGenericPayload(event, true),
+      ...getStartGestureState(this, values, event),
+      ...getGenericPayload(this, event, true),
     }
 
     this.updateGestureState({
@@ -52,7 +50,7 @@ export default class MoveRecognizer extends CoordinatesRecognizer<'move'> {
     const kinematics = this.getKinematics(values, event)
 
     this.updateGestureState({
-      ...this.getGenericPayload(event),
+      ...getGenericPayload(this, event),
       ...kinematics,
     })
 
@@ -76,7 +74,7 @@ export default class MoveRecognizer extends CoordinatesRecognizer<'move'> {
       const state = {
         ...this.controller.state.shared,
         ...this.state,
-        ...this.getGenericPayload(event, true),
+        ...getGenericPayload(this, event, true),
         values,
         active: true,
         hovering: true,
@@ -98,7 +96,7 @@ export default class MoveRecognizer extends CoordinatesRecognizer<'move'> {
       const state = {
         ...this.controller.state.shared,
         ...this.state,
-        ...this.getGenericPayload(event),
+        ...getGenericPayload(this, event),
         values,
         active: false,
       }
