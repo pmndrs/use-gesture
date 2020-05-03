@@ -23,23 +23,27 @@
   --ifm-color-primary-lightest: #e9fff8;
   --ifm-font-base-color: rgb(50, 67, 93);
   --ifm-tabs-color: var(--ifm-font-base-color);
-  --color-highlight: #d73300;
+  --ifm-menu-color: var(--ifm-font-base-color);
+  --color-highlight: #35435b;
   --ifm-color-warning-ultralight: #fdfbed;
-  --ifm-line-height-base: 1.6;
+  --ifm-line-height-base: 1.6rem;
   --ifm-code-font-size: 0.95em;
-  --ifm-contents-border-color: transparent;
   --ifm-leading: 1.8rem;
   --ifm-spacing-horizontal: 2rem;
   --ifm-code-font-size: 0.93em;
-  --ifm-code-border-radius: 0.1rem;
+  --ifm-code-border-radius: 0.3rem;
   --ifm-code-padding-horizontal: 0.3rem;
-  --ifm-code-padding-vertical: 0;
+  --ifm-code-padding-vertical: 0.2rem;
   --ifm-h1-font-size: 1.6rem;
   --ifm-h2-font-size: 1.4rem;
   --ifm-h3-font-size: 1.1rem;
   --ifm-hr-border-width: 0.5px;
   --ifm-hr-border-color: var(--ifm-code-background);
-  --ifm-code-background: rgba(0, 0, 0, 0.04);
+  --ifm-code-background: #86b4ff1a;
+  --ifm-code-border-color: #005aff1a;
+  --ifm-contents-border-color: var(--ifm-code-background);
+  --ifm-menu-color-background-active: var(--ifm-code-background);
+  --ifm-menu-color-background-hover: var(--ifm-menu-color-background-active);
   --ifm-color-info: var(--ifm-color-gray-200);
   --ifm-badge-border-radius: 0.2rem;
   --ifm-badge-padding-horizontal: 0.5rem;
@@ -58,6 +62,12 @@
 html[data-theme='dark'] {
   --ifm-color-warning-lightest: var(--ifm-color-gray-900);
   --ifm-color-warning-ultralight: black;
+  --ifm-font-base-color: #f5f6f7;
+  --color-highlight: #bcd2f7;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 .hero.hero--primary {
@@ -89,6 +99,7 @@ table {
 
 table code {
   background: none;
+  border: none;
 }
 
 table code:first-child {
@@ -108,7 +119,7 @@ em > code,
 strong {
   color: var(--color-highlight);
   font-style: normal;
-  font-weight: normal;
+  font-weight: 600;
 }
 
 a {
@@ -120,6 +131,10 @@ h3 > code,
 h4 > code {
   font-weight: inherit;
   color: var(--color-highlight);
+}
+
+code {
+  border: 1px solid var(--ifm-code-border-color);
 }
 
 a > code {
@@ -162,6 +177,11 @@ a.footnote-ref {
   text-decoration: none;
   font-size: 0.8em;
   padding-left: 0.3em;
+}
+
+.pagination-nav .pagination-nav__link {
+  border: none;
+  padding: 0;
 }
 
 .markdown {
