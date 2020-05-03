@@ -21,6 +21,8 @@
   --ifm-color-primary-light: #91c9f9;
   --ifm-color-primary-lighter: #bcf7fc;
   --ifm-color-primary-lightest: #e9fff8;
+  --ifm-font-base-color: rgb(50, 67, 93);
+  --ifm-tabs-color: var(--ifm-font-base-color);
   --color-highlight: #d73300;
   --ifm-color-warning-ultralight: #fdfbed;
   --ifm-line-height-base: 1.6;
@@ -43,6 +45,14 @@
   --ifm-badge-padding-horizontal: 0.5rem;
   --ifm-badge-padding-vertical: 0.4rem;
   --ifm-footer-link-hover-color: inherit;
+  --ifm-global-shadow-md: none;
+}
+
+@media (max-width: 400px) {
+  :root {
+    --ifm-spacing-horizontal: 1rem;
+    --ifm-font-size-base: 16px;
+  }
 }
 
 html[data-theme='dark'] {
@@ -167,6 +177,10 @@ a.footnote-ref {
 .markdown a > em > code {
   color: inherit;
   text-decoration: underline;
+}
+
+.prism-code {
+  border-radius: 4px;
 }
 
 .prism-code .token-line {
