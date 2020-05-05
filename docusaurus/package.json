@@ -18,7 +18,7 @@
     "react-player": "^1.15.3",
     "react-spring": "^9.0.0-canary.808.17.55c5691",
     "react-toastify": "^5.5.0",
-    "react-use-gesture": "^7.0.10"
+    "react-use-gesture": "^7.0.15"
   },
   "browserslist": {
     "production": [
@@ -40,17 +40,17 @@
     "arrowParens": "avoid"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "2.26.0",
-    "@typescript-eslint/parser": "2.26.0",
+    "@typescript-eslint/eslint-plugin": "2.31.0",
+    "@typescript-eslint/parser": "2.31.0",
     "babel-eslint": "10.1.0",
     "eslint": "6.8.0",
     "eslint-config-react-app": "^5.2.1",
-    "eslint-mdx": "^1.6.8",
+    "eslint-mdx": "^1.6.9",
     "eslint-plugin-flowtype": "4.7.0",
     "eslint-plugin-import": "2.20.2",
     "eslint-plugin-jsx-a11y": "6.x",
-    "eslint-plugin-mdx": "^1.6.8",
+    "eslint-plugin-mdx": "^1.6.9",
     "eslint-plugin-react": "7.19.0",
-    "eslint-plugin-react-hooks": "3.0.0"
+    "eslint-plugin-react-hooks": "4.0.0"
   }
 }

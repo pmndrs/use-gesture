@@ -55,9 +55,10 @@
   right: 0;
   border-radius: var(--ifm-global-radius) var(--ifm-global-radius) 0 0;
   color: var(--ifm-color-primary-light);
-  padding: 0.5em 2em;
-  font-size: 0.9em;
+  padding: 0.5em 1em;
+  font-size: 0.8em;
   font-family: var(--ifm-font-family-monospace);
+  white-space: nowrap;
 }
 
 .ui.horizontal {
@@ -65,7 +66,7 @@
 }
 
 .ui.horizontal > *:not(:first-child) {
-  margin-left: 1em;
+  margin-left: 1.4rem;
 }
 
 .ui label {
@@ -74,7 +75,7 @@
 }
 
 .ui label > input {
-  margin-right: 1em;
+  margin: 0 0.5rem 0 0;
 }
 
 .cancelLimit {
@@ -83,9 +84,13 @@
   top: 0;
   bottom: 0;
   background-color: hotpink;
-  width: calc(50% - 200px);
+  width: calc(50% - 100px);
   opacity: 0.5;
   border-radius: 0 var(--ifm-global-radius) var(--ifm-global-radius) 0;
+}
+
+.Cancel .drag {
+  left: -100px;
 }
 
 .Swipe .square {
@@ -137,9 +142,9 @@
 }
 
 .limits {
-  height: 190px;
-  width: 290px;
-  border: 4px solid var(--ifm-color-primary-darkest);
+  min-height: 190px;
+  min-width: 260px;
+  border: 4px solid var(--ifm-code-border-color);
 }
 
 .Initial .drag,

@@ -156,9 +156,9 @@ export function Threshold({ setActive }) {
     }
     setL({ opacity: 1 })
     if (Math.abs(mx) >= 100) setMovX(true)
-    else setL({ x: mx })
+    else if (!movX) setL({ x: mx })
     if (Math.abs(my) >= 100) setMovY(true)
-    else setL({ y: my })
+    else if (!movY) setL({ y: my })
   })
 
   const th = index => v => {
@@ -188,7 +188,7 @@ export function Threshold({ setActive }) {
   )
 }
 
-const bounds = { left: -100, right: 100, top: -50, bottom: 50 }
+const bounds = { left: -85, right: 85, top: -50, bottom: 50 }
 
 export function Bounds({ setActive }) {
   const [{ x, y }, set] = useSpring(() => ({ x: 0, y: 0 }))
@@ -392,6 +392,7 @@ export function Delay({ setActive }) {
   const timer = useRef()
 
   const startCountdown = () => {
+    setActive(true)
     const start = performance.now()
     timer.current = setInterval(() => {
       const elapsedTime = Math.max(
@@ -407,6 +408,7 @@ export function Delay({ setActive }) {
   }
 
   const clearCountdown = () => {
+    setActive(false)
     clearInterval(timer.current)
     setCountdown({ countdown: 1000, immediate: true })
     setStatus('idle')
@@ -415,7 +417,6 @@ export function Delay({ setActive }) {
   const bind = useGesture(
     {
       onDrag: ({ down, movement: [mx, my], distance, last }) => {
-        setActive && setActive(down)
         if (distance > 0 && down && status !== 'elapsed') {
           clearInterval(timer.current)
           setStatus('moved')

@@ -34,7 +34,7 @@
   --ifm-code-font-size: 0.93em;
   --ifm-code-border-radius: 0.3rem;
   --ifm-code-padding-horizontal: 0.3rem;
-  --ifm-code-padding-vertical: 0.2rem;
+  --ifm-code-padding-vertical: 0.12rem;
   --ifm-h1-font-size: 1.6rem;
   --ifm-h2-font-size: 1.4rem;
   --ifm-h3-font-size: 1.1rem;
@@ -65,6 +65,8 @@ html[data-theme='dark'] {
   --ifm-color-warning-ultralight: black;
   --ifm-font-base-color: #f5f6f7; /* change to --ifm-font-color-base-inverse */
   --color-highlight: #bcd2f7;
+  --ifm-code-background: #000;
+  --ifm-code-border-color: #5b82c85e;
 }
 
 html {
@@ -116,6 +118,7 @@ article > header > h1 {
   margin-bottom: 1em !important;
 }
 
+code,
 em > code,
 strong {
   color: var(--color-highlight);
@@ -213,7 +216,7 @@ a.footnote-ref {
 
 .markdown a > em > code {
   color: inherit;
-  text-decoration: underline;
+  border-color: var(--ifm-link-color);
 }
 
 .prism-code {
