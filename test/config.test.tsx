@@ -14,7 +14,6 @@ describe('testing derived config', () => {
         domTarget: undefined,
         captureString: '',
         eventOptions: { capture: false, passive: true },
-        pointer: false,
         window: window,
       })
     })
@@ -31,11 +30,6 @@ describe('testing derived config', () => {
         eventOptions: { passive: false },
       }
       expect(getInternalGenericOptions(config)).toHaveProperty('eventOptions.passive', false)
-    })
-
-    test(`derived pointer is set to true in derived config when true in eventOptions`, () => {
-      const config = { eventOptions: { pointer: true } }
-      expect(getInternalGenericOptions(config)).toHaveProperty('pointer', true)
     })
   })
 
