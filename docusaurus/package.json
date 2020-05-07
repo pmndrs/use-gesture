@@ -16,7 +16,7 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-player": "^1.15.3",
-    "react-spring": "^9.0.0-canary.808.17.55c5691",
+    "react-spring": "^9.0.0-rc.2",
     "react-toastify": "^5.5.0",
     "react-use-gesture": "^7.0.15"
   },
