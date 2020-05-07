@@ -15,7 +15,6 @@ export default class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
   readonly ingKey = 'pinching' as IngKey
   readonly stateKey = 'pinch'
 
-
   private pinchShouldStart = (event: UseGestureEvent) => {
     const { touches } = getGenericEventData(event)
     return this.enabled && touches === 2
