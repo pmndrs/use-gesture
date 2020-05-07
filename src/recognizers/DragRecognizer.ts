@@ -1,5 +1,5 @@
 import CoordinatesRecognizer from './CoordinatesRecognizer'
-import { UseGestureEvent, Fn, IngKey } from '../types'
+import { Fn, IngKey } from '../types'
 import { noop } from '../utils/utils'
 import { getPointerEventValues, getGenericEventData } from '../utils/event'
 import { calculateDistance } from '../utils/math'
@@ -137,7 +137,11 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
     this.fireGestureHandler()
   }
 
-  onDragEnd = (event: UseGestureEvent): void => {
+  onDragEnd = (event: React.PointerEvent): void => {
+    // If the event pointerId doesn't match the initiating pointerId
+    // don't respond to the event.
+    if (event.pointerId !== this.state._pointerId) return
+
     this.state._active = false
     this.updateSharedState({ down: false, buttons: 0, touches: 0 })
 
