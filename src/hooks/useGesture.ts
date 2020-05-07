@@ -18,7 +18,6 @@ import {
   UserHandlers,
   RecognizerClass,
   UseGestureConfig,
-  HookReturnType,
 } from '../types'
 
 export function wrapStart(fn: Function) {
@@ -61,10 +60,7 @@ function sortHandlers(handlers: UserHandlersPartial) {
  * @param {UseGestureConfig} [config={}] - the full config object
  * @returns {(...args: any[]) => HookReturnType<Config>}
  */
-export function useGesture<Config extends UseGestureConfig>(
-  _handlers: UserHandlersPartial,
-  config: UseGestureConfig = {}
-): (...args: any[]) => HookReturnType<Config> {
+export function useGesture<Config = UseGestureConfig>(_handlers: UserHandlersPartial, config: UseGestureConfig = {}) {
   const [handlers, nativeHandlers, actions] = sortHandlers(_handlers)
 
   /**
