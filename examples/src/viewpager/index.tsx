@@ -25,7 +25,6 @@ export default function Viewpager() {
       cancel()
     }
 
-    // @ts-ignore check with react-spring
     set(i => {
       if (i < index.current - 1 || i > index.current + 1) return { display: 'none' }
       const x = (i - index.current) * window.innerWidth + (down ? mx : 0)

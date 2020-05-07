@@ -4,24 +4,23 @@ import { useGesture } from 'react-use-gesture'
 import { useSpring, a } from 'react-spring/three'
 import styles from './styles.css'
 
+type V3 = [number, number, number]
+
 function Dodecahedron() {
   const { size, viewport } = useThree()
   const aspect = size.width / viewport.width
   const [spring, set] = useSpring(() => ({
-    scale: [1, 1, 1],
-    position: [0, 0, 0],
-    rotation: [0, 0, 0],
+    scale: [1, 1, 1] as V3,
+    position: [0, 0, 0] as V3,
+    rotation: [0, 0, 0] as V3,
     config: { mass: 3, friction: 40, tension: 800 },
   }))
 
   const bind = useGesture(
     {
       onDrag: ({ offset: [x, y] }) =>
-        // @ts-ignore
         set({ position: [x / aspect, -y / aspect, 0], rotation: [y / aspect, x / aspect, 0] }),
-      onHover: ({ hovering }) =>
-        // @ts-ignore
-        set({ scale: hovering ? [1.2, 1.2, 1.2] : [1, 1, 1] }),
+      onHover: ({ hovering }) => set({ scale: hovering ? [1.2, 1.2, 1.2] : [1, 1, 1] }),
     },
     {
       eventOptions: { pointer: true },

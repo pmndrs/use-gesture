@@ -24,14 +24,10 @@ export default function Threshold() {
       setL({ x: 0, y: 0, opacity: 0 })
       return
     }
-    //@ts-ignore
     setL({ opacity: 1 })
-    //@ts-ignore
     if (Math.abs(mx) >= 100) setMovX(true)
-    //@ts-ignore
     else if (!movX) setL({ x: mx })
     if (Math.abs(my) >= 100) setMovY(true)
-    //@ts-ignore
     else if (!movY) setL({ y: my })
   })
 

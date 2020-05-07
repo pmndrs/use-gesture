@@ -93,7 +93,6 @@ export default function DocsExample() {
           setDragging(true)
           setShadow(true)
         } else {
-          // @ts-ignore silent react-spring
           set({
             x: 0,
             y: 0,
@@ -106,7 +105,6 @@ export default function DocsExample() {
       onHover: ({ active }) => {
         if (!dragging) {
           if (!active) resetShineAndText()
-          // @ts-ignore silent react-spring
           set({ scale: active ? 0.9 : 0.8, rotateX: 0, rotateY: 0 })
           setShadow(active)
         }
@@ -114,7 +112,6 @@ export default function DocsExample() {
       onMove: ({ hovering, first, xy: [px, py] }) => {
         if (first) rect.current = ref.current!.getBoundingClientRect()
         if (!dragging && hovering) {
-          // @ts-ignore silent react-spring
           set({ rotateX: rotX(py), rotateY: rotY(px) })
           setText({ y: yText(py), x: xText(px), scale: 1.6 })
           setShine({ background: bgShine(px, py) })
