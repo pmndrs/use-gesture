@@ -194,7 +194,6 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
 
   clean = (): void => {
     super.clean()
-    this.state._delayedEvent = false
     this.removeWindowListeners()
     // TODO add back when setPointerCapture is widely wupported
 
