@@ -56,12 +56,12 @@ export default abstract class Recognizer<T extends StateKey> {
     return this.controller.handlers[this.stateKey]!
   }
 
-  // Conveninence method to update the shared state
+  // Convenience method to update the shared state
   protected updateSharedState(sharedState: Partial<SharedGestureState> | null) {
     Object.assign(this.controller.state.shared, sharedState)
   }
 
-  // Conveninence method to update the gesture state
+  // Convenience method to update the gesture state
   protected updateGestureState(gestureState: PartialGestureState<T> | null) {
     Object.assign(this.state, gestureState)
   }
