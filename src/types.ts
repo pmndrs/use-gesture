@@ -18,7 +18,7 @@ type DomTarget = EventTarget | React.RefObject<EventTarget>
 export interface GenericOptions {
   domTarget?: DomTarget
   window?: EventTarget
-  eventOptions: Partial<EventOptions & { pointer: boolean }>
+  eventOptions: Partial<EventOptions>
   enabled: boolean
 }
 
@@ -81,7 +81,6 @@ export interface InternalGenericOptions {
   domTarget?: DomTarget
   eventOptions: EventOptions
   window?: EventTarget
-  pointer: boolean
   captureString: string
   enabled: boolean
 }
@@ -215,9 +214,10 @@ export interface CommonGestureState {
   _movement: Vector2
   _initial: Vector2
   _lastEventType?: string
+  _pointerIds?: number[]
   event?: UseGestureEvent
-  currentTarget?: (EventTarget & Element) | null
-  pointerId?: number | null
+  // currentTarget?: (EventTarget & Element) | null
+  // pointerId?: number | null
   values: Vector2
   velocities: Vector2
   delta: Vector2
@@ -250,6 +250,7 @@ export interface Coordinates {
 export interface DragState {
   _isTap: boolean
   _delayedEvent: boolean
+  _pointerId?: number
   tap: boolean
   swipe: Vector2
 }

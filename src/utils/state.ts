@@ -60,6 +60,7 @@ export function getInitialState(): State {
     distance: 0,
     _isTap: true,
     _delayedEvent: false,
+    _pointerId: undefined,
     tap: false,
     swipe: [0, 0],
   })

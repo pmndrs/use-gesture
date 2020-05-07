@@ -42,7 +42,7 @@ export function getInternalGestureOptions(gestureConfig: Partial<GestureOptions>
  */
 export function getInternalGenericOptions(config: Partial<GenericOptions> = {}): InternalGenericOptions {
   let {
-    eventOptions: { passive = true, capture = false, pointer = false } = {},
+    eventOptions: { passive = true, capture = false } = {},
     window = defaultWindow,
     domTarget = undefined,
     enabled = true,
@@ -55,7 +55,6 @@ export function getInternalGenericOptions(config: Partial<GenericOptions> = {}):
     // passive is always true if there's no domTarget
     eventOptions: { passive: !domTarget || !!passive, capture: !!capture },
     captureString: capture ? 'Capture' : '',
-    pointer: !!pointer,
   }
 }
 

@@ -106,22 +106,12 @@ export default class MoveRecognizer extends CoordinatesRecognizer<'move'> {
   }
 
   addBindings(): void {
-    if (this.controller.config.pointer) {
-      if ('move' in this.controller.handlers) {
-        this.controller.addBindings('onPointerMove', this.onMove)
-      }
-      if ('hover' in this.controller.handlers) {
-        this.controller.addBindings('onPointerEnter', this.onPointerEnter)
-        this.controller.addBindings('onPointerLeave', this.onPointerLeave)
-      }
-    } else {
-      if ('move' in this.controller.handlers) {
-        this.controller.addBindings('onMouseMove', this.onMove)
-      }
-      if ('hover' in this.controller.handlers) {
-        this.controller.addBindings('onMouseEnter', this.onPointerEnter)
-        this.controller.addBindings('onMouseLeave', this.onPointerLeave)
-      }
+    if ('move' in this.controller.handlers) {
+      this.controller.addBindings('onPointerMove', this.onMove)
+    }
+    if ('hover' in this.controller.handlers) {
+      this.controller.addBindings('onPointerEnter', this.onPointerEnter)
+      this.controller.addBindings('onPointerLeave', this.onPointerLeave)
     }
   }
 }
