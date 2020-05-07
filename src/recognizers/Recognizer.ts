@@ -24,9 +24,9 @@ import { valueFn } from '../utils/utils'
  * @type {StateKey<T>} whether the Recognizer should deal with coordinates or distance / angle
  */
 export default abstract class Recognizer<T extends StateKey> {
-  readonly abstract ingKey: IngKey // dragging, scrolling, etc.
+  abstract readonly ingKey: IngKey // dragging, scrolling, etc.
   protected debounced: Boolean = true
-  readonly abstract stateKey: T
+  abstract readonly stateKey: T
 
   /**
    * Creates an instance of a gesture recognizer.
