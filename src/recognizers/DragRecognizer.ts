@@ -12,7 +12,6 @@ const FILTER_REPEATED_EVENTS_DELAY = 200
 export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
   readonly ingKey = 'dragging' as IngKey
   readonly stateKey = 'drag'
-  wasTouch = false
 
   // Convenience method to add window listeners for a given gesture
   protected addWindowListeners = (listeners: [string, Fn][]) => {
