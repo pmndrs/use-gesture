@@ -1,10 +1,10 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { render } from 'react-dom'
 import * as Examples from './examples'
 // @ts-ignore
-import * as Issues from './issues'
+import * as Issues from './_issues'
 import { sentenceCase } from 'change-case'
-import { Router, Link, RouteComponentProps } from '@reach/router'
+import { Router, Link, RouteComponentProps, navigate } from '@reach/router'
 
 import styles from './styles.css'
 
@@ -55,6 +55,12 @@ function Page({ path, id }: ExampleProps) {
   const isIssue = path!.indexOf('issues') === 0
   //@ts-ignore
   const Component = isIssue ? Issues[id] : Examples[id]
+
+  useEffect(() => {
+    if (!Component) navigate('404', { replace: true })
+  }, [Component])
+
+  if (!Component) return null
   return (
     <>
       <Link className={styles.backBtn} to="/">
@@ -76,7 +82,7 @@ const NotFound = (_props: RouteComponentProps) => (
 function App() {
   return (
     <Router>
-      <NotFound default />
+      <NotFound path="404" />
       <List path="/" />
       <Issues path="issues" />
       <Page path="issues/:id" />
