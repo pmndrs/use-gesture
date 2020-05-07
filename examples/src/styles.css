@@ -26,7 +26,7 @@ ul {
   padding: 0;
 }
 
-.list {
+.container {
   padding: 40px 25px;
 }
 
@@ -54,4 +54,11 @@ ul {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+a[target] {
+  font-size: 0.8em;
+  margin-left: 1em;
+  display: inline-block;
+  text-decoration: none;
 }
