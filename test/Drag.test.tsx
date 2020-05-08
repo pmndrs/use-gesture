@@ -6,10 +6,22 @@ import InteractiveDom from './components/InteractiveDom'
 import InteractiveDomBackwardCompat from './components/InteractiveDomBackwardCompat'
 import { InteractiveType } from './components/types'
 
-// TODO - test drag with touch events
-// TODO - test with pointerEvents
-
 afterAll(cleanup)
+
+// patching createEvent
+for (let key in createEvent) {
+  if (key.indexOf('pointer') === 0) {
+    // @ts-ignore
+    const fn = createEvent[key.replace('pointer', 'mouse')]
+    if (!fn) break
+    // @ts-ignore
+    createEvent[key] = function (type, { pointerId = Date.now(), ...rest }) {
+      const event = fn(type, rest)
+      event.pointerId = pointerId
+      return event
+    }
+  }
+}
 
 describe.each([
   ['attached to component', Interactive, ''],
@@ -25,15 +37,13 @@ describe.each([
     expect(queryByTestId(`${prefix}drag-active`)).not.toBeInTheDocument()
   })
 
-  test('mouseDown should initiate the gesture', () => {
-    const event = createEvent.mouseDown(element, {
-      clientX: 10,
-      clientY: 20,
-      buttons: 1,
-    })
+  test('pointerDown should initiate the gesture', () => {
+    const event = createEvent.pointerDown(element, { clientX: 10, clientY: 20, buttons: 1, pointerId: 1 })
+
     fireEvent(element, event)
     delta_t = event.timeStamp
 
+    // @ts-ignore
     expect(getByTestId(`${prefix}drag-active`)).toHaveTextContent('true')
     expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('true')
     expect(getByTestId(`${prefix}drag-first`)).toHaveTextContent('true')
@@ -55,11 +65,8 @@ describe.each([
   })
 
   test('moving should set first to false', () => {
-    const event = createEvent.mouseMove(window, {
-      clientX: 20,
-      clientY: 50,
-      buttons: 1,
-    })
+    const event = createEvent.pointerMove(window, { clientX: 20, clientY: 50, buttons: 1, pointerId: 1 })
+
     fireEvent(window, event)
     delta_t = event.timeStamp - delta_t
     expect(getByTestId(`${prefix}drag-first`)).toHaveTextContent('false')
@@ -76,7 +83,7 @@ describe.each([
   })
 
   test('moving again should further update xy and movement', () => {
-    fireEvent.mouseMove(window, { clientX: -10, clientY: 30, buttons: 1 })
+    fireEvent.pointerMove(window, { clientX: -10, clientY: 30, buttons: 1, pointerId: 1 })
     expect(getByTestId(`${prefix}drag-xy`)).toHaveTextContent('-10,30')
     expect(getByTestId(`${prefix}drag-offset`)).toHaveTextContent('-20,10')
     expect(getByTestId(`${prefix}drag-movement`)).toHaveTextContent('-20,10')
@@ -85,7 +92,7 @@ describe.each([
   })
 
   test('mouseUp should terminate the gesture', () => {
-    fireEvent.mouseUp(window)
+    fireEvent.pointerUp(window, { pointerId: 1 })
     expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('false')
     expect(getByTestId(`${prefix}drag-active`)).toHaveTextContent('false')
     expect(getByTestId(`${prefix}drag-last`)).toHaveTextContent('true')
@@ -98,29 +105,31 @@ describe.each([
 
   test('disabling all gestures should prevent state from updating', () => {
     rerender(<Component gestures={['Drag']} config={{ enabled: false }} />)
-    fireEvent.mouseDown(element)
+    fireEvent.pointerDown(element, { pointerId: 2 })
     expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('false')
+    fireEvent.pointerUp(element, { pointerId: 2 })
   })
 
   test('disabling the drag gesture should prevent state from updating', () => {
     rerender(<Component gestures={['Drag']} config={{ drag: { enabled: false } }} />)
-    fireEvent.mouseDown(element)
+    fireEvent.pointerDown(element, { pointerId: 3 })
     expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('false')
+    fireEvent.pointerUp(element, { pointerId: 3 })
   })
 
   test('restarting the gesture should book-keep offset and reset movement', () => {
     rerender(<Component gestures={['Drag']} />)
-    fireEvent.mouseDown(element, { clientX: 30, clientY: 60 })
+    fireEvent.pointerDown(element, { clientX: 30, clientY: 60, pointerId: 4 })
     expect(getByTestId(`${prefix}drag-previous`)).toHaveTextContent('-10,30')
-    fireEvent.mouseMove(window, { clientX: 20, clientY: 50, buttons: 1 })
+    fireEvent.pointerMove(window, { clientX: 20, clientY: 50, buttons: 1, pointerId: 4 })
     expect(getByTestId(`${prefix}drag-offset`)).toHaveTextContent('-30,0')
     expect(getByTestId(`${prefix}drag-movement`)).toHaveTextContent('-10,-10')
+    fireEvent.pointerUp(element, { pointerId: 4 })
   })
 
   test('canceling the gesture should cancel the gesture in the next RAF tick', async () => {
     rerender(<Component gestures={['Drag']} canceled />)
-    fireEvent.mouseDown(element, { clientX: 30, clientY: 60 })
-    fireEvent.mouseDown(element, { clientX: 30, clientY: 60 })
+    fireEvent.pointerDown(element, { clientX: 30, clientY: 60, pointerId: 5 })
     await wait(() => [
       expect(getByTestId(`${prefix}drag-canceled`)).toHaveTextContent('true'),
       expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('false'),
@@ -129,21 +138,21 @@ describe.each([
 
   test('applying a dragDelay should start the gesture after a delay', async () => {
     rerender(<Component gestures={['Drag']} config={{ drag: { delay: 180 } }} />)
-    fireEvent.mouseDown(element, { clientX: 100, clientY: 200 })
+    fireEvent.pointerDown(element, { clientX: 100, clientY: 200, pointerId: 6 })
     expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('false')
     await wait(() => [
       expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('true'),
       expect(getByTestId(`${prefix}drag-xy`)).toHaveTextContent('100,200'),
     ])
-    fireEvent.mouseUp(window)
+    fireEvent.pointerUp(window, { pointerId: 6 })
   })
 
   test('applying a dragDelay should start the gesture after a delay', () => {
-    fireEvent.mouseDown(element, { clientX: 100, clientY: 200 })
-    fireEvent.mouseMove(window, { clientX: 20, clientY: 50, buttons: 1 })
+    fireEvent.pointerDown(element, { clientX: 100, clientY: 200, pointerId: 7 })
+    fireEvent.pointerMove(window, { clientX: 20, clientY: 50, buttons: 1, pointerId: 7 })
     expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('true')
     expect(getByTestId(`${prefix}drag-xy`)).toHaveTextContent('20,50')
-    fireEvent.mouseUp(window)
+    fireEvent.pointerUp(window, { pointerId: 7 })
   })
 
   test(`quickly tapping shouldn't trigger a drag`, async () => {
@@ -153,78 +162,77 @@ describe.each([
 
   test(`applying a threshold should prevent the gesture from starting if it's NOT reached`, () => {
     rerender(<Component gestures={['Drag']} config={{ drag: { threshold: 10 } }} />)
-    fireEvent.mouseDown(element, { clientX: 0, clientY: 0 })
-    fireEvent.mouseMove(window, { clientX: 5, clientY: 5, buttons: 1 })
+    fireEvent.pointerDown(element, { clientX: 0, clientY: 0, pointerId: 8 })
+    fireEvent.pointerMove(window, { clientX: 5, clientY: 5, buttons: 1, pointerId: 8 })
     expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('false')
     expect(getByTestId(`${prefix}drag-movement`)).toHaveTextContent('0,0')
     expect(getByTestId(`${prefix}drag-offset`)).toHaveTextContent('-30,0')
   })
 
   test(`applying a threshold should allow the gesture to start when it's reached`, () => {
-    fireEvent.mouseMove(window, { clientX: 12, clientY: 12, buttons: 1 })
-    fireEvent.mouseMove(window, { clientX: 12, clientY: 12, buttons: 1 })
+    fireEvent.pointerMove(window, { clientX: 12, clientY: 12, buttons: 1, pointerId: 8 })
     expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('true')
     expect(getByTestId(`${prefix}drag-movement`)).toHaveTextContent('2,2')
     expect(getByTestId(`${prefix}drag-offset`)).toHaveTextContent('-28,2')
-    fireEvent.mouseUp(window)
+    fireEvent.pointerUp(window, { pointerId: 8 })
   })
 
   test(`applying an axis SHOULDN'T start the gesture if gesture is not detected first in the right axis`, () => {
     rerender(<Component gestures={['Drag']} config={{ drag: { axis: 'x' } }} />)
-    fireEvent.mouseDown(element, { clientX: 0, clientY: 0 })
-    fireEvent.mouseMove(window, { clientX: 0, clientY: 50, buttons: 1 })
-    fireEvent.mouseMove(window, { clientX: 10, clientY: 0, buttons: 1 })
+    fireEvent.pointerDown(element, { clientX: 0, clientY: 0, pointerId: 9 })
+    fireEvent.pointerMove(window, { clientX: 0, clientY: 50, buttons: 1, pointerId: 9 })
+    fireEvent.pointerMove(window, { clientX: 10, clientY: 0, buttons: 1, pointerId: 9 })
     expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('false')
-    fireEvent.mouseUp(window)
+    fireEvent.pointerUp(window, { pointerId: 9 })
   })
 
   test(`applying an axis SHOULD start the gesture if gesture is detected in the right axis`, () => {
     rerender(<Component gestures={['Drag']} config={{ drag: { axis: 'x' } }} />)
-    fireEvent.mouseDown(element, { clientX: 0, clientY: 0 })
-    fireEvent.mouseMove(window, { clientX: 20, clientY: 10, buttons: 1 })
+    fireEvent.pointerDown(element, { clientX: 0, clientY: 0, pointerId: 10 })
+    fireEvent.pointerMove(window, { clientX: 20, clientY: 10, buttons: 1, pointerId: 10 })
     expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('true')
     expect(getByTestId(`${prefix}drag-movement`)).toHaveTextContent('19,0')
-    fireEvent.mouseUp(window)
+    fireEvent.pointerUp(window, { pointerId: 10 })
   })
 
   test(`applying a direction lock SHOULD only update the first detected direction`, () => {
     rerender(<Component gestures={['Drag']} config={{ drag: { lockDirection: true } }} />)
-    fireEvent.mouseDown(element, { clientX: 0, clientY: 0 })
-    fireEvent.mouseMove(window, { clientX: 5, clientY: 15, buttons: 1 })
-    fireEvent.mouseMove(window, { clientX: 50, clientY: 30, buttons: 1 })
+    fireEvent.pointerDown(element, { clientX: 0, clientY: 0, pointerId: 11 })
+    fireEvent.pointerMove(window, { clientX: 5, clientY: 15, buttons: 1, pointerId: 11 })
+    fireEvent.pointerMove(window, { clientX: 50, clientY: 30, buttons: 1, pointerId: 11 })
     expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('true')
     expect(getByTestId(`${prefix}drag-movement`)).toHaveTextContent('0,29')
-    fireEvent.mouseUp(window)
+    fireEvent.pointerUp(window, { pointerId: 11 })
     expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('false')
-    fireEvent.mouseDown(element, { clientX: 0, clientY: 0 })
-    fireEvent.mouseMove(window, { clientX: 20, clientY: 10, buttons: 1 })
-    fireEvent.mouseMove(window, { clientX: 35, clientY: 40, buttons: 1 })
+    fireEvent.pointerDown(element, { clientX: 0, clientY: 0, pointerId: 12 })
+    fireEvent.pointerMove(window, { clientX: 20, clientY: 10, buttons: 1, pointerId: 12 })
+    fireEvent.pointerMove(window, { clientX: 35, clientY: 40, buttons: 1, pointerId: 12 })
     expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('true')
     expect(getByTestId(`${prefix}drag-movement`)).toHaveTextContent('34,0')
-    fireEvent.mouseUp(window)
+    fireEvent.pointerUp(window, { pointerId: 12 })
   })
 
   test(`filtering taps should NOT fire a tap if pointer has moved more than 3px`, () => {
     expect(getByTestId(`${prefix}drag-tap`)).toHaveTextContent('false')
     rerender(<Component gestures={['Drag']} config={{ drag: { filterTaps: true, threshold: 10 } }} />)
-    fireEvent.mouseDown(element, { clientX: 0, clientY: 0 })
-    fireEvent.mouseMove(window, { clientX: 8, clientY: 1, buttons: 1 })
+    fireEvent.pointerDown(element, { clientX: 0, clientY: 0, pointerId: 13 })
+    fireEvent.pointerMove(window, { clientX: 8, clientY: 1, buttons: 1, pointerId: 13 })
     expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('false')
-    fireEvent.mouseUp(window)
+    fireEvent.pointerUp(window, { pointerId: 13 })
     expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('false')
     expect(getByTestId(`${prefix}drag-tap`)).toHaveTextContent('false')
   })
 
   test(`filtering clicks should fire a click if pointer has moved less than 3px`, async () => {
-    let event = createEvent.mouseDown(element, { clientX: 0, clientY: 0 })
+    let event = createEvent.pointerDown(element, { clientX: 0, clientY: 0, pointerId: 14 })
     fireEvent(element, event)
     delta_t = event.timeStamp
-    fireEvent.mouseMove(window, { clientX: 2, clientY: 1, buttons: 1 })
+    fireEvent.pointerMove(window, { clientX: 2, clientY: 1, buttons: 1, pointerId: 14 })
     expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('false')
     expect(getByTestId(`${prefix}drag-tap`)).toHaveTextContent('false')
     await wait(
       () => {
-        event = createEvent.mouseUp(window)
+        event = createEvent.pointerUp(window, { pointerId: 14 })
         delta_t = event.timeStamp - delta_t
         fireEvent(window, event)
         expect(getByTestId(`${prefix}drag-tap`)).toHaveTextContent('true')
@@ -233,6 +241,7 @@ describe.each([
       },
       { timeout: 200 }
     )
+    fireEvent.pointerUp(window, { pointerId: 14 })
   })
 
   test(`bounds should limit both offset and movement`, () => {
@@ -243,15 +252,18 @@ describe.each([
       />
     )
     expect(getByTestId(`${prefix}drag-offset`)).toHaveTextContent('25,31')
-    fireEvent.mouseDown(element, { clientX: 200, clientY: 300 })
-    fireEvent.mouseMove(window, { clientX: 10, clientY: 150, buttons: 1 })
+
+    fireEvent.pointerDown(element, { clientX: 200, clientY: 300, pointerId: 15 })
+    fireEvent.pointerMove(window, { clientX: 10, clientY: 150, buttons: 1, pointerId: 15 })
     expect(getByTestId(`${prefix}drag-movement`)).toHaveTextContent('-150,-100')
     expect(getByTestId(`${prefix}drag-offset`)).toHaveTextContent('-150,-100')
-    fireEvent.mouseUp(window)
-    fireEvent.mouseDown(element, { clientX: 100, clientY: 100 })
-    fireEvent.mouseMove(window, { clientX: 40, clientY: 160, buttons: 1 })
+
+    fireEvent.pointerUp(window, { pointerId: 15 })
+    fireEvent.pointerDown(element, { clientX: 100, clientY: 100, pointerId: 16 })
+    fireEvent.pointerMove(window, { clientX: 40, clientY: 160, buttons: 1, pointerId: 16 })
     expect(getByTestId(`${prefix}drag-movement`)).toHaveTextContent('-60,60')
     expect(getByTestId(`${prefix}drag-offset`)).toHaveTextContent('-150,-40')
+    fireEvent.pointerUp(window, { pointerId: 16 })
   })
 
   test(`rubberbanding should apply rubberband main function with set min and max`, () => {
@@ -259,8 +271,8 @@ describe.each([
       <Component gestures={['Drag']} config={{ drag: { bounds: { top: -100, bottom: 200 }, rubberband: true } }} />
     )
 
-    fireEvent.mouseDown(element, { clientX: 200, clientY: 300 })
-    fireEvent.mouseMove(window, { clientX: 200, clientY: 550, buttons: 1 })
+    fireEvent.pointerDown(element, { clientX: 200, clientY: 300, pointerId: 17 })
+    fireEvent.pointerMove(window, { clientX: 200, clientY: 550, buttons: 1, pointerId: 17 })
 
     const delta = 550 - 300
     const dimension = 200 - -100
@@ -270,28 +282,29 @@ describe.each([
   })
 
   test(`releasing drag with rubberbanding should revert movement to its closest bound`, () => {
-    fireEvent.mouseUp(window)
+    fireEvent.pointerUp(window, { pointerId: 17 })
     expect(getByTestId(`${prefix}drag-movement`)).toHaveTextContent(`0,200`)
   })
 
   test(`rubberbanding should apply rubberband secondary function when only one bound is set`, () => {
     rerender(<Component gestures={['Drag']} config={{ drag: { bounds: { bottom: 200 }, rubberband: true } }} />)
 
-    fireEvent.mouseDown(element, { clientX: 200, clientY: 300 })
-    fireEvent.mouseMove(window, { clientX: 200, clientY: 550, buttons: 1 })
+    fireEvent.pointerDown(element, { clientX: 200, clientY: 300, pointerId: 18 })
+    fireEvent.pointerMove(window, { clientX: 200, clientY: 550, buttons: 1, pointerId: 18 })
 
     const delta = 550 - 300
     const rubberband = Math.pow(delta - 200, 0.15 * 5) + 200
 
     expect(getByTestId(`${prefix}drag-movement`)).toHaveTextContent(`0,${rubberband}`)
-    fireEvent.mouseUp(window)
+    fireEvent.pointerUp(window, { pointerId: 18 })
   })
 
   test(`passing an initial position should affect the movement`, () => {
     rerender(<Component gestures={['Drag']} config={{ drag: { initial: () => [5, 10] } }} />)
-    fireEvent.mouseDown(element, { clientX: 0, clientY: 0 })
+    fireEvent.pointerDown(element, { clientX: 0, clientY: 0, pointerId: 19 })
     expect(getByTestId(`${prefix}drag-movement`)).toHaveTextContent(`5,10`)
-    fireEvent.mouseMove(window, { clientX: 10, clientY: 20, buttons: 1 })
+    fireEvent.pointerMove(window, { clientX: 10, clientY: 20, buttons: 1, pointerId: 19 })
     expect(getByTestId(`${prefix}drag-movement`)).toHaveTextContent(`15,30`)
+    fireEvent.pointerUp(window, { pointerId: 19 })
   })
 })
