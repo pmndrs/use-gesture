@@ -10,6 +10,7 @@ import {
   getInternalDragOptions,
   getInternalCoordinatesOptions,
   getInternalDistanceAngleOptions,
+  getInternalWheelOptions,
 } from '../utils/config'
 import {
   InternalConfig,
@@ -64,7 +65,7 @@ export function useGesture<Config extends UseGestureConfig>(
   if (actions.has('onWheel')) {
     classes.push(WheelRecognizer)
     internalHandlers.wheel = includeStartEndHandlers(handlers, 'onWheel', _nativeHandlers)
-    mergedConfig.wheel = getInternalCoordinatesOptions(wheel)
+    mergedConfig.wheel = getInternalWheelOptions(wheel)
   }
   if (actions.has('onScroll')) {
     classes.push(ScrollRecognizer)

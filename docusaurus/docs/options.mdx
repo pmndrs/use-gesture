@@ -78,6 +78,14 @@ On top of the options for _`xy`_ gestures seen above, _`drag`_ has the following
 | _`swipeDistance`_                       | `number`\|`vector`  |   `[60,60]`   | The minimum distance per axis (in `pixels`) the drag gesture needs to travel to trigger a swipe.                                                                 |
 | _`swipeVelocity`_                       | `number`\|`vector`  |  `[0.5,0.5]`  | The minimum velocity per axis (in `pixels / ms`) the drag gesture needs to reach before the pointer is released.                                                 |
 
+## `wheel` specific options
+
+On top of the options for _`xy`_ gestures seen above, _`wheel`_ has the following additional options:
+
+| Option                                  |        Type         | Default value | Description                                                                                                                                                      |
+| --------------------------------------- | :-----------------: | :-----------: | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [_`reversed`_](#reversed-wheel-only)    |      `boolean`      |    `false`    | If `true`, the wheel act as a natural scrolling (usefull for touchscreens and trackpads).                                                                        |
+
 ## Options explained
 
 ### `domTarget`
@@ -301,3 +309,23 @@ function DelayExample() {
 ```
 
 > Note that _`delay`_ and _`threshold`_ don't play well together: without moving your pointer, your handler will never get triggered.
+
+
+### `reversed` (wheel only)
+
+Making wheel act as natural scrolling (usefull for touchscreens and trackpads).
+
+<Example id="Reversed" />
+
+```jsx {3-5,7-9}
+function ReversedExample() {
+  const bind = useWheel(
+    ({ down, movement: [mx, my] }) => {
+      if (down) alert('down!')
+      set({ x: mx, y: my })
+    },
+    { reversed: true }
+  )
+  return <animated.div {...bind()} style={{ x, y }} />
+}
+```

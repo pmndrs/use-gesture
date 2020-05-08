@@ -13,6 +13,8 @@ import {
   InternalCoordinatesOptions,
   DistanceAngleConfig,
   InternalDistanceAngleOptions,
+  WheelConfig,
+  InternalWheelOptions,
 } from '../types'
 
 const DEFAULT_DRAG_DELAY = 180
@@ -130,5 +132,19 @@ export function getInternalDragOptions(dragConfig: DragConfig = {}): InternalDra
     swipeVelocity: def.array(swipeVelocity) as Vector2,
     swipeDistance: def.array(swipeDistance) as Vector2,
     delay: typeof delay === 'number' ? delay : delay ? DEFAULT_DRAG_DELAY : 0,
+  }
+}
+
+export function getInternalWheelOptions(wheelConfig: WheelConfig = {}): InternalWheelOptions {
+  let { enabled, threshold, bounds, rubberband, initial, ...wheelOptions } = wheelConfig
+  let { reversed = false, axis, lockDirection } = wheelOptions
+
+  const internalCoordinatesOptions = getInternalCoordinatesOptions(
+    matchKeysFromObject({ enabled, threshold, bounds, rubberband, axis, lockDirection, initial }, wheelConfig)
+  )
+
+  return {
+    ...internalCoordinatesOptions,
+    reversed,
   }
 }

@@ -1,7 +1,7 @@
 import useRecognizers from './useRecognizers'
 import WheelRecognizer from '../recognizers/WheelRecognizer'
 import { Handler, InternalConfig, HookReturnType, UseWheelConfig } from '../types'
-import { getInternalGenericOptions, getInternalCoordinatesOptions } from '../utils/config'
+import { getInternalGenericOptions, getInternalWheelOptions } from '../utils/config'
 
 /**
  * @public
@@ -28,7 +28,7 @@ export function useWheel<Config extends UseWheelConfig>(
       eventOptions,
       window,
     }),
-    wheel: getInternalCoordinatesOptions(wheel),
+    wheel: getInternalWheelOptions(wheel),
   }
 
   return useRecognizers<Config>({ wheel: handler }, [WheelRecognizer], mergedConfig)

@@ -61,19 +61,24 @@ export interface DragOptions {
   delay: boolean | number
 }
 
+export interface WheelOptions {
+  reversed: boolean
+}
+
 export type CoordinatesConfig = Partial<GestureOptions & CoordinatesOptions>
 export type DistanceAngleConfig = Partial<GestureOptions & DistanceAngleOptions>
 export type DragConfig = CoordinatesConfig & Partial<DragOptions>
+export type WheelConfig = CoordinatesConfig & Partial<WheelOptions>
 
 export type UseDragConfig = Partial<GenericOptions> & DragConfig
 export type UsePinchConfig = Partial<GenericOptions> & DragConfig
-export type UseWheelConfig = Partial<GenericOptions> & CoordinatesConfig
+export type UseWheelConfig = Partial<GenericOptions> & WheelConfig
 export type UseScrollConfig = Partial<GenericOptions> & CoordinatesConfig
 export type UseMoveConfig = Partial<GenericOptions> & CoordinatesConfig
 export type UseHoverConfig = Partial<GenericOptions>
 export type UseGestureConfig = Partial<GenericOptions> & {
   drag?: DragConfig
-  wheel?: CoordinatesConfig
+  wheel?: WheelConfig
   scroll?: CoordinatesConfig
   move?: CoordinatesConfig
   pinch?: DistanceAngleConfig
@@ -113,9 +118,13 @@ export interface InternalDragOptions extends InternalCoordinatesOptions {
   delay: number
 }
 
+export interface InternalWheelOptions extends InternalCoordinatesOptions {
+  reversed: boolean
+}
+
 export type InternalConfig = InternalGenericOptions & {
   drag?: InternalDragOptions
-  wheel?: InternalCoordinatesOptions
+  wheel?: InternalWheelOptions
   scroll?: InternalCoordinatesOptions
   move?: InternalCoordinatesOptions
   pinch?: InternalDistanceAngleOptions
@@ -257,6 +266,11 @@ export interface DragState {
   swipe: Vector2
 }
 
+export interface WheelState {
+  _isReversed: boolean
+  reversed: boolean
+}
+
 export interface DistanceAngle {
   da: Vector2
   vdva: Vector2
@@ -266,7 +280,7 @@ export interface DistanceAngle {
 
 export type State = { shared: SharedGestureState } & {
   drag: CommonGestureState & Coordinates & DragState
-  wheel: CommonGestureState & Coordinates
+  wheel: CommonGestureState & Coordinates & WheelState
   scroll: CommonGestureState & Coordinates
   move: CommonGestureState & Coordinates
   pinch: CommonGestureState & DistanceAngle

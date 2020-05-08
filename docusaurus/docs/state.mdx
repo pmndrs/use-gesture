@@ -85,6 +85,19 @@ const bind = useDrag(state => {
 })
 ```
 
+## `wheel` state attributes
+
+The _`wheel`_ gesture state adds a few attributes which can help you understand user moves.
+
+<!-- prettier-ignore -->
+```jsx {1-100}
+const bind = useWheel(state => {
+  const {
+    reversed // Is the wheel move reversed
+  } = state
+})
+```
+
 ## Attributes explained
 
 ### `movement` and `offset`

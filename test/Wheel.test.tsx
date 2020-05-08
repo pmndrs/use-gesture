@@ -81,6 +81,16 @@ describe.each([
     await wait(() => expect(getByTestId(`${prefix}wheel-active`)).toHaveTextContent('false'))
   })
 
+  test('applying reversed SHOULD inverse wheel directions', async () => {
+    rerender(<Component gestures={['Wheel']} config={{ wheel: { reversed: true } }} />)
+    fireEvent.wheel(element, { deltaX: -3, deltaY: 10 })
+    fireEvent.wheel(element, { deltaX: 4, deltaY: -6 })
+    expect(getByTestId(`${prefix}wheel-movement`)).toHaveTextContent('-1,-4')
+    await wait(() => expect(getByTestId(`${prefix}wheel-wheeling`)).toHaveTextContent('false'))
+    // allow gesture to finish
+    await later(200)
+  })
+
   test(`applying an axis SHOULDN'T start the gesture if gesture is not detected first in the right axis`, async () => {
     rerender(<Component gestures={['Wheel']} config={{ wheel: { axis: 'x' } }} />)
     fireEvent.wheel(element, { deltaX: 0, deltaY: 10 })

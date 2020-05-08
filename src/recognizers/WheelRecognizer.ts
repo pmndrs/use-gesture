@@ -3,7 +3,7 @@ import CoordinatesRecognizer from './CoordinatesRecognizer'
 import Controller from '../Controller'
 import { UseGestureEvent, IngKey } from '../types'
 import { getWheelEventValues, getGenericEventData } from '../utils/event'
-import { addV, calculateDistance, calculateDirection } from '../utils/math'
+import { addV, calculateDistance, calculateDirection, subV } from '../utils/math'
 
 export default class WheelRecognizer extends CoordinatesRecognizer<'wheel'> {
   ingKey = 'wheeling' as IngKey
@@ -20,8 +20,12 @@ export default class WheelRecognizer extends CoordinatesRecognizer<'wheel'> {
 
   private getValuesFromEvent = (event: UseGestureEvent<WheelEvent>) => {
     const { values: prevValues } = this.state
+    const { reversed } = this.config
+
     const { values } = getWheelEventValues(event)
-    return { values: addV(values, prevValues) }
+    const newValues = reversed ? subV(prevValues, values) : addV(values, prevValues)
+
+    return { values: newValues }
   }
 
   onWheel = (event: UseGestureEvent<WheelEvent>): void => {
@@ -42,6 +46,7 @@ export default class WheelRecognizer extends CoordinatesRecognizer<'wheel'> {
       ...this.getStartGestureState(values, event),
       ...this.getGenericPayload(event, true),
       initial: this.state.values,
+      reversed: this.config.reversed,
     }
 
     const movementDetection = this.getMovement(values, startState)

@@ -77,7 +77,12 @@ export function getInitialState(): State {
       swipe: [0, 0],
     },
     pinch: { ...initialCommon, ...initialDistanceAngle },
-    wheel: { ...initialCommon, ...initialCoordinates },
+    wheel: {
+      ...initialCommon,
+      ...initialCoordinates,
+      _isReversed: false,
+      reversed: false,
+    },
     move: { ...initialCommon, ...initialCoordinates },
     scroll: { ...initialCommon, ...initialCoordinates },
   }
