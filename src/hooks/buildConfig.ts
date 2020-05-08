@@ -18,44 +18,39 @@ import {
 } from '../utils/config'
 
 function _buildMoveConfig({ domTarget, eventOptions, window, ...rest }: UseMoveConfig) {
-  const opts = getInternalGenericOptions({ domTarget, eventOptions, window })
-  const move = getInternalCoordinatesOptions(rest)
-  const options: InternalConfig = { ...opts, move }
-  return options
+  const opts: InternalConfig = getInternalGenericOptions({ domTarget, eventOptions, window })
+  opts.move = getInternalCoordinatesOptions(rest)
+  return opts
 }
 
 function _buildHoverConfig({ domTarget, eventOptions, window, ...rest }: UseHoverConfig) {
-  const opts = getInternalGenericOptions({ domTarget, eventOptions, window })
-  const hover = { enabled: true, ...rest }
-  return { ...opts, hover } as InternalConfig
+  const opts: InternalConfig = getInternalGenericOptions({ domTarget, eventOptions, window })
+  opts.hover = { enabled: true, ...rest }
+  return opts
 }
 
 function _buildDragConfig({ domTarget, eventOptions, window, ...rest }: UseDragConfig) {
-  const opts = getInternalGenericOptions({ domTarget, eventOptions, window })
-  const drag = getInternalDragOptions(rest)
-  const options: InternalConfig = { ...opts, drag }
-  return options
+  const opts: InternalConfig = getInternalGenericOptions({ domTarget, eventOptions, window })
+  opts.drag = getInternalDragOptions(rest)
+  return opts
 }
 
 function _buildPinchConfig({ domTarget, eventOptions, window, ...rest }: UsePinchConfig) {
-  const opts = getInternalGenericOptions({ domTarget, eventOptions, window })
-  const pinch = getInternalDistanceAngleOptions(rest)
-  const options: InternalConfig = { ...opts, pinch }
-  return options
+  const opts: InternalConfig = getInternalGenericOptions({ domTarget, eventOptions, window })
+  opts.pinch = getInternalDistanceAngleOptions(rest)
+  return opts
 }
 
 function _buildScrollConfig({ domTarget, eventOptions, window, ...rest }: UseScrollConfig) {
-  const opts = getInternalGenericOptions({ domTarget, eventOptions, window })
-  const scroll = getInternalCoordinatesOptions(rest)
-  const options: InternalConfig = { ...opts, scroll }
-  return options
+  const opts: InternalConfig = getInternalGenericOptions({ domTarget, eventOptions, window })
+  opts.scroll = getInternalCoordinatesOptions(rest)
+  return opts
 }
 
 function _buildWheelConfig({ domTarget, eventOptions, window, ...rest }: UseWheelConfig) {
-  const opts = getInternalGenericOptions({ domTarget, eventOptions, window })
-  const wheel = getInternalCoordinatesOptions(rest)
-  const options: InternalConfig = { ...opts, wheel }
-  return options
+  const opts: InternalConfig = getInternalGenericOptions({ domTarget, eventOptions, window })
+  opts.wheel = getInternalCoordinatesOptions(rest)
+  return opts
 }
 
 export const buildMoveConfig = memoize(_buildMoveConfig, isEqual)
