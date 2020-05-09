@@ -1,5 +1,8 @@
 import { Fn, EventOptions, UseGestureEvent, Vector2, WebKitGestureEvent } from '../types'
 
+const WEBKIT_DISTANCE_SCALE_FACTOR = 260
+
+
 /**
  * Whether the browser supports GestureEvent (ie Safari)
  * @returns true if the browser supports gesture event
@@ -89,13 +92,12 @@ export function getWheelEventValues(event: UseGestureEvent<React.WheelEvent>): V
  * @param event
  * @returns pointer event values
  */
-export function getPointerEventValues(event: React.MouseEvent | React.TouchEvent | React.PointerEvent): Values {
+export function getPointerEventValues(event: React.MouseEvent | React.TouchEvent | React.PointerEvent): Vector2 {
   const touchEvents = getTouchEvents(event)
   const { clientX, clientY } = touchEvents ? touchEvents[0] : (event as React.PointerEvent)
-  return { values: [clientX, clientY] }
+  return [ clientX, clientY ] 
 }
 
-const WEBKIT_DISTANCE_SCALE_FACTOR = 260
 
 /**
  * Gets webkit gesture event values.

@@ -24,7 +24,7 @@ export default class MoveRecognizer extends CoordinatesRecognizer<'move'> {
   }
 
   onMoveStart = (event: UseGestureEvent): void => {
-    const { values } = getPointerEventValues(event)
+    const values = getPointerEventValues(event)
 
     this.updateSharedState(getGenericEventData(event))
 
@@ -46,7 +46,7 @@ export default class MoveRecognizer extends CoordinatesRecognizer<'move'> {
 
     this.updateSharedState(genericEventData)
 
-    const { values } = getPointerEventValues(event)
+    const values = getPointerEventValues(event)
     const kinematics = this.getKinematics(values, event)
 
     this.updateGestureState({
@@ -69,7 +69,7 @@ export default class MoveRecognizer extends CoordinatesRecognizer<'move'> {
     if (!this.controller.config.enabled) return
 
     if (this.controller.config.hover!.enabled) {
-      const { values } = getPointerEventValues(event)
+      const values = getPointerEventValues(event)
 
       const state = {
         ...this.controller.state.shared,
@@ -91,7 +91,7 @@ export default class MoveRecognizer extends CoordinatesRecognizer<'move'> {
     if ('move' in this.controller.handlers) this.onMoveEnd()
 
     if (this.controller.config.hover!.enabled) {
-      const { values } = getPointerEventValues(event)
+      const values = getPointerEventValues(event)
 
       const state = {
         ...this.controller.state.shared,

@@ -70,7 +70,7 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
   }
 
   startDrag(event: React.PointerEvent) {
-    const { values } = getPointerEventValues(event)
+    const values = getPointerEventValues(event)
     this.updateSharedState(getGenericEventData(event))
 
     const startState = {
@@ -121,7 +121,7 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
 
     this.updateSharedState(genericEventData)
 
-    const { values } = getPointerEventValues(event)
+    const values = getPointerEventValues(event)
     const kinematics = this.getKinematics(values, event)
     const genericPayload = getGenericPayload(this, event)
 
