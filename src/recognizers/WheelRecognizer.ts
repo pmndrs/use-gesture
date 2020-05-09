@@ -39,8 +39,9 @@ export default class WheelRecognizer extends CoordinatesRecognizer<'wheel'> {
 
     const movement = this.getMovement(values)
     const geometry = calculateAllGeometry(movement.delta!)
-
-    this.updateGestureState({ ...movement, ...geometry })
+    
+    this.updateGestureState(movement)
+    this.updateGestureState(geometry)
   }
 
   onChange = (event: UseGestureEvent<WheelEvent>, values: any): void => {
@@ -51,8 +52,9 @@ export default class WheelRecognizer extends CoordinatesRecognizer<'wheel'> {
   }
 
   onEnd = (): void => {
-    this.state._active = false
-    this.updateGestureState({ ...this.getMovement(this.state.values), velocities: [0, 0], velocity: 0 })
+    const movement = this.getMovement(this.state.values)
+    this.updateGestureState(movement)
+    this.updateGestureState({ _active: false, velocities: [0, 0], velocity: 0 })
     this.fireGestureHandler()
   }
 
