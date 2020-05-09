@@ -3,6 +3,7 @@ import CoordinatesRecognizer from './CoordinatesRecognizer'
 import { UseGestureEvent, IngKey } from '../types'
 import { getGenericEventData, getPointerEventValues } from '../utils/event'
 import { getStartGestureState, getGenericPayload } from './Recognizer'
+import { addBindings } from '../Controller'
 
 export default class MoveRecognizer extends CoordinatesRecognizer<'move'> {
   readonly ingKey = 'moving' as IngKey
@@ -98,13 +99,13 @@ export default class MoveRecognizer extends CoordinatesRecognizer<'move'> {
     }
   }
 
-  addBindings(): void {
+  addBindings(bindings: any): void {
     if ('move' in this.controller.handlers) {
-      this.controller.addBindings('onPointerMove', this.onMove)
+      addBindings(bindings, 'onPointerMove', this.onMove)
     }
     if ('hover' in this.controller.handlers) {
-      this.controller.addBindings('onPointerEnter', this.onPointerEnter)
-      this.controller.addBindings('onPointerLeave', this.onPointerLeave)
+      addBindings(bindings, 'onPointerEnter', this.onPointerEnter)
+      addBindings(bindings, 'onPointerLeave', this.onPointerLeave)
     }
   }
 }

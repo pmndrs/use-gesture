@@ -80,7 +80,7 @@ export default abstract class Recognizer<T extends StateKey> {
   protected abstract mapStateValues(state: GestureState<T>): PartialGestureState<T>
 
   // Should return the bindings to be added for a given gesture
-  public abstract addBindings(): void
+  public abstract addBindings(bindings: any): void
 
   /**
    * Returns state properties depending on the movement and state.

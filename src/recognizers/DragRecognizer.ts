@@ -3,6 +3,7 @@ import { Fn, IngKey } from '../types'
 import { getPointerEventValues, getGenericEventData } from '../utils/event'
 import { calculateDistance } from '../utils/math'
 import { getStartGestureState, getGenericPayload } from './Recognizer'
+import { addBindings } from '../Controller'
 
 export const TAP_DISTANCE_THRESHOLD = 3
 export const SWIPE_MAX_ELAPSED_TIME = 220
@@ -146,7 +147,8 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
     requestAnimationFrame(() => this.fireGestureHandler())
   }
 
-  addBindings(): void {
-    this.controller.addBindings('onPointerDown', this.onDragStart)
+  addBindings(bindings: any): void {
+    addBindings(bindings, 'onPointerDown', this.onDragStart)
   }
+
 }

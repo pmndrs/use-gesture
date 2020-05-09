@@ -3,6 +3,7 @@ import { UseGestureEvent, IngKey, Vector2 } from '../types'
 import { getGenericEventData, getScrollEventValues } from '../utils/event'
 import { calculateAllGeometry } from '../utils/math'
 import { getStartGestureState, getGenericPayload } from './Recognizer'
+import { addBindings } from '../Controller'
 
 export default class ScrollRecognizer extends CoordinatesRecognizer<'scroll'> {
   readonly ingKey = 'scrolling' as IngKey
@@ -55,7 +56,7 @@ export default class ScrollRecognizer extends CoordinatesRecognizer<'scroll'> {
     this.fireGestureHandler()
   }
 
-  addBindings(): void {
-    this.controller.addBindings('onScroll', this.handleEvent)
+  addBindings(bindings: any): void {
+    addBindings(bindings, 'onScroll', this.handleEvent)
   }
 }

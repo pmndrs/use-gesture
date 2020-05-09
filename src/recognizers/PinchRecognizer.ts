@@ -9,6 +9,7 @@ import {
   getWebkitGestureEventValues,
 } from '../utils/event'
 import { getStartGestureState, getGenericPayload } from './Recognizer'
+import { addBindings } from '../Controller'
 
 export default class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
   readonly ingKey = 'pinching' as IngKey
@@ -221,20 +222,20 @@ export default class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
     this.fireGestureHandler()
   }
 
-  addBindings(): void {
+  addBindings(bindings: any): void {
     // Only try to use gesture events when they are supported and domTarget is set
     // as React doesn't support gesture handlers.
     if (this.controller.config.domTarget && supportsGestureEvents()) {
-      this.controller.addBindings('onGestureStart', this.onGestureStart)
-      this.controller.addBindings('onGestureChange', this.onGestureChange)
-      this.controller.addBindings(['onGestureEnd', 'onTouchCancel'], this.onGestureEnd)
-      this.controller.addBindings(['onTouchStart', 'onTouchMove'], this.updateTouchData)
+      addBindings(bindings, 'onGestureStart', this.onGestureStart)
+      addBindings(bindings, 'onGestureChange', this.onGestureChange)
+      addBindings(bindings, ['onGestureEnd', 'onTouchCancel'], this.onGestureEnd)
+      addBindings(bindings, ['onTouchStart', 'onTouchMove'], this.updateTouchData)
     } else {
-      this.controller.addBindings('onTouchStart', this.onPinchStart)
-      this.controller.addBindings('onTouchMove', this.onPinchChange)
-      this.controller.addBindings(['onTouchEnd', 'onTouchCancel'], this.onPinchEnd)
+      addBindings(bindings, 'onTouchStart', this.onPinchStart)
+      addBindings(bindings, 'onTouchMove', this.onPinchChange)
+      addBindings(bindings, ['onTouchEnd', 'onTouchCancel'], this.onPinchEnd)
 
-      this.controller.addBindings('onWheel', this.onWheel)
+      addBindings(bindings, 'onWheel', this.onWheel)
     }
   }
 }

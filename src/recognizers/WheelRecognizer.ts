@@ -4,6 +4,7 @@ import { UseGestureEvent, IngKey } from '../types'
 import { getWheelEventValues, getGenericEventData } from '../utils/event'
 import { addV, calculateAllGeometry } from '../utils/math'
 import { getStartGestureState, getGenericPayload } from './Recognizer'
+import { addBindings } from '../Controller'
 
 export default class WheelRecognizer extends CoordinatesRecognizer<'wheel'> {
   readonly ingKey = 'wheeling' as IngKey
@@ -39,7 +40,7 @@ export default class WheelRecognizer extends CoordinatesRecognizer<'wheel'> {
 
     const movement = this.getMovement(values)
     const geometry = calculateAllGeometry(movement.delta!)
-    
+
     this.updateGestureState(movement)
     this.updateGestureState(geometry)
   }
@@ -58,7 +59,7 @@ export default class WheelRecognizer extends CoordinatesRecognizer<'wheel'> {
     this.fireGestureHandler()
   }
 
-  addBindings(): void {
-    this.controller.addBindings('onWheel', this.handleEvent)
+  addBindings(bindings: any): void {
+    addBindings(bindings, 'onWheel', this.handleEvent)
   }
 }
