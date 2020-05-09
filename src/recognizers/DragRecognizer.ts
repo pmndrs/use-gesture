@@ -1,6 +1,5 @@
 import CoordinatesRecognizer from './CoordinatesRecognizer'
 import { Fn, IngKey } from '../types'
-import { noop } from '../utils/utils'
 import { getPointerEventValues, getGenericEventData } from '../utils/event'
 import { calculateDistance } from '../utils/math'
 import { getStartGestureState, getGenericPayload } from './Recognizer'
@@ -97,7 +96,7 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
     const realDistance = calculateDistance(kinematics._movement!)
     if (_isTap && realDistance >= TAP_DISTANCE_THRESHOLD) _isTap = false
 
-    this.updateGestureState({ ...genericPayload, ...kinematics, _isTap, cancel: this.onCancel })
+    this.updateGestureState({ ...genericPayload, ...kinematics, _isTap })
 
     this.fireGestureHandler()
   }
@@ -140,7 +139,8 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
   }
 
   onCancel = (): void => {
-    this.updateGestureState({ canceled: true, cancel: noop })
+    if (this.state.canceled) return
+    this.updateGestureState({ canceled: true })
     this.state._active = false
     this.updateSharedState({ down: false, buttons: 0, touches: 0 })
     requestAnimationFrame(() => this.fireGestureHandler())

@@ -5,10 +5,6 @@ import { Vector2, UseGestureEvent, PartialGestureState, GestureState, Coordinate
 /**
  * @private
  * Abstract class for coordinates-based gesture recongizers
- * @abstract
- * @class CoordinatesRecognizer
- * @extends {Recognizer<T>}
- * @template T
  */
 export default abstract class CoordinatesRecognizer<T extends CoordinatesKey> extends Recognizer<T> {
   /**

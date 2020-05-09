@@ -1,7 +1,6 @@
 import { TouchEvent, WheelEvent } from 'react'
 import DistanceAngleRecognizer from './DistanceAngleRecognizer'
 import { UseGestureEvent, IngKey, Vector2, WebKitGestureEvent } from '../types'
-import { noop } from '../utils/utils'
 import {
   getGenericEventData,
   getTwoTouchesEventData,
@@ -52,8 +51,7 @@ export default class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
     this.updateGestureState({
       ...getGenericPayload(this, event),
       ...kinematics,
-      origin,
-      cancel: this.onCancel,
+      origin
     })
 
     this.fireGestureHandler()
@@ -72,8 +70,9 @@ export default class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
   }
 
   onCancel = (): void => {
+    if (this.state.canceled) return
     this.state._active = false
-    this.updateGestureState({ canceled: true, cancel: noop })
+    this.updateGestureState({ canceled: true })
     this.updateSharedState({ down: false, touches: 0 })
 
     requestAnimationFrame(() => this.fireGestureHandler())
@@ -116,8 +115,7 @@ export default class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
 
     this.updateGestureState({
       ...getGenericPayload(this, event),
-      ...kinematics,
-      cancel: this.onCancel,
+      ...kinematics
     })
 
     this.fireGestureHandler()

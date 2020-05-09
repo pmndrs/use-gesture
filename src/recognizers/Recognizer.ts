@@ -18,10 +18,6 @@ import { valueFn } from '../utils/utils'
 /**
  * @private
  * Recognizer abstract class.
- *
- * @protected
- * @abstract
- * @type {StateKey<T>} whether the Recognizer should deal with coordinates or distance / angle
  */
 export default abstract class Recognizer<T extends StateKey> {
   abstract readonly ingKey: IngKey // dragging, scrolling, etc.
@@ -78,11 +74,6 @@ export default abstract class Recognizer<T extends StateKey> {
 
   /**
    * Utility function to get kinematics of the gesture.
-   *
-   * @abstract
-   * @values - values we want to calculate the kinematics from
-   * @event - the pointer event
-   * @returns - set of values including movement, velocity, velocities, distance and direction
    */
   protected abstract getKinematics(values: Vector2, event: UseGestureEvent): PartialGestureState<T>
 

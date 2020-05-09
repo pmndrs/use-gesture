@@ -12,10 +12,10 @@ import {
   InternalDistanceAngleOptions,
 } from '../types'
 
-const DEFAULT_DRAG_DELAY = 180
-const DEFAULT_RUBBERBAND = 0.15
-const DEFAULT_SWIPE_VELOCITY = 0.5
-const DEFAULT_SWIPE_DISTANCE = 60
+export const DEFAULT_DRAG_DELAY = 180
+export const DEFAULT_RUBBERBAND = 0.15
+export const DEFAULT_SWIPE_VELOCITY = 0.5
+export const DEFAULT_SWIPE_DISTANCE = 60
 
 const defaultWindow = typeof window !== 'undefined' ? window : undefined
 

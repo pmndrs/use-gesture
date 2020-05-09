@@ -24,11 +24,8 @@ export default abstract class DistanceAngleRecognizer<T extends DistanceAngleKey
   getKinematics(values: Vector2, event: UseGestureEvent): PartialGestureState<T> {
     const state = this.getMovement(values)
     const turns = (values[1] - state.movement![1] - this.state.initial[1]) / 360
-
     const dt = event.timeStamp - this.state.timeStamp!
-
     const kinematics = calculateAllKinematics(state.movement!, state.delta!, dt)
-
     return { turns, ...state, ...kinematics }
   }
 
