@@ -20,6 +20,12 @@ export default abstract class DistanceAngleRecognizer<T extends DistanceAngleKey
     a = a !== void 0 ? a : state.values[1]
 
     let delta_a = a - state.values[1]
+
+    //console.warn({
+    //  raw: delta_a, 
+    //  fixed: fixContinuity(delta_a)
+    //})
+
     let next_turns = state.turns
     if (Math.abs(delta_a) > 270) {
       next_turns += Math.sign(delta_a)
@@ -50,4 +56,15 @@ export default abstract class DistanceAngleRecognizer<T extends DistanceAngleKey
   protected mapStateValues(state: GestureState<T>): PartialGestureState<T> {
     return { da: state.values, vdva: state.velocities } as PartialGestureState<T>
   }
+}
+
+/**
+ * @param dangle is a small change of variable on "lifting" of the circle. 
+ * It's expected to be small and cannot be greater than 270 or under -270
+ */
+function fixContinuity(dangle: number) {
+  dangle -= Math.round(dangle/360)*360
+  if (dangle >  270) return dangle - 360
+  if (dangle < -270) return dangle + 360
+  return dangle
 }
