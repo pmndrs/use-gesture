@@ -61,7 +61,7 @@ function sortHandlers(handlers: UserHandlersPartial) {
  * @returns {(...args: any[]) => HookReturnType<Config>}
  */
 export function useGesture<Config = UseGestureConfig>(_handlers: UserHandlersPartial, config: UseGestureConfig = {}) {
-  const [handlers, nativeHandlers, actions] = sortHandlers(_handlers)
+  const [ handlers, nativeHandlers, actions ] = sortHandlers(_handlers)
 
   /**
    * Here we compute the derived internal config based on the provided config object.
