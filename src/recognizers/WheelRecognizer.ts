@@ -21,19 +21,25 @@ export default class WheelRecognizer extends CoordinatesRecognizer<'wheel'> {
     return { values: addV(values, prevValues) }
   }
 
-  onWheel = (event: UseGestureEvent<WheelEvent>): void => {
+  handleEvent = (event: UseGestureEvent<WheelEvent>): void => {
     if (!this.wheelShouldRun(event)) return
     this.clearTimeout()
-    this.setTimeout(this.onWheelEnd)
-
-    if (!this.state._active) this.onWheelStart(event)
-    else this.onWheelChange(event)
-  }
-
-  onWheelStart = (event: UseGestureEvent<WheelEvent>): void => {
-    const { values } = this.getValuesFromEvent(event)
+    this.setTimeout(this.onEnd)
 
     this.updateSharedState(getGenericEventData(event))
+
+    if (!this.state._active) {
+      this.onStart(event)
+    } else {
+      this.onChange(event)
+    }
+
+    this.fireGestureHandler()
+  }
+
+  onStart = (event: UseGestureEvent<WheelEvent>): void => {
+    const { values } = this.getValuesFromEvent(event)
+    
 
     const startState = {
       ...getStartGestureState(this, values, event),
@@ -49,32 +55,24 @@ export default class WheelRecognizer extends CoordinatesRecognizer<'wheel'> {
       ...movementDetection,
       ...calculateAllGeometry(delta),
     })
-
-    this.fireGestureHandler()
   }
 
-  onWheelChange = (event: UseGestureEvent<WheelEvent>): void => {
-    const genericEventData = getGenericEventData(event)
-
-    this.updateSharedState(genericEventData)
-
+  onChange = (event: UseGestureEvent<WheelEvent>): void => {
     const { values } = this.getValuesFromEvent(event)
 
     this.updateGestureState({
       ...getGenericPayload(this, event),
       ...this.getKinematics(values, event),
     })
-
-    this.fireGestureHandler()
   }
 
-  onWheelEnd = (): void => {
+  onEnd = (): void => {
     this.state._active = false
     this.updateGestureState({ ...this.getMovement(this.state.values), velocities: [0, 0], velocity: 0 })
     this.fireGestureHandler()
   }
 
   addBindings(): void {
-    this.controller.addBindings('onWheel', this.onWheel)
+    this.controller.addBindings('onWheel', this.handleEvent)
   }
 }
