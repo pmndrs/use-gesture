@@ -61,8 +61,6 @@ export function getGenericEventData(event: React.MouseEvent | React.TouchEvent |
   return { touches, down, buttons, ...getModifierKeys(event) }
 }
 
-type Values = { values: Vector2 }
-
 /**
  * Gets scroll event values
  * @param event
@@ -104,8 +102,8 @@ export function getPointerEventValues(event: React.MouseEvent | React.TouchEvent
  * @param event
  * @returns webkit gesture event values
  */
-export function getWebkitGestureEventValues(event: WebKitGestureEvent): Values {
-  return { values: [event.scale * WEBKIT_DISTANCE_SCALE_FACTOR, event.rotation] as Vector2 }
+export function getWebkitGestureEventValues(event: WebKitGestureEvent): Vector2 {
+  return [ event.scale * WEBKIT_DISTANCE_SCALE_FACTOR, event.rotation ]
 }
 
 /**

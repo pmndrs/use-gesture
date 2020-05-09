@@ -90,7 +90,7 @@ export default class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
     if (!this.enabled) return
     event.preventDefault()
 
-    const { values } = getWebkitGestureEventValues(event)
+    const values = getWebkitGestureEventValues(event)
 
     this.updateSharedState(getGenericEventData(event))
 
@@ -118,7 +118,7 @@ export default class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
 
     this.updateSharedState(genericEventData)
 
-    const { values } = getWebkitGestureEventValues(event)
+    const values = getWebkitGestureEventValues(event)
     const kinematics = this.getKinematics(values, event)
 
     this.updateGestureState({
