@@ -1,5 +1,5 @@
 import CoordinatesRecognizer from './CoordinatesRecognizer'
-import { UseGestureEvent, IngKey } from '../types'
+import { UseGestureEvent, IngKey, Vector2 } from '../types'
 import { getGenericEventData, getScrollEventValues } from '../utils/event'
 import { calculateAllGeometry } from '../utils/math'
 import { getStartGestureState, getGenericPayload } from './Recognizer'
@@ -9,23 +9,25 @@ export default class ScrollRecognizer extends CoordinatesRecognizer<'scroll'> {
   readonly stateKey = 'scroll'
   debounced = true
 
-  private scrollShouldRun = () => {
-    return this.enabled
-  }
+  handleEvent = (event: UseGestureEvent): void => {
+    if (!this.enabled) return
 
-  onScroll = (event: UseGestureEvent): void => {
-    if (!this.scrollShouldRun()) return
     this.clearTimeout()
-    this.setTimeout(this.onScrollEnd)
+    this.setTimeout(this.onEnd)
 
-    if (!this.state._active) this.onScrollStart(event)
-    else this.onScrollChange(event)
+    const values = getScrollEventValues(event)
+    this.updateSharedState(getGenericEventData(event))
+
+    if (!this.state._active) {
+      this.onStart(event, values)
+    } else {
+      this.onChange(event, values)
+    }
+
+    this.fireGestureHandler()
   }
 
-  onScrollStart = (event: UseGestureEvent): void => {
-    const values = getScrollEventValues(event)
-
-    this.updateSharedState(getGenericEventData(event))
+  onStart = (event: UseGestureEvent, values: Vector2): void => {
 
     const startState = {
       ...getStartGestureState(this, values, event),
@@ -34,40 +36,28 @@ export default class ScrollRecognizer extends CoordinatesRecognizer<'scroll'> {
     }
 
     const movementDetection = this.getMovement(values, startState)
-    const delta = movementDetection.delta!
 
     this.updateGestureState({
       ...startState,
       ...movementDetection,
-      ...calculateAllGeometry(delta),
+      ...calculateAllGeometry(movementDetection.delta!),
     })
-
-    this.fireGestureHandler()
   }
 
-  onScrollChange = (event: UseGestureEvent): void => {
-    const genericEventData = getGenericEventData(event)
-
-    this.updateSharedState(genericEventData)
-
-    const values = getScrollEventValues(event)
-    const kinematics = this.getKinematics(values, event)
-
+  onChange = (event: UseGestureEvent, values: Vector2): void => {
     this.updateGestureState({
       ...getGenericPayload(this, event),
-      ...kinematics,
+      ...this.getKinematics(values, event),
     })
-
-    this.fireGestureHandler()
   }
 
-  onScrollEnd = (): void => {
+  onEnd = (): void => {
     this.state._active = false
     this.updateGestureState({ ...this.getMovement(this.state.values), velocities: [0, 0], velocity: 0 })
     this.fireGestureHandler()
   }
 
   addBindings(): void {
-    this.controller.addBindings('onScroll', this.onScroll)
+    this.controller.addBindings('onScroll', this.handleEvent)
   }
 }

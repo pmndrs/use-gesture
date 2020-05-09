@@ -22,10 +22,6 @@ export default abstract class CoordinatesRecognizer<T extends CoordinatesKey> ex
    * In coordinates-based gesture, this function will detect the first intentional axis,
    * lock the gesture axis if lockDirection is specified in the config, block the gesture
    * if the first intentional axis doesn't match the specified axis in config.
-   *
-   * @param _intentional
-   * @param  _movement
-   * @param state
    */
   protected checkIntentionality(
     _intentional: [false | number, false | number],
@@ -65,22 +61,16 @@ export default abstract class CoordinatesRecognizer<T extends CoordinatesKey> ex
   }
 
   getKinematics(values: Vector2, event: UseGestureEvent): PartialGestureState<T> {
-    const { timeStamp } = this.state
-
     const movementDetection = this.getMovement(values, this.state)
-    const { _blocked, delta, movement } = movementDetection
+    if (movementDetection._blocked) return movementDetection
 
-    if (_blocked) return movementDetection
+    const kinematics = calculateAllKinematics(
+      movementDetection.movement!, 
+      movementDetection.delta!, 
+      event.timeStamp - this.state.timeStamp!
+    )
 
-    const delta_t = event.timeStamp - timeStamp!
-    const kinematics = calculateAllKinematics(movement!, delta!, delta_t)
-
-    return {
-      values,
-      delta,
-      ...movementDetection,
-      ...kinematics,
-    }
+    return { ...movementDetection, ...kinematics }
   }
 
   protected mapStateValues(state: GestureState<T>): PartialGestureState<T> {

@@ -5,20 +5,13 @@ import { getPointerEventValues, getGenericEventData } from '../utils/event'
 import { calculateDistance } from '../utils/math'
 import { getStartGestureState, getGenericPayload } from './Recognizer'
 
-const TAP_DISTANCE_THRESHOLD = 3
-const SWIPE_MAX_ELAPSED_TIME = 220
+export const TAP_DISTANCE_THRESHOLD = 3
+export const SWIPE_MAX_ELAPSED_TIME = 220
 
 export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
   readonly ingKey = 'dragging' as IngKey
   readonly stateKey = 'drag'
-
-  private dragShouldStart = (_event: React.PointerEvent) => {
-    // drag should start if gesture is enabled and not already active.
-    // This is needed so that a second touch on the target doesn't trigger
-    // another drag event.
-    return this.enabled && !this.state._active
-  }
-
+  
   /**
    * TODO add back when setPointerCapture is widely wupported
    * https://caniuse.com/#search=setPointerCapture
@@ -46,7 +39,7 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
   }
 
   onDragStart = (event: React.PointerEvent): void => {
-    if (!this.dragShouldStart(event)) return
+    if (!this.enabled || this.state._active) return
     /**
      * TODO add back when setPointerCapture is widely supported
      * this.setPointers(event as PointerEvent)
@@ -145,23 +138,21 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
     this.state._active = false
     this.updateSharedState({ down: false, buttons: 0, touches: 0 })
 
-    const {
-      _isTap,
-      values,
-      velocities: [vx, vy],
-      movement: [mx, my],
-      _intentional: [ix, iy],
-    } = this.state
+    const tap = this.state._isTap
+
+    const [vx, vy] = this.state.velocities
+    const [mx, my] = this.state.movement
+    const [ix, iy] = this.state._intentional
+
 
     const endState = {
       ...getGenericPayload(this, event),
-      ...this.getMovement(values),
+      ...this.getMovement(this.state.values),
     }
 
-    const {
-      swipeVelocity: [svx, svy],
-      swipeDistance: [sx, sy],
-    } = this.config
+    const [svx, svy] = this.config.swipeVelocity
+    const [ sx, sy ] = this.config.swipeDistance
+
 
     const swipe: [number, number] = [0, 0]
 
@@ -170,8 +161,8 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
       if (iy !== false && Math.abs(vy) > svy && Math.abs(my) > sy) swipe[1] = Math.sign(vy)
     }
 
-    this.updateGestureState({ ...endState, tap: _isTap, swipe })
-    this.fireGestureHandler(this.config.filterTaps && this.state._isTap)
+    this.updateGestureState({ ...endState, tap, swipe })
+    this.fireGestureHandler(this.config.filterTaps && tap)
   }
 
   clean = (): void => {

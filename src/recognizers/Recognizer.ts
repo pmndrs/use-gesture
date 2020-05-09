@@ -168,6 +168,7 @@ export default abstract class Recognizer<T extends StateKey> {
       _initial,
       _movement,
       movement,
+      values,
       offset: computeRubberband(this, offset, _rubberband), // rubberbanded offset
       delta: subV(movement, prevMovement),
     } as PartialGestureState<T>
