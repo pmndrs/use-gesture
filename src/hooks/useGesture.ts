@@ -4,12 +4,7 @@ import WheelRecognizer from '../recognizers/WheelRecognizer'
 import MoveRecognizer from '../recognizers/MoveRecognizer'
 import PinchRecognizer from '../recognizers/PinchRecognizer'
 import ScrollRecognizer from '../recognizers/ScrollRecognizer'
-import {
-  getInternalGenericOptions,
-  getInternalDragOptions,
-  getInternalCoordinatesOptions,
-  getInternalDistanceAngleOptions,
-} from '../utils/config'
+
 import {
   InternalConfig,
   HandlerKey,
@@ -19,6 +14,7 @@ import {
   RecognizerClass,
   UseGestureConfig,
 } from '../types'
+import { buildComplexConfig } from './buildConfig'
 
 export function wrapStart(fn: Function) {
   return function (this: any, { first }: any) {
@@ -63,51 +59,25 @@ function sortHandlers(handlers: UserHandlersPartial) {
 export function useGesture<Config = UseGestureConfig>(_handlers: UserHandlersPartial, config: UseGestureConfig = {}) {
   const [ handlers, nativeHandlers, actions ] = sortHandlers(_handlers)
 
-  /**
-   * Here we compute the derived internal config based on the provided config object.
-   * We decompose the config into its generic and gesture options and compute each.
-   * TODO: this is currently done on every render!
-   */
-  const { drag, wheel, move, scroll, pinch, hover, eventOptions, window, domTarget, enabled } = config
-
-  const mergedConfig: InternalConfig = getInternalGenericOptions({ eventOptions, window, domTarget, enabled })
+  const mergedConfig: InternalConfig = buildComplexConfig(config, actions)
 
   const classes = new Set<RecognizerClass>()
   const internalHandlers: Partial<InternalHandlers> = {}
 
-  // will hold reference to native handlers such as onClick, onMouseDown, etc.
+  if (actions.has('onDrag'))    classes.add(DragRecognizer)
+  if (actions.has('onWheel'))   classes.add(WheelRecognizer)
+  if (actions.has('onScroll'))  classes.add(ScrollRecognizer)
+  if (actions.has('onMove'))    classes.add(MoveRecognizer)
+  if (actions.has('onPinch'))   classes.add(PinchRecognizer)
+  if (actions.has('onHover'))   classes.add(MoveRecognizer)
 
-  if (actions.has('onDrag')) {
-    classes.add(DragRecognizer)
-    internalHandlers.drag = includeStartEndHandlers(handlers, 'onDrag')
-    mergedConfig.drag = getInternalDragOptions(drag)
-  }
-  if (actions.has('onWheel')) {
-    classes.add(WheelRecognizer)
-    internalHandlers.wheel = includeStartEndHandlers(handlers, 'onWheel')
-    mergedConfig.wheel = getInternalCoordinatesOptions(wheel)
-  }
-  if (actions.has('onScroll')) {
-    classes.add(ScrollRecognizer)
-    internalHandlers.scroll = includeStartEndHandlers(handlers, 'onScroll')
-    mergedConfig.scroll = getInternalCoordinatesOptions(scroll)
-  }
-  if (actions.has('onMove')) {
-    classes.add(MoveRecognizer)
-    internalHandlers.move = includeStartEndHandlers(handlers, 'onMove')
-    mergedConfig.move = getInternalCoordinatesOptions(move)
-  }
-  if (actions.has('onPinch')) {
-    classes.add(PinchRecognizer)
-    internalHandlers.pinch = includeStartEndHandlers(handlers, 'onPinch')
-    mergedConfig.pinch = getInternalDistanceAngleOptions(pinch)
-  }
-  if (actions.has('onHover')) {
-    classes.add(MoveRecognizer)
-    internalHandlers.hover = handlers.onHover
-    mergedConfig.hover = { enabled: true, ...hover }
-  }
-
+  if (actions.has('onDrag'))      internalHandlers.drag   = includeStartEndHandlers(handlers, 'onDrag')
+  if (actions.has('onWheel'))     internalHandlers.wheel  = includeStartEndHandlers(handlers, 'onWheel')
+  if (actions.has('onScroll'))    internalHandlers.scroll = includeStartEndHandlers(handlers, 'onScroll')
+  if (actions.has('onMove'))      internalHandlers.move   = includeStartEndHandlers(handlers, 'onMove')
+  if (actions.has('onPinch'))     internalHandlers.pinch  = includeStartEndHandlers(handlers, 'onPinch')
+  if (actions.has('onHover'))     internalHandlers.hover  = handlers.onHover
+  
   return useRecognizers<Config>(internalHandlers, classes, mergedConfig, nativeHandlers)
 }
 /**
