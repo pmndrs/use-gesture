@@ -10,11 +10,12 @@ export default abstract class DistanceAngleRecognizer<T extends DistanceAngleKey
   /**
    * Returns the real movement (without taking intentionality into acount)
    */
-  protected getInternalMovement([d, a]: [number, number?], state: GestureState<T>): Vector2 {
-    // angle might not be defined when ctrl wheel is used for zoom only
-    // in that case we set it to the previous angle value
-    a = a !== void 0 ? a : state.values[1]
-    let delta_a = a - state.values[1]
+  protected getInternalMovement(values: [number, number?], state: GestureState<T>): Vector2 {
+    const prev_a = state.values[1]
+    // not be defined if ctrl+wheel is used for zoom only
+    let [ d, a = prev_a ] = values;
+
+    let delta_a = a - prev_a
     let next_turns = state.turns
     if (Math.abs(delta_a) > 270) next_turns += Math.sign(delta_a)
     return subV([ d, a - 360 * next_turns ], state.initial)

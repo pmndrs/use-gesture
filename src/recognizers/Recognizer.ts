@@ -238,13 +238,8 @@ function getIntentionalDisplacement(movement: number, threshold: number): number
   }
 }
 
-function computeRubberband<T extends StateKey>(
-  recognizer: Recognizer<T>,
-  vector: Vector2,
-  rubberband: Vector2
-): Vector2 {
+function computeRubberband<T extends StateKey>(recognizer: Recognizer<T>, vector: Vector2, rubberband: Vector2): Vector2 {
   const bounds = recognizer.config.bounds
-
   /**
    * [x, y]: [rubberband(x, min, max), rubberband(y, min, max)]
    */
@@ -253,54 +248,35 @@ function computeRubberband<T extends StateKey>(
 
 /**
  * Returns a generic, common payload for all gestures from an event.
- *
- * @param {UseGestureEvent} event
- * @param {boolean} [isStartEvent]
- * @returns - the generic gesture payload
  */
 export function getGenericPayload<T extends StateKey>(
   recognizer: Recognizer<T>,
   event: UseGestureEvent,
   isStartEvent?: boolean
 ) {
-  const { timeStamp, type } = event
-  const {
-    args,
-    state: { values, startTime },
-  } = recognizer
 
   return {
-    _lastEventType: type,
+    _lastEventType: event.type,
     event,
-    timeStamp,
-    elapsedTime: isStartEvent ? 0 : timeStamp - startTime!,
-    args,
-    previous: values,
+    timeStamp: event.timeStamp,
+    elapsedTime: isStartEvent ? 0 : event.timeStamp - recognizer.state.startTime!,
+    args: recognizer.args,
+    previous: recognizer.state.values,
   }
 }
 
 /**
  * Returns the reinitialized start state for the gesture.
  * Should be common to all gestures.
- *
- * @param {Vector2} values
- * @param {UseGestureEvent} event
- * @returns - the start state for the gesture
  */
-export function getStartGestureState<T extends StateKey>(
-  recognizer: Recognizer<T>,
-  values: Vector2,
-  event: UseGestureEvent
-) {
-  const { stateKey, state } = recognizer
-
+export function getStartGestureState<T extends StateKey>(recognizer: Recognizer<T>, values: Vector2, event: UseGestureEvent) {
   return {
-    ...getInitialState()[stateKey],
+    ...getInitialState()[recognizer.stateKey],
     _active: true,
     values,
     initial: values,
-    offset: state.offset,
-    lastOffset: state.offset,
+    offset: recognizer.state.offset,
+    lastOffset: recognizer.state.offset,
     startTime: event.timeStamp,
   }
 }

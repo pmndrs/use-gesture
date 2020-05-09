@@ -10,12 +10,8 @@ export default class MoveRecognizer extends CoordinatesRecognizer<'move'> {
 
   debounced = true
 
-  private moveShouldRun = () => {
-    return this.enabled
-  }
-
   onMove = (event: UseGestureEvent): void => {
-    if (!this.moveShouldRun()) return
+    if (!this.enabled) return
     this.clearTimeout()
     this.setTimeout(this.onMoveEnd)
 

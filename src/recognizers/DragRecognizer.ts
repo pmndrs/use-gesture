@@ -12,29 +12,10 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
   readonly ingKey = 'dragging' as IngKey
   readonly stateKey = 'drag'
   
-  /**
-   * TODO add back when setPointerCapture is widely wupported
-   * https://caniuse.com/#search=setPointerCapture
-   * private setPointers = (event: UseGestureEvent<PointerEvent>) => {
-   *   const { currentTarget, pointerId } = event
-   *   if (currentTarget) currentTarget.setPointerCapture(pointerId)
-   *   this.updateGestureState({ currentTarget, pointerId })
-   * }
-
-   * private removePointers = () => {
-   *   const { currentTarget, pointerId } = this.state
-   *   if (currentTarget && pointerId) currentTarget.releasePointerCapture(pointerId)
-   * }
-   */
-
 
   onDragStart = (event: React.PointerEvent): void => {
     if (!this.enabled || this.state._active) return
-    /**
-     * TODO add back when setPointerCapture is widely supported
-     * this.setPointers(event as PointerEvent)
-     */
-
+    
     this.controller.removeWindowListeners(this.stateKey)
     const dragListeners: [string, Fn][] = [
       ['pointermove', this.onDragChange],
@@ -156,9 +137,6 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
     super.clean()
     this.state._delayedEvent = false // can't remember if this is useful?
     this.controller.removeWindowListeners(this.stateKey)
-
-    // TODO add back when setPointerCapture is widely wupported
-    // this.removePointers()
   }
 
   onCancel = (): void => {
@@ -170,9 +148,5 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
 
   addBindings(): void {
     this.controller.addBindings('onPointerDown', this.onDragStart)
-
-    // TODO add back when setPointerCapture is widely wupported
-    // this.controller.addBindings('onPointerMove', this.onDragChange)
-    // this.controller.addBindings(['onPointerUp', 'onPointerCancel'], this.onDragEnd)
   }
 }
