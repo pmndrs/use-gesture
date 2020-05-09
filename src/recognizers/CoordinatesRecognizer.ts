@@ -61,16 +61,12 @@ export default abstract class CoordinatesRecognizer<T extends CoordinatesKey> ex
   }
 
   getKinematics(values: Vector2, event: UseGestureEvent): PartialGestureState<T> {
-    const movementDetection = this.getMovement(values)
-    if (movementDetection._blocked) return movementDetection
-
-    const kinematics = calculateAllKinematics(
-      movementDetection.movement!, 
-      movementDetection.delta!, 
-      event.timeStamp - this.state.timeStamp!
-    )
-
-    return { ...movementDetection, ...kinematics }
+    const state = this.getMovement(values)
+    if (!state._blocked) {
+      const dt = event.timeStamp - this.state.timeStamp!
+      Object.assign(state, calculateAllKinematics(state.movement!, state.delta!, dt))
+    }
+    return state
   }
 
   protected mapStateValues(state: GestureState<T>): PartialGestureState<T> {
