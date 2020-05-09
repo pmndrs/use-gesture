@@ -29,16 +29,15 @@ export default class ScrollRecognizer extends CoordinatesRecognizer<'scroll'> {
 
   onStart = (event: UseGestureEvent, values: Vector2): void => {
 
-    const startState = {
+    this.updateGestureState({
       ...getStartGestureState(this, values, event),
       ...getGenericPayload(this, event, true),
       initial: this.state.values,
-    }
+    })
 
-    const movementDetection = this.getMovement(values, startState)
+    const movementDetection = this.getMovement(values)
 
     this.updateGestureState({
-      ...startState,
       ...movementDetection,
       ...calculateAllGeometry(movementDetection.delta!),
     })

@@ -110,7 +110,8 @@ export default abstract class Recognizer<T extends StateKey> {
   /**
    * Returns basic movement properties for the gesture based on the next values and current state.
    */
-  protected getMovement(values: Vector2, state: GestureState<T> = this.state): PartialGestureState<T> {
+  protected getMovement(values: Vector2): PartialGestureState<T> {
+    const state: GestureState<T> = this.state
     const { initial, threshold, rubberband } = this.config
 
     const [t0, t1] = threshold

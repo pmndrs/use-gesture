@@ -61,7 +61,7 @@ export default abstract class CoordinatesRecognizer<T extends CoordinatesKey> ex
   }
 
   getKinematics(values: Vector2, event: UseGestureEvent): PartialGestureState<T> {
-    const movementDetection = this.getMovement(values, this.state)
+    const movementDetection = this.getMovement(values)
     if (movementDetection._blocked) return movementDetection
 
     const kinematics = calculateAllKinematics(

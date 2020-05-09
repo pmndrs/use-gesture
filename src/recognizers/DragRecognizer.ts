@@ -27,16 +27,6 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
    * }
    */
 
-  private setListeners = () => {
-    this.controller.removeWindowListeners(this.stateKey)
-    const dragListeners: [string, Fn][] = [
-      ['pointermove', this.onDragChange],
-      ['pointerup', this.onDragEnd],
-      ['pointercancel', this.onDragEnd],
-    ]
-
-    this.controller.addWindowListeners(this.stateKey, dragListeners)
-  }
 
   onDragStart = (event: React.PointerEvent): void => {
     if (!this.enabled || this.state._active) return
@@ -45,12 +35,18 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
      * this.setPointers(event as PointerEvent)
      */
 
-    // Sets listeners to the window
-    this.setListeners()
+    this.controller.removeWindowListeners(this.stateKey)
+    const dragListeners: [string, Fn][] = [
+      ['pointermove', this.onDragChange],
+      ['pointerup', this.onDragEnd],
+      ['pointercancel', this.onDragEnd],
+    ]
+    this.controller.addWindowListeners(this.stateKey, dragListeners)
 
     // We set the state pointerId to the event.pointerId so we can make sure
     // that we lock the drag to the event initiating the gesture
-    this.state._pointerId = event.pointerId
+    this.updateGestureState({ _pointerId: event.pointerId })
+
 
     if (this.config.delay > 0) {
       this.state._delayedEvent = true
@@ -66,20 +62,15 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
     const values = getPointerEventValues(event)
     this.updateSharedState(getGenericEventData(event))
 
-    const startState = {
+    this.updateGestureState({
       ...getStartGestureState(this, values, event),
       ...getGenericPayload(this, event, true),
       _pointerId: event.pointerId,
-    }
-
-    const movementState = this.getMovement(values, startState)
-
-    this.updateGestureState({
-      ...startState,
-      ...movementState,
-      cancel: this.onCancel,
+      cancel: this.onCancel
     })
 
+
+    this.updateGestureState(this.getMovement(values))
     this.fireGestureHandler()
   }
 
@@ -139,20 +130,16 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
     this.updateSharedState({ down: false, buttons: 0, touches: 0 })
 
     const tap = this.state._isTap
-
     const [vx, vy] = this.state.velocities
     const [mx, my] = this.state.movement
     const [ix, iy] = this.state._intentional
-
+    const [svx, svy] = this.config.swipeVelocity
+    const [ sx, sy ] = this.config.swipeDistance
 
     const endState = {
       ...getGenericPayload(this, event),
       ...this.getMovement(this.state.values),
     }
-
-    const [svx, svy] = this.config.swipeVelocity
-    const [ sx, sy ] = this.config.swipeDistance
-
 
     const swipe: [number, number] = [0, 0]
 

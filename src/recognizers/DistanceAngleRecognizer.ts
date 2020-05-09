@@ -41,7 +41,7 @@ export default abstract class DistanceAngleRecognizer<T extends DistanceAngleKey
   }
 
   getKinematics(values: Vector2, event: UseGestureEvent): PartialGestureState<T> {
-    const movementDetection = this.getMovement(values, this.state)
+    const movementDetection = this.getMovement(values)
     const turns = (values[1] - movementDetection.movement![1] - this.state.initial[1]) / 360
 
     const kinematics = calculateAllKinematics(
@@ -62,7 +62,7 @@ export default abstract class DistanceAngleRecognizer<T extends DistanceAngleKey
  * @param dangle is a small change of variable on "lifting" of the circle. 
  * It's expected to be small and cannot be greater than 270 or under -270
  */
-function fixContinuity(dangle: number) {
+export function fixContinuity(dangle: number) {
   dangle -= Math.round(dangle/360)*360
   if (dangle >  270) return dangle - 360
   if (dangle < -270) return dangle + 360

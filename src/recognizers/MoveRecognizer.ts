@@ -28,14 +28,13 @@ export default class MoveRecognizer extends CoordinatesRecognizer<'move'> {
 
     this.updateSharedState(getGenericEventData(event))
 
-    const state = {
+    this.updateGestureState({
       ...getStartGestureState(this, values, event),
       ...getGenericPayload(this, event, true),
-    }
+    })
 
-    const movement = this.getMovement(values, state)
 
-    this.updateGestureState({ ...state, ...movement })
+    this.updateGestureState(this.getMovement(values))
     this.fireGestureHandler()
   }
 

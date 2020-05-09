@@ -13,7 +13,7 @@ export default class WheelRecognizer extends CoordinatesRecognizer<'wheel'> {
   handleEvent = (event: UseGestureEvent<WheelEvent>): void => {
     if (event.ctrlKey && 'pinch' in this.controller.handlers) return
     if (!this.enabled) return
-    
+
     this.clearTimeout()
     this.setTimeout(this.onEnd)
 
@@ -31,20 +31,16 @@ export default class WheelRecognizer extends CoordinatesRecognizer<'wheel'> {
   }
 
   onStart = (event: UseGestureEvent<WheelEvent>, values: any): void => {
-    const startState = {
+    this.updateGestureState({
       ...getStartGestureState(this, values, event),
       ...getGenericPayload(this, event, true),
       initial: this.state.values,
-    }
-
-    const movementDetection = this.getMovement(values, startState)
-    const delta = movementDetection.delta!
-
-    this.updateGestureState({
-      ...startState,
-      ...movementDetection,
-      ...calculateAllGeometry(delta),
     })
+
+    const movement = this.getMovement(values)
+    const geometry = calculateAllGeometry(movement.delta!)
+
+    this.updateGestureState({ ...movement, ...geometry })
   }
 
   onChange = (event: UseGestureEvent<WheelEvent>, values: any): void => {
