@@ -65,11 +65,11 @@ type Values = { values: Vector2 }
  * @param event
  * @returns scroll event values
  */
-export function getScrollEventValues(event: UseGestureEvent): Values {
+export function getScrollEventValues(event: UseGestureEvent): Vector2 {
   // If the currentTarget is the window then we return the scrollX/Y position.
   // If not (ie the currentTarget is a DOM element), then we return scrollLeft/Top
   const { scrollX, scrollY, scrollLeft, scrollTop } = event.currentTarget as Element & Window
-  return { values: [scrollX || scrollLeft || 0, scrollY || scrollTop || 0] }
+  return [scrollX || scrollLeft || 0, scrollY || scrollTop || 0]
 }
 
 /**

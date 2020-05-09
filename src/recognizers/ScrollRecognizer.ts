@@ -23,7 +23,7 @@ export default class ScrollRecognizer extends CoordinatesRecognizer<'scroll'> {
   }
 
   onScrollStart = (event: UseGestureEvent): void => {
-    const { values } = getScrollEventValues(event)
+    const values = getScrollEventValues(event)
 
     this.updateSharedState(getGenericEventData(event))
 
@@ -50,7 +50,7 @@ export default class ScrollRecognizer extends CoordinatesRecognizer<'scroll'> {
 
     this.updateSharedState(genericEventData)
 
-    const { values } = getScrollEventValues(event)
+    const values = getScrollEventValues(event)
     const kinematics = this.getKinematics(values, event)
 
     this.updateGestureState({
