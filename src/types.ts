@@ -81,7 +81,6 @@ export interface InternalGenericOptions {
   domTarget?: DomTarget
   eventOptions: EventOptions
   window?: EventTarget
-  captureString: string
   enabled: boolean
 }
 

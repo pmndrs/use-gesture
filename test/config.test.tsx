@@ -4,7 +4,7 @@ import {
   getInternalDistanceAngleOptions,
   getInternalGestureOptions,
 } from '../src/utils/config'
-import { DragConfig, GenericOptions, DistanceAngleConfig, GestureOptions } from '../src/types'
+import { DragConfig, DistanceAngleConfig, GestureOptions } from '../src/types'
 
 describe('testing derived config', () => {
   describe('testing derived generic configuration', () => {
@@ -12,17 +12,17 @@ describe('testing derived config', () => {
       expect(getInternalGenericOptions(undefined)).toStrictEqual({
         enabled: true,
         domTarget: undefined,
-        captureString: '',
+        //captureString: '',
         eventOptions: { capture: false, passive: true },
         window: window,
       })
     })
-    test(`derived passive is true if target isn't specified`, () => {
-      let config: Partial<GenericOptions> = { eventOptions: { capture: false } }
-      expect(getInternalGenericOptions(config)).toHaveProperty('eventOptions.passive', true)
-      config = { eventOptions: { passive: false } }
-      expect(getInternalGenericOptions(config)).toHaveProperty('eventOptions.passive', true)
-    })
+    // test(`derived passive is true if target isn't specified`, () => {
+    //   let config: Partial<GenericOptions> = { eventOptions: { capture: false } }
+    //   expect(getInternalGenericOptions(config)).toHaveProperty('eventOptions.passive', true)
+    //   config = { eventOptions: { passive: false } }
+    //   expect(getInternalGenericOptions(config)).toHaveProperty('eventOptions.passive', true)
+    // })
 
     test(`derived passive is false if target is specified and config passive is false`, () => {
       const config = {

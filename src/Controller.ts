@@ -47,7 +47,8 @@ export default class Controller {
     // If not, we return an object that contains gesture handlers mapped to react handler event keys.
 
     const bindings: ReactEventHandlers = {}
-    const { captureString } = this.config
+    const { eventOptions } = this.config
+    const captureString = eventOptions.capture ? 'Capture' : ''
 
     Object.entries(this.bindings).forEach(([event, fns]) => {
       const fnsArray = Array.isArray(fns) ? fns : [fns]

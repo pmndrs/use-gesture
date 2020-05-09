@@ -10,6 +10,7 @@ import {
   InternalCoordinatesOptions,
   DistanceAngleConfig,
   InternalDistanceAngleOptions,
+  Vector2,
 } from '../types'
 
 export const DEFAULT_DRAG_DELAY = 180
@@ -19,43 +20,80 @@ export const DEFAULT_SWIPE_DISTANCE = 60
 
 const defaultWindow = typeof window !== 'undefined' ? window : undefined
 
-export function getInternalGestureOptions(gestureConfig: Partial<GestureOptions>): InternalGestureOptions {
-  let { threshold, rubberband, enabled = true, initial = [0, 0] } = gestureConfig
-
-  if (typeof rubberband === 'boolean') rubberband = rubberband ? DEFAULT_RUBBERBAND : 0
-
-  return {
-    enabled,
-    initial,
-    threshold: ensureVector(threshold, 0),
-    rubberband: ensureVector(rubberband, 0),
+export function resolveWith<T extends { [k: string]: any }, V extends { [k: string]: any }>(resolvers: { [k: string]: (x: any, key: string, obj: object) => any }, config: Partial<T> = {}): V {
+  const result: any = {}
+  for (let key in resolvers) {
+    const provided = config[key]
+    const resolver = resolvers[key]
+    result[key] = resolver(provided, key, result)
   }
+  return result;
+}
+
+
+
+const InternalGestureOptionsNormalizers =  {
+
+  threshold(v: number|Vector2|undefined, _k: string, _p: object): Vector2 {
+    return ensureVector(v, 0)
+  }, 
+
+  rubberband(v: number|boolean|Vector2|undefined, _k: string, _p: object): Vector2 {
+    if (Array.isArray(v)) return v
+    if (v === true ) return [ DEFAULT_RUBBERBAND, DEFAULT_RUBBERBAND ]
+    if (v === undefined || v === false) return [ 0, 0 ]
+    return [ v, v ]
+  },
+
+  enabled(v: boolean|undefined, _k: string, _p: object): boolean {
+    if (v === undefined) return true
+    return v
+  },
+
+  initial(v: Vector2|undefined, _k: string, _p: object): Vector2 {
+    if (v === undefined) return [0, 0]
+    return v
+  }
+
+}
+
+const InternalGenericOptionsNormalizers =  {
+
+  enabled(v: boolean|undefined, _k: string, _p: object) {
+    if (v === undefined) return true
+    return v
+  },
+
+  domTarget(v: any, _k: string, _p: object) {
+    return v
+  },
+
+  window(v: any, _k: string, _p: object) {
+    if (v) return v
+    return defaultWindow
+  },
+
+  eventOptions(v: any, _k: string, _p: object) {
+    if (!v) return { passive: true, capture: false }
+    const { passive = true, capture = false }  = v;
+    return { passive, capture }
+  },
+
+}
+
+
+
+export function getInternalGestureOptions(config: Partial<GestureOptions> = {}): InternalGestureOptions {
+  return resolveWith<GestureOptions, InternalGestureOptions>(InternalGestureOptionsNormalizers, config)
 }
 
 /**
  * @private
  *
  * Returns the internal generic option object.
- *
- * @param {Partial<GenericOptions>} [config={}]
- * @returns {InternalGenericOptions}
  */
 export function getInternalGenericOptions(config: Partial<GenericOptions> = {}): InternalGenericOptions {
-  let {
-    eventOptions: { passive = true, capture = false } = {},
-    window = defaultWindow,
-    domTarget = undefined,
-    enabled = true,
-  } = config
-
-  return {
-    enabled,
-    domTarget,
-    window,
-    // passive is always true if there's no domTarget
-    eventOptions: { passive: !domTarget || !!passive, capture: !!capture },
-    captureString: capture ? 'Capture' : '',
-  }
+  return resolveWith<GenericOptions, InternalGenericOptions>(InternalGenericOptionsNormalizers, config)
 }
 
 export function getInternalCoordinatesOptions(coordinatesConfig: CoordinatesConfig = {}): InternalCoordinatesOptions {
