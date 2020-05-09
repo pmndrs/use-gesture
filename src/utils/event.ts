@@ -77,11 +77,11 @@ export function getScrollEventValues(event: UseGestureEvent): Values {
  * @param event
  * @returns wheel event values
  */
-export function getWheelEventValues(event: UseGestureEvent<React.WheelEvent>): Values {
+export function getWheelEventValues(event: UseGestureEvent<React.WheelEvent>): Vector2 {
   const { deltaX, deltaY } = event
   //TODO implement polyfill ?
   // https://developer.mozilla.org/en-US/docs/Web/Events/wheel#Polyfill
-  return { values: [deltaX, deltaY] }
+  return [deltaX, deltaY]
 }
 
 /**

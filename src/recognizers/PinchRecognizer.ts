@@ -157,9 +157,7 @@ export default class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
   }
 
   private getWheelValuesFromEvent = (event: UseGestureEvent<WheelEvent>) => {
-    const {
-      values: [, delta_d],
-    } = getWheelEventValues(event)
+    const [, delta_d] = getWheelEventValues(event)
     const {
       values: [prev_d, prev_a],
     } = this.state

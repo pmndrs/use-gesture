@@ -10,37 +10,27 @@ export default class WheelRecognizer extends CoordinatesRecognizer<'wheel'> {
   readonly stateKey = 'wheel'
   debounced = true
 
-  private wheelShouldRun = (event: UseGestureEvent<WheelEvent>) => {
-    if (event.ctrlKey && 'pinch' in this.controller.handlers) return false
-    return this.enabled
-  }
-
-  private getValuesFromEvent = (event: UseGestureEvent<WheelEvent>) => {
-    const { values: prevValues } = this.state
-    const { values } = getWheelEventValues(event)
-    return { values: addV(values, prevValues) }
-  }
-
   handleEvent = (event: UseGestureEvent<WheelEvent>): void => {
-    if (!this.wheelShouldRun(event)) return
+    if (event.ctrlKey && 'pinch' in this.controller.handlers) return
+    if (!this.enabled) return
+    
     this.clearTimeout()
     this.setTimeout(this.onEnd)
 
     this.updateSharedState(getGenericEventData(event))
 
+    const values = addV(getWheelEventValues(event), this.state.values) 
+
     if (!this.state._active) {
-      this.onStart(event)
+      this.onStart(event, values)
     } else {
-      this.onChange(event)
+      this.onChange(event, values)
     }
 
     this.fireGestureHandler()
   }
 
-  onStart = (event: UseGestureEvent<WheelEvent>): void => {
-    const { values } = this.getValuesFromEvent(event)
-    
-
+  onStart = (event: UseGestureEvent<WheelEvent>, values: any): void => {
     const startState = {
       ...getStartGestureState(this, values, event),
       ...getGenericPayload(this, event, true),
@@ -57,9 +47,7 @@ export default class WheelRecognizer extends CoordinatesRecognizer<'wheel'> {
     })
   }
 
-  onChange = (event: UseGestureEvent<WheelEvent>): void => {
-    const { values } = this.getValuesFromEvent(event)
-
+  onChange = (event: UseGestureEvent<WheelEvent>, values: any): void => {
     this.updateGestureState({
       ...getGenericPayload(this, event),
       ...this.getKinematics(values, event),
