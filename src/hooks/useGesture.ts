@@ -1,9 +1,4 @@
 import useRecognizers from './useRecognizers'
-import DragRecognizer from '../recognizers/DragRecognizer'
-import WheelRecognizer from '../recognizers/WheelRecognizer'
-import MoveRecognizer from '../recognizers/MoveRecognizer'
-import PinchRecognizer from '../recognizers/PinchRecognizer'
-import ScrollRecognizer from '../recognizers/ScrollRecognizer'
 
 import {
   InternalConfig,
@@ -11,7 +6,6 @@ import {
   UserHandlersPartial,
   InternalHandlers,
   UserHandlers,
-  RecognizerClass,
   UseGestureConfig,
 } from '../types'
 import { buildComplexConfig } from './buildConfig'
@@ -60,16 +54,7 @@ export function useGesture<Config = UseGestureConfig>(_handlers: UserHandlersPar
   const [ handlers, nativeHandlers, actions ] = sortHandlers(_handlers)
 
   const mergedConfig: InternalConfig = buildComplexConfig(config, actions)
-
-  const classes = new Set<RecognizerClass>()
   const internalHandlers: Partial<InternalHandlers> = {}
-
-  if (actions.has('onDrag'))    classes.add(DragRecognizer)
-  if (actions.has('onWheel'))   classes.add(WheelRecognizer)
-  if (actions.has('onScroll'))  classes.add(ScrollRecognizer)
-  if (actions.has('onMove'))    classes.add(MoveRecognizer)
-  if (actions.has('onPinch'))   classes.add(PinchRecognizer)
-  if (actions.has('onHover'))   classes.add(MoveRecognizer)
 
   if (actions.has('onDrag'))      internalHandlers.drag   = includeStartEndHandlers(handlers, 'onDrag')
   if (actions.has('onWheel'))     internalHandlers.wheel  = includeStartEndHandlers(handlers, 'onWheel')
@@ -77,9 +62,13 @@ export function useGesture<Config = UseGestureConfig>(_handlers: UserHandlersPar
   if (actions.has('onMove'))      internalHandlers.move   = includeStartEndHandlers(handlers, 'onMove')
   if (actions.has('onPinch'))     internalHandlers.pinch  = includeStartEndHandlers(handlers, 'onPinch')
   if (actions.has('onHover'))     internalHandlers.hover  = handlers.onHover
-  
-  return useRecognizers<Config>(internalHandlers, classes, mergedConfig, nativeHandlers)
+
+  return useRecognizers<Config>(internalHandlers, mergedConfig, nativeHandlers)
 }
+
+
+
+
 /**
  * @private
  *

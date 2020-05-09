@@ -16,13 +16,6 @@ import {
   buildMoveConfig,
   buildPinchConfig,
 } from './buildConfig'
-
-import DragRecognizer from '../recognizers/DragRecognizer'
-import MoveRecognizer from '../recognizers/MoveRecognizer'
-import ScrollRecognizer from '../recognizers/ScrollRecognizer'
-import WheelRecognizer from '../recognizers/WheelRecognizer'
-import PinchRecognizer from '../recognizers/PinchRecognizer'
-
 /**
  * Drag hook.
  *
@@ -30,7 +23,7 @@ import PinchRecognizer from '../recognizers/PinchRecognizer'
  * @param [config={}] - the config object including generic options and drag options
  */
 export function useDrag<Config = UseDragConfig>(handler: Handler<'drag'>, config: Config | {} = {}) {
-  return useRecognizers<Config>({ drag: handler }, new Set([DragRecognizer]), buildDragConfig(config))
+  return useRecognizers<Config>({ drag: handler }, buildDragConfig(config))
 }
 
 /**
@@ -40,7 +33,7 @@ export function useDrag<Config = UseDragConfig>(handler: Handler<'drag'>, config
  * @param [config={}] - the config object including generic options and hover options
  */
 export function useHover<Config = UseHoverConfig>(handler: Handler<'hover'>, config: Config | {} = {}) {
-  return useRecognizers<Config>({ hover: handler }, new Set([MoveRecognizer]), buildHoverConfig(config))
+  return useRecognizers<Config>({ hover: handler }, buildHoverConfig(config))
 }
 
 /**
@@ -50,7 +43,7 @@ export function useHover<Config = UseHoverConfig>(handler: Handler<'hover'>, con
  * @param [config={}] - the config object including generic options and pinch options
  */
 export function usePinch<Config = UsePinchConfig>(handler: Handler<'pinch'>, config: Config | {} = {}) {
-  return useRecognizers<Config>({ pinch: handler }, new Set([PinchRecognizer]), buildPinchConfig(config))
+  return useRecognizers<Config>({ pinch: handler }, buildPinchConfig(config))
 }
 
 /**
@@ -60,7 +53,7 @@ export function usePinch<Config = UsePinchConfig>(handler: Handler<'pinch'>, con
  * @param [config={}] - the config object including generic options and scroll options
  */
 export function useScroll<Config = UseScrollConfig>(handler: Handler<'scroll'>, config: Config | {} = {}) {
-  return useRecognizers<Config>({ scroll: handler }, new Set([ScrollRecognizer]), buildScrollConfig(config))
+  return useRecognizers<Config>({ scroll: handler }, buildScrollConfig(config))
 }
 
 /**
@@ -70,7 +63,7 @@ export function useScroll<Config = UseScrollConfig>(handler: Handler<'scroll'>, 
  * @param the config object including generic options and wheel options
  */
 export function useWheel<Config = UseWheelConfig>(handler: Handler<'wheel'>, config: Config | {} = {}) {
-  return useRecognizers<Config>({ wheel: handler }, new Set([WheelRecognizer]), buildWheelConfig(config))
+  return useRecognizers<Config>({ wheel: handler }, buildWheelConfig(config))
 }
 
 /**
@@ -80,7 +73,7 @@ export function useWheel<Config = UseWheelConfig>(handler: Handler<'wheel'>, con
  * @param [config={}] - the config object including generic options and move options
  */
 export function useMove<Config = UseMoveConfig>(handler: Handler<'move'>, config: Config | {} = {}) {
-  return useRecognizers<Config>({ move: handler }, new Set([MoveRecognizer]), buildMoveConfig(config))
+  return useRecognizers<Config>({ move: handler }, buildMoveConfig(config))
 }
 
 export { useGesture } from './useGesture'
