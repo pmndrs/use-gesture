@@ -21,7 +21,6 @@ export default class MoveRecognizer extends CoordinatesRecognizer<'move'> {
 
   onMoveStart = (event: UseGestureEvent): void => {
     const values = getPointerEventValues(event)
-
     this.updateSharedState(getGenericEventData(event))
 
     this.updateGestureState({
@@ -29,15 +28,12 @@ export default class MoveRecognizer extends CoordinatesRecognizer<'move'> {
       ...getGenericPayload(this, event, true),
     })
 
-
     this.updateGestureState(this.getMovement(values))
     this.fireGestureHandler()
   }
 
   onMoveChange = (event: UseGestureEvent): void => {
-    const genericEventData = getGenericEventData(event)
-
-    this.updateSharedState(genericEventData)
+    this.updateSharedState(getGenericEventData(event))
 
     const values = getPointerEventValues(event)
     const kinematics = this.getKinematics(values, event)
@@ -51,9 +47,7 @@ export default class MoveRecognizer extends CoordinatesRecognizer<'move'> {
   }
 
   onMoveEnd = (): void => {
-    this.state._active = false
-
-    this.updateGestureState({ ...this.getMovement(this.state.values), velocities: [0, 0], velocity: 0 })
+    this.updateGestureState({ ...this.getMovement(this.state.values), velocities: [0, 0], velocity: 0, _active: false })
     this.fireGestureHandler()
   }
 
