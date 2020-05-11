@@ -1,6 +1,6 @@
 import { TouchEvent, WheelEvent } from 'react'
 import DistanceAngleRecognizer from './DistanceAngleRecognizer'
-import { UseGestureEvent, IngKey, Vector2, WebKitGestureEvent } from '../types'
+import { UseGestureEvent, Vector2, WebKitGestureEvent } from '../types'
 import {
   getGenericEventData,
   getTwoTouchesEventData,
@@ -12,7 +12,7 @@ import { getStartGestureState, getGenericPayload } from './Recognizer'
 import { addBindings } from '../Controller'
 
 export default class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
-  readonly ingKey = 'pinching' as IngKey
+  readonly ingKey = 'pinching'
   readonly stateKey = 'pinch'
 
   private pinchShouldStart = (event: UseGestureEvent) => {
@@ -165,7 +165,6 @@ export default class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
 
   onWheel = (event: UseGestureEvent<WheelEvent>): void => {
     if (!this.wheelShouldRun(event)) return
-    this.clearTimeout()
     this.setTimeout(this.onWheelEnd)
 
     if (!this.state._active) this.onWheelStart(event)
@@ -185,19 +184,17 @@ export default class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
 
     this.updateSharedState(getGenericEventData(event))
 
+    
     this.updateGestureState({
       ...getStartGestureState(this, values, event),
       ...getGenericPayload(this, event, true),
       initial: this.state.values,
-    })
-
-    this.updateGestureState({
-      ...this.getMovement(values),
       offset: values,
       delta,
       origin,
     })
 
+    this.updateGestureState(this.getMovement(values))
     this.fireGestureHandler()
   }
 

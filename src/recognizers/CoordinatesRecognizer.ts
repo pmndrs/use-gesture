@@ -21,12 +21,11 @@ export default abstract class CoordinatesRecognizer<T extends CoordinatesKey> ex
    */
   protected checkIntentionality(
     _intentional: [false | number, false | number],
-    _movement: Vector2,
-    state: PartialGestureState<T>
+    _movement: Vector2
   ): PartialGestureState<T> {
     let [_ix, _iy] = _intentional
     const intentionalMovement = _ix !== false || _iy !== false
-    let { axis } = state
+    let { axis } = this.state
     let _blocked = false
 
     // If the movement is intentional, we can compute axis.

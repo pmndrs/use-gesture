@@ -1,19 +1,18 @@
 import {} from 'react'
 import CoordinatesRecognizer from './CoordinatesRecognizer'
-import { UseGestureEvent, IngKey } from '../types'
+import { UseGestureEvent } from '../types'
 import { getGenericEventData, getPointerEventValues } from '../utils/event'
 import { getStartGestureState, getGenericPayload } from './Recognizer'
 import { addBindings } from '../Controller'
 
 export default class MoveRecognizer extends CoordinatesRecognizer<'move'> {
-  readonly ingKey = 'moving' as IngKey
+  readonly ingKey = 'moving'
   readonly stateKey = 'move'
 
   debounced = true
 
   onMove = (event: UseGestureEvent): void => {
     if (!this.enabled) return
-    this.clearTimeout()
     this.setTimeout(this.onMoveEnd)
 
     if (!this.state._active) this.onMoveStart(event)

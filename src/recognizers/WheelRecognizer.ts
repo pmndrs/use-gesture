@@ -1,13 +1,13 @@
 import { WheelEvent } from 'react'
 import CoordinatesRecognizer from './CoordinatesRecognizer'
-import { UseGestureEvent, IngKey } from '../types'
+import { UseGestureEvent } from '../types'
 import { getWheelEventValues, getGenericEventData } from '../utils/event'
 import { addV, calculateAllGeometry } from '../utils/math'
 import { getStartGestureState, getGenericPayload } from './Recognizer'
 import { addBindings } from '../Controller'
 
 export default class WheelRecognizer extends CoordinatesRecognizer<'wheel'> {
-  readonly ingKey = 'wheeling' as IngKey
+  readonly ingKey = 'wheeling'
   readonly stateKey = 'wheel'
   debounced = true
 
@@ -15,41 +15,31 @@ export default class WheelRecognizer extends CoordinatesRecognizer<'wheel'> {
     if (event.ctrlKey && 'pinch' in this.controller.handlers) return
     if (!this.enabled) return
 
-    this.clearTimeout()
     this.setTimeout(this.onEnd)
-
     this.updateSharedState(getGenericEventData(event))
 
     const values = addV(getWheelEventValues(event), this.state.values) 
 
     if (!this.state._active) {
-      this.onStart(event, values)
+      this.updateGestureState({
+        ...getStartGestureState(this, values, event),
+        ...getGenericPayload(this, event, true),
+        initial: this.state.values,
+      })
+  
+      const movement = this.getMovement(values)
+      const geometry = calculateAllGeometry(movement.delta!)
+  
+      this.updateGestureState(movement)
+      this.updateGestureState(geometry)
     } else {
-      this.onChange(event, values)
+      this.updateGestureState({
+        ...getGenericPayload(this, event),
+        ...this.getKinematics(values, event),
+      })
     }
 
     this.fireGestureHandler()
-  }
-
-  onStart = (event: UseGestureEvent<WheelEvent>, values: any): void => {
-    this.updateGestureState({
-      ...getStartGestureState(this, values, event),
-      ...getGenericPayload(this, event, true),
-      initial: this.state.values,
-    })
-
-    const movement = this.getMovement(values)
-    const geometry = calculateAllGeometry(movement.delta!)
-
-    this.updateGestureState(movement)
-    this.updateGestureState(geometry)
-  }
-
-  onChange = (event: UseGestureEvent<WheelEvent>, values: any): void => {
-    this.updateGestureState({
-      ...getGenericPayload(this, event),
-      ...this.getKinematics(values, event),
-    })
   }
 
   onEnd = (): void => {

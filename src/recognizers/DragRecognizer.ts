@@ -1,5 +1,5 @@
 import CoordinatesRecognizer from './CoordinatesRecognizer'
-import { Fn, IngKey } from '../types'
+import { Fn } from '../types'
 import { getPointerEventValues, getGenericEventData } from '../utils/event'
 import { calculateDistance } from '../utils/math'
 import { getStartGestureState, getGenericPayload } from './Recognizer'
@@ -9,7 +9,8 @@ export const TAP_DISTANCE_THRESHOLD = 3
 export const SWIPE_MAX_ELAPSED_TIME = 220
 
 export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
-  readonly ingKey = 'dragging' as IngKey
+
+  readonly ingKey = 'dragging'
   readonly stateKey = 'drag'
   
 

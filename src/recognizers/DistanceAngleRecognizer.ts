@@ -7,9 +7,7 @@ import { Vector2, UseGestureEvent, PartialGestureState, DistanceAngleKey, Gestur
  * Abstract class for distance/angle-based gesture recongizers
  */
 export default abstract class DistanceAngleRecognizer<T extends DistanceAngleKey> extends Recognizer<T> {
-  /**
-   * Returns the real movement (without taking intentionality into acount)
-   */
+
   protected getInternalMovement(values: [number, number?], state: GestureState<T>): Vector2 {
     const prev_a = state.values[1]
     // not be defined if ctrl+wheel is used for zoom only
