@@ -23,24 +23,25 @@ export default abstract class CoordinatesRecognizer<T extends CoordinatesKey> ex
     _intentional: [false | number, false | number],
     _movement: Vector2
   ): PartialGestureState<T> {
-    let [_ix, _iy] = _intentional
-    const intentionalMovement = _ix !== false || _iy !== false
-    let { axis } = this.state
+    if (_intentional[0] === false && _intentional[1] === false) {
+      return { _intentional, axis: this.state.axis } as PartialGestureState<T>
+    }
+    
+    const [absX, absY] = _movement.map(Math.abs)
+    
+    const lockDirection = this.config.lockDirection
+    const configAxis    = this.config.axis
+    
+    // We make sure we only set axis value if it hadn't been detected before.
+    const axis = this.state.axis || (absX > absY ? 'x' : absX < absY ? 'y' : undefined)
+    
     let _blocked = false
-
-    // If the movement is intentional, we can compute axis.
-    if (intentionalMovement) {
-      const [absX, absY] = _movement.map(Math.abs)
-
-      const { axis: configAxis, lockDirection } = this.config
-
-      // We make sure we only set axis value if it hadn't been detected before.
-      axis = axis || (absX > absY ? 'x' : absX < absY ? 'y' : undefined)
-      if (!!configAxis || lockDirection) {
+    if (!!configAxis || lockDirection) {
         if (!!axis) {
           // If the detected axis doesn't match the config axis we block the gesture
-          if (!!configAxis && axis !== configAxis) _blocked = true
-          else {
+          if (!!configAxis && axis !== configAxis) {
+            _blocked = true
+          } else {
             // Otherwise we prevent the gesture from updating the unwanted axis.
             const lockedIndex = axis === 'x' ? 1 : 0
             _intentional![lockedIndex] = false
@@ -49,9 +50,7 @@ export default abstract class CoordinatesRecognizer<T extends CoordinatesKey> ex
           // Until we've detected the axis, we prevent the hnadler from updating.
           _intentional = [false, false]
         }
-      }
     }
-
     return { _intentional, _blocked, axis } as PartialGestureState<T>
   }
 

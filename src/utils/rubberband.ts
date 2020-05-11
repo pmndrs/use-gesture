@@ -19,12 +19,7 @@ function rubberband(distance: number, dimension: number, constant: number) {
 
 export function rubberbandIfOutOfBounds(position: number, min: number, max: number, constant = 0.15) {
   if (constant === 0) return minMax(position, min, max)
-
-  if (position < min) {
-    return -rubberband(min - position, max - min, constant) + min
-  }
-  if (position > max) {
-    return rubberband(position - max, max - min, constant) + max
-  }
+  if (position < min) return -rubberband(min - position, max - min, constant) + min
+  if (position > max) return +rubberband(position - max, max - min, constant) + max
   return position
 }
