@@ -9,14 +9,32 @@ export const TAP_DISTANCE_THRESHOLD = 3
 export const SWIPE_MAX_ELAPSED_TIME = 220
 
 export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
-
   readonly ingKey = 'dragging'
   readonly stateKey = 'drag'
-  
+
+  /**
+   * TODO add back when setPointerCapture is widely wupported
+   * https://caniuse.com/#search=setPointerCapture
+   * private setPointers = (event: UseGestureEvent<PointerEvent>) => {
+   *   const { currentTarget, pointerId } = event
+   *   if (currentTarget) currentTarget.setPointerCapture(pointerId)
+   *   this.updateGestureState({ currentTarget, pointerId })
+   * }
+
+   * private removePointers = () => {
+   *   const { currentTarget, pointerId } = this.state
+   *   if (currentTarget && pointerId) currentTarget.releasePointerCapture(pointerId)
+   * }
+   */
 
   onDragStart = (event: React.PointerEvent): void => {
     if (!this.enabled || this.state._active) return
-    
+
+    /**
+     * TODO add back when setPointerCapture is widely supported
+     * this.setPointers(event as PointerEvent)
+     */
+
     this.controller.removeWindowListeners(this.stateKey)
     const dragListeners: [string, Fn][] = [
       ['pointermove', this.onDragChange],
@@ -28,7 +46,6 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
     // We set the state pointerId to the event.pointerId so we can make sure
     // that we lock the drag to the event initiating the gesture
     this.updateGestureState({ _pointerId: event.pointerId })
-
 
     if (this.config.delay > 0) {
       this.state._delayedEvent = true
@@ -48,9 +65,8 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
       ...getStartGestureState(this, values, event),
       ...getGenericPayload(this, event, true),
       _pointerId: event.pointerId,
-      cancel: this.onCancel
+      cancel: this.onCancel,
     })
-
 
     this.updateGestureState(this.getMovement(values))
     this.fireGestureHandler()
@@ -116,7 +132,7 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
     const [mx, my] = this.state.movement
     const [ix, iy] = this.state._intentional
     const [svx, svy] = this.config.swipeVelocity
-    const [ sx, sy ] = this.config.swipeDistance
+    const [sx, sy] = this.config.swipeDistance
 
     const endState = {
       ...getGenericPayload(this, event),
@@ -138,6 +154,9 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
     super.clean()
     this.state._delayedEvent = false // can't remember if this is useful?
     this.controller.removeWindowListeners(this.stateKey)
+
+    // TODO add back when setPointerCapture is widely wupported
+    // this.removePointers()
   }
 
   onCancel = (): void => {
@@ -150,6 +169,10 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
 
   addBindings(bindings: any): void {
     addBindings(bindings, 'onPointerDown', this.onDragStart)
-  }
 
+    // TODO add back when setPointerCapture is widely wupported
+    // addBindings(bindings, 'onPointerMove', this.onDragChange)
+    // addBindings(bindings, 'onPointerUp', this.onDragEnd)
+    // addBindings(bindings, 'onPointerCancel', this.onDragEnd)
+  }
 }
