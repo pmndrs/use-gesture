@@ -31,7 +31,7 @@ export default class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
       ...getStartGestureState(this, values, event),
       ...getGenericPayload(this, event, true),
       cancel: this.onCancel,
-      origin
+      origin,
     })
 
     this.updateGestureState(this.getMovement(values))
@@ -39,10 +39,9 @@ export default class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
   }
 
   onPinchChange = (event: UseGestureEvent<TouchEvent>): void => {
-    const { canceled, timeStamp, _active } = this.state
+    const { canceled, _active } = this.state
     if (canceled || !_active) return
     const genericEventData = getGenericEventData(event)
-    if (genericEventData.touches !== 2 || event.timeStamp === timeStamp) return
 
     this.updateSharedState(genericEventData)
 
@@ -52,7 +51,7 @@ export default class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
     this.updateGestureState({
       ...getGenericPayload(this, event),
       ...kinematics,
-      origin
+      origin,
     })
 
     this.fireGestureHandler()
@@ -89,13 +88,12 @@ export default class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
     const values = getWebkitGestureEventValues(event)
 
     this.updateSharedState(getGenericEventData(event))
-  
+
     this.updateGestureState({
       ...getStartGestureState(this, values, event),
       ...getGenericPayload(this, event, true),
       cancel: this.onCancel,
     })
-
 
     this.updateGestureState(this.getMovement(values))
     this.fireGestureHandler()
@@ -116,7 +114,7 @@ export default class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
 
     this.updateGestureState({
       ...getGenericPayload(this, event),
-      ...kinematics
+      ...kinematics,
     })
 
     this.fireGestureHandler()
@@ -184,7 +182,6 @@ export default class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
 
     this.updateSharedState(getGenericEventData(event))
 
-    
     this.updateGestureState({
       ...getStartGestureState(this, values, event),
       ...getGenericPayload(this, event, true),
