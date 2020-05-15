@@ -2,7 +2,6 @@ import { Fn, EventOptions, UseGestureEvent, Vector2, WebKitGestureEvent } from '
 
 const WEBKIT_DISTANCE_SCALE_FACTOR = 260
 
-
 /**
  * Whether the browser supports GestureEvent (ie Safari)
  * @returns true if the browser supports gesture event
@@ -47,8 +46,8 @@ export function getModifierKeys({ shiftKey, altKey, metaKey, ctrlKey }: UseGestu
 
 function getTouchEvents(event: UseGestureEvent) {
   if ('touches' in event) {
-    const { touches, changedTouches } = event
-    return touches.length > 0 ? touches : changedTouches
+    const { targetTouches, changedTouches } = event
+    return targetTouches.length > 0 ? targetTouches : changedTouches
   }
   return null
 }
@@ -93,9 +92,8 @@ export function getWheelEventValues(event: UseGestureEvent<React.WheelEvent>): V
 export function getPointerEventValues(event: React.MouseEvent | React.TouchEvent | React.PointerEvent): Vector2 {
   const touchEvents = getTouchEvents(event)
   const { clientX, clientY } = touchEvents ? touchEvents[0] : (event as React.PointerEvent)
-  return [ clientX, clientY ] 
+  return [clientX, clientY]
 }
-
 
 /**
  * Gets webkit gesture event values.
@@ -103,7 +101,7 @@ export function getPointerEventValues(event: React.MouseEvent | React.TouchEvent
  * @returns webkit gesture event values
  */
 export function getWebkitGestureEventValues(event: WebKitGestureEvent): Vector2 {
-  return [ event.scale * WEBKIT_DISTANCE_SCALE_FACTOR, event.rotation ]
+  return [event.scale * WEBKIT_DISTANCE_SCALE_FACTOR, event.rotation]
 }
 
 /**
@@ -111,9 +109,9 @@ export function getWebkitGestureEventValues(event: WebKitGestureEvent): Vector2 
  * @param event
  * @returns two touches event data
  */
-export function getTwoTouchesEventData({ touches }: React.TouchEvent) {
-  const A = touches[0],
-    B = touches[1]
+export function getTwoTouchesEventData({ targetTouches }: React.TouchEvent) {
+  const A = targetTouches[0],
+    B = targetTouches[1]
 
   const dx = B.clientX - A.clientX
   const dy = B.clientY - A.clientY
