@@ -4,23 +4,24 @@ import { useGesture } from 'react-use-gesture'
 import styles from './styles.module.css'
 
 export default function Issue() {
-  const [style, set] = useSpring(() => ({ x: 0, y: 0, scale: 1 }))
+  const [style, set] = useSpring(() => ({ x: 0, y: 0, scale: 1, rotateZ: 0 }))
   const [style2, set2] = useSpring(() => ({ x: 0, y: 0, scale: 1 }))
 
-  const bind = useGesture(
-    {
-      onDrag: ({ down, offset: [x, y], tap }) => {
-        console.log({ tap })
-        set({ scale: down ? 1.2 : 1, x, y })
-      },
+  const bind = useGesture({
+    onDrag: ({ pinching, cancel, down, offset: [x, y], tap }) => {
+      // if (pinching) {
+      //   cancel()
+      //   return
+      // }
+      set({ scale: down ? 1.2 : 1, x, y })
     },
-    { drag: { filterTaps: true } }
-  )
+    onPinch: ({ offset: [d, a] }) => {
+      set({ scale: 1 + d / 200, rotateZ: a })
+    },
+  })
 
   const bind2 = useGesture({
     onDrag: ({ down, offset: [x, y], tap }) => {
-      console.log('2', { tap })
-
       set2({ scale: down ? 1.2 : 1, x, y })
     },
   })
@@ -28,7 +29,7 @@ export default function Issue() {
   return (
     <>
       <animated.div {...bind()} className={styles.drag} style={style}></animated.div>
-      <animated.div {...bind2()} className={styles.drag} style={style2}></animated.div>
+      <animated.div {...bind2()} className={styles.drag} style={{ ...style2, background: 'hotpink' }}></animated.div>
     </>
   )
 }

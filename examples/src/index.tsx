@@ -84,7 +84,6 @@ function App() {
     <Router>
       <NotFound path="404" />
       <List path="/" />
-      <Issues path="issues" />
       <Page path="issues/:id" />
       <Page path="/:id" />
     </Router>
