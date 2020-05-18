@@ -24,7 +24,7 @@ export default function ActionSheet() {
       if (first) draggingRef.current = true
       // if this is not the first or last frame, it's a moving frame
       // then it means the user is dragging
-      else if (last) draggingRef.current = false
+      else if (last) setTimeout(() => (draggingRef.current = false), 0)
 
       // if the user drags up passed a threshold, then we cancel
       // the drag so that the sheet resets to its open position
