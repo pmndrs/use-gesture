@@ -8,5 +8,6 @@ export { default as infiniteSlideshow } from './infinite-slideshow'
 export { default as three } from './threejs'
 export { default as docsExample } from './docs-example'
 export { default as pinch } from './pinch'
+export { default as filterTaps } from './filterTaps'
 
 // TODO possibly add domTarget site-wide option to test domTarget for all examples
