@@ -223,6 +223,9 @@ describe.each([
     expect(getByTestId(`${prefix}drag-tap`)).toHaveTextContent('false')
   })
 
+  // TODO add a test to verify underlying children's onClick handler is not triggered
+  // when filterTaps is true
+
   test(`filtering clicks should fire a click if pointer has moved less than 3px`, async () => {
     let event = createEvent.pointerDown(element, { clientX: 0, clientY: 0, pointerId: 14 })
     fireEvent(element, event)
