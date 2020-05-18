@@ -167,8 +167,16 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
     requestAnimationFrame(() => this.fireGestureHandler())
   }
 
+  onClick = (event: React.PointerEvent): void => {
+    if (!this.state._isTap) event.stopPropagation()
+  }
+
   addBindings(bindings: any): void {
     addBindings(bindings, 'onPointerDown', this.onDragStart)
+    if (this.config.filterTaps) {
+      const handler = this.controller.config.eventOptions.capture ? 'onClick' : 'onClickCapture'
+      addBindings(bindings, handler, this.onClick)
+    }
 
     // TODO add back when setPointerCapture is widely wupported
     // addBindings(bindings, 'onPointerMove', this.onDragChange)

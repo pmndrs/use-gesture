@@ -185,6 +185,10 @@ export interface ReactEventHandlers {
   onGestureStart?: Fn
   onGestureChange?: Fn
   onGestureEnd?: Fn
+
+  // onClick for drag / filterTaps
+  onClick?: Fn
+  onClickCapture?: Fn
 }
 
 export type ReactEventHandlerKey = keyof ReactEventHandlers
