@@ -28,7 +28,7 @@ import ScrollRecognizer from '../recognizers/ScrollRecognizer'
 export default function useRecognizers<Config extends Partial<GenericOptions>>(
   handlers: Partial<InternalHandlers>,
   config: InternalConfig,
-  nativeHandlers?: NativeHandlersPartial
+  nativeHandlers: NativeHandlersPartial = {}
 ): (...args: any[]) => HookReturnType<Config> {
 
   const classes = resolveClasses(handlers)

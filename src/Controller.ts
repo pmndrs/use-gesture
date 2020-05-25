@@ -8,14 +8,13 @@ import {
   InternalConfig,
   InternalHandlers,
   RecognizerClass,
-  NativeHandlersPartial,
 } from './types'
 import { getInitialState } from './utils/state'
 import { chainFns } from './utils/utils'
 
 type GestureTimeouts = Partial<{ [stateKey in StateKey]: number }>
 type WindowListeners = Partial<{ [stateKey in StateKey]: [string, Fn][] }>
-type Bindings = Partial<{ [eventName in ReactEventHandlerKey]: Fn[] }>
+//type Bindings = Partial<{ [eventName in ReactEventHandlerKey]: Fn[] }>
 
 /**
  * The controller will keep track of the state for all gestures and also keep
@@ -38,15 +37,11 @@ export default class Controller {
     }
 
     // we also add event bindings for native handlers
-    if (this.nativeRefs) {
-      for (let eventName in this.nativeRefs)
-        addBindings(
-          this.bindings,
-          eventName as ReactEventHandlerKey,
-          // @ts-ignore we're cheating when it comes to event type :(
-          this.nativeRefs[eventName] as Fn
-        )
-    }
+    for (let eventName in this.nativeRefs)
+        addBindings(this.bindings,
+          eventName,
+          this.nativeRefs[eventName]
+      )
 
     // If config.domTarget is set we add event listeners to it and return the clean function.
     if (this.isDomTargetDefined) return
@@ -73,14 +68,14 @@ export default class Controller {
     return this.clean
   }
 
-  public nativeRefs?: NativeHandlersPartial
+  public nativeRefs!: any
   public config!: InternalConfig
   public handlers!: Partial<InternalHandlers>
   public state: State = getInitialState() // state for all gestures
   public timeouts: GestureTimeouts = {} // keeping track of timeouts for debounced gestures (such as move, scroll, wheel)
   private domListeners: [string, Fn][] = [] // when config.domTarget is set, we attach events directly to the dom
   private windowListeners: WindowListeners = {} // keeps track of window listeners added by gestures (drag only at the moment)
-  private bindings: Bindings = {} // an object holding the handlers associated to the gestures
+  private bindings: any = {} // an object holding the handlers associated to the gestures
 
   /**
    * Function ran on component unmount: cleans timeouts and removes dom listeners set by the bind function.
@@ -154,7 +149,7 @@ export default class Controller {
    * added recognizer, we need to make sure that each event key is an array of all the functions mapped for
    * that key.
    */
-  public addBindings = (eventNames: ReactEventHandlerKey | ReactEventHandlerKey[], fn: Fn): void => {
+  public addBindings = (eventNames: string | string[], fn: Fn): void => {
     const eventNamesArray = !Array.isArray(eventNames) ? [eventNames] : eventNames
     eventNamesArray.forEach(eventName => {
       if (this.bindings[eventName]) this.bindings[eventName]!.push(fn)
@@ -174,7 +169,7 @@ export default class Controller {
    * added recognizer, we need to make sure that each event key is an array of all the functions mapped for
    * that key.
    */
-  export function addBindings(bindings: any, eventNames: ReactEventHandlerKey | ReactEventHandlerKey[], fn: Fn): void  {
+  export function addBindings(bindings: any, eventNames: string | string[], fn: Fn): void  {
     const eventNamesArray = !Array.isArray(eventNames) ? [eventNames] : eventNames
     eventNamesArray.forEach(eventName => {
       if (bindings[eventName]) {
