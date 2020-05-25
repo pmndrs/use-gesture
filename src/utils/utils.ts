@@ -26,18 +26,16 @@ export function chainFns(...fns: Function[]): Function {
  *
  * @param value
  */
-export function ensureVector<T>(value: T | [T, T] | undefined, fallback?: T | [T, T]): [T, T] {
+export function ensureVector<T>(value: T | [T, T]  | undefined, fallback?: T | [T, T]): [T, T]  {
   if (value === undefined) {
     if (fallback === undefined) {
       throw new Error('Must define fallback value if undefined is expected')
     }
     value = fallback
   }
-  if (!Array.isArray(value)) {
-    return [value, value]
-  } else {
-    return value
-  }
+
+  if (Array.isArray(value)) return value
+  return [value, value]
 }
 
 /**

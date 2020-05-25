@@ -1,4 +1,6 @@
 import { ensureVector, assignDefault } from './utils'
+import { resolveWith } from './resolveOptionsWith'
+
 import {
   GenericOptions,
   InternalGenericOptions,
@@ -18,44 +20,23 @@ export const DEFAULT_RUBBERBAND = 0.15
 export const DEFAULT_SWIPE_VELOCITY = 0.5
 export const DEFAULT_SWIPE_DISTANCE = 60
 
-const defaultWindow = typeof window !== 'undefined' ? window : undefined
-
-type Resolver = (x: any, key: string, obj: object) => any;
-type ResolverMap = { [k: string]: Resolver | ResolverMap|boolean }
-
-export function resolveWith<T extends { [k: string]: any }, V extends { [k: string]: any }>(config: Partial<T> = {}, resolvers: ResolverMap): V {
-  const result: any = {}
-
-  for (const [key, resolver] of Object.entries(resolvers)) switch (typeof resolver) {
-    case "function": result[key] = resolver(config[key], key, config); break;
-    case "object"  : result[key] = resolveWith(config[key], resolver); break;
-    case "boolean" : if (resolver) result[key] = config[key]; break;
-  }
-
-  return result;
-}
-
-
 
 const InternalGestureOptionsNormalizers = {
 
-  threshold(v: number | Vector2 | undefined, _k: string, _p: object): Vector2 {
-    return ensureVector(v, 0)
+  threshold(v: number | Vector2 = 0, _k: string, _p: object) {
+    return ensureVector(v)
   },
 
-  rubberband(v: number | boolean | Vector2 | undefined, _k: string, _p: object): Vector2 {
-    if (Array.isArray(v)) return v
-    if (v === true) return [DEFAULT_RUBBERBAND, DEFAULT_RUBBERBAND]
-    if (v === undefined || v === false) return [0, 0]
-    return [v, v]
+  rubberband(v: number | boolean | Vector2 = 0): Vector2 {
+    if (v === true)  v = DEFAULT_RUBBERBAND;
+    if (v === false) v = 0;
+    return ensureVector(v)
   },
 
-  enabled(value = true): boolean {
-    return value
-  },
-
-  initial(value = [ 0, 0 ] as Vector2): Vector2 {
-    return value
+  enabled(value = true) { return value },
+  initial(value = 0) {
+    if (typeof value === "function") return value;
+    return ensureVector(value)
   }
 }
 
@@ -77,7 +58,7 @@ const InternalGenericOptionsNormalizers = {
     return value 
   },
   domTarget: true,
-  window(value = defaultWindow) { 
+  window(value = typeof window !== 'undefined' ? window : undefined) { 
     return value 
   },
   eventOptions({ passive = true, capture = false } = {}) {
@@ -90,14 +71,33 @@ const InternalDistanceAngleOptionsNormalizers = {
   ...InternalGestureOptionsNormalizers,
 
   bounds(_value: undefined, _key: string, { distanceBounds = {}, angleBounds = {} }: any = {}) {
-    distanceBounds = assignDefault(distanceBounds, { min: -Infinity, max: Infinity })
-    angleBounds    = assignDefault(angleBounds,    { min: -Infinity, max: Infinity })
-
-    return [
-      [distanceBounds.min, distanceBounds.max],
-      [angleBounds.min, angleBounds.max],
-    ]
+    const D = assignDefault(distanceBounds, { min: -Infinity, max: Infinity })
+    const A = assignDefault(angleBounds,    { min: -Infinity, max: Infinity })
+    return [[D.min, D.max], [A.min, A.max]]
   }
+}
+
+const InternalDragOptionsNormalizers = {
+    
+  ...InternalCoordinatesOptionsNormalizers,
+
+  threshold(this: any, v: number | Vector2 | undefined, _k: string, { filterTaps = false, lockDirection = false, axis = undefined  }: any) {
+    const A = ensureVector(v, filterTaps ? 3 : lockDirection ? 1 : axis ? 1 : 0) as Vector2;
+    this.filterTaps = filterTaps || (A[0] + A[1] > 0)
+    return A
+  },
+
+  swipeVelocity(v: number | Vector2 = DEFAULT_SWIPE_VELOCITY) { return ensureVector(v) },
+  swipeDistance(v: number | Vector2 = DEFAULT_SWIPE_DISTANCE) { return ensureVector(v) },
+
+  delay(value: number|boolean = 0) {
+    switch (value) {
+      case true : return DEFAULT_DRAG_DELAY;
+      case false: return 0;
+      default: return value
+    }
+  }
+
 }
 
 
@@ -115,46 +115,6 @@ export function getInternalCoordinatesOptions(config: CoordinatesConfig = {}): I
 export function getInternalDistanceAngleOptions(config: DistanceAngleConfig = {}): InternalDistanceAngleOptions {
   return resolveWith<DistanceAngleConfig, InternalDistanceAngleOptions>(config, InternalDistanceAngleOptionsNormalizers)
 }
-
-export function getInternalDragOptions(dragConfig: DragConfig = {}): InternalDragOptions {
-  let {
-    enabled,
-    threshold,
-    bounds,
-    rubberband,
-    initial,
-    swipeVelocity = DEFAULT_SWIPE_VELOCITY,
-    swipeDistance = DEFAULT_SWIPE_DISTANCE,
-    delay = false,
-    filterTaps = false,
-    axis,
-    lockDirection,
-  } = dragConfig
-
-  if (delay === true) delay = DEFAULT_DRAG_DELAY
-  if (delay === false) delay = 0
-
-  if (threshold === undefined) {
-    threshold = Math.max(0, filterTaps ? 3 : 0, lockDirection || axis ? 1 : 0)
-  } else {
-    filterTaps = true
-  }
-
-  const internalCoordinatesOptions = getInternalCoordinatesOptions({
-    enabled,
-    threshold,
-    bounds,
-    rubberband,
-    axis,
-    lockDirection,
-    initial,
-  })
-
-  return {
-    ...internalCoordinatesOptions,
-    filterTaps: filterTaps || internalCoordinatesOptions.threshold[0] + internalCoordinatesOptions.threshold[1] > 0,
-    swipeVelocity: ensureVector(swipeVelocity),
-    swipeDistance: ensureVector(swipeDistance),
-    delay,
-  }
+export function getInternalDragOptions(config: DragConfig = {}): InternalDragOptions {
+  return resolveWith<DragConfig, InternalDragOptions>(config, InternalDragOptionsNormalizers)
 }
