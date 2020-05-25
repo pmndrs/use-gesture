@@ -23,17 +23,22 @@ export const DEFAULT_SWIPE_DISTANCE = 60
 
 const InternalGestureOptionsNormalizers = {
 
-  threshold(v: number | Vector2 = 0, _k: string, _p: object) {
-    return ensureVector(v)
+  threshold(value:number|Vector2 = 0) {
+    return ensureVector(value)
   },
 
-  rubberband(v: number | boolean | Vector2 = 0): Vector2 {
-    if (v === true)  v = DEFAULT_RUBBERBAND;
-    if (v === false) v = 0;
-    return ensureVector(v)
+  rubberband(value: number|boolean|Vector2 = 0): Vector2 {
+    switch (value) {
+      case true : return ensureVector(DEFAULT_RUBBERBAND)
+      case false: return ensureVector(0)
+      default   : return ensureVector(value)
+    }
   },
 
-  enabled(value = true) { return value },
+  enabled(value = true) {
+    return value 
+  },
+  
   initial(value = 0) {
     if (typeof value === "function") return value;
     return ensureVector(value)
