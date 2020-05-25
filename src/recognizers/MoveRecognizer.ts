@@ -1,4 +1,3 @@
-import {} from 'react'
 import CoordinatesRecognizer from './CoordinatesRecognizer'
 import { UseGestureEvent } from '../types'
 import { getGenericEventData, getPointerEventValues } from '../utils/event'

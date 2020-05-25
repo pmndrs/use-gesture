@@ -1,4 +1,4 @@
-import { Fn, EventOptions, UseGestureEvent, Vector2, WebKitGestureEvent } from '../types'
+import { UseGestureEvent, Vector2, WebKitGestureEvent } from '../types'
 
 const WEBKIT_DISTANCE_SCALE_FACTOR = 260
 
@@ -16,33 +16,6 @@ export function supportsGestureEvents(): boolean {
   }
 }
 
-export function addListeners(el: EventTarget, listeners: Array<[string, Fn]>, options: EventOptions) {
-  for (let [eventName, eventHandler] of listeners) {
-    el.addEventListener(eventName, eventHandler, options)
-  }
-}
-
-export function removeListeners(el: EventTarget, listeners: Array<[string, Fn]>, options: EventOptions) {
-  for (let [eventName, eventHandler] of listeners) {
-    el.removeEventListener(eventName, eventHandler, options)
-  }
-}
-
-interface ModifierKeys {
-  shiftKey: boolean
-  altKey: boolean
-  metaKey: boolean
-  ctrlKey: boolean
-}
-
-/**
- * Gets modifier keys from event
- * @param event
- * @returns modifier keys
- */
-export function getModifierKeys({ shiftKey, altKey, metaKey, ctrlKey }: UseGestureEvent): ModifierKeys {
-  return { shiftKey, altKey, metaKey, ctrlKey }
-}
 
 function getTouchEvents(event: UseGestureEvent) {
   if ('touches' in event) {
@@ -57,7 +30,9 @@ export function getGenericEventData(event: React.MouseEvent | React.TouchEvent |
   const touchEvents = getTouchEvents(event)
   const touches = (touchEvents && touchEvents.length) || 0
   const down = touches > 0 || buttons > 0
-  return { touches, down, buttons, ...getModifierKeys(event) }
+
+  const { shiftKey, altKey, metaKey, ctrlKey } = event;
+  return { touches, down, buttons, shiftKey, altKey, metaKey, ctrlKey }
 }
 
 /**

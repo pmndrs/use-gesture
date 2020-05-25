@@ -1,4 +1,5 @@
 import {
+  EventOptions, 
   StateKey,
   State,
   Fn,
@@ -10,7 +11,6 @@ import {
   NativeHandlersPartial,
 } from './types'
 import { getInitialState } from './utils/state'
-import { addListeners, removeListeners } from './utils/event'
 import { chainFns } from './utils/utils'
 
 type GestureTimeouts = Partial<{ [stateKey in StateKey]: number }>
@@ -184,3 +184,19 @@ export default class Controller {
       }
     })
   }
+
+
+
+
+
+function addListeners(el: EventTarget, listeners: Array<[string, Fn]>, options: EventOptions) {
+  for (let [eventName, eventHandler] of listeners) {
+    el.addEventListener(eventName, eventHandler, options)
+  }
+}
+
+function removeListeners(el: EventTarget, listeners: Array<[string, Fn]>, options: EventOptions) {
+  for (let [eventName, eventHandler] of listeners) {
+    el.removeEventListener(eventName, eventHandler, options)
+  }
+}
