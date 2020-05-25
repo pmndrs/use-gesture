@@ -110,11 +110,10 @@ export default class Controller {
   /**
    * Commodity function to let recognizers simply add listeners to config.window.
    */
-  public addWindowListeners = (stateKey: StateKey, listeners: [string, Fn][]): void => {
+  public addWindowListeners = (stateKey: StateKey, listeners: [string, Fn][] = []): void => {
     if (!this.config.window) return
-    // we use this.windowListeners to keep track of the listeners we add
-    this.windowListeners[stateKey] = listeners
     addListeners(this.config.window, listeners, this.config.eventOptions)
+    this.windowListeners[stateKey] = listeners
   }
 
   /**
@@ -122,11 +121,8 @@ export default class Controller {
    */
   public removeWindowListeners = (stateKey: StateKey): void => {
     if (!this.config.window) return
-    const listeners = this.windowListeners[stateKey]
-    if (listeners) {
-      removeListeners(this.config.window, listeners, this.config.eventOptions)
-      delete this.windowListeners[stateKey]
-    }
+    removeListeners(this.config.window, this.windowListeners[stateKey], this.config.eventOptions)
+    delete this.windowListeners[stateKey]
   }
 
 
@@ -149,13 +145,13 @@ export function addBindings(bindings: any, name: string, fn: Fn): void {
 }
 
 
-function addListeners(el: EventTarget, listeners: Array<[string, Fn]>, options: EventOptions) {
+function addListeners(el: EventTarget, listeners: Array<[string, Fn]> = [], options: EventOptions = {}) {
   for (let [eventName, eventHandler] of listeners) {
     el.addEventListener(eventName, eventHandler, options)
   }
 }
 
-function removeListeners(el: EventTarget, listeners: Array<[string, Fn]>, options: EventOptions) {
+function removeListeners(el: EventTarget, listeners: Array<[string, Fn]> = [], options: EventOptions = {}) {
   for (let [eventName, eventHandler] of listeners) {
     el.removeEventListener(eventName, eventHandler, options)
   }
