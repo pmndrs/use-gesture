@@ -41,7 +41,7 @@ export default function useRecognizers<Config extends Partial<GenericOptions>>(
   React.useEffect(controller.effect, [])
 
   // @ts-ignore
-  if (controller.isDomTargetDefined) return deprecationNoticeForDomTarget
+  if (controller.config.domTarget) return deprecationNoticeForDomTarget
   // @ts-ignore
   return controller.bind
 }

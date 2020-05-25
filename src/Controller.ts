@@ -73,7 +73,7 @@ export default class Controller {
   }
 
   public effect = () => {
-    if (this.isDomTargetDefined) this.bind()
+    if (this.config.domTarget) this.bind()
     return this.clean
   }
 
@@ -123,12 +123,6 @@ export default class Controller {
     if (!this.config.window) return
     removeListeners(this.config.window, this.windowListeners[stateKey], this.config.eventOptions)
     delete this.windowListeners[stateKey]
-  }
-
-
-
-  public get isDomTargetDefined() {
-    return !!this.config.domTarget
   }
 }
 
