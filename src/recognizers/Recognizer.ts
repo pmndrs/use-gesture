@@ -19,7 +19,7 @@ import { valueFn } from '../utils/utils'
  * @private
  * Recognizer abstract class.
  */
-export default abstract class Recognizer<T extends StateKey> {
+export default abstract class Recognizer<T extends StateKey = StateKey> {
   abstract readonly ingKey: IngKey // dragging, scrolling, etc.
   protected debounced: Boolean = true
   abstract readonly stateKey: T
@@ -94,9 +94,8 @@ export default abstract class Recognizer<T extends StateKey> {
    * Returns basic movement properties for the gesture based on the next values and current state.
    */
   protected getMovement(values: Vector2): PartialGestureState<T> {
-    const { initial, rubberband } = this.config
+    const { initial, rubberband, threshold: T } = this.config
 
-    const T = this.config.threshold
     const { _initial, _active, _intentional: intentional, lastOffset, movement: prevMovement } = this.state
     const M = this.getInternalMovement(values, this.state)
 
@@ -216,22 +215,19 @@ function getIntentionalDisplacement(movement: number, threshold: number): number
   }
 }
 
-function computeRubberband<T extends StateKey>(recognizer: Recognizer<T>, vector: Vector2, rubberband: Vector2): Vector2 {
-  const bounds = recognizer.config.bounds
-  /**
-   * [x, y]: [rubberband(x, min, max), rubberband(y, min, max)]
-   */
-  return vector.map((v, i) => rubberbandIfOutOfBounds(v, bounds[i][0], bounds[i][1], rubberband[i])) as Vector2
+function computeRubberband({ config: { bounds } }: Recognizer, [ Vx, Vy ]: Vector2, [ Rx, Ry ]: Vector2): Vector2 {
+  const [ [ X1, X2 ], [ Y1, Y2 ] ] = bounds;
+
+  return [
+    rubberbandIfOutOfBounds(Vx, X1, X2, Rx),
+    rubberbandIfOutOfBounds(Vy, Y1, Y2, Ry)
+  ]
 }
 
 /**
  * Returns a generic, common payload for all gestures from an event.
  */
-export function getGenericPayload<T extends StateKey>(
-  recognizer: Recognizer<T>,
-  event: UseGestureEvent,
-  isStartEvent?: boolean
-) {
+export function getGenericPayload(recognizer: Recognizer, event: UseGestureEvent, isStartEvent?: boolean) {
 
   return {
     _lastEventType: event.type,
@@ -248,13 +244,16 @@ export function getGenericPayload<T extends StateKey>(
  * Should be common to all gestures.
  */
 export function getStartGestureState<T extends StateKey>(recognizer: Recognizer<T>, values: Vector2, event: UseGestureEvent) {
+  const offset = recognizer.state.offset;
+  const startTime = event.timeStamp;
+
   return {
     ...getInitialState()[recognizer.stateKey],
     _active: true,
     values,
     initial: values,
-    offset: recognizer.state.offset,
-    lastOffset: recognizer.state.offset,
-    startTime: event.timeStamp,
+    offset,
+    lastOffset: offset,
+    startTime,
   }
 }
