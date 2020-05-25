@@ -28,15 +28,14 @@ export default class Controller {
 
 
   public bind = (...args: any[]) => {
-    const bindings = {}
+    const bindings: { [key: string]: Function[] } = {}
 
-    const domTarget = this.getDomTarget()
+    const domTarget = getDomTargetFromConfig(this.config)
     const { eventOptions } = this.config
 
     for (let RecognizerClass of this.classes) 
       new RecognizerClass(this, args).addBindings(bindings)
     
-
     // we also add event bindings for native handlers
     for (let [event, handler] of Object.entries(this.nativeRefs)) 
       addBindings(bindings, event, handler)
@@ -47,12 +46,9 @@ export default class Controller {
       removeListeners(domTarget, this.domListeners, eventOptions)
       const domListeners = this.domListeners = [] as Array<[string, any]>
 
-      for (let key in bindings) {
-        // @ts-ignore
-        const handlers: Function[] = bindings[key]
-        const eventName = key.substr(2).toLowerCase()
-        const handler = chainFns(...handlers)
-        domListeners.push([eventName, handler])
+      for (let [ key, fns ] of Object.entries(bindings)) {
+        const name = key.slice(2).toLowerCase()
+        domListeners.push([ name, chainFns(...fns)])
       }
   
       addListeners(domTarget, domListeners, eventOptions)
@@ -89,22 +85,15 @@ export default class Controller {
    * Function ran on component unmount: cleans timeouts and removes dom listeners set by the bind function.
    */
   public clean = (): void => {
-    const domTarget = this.getDomTarget()
+    const domTarget = getDomTargetFromConfig(this.config)
+    const { eventOptions } = this.config
+
     if (domTarget) {
-      removeListeners(domTarget, this.domListeners, this.config.eventOptions)
+      removeListeners(domTarget, this.domListeners, eventOptions)
       this.domListeners = []
     }
     Object.values(this.timeouts).forEach(clearTimeout)
     Object.keys(this.windowListeners).forEach(stateKey => this.removeWindowListeners(stateKey as StateKey))
-  }
-
-
-  /**
-   * Returns the domTarget element and parses a ref if needed.
-   */
-  private getDomTarget = (): EventTarget | null | undefined => {
-    const { domTarget } = this.config
-    return domTarget && 'current' in domTarget ? domTarget.current : domTarget
   }
 
   /**
@@ -127,8 +116,18 @@ export default class Controller {
 }
 
 
+
+
+
+
+
+function getDomTargetFromConfig({ domTarget }: InternalConfig) {
+  return domTarget && 'current' in domTarget ? domTarget.current : domTarget
+}
+
+
 /**
- * this.bindings is an object which keys match ReactEventHandlerKeys.
+ * bindings is an object which keys match ReactEventHandlerKeys.
  * Since a recognizer might want to bind a handler function to an event key already used by a previously
  * added recognizer, we need to make sure that each event key is an array of all the functions mapped for
  * that key.
