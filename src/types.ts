@@ -1,6 +1,6 @@
-import React from 'react'
-import Controller from './Controller'
-import Recognizer from './recognizers/Recognizer'
+import type React from 'react'
+import type Controller from './Controller'
+import type Recognizer from './recognizers/Recognizer'
 
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
 export type AtLeastOneOf<T, U = { [K in keyof T]: Pick<T, K> }> = Partial<T> & U[keyof U]
@@ -9,66 +9,61 @@ export type Vector2 = [number, number]
 export type Fn = any
 
 export interface EventOptions {
-  capture: boolean
-  passive: boolean
+  capture       ?: boolean
+  passive       ?: boolean
 }
 
 type DomTarget = EventTarget | React.RefObject<EventTarget>
 
 export interface GenericOptions {
-  domTarget?: DomTarget
-  window?: EventTarget
-  eventOptions: Partial<EventOptions>
-  enabled: boolean
+  domTarget     ?: DomTarget
+  window        ?: EventTarget
+  eventOptions  ?: EventOptions
+  enabled       ?: boolean
 }
 
 export interface GestureOptions {
-  enabled: boolean
-  initial: Vector2 | (() => Vector2)
-  threshold?: number | Vector2
-  rubberband: boolean | number | Vector2
+  enabled       ?: boolean
+  initial       ?: Vector2 | (() => Vector2)
+  threshold     ?: number | Vector2
+  rubberband    ?: boolean | number | Vector2
 }
 
-export interface CoordinatesOptions {
+
+export type CoordinatesConfig = GestureOptions & {
   axis?: 'x' | 'y'
-  lockDirection: boolean
+  lockDirection?: boolean
   bounds?: {
-    top?: number
+    top   ?: number
     bottom?: number
-    left?: number
-    right?: number
+    left  ?: number
+    right ?: number
   }
 }
 
-interface DistanceAngleOptions {
-  distanceBounds?: {
-    min?: number
-    max?: number
-  }
-  angleBounds?: {
-    min?: number
-    max?: number
-  }
+export type DistanceAngleConfig = GestureOptions & {
+  distanceBounds?: { min?: number, max?: number }
+  angleBounds   ?: { min?: number, max?: number }
 }
 
-interface DragOptions {
-  filterTaps: boolean
-  swipeVelocity: number | Vector2
-  swipeDistance: number | Vector2
-  delay: boolean | number
+export type DragConfig = CoordinatesConfig & {
+  filterTaps    ?: boolean
+  swipeVelocity ?: number  | Vector2
+  swipeDistance ?: number  | Vector2
+  delay         ?: boolean | number
 }
 
-export type CoordinatesConfig = Partial<GestureOptions & CoordinatesOptions>
-export type DistanceAngleConfig = Partial<GestureOptions & DistanceAngleOptions>
-export type DragConfig = CoordinatesConfig & Partial<DragOptions>
 
-export type UseDragConfig = Partial<GenericOptions> & DragConfig
-export type UsePinchConfig = Partial<GenericOptions> & DragConfig
-export type UseWheelConfig = Partial<GenericOptions> & CoordinatesConfig
-export type UseScrollConfig = Partial<GenericOptions> & CoordinatesConfig
-export type UseMoveConfig = Partial<GenericOptions> & CoordinatesConfig
-export type UseHoverConfig = Partial<GenericOptions>
-export type UseGestureConfig = Partial<GenericOptions> & {
+export type UseDragConfig   = GenericOptions & DragConfig
+export type UsePinchConfig  = GenericOptions & DragConfig
+
+export type UseWheelConfig  = GenericOptions & CoordinatesConfig
+export type UseScrollConfig = GenericOptions & CoordinatesConfig
+export type UseMoveConfig   = GenericOptions & CoordinatesConfig
+
+export type UseHoverConfig  = GenericOptions
+
+export type UseGestureConfig = GenericOptions & {
   drag?: DragConfig
   wheel?: CoordinatesConfig
   scroll?: CoordinatesConfig
@@ -77,11 +72,12 @@ export type UseGestureConfig = Partial<GenericOptions> & {
   hover?: { enabled?: boolean }
 }
 
+
 export interface InternalGenericOptions {
-  domTarget?: DomTarget
-  eventOptions: EventOptions
-  window?: EventTarget
-  enabled: boolean
+  domTarget     ?: DomTarget
+  eventOptions   : EventOptions
+  window        ?: EventTarget
+  enabled        : boolean
 }
 
 export interface InternalGestureOptions {
@@ -126,6 +122,7 @@ export type UseGestureEvent<
     | React.PointerEvent
     | WebKitGestureEvent
 > = T
+
 
 export interface ReactEventHandlers {
   // Mouse Events
@@ -190,6 +187,17 @@ export interface ReactEventHandlers {
   onClick?: Fn
   onClickCapture?: Fn
 }
+
+
+
+
+
+
+
+
+
+
+
 
 export type ReactEventHandlerKey = keyof ReactEventHandlers
 

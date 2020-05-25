@@ -227,16 +227,11 @@ function computeRubberband({ config: { bounds } }: Recognizer, [ Vx, Vy ]: Vecto
 /**
  * Returns a generic, common payload for all gestures from an event.
  */
-export function getGenericPayload(recognizer: Recognizer, event: UseGestureEvent, isStartEvent?: boolean) {
-
-  return {
-    _lastEventType: event.type,
-    event,
-    timeStamp: event.timeStamp,
-    elapsedTime: isStartEvent ? 0 : event.timeStamp - recognizer.state.startTime!,
-    args: recognizer.args,
-    previous: recognizer.state.values,
-  }
+export function getGenericPayload({ state, args }: Recognizer, event: UseGestureEvent, isStartEvent?: boolean) {
+  const { timeStamp, type: _lastEventType } = event;
+  const previous = state.values;
+  const elapsedTime = isStartEvent ? 0 : timeStamp - state.startTime!
+  return { _lastEventType, event, timeStamp, elapsedTime, args, previous }
 }
 
 /**

@@ -10,6 +10,7 @@ import {
   UseScrollConfig,
   UseWheelConfig,
 } from '../types'
+
 import {
   getInternalGenericOptions,
   getInternalCoordinatesOptions,

@@ -108,10 +108,10 @@ const InternalDragOptionsNormalizers = {
 
 
 
-export function getInternalGestureOptions(config: Partial<GestureOptions> = {}): InternalGestureOptions {
+export function getInternalGestureOptions(config: GestureOptions = {}): InternalGestureOptions {
   return resolveWith<GestureOptions, InternalGestureOptions>(config, InternalGestureOptionsNormalizers)
 }
-export function getInternalGenericOptions(config: Partial<GenericOptions> = {}): InternalGenericOptions {
+export function getInternalGenericOptions(config: GenericOptions = {}): InternalGenericOptions {
   return resolveWith<GenericOptions, InternalGenericOptions>(config, InternalGenericOptionsNormalizers)
 }
 export function getInternalCoordinatesOptions(config: CoordinatesConfig = {}): InternalCoordinatesOptions {
