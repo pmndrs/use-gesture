@@ -12,8 +12,8 @@ import {
 import { getInitialState } from './utils/state'
 import { chainFns } from './utils/utils'
 
-type GestureTimeouts = Partial<{ [stateKey in StateKey]: number }>
-type WindowListeners = Partial<{ [stateKey in StateKey]: [string, Fn][] }>
+type GestureTimeouts = { [stateKey in StateKey]?: number }
+type WindowListeners = { [stateKey in StateKey]?: [string, Fn][] }
 //type Bindings = Partial<{ [eventName in ReactEventHandlerKey]: Fn[] }>
 
 /**
@@ -41,31 +41,27 @@ export default class Controller {
       addBindings(bindings, event, handler)
     
 
-    // If config.domTarget is set we add event listeners to it and return the clean function.
+      
     if (domTarget) {
-      removeListeners(domTarget, this.domListeners, eventOptions)
-      const domListeners = this.domListeners = [] as Array<[string, any]>
+      removeListeners(domTarget, takeAll(this.domListeners), eventOptions)
+      const domListeners = this.domListeners
 
       for (let [ key, fns ] of Object.entries(bindings)) {
         const name = key.slice(2).toLowerCase()
         domListeners.push([ name, chainFns(...fns)])
       }
-  
       addListeners(domTarget, domListeners, eventOptions)
       return
+    } else {
+      const props: ReactEventHandlers = {}
+      const captureString = eventOptions.capture ? 'Capture' : ''
+      for (let [ event, fns ] of Object.entries(bindings)) {
+        const fnsArray = Array.isArray(fns) ? fns : [fns]
+        const key = (event + captureString) as ReactEventHandlerKey
+        props[key] = chainFns(...(fnsArray as Fn[]))
+      }
+      return props
     }
-    // If not, we return an object that contains gesture handlers mapped to react handler event keys.
-
-    const props: ReactEventHandlers = {}
-    const captureString = eventOptions.capture ? 'Capture' : ''
-
-    for (let [ event, fns ] of Object.entries(bindings)) {
-      const fnsArray = Array.isArray(fns) ? fns : [fns]
-      const key = (event + captureString) as ReactEventHandlerKey
-      props[key] = chainFns(...(fnsArray as Fn[]))
-    }
-
-    return props
   }
 
   public effect = () => {
@@ -89,11 +85,11 @@ export default class Controller {
     const { eventOptions } = this.config
 
     if (domTarget) {
-      removeListeners(domTarget, this.domListeners, eventOptions)
-      this.domListeners = []
+      removeListeners(domTarget, takeAll(this.domListeners), eventOptions)
     }
+
     Object.values(this.timeouts).forEach(clearTimeout)
-    Object.keys(this.windowListeners).forEach(stateKey => this.removeWindowListeners(stateKey as StateKey))
+    for (let key in this.windowListeners) this.removeWindowListeners(key as StateKey)
   }
 
   /**
@@ -118,13 +114,14 @@ export default class Controller {
 
 
 
-
+function takeAll<T>(array: Array<T> = []) {
+  return array.splice(0, array.length)
+}
 
 
 function getDomTargetFromConfig({ domTarget }: InternalConfig) {
   return domTarget && 'current' in domTarget ? domTarget.current : domTarget
 }
-
 
 /**
  * bindings is an object which keys match ReactEventHandlerKeys.
