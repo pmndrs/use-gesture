@@ -19,8 +19,8 @@ export default class MoveRecognizer extends CoordinatesRecognizer<'move'> {
   }
 
   onMoveStart = (event: UseGestureEvent): void => {
-    const values = getPointerEventValues(event)
     this.updateSharedState(getGenericEventData(event))
+    const values = getPointerEventValues(event)
 
     this.updateGestureState({
       ...getStartGestureState(this, values, event),
@@ -33,20 +33,20 @@ export default class MoveRecognizer extends CoordinatesRecognizer<'move'> {
 
   onMoveChange = (event: UseGestureEvent): void => {
     this.updateSharedState(getGenericEventData(event))
-
     const values = getPointerEventValues(event)
-    const kinematics = this.getKinematics(values, event)
 
     this.updateGestureState({
       ...getGenericPayload(this, event),
-      ...kinematics,
+      ...this.getKinematics(values, event),
     })
 
     this.fireGestureHandler()
   }
 
   onMoveEnd = (): void => {
-    this.updateGestureState({ ...this.getMovement(this.state.values), velocities: [0, 0], velocity: 0, _active: false })
+    const values = this.state.values
+    this.updateGestureState(this.getMovement(values))
+    this.updateGestureState({ velocities: [0, 0], velocity: 0, _active: false })
     this.fireGestureHandler()
   }
 
@@ -75,20 +75,19 @@ export default class MoveRecognizer extends CoordinatesRecognizer<'move'> {
   onPointerLeave = (event: UseGestureEvent): void => {
     this.controller.state.shared.hovering = false
     if ('move' in this.controller.handlers) this.onMoveEnd()
+    if (!this.controller.config.hover!.enabled) return;
 
-    if (this.controller.config.hover!.enabled) {
-      const values = getPointerEventValues(event)
+    const values = getPointerEventValues(event)
 
-      const state = {
-        ...this.controller.state.shared,
-        ...this.state,
-        ...getGenericPayload(this, event),
-        values,
-        active: false,
-      }
-
-      this.controller.handlers.hover!({ ...state, ...this.mapStateValues(state) })
+    const state = {
+      ...this.controller.state.shared,
+      ...this.state,
+      ...getGenericPayload(this, event),
+      values,
+      active: false,
     }
+
+    this.controller.handlers.hover!({ ...state, ...this.mapStateValues(state) })
   }
 
   addBindings(bindings: any): void {
