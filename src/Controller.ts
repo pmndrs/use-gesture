@@ -1,5 +1,5 @@
 import {
-  EventOptions, 
+  EventOptions,
   StateKey,
   State,
   Fn,
@@ -23,48 +23,57 @@ type WindowListeners = Partial<{ [stateKey in StateKey]: [string, Fn][] }>
  * @template BinderType the type the bind function should return
  */
 export default class Controller {
-  constructor(private classes: Set<RecognizerClass>) {}
+  
+  constructor(private classes: Set<RecognizerClass>) { }
+
 
   public bind = (...args: any[]) => {
-    this.bindings = {}
+    const bindings = {}
+
     const domTarget = this.getDomTarget()
-    if (domTarget) {
-      removeListeners(domTarget, this.domListeners, this.config.eventOptions)
-      this.domListeners = []
-    }
-    for (let RecognizerClass of this.classes) {
-      new RecognizerClass(this, args).addBindings(this.bindings)
-    }
+    const { eventOptions } = this.config
+
+    for (let RecognizerClass of this.classes) 
+      new RecognizerClass(this, args).addBindings(bindings)
+    
 
     // we also add event bindings for native handlers
-    for (let eventName in this.nativeRefs)
-        addBindings(this.bindings,
-          eventName,
-          this.nativeRefs[eventName]
-      )
+    for (let [event, handler] of Object.entries(this.nativeRefs)) 
+      addBindings(bindings, event, handler)
+    
 
     // If config.domTarget is set we add event listeners to it and return the clean function.
-    if (this.isDomTargetDefined) return
+    if (domTarget) {
+      removeListeners(domTarget, this.domListeners, eventOptions)
+      const domListeners = this.domListeners = [] as Array<[string, any]>
+
+      for (let key in bindings) {
+        // @ts-ignore
+        const handlers: Function[] = bindings[key]
+        const eventName = key.substr(2).toLowerCase()
+        const handler = chainFns(...handlers)
+        domListeners.push([eventName, handler])
+      }
+  
+      addListeners(domTarget, domListeners, eventOptions)
+      return
+    }
     // If not, we return an object that contains gesture handlers mapped to react handler event keys.
 
-    const bindings: ReactEventHandlers = {}
-    const { eventOptions } = this.config
+    const props: ReactEventHandlers = {}
     const captureString = eventOptions.capture ? 'Capture' : ''
 
-    Object.entries(this.bindings).forEach(([event, fns]) => {
+    for (let [ event, fns ] of Object.entries(bindings)) {
       const fnsArray = Array.isArray(fns) ? fns : [fns]
       const key = (event + captureString) as ReactEventHandlerKey
-      bindings[key] = chainFns(...(fnsArray as Fn[]))
-    })
+      props[key] = chainFns(...(fnsArray as Fn[]))
+    }
 
-    return bindings
+    return props
   }
 
   public effect = () => {
-    if (this.isDomTargetDefined) {
-      this.bind()
-      this.addDomTargetListeners()
-    }
+    if (this.isDomTargetDefined) this.bind()
     return this.clean
   }
 
@@ -75,13 +84,11 @@ export default class Controller {
   public timeouts: GestureTimeouts = {} // keeping track of timeouts for debounced gestures (such as move, scroll, wheel)
   private domListeners: [string, Fn][] = [] // when config.domTarget is set, we attach events directly to the dom
   private windowListeners: WindowListeners = {} // keeps track of window listeners added by gestures (drag only at the moment)
-  private bindings: any = {} // an object holding the handlers associated to the gestures
 
   /**
    * Function ran on component unmount: cleans timeouts and removes dom listeners set by the bind function.
    */
   public clean = (): void => {
-    this.bindings = {}
     const domTarget = this.getDomTarget()
     if (domTarget) {
       removeListeners(domTarget, this.domListeners, this.config.eventOptions)
@@ -90,7 +97,7 @@ export default class Controller {
     Object.values(this.timeouts).forEach(clearTimeout)
     Object.keys(this.windowListeners).forEach(stateKey => this.removeWindowListeners(stateKey as StateKey))
   }
-  
+
 
   /**
    * Returns the domTarget element and parses a ref if needed.
@@ -122,40 +129,7 @@ export default class Controller {
     }
   }
 
-  /**
-   * When config.domTarget is set, this function will add dom listeners to it
-   */
-  public addDomTargetListeners = (): void => {
-    const target = this.getDomTarget()
-    if (!target) return
-    /** We iterate on the entries of this.binding for each event, then we chain
-     * the array of functions mapped to it and push them to this.domListeners
-     */
 
-    for (let key in this.bindings) {
-      // @ts-ignore
-      const handlers: Function[] = this.bindings[key]
-      const eventName = key.substr(2).toLowerCase()
-      const handler = chainFns(...handlers)
-      this.domListeners.push([eventName, handler])
-    }
-
-    addListeners(target, this.domListeners, this.config.eventOptions)
-  }
-
-  /**
-   * this.bindings is an object which keys match ReactEventHandlerKeys.
-   * Since a recognizer might want to bind a handler function to an event key already used by a previously
-   * added recognizer, we need to make sure that each event key is an array of all the functions mapped for
-   * that key.
-   */
-  public addBindings = (eventNames: string | string[], fn: Fn): void => {
-    const eventNamesArray = !Array.isArray(eventNames) ? [eventNames] : eventNames
-    eventNamesArray.forEach(eventName => {
-      if (this.bindings[eventName]) this.bindings[eventName]!.push(fn)
-      else this.bindings[eventName] = [fn]
-    })
-  }
 
   public get isDomTargetDefined() {
     return !!this.config.domTarget
@@ -163,25 +137,16 @@ export default class Controller {
 }
 
 
-  /**
-   * this.bindings is an object which keys match ReactEventHandlerKeys.
-   * Since a recognizer might want to bind a handler function to an event key already used by a previously
-   * added recognizer, we need to make sure that each event key is an array of all the functions mapped for
-   * that key.
-   */
-  export function addBindings(bindings: any, eventNames: string | string[], fn: Fn): void  {
-    const eventNamesArray = !Array.isArray(eventNames) ? [eventNames] : eventNames
-    eventNamesArray.forEach(eventName => {
-      if (bindings[eventName]) {
-        bindings[eventName]!.push(fn)
-      } else {
-        bindings[eventName] = [fn]
-      }
-    })
-  }
-
-
-
+/**
+ * this.bindings is an object which keys match ReactEventHandlerKeys.
+ * Since a recognizer might want to bind a handler function to an event key already used by a previously
+ * added recognizer, we need to make sure that each event key is an array of all the functions mapped for
+ * that key.
+ */
+export function addBindings(bindings: any, name: string, fn: Fn): void {
+  if (!bindings[name]) bindings[name] = []
+  bindings[name]!.push(fn)
+}
 
 
 function addListeners(el: EventTarget, listeners: Array<[string, Fn]>, options: EventOptions) {

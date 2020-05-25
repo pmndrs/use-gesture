@@ -222,13 +222,15 @@ export default class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
     if (this.controller.config.domTarget && supportsGestureEvents()) {
       addBindings(bindings, 'onGestureStart', this.onGestureStart)
       addBindings(bindings, 'onGestureChange', this.onGestureChange)
-      addBindings(bindings, ['onGestureEnd', 'onTouchCancel'], this.onGestureEnd)
-      addBindings(bindings, ['onTouchStart', 'onTouchMove'], this.updateTouchData)
+      addBindings(bindings, 'onGestureEnd', this.onGestureEnd)
+      addBindings(bindings, 'onTouchCancel', this.onGestureEnd)
+      addBindings(bindings, 'onTouchStart', this.updateTouchData)
+      addBindings(bindings, 'onTouchMove', this.updateTouchData)
     } else {
       addBindings(bindings, 'onTouchStart', this.onPinchStart)
       addBindings(bindings, 'onTouchMove', this.onPinchChange)
-      addBindings(bindings, ['onTouchEnd', 'onTouchCancel'], this.onPinchEnd)
-
+      addBindings(bindings, 'onTouchEnd', this.onPinchEnd)
+      addBindings(bindings, 'onTouchCancel', this.onPinchEnd)
       addBindings(bindings, 'onWheel', this.onWheel)
     }
   }
