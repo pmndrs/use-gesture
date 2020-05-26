@@ -13,7 +13,7 @@ import { getInitialState } from './utils/state'
 import { chainFns } from './utils/utils'
 
 type GestureTimeouts = { [stateKey in StateKey]?: number }
-type WindowListeners = { [stateKey in StateKey]?: [string, Fn][] }
+type WindowListeners = { [stateKey in StateKey]?: [string, Function][] }
 //type Bindings = Partial<{ [eventName in ReactEventHandlerKey]: Fn[] }>
 
 /**
@@ -30,37 +30,13 @@ export default class Controller {
   public bind = (...args: any[]) => {
     const bindings: { [key: string]: Function[] } = {}
 
-    const domTarget = getDomTargetFromConfig(this.config)
-    const { eventOptions } = this.config
-
-    for (let RecognizerClass of this.classes) 
-      new RecognizerClass(this, args).addBindings(bindings)
+    for (let RecognizerClass of this.classes) new RecognizerClass(this, args).addBindings(bindings)
+    for (let [event, handler] of Object.entries(this.nativeRefs)) addBindings(bindings, event, handler)
     
-    // we also add event bindings for native handlers
-    for (let [event, handler] of Object.entries(this.nativeRefs)) 
-      addBindings(bindings, event, handler)
-    
-
-      
-    if (domTarget) {
-      removeListeners(domTarget, takeAll(this.domListeners), eventOptions)
-      const domListeners = this.domListeners
-
-      for (let [ key, fns ] of Object.entries(bindings)) {
-        const name = key.slice(2).toLowerCase()
-        domListeners.push([ name, chainFns(...fns)])
-      }
-      addListeners(domTarget, domListeners, eventOptions)
-      return
+    if (this.config.domTarget) {
+      return updateDomListeners(this, bindings)
     } else {
-      const props: ReactEventHandlers = {}
-      const captureString = eventOptions.capture ? 'Capture' : ''
-      for (let [ event, fns ] of Object.entries(bindings)) {
-        const fnsArray = Array.isArray(fns) ? fns : [fns]
-        const key = (event + captureString) as ReactEventHandlerKey
-        props[key] = chainFns(...(fnsArray as Fn[]))
-      }
-      return props
+      return getPropsListener(this, bindings)
     }
   }
 
@@ -74,7 +50,7 @@ export default class Controller {
   public handlers!: Partial<InternalHandlers>
   public state: State = getInitialState() // state for all gestures
   public timeouts: GestureTimeouts = {} // keeping track of timeouts for debounced gestures (such as move, scroll, wheel)
-  private domListeners: [string, Fn][] = [] // when config.domTarget is set, we attach events directly to the dom
+  public domListeners: [string, Fn][] = [] // when config.domTarget is set, we attach events directly to the dom
   private windowListeners: WindowListeners = {} // keeps track of window listeners added by gestures (drag only at the moment)
 
   /**
@@ -112,7 +88,31 @@ export default class Controller {
 }
 
 
+function updateDomListeners({ config, domListeners }: Controller, bindings: { [key: string]: Function[] }) {
+  const domTarget = getDomTargetFromConfig(config)
+  if (!domTarget) throw new Error("domTarget must be defined")
+  const { eventOptions } = config
 
+  removeListeners(domTarget, takeAll(domListeners), eventOptions)
+
+  for (let [ key, fns ] of Object.entries(bindings)) {
+      const name = key.slice(2).toLowerCase()
+      domListeners.push([ name, chainFns(...fns)])
+  }
+
+  addListeners(domTarget, domListeners, eventOptions)
+}
+
+function getPropsListener({ config }: Controller, bindings: { [key: string]: Function[] }) {
+  const props: ReactEventHandlers = {}
+  const captureString = config.eventOptions.capture ? 'Capture' : ''
+  for (let [ event, fns ] of Object.entries(bindings)) {
+    const fnsArray = Array.isArray(fns) ? fns : [fns]
+    const key = (event + captureString) as ReactEventHandlerKey
+    props[key] = chainFns(...(fnsArray as Fn[]))
+  }
+  return props
+}
 
 function takeAll<T>(array: Array<T> = []) {
   return array.splice(0, array.length)
