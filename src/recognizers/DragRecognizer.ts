@@ -1,9 +1,8 @@
 import CoordinatesRecognizer from './CoordinatesRecognizer'
-import { Fn } from '../types'
 import { getPointerEventValues, getGenericEventData } from '../utils/event'
 import { calculateDistance } from '../utils/math'
 import { getStartGestureState, getGenericPayload } from './Recognizer'
-import { addBindings } from '../Controller'
+import { addBindings, updateWindowListeners, clearWindowListeners } from '../Controller'
 
 export const TAP_DISTANCE_THRESHOLD = 3
 export const SWIPE_MAX_ELAPSED_TIME = 220
@@ -35,13 +34,11 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
      * this.setPointers(event as PointerEvent)
      */
 
-    this.controller.removeWindowListeners(this.stateKey)
-    const dragListeners: [string, Fn][] = [
-      ['pointermove', this.onDragChange],
-      ['pointerup', this.onDragEnd],
-      ['pointercancel', this.onDragEnd],
-    ]
-    this.controller.addWindowListeners(this.stateKey, dragListeners)
+    updateWindowListeners(this.controller, this.stateKey, [
+      ['pointermove'  , this.onDragChange],
+      ['pointerup'    , this.onDragEnd   ],
+      ['pointercancel', this.onDragEnd   ],
+    ])
 
     // We set the state pointerId to the event.pointerId so we can make sure
     // that we lock the drag to the event initiating the gesture
@@ -102,8 +99,8 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
     }
 
     this.updateSharedState(genericEventData)
-
     const values = getPointerEventValues(event)
+
     const kinematics = this.getKinematics(values, event)
     const genericPayload = getGenericPayload(this, event)
 
@@ -153,8 +150,7 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
   clean = (): void => {
     super.clean()
     this.state._delayedEvent = false // can't remember if this is useful?
-    this.controller.removeWindowListeners(this.stateKey)
-
+    clearWindowListeners(this.controller, this.stateKey)
     // TODO add back when setPointerCapture is widely wupported
     // this.removePointers()
   }

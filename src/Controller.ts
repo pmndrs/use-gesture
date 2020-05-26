@@ -12,26 +12,37 @@ import {
 import { getInitialState } from './utils/state'
 import { chainFns } from './utils/utils'
 
-type GestureTimeouts = { [stateKey in StateKey]?: number }
-type WindowListeners = { [stateKey in StateKey]?: [string, Function][] }
-//type Bindings = Partial<{ [eventName in ReactEventHandlerKey]: Fn[] }>
-
 /**
  * The controller will keep track of the state for all gestures and also keep
  * track of timeouts, and window listeners.
- *
- * @template BinderType the type the bind function should return
  */
 export default class Controller {
+
+  public nativeRefs!    : any
+  public config!        : InternalConfig
+  public handlers!      : InternalHandlers
+  public state          : State                                              // state for all gestures
+  public timeouts       : { [stateKey in StateKey]?: number }                // tracks timeouts of debounced gestures
+  public domListeners   : [string, Fn][]                                     // when config.domTarget is set, we attach events directly to the dom
+  public windowListeners: { [stateKey in StateKey]?: [string, Function][] }  // keeps track of window listeners added by gestures (drag only at the moment)
+
   
-  constructor(private classes: Set<RecognizerClass>) { }
+  constructor(private classes: Set<RecognizerClass>) {
+    this.state           = getInitialState()
+    this.timeouts        = {}
+    this.domListeners    = []
+    this.windowListeners = {}
+  }
 
 
   public bind = (...args: any[]) => {
     const bindings: { [key: string]: Function[] } = {}
 
-    for (let RecognizerClass of this.classes) new RecognizerClass(this, args).addBindings(bindings)
-    for (let [event, handler] of Object.entries(this.nativeRefs)) addBindings(bindings, event, handler)
+    for (let RecognizerClass of this.classes) 
+      new RecognizerClass(this, args).addBindings(bindings);
+
+    for (let [event, handler] of Object.entries(this.nativeRefs)) 
+      addBindings(bindings, event, handler)
     
     if (this.config.domTarget) {
       return updateDomListeners(this, bindings)
@@ -45,46 +56,46 @@ export default class Controller {
     return this.clean
   }
 
-  public nativeRefs!: any
-  public config!: InternalConfig
-  public handlers!: Partial<InternalHandlers>
-  public state: State = getInitialState() // state for all gestures
-  public timeouts: GestureTimeouts = {} // keeping track of timeouts for debounced gestures (such as move, scroll, wheel)
-  public domListeners: [string, Fn][] = [] // when config.domTarget is set, we attach events directly to the dom
-  private windowListeners: WindowListeners = {} // keeps track of window listeners added by gestures (drag only at the moment)
-
   /**
    * Function ran on component unmount: cleans timeouts and removes dom listeners set by the bind function.
    */
   public clean = (): void => {
     const domTarget = getDomTargetFromConfig(this.config)
     const { eventOptions } = this.config
-
-    if (domTarget) {
-      removeListeners(domTarget, takeAll(this.domListeners), eventOptions)
-    }
-
+    if (domTarget) removeListeners(domTarget, takeAll(this.domListeners), eventOptions)
     Object.values(this.timeouts).forEach(clearTimeout)
-    for (let key in this.windowListeners) this.removeWindowListeners(key as StateKey)
+    clearAllWindowListeners(this)
   }
 
-  /**
-   * Commodity function to let recognizers simply add listeners to config.window.
-   */
-  public addWindowListeners = (stateKey: StateKey, listeners: [string, Fn][] = []): void => {
-    if (!this.config.window) return
-    addListeners(this.config.window, listeners, this.config.eventOptions)
-    this.windowListeners[stateKey] = listeners
+}
+
+
+
+
+export function clearAllWindowListeners(controller: Controller) {
+  const { config: { window: el, eventOptions }, windowListeners } = controller;
+  if (!el) return
+
+  for (let stateKey in windowListeners) {
+    const handlers = windowListeners[stateKey as StateKey]
+    removeListeners(el, handlers, eventOptions)
   }
 
-  /**
-   * Commodity function to let recognizers simply remove listeners to config.window.
-   */
-  public removeWindowListeners = (stateKey: StateKey): void => {
-    if (!this.config.window) return
-    removeListeners(this.config.window, this.windowListeners[stateKey], this.config.eventOptions)
-    delete this.windowListeners[stateKey]
-  }
+  controller.windowListeners = {}
+}
+
+
+export function clearWindowListeners({ config, windowListeners }: Controller, stateKey: StateKey) {
+  if (!config.window) return
+  removeListeners(config.window, windowListeners[stateKey] , config.eventOptions)
+  delete windowListeners[stateKey]
+}
+
+
+export function updateWindowListeners({ config, windowListeners }: Controller, stateKey: StateKey, listeners: [string, Fn][] = []) {
+  if (!config.window) return
+  removeListeners(config.window, windowListeners[stateKey]            , config.eventOptions)
+  addListeners   (config.window, windowListeners[stateKey] = listeners, config.eventOptions)
 }
 
 
