@@ -310,7 +310,7 @@ export type UserHandlers = {
   onHover: Handler<'hover'>
 }
 
-export type InternalHandlers = { [Key in GestureKey]: Handler<Key> }
+export type InternalHandlers = { [Key in GestureKey]?: Handler<Key> }
 
 export type RecognizerClass<T extends StateKey = StateKey> = {
   new (controller: Controller, args: any[]): Recognizer<T>
