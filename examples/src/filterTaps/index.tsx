@@ -13,7 +13,7 @@ export default function FilterTaps() {
       setDragged(active)
       set({ x, y, immediate: true })
     },
-    { filterTaps: true, eventOptions: { capture: true } }
+    { filterTaps: true }
   )
   return (
     <div className="flex">
