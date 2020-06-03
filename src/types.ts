@@ -305,7 +305,7 @@ type ReactDomAttributes = React.DOMAttributes<Element>
 
 export type NativeHandlersPartial = Partial<Omit<ReactDomAttributes, keyof UserHandlers & keyof ReactDomAttributes>>
 /* Handlers should also accept DomAttributes to prevent overrides */
-export type UserHandlersPartial = AtLeastOneOf<UserHandlers> & NativeHandlersPartial
+export type UserHandlersPartial = AtLeastOneOf<UserHandlers & NativeHandlersPartial>
 
 export type HookReturnType<T extends { domTarget?: DomTarget }> = T['domTarget'] extends object
   ? void | undefined
