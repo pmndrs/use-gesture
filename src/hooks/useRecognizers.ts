@@ -30,7 +30,6 @@ export default function useRecognizers<Config extends Partial<GenericOptions>>(
   config: InternalConfig,
   nativeHandlers: NativeHandlersPartial = {}
 ): (...args: any[]) => HookReturnType<Config> {
-
   const classes = resolveClasses(handlers)
 
   const controller = React.useMemo(() => new Controller(classes), [])
@@ -54,16 +53,15 @@ function deprecationNoticeForDomTarget() {
   }
 }
 
-
 function resolveClasses(internalHandlers: Partial<InternalHandlers>) {
   const classes = new Set<RecognizerClass>()
 
-  if (internalHandlers.drag)    classes.add(DragRecognizer)
-  if (internalHandlers.wheel)   classes.add(WheelRecognizer)
-  if (internalHandlers.scroll)  classes.add(ScrollRecognizer)
-  if (internalHandlers.move)    classes.add(MoveRecognizer)
-  if (internalHandlers.pinch)   classes.add(PinchRecognizer)
-  if (internalHandlers.hover)   classes.add(MoveRecognizer)
+  if (internalHandlers.drag) classes.add(DragRecognizer)
+  if (internalHandlers.wheel) classes.add(WheelRecognizer)
+  if (internalHandlers.scroll) classes.add(ScrollRecognizer)
+  if (internalHandlers.move) classes.add(MoveRecognizer)
+  if (internalHandlers.pinch) classes.add(PinchRecognizer)
+  if (internalHandlers.hover) classes.add(MoveRecognizer)
 
   return classes
 }

@@ -85,10 +85,12 @@ export default abstract class Recognizer<T extends StateKey = StateKey> {
    * Should be overriden for custom behavior, doesn't do anything in the implementation
    * below.
    */
-  protected checkIntentionality(_intentional: [false | number, false | number], _movement: Vector2): PartialGestureState<T> {
+  protected checkIntentionality(
+    _intentional: [false | number, false | number],
+    _movement: Vector2
+  ): PartialGestureState<T> {
     return { _intentional, _blocked: false } as PartialGestureState<T>
   }
-
 
   /**
    * Returns basic movement properties for the gesture based on the next values and current state.
@@ -99,8 +101,8 @@ export default abstract class Recognizer<T extends StateKey = StateKey> {
     const { _initial, _active, _intentional: intentional, lastOffset, movement: prevMovement } = this.state
     const M = this.getInternalMovement(values, this.state)
 
-    const i0 = intentional[0] === false ? getIntentionalDisplacement(M[0], T[0]) : intentional[0];
-    const i1 = intentional[1] === false ? getIntentionalDisplacement(M[1], T[1]) : intentional[1];
+    const i0 = intentional[0] === false ? getIntentionalDisplacement(M[0], T[0]) : intentional[0]
+    const i1 = intentional[1] === false ? getIntentionalDisplacement(M[1], T[1]) : intentional[1]
 
     // Get gesture specific state properties based on intentionality and movement.
     const intentionalityCheck = this.checkIntentionality([i0, i1], M)
@@ -113,7 +115,6 @@ export default abstract class Recognizer<T extends StateKey = StateKey> {
 
     if (_intentional[0] !== false && intentional[0] === false) _initial[0] = valueFn(initial)[0]
     if (_intentional[1] !== false && intentional[1] === false) _initial[1] = valueFn(initial)[1]
-
 
     /**
      * The movement sent to the handler has 0 in its dimensions when intentionality is false.
@@ -174,8 +175,8 @@ export default abstract class Recognizer<T extends StateKey = StateKey> {
     const next_active = this.state._active
 
     this.state.active = next_active
-    this.state.first  = next_active && !prev_active
-    this.state.last   = prev_active && !next_active
+    this.state.first = next_active && !prev_active
+    this.state.last = prev_active && !next_active
 
     this.controller.state.shared[this.ingKey] = next_active // Sets dragging, pinching, etc. to the gesture active state
 
@@ -198,14 +199,7 @@ export default abstract class Recognizer<T extends StateKey = StateKey> {
   }
 }
 
-
-
-
-
-
-
 //--------------------------------------------
-
 
 function getIntentionalDisplacement(movement: number, threshold: number): number | false {
   if (Math.abs(movement) >= threshold) {
@@ -215,21 +209,18 @@ function getIntentionalDisplacement(movement: number, threshold: number): number
   }
 }
 
-function computeRubberband({ config: { bounds } }: Recognizer, [ Vx, Vy ]: Vector2, [ Rx, Ry ]: Vector2): Vector2 {
-  const [ [ X1, X2 ], [ Y1, Y2 ] ] = bounds;
+function computeRubberband({ config: { bounds } }: Recognizer, [Vx, Vy]: Vector2, [Rx, Ry]: Vector2): Vector2 {
+  const [[X1, X2], [Y1, Y2]] = bounds
 
-  return [
-    rubberbandIfOutOfBounds(Vx, X1, X2, Rx),
-    rubberbandIfOutOfBounds(Vy, Y1, Y2, Ry)
-  ]
+  return [rubberbandIfOutOfBounds(Vx, X1, X2, Rx), rubberbandIfOutOfBounds(Vy, Y1, Y2, Ry)]
 }
 
 /**
  * Returns a generic, common payload for all gestures from an event.
  */
 export function getGenericPayload({ state, args }: Recognizer, event: UseGestureEvent, isStartEvent?: boolean) {
-  const { timeStamp, type: _lastEventType } = event;
-  const previous = state.values;
+  const { timeStamp, type: _lastEventType } = event
+  const previous = state.values
   const elapsedTime = isStartEvent ? 0 : timeStamp - state.startTime!
   return { _lastEventType, event, timeStamp, elapsedTime, args, previous }
 }
@@ -238,9 +229,13 @@ export function getGenericPayload({ state, args }: Recognizer, event: UseGesture
  * Returns the reinitialized start state for the gesture.
  * Should be common to all gestures.
  */
-export function getStartGestureState<T extends StateKey>(recognizer: Recognizer<T>, values: Vector2, event: UseGestureEvent) {
-  const offset = recognizer.state.offset;
-  const startTime = event.timeStamp;
+export function getStartGestureState<T extends StateKey>(
+  recognizer: Recognizer<T>,
+  values: Vector2,
+  event: UseGestureEvent
+) {
+  const offset = recognizer.state.offset
+  const startTime = event.timeStamp
 
   return {
     ...getInitialState()[recognizer.stateKey],

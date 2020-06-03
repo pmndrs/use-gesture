@@ -75,7 +75,7 @@ export default class MoveRecognizer extends CoordinatesRecognizer<'move'> {
   onPointerLeave = (event: UseGestureEvent): void => {
     this.controller.state.shared.hovering = false
     if ('move' in this.controller.handlers) this.onMoveEnd()
-    if (!this.controller.config.hover!.enabled) return;
+    if (!this.controller.config.hover!.enabled) return
 
     const values = getPointerEventValues(event)
 

@@ -19,15 +19,18 @@ export default abstract class CoordinatesRecognizer<T extends CoordinatesKey> ex
    * lock the gesture axis if lockDirection is specified in the config, block the gesture
    * if the first intentional axis doesn't match the specified axis in config.
    */
-  protected checkIntentionality(_intentional: [false | number, false | number], _movement: Vector2): PartialGestureState<T> {
+  protected checkIntentionality(
+    _intentional: [false | number, false | number],
+    _movement: Vector2
+  ): PartialGestureState<T> {
     if (_intentional[0] === false && _intentional[1] === false) {
       return { _intentional, axis: this.state.axis } as PartialGestureState<T>
     }
     const [absX, absY] = _movement.map(Math.abs)
     const axis = this.state.axis || (absX > absY ? 'x' : absX < absY ? 'y' : undefined)
     if (!this.config.axis && !this.config.lockDirection) return { _intentional, _blocked: false, axis } as any
-    if (!axis) return { _intentional: [false, false], _blocked: false, axis } as any    
-    if (!!this.config.axis && axis !== this.config.axis) return { _intentional, _blocked: true, axis } as any    
+    if (!axis) return { _intentional: [false, false], _blocked: false, axis } as any
+    if (!!this.config.axis && axis !== this.config.axis) return { _intentional, _blocked: true, axis } as any
     _intentional![axis === 'x' ? 1 : 0] = false
     return { _intentional, _blocked: false, axis } as any
   }

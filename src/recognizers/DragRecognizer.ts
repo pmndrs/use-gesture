@@ -35,9 +35,9 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
      */
 
     updateWindowListeners(this.controller, this.stateKey, [
-      ['pointermove'  , this.onDragChange],
-      ['pointerup'    , this.onDragEnd   ],
-      ['pointercancel', this.onDragEnd   ],
+      ['pointermove', this.onDragChange],
+      ['pointerup', this.onDragEnd],
+      ['pointercancel', this.onDragEnd],
     ])
 
     // We set the state pointerId to the event.pointerId so we can make sure

@@ -25,10 +25,10 @@ export default class ScrollRecognizer extends CoordinatesRecognizer<'scroll'> {
         ...getGenericPayload(this, event, true),
         initial: this.state.values,
       })
-  
+
       const movementDetection = this.getMovement(values)
       const geometry = calculateAllGeometry(movementDetection.delta!)
-  
+
       this.updateGestureState(movementDetection)
       this.updateGestureState(geometry)
     } else {

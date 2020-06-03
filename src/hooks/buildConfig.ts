@@ -18,9 +18,7 @@ import {
   getInternalDistanceAngleOptions,
 } from '../utils/config'
 
-import {
-  UseGestureConfig,
-} from '../types'
+import { UseGestureConfig } from '../types'
 
 function _buildMoveConfig({ domTarget, eventOptions, window, enabled, ...rest }: UseMoveConfig) {
   const opts: InternalConfig = getInternalGenericOptions({ domTarget, eventOptions, window, enabled })
@@ -65,18 +63,17 @@ export const buildPinchConfig = memoize(_buildPinchConfig, isEqual)
 export const buildScrollConfig = memoize(_buildScrollConfig, isEqual)
 export const buildWheelConfig = memoize(_buildWheelConfig, isEqual)
 
-
 export function buildComplexConfig(config: UseGestureConfig = {}, actions: Set<string> = new Set()) {
   const { drag, wheel, move, scroll, pinch, hover, eventOptions, window, domTarget, enabled } = config
 
   const mergedConfig: InternalConfig = getInternalGenericOptions({ eventOptions, window, domTarget, enabled })
 
-  if (actions.has('onDrag'))    mergedConfig.drag   = getInternalDragOptions(drag)
-  if (actions.has('onWheel'))   mergedConfig.wheel  = getInternalCoordinatesOptions(wheel)
-  if (actions.has('onScroll'))  mergedConfig.scroll = getInternalCoordinatesOptions(scroll)
-  if (actions.has('onMove'))    mergedConfig.move   = getInternalCoordinatesOptions(move)
-  if (actions.has('onPinch'))   mergedConfig.pinch  = getInternalDistanceAngleOptions(pinch)
-  if (actions.has('onHover'))   mergedConfig.hover  = { enabled: true, ...hover }
+  if (actions.has('onDrag')) mergedConfig.drag = getInternalDragOptions(drag)
+  if (actions.has('onWheel')) mergedConfig.wheel = getInternalCoordinatesOptions(wheel)
+  if (actions.has('onScroll')) mergedConfig.scroll = getInternalCoordinatesOptions(scroll)
+  if (actions.has('onMove')) mergedConfig.move = getInternalCoordinatesOptions(move)
+  if (actions.has('onPinch')) mergedConfig.pinch = getInternalDistanceAngleOptions(pinch)
+  if (actions.has('onHover')) mergedConfig.hover = { enabled: true, ...hover }
 
   return mergedConfig
 }

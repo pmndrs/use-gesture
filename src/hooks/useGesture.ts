@@ -51,23 +51,20 @@ function sortHandlers(handlers: UserHandlersPartial) {
  * @returns {(...args: any[]) => HookReturnType<Config>}
  */
 export function useGesture<Config = UseGestureConfig>(_handlers: UserHandlersPartial, config: UseGestureConfig = {}) {
-  const [ handlers, nativeHandlers, actions ] = sortHandlers(_handlers)
+  const [handlers, nativeHandlers, actions] = sortHandlers(_handlers)
 
   const mergedConfig: InternalConfig = buildComplexConfig(config, actions)
   const internalHandlers: Partial<InternalHandlers> = {}
 
-  if (actions.has('onDrag'))      internalHandlers.drag   = includeStartEndHandlers(handlers, 'onDrag')
-  if (actions.has('onWheel'))     internalHandlers.wheel  = includeStartEndHandlers(handlers, 'onWheel')
-  if (actions.has('onScroll'))    internalHandlers.scroll = includeStartEndHandlers(handlers, 'onScroll')
-  if (actions.has('onMove'))      internalHandlers.move   = includeStartEndHandlers(handlers, 'onMove')
-  if (actions.has('onPinch'))     internalHandlers.pinch  = includeStartEndHandlers(handlers, 'onPinch')
-  if (actions.has('onHover'))     internalHandlers.hover  = handlers.onHover
+  if (actions.has('onDrag')) internalHandlers.drag = includeStartEndHandlers(handlers, 'onDrag')
+  if (actions.has('onWheel')) internalHandlers.wheel = includeStartEndHandlers(handlers, 'onWheel')
+  if (actions.has('onScroll')) internalHandlers.scroll = includeStartEndHandlers(handlers, 'onScroll')
+  if (actions.has('onMove')) internalHandlers.move = includeStartEndHandlers(handlers, 'onMove')
+  if (actions.has('onPinch')) internalHandlers.pinch = includeStartEndHandlers(handlers, 'onPinch')
+  if (actions.has('onHover')) internalHandlers.hover = handlers.onHover
 
   return useRecognizers<Config>(internalHandlers, mergedConfig, nativeHandlers)
 }
-
-
-
 
 /**
  * @private
