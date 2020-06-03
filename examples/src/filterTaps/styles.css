@@ -6,6 +6,7 @@
   align-items: center;
   justify-content: center;
   padding: 10px;
+  touch-action: none;
 }
 
 .drag button {
