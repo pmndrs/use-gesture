@@ -7,7 +7,7 @@
 ### Breaking
 
 1. The app uses `PointerEvent` wherever it can, [dropping support for some older browsers](https://caniuse.com/#feat=mdn-api_pointerevent).
-2. When adding events directly to the dom element using `domTarget` you no longer need to clean the effect your self.
+2. When adding events directly to the dom element using `domTarget` you no longer need to clean the effect yourself.
 
 ```jsx
 // before
