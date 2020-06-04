@@ -1,5 +1,37 @@
 # Changelog
 
+## 7.1.0
+
+**Summary:** Major refactoring by [thephoenixofthevoid](https://github.com/thephoenixofthevoid). This release has some significant underlying changes that may break some specific edge cases (like scrolling while dragging on mobile).
+
+### Breaking
+
+1. The app uses `PointerEvent` wherever it can, [dropping support for some older browsers](https://caniuse.com/#feat=mdn-api_pointerevent).
+2. When adding events directly to the dom element using `domTarget` you no longer need to clean the effect your self.
+
+```jsx
+// before
+const bind = useDrag(() => { /* your logic */ }, { domTarget: window })
+React.useEffect(bind, [bind])
+
+// after
+useDrag(() => { /* your logic */ }, { domTarget: window })
+```
+
+3. 
+
+### Added
+
+1. Drag and pinch now works on multiple dom elements at once [#170](https://github.com/react-spring/react-use-gesture/issues/170).
+2. Drag option `{ filterTaps: true }` will also prevent unwanted taps on children elements [#173](https://github.com/react-spring/react-use-gesture/issues/173).
+
+### Fixed
+
+1. Various Typescript types.
+2. Recognizer are no longer recreated on every render.
+
+
+
 ## 7.0.15 Release
 
 **Summary:** Fixes touchcancel on drag.
@@ -125,7 +157,7 @@
 
 **Summary:** Major release introducing new features and options renaming. This is a full rewrite.
 
-### Breaking changes
+### Breaking
 
 1. Options for `useGesture` are now separated per gesture;
 2. Options for event are now structured differently.
@@ -391,7 +423,7 @@ useDrag(fn, {
 
 1. Drag gesture will interrupt if a move event has no button pressed (that could happen if triggering a right click) and then moving the mouse around.
 
-### Breaking changes
+### Breaking
 
 1. `config` object must be passed as a second argument.
 
