@@ -20,6 +20,10 @@
   },
   "jest": {
     "testEnvironment": "jsdom",
+    "roots": [
+      "./src",
+      "./test"
+    ],
     "setupFilesAfterEnv": [
       "./setupPointerEvent.js"
     ],
