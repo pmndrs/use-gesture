@@ -9,5 +9,7 @@ export { default as three } from './threejs'
 export { default as docsExample } from './docs-example'
 export { default as pinch } from './pinch'
 export { default as filterTaps } from './filterTaps'
+export { default as twoElements } from './two-elements'
+export { default as gestureEvents } from './gesture-events'
 
 // TODO possibly add domTarget site-wide option to test domTarget for all examples
