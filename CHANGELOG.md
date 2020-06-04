@@ -26,9 +26,8 @@ useDrag(() => { /* your logic */ }, { domTarget: window })
 2. Drag option `{ filterTaps: true }` will also prevent unwanted taps on children elements [#173](https://github.com/react-spring/react-use-gesture/issues/173).
 
 ### Fixed
-
 1. Various Typescript types.
-2. Recognizer are no longer recreated on every render.
+2. Hooks configuration is no longer recreated on every render.
 
 
 
