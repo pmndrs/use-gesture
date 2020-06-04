@@ -18,7 +18,7 @@ React.useEffect(bind, [bind])
 useDrag(() => { /* your logic */ }, { domTarget: window })
 ```
 
-1. The handlers are being fired even if the gesture is not intentional #3dacf8f. This allows manipulation of events at all times. Fixes [#175](https://github.com/react-spring/react-use-gesture/issues/175).
+3. The handlers are being fired even if the gesture is not intentional [#3dacf8f](https://github.com/react-spring/react-use-gesture/pull/164/commits/36eec2c4ef241105d0789aaa6ae4c64935d68f19). This allows manipulation of events at all times. Fixes [#175](https://github.com/react-spring/react-use-gesture/issues/175).
 
 ### Added
 
