@@ -1,6 +1,6 @@
 # Changelog
 
-## 7.1.0
+## 8.0.0
 
 **Summary:** Major refactoring by [thephoenixofthevoid](https://github.com/thephoenixofthevoid). This release has some significant underlying changes that may break some specific edge cases (like scrolling while dragging on mobile).
 
