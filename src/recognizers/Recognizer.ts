@@ -153,7 +153,7 @@ export default abstract class Recognizer<T extends StateKey = StateKey> {
   /**
    * Fires the gesture handler
    */
-  protected fireGestureHandler = (forceFlag?: boolean): FullGestureState<T> | null => {
+  protected fireGestureHandler = (): FullGestureState<T> | null => {
     /**
      * If the gesture has been blocked (this can happen when the gesture has started in an unwanted direction),
      * clean everything and don't do anything.
@@ -167,19 +167,21 @@ export default abstract class Recognizer<T extends StateKey = StateKey> {
       return null
     }
 
-    // If the gesture has no intentional dimension, don't do fire the handler.
+    // If the gesture has no intentional dimension, don't fire the handler.
     const [intentionalX, intentionalY] = this.state._intentional
-    if (!forceFlag && intentionalX === false && intentionalY === false) return null
+    const isGestureIntentional = intentionalX !== false || intentionalY !== false
+    // if (!forceFlag && intentionalX === false && intentionalY === false) return null
 
-    const prev_active = this.state.active
-    const next_active = this.state._active
+    if (isGestureIntentional) {
+      const prev_active = this.state.active
+      const next_active = this.state._active
 
-    this.state.active = next_active
-    this.state.first = next_active && !prev_active
-    this.state.last = prev_active && !next_active
+      this.state.active = next_active
+      this.state.first = next_active && !prev_active
+      this.state.last = prev_active && !next_active
 
-    this.controller.state.shared[this.ingKey] = next_active // Sets dragging, pinching, etc. to the gesture active state
-
+      this.controller.state.shared[this.ingKey] = next_active // Sets dragging, pinching, etc. to the gesture active state
+    }
     const state = {
       ...this.controller.state.shared,
       ...this.state,
@@ -193,7 +195,7 @@ export default abstract class Recognizer<T extends StateKey = StateKey> {
     this.state.memo = newMemo !== void 0 ? newMemo : this.state.memo
 
     // Cleans the gesture when the gesture is no longer active.
-    if (!next_active) this.clean()
+    if (!this.state._active) this.clean()
 
     return state
   }

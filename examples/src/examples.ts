@@ -11,5 +11,6 @@ export { default as pinch } from './pinch'
 export { default as filterTaps } from './filterTaps'
 export { default as twoElements } from './two-elements'
 export { default as gestureEvents } from './gesture-events'
+export { default as nested } from './nested'
 
 // TODO possibly add domTarget site-wide option to test domTarget for all examples
