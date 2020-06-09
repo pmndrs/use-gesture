@@ -2,7 +2,7 @@
   "include": ["src", "types"],
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
-    "target": "esnext",
+    "target": "es2019",
     "module": "esnext",
     "lib": ["dom", "esnext"],
     "importHelpers": true,
