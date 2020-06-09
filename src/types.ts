@@ -180,8 +180,8 @@ export interface ReactEventHandlers {
   onGestureEnd?: Fn
 
   // onClick for drag / filterTaps
-  onClick?: Fn
-  onClickCapture?: Fn
+  onClick?: React.MouseEventHandler
+  onClickCapture?: React.MouseEventHandler
 }
 
 export type ReactEventHandlerKey = keyof ReactEventHandlers
