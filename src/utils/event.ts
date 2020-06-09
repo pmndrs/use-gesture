@@ -16,6 +16,10 @@ export function supportsGestureEvents(): boolean {
   }
 }
 
+export function supportsTouchEvents(): boolean {
+  return typeof window !== 'undefined' && window.ontouchstart === null
+}
+
 function getTouchEvents(event: UseGestureEvent) {
   if ('touches' in event) {
     const { targetTouches, changedTouches } = event
@@ -83,7 +87,8 @@ export function getWebkitGestureEventValues(event: WebKitGestureEvent): Vector2 
  * @param event
  * @returns two touches event data
  */
-export function getTwoTouchesEventData({ targetTouches }: React.TouchEvent) {
+export function getTwoTouchesEventData(event: React.TouchEvent) {
+  const { targetTouches, nativeEvent } = event
   const A = targetTouches[0],
     B = targetTouches[1]
 
@@ -92,8 +97,10 @@ export function getTwoTouchesEventData({ targetTouches }: React.TouchEvent) {
   const cx = (B.clientX + A.clientX) / 2
   const cy = (B.clientY + A.clientY) / 2
 
+  const e: any = nativeEvent ?? event
+
   const distance = Math.hypot(dx, dy)
-  const angle = -(Math.atan2(dx, dy) * 180) / Math.PI
+  const angle = (e.rotation as number) ?? -(Math.atan2(dx, dy) * 180) / Math.PI
 
   const values: Vector2 = [distance, angle]
   const origin: Vector2 = [cx, cy]
