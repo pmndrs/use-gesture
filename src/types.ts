@@ -53,8 +53,8 @@ export type DragConfig = CoordinatesConfig & {
 }
 
 export type UseDragConfig = GenericOptions & DragConfig
-export type UsePinchConfig = GenericOptions & DragConfig
 
+export type UsePinchConfig = GenericOptions & DistanceAngleConfig
 export type UseWheelConfig = GenericOptions & CoordinatesConfig
 export type UseScrollConfig = GenericOptions & CoordinatesConfig
 export type UseMoveConfig = GenericOptions & CoordinatesConfig
