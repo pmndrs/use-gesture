@@ -1,5 +1,4 @@
 import {
-  EventOptions,
   StateKey,
   State,
   Fn,
@@ -142,13 +141,13 @@ export function addBindings(bindings: any, name: string, fn: Fn): void {
   bindings[name]!.push(fn)
 }
 
-function addListeners(el: EventTarget, listeners: Array<[string, Fn]> = [], options: EventOptions = {}) {
+function addListeners(el: EventTarget, listeners: Array<[string, Fn]> = [], options = {}) {
   for (let [eventName, eventHandler] of listeners) {
     el.addEventListener(eventName, eventHandler, options)
   }
 }
 
-function removeListeners(el: EventTarget, listeners: Array<[string, Fn]> = [], options: EventOptions = {}) {
+function removeListeners(el: EventTarget, listeners: Array<[string, Fn]> = [], options = {}) {
   for (let [eventName, eventHandler] of listeners) {
     el.removeEventListener(eventName, eventHandler, options)
   }

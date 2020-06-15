@@ -8,17 +8,12 @@ export type AtLeastOneOf<T, U = { [K in keyof T]: Pick<T, K> }> = Partial<T> & U
 export type Vector2 = [number, number]
 export type Fn = any
 
-export interface EventOptions {
-  capture?: boolean
-  passive?: boolean
-}
-
 type DomTarget = EventTarget | React.RefObject<EventTarget>
 
 export interface GenericOptions {
   domTarget?: DomTarget
   window?: EventTarget
-  eventOptions?: EventOptions
+  eventOptions?: { capture?: boolean; passive?: boolean }
   enabled?: boolean
 }
 
@@ -53,7 +48,6 @@ export type DragConfig = CoordinatesConfig & {
 }
 
 export type UseDragConfig = GenericOptions & DragConfig
-
 export type UsePinchConfig = GenericOptions & DistanceAngleConfig
 export type UseWheelConfig = GenericOptions & CoordinatesConfig
 export type UseScrollConfig = GenericOptions & CoordinatesConfig
@@ -72,7 +66,7 @@ export type UseGestureConfig = GenericOptions & {
 
 export interface InternalGenericOptions {
   domTarget?: DomTarget
-  eventOptions: EventOptions
+  eventOptions: { capture?: boolean; passive?: boolean }
   window?: EventTarget
   enabled: boolean
 }
@@ -274,6 +268,7 @@ export type PartialGestureState<T extends StateKey> = Partial<GestureState<T>>
 export type FullGestureState<T extends StateKey> = SharedGestureState & State[T]
 
 export type Handler<T extends GestureKey> = (state: FullGestureState<StateKey<T>>) => any | void
+export type InternalHandlers = { [Key in GestureKey]?: Handler<Key> }
 
 export type UserHandlers = {
   onDrag: Handler<'drag'>
@@ -293,8 +288,6 @@ export type UserHandlers = {
   onScrollEnd: Handler<'scroll'>
   onHover: Handler<'hover'>
 }
-
-export type InternalHandlers = { [Key in GestureKey]?: Handler<Key> }
 
 export type RecognizerClass<T extends StateKey = StateKey> = {
   new (controller: Controller, args: any[]): Recognizer<T>
