@@ -1,6 +1,5 @@
 import { WheelEvent } from 'react'
 import CoordinatesRecognizer from './CoordinatesRecognizer'
-import { UseGestureEvent } from '../types'
 import { getWheelEventValues, getGenericEventData } from '../utils/event'
 import { addV, calculateAllGeometry } from '../utils/math'
 import { getStartGestureState, getGenericPayload } from './Recognizer'
@@ -11,7 +10,7 @@ export default class WheelRecognizer extends CoordinatesRecognizer<'wheel'> {
   readonly stateKey = 'wheel'
   debounced = true
 
-  handleEvent = (event: UseGestureEvent<WheelEvent>): void => {
+  handleEvent = (event: React.WheelEvent | WheelEvent): void => {
     if (event.ctrlKey && 'pinch' in this.controller.handlers) return
     if (!this.enabled) return
 

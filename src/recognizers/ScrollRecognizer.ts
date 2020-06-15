@@ -1,5 +1,4 @@
 import CoordinatesRecognizer from './CoordinatesRecognizer'
-import { UseGestureEvent } from '../types'
 import { getGenericEventData, getScrollEventValues } from '../utils/event'
 import { calculateAllGeometry } from '../utils/math'
 import { getStartGestureState, getGenericPayload } from './Recognizer'
@@ -10,7 +9,7 @@ export default class ScrollRecognizer extends CoordinatesRecognizer<'scroll'> {
   readonly stateKey = 'scroll'
   debounced = true
 
-  handleEvent = (event: UseGestureEvent): void => {
+  handleEvent = (event: React.UIEvent | UIEvent): void => {
     if (!this.enabled) return
 
     this.clearTimeout()

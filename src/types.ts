@@ -110,15 +110,17 @@ export type InternalConfig = InternalGenericOptions & {
   hover?: { enabled: boolean }
 }
 
-export type WebKitGestureEvent = React.PointerEvent & { scale: number; rotation: number }
-export type UseGestureEvent<
-  T extends React.SyntheticEvent =
-    | React.MouseEvent
-    | React.TouchEvent
-    | React.WheelEvent
-    | React.PointerEvent
-    | WebKitGestureEvent
-> = T
+export type WebKitGestureEvent = PointerEvent & { scale: number; rotation: number }
+export type DomEvents =
+  | TouchEvent
+  | PointerEvent
+  | WheelEvent
+  | UIEvent
+  | WebKitGestureEvent
+  | React.TouchEvent
+  | React.PointerEvent
+  | React.WheelEvent
+  | React.UIEvent
 
 export interface ReactEventHandlers {
   // Mouse Events
@@ -211,7 +213,7 @@ export interface CommonGestureState {
   _initial: Vector2
   _lastEventType?: string
   _pointerIds?: number[]
-  event?: UseGestureEvent
+  event?: React.UIEvent | UIEvent
   // currentTarget?: (EventTarget & Element) | null
   // pointerId?: number | null
   values: Vector2

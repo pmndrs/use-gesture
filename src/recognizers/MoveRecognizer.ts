@@ -1,5 +1,4 @@
 import CoordinatesRecognizer from './CoordinatesRecognizer'
-import { UseGestureEvent } from '../types'
 import { getGenericEventData, getPointerEventValues } from '../utils/event'
 import { getStartGestureState, getGenericPayload } from './Recognizer'
 import { addBindings } from '../Controller'
@@ -10,7 +9,7 @@ export default class MoveRecognizer extends CoordinatesRecognizer<'move'> {
 
   debounced = true
 
-  onMove = (event: UseGestureEvent): void => {
+  onMove = (event: React.PointerEvent | PointerEvent): void => {
     if (!this.enabled) return
     this.setTimeout(this.onMoveEnd)
 
@@ -18,7 +17,7 @@ export default class MoveRecognizer extends CoordinatesRecognizer<'move'> {
     else this.onMoveChange(event)
   }
 
-  onMoveStart = (event: UseGestureEvent): void => {
+  onMoveStart = (event: React.PointerEvent | PointerEvent): void => {
     this.updateSharedState(getGenericEventData(event))
     const values = getPointerEventValues(event)
 
@@ -31,7 +30,7 @@ export default class MoveRecognizer extends CoordinatesRecognizer<'move'> {
     this.fireGestureHandler()
   }
 
-  onMoveChange = (event: UseGestureEvent): void => {
+  onMoveChange = (event: React.PointerEvent | PointerEvent): void => {
     this.updateSharedState(getGenericEventData(event))
     const values = getPointerEventValues(event)
 
@@ -50,7 +49,7 @@ export default class MoveRecognizer extends CoordinatesRecognizer<'move'> {
     this.fireGestureHandler()
   }
 
-  onPointerEnter = (event: UseGestureEvent): void => {
+  onPointerEnter = (event: React.PointerEvent | PointerEvent): void => {
     this.controller.state.shared.hovering = true
     if (!this.controller.config.enabled) return
 
@@ -72,7 +71,7 @@ export default class MoveRecognizer extends CoordinatesRecognizer<'move'> {
     if ('move' in this.controller.handlers) this.onMoveStart(event)
   }
 
-  onPointerLeave = (event: UseGestureEvent): void => {
+  onPointerLeave = (event: React.PointerEvent | PointerEvent): void => {
     this.controller.state.shared.hovering = false
     if ('move' in this.controller.handlers) this.onMoveEnd()
     if (!this.controller.config.hover!.enabled) return

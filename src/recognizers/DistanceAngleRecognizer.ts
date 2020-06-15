@@ -1,6 +1,6 @@
 import Recognizer from './Recognizer'
 import { calculateAllKinematics, subV } from '../utils/math'
-import { Vector2, UseGestureEvent, PartialGestureState, DistanceAngleKey, GestureState } from '../types'
+import { Vector2, PartialGestureState, DistanceAngleKey, GestureState } from '../types'
 
 /**
  * @private
@@ -18,7 +18,7 @@ export default abstract class DistanceAngleRecognizer<T extends DistanceAngleKey
     return subV([d, a - 360 * next_turns], state.initial)
   }
 
-  getKinematics(values: Vector2, event: UseGestureEvent): PartialGestureState<T> {
+  getKinematics(values: Vector2, event: React.UIEvent | UIEvent): PartialGestureState<T> {
     const state = this.getMovement(values)
     const turns = (values[1] - state.movement![1] - this.state.initial[1]) / 360
     const dt = event.timeStamp - this.state.timeStamp!

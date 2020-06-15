@@ -1,6 +1,6 @@
 import Recognizer from './Recognizer'
 import { calculateAllKinematics, subV } from '../utils/math'
-import { Vector2, UseGestureEvent, PartialGestureState, GestureState, CoordinatesKey } from '../types'
+import { Vector2, PartialGestureState, GestureState, CoordinatesKey } from '../types'
 
 /**
  * @private
@@ -35,7 +35,7 @@ export default abstract class CoordinatesRecognizer<T extends CoordinatesKey> ex
     return { _intentional, _blocked: false, axis } as any
   }
 
-  getKinematics(values: Vector2, event: UseGestureEvent): PartialGestureState<T> {
+  getKinematics(values: Vector2, event: React.UIEvent | UIEvent): PartialGestureState<T> {
     const state = this.getMovement(values)
     if (!state._blocked) {
       const dt = event.timeStamp - this.state.timeStamp!

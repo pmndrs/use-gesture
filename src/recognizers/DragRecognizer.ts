@@ -26,7 +26,7 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
    * }
    */
 
-  onDragStart = (event: React.PointerEvent): void => {
+  onDragStart = (event: React.PointerEvent | PointerEvent): void => {
     if (!this.enabled || this.state._active) return
 
     /**
@@ -47,14 +47,14 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
     if (this.config.delay > 0) {
       this.state._delayedEvent = true
       // If it's a React SyntheticEvent we need to persist it so that we can use it async
-      if (typeof event.persist === 'function') event.persist()
+      if ('persist' in event && typeof event.persist === 'function') event.persist()
       this.setTimeout(this.startDrag.bind(this), this.config.delay, event)
     } else {
       this.startDrag(event)
     }
   }
 
-  startDrag(event: React.PointerEvent) {
+  startDrag(event: React.PointerEvent | PointerEvent) {
     const values = getPointerEventValues(event)
     this.updateSharedState(getGenericEventData(event))
 
@@ -69,7 +69,7 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
     this.fireGestureHandler()
   }
 
-  onDragChange = (event: React.PointerEvent): void => {
+  onDragChange = (event: PointerEvent): void => {
     // If the gesture was canceled don't respond to the event.
     if (this.state.canceled) return
 
@@ -116,7 +116,7 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
     this.fireGestureHandler()
   }
 
-  onDragEnd = (event: React.PointerEvent): void => {
+  onDragEnd = (event: PointerEvent): void => {
     // If the event pointerId doesn't match the initiating pointerId
     // don't respond to the event.
     if (event.pointerId !== this.state._pointerId) return
@@ -163,7 +163,7 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
     requestAnimationFrame(() => this.fireGestureHandler())
   }
 
-  onClick = (event: React.PointerEvent): void => {
+  onClick = (event: React.UIEvent | UIEvent): void => {
     if (!this.state._isTap) event.stopPropagation()
   }
 

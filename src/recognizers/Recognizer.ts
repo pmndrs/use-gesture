@@ -2,7 +2,6 @@ import Controller from '../Controller'
 import {
   StateKey,
   SharedGestureState,
-  UseGestureEvent,
   IngKey,
   InternalConfig,
   GestureState,
@@ -73,7 +72,7 @@ export default abstract class Recognizer<T extends StateKey = StateKey> {
     clearTimeout(this.controller.timeouts[this.stateKey])
   }
 
-  protected abstract getKinematics(values: Vector2, event: UseGestureEvent): PartialGestureState<T>
+  protected abstract getKinematics(values: Vector2, event: React.UIEvent | UIEvent): PartialGestureState<T>
   protected abstract getInternalMovement(values: Vector2, state: GestureState<T>): Vector2
   protected abstract mapStateValues(state: GestureState<T>): PartialGestureState<T>
 
@@ -220,7 +219,7 @@ function computeRubberband({ config: { bounds } }: Recognizer, [Vx, Vy]: Vector2
 /**
  * Returns a generic, common payload for all gestures from an event.
  */
-export function getGenericPayload({ state, args }: Recognizer, event: UseGestureEvent, isStartEvent?: boolean) {
+export function getGenericPayload({ state, args }: Recognizer, event: React.UIEvent | UIEvent, isStartEvent?: boolean) {
   const { timeStamp, type: _lastEventType } = event
   const previous = state.values
   const elapsedTime = isStartEvent ? 0 : timeStamp - state.startTime!
@@ -234,7 +233,7 @@ export function getGenericPayload({ state, args }: Recognizer, event: UseGesture
 export function getStartGestureState<T extends StateKey>(
   recognizer: Recognizer<T>,
   values: Vector2,
-  event: UseGestureEvent
+  event: React.UIEvent | UIEvent
 ) {
   const offset = recognizer.state.offset
   const startTime = event.timeStamp
