@@ -1,14 +1,6 @@
 import useRecognizers from './useRecognizers'
-
-import {
-  InternalConfig,
-  HandlerKey,
-  UserHandlersPartial,
-  InternalHandlers,
-  UserHandlers,
-  UseGestureConfig,
-} from '../types'
 import { buildComplexConfig } from './buildConfig'
+import { InternalConfig, UserHandlersPartial, InternalHandlers, UserHandlers, UseGestureConfig } from '../types'
 
 export function wrapStart(fn: Function) {
   return function (this: any, { first }: any) {
@@ -76,6 +68,7 @@ export function useGesture<Config = UseGestureConfig>(_handlers: UserHandlersPar
  * @param {HandlerKey} handlerKey - the key for which to integrate start and end handlers
  * @returns
  */
+type HandlerKey = 'onDrag' | 'onPinch' | 'onWheel' | 'onMove' | 'onScroll' | 'onHover'
 function includeStartEndHandlers(handlers: UserHandlersPartial, handlerKey: HandlerKey) {
   const startKey = (handlerKey + 'Start') as keyof UserHandlers
   const endKey = (handlerKey + 'End') as keyof UserHandlers

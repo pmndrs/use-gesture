@@ -189,7 +189,6 @@ export interface ReactEventHandlers {
 export type ReactEventHandlerKey = keyof ReactEventHandlers
 
 export type IngKey = 'hovering' | 'scrolling' | 'wheeling' | 'dragging' | 'moving' | 'pinching'
-
 export type CoordinatesKey = 'drag' | 'wheel' | 'move' | 'scroll'
 export type DistanceAngleKey = 'pinch'
 type GestureKey = CoordinatesKey | DistanceAngleKey | 'hover'
@@ -275,8 +274,6 @@ export type PartialGestureState<T extends StateKey> = Partial<GestureState<T>>
 export type FullGestureState<T extends StateKey> = SharedGestureState & State[T]
 
 export type Handler<T extends GestureKey> = (state: FullGestureState<StateKey<T>>) => any | void
-
-export type HandlerKey = 'onDrag' | 'onPinch' | 'onWheel' | 'onMove' | 'onScroll' | 'onHover'
 
 export type UserHandlers = {
   onDrag: Handler<'drag'>
