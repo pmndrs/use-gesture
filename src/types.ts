@@ -52,7 +52,6 @@ export type UsePinchConfig = GenericOptions & DistanceAngleConfig
 export type UseWheelConfig = GenericOptions & CoordinatesConfig
 export type UseScrollConfig = GenericOptions & CoordinatesConfig
 export type UseMoveConfig = GenericOptions & CoordinatesConfig
-
 export type UseHoverConfig = GenericOptions
 
 export type UseGestureConfig = GenericOptions & {
@@ -295,9 +294,7 @@ export type RecognizerClass<T extends StateKey = StateKey> = {
 
 type ReactDomAttributes = React.DOMAttributes<Element>
 
-export type NativeHandlersPartial = Partial<Omit<ReactDomAttributes, keyof UserHandlers & keyof ReactDomAttributes>>
-/* Handlers should also accept DomAttributes to prevent overrides */
-export type UserHandlersPartial = AtLeastOneOf<UserHandlers & NativeHandlersPartial>
+export type NativeHandlers = Omit<ReactDomAttributes, keyof UserHandlers & keyof ReactDomAttributes>
 
 export type HookReturnType<T extends { domTarget?: DomTarget }> = T['domTarget'] extends object
   ? void | undefined

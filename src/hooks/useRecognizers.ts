@@ -8,7 +8,7 @@ import {
   InternalHandlers,
   GenericOptions,
   RecognizerClass,
-  NativeHandlersPartial,
+  NativeHandlers,
 } from '../types'
 
 import DragRecognizer from '../recognizers/DragRecognizer'
@@ -28,7 +28,7 @@ import ScrollRecognizer from '../recognizers/ScrollRecognizer'
 export default function useRecognizers<Config extends Partial<GenericOptions>>(
   handlers: Partial<InternalHandlers>,
   config: InternalConfig,
-  nativeHandlers: NativeHandlersPartial = {}
+  nativeHandlers: Partial<NativeHandlers> = {}
 ): (...args: any[]) => HookReturnType<Config> {
   const classes = resolveClasses(handlers)
 

@@ -1,6 +1,8 @@
 import useRecognizers from './useRecognizers'
 import { buildComplexConfig } from './buildConfig'
-import { InternalConfig, UserHandlersPartial, InternalHandlers, UserHandlers, UseGestureConfig } from '../types'
+import { InternalConfig, InternalHandlers, UserHandlers, UseGestureConfig, NativeHandlers } from '../types'
+
+type Handlers = Partial<UserHandlers & NativeHandlers>
 
 export function wrapStart(fn: Function) {
   return function (this: any, { first }: any) {
@@ -16,7 +18,7 @@ export function wrapEnd(fn: Function) {
 
 const RE_NOT_NATIVE = /^on(Drag|Wheel|Scroll|Move|Pinch|Hover)/
 
-function sortHandlers(handlers: UserHandlersPartial) {
+function sortHandlers(handlers: Handlers) {
   const native: any = {}
   const handle: any = {}
   const actions = new Set()
@@ -42,7 +44,7 @@ function sortHandlers(handlers: UserHandlersPartial) {
  * @param {UseGestureConfig} [config={}] - the full config object
  * @returns {(...args: any[]) => HookReturnType<Config>}
  */
-export function useGesture<Config = UseGestureConfig>(_handlers: UserHandlersPartial, config: UseGestureConfig = {}) {
+export function useGesture<Config = UseGestureConfig>(_handlers: Handlers, config: UseGestureConfig = {}) {
   const [handlers, nativeHandlers, actions] = sortHandlers(_handlers)
 
   const mergedConfig: InternalConfig = buildComplexConfig(config, actions)
@@ -69,7 +71,7 @@ export function useGesture<Config = UseGestureConfig>(_handlers: UserHandlersPar
  * @returns
  */
 type HandlerKey = 'onDrag' | 'onPinch' | 'onWheel' | 'onMove' | 'onScroll' | 'onHover'
-function includeStartEndHandlers(handlers: UserHandlersPartial, handlerKey: HandlerKey) {
+function includeStartEndHandlers(handlers: Partial<UserHandlers>, handlerKey: HandlerKey) {
   const startKey = (handlerKey + 'Start') as keyof UserHandlers
   const endKey = (handlerKey + 'End') as keyof UserHandlers
 
