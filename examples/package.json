@@ -14,7 +14,7 @@
     "add": "^2.0.6",
     "change-case": "^4.1.1",
     "classnames": "^2.2.6",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "lodash-move": "^1.1.1",
     "react-app-polyfill": "^1.0.6",
     "react-spring": "^9.0.0-rc.2",
