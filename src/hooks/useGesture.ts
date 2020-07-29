@@ -1,4 +1,4 @@
-import React from 'react'
+import { useState } from 'preact/hooks'
 import useRecognizers from './useRecognizers'
 import DragRecognizer from '../recognizers/DragRecognizer'
 import WheelRecognizer from '../recognizers/WheelRecognizer'
@@ -39,7 +39,7 @@ export function useGesture<Config extends UseGestureConfig>(
    * If handlers contains {onDragStart, onDrag, onDragEnd, onMoveStart, onMove}
    * actions will include 'onDrag' and 'onMove.
    */
-  const [actions] = React.useState(() => new Set(Object.keys(handlers).map(k => k.replace(/End|Start/, ''))))
+  const [actions] = useState(() => new Set(Object.keys(handlers).map(k => k.replace(/End|Start/, ''))))
 
   /**
    * Here we compute the derived internal config based on the provided config object.

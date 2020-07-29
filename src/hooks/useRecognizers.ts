@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 
-import React from 'react'
+import { useMemo, useEffect } from 'preact/hooks'
 import Controller from '../Controller'
 import {
   InternalConfig,
@@ -30,7 +30,7 @@ export default function useRecognizers<Config extends Partial<GenericOptions>>(
   nativeHandlers?: NativeHandlersPartial
 ): (...args: any[]) => HookReturnType<Config> {
   // The gesture controller keeping track of all gesture states
-  const controller = React.useMemo(() => {
+  const controller = useMemo(() => {
     const current = new Controller()
 
     /**
@@ -66,7 +66,7 @@ export default function useRecognizers<Config extends Partial<GenericOptions>>(
   controller.nativeRefs = nativeHandlers
 
   // Run controller clean functions on unmount.
-  React.useEffect(() => controller.current!.clean, [])
+  useEffect(() => controller.current!.clean, [])
 
   return controller.bind
 }

@@ -72,6 +72,7 @@ export default class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
     this.updateSharedState({ down: false, touches: 0 })
 
     this.updateGestureState({
+      //@ts-ignore
       event,
       ...this.getGenericPayload(event),
       ...this.getMovement(this.state.values),
@@ -141,6 +142,7 @@ export default class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
     this.updateSharedState({ down: false, touches: 0 })
 
     this.updateGestureState({
+      //@ts-ignore
       event,
       ...this.getGenericPayload(event),
       ...this.getMovement(this.state.values),
