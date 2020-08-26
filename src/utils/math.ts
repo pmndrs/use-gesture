@@ -77,9 +77,17 @@ export function calculateAllKinematics<T extends number[]>(movement: T, delta: T
   }
 }
 
+export function sign(x: number) {
+  let num = Number(x)
+  if (num === 0 || isNaN(num)) {
+    return num
+  }
+  return num > 0 ? 1 : -1
+}
+
 export function getIntentionalDisplacement(movement: number, threshold: number): number | false {
   const abs = Math.abs(movement)
-  return abs >= threshold ? Math.sign(movement) * threshold : false
+  return abs >= threshold ? sign(movement) * threshold : false
 }
 
 function minMax(value: number, min: number, max: number) {
