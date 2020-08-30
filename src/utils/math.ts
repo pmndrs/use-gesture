@@ -79,7 +79,7 @@ export function calculateAllKinematics<T extends number[]>(movement: T, delta: T
 
 /**
  * Because IE doesn't support `Math.sign` function, so we use the polyfill version of the function.
- * This polyfill function came from
+ * This polyfill function is suggested by Mozilla
  * :https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/sign#Polyfill
  * @param x target number
  */
