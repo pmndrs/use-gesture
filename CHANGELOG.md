@@ -1,5 +1,13 @@
 # Changelog
 
+## 7.0.16 Release
+
+**Summary:** Minor release.
+
+### Fixed
+
+1. Polyfill for `Math.sign` [#206](https://github.com/react-spring/react-use-gesture/pull/206).
+
 ## 7.0.15 Release
 
 **Summary:** Fixes touchcancel on drag.
