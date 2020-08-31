@@ -1,5 +1,5 @@
 import Recognizer from './Recognizer'
-import { calculateAllKinematics } from '../utils/math'
+import { calculateAllKinematics, sign } from '../utils/math'
 import { Vector2, UseGestureEvent, PartialGestureState, DistanceAngleKey, GestureState } from '../types'
 
 /**
@@ -28,7 +28,7 @@ export default abstract class DistanceAngleRecognizer<T extends DistanceAngleKey
      * read 181deg to ensure continuity. To make that happen, we detect when the jump
      * is supsiciously high (ie > 270deg) and increase the `turns` value
      */
-    const newTurns = Math.abs(delta_a) > 270 ? turns + Math.sign(delta_a) : turns
+    const newTurns = Math.abs(delta_a) > 270 ? turns + sign(delta_a) : turns
 
     // we update the angle difference to its corrected value
 
