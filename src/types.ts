@@ -293,9 +293,20 @@ export type RecognizerClass<T extends StateKey = StateKey> = {
 }
 
 type ReactDomAttributes = React.DOMAttributes<Element>
-
 export type NativeHandlers = Omit<ReactDomAttributes, keyof UserHandlers & keyof ReactDomAttributes>
+export type Handlers = Partial<UserHandlers & NativeHandlers>
+
+type check<T> = T extends { capture: boolean } ? T['capture'] : false
+
+export type DragReturnType<T extends UseGestureConfig> = check<T['eventOptions']> extends true
+  ? { onPointerDownCapture: React.PointerEventHandler }
+  : { onPointerDown: React.PointerEventHandler }
 
 export type HookReturnType<T extends { domTarget?: DomTarget }> = T['domTarget'] extends object
   ? void | undefined
   : ReactEventHandlers
+
+export type HookReturnType2<
+  T extends UseGestureConfig,
+  K extends Partial<InternalHandlers>
+> = T['domTarget'] extends object ? void : {} & K['drag'] extends object ? DragReturnType<T> : {}

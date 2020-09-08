@@ -1,8 +1,6 @@
 import useRecognizers from './useRecognizers'
 import { buildComplexConfig } from './buildConfig'
-import { InternalConfig, InternalHandlers, UserHandlers, UseGestureConfig, NativeHandlers } from '../types'
-
-type Handlers = Partial<UserHandlers & NativeHandlers>
+import { InternalConfig, InternalHandlers, UserHandlers, UseGestureConfig, Handlers } from '../types'
 
 export function wrapStart(fn: Function) {
   return function (this: any, { first }: any) {
@@ -40,7 +38,7 @@ function sortHandlers(handlers: Handlers) {
  *
  * The most complete gesture hook, allowing support for multiple gestures.
  *
- * @param {UserHandlersPartial} handlers - an object with on[Gesture] keys containg gesture handlers
+ * @param {Handlers} handlers - an object with on[Gesture] keys containg gesture handlers
  * @param {UseGestureConfig} [config={}] - the full config object
  * @returns {(...args: any[]) => HookReturnType<Config>}
  */
