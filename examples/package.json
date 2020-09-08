@@ -16,11 +16,13 @@
     "classnames": "^2.2.6",
     "lodash": "^4.17.15",
     "lodash-move": "^1.1.1",
+    "react": ">=16.13",
     "react-app-polyfill": "^1.0.6",
+    "react-dom": ">=16.13",
     "react-spring": "^9.0.0-rc.3",
-    "react-three-fiber": "^4.1.4",
-    "react-toastify": "^5.5.0",
-    "three": "^0.116.0",
+    "react-three-fiber": "^4.2.8",
+    "react-toastify": "^6.0.8",
+    "three": ">=0.115",
     "yarn": "^1.22.4"
   },
   "devDependencies": {
@@ -30,7 +32,7 @@
     "@types/react": "^16.9.34",
     "@types/react-dom": "^16.9.7",
     "parcel": "^1.12.4",
-    "postcss-modules": "^2.0.0",
+    "postcss-modules": "^3.2.2",
     "postcss-preset-env": "^6.7.0",
     "typescript": "^3.8.3"
   },

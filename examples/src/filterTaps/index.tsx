@@ -9,7 +9,7 @@ export default function FilterTaps() {
   const [dragged, setDragged] = useState(false)
   const [style, set] = useSpring(() => ({ x: 0, y: 0 }))
   const bind = useDrag(
-    ({ active, offset: [x, y] }) => {
+    ({ _active, active, offset: [x, y], tap }) => {
       setDragged(active)
       set({ x, y, immediate: true })
     },
