@@ -11,7 +11,7 @@ import {
 } from '../types'
 import { getInitialState } from '../utils/state'
 import { rubberbandIfOutOfBounds } from '../utils/rubberband'
-import { subV, addV } from '../utils/math'
+import { subV, addV, sign } from '../utils/math'
 import { valueFn } from '../utils/utils'
 
 /**
@@ -204,7 +204,7 @@ export default abstract class Recognizer<T extends StateKey = StateKey> {
 
 function getIntentionalDisplacement(movement: number, threshold: number): number | false {
   if (Math.abs(movement) >= threshold) {
-    return Math.sign(movement) * threshold
+    return sign(movement) * threshold
   } else {
     return false
   }

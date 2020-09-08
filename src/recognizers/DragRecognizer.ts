@@ -1,6 +1,6 @@
 import CoordinatesRecognizer from './CoordinatesRecognizer'
 import { getPointerEventValues, getGenericEventData } from '../utils/event'
-import { calculateDistance } from '../utils/math'
+import { calculateDistance, sign } from '../utils/math'
 import { getStartGestureState, getGenericPayload } from './Recognizer'
 import { addBindings, updateWindowListeners, clearWindowListeners } from '../Controller'
 
@@ -139,8 +139,8 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
     const swipe: [number, number] = [0, 0]
 
     if (endState.elapsedTime < SWIPE_MAX_ELAPSED_TIME) {
-      if (ix !== false && Math.abs(vx) > svx && Math.abs(mx) > sx) swipe[0] = Math.sign(vx)
-      if (iy !== false && Math.abs(vy) > svy && Math.abs(my) > sy) swipe[1] = Math.sign(vy)
+      if (ix !== false && Math.abs(vx) > svx && Math.abs(mx) > sx) swipe[0] = sign(vx)
+      if (iy !== false && Math.abs(vy) > svy && Math.abs(my) > sy) swipe[1] = sign(vy)
     }
 
     this.updateGestureState({ ...endState, tap, swipe })

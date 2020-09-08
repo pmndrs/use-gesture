@@ -1,5 +1,5 @@
 import Recognizer from './Recognizer'
-import { calculateAllKinematics, subV } from '../utils/math'
+import { calculateAllKinematics, sign, subV } from '../utils/math'
 import { Vector2, PartialGestureState, DistanceAngleKey, GestureState } from '../types'
 
 /**
@@ -14,7 +14,7 @@ export default abstract class DistanceAngleRecognizer<T extends DistanceAngleKey
 
     let delta_a = a - prev_a
     let next_turns = state.turns
-    if (Math.abs(delta_a) > 270) next_turns += Math.sign(delta_a)
+    if (Math.abs(delta_a) > 270) next_turns += sign(delta_a)
     return subV([d, a - 360 * next_turns], state.initial)
   }
 
