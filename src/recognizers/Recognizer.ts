@@ -8,11 +8,14 @@ import {
   PartialGestureState,
   Vector2,
   FullGestureState,
+  RecognizerClass,
 } from '../types'
 import { getInitialState } from '../utils/state'
 import { rubberbandIfOutOfBounds } from '../utils/rubberband'
 import { subV, addV, sign } from '../utils/math'
 import { valueFn } from '../utils/utils'
+
+export const RecognizersMap = new Map<string, RecognizerClass>()
 
 /**
  * @private

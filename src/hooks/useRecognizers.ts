@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 
 import React from 'react'
+import { RecognizersMap } from '../recognizers/Recognizer'
 import Controller from '../Controller'
 import {
   InternalConfig,
@@ -10,12 +11,6 @@ import {
   RecognizerClass,
   NativeHandlers,
 } from '../types'
-
-import DragRecognizer from '../recognizers/DragRecognizer'
-import WheelRecognizer from '../recognizers/WheelRecognizer'
-import MoveRecognizer from '../recognizers/MoveRecognizer'
-import PinchRecognizer from '../recognizers/PinchRecognizer'
-import ScrollRecognizer from '../recognizers/ScrollRecognizer'
 
 /**
  * Utility hook called by all gesture hooks and that will be responsible for the internals.
@@ -56,12 +51,12 @@ function deprecationNoticeForDomTarget() {
 function resolveClasses(internalHandlers: Partial<InternalHandlers>) {
   const classes = new Set<RecognizerClass>()
 
-  if (internalHandlers.drag) classes.add(DragRecognizer)
-  if (internalHandlers.wheel) classes.add(WheelRecognizer)
-  if (internalHandlers.scroll) classes.add(ScrollRecognizer)
-  if (internalHandlers.move) classes.add(MoveRecognizer)
-  if (internalHandlers.pinch) classes.add(PinchRecognizer)
-  if (internalHandlers.hover) classes.add(MoveRecognizer)
+  if (internalHandlers.drag) classes.add(RecognizersMap.get('drag')!)
+  if (internalHandlers.wheel) classes.add(RecognizersMap.get('wheel')!)
+  if (internalHandlers.scroll) classes.add(RecognizersMap.get('scroll')!)
+  if (internalHandlers.move) classes.add(RecognizersMap.get('move')!)
+  if (internalHandlers.pinch) classes.add(RecognizersMap.get('pinch')!)
+  if (internalHandlers.hover) classes.add(RecognizersMap.get('hover')!)
 
   return classes
 }
