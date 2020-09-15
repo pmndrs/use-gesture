@@ -18,12 +18,13 @@ React.useEffect(bind, [bind])
 useDrag(() => { /* your logic */ }, { domTarget: window })
 ```
 
-3. The handlers are being fired even if the gesture is not intentional [#3dacf8f](https://github.com/react-spring/react-use-gesture/pull/164/commits/36eec2c4ef241105d0789aaa6ae4c64935d68f19). This allows manipulation of events at all times. Fixes [#175](https://github.com/react-spring/react-use-gesture/issues/175).
+3. Handlers are being fired even if the gesture is not intentional [#3dacf8f](https://github.com/react-spring/react-use-gesture/pull/164/commits/36eec2c4ef241105d0789aaa6ae4c64935d68f19). This allows manipulation of events at all times. Fixes [#175](https://github.com/react-spring/react-use-gesture/issues/175).
 
 ### Added
 
 1. Drag and pinch now works on multiple dom elements at once [#170](https://github.com/react-spring/react-use-gesture/issues/170).
 2. Drag option `{ filterTaps: true }` will also prevent unwanted taps on children elements [#173](https://github.com/react-spring/react-use-gesture/issues/173).
+3. Shared state is forwarded to native event listeners handlers [#186](https://github.com/react-spring/react-use-gesture/issues/186)
 
 ### Fixed
 1. Various Typescript types.
