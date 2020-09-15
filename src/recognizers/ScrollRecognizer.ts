@@ -1,10 +1,10 @@
 import CoordinatesRecognizer from './CoordinatesRecognizer'
 import { getGenericEventData, getScrollEventValues } from '../utils/event'
 import { calculateAllGeometry } from '../utils/math'
-import { getStartGestureState, getGenericPayload } from './Recognizer'
+import { getStartGestureState, getGenericPayload, RecognizersMap } from './Recognizer'
 import { addBindings } from '../Controller'
 
-export default class ScrollRecognizer extends CoordinatesRecognizer<'scroll'> {
+class ScrollRecognizer extends CoordinatesRecognizer<'scroll'> {
   readonly ingKey = 'scrolling'
   readonly stateKey = 'scroll'
   debounced = true
@@ -50,3 +50,5 @@ export default class ScrollRecognizer extends CoordinatesRecognizer<'scroll'> {
     addBindings(bindings, 'onScroll', this.handleEvent)
   }
 }
+
+RecognizersMap.set('scroll', ScrollRecognizer)

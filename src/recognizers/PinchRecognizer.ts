@@ -8,10 +8,10 @@ import {
   getWebkitGestureEventValues,
   supportsTouchEvents,
 } from '../utils/event'
-import { getStartGestureState, getGenericPayload } from './Recognizer'
+import { getStartGestureState, getGenericPayload, RecognizersMap } from './Recognizer'
 import { addBindings } from '../Controller'
 
-export default class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
+class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
   readonly ingKey = 'pinching'
   readonly stateKey = 'pinch'
 
@@ -232,3 +232,5 @@ export default class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
     }
   }
 }
+
+RecognizersMap.set('pinch', PinchRecognizer)

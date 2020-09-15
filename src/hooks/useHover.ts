@@ -1,5 +1,4 @@
-import MoveRecognizer from '../recognizers/MoveRecognizer'
-import { RecognizersMap } from '../recognizers/Recognizer'
+import '../recognizers/MoveRecognizer'
 import { UseHoverConfig, Handler } from '../types'
 import { buildHoverConfig } from './buildConfig'
 import useRecognizers from './useRecognizers'
@@ -13,5 +12,3 @@ import useRecognizers from './useRecognizers'
 export function useHover<Config = UseHoverConfig>(handler: Handler<'hover'>, config: Config | {} = {}) {
   return useRecognizers<Config>({ hover: handler }, buildHoverConfig(config))
 }
-
-RecognizersMap.set('hover', MoveRecognizer)

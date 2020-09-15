@@ -1,5 +1,4 @@
-import { RecognizersMap } from '../recognizers/Recognizer'
-import WheelRecognizer from '../recognizers/WheelRecognizer'
+import '../recognizers/WheelRecognizer'
 import { UseWheelConfig, Handler } from '../types'
 import { buildWheelConfig } from './buildConfig'
 import useRecognizers from './useRecognizers'
@@ -13,5 +12,3 @@ import useRecognizers from './useRecognizers'
 export function useWheel<Config = UseWheelConfig>(handler: Handler<'wheel'>, config: Config | {} = {}) {
   return useRecognizers<Config>({ wheel: handler }, buildWheelConfig(config))
 }
-
-RecognizersMap.set('wheel', WheelRecognizer)

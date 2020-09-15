@@ -1,5 +1,4 @@
-import DragRecognizer from '../recognizers/DragRecognizer'
-import { RecognizersMap } from '../recognizers/Recognizer'
+import '../recognizers/DragRecognizer'
 import { UseDragConfig, Handler } from '../types'
 import { buildDragConfig } from './buildConfig'
 import useRecognizers from './useRecognizers'
@@ -13,5 +12,3 @@ import useRecognizers from './useRecognizers'
 export function useDrag<Config = UseDragConfig>(handler: Handler<'drag'>, config: Config | {} = {}) {
   return useRecognizers<Config>({ drag: handler }, buildDragConfig(config))
 }
-
-RecognizersMap.set('drag', DragRecognizer)

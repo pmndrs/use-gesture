@@ -1,5 +1,4 @@
-import MoveRecognizer from '../recognizers/MoveRecognizer'
-import { RecognizersMap } from '../recognizers/Recognizer'
+import '../recognizers/MoveRecognizer'
 import { UseMoveConfig, Handler } from '../types'
 import { buildMoveConfig } from './buildConfig'
 import useRecognizers from './useRecognizers'
@@ -13,5 +12,3 @@ import useRecognizers from './useRecognizers'
 export function useMove<Config = UseMoveConfig>(handler: Handler<'move'>, config: Config | {} = {}) {
   return useRecognizers<Config>({ move: handler }, buildMoveConfig(config))
 }
-
-RecognizersMap.set('move', MoveRecognizer)

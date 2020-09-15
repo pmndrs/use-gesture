@@ -1,5 +1,4 @@
-import { RecognizersMap } from '../recognizers/Recognizer'
-import ScrollRecognizer from '../recognizers/ScrollRecognizer'
+import '../recognizers/ScrollRecognizer'
 import { UseScrollConfig, Handler } from '../types'
 import { buildScrollConfig } from './buildConfig'
 import useRecognizers from './useRecognizers'
@@ -13,5 +12,3 @@ import useRecognizers from './useRecognizers'
 export function useScroll<Config = UseScrollConfig>(handler: Handler<'scroll'>, config: Config | {} = {}) {
   return useRecognizers<Config>({ scroll: handler }, buildScrollConfig(config))
 }
-
-RecognizersMap.set('scroll', ScrollRecognizer)

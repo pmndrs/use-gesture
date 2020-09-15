@@ -1,5 +1,4 @@
-import PinchRecognizer from '../recognizers/PinchRecognizer'
-import { RecognizersMap } from '../recognizers/Recognizer'
+import '../recognizers/PinchRecognizer'
 import { UsePinchConfig, Handler } from '../types'
 import { buildPinchConfig } from './buildConfig'
 import useRecognizers from './useRecognizers'
@@ -13,5 +12,3 @@ import useRecognizers from './useRecognizers'
 export function usePinch<Config = UsePinchConfig>(handler: Handler<'pinch'>, config: Config | {} = {}) {
   return useRecognizers<Config>({ pinch: handler }, buildPinchConfig(config))
 }
-
-RecognizersMap.set('pinch', PinchRecognizer)
