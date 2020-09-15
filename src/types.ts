@@ -289,12 +289,20 @@ export type UserHandlers = {
 }
 
 export type RecognizerClass<T extends StateKey = StateKey> = {
-  new (controller: Controller, args: any[]): Recognizer<T>
+  new (controller: Controller, args: any): Recognizer<T>
 }
 
 type ReactDomAttributes = React.DOMAttributes<Element>
-export type NativeHandlers = Omit<ReactDomAttributes, keyof UserHandlers & keyof ReactDomAttributes>
 export type Handlers = Partial<UserHandlers & NativeHandlers>
+
+type NativeHandlersKeys = keyof Omit<
+  ReactDomAttributes,
+  (keyof UserHandlers & keyof ReactDomAttributes) | 'children' | 'dangerouslySetInnerHTML'
+>
+
+export type NativeHandlers = {
+  [key in NativeHandlersKeys]: (state: SharedGestureState & { event: Event; args: any }, ...args: any) => void
+}
 
 export type HookReturnType<T extends { domTarget?: DomTarget }> = T['domTarget'] extends object
   ? void | undefined

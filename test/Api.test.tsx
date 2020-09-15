@@ -42,7 +42,7 @@ test('bind should dispatch its arguments', () => {
 })
 
 test('genuine handlers should correctly execute', () => {
-  const { getByTestId } = render(<GenuineHandlers />)
+  const { getByTestId } = render(<GenuineHandlers args="testArg" />)
   const element = getByTestId('drag-el')
   fireEvent.pointerDown(element, { pointerId: 4 })
   expect(getByTestId('drag-active')).toHaveTextContent('true')
@@ -50,7 +50,7 @@ test('genuine handlers should correctly execute', () => {
   fireEvent.pointerUp(element, { pointerId: 4 })
 
   fireEvent.click(element)
-  expect(getByTestId('click')).toHaveTextContent(/^clicked$/)
+  expect(getByTestId('click')).toHaveTextContent(/^clicked testArg$/)
 })
 
 test('testing memo', () => {

@@ -11,6 +11,13 @@ import {
 import { getInitialState } from './utils/state'
 import { chainFns } from './utils/utils'
 
+function partial(func: Fn, state: any) {
+  return function (event: any, ...args: any) {
+    // @ts-ignore
+    return func.call(this, { ...state, event }, ...args)
+  }
+}
+
 /**
  * The controller will keep track of the state for all gestures and also keep
  * track of timeouts, and window listeners.
@@ -37,7 +44,8 @@ export default class Controller {
     for (let RecognizerClass of this.classes) new RecognizerClass(this, args).addBindings(bindings)
 
     // we also add event bindings for native handlers
-    for (let [event, handler] of Object.entries(this.nativeRefs)) addBindings(bindings, event, handler)
+    for (let [event, handler] of Object.entries(this.nativeRefs))
+      addBindings(bindings, event, partial(handler, { ...this.state.shared, args }))
 
     if (this.config.domTarget) {
       // If config.domTarget is set we add event listeners to it and return the clean function.
