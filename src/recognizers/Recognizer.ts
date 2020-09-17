@@ -4,7 +4,9 @@ import {
   SharedGestureState,
   IngKey,
   InternalConfig,
+  GestureKey,
   GestureState,
+  EventTypes,
   PartialGestureState,
   Vector2,
   FullGestureState,
@@ -15,7 +17,7 @@ import { rubberbandIfOutOfBounds } from '../utils/rubberband'
 import { subV, addV, sign } from '../utils/math'
 import { valueFn } from '../utils/utils'
 
-export const RecognizersMap = new Map<string, RecognizerClass>()
+export const RecognizersMap = new Map<GestureKey, RecognizerClass>()
 
 /**
  * @private
@@ -213,7 +215,11 @@ function getIntentionalDisplacement(movement: number, threshold: number): number
   }
 }
 
-function computeRubberband({ config: { bounds } }: Recognizer, [Vx, Vy]: Vector2, [Rx, Ry]: Vector2): Vector2 {
+function computeRubberband<T extends StateKey>(
+  { config: { bounds } }: Recognizer<T>,
+  [Vx, Vy]: Vector2,
+  [Rx, Ry]: Vector2
+): Vector2 {
   const [[X1, X2], [Y1, Y2]] = bounds
 
   return [rubberbandIfOutOfBounds(Vx, X1, X2, Rx), rubberbandIfOutOfBounds(Vy, Y1, Y2, Ry)]
@@ -222,7 +228,11 @@ function computeRubberband({ config: { bounds } }: Recognizer, [Vx, Vy]: Vector2
 /**
  * Returns a generic, common payload for all gestures from an event.
  */
-export function getGenericPayload({ state, args }: Recognizer, event: React.UIEvent | UIEvent, isStartEvent?: boolean) {
+export function getGenericPayload<T extends StateKey>(
+  { state, args }: Recognizer<T>,
+  event: EventTypes[T],
+  isStartEvent?: boolean
+) {
   const { timeStamp, type: _lastEventType } = event
   const previous = state.values
   const elapsedTime = isStartEvent ? 0 : timeStamp - state.startTime!
@@ -236,7 +246,7 @@ export function getGenericPayload({ state, args }: Recognizer, event: React.UIEv
 export function getStartGestureState<T extends StateKey>(
   recognizer: Recognizer<T>,
   values: Vector2,
-  event: React.UIEvent | UIEvent
+  event: EventTypes[T]
 ) {
   const offset = recognizer.state.offset
   const startTime = event.timeStamp

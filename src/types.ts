@@ -184,7 +184,7 @@ export type ReactEventHandlerKey = keyof ReactEventHandlers
 export type IngKey = 'hovering' | 'scrolling' | 'wheeling' | 'dragging' | 'moving' | 'pinching'
 export type CoordinatesKey = 'drag' | 'wheel' | 'move' | 'scroll'
 export type DistanceAngleKey = 'pinch'
-type GestureKey = CoordinatesKey | DistanceAngleKey | 'hover'
+export type GestureKey = CoordinatesKey | DistanceAngleKey | 'hover'
 export type StateKey<T extends GestureKey = GestureKey> = T extends 'hover' ? 'move' : T
 
 export type SharedGestureState = { [ingKey in IngKey]: boolean } & {
@@ -197,7 +197,15 @@ export type SharedGestureState = { [ingKey in IngKey]: boolean } & {
   ctrlKey: boolean
 }
 
-export interface CommonGestureState {
+export type EventTypes = {
+  drag: React.PointerEvent | PointerEvent
+  wheel: React.WheelEvent | WheelEvent
+  scroll: React.UIEvent | UIEvent
+  move: React.PointerEvent | PointerEvent
+  pinch: React.TouchEvent | TouchEvent | React.WheelEvent | WheelEvent | WebKitGestureEvent
+}
+
+export interface CommonGestureState<K extends EventTypes[keyof EventTypes]> {
   _active: boolean
   _blocked: boolean
   _intentional: [false | number, false | number]
@@ -205,7 +213,7 @@ export interface CommonGestureState {
   _initial: Vector2
   _lastEventType?: string
   _pointerIds?: number[]
-  event?: React.UIEvent | UIEvent
+  event?: K
   // currentTarget?: (EventTarget & Element) | null
   // pointerId?: number | null
   values: Vector2
@@ -254,11 +262,11 @@ export interface DistanceAngle {
 
 export type State = {
   shared: SharedGestureState
-  drag: CommonGestureState & Coordinates & DragState
-  wheel: CommonGestureState & Coordinates
-  scroll: CommonGestureState & Coordinates
-  move: CommonGestureState & Coordinates
-  pinch: CommonGestureState & DistanceAngle
+  drag: CommonGestureState<EventTypes['drag']> & Coordinates & DragState
+  wheel: CommonGestureState<EventTypes['wheel']> & Coordinates
+  scroll: CommonGestureState<EventTypes['scroll']> & Coordinates
+  move: CommonGestureState<EventTypes['move']> & Coordinates
+  pinch: CommonGestureState<EventTypes['pinch']> & DistanceAngle
 }
 
 export type GestureState<T extends StateKey> = State[T]
@@ -288,8 +296,8 @@ export type UserHandlers = {
   onHover: Handler<'hover'>
 }
 
-export type RecognizerClass<T extends StateKey = StateKey> = {
-  new (controller: Controller, args: any): Recognizer<T>
+export type RecognizerClass = {
+  new (controller: Controller, args: any): Recognizer
 }
 
 type ReactDomAttributes = React.DOMAttributes<Element>
