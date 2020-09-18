@@ -44,7 +44,7 @@ export default abstract class CoordinatesRecognizer<T extends CoordinatesKey> ex
     return state
   }
 
-  protected mapStateValues(state: GestureState<T>): PartialGestureState<T> {
-    return { xy: state.values, vxvy: state.velocities } as PartialGestureState<T>
+  protected mapStateValues(state: GestureState<T>): Omit<PartialGestureState<T>, 'event'> {
+    return { xy: state.values, vxvy: state.velocities } as Omit<PartialGestureState<T>, 'event'>
   }
 }

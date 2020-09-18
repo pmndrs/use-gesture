@@ -79,7 +79,7 @@ export default abstract class Recognizer<T extends StateKey = StateKey> {
 
   protected abstract getKinematics(values: Vector2, event: React.UIEvent | UIEvent): PartialGestureState<T>
   protected abstract getInternalMovement(values: Vector2, state: GestureState<T>): Vector2
-  protected abstract mapStateValues(state: GestureState<T>): PartialGestureState<T>
+  protected abstract mapStateValues(state: GestureState<T>): Omit<PartialGestureState<T>, 'event'>
 
   public abstract addBindings(bindings: any): void
 

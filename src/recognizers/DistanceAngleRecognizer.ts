@@ -26,8 +26,8 @@ export default abstract class DistanceAngleRecognizer<T extends DistanceAngleKey
     return { turns, ...state, ...kinematics }
   }
 
-  protected mapStateValues(state: GestureState<T>): PartialGestureState<T> {
-    return { da: state.values, vdva: state.velocities } as PartialGestureState<T>
+  protected mapStateValues(state: GestureState<T>): Omit<PartialGestureState<T>, 'event'> {
+    return { da: state.values, vdva: state.velocities } as Omit<PartialGestureState<T>, 'event'>
   }
 }
 

@@ -205,7 +205,7 @@ export type EventTypes = {
   pinch: React.TouchEvent | TouchEvent | React.WheelEvent | WheelEvent | WebKitGestureEvent
 }
 
-export interface CommonGestureState<K extends EventTypes[keyof EventTypes]> {
+export interface CommonGestureState {
   _active: boolean
   _blocked: boolean
   _intentional: [false | number, false | number]
@@ -213,7 +213,7 @@ export interface CommonGestureState<K extends EventTypes[keyof EventTypes]> {
   _initial: Vector2
   _lastEventType?: string
   _pointerIds?: number[]
-  event?: K
+  event?: React.UIEvent | UIEvent
   // currentTarget?: (EventTarget & Element) | null
   // pointerId?: number | null
   values: Vector2
@@ -262,11 +262,11 @@ export interface DistanceAngle {
 
 export type State = {
   shared: SharedGestureState
-  drag: CommonGestureState<EventTypes['drag']> & Coordinates & DragState
-  wheel: CommonGestureState<EventTypes['wheel']> & Coordinates
-  scroll: CommonGestureState<EventTypes['scroll']> & Coordinates
-  move: CommonGestureState<EventTypes['move']> & Coordinates
-  pinch: CommonGestureState<EventTypes['pinch']> & DistanceAngle
+  drag: CommonGestureState & Coordinates & DragState
+  wheel: CommonGestureState & Coordinates
+  scroll: CommonGestureState & Coordinates
+  move: CommonGestureState & Coordinates
+  pinch: CommonGestureState & DistanceAngle
 }
 
 export type GestureState<T extends StateKey> = State[T]
@@ -274,7 +274,10 @@ export type PartialGestureState<T extends StateKey> = Partial<GestureState<T>>
 
 export type FullGestureState<T extends StateKey> = SharedGestureState & State[T]
 
-export type Handler<T extends GestureKey> = (state: FullGestureState<StateKey<T>>) => any | void
+export type Handler<T extends GestureKey> = (
+  state: Omit<FullGestureState<StateKey<T>>, 'event'> & { event: EventTypes[StateKey<T>] }
+) => any | void
+
 export type InternalHandlers = { [Key in GestureKey]?: Handler<Key> }
 
 export type UserHandlers = {
