@@ -256,7 +256,7 @@ export interface DragState {
 export interface DistanceAngle {
   da: Vector2
   vdva: Vector2
-  origin?: Vector2
+  origin: Vector2
   turns: number
 }
 

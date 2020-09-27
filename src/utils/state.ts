@@ -68,6 +68,7 @@ export function getInitialState(): State {
   const pinch = getInitial<DistanceAngle>({
     da: [0, 0] as Vector2,
     vdva: [0, 0] as Vector2,
+    // @ts-ignore origin can never be passed as undefined in userland
     origin: undefined,
     turns: 0,
   })
