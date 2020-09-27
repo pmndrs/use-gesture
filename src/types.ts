@@ -203,6 +203,7 @@ export type EventTypes = {
   scroll: React.UIEvent | UIEvent
   move: React.PointerEvent | PointerEvent
   pinch: React.TouchEvent | TouchEvent | React.WheelEvent | WheelEvent | WebKitGestureEvent
+  hover: React.PointerEvent | PointerEvent
 }
 
 export interface CommonGestureState {
@@ -274,46 +275,66 @@ export type PartialGestureState<T extends StateKey> = Partial<GestureState<T>>
 
 export type FullGestureState<T extends StateKey> = SharedGestureState & State[T]
 
-export type Handler<T extends GestureKey> = (
-  state: Omit<FullGestureState<StateKey<T>>, 'event'> & { event: EventTypes[StateKey<T>] }
+export type Handler<T extends GestureKey, K = EventTypes[T]> = (
+  state: Omit<FullGestureState<StateKey<T>>, 'event'> & { event: K }
 ) => any | void
 
-export type InternalHandlers = { [Key in GestureKey]?: Handler<Key> }
-
-export type UserHandlers = {
-  onDrag: Handler<'drag'>
-  onDragStart: Handler<'drag'>
-  onDragEnd: Handler<'drag'>
-  onPinch: Handler<'pinch'>
-  onPinchStart: Handler<'pinch'>
-  onPinchEnd: Handler<'pinch'>
-  onWheel: Handler<'wheel'>
-  onWheelStart: Handler<'wheel'>
-  onWheelEnd: Handler<'wheel'>
-  onMove: Handler<'move'>
-  onMoveStart: Handler<'move'>
-  onMoveEnd: Handler<'move'>
-  onScroll: Handler<'scroll'>
-  onScrollStart: Handler<'scroll'>
-  onScrollEnd: Handler<'scroll'>
-  onHover: Handler<'hover'>
-}
-
-export type RecognizerClass = {
-  new (controller: Controller, args: any): Recognizer
-}
+export type InternalHandlers = { [Key in GestureKey]?: Handler<Key, any> }
 
 type ReactDomAttributes = React.DOMAttributes<Element>
-export type Handlers = Partial<UserHandlers & NativeHandlers>
 
 type NativeHandlersKeys = keyof Omit<
   ReactDomAttributes,
   (keyof UserHandlers & keyof ReactDomAttributes) | 'children' | 'dangerouslySetInnerHTML'
 >
 
-export type NativeHandlers = {
-  [key in NativeHandlersKeys]: (state: SharedGestureState & { event: Event; args: any }, ...args: any) => void
+// allows overriding the event type from the returned state in handlers
+export type AnyGestureEventTypes = Partial<
+  {
+    drag: any
+    wheel: any
+    scroll: any
+    move: any
+    pinch: any
+    hover: any
+  } & { [key in NativeHandlersKeys]: any }
+>
+
+// if no type is provided in the user generic for a given key
+// then return the default EventTypes that key
+type check<T extends AnyGestureEventTypes, Key extends GestureKey> = undefined extends T[Key] ? EventTypes[Key] : T[Key]
+
+export type UserHandlers<T extends AnyGestureEventTypes = EventTypes> = {
+  onDrag: Handler<'drag', check<T, 'drag'>>
+  onDragStart: Handler<'drag', check<T, 'drag'>>
+  onDragEnd: Handler<'drag', check<T, 'drag'>>
+  onPinch: Handler<'pinch', check<T, 'pinch'>>
+  onPinchStart: Handler<'pinch', check<T, 'pinch'>>
+  onPinchEnd: Handler<'pinch', check<T, 'pinch'>>
+  onWheel: Handler<'wheel', check<T, 'wheel'>>
+  onWheelStart: Handler<'wheel', check<T, 'wheel'>>
+  onWheelEnd: Handler<'wheel', check<T, 'wheel'>>
+  onMove: Handler<'move', check<T, 'move'>>
+  onMoveStart: Handler<'move', check<T, 'move'>>
+  onMoveEnd: Handler<'move', check<T, 'move'>>
+  onScroll: Handler<'scroll', check<T, 'scroll'>>
+  onScrollStart: Handler<'scroll', check<T, 'scroll'>>
+  onScrollEnd: Handler<'scroll', check<T, 'scroll'>>
+  onHover: Handler<'hover', check<T, 'hover'>>
 }
+
+export type RecognizerClass = {
+  new (controller: Controller, args: any): Recognizer
+}
+
+export type NativeHandlers<T extends AnyGestureEventTypes = {}> = {
+  [key in NativeHandlersKeys]: (
+    state: SharedGestureState & { event: undefined extends T[key] ? Event : T[key]; args: any },
+    ...args: any
+  ) => void
+}
+
+export type Handlers<T extends AnyGestureEventTypes = EventTypes> = Partial<UserHandlers<T> & NativeHandlers<T>>
 
 export type HookReturnType<T extends { domTarget?: DomTarget }> = T['domTarget'] extends object
   ? void | undefined

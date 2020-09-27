@@ -1,5 +1,5 @@
 import '../recognizers/MoveRecognizer'
-import { UseHoverConfig, Handler } from '../types'
+import { Handler, UseHoverConfig, EventTypes } from '../types'
 import { buildHoverConfig } from './buildConfig'
 import useRecognizers from './useRecognizers'
 
@@ -9,6 +9,6 @@ import useRecognizers from './useRecognizers'
  * @param handler - the function fired every time the hover gesture updates
  * @param [config={}] - the config object including generic options and hover options
  */
-export function useHover<Config = UseHoverConfig>(handler: Handler<'hover'>, config: Config | {} = {}) {
-  return useRecognizers<Config>({ hover: handler }, buildHoverConfig(config))
+export function useHover<K = EventTypes['hover']>(handler: Handler<'hover', K>, config: UseHoverConfig | {} = {}) {
+  return useRecognizers<UseHoverConfig>({ hover: handler }, buildHoverConfig(config))
 }

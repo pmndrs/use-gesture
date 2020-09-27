@@ -1,6 +1,14 @@
 import useRecognizers from './useRecognizers'
 import { buildComplexConfig } from './buildConfig'
-import { InternalConfig, InternalHandlers, UserHandlers, UseGestureConfig, Handlers } from '../types'
+import {
+  InternalConfig,
+  InternalHandlers,
+  UserHandlers,
+  UseGestureConfig,
+  Handlers,
+  EventTypes,
+  AnyGestureEventTypes,
+} from '../types'
 
 export function wrapStart(fn: Function) {
   return function (this: any, { first }: any) {
@@ -16,7 +24,7 @@ export function wrapEnd(fn: Function) {
 
 const RE_NOT_NATIVE = /^on(Drag|Wheel|Scroll|Move|Pinch|Hover)/
 
-function sortHandlers(handlers: Handlers) {
+function sortHandlers(handlers: object) {
   const native: any = {}
   const handle: any = {}
   const actions = new Set()
@@ -42,7 +50,10 @@ function sortHandlers(handlers: Handlers) {
  * @param {UseGestureConfig} [config={}] - the full config object
  * @returns {(...args: any[]) => HookReturnType<Config>}
  */
-export function useGesture<Config = UseGestureConfig>(_handlers: Handlers, config: UseGestureConfig = {}) {
+export function useGesture<T extends AnyGestureEventTypes = EventTypes>(
+  _handlers: Handlers<T>,
+  config: UseGestureConfig = {}
+) {
   const [handlers, nativeHandlers, actions] = sortHandlers(_handlers)
 
   const mergedConfig: InternalConfig = buildComplexConfig(config, actions)
@@ -55,7 +66,7 @@ export function useGesture<Config = UseGestureConfig>(_handlers: Handlers, confi
   if (actions.has('onPinch')) internalHandlers.pinch = includeStartEndHandlers(handlers, 'onPinch')
   if (actions.has('onHover')) internalHandlers.hover = handlers.onHover
 
-  return useRecognizers<Config>(internalHandlers, mergedConfig, nativeHandlers)
+  return useRecognizers<UseGestureConfig>(internalHandlers, mergedConfig, nativeHandlers)
 }
 
 /**
