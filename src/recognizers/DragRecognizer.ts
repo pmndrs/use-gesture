@@ -1,13 +1,13 @@
 import CoordinatesRecognizer from './CoordinatesRecognizer'
 import { getPointerEventValues, getGenericEventData } from '../utils/event'
 import { calculateDistance, sign } from '../utils/math'
-import { getStartGestureState, getGenericPayload, RecognizersMap } from './Recognizer'
+import { getStartGestureState, getGenericPayload } from './Recognizer'
 import { addBindings, updateWindowListeners, clearWindowListeners } from '../Controller'
 
 export const TAP_DISTANCE_THRESHOLD = 3
 export const SWIPE_MAX_ELAPSED_TIME = 220
 
-class DragRecognizer extends CoordinatesRecognizer<'drag'> {
+export class DragRecognizer extends CoordinatesRecognizer<'drag'> {
   readonly ingKey = 'dragging'
   readonly stateKey = 'drag'
 
@@ -180,5 +180,3 @@ class DragRecognizer extends CoordinatesRecognizer<'drag'> {
     // addBindings(bindings, 'onPointerCancel', this.onDragEnd)
   }
 }
-
-RecognizersMap.set('drag', DragRecognizer)

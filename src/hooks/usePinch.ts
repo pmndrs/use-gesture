@@ -1,7 +1,8 @@
-import '../recognizers/PinchRecognizer'
 import { UsePinchConfig, Handler, EventTypes } from '../types'
 import { buildPinchConfig } from './buildConfig'
 import useRecognizers from './useRecognizers'
+import { RecognizersMap } from '../recognizers/Recognizer'
+import { PinchRecognizer } from '../recognizers/PinchRecognizer'
 
 /**
  * Pinch hook.
@@ -10,5 +11,7 @@ import useRecognizers from './useRecognizers'
  * @param [config={}] - the config object including generic options and pinch options
  */
 export function usePinch<K = EventTypes['pinch']>(handler: Handler<'pinch', K>, config: UsePinchConfig | {} = {}) {
+  RecognizersMap.set('pinch', PinchRecognizer)
+
   return useRecognizers<UsePinchConfig>({ pinch: handler }, buildPinchConfig(config))
 }

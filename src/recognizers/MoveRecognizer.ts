@@ -1,9 +1,9 @@
 import CoordinatesRecognizer from './CoordinatesRecognizer'
 import { getGenericEventData, getPointerEventValues } from '../utils/event'
-import { getStartGestureState, getGenericPayload, RecognizersMap } from './Recognizer'
+import { getStartGestureState, getGenericPayload } from './Recognizer'
 import { addBindings } from '../Controller'
 
-class MoveRecognizer extends CoordinatesRecognizer<'move'> {
+export class MoveRecognizer extends CoordinatesRecognizer<'move'> {
   readonly ingKey = 'moving'
   readonly stateKey = 'move'
 
@@ -99,6 +99,3 @@ class MoveRecognizer extends CoordinatesRecognizer<'move'> {
     }
   }
 }
-
-RecognizersMap.set('move', MoveRecognizer)
-RecognizersMap.set('hover', MoveRecognizer)

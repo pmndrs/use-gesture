@@ -9,6 +9,12 @@ import {
   EventTypes,
   AnyGestureEventTypes,
 } from '../types'
+import { RecognizersMap } from '../recognizers/Recognizer'
+import { DragRecognizer } from '../recognizers/DragRecognizer'
+import { MoveRecognizer } from '../recognizers/MoveRecognizer'
+import { PinchRecognizer } from '../recognizers/PinchRecognizer'
+import { ScrollRecognizer } from '../recognizers/ScrollRecognizer'
+import { WheelRecognizer } from '../recognizers/WheelRecognizer'
 
 export function wrapStart(fn: Function) {
   return function (this: any, { first }: any) {
@@ -55,6 +61,13 @@ export function useGesture<T extends AnyGestureEventTypes = EventTypes>(
   config: UseGestureConfig = {}
 ) {
   const [handlers, nativeHandlers, actions] = sortHandlers(_handlers)
+
+  RecognizersMap.set('drag', DragRecognizer)
+  RecognizersMap.set('hover', MoveRecognizer)
+  RecognizersMap.set('move', MoveRecognizer)
+  RecognizersMap.set('pinch', PinchRecognizer)
+  RecognizersMap.set('scroll', ScrollRecognizer)
+  RecognizersMap.set('wheel', WheelRecognizer)
 
   const mergedConfig: InternalConfig = buildComplexConfig(config, actions)
   const internalHandlers: Partial<InternalHandlers> = {}

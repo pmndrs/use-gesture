@@ -2,10 +2,10 @@ import { WheelEvent } from 'react'
 import CoordinatesRecognizer from './CoordinatesRecognizer'
 import { getWheelEventValues, getGenericEventData } from '../utils/event'
 import { addV, calculateAllGeometry } from '../utils/math'
-import { getStartGestureState, getGenericPayload, RecognizersMap } from './Recognizer'
+import { getStartGestureState, getGenericPayload } from './Recognizer'
 import { addBindings } from '../Controller'
 
-class WheelRecognizer extends CoordinatesRecognizer<'wheel'> {
+export class WheelRecognizer extends CoordinatesRecognizer<'wheel'> {
   readonly ingKey = 'wheeling'
   readonly stateKey = 'wheel'
   debounced = true
@@ -52,5 +52,3 @@ class WheelRecognizer extends CoordinatesRecognizer<'wheel'> {
     addBindings(bindings, 'onWheel', this.handleEvent)
   }
 }
-
-RecognizersMap.set('wheel', WheelRecognizer)
