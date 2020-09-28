@@ -30,8 +30,6 @@ useDrag(() => { /* your logic */ }, { domTarget: window })
 1. Various Typescript types.
 2. Hooks configuration is no longer recreated on every render.
 
-
-
 ## 7.0.15 Release
 
 **Summary:** Fixes touchcancel on drag.
