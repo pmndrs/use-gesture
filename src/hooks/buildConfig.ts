@@ -1,6 +1,3 @@
-import isEqual from '../utils/react-fast-compare'
-import memoize from '../utils/memoize-one'
-
 import {
   InternalConfig,
   UseMoveConfig,
@@ -20,48 +17,41 @@ import {
 
 import { UseGestureConfig } from '../types'
 
-function _buildMoveConfig({ domTarget, eventOptions, window, enabled, ...rest }: UseMoveConfig) {
+export function _buildMoveConfig({ domTarget, eventOptions, window, enabled, ...rest }: UseMoveConfig) {
   const opts: InternalConfig = getInternalGenericOptions({ domTarget, eventOptions, window, enabled })
   opts.move = getInternalCoordinatesOptions(rest)
   return opts
 }
 
-function _buildHoverConfig({ domTarget, eventOptions, window, enabled, ...rest }: UseHoverConfig) {
+export function _buildHoverConfig({ domTarget, eventOptions, window, enabled, ...rest }: UseHoverConfig) {
   const opts: InternalConfig = getInternalGenericOptions({ domTarget, eventOptions, window, enabled })
   opts.hover = { enabled: true, ...rest }
   return opts
 }
 
-function _buildDragConfig({ domTarget, eventOptions, window, enabled, ...rest }: UseDragConfig) {
+export function _buildDragConfig({ domTarget, eventOptions, window, enabled, ...rest }: UseDragConfig) {
   const opts: InternalConfig = getInternalGenericOptions({ domTarget, eventOptions, window, enabled })
   opts.drag = getInternalDragOptions(rest)
   return opts
 }
 
-function _buildPinchConfig({ domTarget, eventOptions, window, enabled, ...rest }: UsePinchConfig) {
+export function _buildPinchConfig({ domTarget, eventOptions, window, enabled, ...rest }: UsePinchConfig) {
   const opts: InternalConfig = getInternalGenericOptions({ domTarget, eventOptions, window, enabled })
   opts.pinch = getInternalDistanceAngleOptions(rest)
   return opts
 }
 
-function _buildScrollConfig({ domTarget, eventOptions, window, enabled, ...rest }: UseScrollConfig) {
+export function _buildScrollConfig({ domTarget, eventOptions, window, enabled, ...rest }: UseScrollConfig) {
   const opts: InternalConfig = getInternalGenericOptions({ domTarget, eventOptions, window, enabled })
   opts.scroll = getInternalCoordinatesOptions(rest)
   return opts
 }
 
-function _buildWheelConfig({ domTarget, eventOptions, window, enabled, ...rest }: UseWheelConfig) {
+export function _buildWheelConfig({ domTarget, eventOptions, window, enabled, ...rest }: UseWheelConfig) {
   const opts: InternalConfig = getInternalGenericOptions({ domTarget, eventOptions, window, enabled })
   opts.wheel = getInternalCoordinatesOptions(rest)
   return opts
 }
-
-export const buildMoveConfig = memoize(_buildMoveConfig, isEqual)
-export const buildHoverConfig = memoize(_buildHoverConfig, isEqual)
-export const buildDragConfig = memoize(_buildDragConfig, isEqual)
-export const buildPinchConfig = memoize(_buildPinchConfig, isEqual)
-export const buildScrollConfig = memoize(_buildScrollConfig, isEqual)
-export const buildWheelConfig = memoize(_buildWheelConfig, isEqual)
 
 export function buildComplexConfig(config: UseGestureConfig = {}, actions: Set<string> = new Set()) {
   const { drag, wheel, move, scroll, pinch, hover, eventOptions, window, domTarget, enabled } = config

@@ -1,8 +1,11 @@
 import { UseScrollConfig, Handler, EventTypes } from '../types'
-import { buildScrollConfig } from './buildConfig'
+import { _buildScrollConfig } from './buildConfig'
 import useRecognizers from './useRecognizers'
 import { RecognizersMap } from '../recognizers/Recognizer'
 import { ScrollRecognizer } from '../recognizers/ScrollRecognizer'
+import memoize from '../utils/memoize-one'
+import isEqual from '../utils/react-fast-compare'
+import { useRef } from 'react'
 
 /**
  * Scroll hook.
@@ -12,5 +15,9 @@ import { ScrollRecognizer } from '../recognizers/ScrollRecognizer'
  */
 export function useScroll<K = EventTypes['scroll']>(handler: Handler<'scroll', K>, config: UseScrollConfig | {} = {}) {
   RecognizersMap.set('scroll', ScrollRecognizer)
-  return useRecognizers<UseScrollConfig>({ scroll: handler }, buildScrollConfig(config))
+  const buildScrollConfig = useRef<any>()
+  if (!buildScrollConfig.current) {
+    buildScrollConfig.current = memoize(_buildScrollConfig, isEqual)
+  }
+  return useRecognizers<UseScrollConfig>({ scroll: handler }, buildScrollConfig.current(config))
 }

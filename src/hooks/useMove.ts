@@ -1,8 +1,11 @@
 import { UseMoveConfig, Handler, EventTypes } from '../types'
-import { buildMoveConfig } from './buildConfig'
+import { _buildMoveConfig } from './buildConfig'
 import useRecognizers from './useRecognizers'
 import { RecognizersMap } from '../recognizers/Recognizer'
 import { MoveRecognizer } from '../recognizers/MoveRecognizer'
+import memoize from '../utils/memoize-one'
+import isEqual from '../utils/react-fast-compare'
+import { useRef } from 'react'
 
 /**
  * Move hook.
@@ -12,6 +15,9 @@ import { MoveRecognizer } from '../recognizers/MoveRecognizer'
  */
 export function useMove<K = EventTypes['move']>(handler: Handler<'move', K>, config: UseMoveConfig | {} = {}) {
   RecognizersMap.set('move', MoveRecognizer)
-  
-  return useRecognizers<UseMoveConfig>({ move: handler }, buildMoveConfig(config))
+  const buildMoveConfig = useRef<any>()
+  if (!buildMoveConfig.current) {
+    buildMoveConfig.current = memoize(_buildMoveConfig, isEqual)
+  }
+  return useRecognizers<UseMoveConfig>({ move: handler }, buildMoveConfig.current(config))
 }

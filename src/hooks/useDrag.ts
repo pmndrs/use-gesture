@@ -1,8 +1,11 @@
 import { UseDragConfig, Handler, EventTypes } from '../types'
-import { buildDragConfig } from './buildConfig'
+import { _buildDragConfig } from './buildConfig'
 import useRecognizers from './useRecognizers'
 import { RecognizersMap } from '../recognizers/Recognizer'
 import { DragRecognizer } from '../recognizers/DragRecognizer'
+import memoize from '../utils/memoize-one'
+import isEqual from '../utils/react-fast-compare'
+import { useRef } from 'react'
 
 /**
  * Drag hook.
@@ -12,6 +15,9 @@ import { DragRecognizer } from '../recognizers/DragRecognizer'
  */
 export function useDrag<K = EventTypes['drag']>(handler: Handler<'drag', K>, config: UseDragConfig | {} = {}) {
   RecognizersMap.set('drag', DragRecognizer)
-  
-  return useRecognizers<UseDragConfig>({ drag: handler }, buildDragConfig(config))
+  const buildDragConfig = useRef<any>()
+  if (!buildDragConfig.current) {
+    buildDragConfig.current = memoize(_buildDragConfig, isEqual)
+  }
+  return useRecognizers<UseDragConfig>({ drag: handler }, buildDragConfig.current(config))
 }

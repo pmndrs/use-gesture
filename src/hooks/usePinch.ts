@@ -1,8 +1,11 @@
 import { UsePinchConfig, Handler, EventTypes } from '../types'
-import { buildPinchConfig } from './buildConfig'
+import { _buildPinchConfig } from './buildConfig'
 import useRecognizers from './useRecognizers'
 import { RecognizersMap } from '../recognizers/Recognizer'
 import { PinchRecognizer } from '../recognizers/PinchRecognizer'
+import memoize from '../utils/memoize-one'
+import isEqual from '../utils/react-fast-compare'
+import { useRef } from 'react'
 
 /**
  * Pinch hook.
@@ -12,6 +15,9 @@ import { PinchRecognizer } from '../recognizers/PinchRecognizer'
  */
 export function usePinch<K = EventTypes['pinch']>(handler: Handler<'pinch', K>, config: UsePinchConfig | {} = {}) {
   RecognizersMap.set('pinch', PinchRecognizer)
-
-  return useRecognizers<UsePinchConfig>({ pinch: handler }, buildPinchConfig(config))
+  const buildPinchConfig = useRef<any>()
+  if (!buildPinchConfig.current) {
+    buildPinchConfig.current = memoize(_buildPinchConfig, isEqual)
+  }
+  return useRecognizers<UsePinchConfig>({ pinch: handler }, buildPinchConfig.current(config))
 }

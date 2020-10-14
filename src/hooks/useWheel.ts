@@ -1,8 +1,11 @@
 import { UseWheelConfig, Handler, EventTypes } from '../types'
-import { buildWheelConfig } from './buildConfig'
+import { _buildWheelConfig } from './buildConfig'
 import useRecognizers from './useRecognizers'
 import { RecognizersMap } from '../recognizers/Recognizer'
 import { WheelRecognizer } from '../recognizers/WheelRecognizer'
+import memoize from '../utils/memoize-one'
+import isEqual from '../utils/react-fast-compare'
+import { useRef } from 'react'
 
 /**
  * Wheel hook.
@@ -12,6 +15,9 @@ import { WheelRecognizer } from '../recognizers/WheelRecognizer'
  */
 export function useWheel<K = EventTypes['wheel']>(handler: Handler<'wheel', K>, config: UseWheelConfig | {} = {}) {
   RecognizersMap.set('wheel', WheelRecognizer)
-
-  return useRecognizers<UseWheelConfig>({ wheel: handler }, buildWheelConfig(config))
+  const buildWheelConfig = useRef<any>()
+  if (!buildWheelConfig.current) {
+    buildWheelConfig.current = memoize(_buildWheelConfig, isEqual)
+  }
+  return useRecognizers<UseWheelConfig>({ wheel: handler }, buildWheelConfig.current(config))
 }
