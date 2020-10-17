@@ -1,5 +1,5 @@
 import React from 'react'
-import { render, cleanup, fireEvent, createEvent, wait } from '@testing-library/react'
+import { render, cleanup, fireEvent, createEvent, waitFor } from '@testing-library/react'
 import '@testing-library/jest-dom/extend-expect'
 import Interactive from './components/Interactive'
 import InteractiveDom from './components/InteractiveDom'
@@ -130,7 +130,7 @@ describe.each([
   test('canceling the gesture should cancel the gesture in the next RAF tick', async () => {
     rerender(<Component gestures={['Drag']} canceled />)
     fireEvent.pointerDown(element, { clientX: 30, clientY: 60, pointerId: 5 })
-    await wait(() => [
+    await waitFor(() => [
       expect(getByTestId(`${prefix}drag-canceled`)).toHaveTextContent('true'),
       expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('false'),
     ])
@@ -140,7 +140,7 @@ describe.each([
     rerender(<Component gestures={['Drag']} config={{ drag: { delay: 180 } }} />)
     fireEvent.pointerDown(element, { clientX: 100, clientY: 200, pointerId: 6 })
     expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('false')
-    await wait(() => [
+    await waitFor(() => [
       expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('true'),
       expect(getByTestId(`${prefix}drag-xy`)).toHaveTextContent('100,200'),
     ])
@@ -157,7 +157,7 @@ describe.each([
 
   test(`quickly tapping shouldn't trigger a drag`, async () => {
     fireEvent.click(element, { clientX: 100, clientY: 200 })
-    await wait(() => expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('false'), { timeout: 200 })
+    await waitFor(() => expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('false'), { timeout: 200 })
   })
 
   test(`applying a threshold should prevent the gesture from starting if it's NOT reached`, () => {
@@ -233,11 +233,11 @@ describe.each([
     fireEvent.pointerMove(window, { clientX: 2, clientY: 1, buttons: 1, pointerId: 14 })
     expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('false')
     expect(getByTestId(`${prefix}drag-tap`)).toHaveTextContent('false')
-    await wait(
+    event = createEvent.pointerUp(window, { pointerId: 14 })
+    delta_t = event.timeStamp - delta_t
+    fireEvent(window, event)
+    await waitFor(
       () => {
-        event = createEvent.pointerUp(window, { pointerId: 14 })
-        delta_t = event.timeStamp - delta_t
-        fireEvent(window, event)
         expect(getByTestId(`${prefix}drag-tap`)).toHaveTextContent('true')
         expect(getByTestId(`${prefix}drag-elapsedTime`)).toHaveTextContent(String(delta_t))
         expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('false')

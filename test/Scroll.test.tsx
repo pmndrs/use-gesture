@@ -1,5 +1,5 @@
 import React from 'react'
-import { render, cleanup, fireEvent, createEvent, wait } from '@testing-library/react'
+import { render, cleanup, fireEvent, createEvent, waitFor } from '@testing-library/react'
 import '@testing-library/jest-dom/extend-expect'
 import Interactive from './components/Interactive'
 import InteractiveDom from './components/InteractiveDom'
@@ -66,7 +66,7 @@ describe.each([
   })
 
   test('the last scroll event should debounce and terminate the gesture', async () => {
-    await wait(() => {
+    await waitFor(() => {
       expect(getByTestId(`${prefix}scroll-last`)).toHaveTextContent('true')
       expect(getByTestId(`${prefix}scroll-active`)).toHaveTextContent('false')
       expect(getByTestId(`${prefix}scroll-vxvy`)).toHaveTextContent('0,0')
@@ -75,7 +75,7 @@ describe.each([
   })
 
   test('terminating the gesture should fire onScrollEnd', async () => {
-    await wait(() => expect(getByTestId(`${prefix}scroll-end`)).toHaveTextContent(/^fired$/))
+    await waitFor(() => expect(getByTestId(`${prefix}scroll-end`)).toHaveTextContent(/^fired$/))
   })
 
   test('disabling all gestures should prevent state from updating', () => {

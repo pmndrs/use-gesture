@@ -1,5 +1,5 @@
 import React from 'react'
-import { render, cleanup, fireEvent, createEvent, wait } from '@testing-library/react'
+import { render, cleanup, fireEvent, createEvent, waitFor } from '@testing-library/react'
 import '@testing-library/jest-dom/extend-expect'
 import Interactive from './components/Interactive'
 import InteractiveDom from './components/InteractiveDom'
@@ -61,7 +61,7 @@ describe.each([
   })
 
   test('the last mouseMove event should debounce and terminate the gesture', async () => {
-    await wait(() => {
+    await waitFor(() => {
       expect(getByTestId(`${prefix}move-last`)).toHaveTextContent('true')
       expect(getByTestId(`${prefix}move-active`)).toHaveTextContent('false')
       expect(getByTestId(`${prefix}move-vxvy`)).toHaveTextContent('0,0')
@@ -70,7 +70,7 @@ describe.each([
   })
 
   test('terminating the gesture should fire onMoveEnd', async () => {
-    await wait(() => expect(getByTestId(`${prefix}move-end`)).toHaveTextContent(/^fired$/))
+    await waitFor(() => expect(getByTestId(`${prefix}move-end`)).toHaveTextContent(/^fired$/))
   })
 
   test(`applying an axis SHOULDN'T start the gesture if gesture is not detected first in the right axis`, async () => {
@@ -89,7 +89,7 @@ describe.each([
     fireEvent.mouseMove(element, { clientX: 13, clientY: 4 })
     expect(getByTestId(`${prefix}move-moving`)).toHaveTextContent('true')
     expect(getByTestId(`${prefix}move-movement`)).toHaveTextContent('13,0')
-    await wait(() => expect(getByTestId(`${prefix}move-moving`)).toHaveTextContent('false'))
+    await waitFor(() => expect(getByTestId(`${prefix}move-moving`)).toHaveTextContent('false'))
   })
 
   test('disabling all gestures should prevent state from updating', () => {

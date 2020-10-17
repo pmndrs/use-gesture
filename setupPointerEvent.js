@@ -1,7 +1,7 @@
 if (window.PointerEvent) {
   console.error('ERROR: patching PointerEvent is no longer necessary')
 } else {
-  console.warn('Setup: patching PointerEvent')
+  console.log('Setup: patching PointerEvent')
   // @ts-ignore
   window.PointerEvent = window.MouseEvent
   document.createEvent = null // prevents https://github.com/facebook/react/blob/master/packages/shared/invokeGuardedCallbackImpl.js

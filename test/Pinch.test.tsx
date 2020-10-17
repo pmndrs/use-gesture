@@ -1,5 +1,5 @@
 import React from 'react'
-import { render, cleanup, fireEvent, createEvent, wait } from '@testing-library/react'
+import { render, cleanup, fireEvent, createEvent, waitFor } from '@testing-library/react'
 import '@testing-library/jest-dom/extend-expect'
 import Interactive from './components/Interactive'
 import InteractiveDom from './components/InteractiveDom'
@@ -137,7 +137,7 @@ describe.each([
   test('canceling the gesture should cancel the gesture in the next RAF tick', async () => {
     rerender(<Component gestures={['Pinch']} canceled />)
     fireEvent.touchMove(element, { targetTouches: [{}, {}] })
-    await wait(() => {
+    await waitFor(() => {
       expect(getByTestId(`${prefix}pinch-canceled`)).toHaveTextContent('true')
       expect(getByTestId(`${prefix}pinch-pinching`)).toHaveTextContent('false')
     })

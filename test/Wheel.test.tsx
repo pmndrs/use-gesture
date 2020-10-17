@@ -1,5 +1,5 @@
 import React from 'react'
-import { render, cleanup, fireEvent, createEvent, wait } from '@testing-library/react'
+import { render, cleanup, fireEvent, createEvent, waitFor } from '@testing-library/react'
 import '@testing-library/jest-dom/extend-expect'
 import Interactive from './components/Interactive'
 import InteractiveDom from './components/InteractiveDom'
@@ -63,7 +63,7 @@ describe.each([
   })
 
   test('the last wheel event should debounce and terminate the gesture', async () => {
-    await wait(() => {
+    await waitFor(() => {
       expect(getByTestId(`${prefix}wheel-last`)).toHaveTextContent('true')
       expect(getByTestId(`${prefix}wheel-active`)).toHaveTextContent('false')
       expect(getByTestId(`${prefix}wheel-vxvy`)).toHaveTextContent('0,0')
@@ -72,14 +72,14 @@ describe.each([
   })
 
   test('terminating the gesture should fire onWheelEnd', async () => {
-    await wait(() => expect(getByTestId(`${prefix}wheel-end`)).toHaveTextContent(/^fired$/))
+    await waitFor(() => expect(getByTestId(`${prefix}wheel-end`)).toHaveTextContent(/^fired$/))
   })
 
   test('wheeling again should restart the gesture', async () => {
     fireEvent.wheel(element, { deltaX: 10, deltaY: 0 })
     expect(getByTestId(`${prefix}wheel-first`)).toHaveTextContent('true')
     expect(getByTestId(`${prefix}wheel-previous`)).toHaveTextContent('5,-6')
-    await wait(() => expect(getByTestId(`${prefix}wheel-active`)).toHaveTextContent('false'))
+    await waitFor(() => expect(getByTestId(`${prefix}wheel-active`)).toHaveTextContent('false'))
   })
 
   test(`applying an axis SHOULDN'T start the gesture if gesture is not detected first in the right axis`, async () => {
@@ -97,11 +97,10 @@ describe.each([
     fireEvent.wheel(element, { deltaX: 3, deltaY: 0 })
     expect(getByTestId(`${prefix}wheel-wheeling`)).toHaveTextContent('true')
     expect(getByTestId(`${prefix}wheel-movement`)).toHaveTextContent('13,0')
-    await wait(() => expect(getByTestId(`${prefix}wheel-wheeling`)).toHaveTextContent('false'))
+    await waitFor(() => expect(getByTestId(`${prefix}wheel-wheeling`)).toHaveTextContent('false'))
   })
 
   test('disabling all gestures should prevent state from updating', async () => {
-    await wait(undefined, { timeout: 400 })
     rerender(<Component gestures={['Wheel']} config={{ enabled: false }} />)
     fireEvent.wheel(element)
     expect(getByTestId(`${prefix}wheel-wheeling`)).toHaveTextContent('false')
