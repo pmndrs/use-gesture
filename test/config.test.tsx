@@ -12,17 +12,10 @@ describe('testing derived config', () => {
       expect(getInternalGenericOptions(undefined)).toStrictEqual({
         enabled: true,
         domTarget: undefined,
-        //captureString: '',
         eventOptions: { capture: false, passive: true },
         window: window,
       })
     })
-    // test(`derived passive is true if target isn't specified`, () => {
-    //   let config: Partial<GenericOptions> = { eventOptions: { capture: false } }
-    //   expect(getInternalGenericOptions(config)).toHaveProperty('eventOptions.passive', true)
-    //   config = { eventOptions: { passive: false } }
-    //   expect(getInternalGenericOptions(config)).toHaveProperty('eventOptions.passive', true)
-    // })
 
     test(`derived passive is false if target is specified and config passive is false`, () => {
       const config = {
@@ -34,7 +27,7 @@ describe('testing derived config', () => {
   })
 
   describe('testing internal gesture configuration', () => {
-    let config: Partial<GestureOptions>
+    let config: GestureOptions<'drag'>
     test(`derived threshold array is set when threshold is a number`, () => {
       config = { threshold: 10 }
       expect(getInternalGestureOptions(config)).toHaveProperty('threshold', [10, 10])
@@ -108,7 +101,7 @@ describe('testing derived config', () => {
       })
     })
 
-    let config: DistanceAngleConfig
+    let config: DistanceAngleConfig<'pinch'>
     test(`derived bounds array matches [[distanceBounds], [angleBounds]]`, () => {
       config = { distanceBounds: { min: -100, max: 200 }, angleBounds: { min: -50, max: 60 } }
       expect(getInternalDistanceAngleOptions(config)).toHaveProperty('bounds', [

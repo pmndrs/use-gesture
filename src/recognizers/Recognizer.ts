@@ -100,9 +100,9 @@ export default abstract class Recognizer<T extends StateKey = StateKey> {
    * Returns basic movement properties for the gesture based on the next values and current state.
    */
   protected getMovement(values: Vector2): PartialGestureState<T> {
-    const { initial, rubberband, threshold: T } = this.config
+    const { initial, bounds, rubberband, threshold: T } = this.config
 
-    const { _initial, _active, _intentional: intentional, lastOffset, movement: prevMovement } = this.state
+    const { _bounds, _initial, _active, _intentional: intentional, lastOffset, movement: prevMovement } = this.state
     const M = this.getInternalMovement(values, this.state)
 
     const i0 = intentional[0] === false ? getIntentionalDisplacement(M[0], T[0]) : intentional[0]
@@ -117,16 +117,29 @@ export default abstract class Recognizer<T extends StateKey = StateKey> {
     const _intentional = intentionalityCheck._intentional!
     const _movement = M
 
-    if (_intentional[0] !== false && intentional[0] === false) _initial[0] = valueFn(initial)[0]
-    if (_intentional[1] !== false && intentional[1] === false) _initial[1] = valueFn(initial)[1]
+    let __cachedBounds
+    let __cachedInitial
+
+    if (_intentional[0] !== false && intentional[0] === false) {
+      __cachedInitial = valueFn(initial, this.state)
+      __cachedBounds = valueFn(bounds, this.state)
+      _initial[0] = __cachedInitial[0]
+      _bounds[0] = __cachedBounds[0]
+    }
+    if (_intentional[1] !== false && intentional[1] === false) {
+      __cachedInitial = __cachedInitial ?? valueFn(initial, this.state)
+      __cachedBounds = __cachedBounds ?? valueFn(bounds, this.state)
+      _initial[1] = __cachedInitial[1]
+      _bounds[1] = __cachedBounds[1]
+    }
 
     /**
      * The movement sent to the handler has 0 in its dimensions when intentionality is false.
      * It is calculated from the actual movement minus the threshold.
      */
     let movement: Vector2 = [
-      _intentional[0] !== false ? M[0] - _intentional[0] : valueFn(initial)[0],
-      _intentional[1] !== false ? M[1] - _intentional[1] : valueFn(initial)[1],
+      _intentional[0] !== false ? M[0] - _intentional[0] : _initial[0],
+      _intentional[1] !== false ? M[1] - _intentional[1] : _initial[1],
     ]
 
     const offset = addV(movement, lastOffset)
@@ -136,7 +149,7 @@ export default abstract class Recognizer<T extends StateKey = StateKey> {
      * and offset can return within their bounds.
      */
     const _rubberband: Vector2 = _active ? rubberband : [0, 0]
-    movement = computeRubberband(this, addV(movement, _initial), _rubberband)
+    movement = computeRubberband(_bounds, addV(movement, _initial), _rubberband)
 
     return {
       ...intentionalityCheck,
@@ -144,7 +157,7 @@ export default abstract class Recognizer<T extends StateKey = StateKey> {
       _movement,
       movement,
       values,
-      offset: computeRubberband(this, offset, _rubberband),
+      offset: computeRubberband(_bounds, offset, _rubberband),
       delta: subV(movement, prevMovement),
     } as PartialGestureState<T>
   }
@@ -215,11 +228,7 @@ function getIntentionalDisplacement(movement: number, threshold: number): number
   }
 }
 
-function computeRubberband<T extends StateKey>(
-  { config: { bounds } }: Recognizer<T>,
-  [Vx, Vy]: Vector2,
-  [Rx, Ry]: Vector2
-): Vector2 {
+function computeRubberband(bounds: [Vector2, Vector2], [Vx, Vy]: Vector2, [Rx, Ry]: Vector2): Vector2 {
   const [[X1, X2], [Y1, Y2]] = bounds
 
   return [rubberbandIfOutOfBounds(Vx, X1, X2, Rx), rubberbandIfOutOfBounds(Vy, Y1, Y2, Ry)]

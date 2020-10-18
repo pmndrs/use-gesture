@@ -17,30 +17,34 @@ export interface GenericOptions {
   enabled?: boolean
 }
 
-export interface GestureOptions {
+export interface GestureOptions<T extends StateKey> {
   enabled?: boolean
-  initial?: Vector2 | (() => Vector2)
+  initial?: Vector2 | ((state: State[T]) => Vector2)
   threshold?: number | Vector2
   rubberband?: boolean | number | Vector2
 }
 
-export type CoordinatesConfig = GestureOptions & {
+export type Bounds = {
+  top?: number
+  bottom?: number
+  left?: number
+  right?: number
+}
+
+export type CoordinatesConfig<T extends CoordinatesKey> = GestureOptions<T> & {
   axis?: 'x' | 'y'
   lockDirection?: boolean
-  bounds?: {
-    top?: number
-    bottom?: number
-    left?: number
-    right?: number
-  }
+  bounds?: Bounds | ((state: State[T]) => Bounds)
 }
 
-export type DistanceAngleConfig = GestureOptions & {
-  distanceBounds?: { min?: number; max?: number }
-  angleBounds?: { min?: number; max?: number }
+export type DistanceAngleBounds = { min?: number; max?: number }
+
+export type DistanceAngleConfig<T extends DistanceAngleKey> = GestureOptions<T> & {
+  distanceBounds?: DistanceAngleBounds | ((state: State[T]) => DistanceAngleBounds)
+  angleBounds?: DistanceAngleBounds | ((state: State[T]) => DistanceAngleBounds)
 }
 
-export type DragConfig = CoordinatesConfig & {
+export type DragConfig = CoordinatesConfig<'drag'> & {
   filterTaps?: boolean
   swipeVelocity?: number | Vector2
   swipeDistance?: number | Vector2
@@ -48,18 +52,18 @@ export type DragConfig = CoordinatesConfig & {
 }
 
 export type UseDragConfig = GenericOptions & DragConfig
-export type UsePinchConfig = GenericOptions & DistanceAngleConfig
-export type UseWheelConfig = GenericOptions & CoordinatesConfig
-export type UseScrollConfig = GenericOptions & CoordinatesConfig
-export type UseMoveConfig = GenericOptions & CoordinatesConfig
+export type UsePinchConfig = GenericOptions & DistanceAngleConfig<'pinch'>
+export type UseWheelConfig = GenericOptions & CoordinatesConfig<'wheel'>
+export type UseScrollConfig = GenericOptions & CoordinatesConfig<'scroll'>
+export type UseMoveConfig = GenericOptions & CoordinatesConfig<'move'>
 export type UseHoverConfig = GenericOptions
 
 export type UseGestureConfig = GenericOptions & {
   drag?: DragConfig
-  wheel?: CoordinatesConfig
-  scroll?: CoordinatesConfig
-  move?: CoordinatesConfig
-  pinch?: DistanceAngleConfig
+  wheel?: CoordinatesConfig<'wheel'>
+  scroll?: CoordinatesConfig<'scroll'>
+  move?: CoordinatesConfig<'move'>
+  pinch?: DistanceAngleConfig<'pinch'>
   hover?: { enabled?: boolean }
 }
 
@@ -70,24 +74,22 @@ export interface InternalGenericOptions {
   enabled: boolean
 }
 
-export interface InternalGestureOptions {
+export interface InternalGestureOptions<T extends StateKey> {
   enabled: boolean
-  initial: Vector2 | (() => Vector2)
+  initial: Vector2 | ((state: State[T]) => Vector2)
   threshold: Vector2
   rubberband: Vector2
+  bounds: [Vector2, Vector2] | ((state: State[T]) => [Vector2, Vector2])
 }
 
-export interface InternalCoordinatesOptions extends InternalGestureOptions {
+export interface InternalCoordinatesOptions<T extends CoordinatesKey> extends InternalGestureOptions<T> {
   axis?: 'x' | 'y'
-  bounds: [Vector2, Vector2]
   lockDirection: boolean
 }
 
-export interface InternalDistanceAngleOptions extends InternalGestureOptions {
-  bounds: [Vector2, Vector2]
-}
+export interface InternalDistanceAngleOptions<T extends DistanceAngleKey> extends InternalGestureOptions<T> {}
 
-export interface InternalDragOptions extends InternalCoordinatesOptions {
+export interface InternalDragOptions extends InternalCoordinatesOptions<'drag'> {
   filterTaps: boolean
   swipeVelocity: Vector2
   swipeDistance: Vector2
@@ -96,10 +98,10 @@ export interface InternalDragOptions extends InternalCoordinatesOptions {
 
 export type InternalConfig = InternalGenericOptions & {
   drag?: InternalDragOptions
-  wheel?: InternalCoordinatesOptions
-  scroll?: InternalCoordinatesOptions
-  move?: InternalCoordinatesOptions
-  pinch?: InternalDistanceAngleOptions
+  wheel?: InternalCoordinatesOptions<'wheel'>
+  scroll?: InternalCoordinatesOptions<'scroll'>
+  move?: InternalCoordinatesOptions<'move'>
+  pinch?: InternalDistanceAngleOptions<'pinch'>
   hover?: { enabled: boolean }
 }
 
@@ -212,6 +214,7 @@ export interface CommonGestureState {
   _intentional: [false | number, false | number]
   _movement: Vector2
   _initial: Vector2
+  _bounds: [Vector2, Vector2]
   _lastEventType?: string
   _pointerIds?: number[]
   event?: React.UIEvent | UIEvent

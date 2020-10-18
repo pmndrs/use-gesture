@@ -232,4 +232,3 @@ export class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
     }
   }
 }
-

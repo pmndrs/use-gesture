@@ -1,4 +1,4 @@
-import { ensureVector, assignDefault } from './utils'
+import { ensureVector, assignDefault, valueFn } from './utils'
 import { resolveWith } from './resolveOptionsWith'
 
 import {
@@ -13,6 +13,11 @@ import {
   DistanceAngleConfig,
   InternalDistanceAngleOptions,
   Vector2,
+  Bounds,
+  StateKey,
+  State,
+  CoordinatesKey,
+  DistanceAngleKey,
 } from '../types'
 
 export const DEFAULT_DRAG_DELAY = 180
@@ -52,7 +57,12 @@ const InternalCoordinatesOptionsNormalizers = {
   lockDirection(value = false) {
     return value
   },
-  bounds({ left = -Infinity, right = Infinity, top = -Infinity, bottom = Infinity } = {}) {
+  bounds(value: Bounds | ((state?: State) => Bounds) = {}) {
+    if (typeof value === 'function')
+      return (state?: State) => InternalCoordinatesOptionsNormalizers.bounds(value(state))
+
+    const { left = -Infinity, right = Infinity, top = -Infinity, bottom = Infinity } = value
+
     return [
       [left, right],
       [top, bottom],
@@ -76,13 +86,21 @@ const InternalGenericOptionsNormalizers = {
 const InternalDistanceAngleOptionsNormalizers = {
   ...InternalGestureOptionsNormalizers,
 
-  bounds(_value: undefined, _key: string, { distanceBounds = {}, angleBounds = {} }: any = {}) {
-    const D = assignDefault(distanceBounds, { min: -Infinity, max: Infinity })
-    const A = assignDefault(angleBounds, { min: -Infinity, max: Infinity })
-    return [
-      [D.min, D.max],
-      [A.min, A.max],
-    ]
+  bounds(_value: undefined, _key: string, { distanceBounds = {}, angleBounds = {} }: any) {
+    const _distanceBounds = (state?: State) => {
+      const D = assignDefault(valueFn(distanceBounds, state), { min: -Infinity, max: Infinity })
+      return [D.min, D.max]
+    }
+
+    const _angleBounds = (state?: State) => {
+      const A = assignDefault(valueFn(angleBounds, state), { min: -Infinity, max: Infinity })
+      return [A.min, A.max]
+    }
+
+    if (typeof distanceBounds !== 'function' && typeof angleBounds !== 'function')
+      return [_distanceBounds(), _angleBounds()]
+
+    return (state?: State) => [_distanceBounds(state), _angleBounds(state)]
   },
 }
 
@@ -119,18 +137,31 @@ const InternalDragOptionsNormalizers = {
   },
 }
 
-export function getInternalGestureOptions(config: GestureOptions = {}): InternalGestureOptions {
-  return resolveWith<GestureOptions, InternalGestureOptions>(config, InternalGestureOptionsNormalizers)
+export function getInternalGestureOptions<T extends StateKey>(
+  config: GestureOptions<T> = {}
+): InternalGestureOptions<T> {
+  return resolveWith<GestureOptions<T>, InternalGestureOptions<T>>(config, InternalGestureOptionsNormalizers)
 }
+
 export function getInternalGenericOptions(config: GenericOptions = {}): InternalGenericOptions {
   return resolveWith<GenericOptions, InternalGenericOptions>(config, InternalGenericOptionsNormalizers)
 }
-export function getInternalCoordinatesOptions(config: CoordinatesConfig = {}): InternalCoordinatesOptions {
-  return resolveWith<CoordinatesConfig, InternalCoordinatesOptions>(config, InternalCoordinatesOptionsNormalizers)
+
+export function getInternalCoordinatesOptions<T extends CoordinatesKey>(
+  config: CoordinatesConfig<T> = {}
+): InternalCoordinatesOptions<T> {
+  return resolveWith<CoordinatesConfig<T>, InternalCoordinatesOptions<T>>(config, InternalCoordinatesOptionsNormalizers)
 }
-export function getInternalDistanceAngleOptions(config: DistanceAngleConfig = {}): InternalDistanceAngleOptions {
-  return resolveWith<DistanceAngleConfig, InternalDistanceAngleOptions>(config, InternalDistanceAngleOptionsNormalizers)
+
+export function getInternalDistanceAngleOptions<T extends DistanceAngleKey>(
+  config: DistanceAngleConfig<T> = {}
+): InternalDistanceAngleOptions<T> {
+  return resolveWith<DistanceAngleConfig<T>, InternalDistanceAngleOptions<T>>(
+    config,
+    InternalDistanceAngleOptionsNormalizers
+  )
 }
+
 export function getInternalDragOptions(config: DragConfig = {}): InternalDragOptions {
   return resolveWith<DragConfig, InternalDragOptions>(config, InternalDragOptionsNormalizers)
 }

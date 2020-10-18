@@ -302,6 +302,27 @@ describe.each([
     fireEvent.pointerUp(window, { pointerId: 18 })
   })
 
+  // this test uses bindArgs which are only accessible when attaching handlers to the component
+  // (ie without the domTarget option)
+  if (_testName === 'attached to component') {
+    test(`bounds function should define _bounds in state`, () => {
+      rerender(
+        <Component
+          gestures={['Drag']}
+          bindArgs={[2]}
+          config={{
+            drag: {
+              bounds: ({ args: [i] }) => ({ top: i * 100, left: i * -200 }),
+            },
+          }}
+        />
+      )
+      fireEvent.pointerDown(element, { clientX: 0, clientY: 0, pointerId: 181 })
+      expect(getByTestId(`${prefix}drag-_bounds`)).toHaveTextContent('-400,Infinity,200,Infinity')
+      fireEvent.pointerUp(window, { pointerId: 181 })
+    })
+  }
+
   test(`passing an initial position should affect the movement`, () => {
     rerender(<Component gestures={['Drag']} config={{ drag: { initial: () => [5, 10] } }} />)
     fireEvent.pointerDown(element, { clientX: 0, clientY: 0, pointerId: 19 })

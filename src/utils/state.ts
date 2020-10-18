@@ -8,6 +8,10 @@ function getInitial<T>(mixed: T): T & CommonGestureState {
     _intentional: [false, false],
     _movement: [0, 0],
     _initial: [0, 0],
+    _bounds: [
+      [-Infinity, Infinity],
+      [-Infinity, Infinity],
+    ],
     _lastEventType: undefined,
     event: undefined,
     // currentTarget: undefined,

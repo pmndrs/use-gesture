@@ -164,4 +164,30 @@ describe.each([
     })
     expect(getByTestId(`${prefix}pinch-pinching`)).toHaveTextContent('false')
   })
+
+  // this test uses bindArgs which are only accessible when attaching handlers to the component
+  // (ie without the domTarget option)
+  if (_testName === 'attached to component') {
+    test(`distanceBounds and angleBounds should define _bounds in state`, () => {
+      rerender(
+        <Component
+          gestures={['Pinch']}
+          bindArgs={[2]}
+          config={{
+            pinch: {
+              distanceBounds: ({ args: [i] }) => ({ min: i * 100, max: i * -200 }),
+              angleBounds: ({ args: [i] }) => ({ min: i * -300 }),
+            },
+          }}
+        />
+      )
+      fireEvent.touchStart(element, {
+        targetTouches: [
+          { clientX: 0, clientY: 0 },
+          { clientX: 0, clientY: 40 },
+        ],
+      })
+      expect(getByTestId(`${prefix}pinch-_bounds`)).toHaveTextContent('200,-400,-600,Infinity')
+    })
+  }
 })

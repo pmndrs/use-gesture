@@ -50,14 +50,14 @@ export function assignDefault<T extends Object>(value: Partial<T> | undefined, f
 
 /**
  * Resolves getters (functions) by calling them
- * If simple value is given it just pasees through
+ * If simple value is given it just passes through
  *
  * @param v
  */
-export function valueFn<T>(v: T | (() => T)): T {
+export function valueFn<T>(v: T | ((...args: any[]) => T), ...args: any[]): T {
   if (typeof v === 'function') {
     // @ts-ignore
-    return v()
+    return v(...args)
   } else {
     return v
   }

@@ -19,12 +19,27 @@ useDrag(() => { /* your logic */ }, { domTarget: window })
 ```
 
 3. Handlers are being fired even if the gesture is not intentional [#3dacf8f](https://github.com/react-spring/react-use-gesture/pull/164/commits/36eec2c4ef241105d0789aaa6ae4c64935d68f19). This allows manipulation of events at all times. Fixes [#175](https://github.com/react-spring/react-use-gesture/issues/175).
+4. When using native handlers, the shared state is now being forwarded [#186](https://github.com/react-spring/react-use-gesture/issues/186).
+
+```jsx
+// before
+const bind = useGesture({
+  onClick: event => console.log(event)
+}) 
+
+// after
+const bind = useGesture({
+  onClick: ({event, ...fullState}) => console.log(event) // you can do something with the fullState
+}) 
+
+```
 
 ### Added
 
 1. Drag and pinch now works on multiple dom elements at once [#170](https://github.com/react-spring/react-use-gesture/issues/170).
 2. Drag option `{ filterTaps: true }` will also prevent unwanted taps on children elements [#173](https://github.com/react-spring/react-use-gesture/issues/173).
-3. Shared state is forwarded to native event listeners handlers [#186](https://github.com/react-spring/react-use-gesture/issues/186)
+4. Config options `bounds`, `distanceBounds` and `angleBounds` can now be functions excuted at the start of each gesture. The function is passed the gesture state as an argument.
+5. When a function, `initial` is passed the gesture state as an argument so that you can compute `initial` based on `args`.
 
 ### Fixed
 1. Various Typescript types.

@@ -41,7 +41,7 @@ test('bind should dispatch its arguments', () => {
   expect(getByTestId('drag-args')).toHaveTextContent('args1')
 })
 
-test('genuine handlers should correctly execute', () => {
+test('native handlers should correctly execute', () => {
   const { getByTestId } = render(<GenuineHandlers args="testArg" />)
   const element = getByTestId('drag-el')
   fireEvent.pointerDown(element, { pointerId: 4 })
