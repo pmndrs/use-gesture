@@ -96,6 +96,7 @@ describe.each([
     expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('false')
     expect(getByTestId(`${prefix}drag-active`)).toHaveTextContent('false')
     expect(getByTestId(`${prefix}drag-last`)).toHaveTextContent('true')
+    expect(getByTestId(`${prefix}drag-intentional`)).toHaveTextContent('true')
     expect(getByTestId(`${prefix}drag-down`)).toHaveTextContent('false')
   })
 
@@ -218,7 +219,9 @@ describe.each([
     fireEvent.pointerDown(element, { clientX: 0, clientY: 0, pointerId: 13 })
     fireEvent.pointerMove(window, { clientX: 8, clientY: 1, buttons: 1, pointerId: 13 })
     expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('false')
+    expect(getByTestId(`${prefix}drag-intentional`)).toHaveTextContent('false')
     fireEvent.pointerUp(window, { pointerId: 13 })
+    expect(getByTestId(`${prefix}drag-intentional`)).toHaveTextContent('false')
     expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('false')
     expect(getByTestId(`${prefix}drag-tap`)).toHaveTextContent('false')
   })

@@ -220,6 +220,7 @@ export interface CommonGestureState {
   event?: React.UIEvent | UIEvent
   // currentTarget?: (EventTarget & Element) | null
   // pointerId?: number | null
+  intentional: boolean
   values: Vector2
   velocities: Vector2
   delta: Vector2

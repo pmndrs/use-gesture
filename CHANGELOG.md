@@ -40,6 +40,7 @@ const bind = useGesture({
 2. Drag option `{ filterTaps: true }` will also prevent unwanted taps on children elements [#173](https://github.com/react-spring/react-use-gesture/issues/173).
 4. Config options `bounds`, `distanceBounds` and `angleBounds` can now be functions excuted at the start of each gesture. The function is passed the gesture state as an argument.
 5. When a function, `initial` is passed the gesture state as an argument so that you can compute `initial` based on `args`.
+6. User facing `intentional` option that is set to `true` when the gesture is intentional (useful when using `threshold` or `filterTaps` options). 
 
 ### Fixed
 1. Various Typescript types.

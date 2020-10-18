@@ -16,6 +16,7 @@ function getInitial<T>(mixed: T): T & CommonGestureState {
     event: undefined,
     // currentTarget: undefined,
     // pointerId: undefined,
+    intentional: false,
     values: [0, 0],
     velocities: [0, 0],
     delta: [0, 0],

@@ -196,6 +196,7 @@ export default abstract class Recognizer<T extends StateKey = StateKey> {
       this.state.active = next_active
       this.state.first = next_active && !prev_active
       this.state.last = prev_active && !next_active
+      this.state.intentional = true
 
       this.controller.state.shared[this.ingKey] = next_active // Sets dragging, pinching, etc. to the gesture active state
     }
