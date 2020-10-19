@@ -12,6 +12,7 @@
     "@tim-soft/react-dat-gui": "^4.0.11",
     "classnames": "^2.2.6",
     "gatsby": "^2.15.18",
+    "gatsby-plugin-google-analytics": "^2.3.19",
     "react": "^16.10.1",
     "react-dom": "^16.10.1",
     "react-player": "^2.6.2",
