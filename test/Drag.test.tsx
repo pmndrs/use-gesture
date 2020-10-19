@@ -219,9 +219,7 @@ describe.each([
     fireEvent.pointerDown(element, { clientX: 0, clientY: 0, pointerId: 13 })
     fireEvent.pointerMove(window, { clientX: 8, clientY: 1, buttons: 1, pointerId: 13 })
     expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('false')
-    expect(getByTestId(`${prefix}drag-intentional`)).toHaveTextContent('false')
     fireEvent.pointerUp(window, { pointerId: 13 })
-    expect(getByTestId(`${prefix}drag-intentional`)).toHaveTextContent('false')
     expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('false')
     expect(getByTestId(`${prefix}drag-tap`)).toHaveTextContent('false')
   })
@@ -229,7 +227,7 @@ describe.each([
   // TODO add a test to verify underlying children's onClick handler is not triggered
   // when filterTaps is true
 
-  test(`filtering clicks should fire a click if pointer has moved less than 3px`, async () => {
+  test(`filtering taps should fire a tap if pointer has moved less than 3px`, async () => {
     let event = createEvent.pointerDown(element, { clientX: 0, clientY: 0, pointerId: 14 })
     fireEvent(element, event)
     delta_t = event.timeStamp
@@ -250,6 +248,19 @@ describe.each([
     fireEvent.pointerUp(window, { pointerId: 14 })
   })
 
+  test(`triggerAllEvents should trigger all events even if gesture is unintentional`, () => {
+    rerender(<Component gestures={['Drag']} config={{ drag: { threshold: 10, triggerAllEvents: true } }} />)
+    fireEvent.pointerDown(element, { clientX: 0, clientY: 0, pointerId: 141 })
+    fireEvent.pointerMove(window, { clientX: 8, clientY: 1, buttons: 1, pointerId: 141 })
+    expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('false')
+    expect(getByTestId(`${prefix}drag-intentional`)).toHaveTextContent('false')
+    fireEvent.pointerMove(window, { clientX: 14, clientY: 1, buttons: 1, pointerId: 141 })
+    expect(getByTestId(`${prefix}drag-intentional`)).toHaveTextContent('true')
+    fireEvent.pointerUp(window, { pointerId: 141 })
+    expect(getByTestId(`${prefix}drag-intentional`)).toHaveTextContent('true')
+    expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('false')
+  })
+
   test(`bounds should limit both offset and movement`, () => {
     rerender(
       <Component
@@ -257,7 +268,7 @@ describe.each([
         config={{ drag: { bounds: { top: -100, bottom: 200, left: -150, right: 250 } } }}
       />
     )
-    expect(getByTestId(`${prefix}drag-offset`)).toHaveTextContent('25,31')
+    expect(getByTestId(`${prefix}drag-offset`)).toHaveTextContent('29,31')
 
     fireEvent.pointerDown(element, { clientX: 200, clientY: 300, pointerId: 15 })
     fireEvent.pointerMove(window, { clientX: 10, clientY: 150, buttons: 1, pointerId: 15 })

@@ -45,6 +45,10 @@ const InternalGestureOptionsNormalizers = {
     return value
   },
 
+  triggerAllEvents(value = false) {
+    return value
+  },
+
   initial(value = 0) {
     if (typeof value === 'function') return value
     return ensureVector(value)

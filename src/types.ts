@@ -21,6 +21,7 @@ export interface GestureOptions<T extends StateKey> {
   enabled?: boolean
   initial?: Vector2 | ((state: State[T]) => Vector2)
   threshold?: number | Vector2
+  triggerAllEvents?: boolean
   rubberband?: boolean | number | Vector2
 }
 
@@ -78,6 +79,7 @@ export interface InternalGestureOptions<T extends StateKey> {
   enabled: boolean
   initial: Vector2 | ((state: State[T]) => Vector2)
   threshold: Vector2
+  triggerAllEvents: boolean
   rubberband: Vector2
   bounds: [Vector2, Vector2] | ((state: State[T]) => [Vector2, Vector2])
 }

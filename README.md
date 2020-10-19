@@ -1,8 +1,8 @@
-# react-use-gesture
+# React UseGesture
 
-![npm (tag)](https://img.shields.io/npm/v/react-use-gesture) ![npm bundle size](https://img.shields.io/bundlephobia/minzip/react-use-gesture) ![NPM](https://img.shields.io/npm/l/react-use-gesture) ![Travis (.org) branch](https://img.shields.io/travis/react-spring/react-use-gesture/master)
+![npm (tag)](https://img.shields.io/npm/v/react-use-gesture) ![npm bundle size](https://img.shields.io/bundlephobia/minzip/react-use-gesture) ![NPM](https://img.shields.io/npm/l/react-use-gesture) ![Travis (.org) branch](https://img.shields.io/travis/react-spring/react-use-gesture/master) [![Discord Shield](https://discordapp.com/api/guilds/740090768164651008/widget.png?style=shield)](https://discord.gg/ZZjjNvJ)
 
-React-use-gesture is a hook that lets you bind richer mouse and touch events to any component or view. With the data you receive, it becomes trivial to set up gestures, and often takes no more than a few lines of code.
+React UseGesture is a hook that lets you bind richer mouse and touch events to any component or view. With the data you receive, it becomes trivial to set up gestures, and often takes no more than a few lines of code.
 
 You can use it stand-alone, but to make the most of it you should combine it with an animation library like [react-spring](https://github.com/react-spring/react-spring), though you can most certainly use any other.
 

@@ -144,7 +144,7 @@ export class DragRecognizer extends CoordinatesRecognizer<'drag'> {
     }
 
     this.updateGestureState({ ...endState, tap, swipe })
-    this.fireGestureHandler()
+    this.fireGestureHandler(tap === true)
   }
 
   clean = (): void => {

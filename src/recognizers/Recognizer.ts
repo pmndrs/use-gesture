@@ -102,11 +102,11 @@ export default abstract class Recognizer<T extends StateKey = StateKey> {
   protected getMovement(values: Vector2): PartialGestureState<T> {
     const { initial, bounds, rubberband, threshold: T } = this.config
 
-    const { _bounds, _initial, _active, _intentional: intentional, lastOffset, movement: prevMovement } = this.state
+    const { _bounds, _initial, _active, _intentional: wasIntentional, lastOffset, movement: prevMovement } = this.state
     const M = this.getInternalMovement(values, this.state)
 
-    const i0 = intentional[0] === false ? getIntentionalDisplacement(M[0], T[0]) : intentional[0]
-    const i1 = intentional[1] === false ? getIntentionalDisplacement(M[1], T[1]) : intentional[1]
+    const i0 = wasIntentional[0] === false ? getIntentionalDisplacement(M[0], T[0]) : wasIntentional[0]
+    const i1 = wasIntentional[1] === false ? getIntentionalDisplacement(M[1], T[1]) : wasIntentional[1]
 
     // Get gesture specific state properties based on intentionality and movement.
     const intentionalityCheck = this.checkIntentionality([i0, i1], M)
@@ -120,13 +120,13 @@ export default abstract class Recognizer<T extends StateKey = StateKey> {
     let __cachedBounds
     let __cachedInitial
 
-    if (_intentional[0] !== false && intentional[0] === false) {
+    if (_intentional[0] !== false && wasIntentional[0] === false) {
       __cachedInitial = valueFn(initial, this.state)
       __cachedBounds = valueFn(bounds, this.state)
       _initial[0] = __cachedInitial[0]
       _bounds[0] = __cachedBounds[0]
     }
-    if (_intentional[1] !== false && intentional[1] === false) {
+    if (_intentional[1] !== false && wasIntentional[1] === false) {
       __cachedInitial = __cachedInitial ?? valueFn(initial, this.state)
       __cachedBounds = __cachedBounds ?? valueFn(bounds, this.state)
       _initial[1] = __cachedInitial[1]
@@ -153,6 +153,7 @@ export default abstract class Recognizer<T extends StateKey = StateKey> {
 
     return {
       ...intentionalityCheck,
+      intentional: _intentional[0] !== false || _intentional[1] !== false,
       _initial,
       _movement,
       movement,
@@ -170,7 +171,7 @@ export default abstract class Recognizer<T extends StateKey = StateKey> {
   /**
    * Fires the gesture handler
    */
-  protected fireGestureHandler = (): FullGestureState<T> | null => {
+  protected fireGestureHandler = (forceFlag: boolean = false): FullGestureState<T> | null => {
     /**
      * If the gesture has been blocked (this can happen when the gesture has started in an unwanted direction),
      * clean everything and don't do anything.
@@ -185,18 +186,15 @@ export default abstract class Recognizer<T extends StateKey = StateKey> {
     }
 
     // If the gesture has no intentional dimension, don't fire the handler.
-    const [intentionalX, intentionalY] = this.state._intentional
-    const isGestureIntentional = intentionalX !== false || intentionalY !== false
-    // if (!forceFlag && intentionalX === false && intentionalY === false) return null
+    if (!forceFlag && !this.state.intentional && !this.config.triggerAllEvents) return null
 
-    if (isGestureIntentional) {
+    if (this.state.intentional) {
       const prev_active = this.state.active
       const next_active = this.state._active
 
       this.state.active = next_active
       this.state.first = next_active && !prev_active
       this.state.last = prev_active && !next_active
-      this.state.intentional = true
 
       this.controller.state.shared[this.ingKey] = next_active // Sets dragging, pinching, etc. to the gesture active state
     }
