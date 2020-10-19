@@ -1,0 +1,11 @@
+.simple > div {
+  width: 200px;
+  height: 200px;
+  background: hotpink;
+  border-radius: 16px;
+  touch-action: none;
+}
+
+.simple > div:last-child {
+  background: indigo;
+}

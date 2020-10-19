@@ -1,5 +1,9 @@
 .cards {
   background: lightblue;
+<<<<<<< HEAD
+=======
+  touch-action: none;
+>>>>>>> pr/164
   overflow: hidden;
   width: 100%;
   height: 100%;

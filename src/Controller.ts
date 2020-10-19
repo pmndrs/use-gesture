@@ -6,136 +6,157 @@ import {
   ReactEventHandlers,
   InternalConfig,
   InternalHandlers,
+  RecognizerClass,
 } from './types'
 import { getInitialState } from './utils/state'
-import { addListeners, removeListeners } from './utils/event'
 import { chainFns } from './utils/utils'
 
-type GestureTimeouts = Partial<{ [stateKey in StateKey]: number }>
-type WindowListeners = Partial<{ [stateKey in StateKey]: [string, Fn][] }>
-type Bindings = Partial<{ [eventName in ReactEventHandlerKey]: Fn[] }>
+function partial(func: Fn, state: any) {
+  return function (event: any, ...args: any) {
+    // @ts-ignore
+    return func.call(this, { ...state, event }, ...args)
+  }
+}
 
 /**
  * The controller will keep track of the state for all gestures and also keep
  * track of timeouts, and window listeners.
- *
- * @template BinderType the type the bind function should return
  */
 export default class Controller {
+  public nativeRefs!: any
   public config!: InternalConfig
-  public handlers!: Partial<InternalHandlers>
-  public state: State = getInitialState() // state for all gestures
-  public timeouts: GestureTimeouts = {} // keeping track of timeouts for debounced gestures (such as move, scroll, wheel)
-  private domListeners: [string, Fn][] = [] // when config.domTarget is set, we attach events directly to the dom
-  private windowListeners: WindowListeners = {} // keeps track of window listeners added by gestures (drag only at the moment)
-  private bindings: Bindings = {} // an object holding the handlers associated to the gestures
+  public handlers!: InternalHandlers
+  public state: State // state for all gestures
+  public timeouts: { [stateKey in StateKey]?: number } // tracks timeouts of debounced gestures
+  public domListeners: [string, Fn][] // when config.domTarget is set, we attach events directly to the dom
+  public windowListeners: { [stateKey in StateKey]?: [string, Function][] } // keeps track of window listeners added by gestures (drag only at the moment)
+
+  constructor(private classes: Set<RecognizerClass>) {
+    this.state = getInitialState()
+    this.timeouts = {}
+    this.domListeners = []
+    this.windowListeners = {}
+  }
+
+  public bind = (...args: any[]) => {
+    const bindings: { [key: string]: Function[] } = {}
+
+    for (let RecognizerClass of this.classes) new RecognizerClass(this, args).addBindings(bindings)
+
+    // we also add event bindings for native handlers
+    for (let [event, handler] of Object.entries(this.nativeRefs))
+      addBindings(bindings, event, partial(handler, { ...this.state.shared, args }))
+
+    if (this.config.domTarget) {
+      // If config.domTarget is set we add event listeners to it and return the clean function.
+      return updateDomListeners(this, bindings)
+    } else {
+      // If not, we return an object that contains gesture handlers mapped to react handler event keys.
+      return getPropsListener(this, bindings)
+    }
+  }
+
+  public effect = () => {
+    if (this.config.domTarget) this.bind()
+    return this.clean
+  }
 
   /**
    * Function ran on component unmount: cleans timeouts and removes dom listeners set by the bind function.
    */
   public clean = (): void => {
-    this.resetBindings()
+    const domTarget = getDomTargetFromConfig(this.config)
+    const { eventOptions } = this.config
+    if (domTarget) removeListeners(domTarget, takeAll(this.domListeners), eventOptions)
     Object.values(this.timeouts).forEach(clearTimeout)
-    Object.keys(this.windowListeners).forEach(stateKey => this.removeWindowListeners(stateKey as StateKey))
+    clearAllWindowListeners(this)
+  }
+}
+
+export function clearAllWindowListeners(controller: Controller) {
+  const {
+    config: { window: el, eventOptions },
+    windowListeners,
+  } = controller
+  if (!el) return
+
+  for (let stateKey in windowListeners) {
+    const handlers = windowListeners[stateKey as StateKey]
+    removeListeners(el, handlers, eventOptions)
   }
 
-  /**
-   * Function run every time the bind function is run (ie on every render).
-   * Resets the binding object and remove dom listeners attached to config.domTarget
-   */
-  public resetBindings = (): void => {
-    this.bindings = {}
-    const domTarget = this.getDomTarget()
-    if (domTarget) {
-      removeListeners(domTarget, this.domListeners, this.config.eventOptions)
-      this.domListeners = []
-    }
+  controller.windowListeners = {}
+}
+
+export function clearWindowListeners({ config, windowListeners }: Controller, stateKey: StateKey) {
+  if (!config.window) return
+  removeListeners(config.window, windowListeners[stateKey], config.eventOptions)
+  delete windowListeners[stateKey]
+}
+
+export function updateWindowListeners(
+  { config, windowListeners }: Controller,
+  stateKey: StateKey,
+  listeners: [string, Fn][] = []
+) {
+  if (!config.window) return
+  removeListeners(config.window, windowListeners[stateKey], config.eventOptions)
+  addListeners(config.window, (windowListeners[stateKey] = listeners), config.eventOptions)
+}
+
+function updateDomListeners({ config, domListeners }: Controller, bindings: { [key: string]: Function[] }) {
+  const domTarget = getDomTargetFromConfig(config)
+  if (!domTarget) throw new Error('domTarget must be defined')
+  const { eventOptions } = config
+
+  removeListeners(domTarget, takeAll(domListeners), eventOptions)
+
+  for (let [key, fns] of Object.entries(bindings)) {
+    const name = key.slice(2).toLowerCase()
+    domListeners.push([name, chainFns(...fns)])
   }
 
-  /**
-   * Returns the domTarget element and parses a ref if needed.
-   */
-  private getDomTarget = (): EventTarget | null | undefined => {
-    const { domTarget } = this.config
-    return domTarget && 'current' in domTarget ? domTarget.current : domTarget
+  addListeners(domTarget, domListeners, eventOptions)
+}
+
+function getPropsListener({ config }: Controller, bindings: { [key: string]: Function[] }) {
+  const props: ReactEventHandlers = {}
+  const captureString = config.eventOptions.capture ? 'Capture' : ''
+  for (let [event, fns] of Object.entries(bindings)) {
+    const fnsArray = Array.isArray(fns) ? fns : [fns]
+    const key = (event + captureString) as ReactEventHandlerKey
+    props[key] = chainFns(...(fnsArray as Fn[]))
   }
+  return props
+}
 
-  /**
-   * Commodity function to let recognizers simply add listeners to config.window.
-   */
-  public addWindowListeners = (stateKey: StateKey, listeners: [string, Fn][]): void => {
-    if (!this.config.window) return
-    // we use this.windowListeners to keep track of the listeners we add
-    this.windowListeners[stateKey] = listeners
-    addListeners(this.config.window, listeners, this.config.eventOptions)
+function takeAll<T>(array: Array<T> = []) {
+  return array.splice(0, array.length)
+}
+
+function getDomTargetFromConfig({ domTarget }: InternalConfig) {
+  return domTarget && 'current' in domTarget ? domTarget.current : domTarget
+}
+
+/**
+ * bindings is an object which keys match ReactEventHandlerKeys.
+ * Since a recognizer might want to bind a handler function to an event key already used by a previously
+ * added recognizer, we need to make sure that each event key is an array of all the functions mapped for
+ * that key.
+ */
+export function addBindings(bindings: any, name: string, fn: Fn): void {
+  if (!bindings[name]) bindings[name] = []
+  bindings[name]!.push(fn)
+}
+
+function addListeners(el: EventTarget, listeners: Array<[string, Fn]> = [], options = {}) {
+  for (let [eventName, eventHandler] of listeners) {
+    el.addEventListener(eventName, eventHandler, options)
   }
+}
 
-  /**
-   * Commodity function to let recognizers simply remove listeners to config.window.
-   */
-  public removeWindowListeners = (stateKey: StateKey): void => {
-    if (!this.config.window) return
-    const listeners = this.windowListeners[stateKey]
-    if (listeners) {
-      removeListeners(this.config.window, listeners, this.config.eventOptions)
-      delete this.windowListeners[stateKey]
-    }
-  }
-
-  /**
-   * When config.domTarget is set, this function will add dom listeners to it
-   */
-  public addDomTargetListeners = (target: EventTarget): void => {
-    /** We iterate on the entries of this.binding for each event, then we chain
-     * the array of functions mapped to it and push them to this.domListeners
-     */
-    Object.entries(this.bindings).forEach(([event, fns]) => {
-      this.domListeners.push([event.substr(2).toLowerCase(), chainFns(...(fns as Fn[]))])
-    })
-
-    addListeners(target, this.domListeners, this.config.eventOptions)
-  }
-
-  /**
-   * this.bindings is an object which keys match ReactEventHandlerKeys.
-   * Since a recognizer might want to bind a handler function to an event key already used by a previously
-   * added recognizer, we need to make sure that each event key is an array of all the functions mapped for
-   * that key.
-   */
-  public addBindings = (eventNames: ReactEventHandlerKey | ReactEventHandlerKey[], fn: Fn): void => {
-    const eventNamesArray = !Array.isArray(eventNames) ? [eventNames] : eventNames
-    eventNamesArray.forEach(eventName => {
-      if (this.bindings[eventName]) this.bindings[eventName]!.push(fn)
-      else this.bindings[eventName] = [fn]
-    })
-  }
-
-  /**
-   * getBindings will return an object that will be bound by users
-   * to the react component they want to interact with.
-   */
-  public getBindings = (): ReactEventHandlers => {
-    const bindings: ReactEventHandlers = {}
-    const { captureString } = this.config
-
-    Object.entries(this.bindings).forEach(([event, fns]) => {
-      const fnsArray = Array.isArray(fns) ? fns : [fns]
-      const key = (event + captureString) as ReactEventHandlerKey
-      bindings[key] = chainFns(...(fnsArray as Fn[]))
-    })
-
-    return bindings
-  }
-
-  public getBind = () => {
-    // If config.domTarget is set we add event listeners to it and return the clean function.
-    if (this.config.domTarget) {
-      const domTarget = this.getDomTarget()
-      domTarget && this.addDomTargetListeners(domTarget)
-      return this.clean
-    }
-
-    // If not, we return an object that contains gesture handlers mapped to react handler event keys.
-    return this.getBindings()
+function removeListeners(el: EventTarget, listeners: Array<[string, Fn]> = [], options = {}) {
+  for (let [eventName, eventHandler] of listeners) {
+    el.removeEventListener(eventName, eventHandler, options)
   }
 }

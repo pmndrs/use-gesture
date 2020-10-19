@@ -1,72 +1,62 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 
 import React from 'react'
+import { RecognizersMap } from '../recognizers/Recognizer'
 import Controller from '../Controller'
 import {
   InternalConfig,
   HookReturnType,
   InternalHandlers,
-  RecognizerClasses,
   GenericOptions,
-  NativeHandlersPartial,
-  ReactEventHandlerKey,
-  Fn,
+  RecognizerClass,
+  NativeHandlers,
 } from '../types'
+
 /**
- * @private
- *
  * Utility hook called by all gesture hooks and that will be responsible for the internals.
  *
- * @param {Partial<InternalHandlers>} handlers
- * @param {RecognizerClasses} classes
- * @param {InternalConfig} config
- * @param {NativeHandlersPartial} nativeHandlers - native handlers such as onClick, onMouseDown, etc.
- * @returns {(...args: any[]) => HookReturnType<Config>}
+ * @param handlers
+ * @param classes
+ * @param config
+ * @param nativeHandlers - native handlers such as onClick, onMouseDown, etc.
  */
 export default function useRecognizers<Config extends Partial<GenericOptions>>(
   handlers: Partial<InternalHandlers>,
-  classes: RecognizerClasses,
   config: InternalConfig,
-  nativeHandlers?: NativeHandlersPartial
+  nativeHandlers: Partial<NativeHandlers> = {}
 ): (...args: any[]) => HookReturnType<Config> {
-  // The gesture controller keeping track of all gesture states
-  const controller = React.useMemo(() => {
-    const current = new Controller()
+  const classes = resolveClasses(handlers)
 
-    /**
-     * The bind function will create gesture recognizers and return the right
-     * bind object depending on whether `domTarget` was specified in the config object.
-     */
-    const bind = (...args: any[]) => {
-      current.resetBindings()
-      for (let RecognizerClass of classes) {
-        new RecognizerClass(current, args).addBindings()
-      }
+  const controller = React.useMemo(() => new Controller(classes), [])
+  controller!.config = config
+  controller!.handlers = handlers
+  controller!.nativeRefs = nativeHandlers
 
-      // we also add event bindings for native handlers
-      if (controller.nativeRefs) {
-        for (let eventName in controller.nativeRefs)
-          current.addBindings(
-            eventName as ReactEventHandlerKey,
-            // @ts-ignore we're cheating when it comes to event type :(
-            controller.nativeRefs[eventName] as Fn
-          )
-      }
+  React.useEffect(controller.effect, [])
 
-      return current.getBind() as HookReturnType<Config>
-    }
-
-    return { nativeRefs: nativeHandlers, current, bind }
-  }, [])
-
-  // We reassign the config and handlers to the controller on every render.
-  controller.current!.config = config
-  controller.current!.handlers = handlers
-  // We assign nativeHandlers, otherwise they won't be refreshed on the next render.
-  controller.nativeRefs = nativeHandlers
-
-  // Run controller clean functions on unmount.
-  React.useEffect(() => controller.current!.clean, [])
-
+  // @ts-ignore
+  if (controller.config.domTarget) return deprecationNoticeForDomTarget
+  // @ts-ignore
   return controller.bind
+}
+
+function deprecationNoticeForDomTarget() {
+  if (process.env.NODE_ENV === 'development') {
+    console.warn(
+      `Deprecation notice: When the \`domTarget\` option is specified, you don't need to write \`useEffect(bind, [bind])\` anymore: event binding is now made handled internally to this lib.\n\nNext version won't return anything when \`domTarget\` is provided, therefore your code will break if you try to call \`useEffect\`.`
+    )
+  }
+}
+
+function resolveClasses(internalHandlers: Partial<InternalHandlers>) {
+  const classes = new Set<RecognizerClass>()
+
+  if (internalHandlers.drag) classes.add(RecognizersMap.get('drag')!)
+  if (internalHandlers.wheel) classes.add(RecognizersMap.get('wheel')!)
+  if (internalHandlers.scroll) classes.add(RecognizersMap.get('scroll')!)
+  if (internalHandlers.move) classes.add(RecognizersMap.get('move')!)
+  if (internalHandlers.pinch) classes.add(RecognizersMap.get('pinch')!)
+  if (internalHandlers.hover) classes.add(RecognizersMap.get('hover')!)
+
+  return classes
 }

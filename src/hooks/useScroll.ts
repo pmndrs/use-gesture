@@ -1,35 +1,23 @@
+import { UseScrollConfig, Handler, EventTypes } from '../types'
+import { _buildScrollConfig } from './buildConfig'
 import useRecognizers from './useRecognizers'
-import ScrollRecognizer from '../recognizers/ScrollRecognizer'
-import { Handler, InternalConfig, HookReturnType, UseScrollConfig } from '../types'
-import { getInternalGenericOptions, getInternalCoordinatesOptions } from '../utils/config'
+import { RecognizersMap } from '../recognizers/Recognizer'
+import { ScrollRecognizer } from '../recognizers/ScrollRecognizer'
+import memoize from '../utils/memoize-one'
+import isEqual from '../utils/react-fast-compare'
+import { useRef } from 'react'
 
 /**
- * @public
- *
  * Scroll hook.
  *
- * @param {Handler<'scroll'>} handler - the function fired every time the scroll gesture updates
- * @param {(Config | {})} [config={}] - the config object including generic options and scroll options
- * @returns {(...args: any[]) => HookReturnType<Config>}
+ * @param handler - the function fired every time the scroll gesture updates
+ * @param [config={}] - the config object including generic options and scroll options
  */
-export function useScroll<Config extends UseScrollConfig>(
-  handler: Handler<'scroll'>,
-  config: Config | {} = {}
-): (...args: any[]) => HookReturnType<Config> {
-  const { domTarget, eventOptions, window, ...scroll } = config as UseScrollConfig
-
-  /**
-   * TODO: at the moment we recompute the config object at every render
-   * this could probably be optimized
-   */
-  const mergedConfig: InternalConfig = {
-    ...getInternalGenericOptions({
-      domTarget,
-      eventOptions,
-      window,
-    }),
-    scroll: getInternalCoordinatesOptions(scroll),
+export function useScroll<K = EventTypes['scroll']>(handler: Handler<'scroll', K>, config: UseScrollConfig | {} = {}) {
+  RecognizersMap.set('scroll', ScrollRecognizer)
+  const buildScrollConfig = useRef<any>()
+  if (!buildScrollConfig.current) {
+    buildScrollConfig.current = memoize(_buildScrollConfig, isEqual)
   }
-
-  return useRecognizers<Config>({ scroll: handler }, [ScrollRecognizer], mergedConfig)
+  return useRecognizers<UseScrollConfig>({ scroll: handler }, buildScrollConfig.current(config))
 }

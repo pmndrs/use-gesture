@@ -16,6 +16,7 @@ function Dodecahedron() {
     config: { mass: 3, friction: 40, tension: 800 },
   }))
 
+<<<<<<< HEAD
   const bind = useGesture(
     {
       onDrag: ({ offset: [x, y] }) =>
@@ -26,6 +27,13 @@ function Dodecahedron() {
       eventOptions: { pointer: true },
     }
   )
+=======
+  const bind = useGesture({
+    onDrag: ({ offset: [x, y] }) =>
+      set({ position: [x / aspect, -y / aspect, 0], rotation: [y / aspect, x / aspect, 0] }),
+    onHover: ({ hovering }) => set({ scale: hovering ? [1.2, 1.2, 1.2] : [1, 1, 1] }),
+  })
+>>>>>>> pr/164
 
   return (
     <a.mesh {...spring} {...bind()} castShadow>

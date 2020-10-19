@@ -1,35 +1,23 @@
+import { UseDragConfig, Handler, EventTypes } from '../types'
+import { _buildDragConfig } from './buildConfig'
 import useRecognizers from './useRecognizers'
-import DragRecognizer from '../recognizers/DragRecognizer'
-import { Handler, InternalConfig, HookReturnType, UseDragConfig } from '../types'
-import { getInternalGenericOptions, getInternalDragOptions } from '../utils/config'
+import { RecognizersMap } from '../recognizers/Recognizer'
+import { DragRecognizer } from '../recognizers/DragRecognizer'
+import memoize from '../utils/memoize-one'
+import isEqual from '../utils/react-fast-compare'
+import { useRef } from 'react'
 
 /**
- * @public
- *
  * Drag hook.
  *
- * @param {Handler<'drag'>} handler - the function fired every time the drag gesture updates
- * @param {(Config | {})} [config={}] - the config object including generic options and drag options
- * @returns {(...args: any[]) => HookReturnType<Config>}
+ * @param handler - the function fired every time the drag gesture updates
+ * @param [config={}] - the config object including generic options and drag options
  */
-export function useDrag<Config extends UseDragConfig>(
-  handler: Handler<'drag'>,
-  config: Config | {} = {}
-): (...args: any[]) => HookReturnType<Config> {
-  const { domTarget, eventOptions, window, ...drag } = config as UseDragConfig
-
-  /**
-   * TODO: at the moment we recompute the config object at every render
-   * this could probably be optimized
-   */
-  const mergedConfig: InternalConfig = {
-    ...getInternalGenericOptions({
-      domTarget,
-      eventOptions,
-      window,
-    }),
-    drag: getInternalDragOptions(drag),
+export function useDrag<K = EventTypes['drag']>(handler: Handler<'drag', K>, config: UseDragConfig | {} = {}) {
+  RecognizersMap.set('drag', DragRecognizer)
+  const buildDragConfig = useRef<any>()
+  if (!buildDragConfig.current) {
+    buildDragConfig.current = memoize(_buildDragConfig, isEqual)
   }
-
-  return useRecognizers<Config>({ drag: handler }, [DragRecognizer], mergedConfig)
+  return useRecognizers<UseDragConfig>({ drag: handler }, buildDragConfig.current(config))
 }

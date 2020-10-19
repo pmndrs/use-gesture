@@ -1,85 +1,54 @@
 import { WheelEvent } from 'react'
 import CoordinatesRecognizer from './CoordinatesRecognizer'
-import Controller from '../Controller'
-import { UseGestureEvent, IngKey } from '../types'
 import { getWheelEventValues, getGenericEventData } from '../utils/event'
-import { addV, calculateDistance, calculateDirection } from '../utils/math'
+import { addV, calculateAllGeometry } from '../utils/math'
+import { getStartGestureState, getGenericPayload } from './Recognizer'
+import { addBindings } from '../Controller'
 
-export default class WheelRecognizer extends CoordinatesRecognizer<'wheel'> {
-  ingKey = 'wheeling' as IngKey
+export class WheelRecognizer extends CoordinatesRecognizer<'wheel'> {
+  readonly ingKey = 'wheeling'
+  readonly stateKey = 'wheel'
   debounced = true
 
-  constructor(controller: Controller, args: any[]) {
-    super('wheel', controller, args)
-  }
+  handleEvent = (event: React.WheelEvent | WheelEvent): void => {
+    if (event.ctrlKey && 'pinch' in this.controller.handlers) return
+    if (!this.enabled) return
 
-  private wheelShouldRun = (event: UseGestureEvent<WheelEvent>) => {
-    if (event.ctrlKey && 'pinch' in this.controller.handlers) return false
-    return this.enabled
-  }
-
-  private getValuesFromEvent = (event: UseGestureEvent<WheelEvent>) => {
-    const { values: prevValues } = this.state
-    const { values } = getWheelEventValues(event)
-    return { values: addV(values, prevValues) }
-  }
-
-  onWheel = (event: UseGestureEvent<WheelEvent>): void => {
-    if (!this.wheelShouldRun(event)) return
-    this.clearTimeout()
-    this.setTimeout(this.onWheelEnd)
-
-    if (!this.state._active) this.onWheelStart(event)
-    else this.onWheelChange(event)
-  }
-
-  onWheelStart = (event: UseGestureEvent<WheelEvent>): void => {
-    const { values } = this.getValuesFromEvent(event)
-
+    this.setTimeout(this.onEnd)
     this.updateSharedState(getGenericEventData(event))
 
-    const startState = {
-      ...this.getStartGestureState(values, event),
-      ...this.getGenericPayload(event, true),
-      initial: this.state.values,
+    const values = addV(getWheelEventValues(event), this.state.values)
+
+    if (!this.state._active) {
+      this.updateGestureState({
+        ...getStartGestureState(this, values, event),
+        ...getGenericPayload(this, event, true),
+        initial: this.state.values,
+      })
+
+      const movement = this.getMovement(values)
+      const geometry = calculateAllGeometry(movement.delta!)
+
+      this.updateGestureState(movement)
+      this.updateGestureState(geometry)
+    } else {
+      this.updateGestureState({
+        ...getGenericPayload(this, event),
+        ...this.getKinematics(values, event),
+      })
     }
 
-    const movementDetection = this.getMovement(values, startState)
-    const delta = movementDetection.delta!
-
-    this.updateGestureState({
-      ...startState,
-      ...movementDetection,
-      distance: calculateDistance(delta),
-      direction: calculateDirection(delta),
-    })
-
     this.fireGestureHandler()
   }
 
-  onWheelChange = (event: UseGestureEvent<WheelEvent>): void => {
-    const genericEventData = getGenericEventData(event)
-
-    this.updateSharedState(genericEventData)
-
-    const { values } = this.getValuesFromEvent(event)
-    const kinematics = this.getKinematics(values, event)
-
-    this.updateGestureState({
-      ...this.getGenericPayload(event),
-      ...kinematics,
-    })
-
+  onEnd = (): void => {
+    const movement = this.getMovement(this.state.values)
+    this.updateGestureState(movement)
+    this.updateGestureState({ _active: false, velocities: [0, 0], velocity: 0 })
     this.fireGestureHandler()
   }
 
-  onWheelEnd = (): void => {
-    this.state._active = false
-    this.updateGestureState({ ...this.getMovement(this.state.values), velocities: [0, 0], velocity: 0 })
-    this.fireGestureHandler()
-  }
-
-  addBindings(): void {
-    this.controller.addBindings('onWheel', this.onWheel)
+  addBindings(bindings: any): void {
+    addBindings(bindings, 'onWheel', this.handleEvent)
   }
 }

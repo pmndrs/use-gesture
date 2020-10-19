@@ -1,35 +1,23 @@
+import { UseWheelConfig, Handler, EventTypes } from '../types'
+import { _buildWheelConfig } from './buildConfig'
 import useRecognizers from './useRecognizers'
-import WheelRecognizer from '../recognizers/WheelRecognizer'
-import { Handler, InternalConfig, HookReturnType, UseWheelConfig } from '../types'
-import { getInternalGenericOptions, getInternalCoordinatesOptions } from '../utils/config'
+import { RecognizersMap } from '../recognizers/Recognizer'
+import { WheelRecognizer } from '../recognizers/WheelRecognizer'
+import memoize from '../utils/memoize-one'
+import isEqual from '../utils/react-fast-compare'
+import { useRef } from 'react'
 
 /**
- * @public
- *
  * Wheel hook.
  *
- * @param {Handler<'wheel'>} handler - the function fired every time the wheel gesture updates
- * @param {(Config | {})} [config={}] - the config object including generic options and wheel options
- * @returns {(...args: any[]) => HookReturnType<Config>}
+ * @param handler - the function fired every time the wheel gesture updates
+ * @param the config object including generic options and wheel options
  */
-export function useWheel<Config extends UseWheelConfig>(
-  handler: Handler<'wheel'>,
-  config: Config | {} = {}
-): (...args: any[]) => HookReturnType<Config> {
-  const { domTarget, eventOptions, window, ...wheel } = config as UseWheelConfig
-
-  /**
-   * TODO: at the moment we recompute the config object at every render
-   * this could probably be optimized
-   */
-  const mergedConfig: InternalConfig = {
-    ...getInternalGenericOptions({
-      domTarget,
-      eventOptions,
-      window,
-    }),
-    wheel: getInternalCoordinatesOptions(wheel),
+export function useWheel<K = EventTypes['wheel']>(handler: Handler<'wheel', K>, config: UseWheelConfig | {} = {}) {
+  RecognizersMap.set('wheel', WheelRecognizer)
+  const buildWheelConfig = useRef<any>()
+  if (!buildWheelConfig.current) {
+    buildWheelConfig.current = memoize(_buildWheelConfig, isEqual)
   }
-
-  return useRecognizers<Config>({ wheel: handler }, [WheelRecognizer], mergedConfig)
+  return useRecognizers<UseWheelConfig>({ wheel: handler }, buildWheelConfig.current(config))
 }

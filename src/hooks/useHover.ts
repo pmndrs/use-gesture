@@ -1,35 +1,23 @@
+import { Handler, UseHoverConfig, EventTypes } from '../types'
+import { _buildHoverConfig } from './buildConfig'
 import useRecognizers from './useRecognizers'
-import MoveRecognizer from '../recognizers/MoveRecognizer'
-import { Handler, InternalConfig, HookReturnType, UseHoverConfig } from '../types'
-import { getInternalGenericOptions } from '../utils/config'
+import { RecognizersMap } from '../recognizers/Recognizer'
+import { MoveRecognizer } from '../recognizers/MoveRecognizer'
+import memoize from '../utils/memoize-one'
+import isEqual from '../utils/react-fast-compare'
+import { useRef } from 'react'
 
 /**
- * @public
- *
  * Hover hook.
  *
- * @param {Handler<'hover'>} handler - the function fired every time the hover gesture updates
- * @param {(Config | {})} [config={}] - the config object including generic options and hover options
- * @returns {(...args: any[]) => HookReturnType<Config>}
+ * @param handler - the function fired every time the hover gesture updates
+ * @param [config={}] - the config object including generic options and hover options
  */
-export function useHover<Config extends UseHoverConfig>(
-  handler: Handler<'hover'>,
-  config: Config | {} = {}
-): (...args: any[]) => HookReturnType<Config> {
-  const { domTarget, eventOptions, window, ...hover } = config as UseHoverConfig
-
-  /**
-   * TODO: at the moment we recompute the config object at every render
-   * this could probably be optimized
-   */
-  const mergedConfig: InternalConfig = {
-    ...getInternalGenericOptions({
-      domTarget,
-      eventOptions,
-      window,
-    }),
-    hover: { enabled: true, ...hover },
+export function useHover<K = EventTypes['hover']>(handler: Handler<'hover', K>, config: UseHoverConfig | {} = {}) {
+  RecognizersMap.set('hover', MoveRecognizer)
+  const buildHoverConfig = useRef<any>()
+  if (!buildHoverConfig.current) {
+    buildHoverConfig.current = memoize(_buildHoverConfig, isEqual)
   }
-
-  return useRecognizers<Config>({ hover: handler }, [MoveRecognizer], mergedConfig)
+  return useRecognizers<UseHoverConfig>({ hover: handler }, buildHoverConfig.current(config))
 }

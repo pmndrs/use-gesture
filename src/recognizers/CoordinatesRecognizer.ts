@@ -1,14 +1,10 @@
 import Recognizer from './Recognizer'
 import { calculateAllKinematics, subV } from '../utils/math'
-import { Vector2, UseGestureEvent, PartialGestureState, FalseOrNumber, GestureState, CoordinatesKey } from '../types'
+import { Vector2, PartialGestureState, GestureState, CoordinatesKey } from '../types'
 
 /**
  * @private
  * Abstract class for coordinates-based gesture recongizers
- * @abstract
- * @class CoordinatesRecognizer
- * @extends {Recognizer<T>}
- * @template T
  */
 export default abstract class CoordinatesRecognizer<T extends CoordinatesKey> extends Recognizer<T> {
   /**
@@ -22,68 +18,33 @@ export default abstract class CoordinatesRecognizer<T extends CoordinatesKey> ex
    * In coordinates-based gesture, this function will detect the first intentional axis,
    * lock the gesture axis if lockDirection is specified in the config, block the gesture
    * if the first intentional axis doesn't match the specified axis in config.
-   *
-   * @param {[FalseOrNumber, FalseOrNumber]} _intentional
-   * @param {Vector2} _movement
-   * @param {PartialGestureState<T>} state
    */
   protected checkIntentionality(
-    _intentional: [FalseOrNumber, FalseOrNumber],
-    _movement: Vector2,
-    state: PartialGestureState<T>
+    _intentional: [false | number, false | number],
+    _movement: Vector2
   ): PartialGestureState<T> {
-    let [_ix, _iy] = _intentional
-    const intentionalMovement = _ix !== false || _iy !== false
-    let { axis } = state
-    let _blocked = false
-
-    // If the movement is intentional, we can compute axis.
-    if (intentionalMovement) {
-      const [absX, absY] = _movement.map(Math.abs)
-
-      const { axis: configAxis, lockDirection } = this.config
-
-      // We make sure we only set axis value if it hadn't been detected before.
-      axis = axis || (absX > absY ? 'x' : absX < absY ? 'y' : undefined)
-      if (!!configAxis || lockDirection) {
-        if (!!axis) {
-          // If the detected axis doesn't match the config axis we block the gesture
-          if (!!configAxis && axis !== configAxis) _blocked = true
-          else {
-            // Otherwise we prevent the gesture from updating the unwanted axis.
-            const lockedIndex = axis === 'x' ? 1 : 0
-            _intentional![lockedIndex] = false
-          }
-        } else {
-          // Until we've detected the axis, we prevent the hnadler from updating.
-          _intentional = [false, false]
-        }
-      }
+    if (_intentional[0] === false && _intentional[1] === false) {
+      return { _intentional, axis: this.state.axis } as PartialGestureState<T>
     }
-
-    return { _intentional, _blocked, axis } as PartialGestureState<T>
+    const [absX, absY] = _movement.map(Math.abs)
+    const axis = this.state.axis || (absX > absY ? 'x' : absX < absY ? 'y' : undefined)
+    if (!this.config.axis && !this.config.lockDirection) return { _intentional, _blocked: false, axis } as any
+    if (!axis) return { _intentional: [false, false], _blocked: false, axis } as any
+    if (!!this.config.axis && axis !== this.config.axis) return { _intentional, _blocked: true, axis } as any
+    _intentional![axis === 'x' ? 1 : 0] = false
+    return { _intentional, _blocked: false, axis } as any
   }
 
-  getKinematics(values: Vector2, event: UseGestureEvent): PartialGestureState<T> {
-    const { timeStamp } = this.state
-
-    const movementDetection = this.getMovement(values, this.state)
-    const { _blocked, delta, movement } = movementDetection
-
-    if (_blocked) return movementDetection
-
-    const delta_t = event.timeStamp - timeStamp!
-    const kinematics = calculateAllKinematics(movement!, delta!, delta_t)
-
-    return {
-      values,
-      delta,
-      ...movementDetection,
-      ...kinematics,
+  getKinematics(values: Vector2, event: React.UIEvent | UIEvent): PartialGestureState<T> {
+    const state = this.getMovement(values)
+    if (!state._blocked) {
+      const dt = event.timeStamp - this.state.timeStamp!
+      Object.assign(state, calculateAllKinematics(state.movement!, state.delta!, dt))
     }
+    return state
   }
 
-  protected mapStateValues(state: GestureState<T>): PartialGestureState<T> {
-    return { xy: state.values, vxvy: state.velocities } as PartialGestureState<T>
+  protected mapStateValues(state: GestureState<T>): Omit<PartialGestureState<T>, 'event'> {
+    return { xy: state.values, vxvy: state.velocities } as Omit<PartialGestureState<T>, 'event'>
   }
 }

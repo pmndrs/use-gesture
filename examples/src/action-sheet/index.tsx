@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import React, { useRef } from 'react'
+=======
+import React from 'react'
+>>>>>>> pr/164
 import { useSpring, a, config } from 'react-spring'
 import { useDrag } from 'react-use-gesture'
 import styles from './styles.css'
@@ -7,7 +11,10 @@ const items = ['save item', 'open item', 'share item', 'delete item', 'cancel']
 const height = items.length * 60 + 80
 
 export default function ActionSheet() {
+<<<<<<< HEAD
   const draggingRef = useRef(false)
+=======
+>>>>>>> pr/164
   const [{ y }, set] = useSpring(() => ({ y: height }))
 
   const open = (canceled?: boolean) => {
@@ -20,12 +27,16 @@ export default function ActionSheet() {
   }
 
   const bind = useDrag(
+<<<<<<< HEAD
     ({ first, last, vxvy: [, vy], movement: [, my], cancel, canceled }) => {
       if (first) draggingRef.current = true
       // if this is not the first or last frame, it's a moving frame
       // then it means the user is dragging
       else if (last) draggingRef.current = false
 
+=======
+    ({ last, vxvy: [, vy], movement: [, my], cancel, canceled }) => {
+>>>>>>> pr/164
       // if the user drags up passed a threshold, then we cancel
       // the drag so that the sheet resets to its open position
       if (my < -70) cancel()
@@ -37,7 +48,11 @@ export default function ActionSheet() {
       // the cursor position
       else set({ y: my, immediate: false, config: config.stiff })
     },
+<<<<<<< HEAD
     { initial: () => [0, y.get()], bounds: { top: 0 }, rubberband: true }
+=======
+    { initial: () => [0, y.get()], bounds: { top: 0 }, rubberband: true, filterTaps: true }
+>>>>>>> pr/164
   )
 
   const display = y.to(py => (py < height ? 'block' : 'none'))
@@ -63,7 +78,11 @@ export default function ActionSheet() {
       <div className={styles.actionBtn} onClick={() => open()} />
       <a.div className={styles.sheet} {...bind()} style={{ display, bottom: `calc(-100vh + ${height - 100}px)`, y }}>
         {items.map(entry => (
+<<<<<<< HEAD
           <div key={entry} onClick={() => !draggingRef.current && close()} children={entry} />
+=======
+          <div key={entry} onClick={() => close()} children={entry} />
+>>>>>>> pr/164
         ))}
       </a.div>
     </div>

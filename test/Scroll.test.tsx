@@ -1,18 +1,19 @@
 import React from 'react'
-import { render, cleanup, fireEvent, createEvent, wait } from '@testing-library/react'
+import { render, cleanup, fireEvent, createEvent, waitFor } from '@testing-library/react'
 import '@testing-library/jest-dom/extend-expect'
 import Interactive from './components/Interactive'
 import InteractiveDom from './components/InteractiveDom'
+import InteractiveDomBackwardCompat from './components/InteractiveDomBackwardCompat'
 import { InteractiveType } from './components/types'
 
 afterAll(cleanup)
 
 describe.each([
-  ['attached to component', Interactive, false],
-  ['attached to node', InteractiveDom, true],
-])('testing onScroll %s)', (_testName, C, domTarget) => {
+  ['attached to component', Interactive, ''],
+  ['attached to node', InteractiveDom, 'dom-'],
+  ['attached to node and called effect', InteractiveDomBackwardCompat, 'backward-dom-'],
+])('testing onScroll %s)', (_testName, C, prefix) => {
   const Component = C as InteractiveType
-  const prefix = domTarget ? 'dom-' : ''
   const { getByTestId, rerender } = render(<Component gestures={['Scroll']} memoArg="memo" />)
   const element = getByTestId(`${prefix}scroll-el`)
   let delta_t: number
@@ -61,11 +62,11 @@ describe.each([
 
   test('kinematics should update', () => {
     expect(getByTestId(`${prefix}scroll-velocity`)).not.toHaveTextContent(/^0$/)
-    expect(getByTestId(`${prefix}scroll-vxvy`)).toHaveTextContent(`${30 / delta_t},${20 / delta_t}`)
+    expect(getByTestId(`${prefix}scroll-vxvy`)).toHaveTextContent(`${30 * (1 / delta_t)},${20 * (1 / delta_t)}`)
   })
 
   test('the last scroll event should debounce and terminate the gesture', async () => {
-    await wait(() => {
+    await waitFor(() => {
       expect(getByTestId(`${prefix}scroll-last`)).toHaveTextContent('true')
       expect(getByTestId(`${prefix}scroll-active`)).toHaveTextContent('false')
       expect(getByTestId(`${prefix}scroll-vxvy`)).toHaveTextContent('0,0')
@@ -74,7 +75,7 @@ describe.each([
   })
 
   test('terminating the gesture should fire onScrollEnd', async () => {
-    await wait(() => expect(getByTestId(`${prefix}scroll-end`)).toHaveTextContent(/^fired$/))
+    await waitFor(() => expect(getByTestId(`${prefix}scroll-end`)).toHaveTextContent(/^fired$/))
   })
 
   test('disabling all gestures should prevent state from updating', () => {

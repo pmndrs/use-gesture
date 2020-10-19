@@ -1,63 +1,43 @@
 import Recognizer from './Recognizer'
-import { calculateAllKinematics, sign } from '../utils/math'
-import { Vector2, UseGestureEvent, PartialGestureState, DistanceAngleKey, GestureState } from '../types'
+import { calculateAllKinematics, sign, subV } from '../utils/math'
+import { Vector2, PartialGestureState, DistanceAngleKey, GestureState } from '../types'
 
 /**
  * @private
  * Abstract class for distance/angle-based gesture recongizers
- * @abstract
- * @class DistanceAngleRecognizer
- * @extends {Recognizer<T>}
- * @template T
  */
 export default abstract class DistanceAngleRecognizer<T extends DistanceAngleKey> extends Recognizer<T> {
-  /**
-   * Returns the real movement (without taking intentionality into acount)
-   */
-  protected getInternalMovement([d, a]: [number, number?], state: GestureState<T>): Vector2 {
-    const { values: da, turns, initial } = state
+  protected getInternalMovement(values: [number, number?], state: GestureState<T>): Vector2 {
+    const prev_a = state.values[1]
+    // not be defined if ctrl+wheel is used for zoom only
+    let [d, a = prev_a] = values
 
-    // angle might not be defined when ctrl wheel is used for zoom only
-    // in that case we set it to the previous angle value
-    a = a !== void 0 ? a : da[1]
-
-    let delta_a = a - da[1]
-
-    /**
-     * The angle value might jump from 179deg to -179deg when we actually want to
-     * read 181deg to ensure continuity. To make that happen, we detect when the jump
-     * is supsiciously high (ie > 270deg) and increase the `turns` value
-     */
-    const newTurns = Math.abs(delta_a) > 270 ? turns + sign(delta_a) : turns
-
-    // we update the angle difference to its corrected value
-
-    const movement_d = d - initial[0]
-    const movement_a = a - 360 * newTurns - initial[1]
-    return [movement_d, movement_a]
+    let delta_a = a - prev_a
+    let next_turns = state.turns
+    if (Math.abs(delta_a) > 270) next_turns += sign(delta_a)
+    return subV([d, a - 360 * next_turns], state.initial)
   }
 
-  getKinematics(values: Vector2, event: UseGestureEvent): PartialGestureState<T> {
-    const { timeStamp, initial } = this.state
-
-    const movementDetection = this.getMovement(values, this.state)
-    const { delta, movement } = movementDetection
-
-    const turns = (values[1] - movement![1] - initial[1]) / 360
-
-    const delta_t = event.timeStamp - timeStamp!
-    const kinematics = calculateAllKinematics(movement!, delta!, delta_t)
-
-    return {
-      values,
-      delta,
-      turns,
-      ...movementDetection,
-      ...kinematics,
-    }
+  getKinematics(values: Vector2, event: React.UIEvent | UIEvent): PartialGestureState<T> {
+    const state = this.getMovement(values)
+    const turns = (values[1] - state.movement![1] - this.state.initial[1]) / 360
+    const dt = event.timeStamp - this.state.timeStamp!
+    const kinematics = calculateAllKinematics(state.movement!, state.delta!, dt)
+    return { turns, ...state, ...kinematics }
   }
 
-  protected mapStateValues(state: GestureState<T>): PartialGestureState<T> {
-    return { da: state.values, vdva: state.velocities } as PartialGestureState<T>
+  protected mapStateValues(state: GestureState<T>): Omit<PartialGestureState<T>, 'event'> {
+    return { da: state.values, vdva: state.velocities } as Omit<PartialGestureState<T>, 'event'>
   }
+}
+
+/**
+ * @param dangle is a small change of variable on "lifting" of the circle.
+ * It's expected to be small and cannot be greater than 270 or under -270
+ */
+export function fixContinuity(dangle: number) {
+  dangle -= Math.round(dangle / 360) * 360
+  if (dangle > 270) return dangle - 360
+  if (dangle < -270) return dangle + 360
+  return dangle
 }

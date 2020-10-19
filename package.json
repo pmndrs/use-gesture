@@ -1,6 +1,6 @@
 {
   "name": "react-use-gesture",
-  "version": "7.0.16",
+  "version": "8.0.0-beta.1",
   "description": "React hook for receiving gestures https://use-gesture.netlify.app",
   "main": "dist/index.js",
   "module": "dist/react-use-gesture.esm.js",
@@ -20,12 +20,16 @@
   },
   "jest": {
     "testEnvironment": "jsdom",
+    "roots": [
+      "./src",
+      "./test"
+    ],
+    "setupFilesAfterEnv": [
+      "./setupPointerEvent.js"
+    ],
     "setupFiles": [
       "@testing-library/react/dont-cleanup-after-each"
     ]
-  },
-  "peerDependencies": {
-    "react": ">= 16.8.0"
   },
   "prettier": {
     "printWidth": 120,
@@ -62,23 +66,25 @@
     "url": "https://github.com/react-spring/react-use-gesture/issues"
   },
   "homepage": "https://use-gesture.netlify.app",
-  "devDependencies": {
-    "@testing-library/jest-dom": "^5.1.1",
-    "@testing-library/react": "^9.5.0",
-    "@types/jest": "^25.2.1",
-    "@types/react": "^16.9.32",
-    "@types/react-dom": "^16.9.6",
-    "eslint-plugin-prettier": "^3.1.2",
-    "husky": "^4.2.3",
-    "prettier": "^2.0.2",
-    "pretty-quick": "^2.0.1",
-    "react": "^16.13.0",
-    "react-dom": "^16.13.0",
-    "tsdx": "^0.13.1",
-    "tslib": "^1.11.1",
-    "typescript": "^3.8.3"
+  "peerDependencies": {
+    "react": ">= 16.8.0"
   },
-  "resolutions": {
-    "@types/react": "^16.9.32"
+  "devDependencies": {
+    "@size-limit/preset-small-lib": "^4.6.0",
+    "@testing-library/jest-dom": "^5.9.0",
+    "@testing-library/react": "^11.1.0",
+    "@types/jest": "^26.0.14",
+    "@types/react": "^16.9.53",
+    "@types/react-dom": "^16.9.8",
+    "eslint-plugin-prettier": "^3.1.4",
+    "husky": "^4.3.0",
+    "prettier": "^2.1.2",
+    "pretty-quick": "^3.1.0",
+    "react": "^16.14.0",
+    "react-dom": "^16.14.0",
+    "size-limit": "^4.6.0",
+    "tsdx": "^0.14.1",
+    "tslib": "^2.0.3",
+    "typescript": "^4.0.3"
   }
 }

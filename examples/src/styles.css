@@ -26,7 +26,11 @@ ul {
   padding: 0;
 }
 
+<<<<<<< HEAD
 .list {
+=======
+.container {
+>>>>>>> pr/164
   padding: 40px 25px;
 }
 
@@ -55,3 +59,13 @@ ul {
   justify-content: center;
   align-items: center;
 }
+<<<<<<< HEAD
+=======
+
+a[target] {
+  font-size: 0.8em;
+  margin-left: 1em;
+  display: inline-block;
+  text-decoration: none;
+}
+>>>>>>> pr/164

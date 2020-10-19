@@ -1,6 +1,6 @@
 import React, { ReactChild } from 'react'
 import { Fn } from '../../src/types'
-import { UserHandlersPartial } from '../../src/types'
+import { Handlers } from '../../src/types'
 
 export const createHandlers = ({
   gestures,
@@ -14,8 +14,8 @@ export const createHandlers = ({
   canceled?: boolean
   set: Fn
   setStartEnd: React.Dispatch<React.SetStateAction<[number, number]>>
-}): UserHandlersPartial => {
-  return gestures.reduce((acc: UserHandlersPartial, g) => {
+}): Handlers => {
+  return gestures.reduce((acc: Handlers, g) => {
     const gesture = {
       [`on${g}`]: ({
         event,
@@ -48,7 +48,7 @@ export const createHandlers = ({
       ...acc,
       ...gesture,
     }
-  }, {} as UserHandlersPartial)
+  }, {} as Handlers)
 }
 
 export const Common = React.forwardRef(
@@ -88,6 +88,7 @@ export const Common = React.forwardRef(
             {String(v)}
           </div>
         ))}
+        <div data-testid={testKey}>{JSON.stringify(state)}</div>
         {children}
       </div>
     )

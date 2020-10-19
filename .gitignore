@@ -6,3 +6,6 @@ node_modules
 .rts2_cache_esm
 .rts2_cache_umd
 dist
+package-lock.json
+yarn.lock
+.gitignore

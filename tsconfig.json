@@ -1,31 +1,26 @@
 {
   "include": ["src", "types"],
   "compilerOptions": {
-    "allowSyntheticDefaultImports": true,
-    "target": "esnext",
     "module": "esnext",
+    "target": "ES2019",
     "lib": ["dom", "esnext"],
-    "importHelpers": true,
+    "allowSyntheticDefaultImports": true,
     "declaration": true,
     "sourceMap": true,
     "rootDir": "./src",
     "strict": true,
-    "noImplicitAny": true,
-    "strictNullChecks": true,
-    "strictFunctionTypes": true,
-    "strictPropertyInitialization": true,
-    "noImplicitThis": true,
-    "alwaysStrict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "moduleResolution": "node",
+    "jsx": "react",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "downlevelIteration": true,
     "baseUrl": "./",
     "paths": {
       "*": ["src/*", "node_modules/*"]
-    },
-    "jsx": "react",
-    "esModuleInterop": true
+    }
   }
 }

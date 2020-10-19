@@ -1,13 +1,6 @@
-import { Fn, EventOptions, UseGestureEvent, Vector2, WebKitGestureEvent } from '../types'
+import { Vector2, WebKitGestureEvent, DomEvents } from '../types'
 
-const isBrowser = typeof window !== 'undefined'
-
-export const supportsTouchEvents = () => isBrowser && window.ontouchstart === null
-
-const setListeners = (add: boolean) => (el: EventTarget, listeners: [string, Fn][], options: EventOptions): void => {
-  const action = add ? 'addEventListener' : 'removeEventListener'
-  listeners.forEach(([eventName, fn]) => el[action](eventName, fn, options))
-}
+const WEBKIT_DISTANCE_SCALE_FACTOR = 260
 
 /**
  * Whether the browser supports GestureEvent (ie Safari)
@@ -23,66 +16,26 @@ export function supportsGestureEvents(): boolean {
   }
 }
 
-export const addListeners = setListeners(true)
-export const removeListeners = setListeners(false)
-
-interface ModifierKeys {
-  shiftKey: boolean
-  altKey: boolean
-  metaKey: boolean
-  ctrlKey: boolean
+export function supportsTouchEvents(): boolean {
+  return typeof window !== 'undefined' && window.ontouchstart === null
 }
 
-/**
- * Gets modifier keys from event
- * @param event
- * @returns modifier keys
- */
-export function getModifierKeys(event: UseGestureEvent): ModifierKeys {
-  const { shiftKey, altKey, metaKey, ctrlKey } = event
-  return { shiftKey, altKey, metaKey, ctrlKey }
-}
-
-function getTouchEvents(event: UseGestureEvent) {
+function getTouchEvents(event: DomEvents) {
   if ('touches' in event) {
-    const { touches, changedTouches } = event
-    return touches.length > 0 ? touches : changedTouches
+    const { targetTouches, changedTouches } = event
+    return targetTouches.length > 0 ? targetTouches : changedTouches
   }
   return null
 }
 
-export function getGenericEventData(event: React.MouseEvent | React.TouchEvent | React.PointerEvent) {
+export function getGenericEventData(event: DomEvents) {
   const buttons = 'buttons' in event ? event.buttons : 0
   const touchEvents = getTouchEvents(event)
   const touches = (touchEvents && touchEvents.length) || 0
   const down = touches > 0 || buttons > 0
-  return { touches, down, buttons, ...getModifierKeys(event) }
-}
 
-type Values = { values: Vector2 }
-
-/**
- * Gets scroll event values
- * @param event
- * @returns scroll event values
- */
-export function getScrollEventValues(event: UseGestureEvent): Values {
-  // If the currentTarget is the window then we return the scrollX/Y position.
-  // If not (ie the currentTarget is a DOM element), then we return scrollLeft/Top
-  const { scrollX, scrollY, scrollLeft, scrollTop } = event.currentTarget as Element & Window
-  return { values: [scrollX || scrollLeft || 0, scrollY || scrollTop || 0] }
-}
-
-/**
- * Gets wheel event values.
- * @param event
- * @returns wheel event values
- */
-export function getWheelEventValues(event: UseGestureEvent<React.WheelEvent>): Values {
-  const { deltaX, deltaY } = event
-  //TODO implement polyfill ?
-  // https://developer.mozilla.org/en-US/docs/Web/Events/wheel#Polyfill
-  return { values: [deltaX, deltaY] }
+  const { shiftKey, altKey, metaKey, ctrlKey } = event as any // TODO check if this might create some overrides?
+  return { touches, down, buttons, shiftKey, altKey, metaKey, ctrlKey }
 }
 
 /**
@@ -90,21 +43,45 @@ export function getWheelEventValues(event: UseGestureEvent<React.WheelEvent>): V
  * @param event
  * @returns pointer event values
  */
-export function getPointerEventValues(event: React.MouseEvent | React.TouchEvent | React.PointerEvent): Values {
+export function getPointerEventValues(
+  event: TouchEvent | React.TouchEvent | React.PointerEvent | PointerEvent
+): Vector2 {
   const touchEvents = getTouchEvents(event)
   const { clientX, clientY } = touchEvents ? touchEvents[0] : (event as React.PointerEvent)
-  return { values: [clientX, clientY] }
+  return [clientX, clientY]
 }
 
-const WEBKIT_DISTANCE_SCALE_FACTOR = 260
+/**
+ * Gets scroll event values
+ * @param event
+ * @returns scroll event values
+ */
+export function getScrollEventValues(event: React.UIEvent | UIEvent): Vector2 {
+  // If the currentTarget is the window then we return the scrollX/Y position.
+  // If not (ie the currentTarget is a DOM element), then we return scrollLeft/Top
+  const { scrollX, scrollY, scrollLeft, scrollTop } = event.currentTarget as Element & Window
+  return [scrollX || scrollLeft || 0, scrollY || scrollTop || 0]
+}
+
+/**
+ * Gets wheel event values.
+ * @param event
+ * @returns wheel event values
+ */
+export function getWheelEventValues(event: React.WheelEvent | WheelEvent): Vector2 {
+  const { deltaX, deltaY } = event
+  //TODO implement polyfill ?
+  // https://developer.mozilla.org/en-US/docs/Web/Events/wheel#Polyfill
+  return [deltaX, deltaY]
+}
 
 /**
  * Gets webkit gesture event values.
  * @param event
  * @returns webkit gesture event values
  */
-export function getWebkitGestureEventValues(event: WebKitGestureEvent): Values {
-  return { values: [event.scale * WEBKIT_DISTANCE_SCALE_FACTOR, event.rotation] as Vector2 }
+export function getWebkitGestureEventValues(event: WebKitGestureEvent): Vector2 {
+  return [event.scale * WEBKIT_DISTANCE_SCALE_FACTOR, event.rotation]
 }
 
 /**
@@ -112,13 +89,23 @@ export function getWebkitGestureEventValues(event: WebKitGestureEvent): Values {
  * @param event
  * @returns two touches event data
  */
-export function getTwoTouchesEventData(event: React.TouchEvent) {
-  const { touches } = event
-  const dx = touches[1].clientX - touches[0].clientX
-  const dy = touches[1].clientY - touches[0].clientY
+export function getTwoTouchesEventData(event: React.TouchEvent | TouchEvent) {
+  const { targetTouches } = event
+  const A = targetTouches[0],
+    B = targetTouches[1]
 
-  const values: Vector2 = [Math.hypot(dx, dy), -(Math.atan2(dx, dy) * 180) / Math.PI]
-  const origin: Vector2 = [(touches[1].clientX + touches[0].clientX) / 2, (touches[1].clientY + touches[0].clientY) / 2]
+  const dx = B.clientX - A.clientX
+  const dy = B.clientY - A.clientY
+  const cx = (B.clientX + A.clientX) / 2
+  const cy = (B.clientY + A.clientY) / 2
+
+  const e: any = 'nativeEvent' in event ? event.nativeEvent : event
+
+  const distance = Math.hypot(dx, dy)
+  const angle = (e.rotation as number) ?? -(Math.atan2(dx, dy) * 180) / Math.PI
+
+  const values: Vector2 = [distance, angle]
+  const origin: Vector2 = [cx, cy]
 
   return { values, origin }
 }

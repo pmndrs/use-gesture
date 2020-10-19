@@ -1,109 +1,85 @@
-import { PointerEvent } from 'react'
 import CoordinatesRecognizer from './CoordinatesRecognizer'
-import Controller from '../Controller'
-import { UseGestureEvent, Fn, IngKey } from '../types'
-import { noop } from '../utils/utils'
 import { getPointerEventValues, getGenericEventData } from '../utils/event'
 import { calculateDistance, sign } from '../utils/math'
+import { getStartGestureState, getGenericPayload } from './Recognizer'
+import { addBindings, updateWindowListeners, clearWindowListeners } from '../Controller'
 
-const TAP_DISTANCE_THRESHOLD = 3
-const SWIPE_MAX_ELAPSED_TIME = 220
-const FILTER_REPEATED_EVENTS_DELAY = 200
+export const TAP_DISTANCE_THRESHOLD = 3
+export const SWIPE_MAX_ELAPSED_TIME = 220
 
-export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
-  ingKey = 'dragging' as IngKey
-  wasTouch = false
+export class DragRecognizer extends CoordinatesRecognizer<'drag'> {
+  readonly ingKey = 'dragging'
+  readonly stateKey = 'drag'
 
-  constructor(controller: Controller, args: any[]) {
-    super('drag', controller, args)
-  }
+  /**
+   * TODO add back when setPointerCapture is widely wupported
+   * https://caniuse.com/#search=setPointerCapture
+   * private setPointers = (event: UseGestureEvent<PointerEvent>) => {
+   *   const { currentTarget, pointerId } = event
+   *   if (currentTarget) currentTarget.setPointerCapture(pointerId)
+   *   this.updateGestureState({ currentTarget, pointerId })
+   * }
 
-  private isEventTypeTouch = (type?: string) => !!type && type.indexOf('touch') === 0
+   * private removePointers = () => {
+   *   const { currentTarget, pointerId } = this.state
+   *   if (currentTarget && pointerId) currentTarget.releasePointerCapture(pointerId)
+   * }
+   */
 
-  private dragShouldStart = (event: UseGestureEvent) => {
-    const { touches } = getGenericEventData(event)
-    const { _lastEventType } = this.state
+  onDragStart = (event: React.PointerEvent | PointerEvent): void => {
+    if (!this.enabled || this.state._active) return
+
     /**
-     * This tries to filter out mouse events triggered by touch screens
-     * */
-    // If the previous gesture was touch-based, and the current one is mouse based,
-    // this means that we might be dealing with mouse simulated events if they're close to
-    // each other. We're only doing this check when we're not using pointer events.
-    if (
-      !this.controller.config.pointer &&
-      this.isEventTypeTouch(_lastEventType) &&
-      !this.isEventTypeTouch(event.type)
-    ) {
-      const delay = Math.abs(event.timeStamp - this.state.startTime)
-      if (delay < FILTER_REPEATED_EVENTS_DELAY) return false
-    }
+     * TODO add back when setPointerCapture is widely supported
+     * this.setPointers(event as PointerEvent)
+     */
 
-    return this.enabled && touches < 2
-  }
+    updateWindowListeners(this.controller, this.stateKey, [
+      ['pointermove', this.onDragChange],
+      ['pointerup', this.onDragEnd],
+      ['pointercancel', this.onDragEnd],
+    ])
 
-  private setPointers = (event: UseGestureEvent<PointerEvent>) => {
-    const { currentTarget, pointerId } = event
-    if (currentTarget) currentTarget.setPointerCapture(pointerId)
-    this.updateGestureState({ currentTarget, pointerId })
-  }
-
-  private removePointers = () => {
-    const { currentTarget, pointerId } = this.state
-    if (currentTarget && pointerId) currentTarget.releasePointerCapture(pointerId)
-  }
-
-  private setListeners = (isTouch: boolean) => {
-    this.removeWindowListeners()
-    const dragListeners: [string, Fn][] = isTouch
-      ? [
-          ['touchmove', this.onDragChange],
-          ['touchend', this.onDragEnd],
-          ['touchcancel', this.onDragEnd],
-        ]
-      : [
-          ['mousemove', this.onDragChange],
-          ['mouseup', this.onDragEnd],
-        ]
-    this.addWindowListeners(dragListeners)
-  }
-
-  onDragStart = (event: UseGestureEvent): void => {
-    if (!this.dragShouldStart(event)) return
-    // if pointers events
-    if (this.controller.config.pointer) this.setPointers(event as PointerEvent)
-    else this.setListeners(this.isEventTypeTouch(event.type))
+    // We set the state pointerId to the event.pointerId so we can make sure
+    // that we lock the drag to the event initiating the gesture
+    this.updateGestureState({ _pointerId: event.pointerId })
 
     if (this.config.delay > 0) {
       this.state._delayedEvent = true
-      if (typeof event.persist === 'function') event.persist()
-      this.setTimeout(() => this.startDrag(event), this.config.delay)
+      // If it's a React SyntheticEvent we need to persist it so that we can use it async
+      if ('persist' in event && typeof event.persist === 'function') event.persist()
+      this.setTimeout(this.startDrag.bind(this), this.config.delay, event)
     } else {
       this.startDrag(event)
     }
   }
 
-  startDrag(event: UseGestureEvent) {
-    const { values } = getPointerEventValues(event)
+  startDrag(event: React.PointerEvent | PointerEvent) {
+    const values = getPointerEventValues(event)
     this.updateSharedState(getGenericEventData(event))
 
-    const startState = {
-      ...this.getStartGestureState(values, event),
-      ...this.getGenericPayload(event, true),
-    }
-
     this.updateGestureState({
-      ...startState,
-      ...this.getMovement(values, startState),
-      cancel: () => this.onCancel(),
+      ...getStartGestureState(this, values, event),
+      ...getGenericPayload(this, event, true),
+      _pointerId: event.pointerId,
+      cancel: this.onCancel,
     })
 
+    this.updateGestureState(this.getMovement(values))
     this.fireGestureHandler()
   }
 
-  onDragChange = (event: UseGestureEvent): void => {
-    const { canceled } = this.state
-    if (canceled) return
+  onDragChange = (event: PointerEvent): void => {
+    // If the gesture was canceled don't respond to the event.
+    if (this.state.canceled) return
 
+    // If the event pointerId doesn't match the initiating pointerId
+    // don't respond to the event.
+    if (event.pointerId !== this.state._pointerId) return
+
+    // If the gesture isn't active then respond to the event only if
+    // it's been delayed via the `delay` option, in which case start
+    // the gesture immediately.
     if (!this.state._active) {
       if (this.state._delayedEvent) {
         this.clearTimeout()
@@ -114,90 +90,93 @@ export default class DragRecognizer extends CoordinatesRecognizer<'drag'> {
 
     const genericEventData = getGenericEventData(event)
 
+    // If the event doesn't have any button / touches left we should cancel
+    // the gesture. This may happen if the drag release happens outside the browser
+    // window.
     if (!genericEventData.down) {
       this.onDragEnd(event)
       return
     }
 
     this.updateSharedState(genericEventData)
+    const values = getPointerEventValues(event)
 
-    const { values } = getPointerEventValues(event)
     const kinematics = this.getKinematics(values, event)
+    const genericPayload = getGenericPayload(this, event)
 
+    // This verifies if the drag can be assimilated to a tap by checking
+    // if the real distance of the drag (ie not accounting for the threshold) is
+    // greater than the TAP_DISTANCE_THRESHOLD.
     let { _isTap } = this.state
-    if (_isTap && calculateDistance(kinematics._movement!) >= TAP_DISTANCE_THRESHOLD) _isTap = false
+    const realDistance = calculateDistance(kinematics._movement!)
+    if (_isTap && realDistance >= TAP_DISTANCE_THRESHOLD) _isTap = false
 
-    this.updateGestureState({
-      ...this.getGenericPayload(event),
-      ...kinematics,
-      _isTap,
-      cancel: () => this.onCancel(),
-    })
+    this.updateGestureState({ ...genericPayload, ...kinematics, _isTap })
 
     this.fireGestureHandler()
   }
 
-  onDragEnd = (event: UseGestureEvent): void => {
+  onDragEnd = (event: PointerEvent): void => {
+    // If the event pointerId doesn't match the initiating pointerId
+    // don't respond to the event.
+    if (event.pointerId !== this.state._pointerId) return
+
     this.state._active = false
     this.updateSharedState({ down: false, buttons: 0, touches: 0 })
 
-    const {
-      _isTap,
-      values,
-      velocities: [vx, vy],
-      movement: [mx, my],
-      _intentional: [ix, iy],
-    } = this.state
+    const tap = this.state._isTap
+    const [vx, vy] = this.state.velocities
+    const [mx, my] = this.state.movement
+    const [ix, iy] = this.state._intentional
+    const [svx, svy] = this.config.swipeVelocity
+    const [sx, sy] = this.config.swipeDistance
 
     const endState = {
-      ...this.getGenericPayload(event),
-      ...this.getMovement(values),
+      ...getGenericPayload(this, event),
+      ...this.getMovement(this.state.values),
     }
-
-    const { elapsedTime } = endState
-
-    const {
-      swipeVelocity: [svx, svy],
-      swipeDistance: [sx, sy],
-    } = this.config
 
     const swipe: [number, number] = [0, 0]
 
-    if (elapsedTime < SWIPE_MAX_ELAPSED_TIME) {
+    if (endState.elapsedTime < SWIPE_MAX_ELAPSED_TIME) {
       if (ix !== false && Math.abs(vx) > svx && Math.abs(mx) > sx) swipe[0] = sign(vx)
       if (iy !== false && Math.abs(vy) > svy && Math.abs(my) > sy) swipe[1] = sign(vy)
     }
 
-    this.updateGestureState({
-      event,
-      ...endState,
-      tap: _isTap,
-      swipe,
-    })
-    this.fireGestureHandler(this.config.filterTaps && this.state._isTap)
+    this.updateGestureState({ ...endState, tap, swipe })
+    this.fireGestureHandler(tap === true)
   }
 
   clean = (): void => {
     super.clean()
-    this.state._delayedEvent = false
-
-    if (this.controller.config.pointer) this.removePointers()
+    this.state._delayedEvent = false // can't remember if this is useful?
+    clearWindowListeners(this.controller, this.stateKey)
+    // TODO add back when setPointerCapture is widely wupported
+    // this.removePointers()
   }
 
   onCancel = (): void => {
-    this.updateGestureState({ canceled: true, cancel: noop })
+    if (this.state.canceled) return
+    this.updateGestureState({ canceled: true })
     this.state._active = false
     this.updateSharedState({ down: false, buttons: 0, touches: 0 })
     requestAnimationFrame(() => this.fireGestureHandler())
   }
 
-  addBindings(): void {
-    if (this.controller.config.pointer) {
-      this.controller.addBindings('onPointerDown', this.onDragStart)
-      this.controller.addBindings('onPointerMove', this.onDragChange)
-      this.controller.addBindings(['onPointerUp', 'onPointerCancel'], this.onDragEnd)
-    } else {
-      this.controller.addBindings(['onTouchStart', 'onMouseDown'], this.onDragStart)
+  onClick = (event: React.UIEvent | UIEvent): void => {
+    if (!this.state._isTap) event.stopPropagation()
+  }
+
+  addBindings(bindings: any): void {
+    addBindings(bindings, 'onPointerDown', this.onDragStart)
+    if (this.config.filterTaps) {
+      const handler = this.controller.config.eventOptions.capture ? 'onClick' : 'onClickCapture'
+      addBindings(bindings, handler, this.onClick)
     }
+
+    // TODO add back when setPointerCapture is widely wupported
+    // addBindings(bindings, 'onPointerMove', this.onDragChange)
+    // addBindings(bindings, 'onPointerUp', this.onDragEnd)
+    // addBindings(bindings, 'onPointerCancel', this.onDragEnd)
   }
 }
