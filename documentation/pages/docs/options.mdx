@@ -59,18 +59,18 @@ All gestures share a set of common options described below.
 
 Here is the list of options for `drag`, `move`, `wheel` and `scroll` gestures:
 
-| Option                                             |           Type            | Default value | Description                                                                     |
-| -------------------------------------------------- | :-----------------------: | :-----------: | ------------------------------------------------------------------------------- |
-| [`axis`](#axis-xy-gestures-only)                   |         `x`\|`y`          |  `undefined`  | Your handler will only trigger if a movement is detected on the specified axis. |
-| [`lockDirection`](#lockdirection-xy-gestures-only) |         `boolean`         |    `false`    | If `true`, the gesture will lock the first detected direction.                  |
-| [`bounds`](#bounds)                                | `{top,bottom,left,right}` |  `Infinity`   | Limits the gesture `movement` and `offset` to the specified bounds.             |
+| Option                                             |                                 Type                                 | Default value | Description                                                                     |
+| -------------------------------------------------- | :------------------------------------------------------------------: | :-----------: | ------------------------------------------------------------------------------- |
+| [`axis`](#axis-xy-gestures-only)                   |                               `x`\|`y`                               |  `undefined`  | Your handler will only trigger if a movement is detected on the specified axis. |
+| [`lockDirection`](#lockdirection-xy-gestures-only) |                              `boolean`                               |    `false`    | If `true`, the gesture will lock the first detected direction.                  |
+| [`bounds`](#bounds)                                | `{top,bottom,left,right}`\|<br/>`(state) => {top,bottom,left,right}` |  `Infinity`   | Limits the gesture `movement` and `offset` to the specified bounds.             |
 
 ## `pinch` specific options
 
-| Option                      |    Type     | Default value | Description                                                          |
-| --------------------------- | :---------: | :-----------: | -------------------------------------------------------------------- |
-| [`distanceBounds`](#bounds) | `{min,max}` |  `Infinity`   | Limits the distance `movement` and `offset` to the specified bounds. |
-| [`angleBounds`](#bounds)    | `{min,max}` |  `Infinity`   | Limits the angle `movement` and `offset` to the specified bounds.    |
+| Option                      |                   Type                   | Default value | Description                                                          |
+| --------------------------- | :--------------------------------------: | :-----------: | -------------------------------------------------------------------- |
+| [`distanceBounds`](#bounds) | `{min,max}`\|<br/>`(state) => {min,max}` |  `Infinity`   | Limits the distance `movement` and `offset` to the specified bounds. |
+| [`angleBounds`](#bounds)    | `{min,max}`\|<br/>`(state) => {min,max}` |  `Infinity`   | Limits the angle `movement` and `offset` to the specified bounds.    |
 
 ## `drag` specific options
 
@@ -88,17 +88,14 @@ On top of the options for `xy` gestures seen above, `drag` has the following add
 ### `domTarget`
 
 <ReactUseGesture /> also supports adding handlers to dom nodes directly (or the `window` or `document` objects). In that
-case, you shouldn't spread the `bind()` object returned by the hooks as a prop, but use the `React.useEffect` hook as
-below.
+case, you shouldn't spread the `bind()` object returned by the hooks as a prop. Cleaning is handled automatically.
 
 ```jsx {5-10}
 function ScrollExample() {
   const [{ width }, set] = useSpring(() => ({ width: '0%' }))
   const height = document.documentElement.scrollHeight
 
-  const bind = useScroll(({ xy: [, y] }) => set({ width: (y / height) * 100 + '%' }), { domTarget: window })
-
-  React.useEffect(bind, [bind])
+  useScroll(({ xy: [, y] }) => set({ width: (y / height) * 100 + '%' }), { domTarget: window })
 
   return <animated.div style={{ width }} />
 }
@@ -113,18 +110,17 @@ You can also directly pass a ref to `domTarget`. This is actually usefull when y
 ```jsx {1-100}
 const myRef = React.useRef(null)
 // This will add a scroll listener the div
-const bind = useScroll(({ event }) => event.preventDefault(), {
+useScroll(({ event }) => event.preventDefault(), {
   domTarget: myRef,
   eventOptions: { passive: false },
 })
 
-React.useEffect(bind, [bind])
 return <div ref={myRef} />
 ```
 
 ### `initial`
 
-Everytime a gesture starts, the `movement` state attribute is set to `[0, 0]`. But in some cases, you might want to calculate `movement` from an initial position that is external to your logic[^1].
+Everytime a gesture starts, the `movement` state attribute is set to `[0,0]`. But in some cases, you might want to calculate `movement` from an initial position that is external to your logic[^1].
 
 [^1]: If you're used to <ReactUseGesture/>, this was the most common usecase for `memo`.
 
@@ -132,7 +128,7 @@ Let's take a tangible example: say that a draggable component turns back to its 
 
 <Code id="Initial" />
 
-Drag the blue square and **before it goes back to its origin** drag it again. If you've unticked the checkbox, you'll notice that the square goes back to its origin instead of moving from where you've dragged it: that's because `movement` is by default reset to `[0, 0]`.
+Drag the blue square and **before it goes back to its origin** drag it again. If you've unticked the checkbox, you'll notice that the square goes back to its origin instead of moving from where you've dragged it: that's because `movement` is by default reset to `[0,0]`.
 
 The code below shows how the example works:
 
