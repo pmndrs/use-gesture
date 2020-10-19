@@ -1,0 +1,49 @@
+---
+title: Useful extras
+section: More
+---
+
+import Code from './code/'
+import ReactUseGesture from './code/rug'
+
+# Useful extras
+
+These tips aren't specific to <ReactUseGesture/> but might come handy to anyone building mobile-friendly UI interfaces.
+
+### `touch-action`
+
+Let's take the mailbox email list: panning vertically should scroll vertically through the emails, and dragging horizontally should unveil options such as delete and mark undread.
+
+In these situations you don't want the `body` of your page to scroll along with the user manipulating the item horizontally. Your first instinct might be to prevent the event default action by calling `event.preventDefault()` in your handler. But there is a simpler, more effective solution, which has to do with a simple CSS property.
+
+[`touch-action`](https://developer.mozilla.org/en-US/docs/Web/CSS/touch-action) is a CSS property that sets how an element's region can be manipulated by a touchscreen user.
+
+> This demo only makes sense on mobile or when your browser inspector is set for touch devices.
+
+<Code id="TouchAction" />
+
+Setting `touch-action: pan-y` on your draggable element class or style indicates the browser should only react to vertical scrolling when interacting with the item.
+
+> If you don't want the browser scrolling either vertically or horizontally, set `touch-action: none`.
+
+```jsx {3-12}
+function TouchActionExample() {
+  const [springs, set] = useSprings(4, () => ({ x: 0 }))
+
+  const bind = useDrag(({ down, movement: [x], args: [index] }) => set(i => i === index && { x: down ? x : 0 }), {
+    axis: 'x',
+  })
+
+  return springs.map(({ x }, i) => <animated.div {...bind(i)} style={{ x, touchAction: 'pan-y' }} />)
+}
+```
+
+In your drag options, you should then set [`{axis:'x'}`](/docs/options/#axis-xy-gestures-only). This will result in the browser natively canceling vertical scrolling when it detects movement intent on the horizontal axis, while your handler will trigger your horizontal logic. When movement intent is detected as vertical by the browser, it will allow your body to scroll, but the `{axis:'x'}` option on the drag handler will prevent your item to move horizontally.
+
+> Note that you can fail this behaviour by slooowly scrolling sideways and then firmly up or down. But it should work in most situations.
+
+### Body Scroll Lock
+
+When you have a menu overlay on top of your page you generally don't want the `body` to scroll along with the menu content. [Body scroll lock](https://github.com/willmcpo/body-scroll-lock) is a javascript library that disable body scroll.
+
+Make sure you can't solve your problem scroll problem with [`touch-action`](#touch-action) before using this library though.

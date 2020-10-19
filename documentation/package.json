@@ -1,0 +1,23 @@
+{
+  "name": "smooth-doc-starter",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "gatsby develop -H 0.0.0.0",
+    "build": "gatsby build",
+    "clean": "gatsby clean",
+    "serve": "gatsby serve"
+  },
+  "dependencies": {
+    "@tim-soft/react-dat-gui": "^4.0.11",
+    "classnames": "^2.2.6",
+    "gatsby": "^2.15.18",
+    "react": "^16.10.1",
+    "react-dom": "^16.10.1",
+    "react-player": "^2.6.2",
+    "react-spring": "9.0.0-rc.2",
+    "react-toastify": "^6.0.9",
+    "react-use-gesture": "^8.0.0-alpha.10",
+    "smooth-doc": "^5.1.1"
+  }
+}

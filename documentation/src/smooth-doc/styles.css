@@ -1,0 +1,40 @@
+/* .prism-code .token-line {
+  opacity: 0.1;
+  transition: opacity 350ms ease 350ms;
+}
+
+.prism-code:hover .token-line {
+  opacity: 1;
+  transition-delay: 0ms;
+}
+
+.token-line.docusaurus-highlight-code-line {
+  display: block;
+  opacity: 1 !important;
+} */
+
+body.dragged {
+  user-select: none;
+  pointer-events: none;
+}
+
+sup {
+  margin: 0 0.2em;
+}
+
+footer {
+  padding-top: 40px;
+  padding-bottom: 40px;
+  font-size: 0.8rem;
+  background: var(--xstyled-colors-background-light);
+  color: var(--xstyled-colors-on-background-light);
+  text-align: center;
+}
+
+a {
+  color: var(--xstyled-colors-on-background-primary, #4c51bf);
+}
+
+footer a {
+  color: inherit;
+}

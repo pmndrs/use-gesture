@@ -1,0 +1,174 @@
+---
+title: Gesture state
+section: Reference
+order: 3
+---
+
+import Code from './code/'
+import ReactUseGesture from './code/rug'
+
+# Gesture state
+
+Every time a handler is called, it will get passed a **gesture state** that includes the source event and adds multiple attributes such as **velocity**, **previous value**, and much more.
+
+States structure doesn't vary much across different gestures: the only distinction comes from the `pinch` gesture which handles `distance` and `angle` values (how distant your fingers are on screen, and what is their angle), when all other hooks deal with `x` and `y` coordinates.
+
+## `xy` gestures state attributes
+
+With the exception of `xy` and `vxvy`, all the attributes below are common to all gestures.
+
+<!-- prettier-ignore -->
+```jsx {1-100}
+const bind = useXXXX(state => {
+  const {
+    event,       // the source event
+    xy,          // [x,y] values (pointer position or scroll offset)
+    previous,    // previous xy
+    initial,     // xy value when the gesture started
+    intentional, // is the movement intentional -- new in v8
+    movement,    // last gesture offset (xy - initial)
+    delta,       // movement delta (movement - previous movement)
+    offset,      // offset since the first gesture
+    lastOffset,  // offset when the last gesture started
+    vxvy,        // momentum of the gesture per axis
+    velocity,    // absolute velocity of the gesture
+    distance,    // offset distance
+    direction,   // direction per axis
+    startTime,   // gesture start time
+    elapsedTime, // gesture elapsed time
+    timeStamp,   // timestamp of the event
+    first,       // true when it's the first event
+    last,        // true when it's the last event
+    active,      // true when the gesture is active
+    memo,        // value returned by your handler on its previous run
+    cancel,      // function you can call to interrupt some gestures
+    canceled,    // whether the gesture was canceled (drag and pinch)
+    down,        // true when a mouse button or touch is down
+    buttons,     // number of buttons pressed
+    touches,     // number of fingers touching the screen
+    args,        // arguments you passed to bind
+    ctrlKey,     // true when control key is pressed
+    altKey,      // "      "  alt     "      "
+    shiftKey,    // "      "  shift   "      "
+    metaKey,     // "      "  meta    "      "
+    dragging,    // is the component currently being dragged
+    moving,      // "              "              "  moved
+    scrolling,   // "              "              "  scrolled
+    wheeling,    // "              "              "  wheeled
+    pinching     // "              "              "  pinched
+  } = state
+})
+```
+
+## `pinch` state attributes
+
+The state attributes for `pinch` include all of the above (with the exception of `xy` and `vxvy`) plus the one below:
+
+<!-- prettier-ignore -->
+```jsx {1-100}
+const bind = usePinch(state => {
+  const {
+    da,          // [d,a] absolute distance and angle of the two pointers
+    vdva,        // momentum of the gesture of distance and rotation
+    origin,      // coordinates of the center between the two touch event
+  } = state
+})
+```
+
+## `drag` state attributes
+
+The `drag` gesture state adds a few attributes which can help you understand the user intent.
+
+<!-- prettier-ignore -->
+```jsx {1-100}
+const bind = useDrag(state => {
+  const {
+    swipe,       // [swipeX, swipeY] 0 if no swipe detected, -1 or 1 otherwise
+    tap,       // is the drag assimilated to a tap
+  } = state
+})
+```
+
+## Attributes explained
+
+### `movement` and `offset`
+
+`movement` and `offset` are the attributes you're going to use most of the time when dragging or pinching. They represent **relative** values of the gesture, in contrast with `xy` and `da` which are absolute values of your pointers. Relative values are handy as you usually use the `transform` style attribute to move your components, which itself is relative to the component natural position.
+
+#### The difference between the two
+
+In <ReactUseGesture/>, we call **gesture** the act of the user initiating and terminating an interaction. `movement` expresses the gesture movement, while `offset` is the sum of all gesture movements on the same component. When you start dragging a component, `movement` is reset to `[0,0]`, while `offset` keeps its previous value.
+
+In practical terms, `movement` is handy when your element returns back to its original position at the end of the gesture. Here is an example for `offset`, where the component stays where you left it:
+
+<Code id="Offset" />
+
+```jsx {1-100}
+function OffsetExample() {
+  const [{ x, y }, set] = useSpring(() => ({ x: 0, y: 0 }))
+  const bind = useDrag(({ offset: [x, y] }) => set({ x, y }))
+  return <animated.div {...bind()} style={{ x, y }} />
+}
+```
+
+### `memo`
+
+`memo` stores the value returned by the previous call of your handler. The most common usecase for using `memo` should be simplified by using [`initial`](/docs/options/#initial).
+
+### `cancel`
+
+`cancel` is a function that imperatively stops the current gesture. Here is an example on how you might want to use `cancel` with the **drag** gesture.
+
+<Code id="Cancel" disableOverlay />
+
+If you drag the blue square over the pink zone, you'll notice that the gesture is canceled and the blue square goes back to its original position. This is very simply triggered using the code below.
+
+```jsx {3-6}
+function CancelExample() {
+  const [{ x }, set] = useSpring(() => ({ x: 0 }))
+  const bind = useDrag(({ down, movement: [mx], cancel }) => {
+    if (mx > 200) cancel()
+    set({ x: down ? mx : 0, immediate: down })
+  })
+
+  return <animated.div {...bind()} style={{ x }} />
+}
+```
+
+This is obviously very simple abstract logic, but please go over the [Examples section](examples.mdx) for more compelling use cases. Note that only `drag` and `pinch` gestures are cancellable (calling `cancel` on other gestures won't do anything).
+
+### `swipe` (drag only)
+
+`swipe` is a convenient state attribute for the drag gesture that will help you detect swipes. `swipe` is a vector which both components are either `-1`, `0` or `1`. The component stays to `0` until a swipe is detected. `1` or `-1` indicates the direction of the swipe (**left** or **right** on the horizontal axis, **top** or **bottom** on the vertical axis).
+
+<Code id="Swipe" disableOverlay />
+
+In the example above, the blue square will move left or right when you swipe it. Here is the code to make it happen:
+
+```jsx {2,4-7}
+function SwipeExample() {
+  const [position, setPosition] = React.useState(0)
+  const { x } = useSpring({ x: position * 200 })
+  const bind = useDrag(({ swipe: [swipeX] }) => {
+    // position will either be -1, 0 or 1
+    setPosition(p => Math.min(Math.max(-1, p + swipeX), 1))
+  })
+
+  return <animated.div {...bind()} style={{ x }} />
+}
+```
+
+Here are the conditions for a swipe to be detected on the `x` axis:
+
+- The drag gesture is over.
+- The drag gesture didn't last more than `220ms`.
+- `movement[0]` is superior to the `swipeDistance[0]` option.
+- `vxvy[0]` is superior to the `swipeVelocity[0]` option.
+
+> Visit the [swipe options](options.mdx) documentation for more info about how to configure swipe detection to your needs.
+
+### `tap` (drag only)
+
+`tap` is a `boolean` state attribute for the **drag** gesture that will be set to true if the drag gesture can be assimilated to a tap or click. In other words, `tap` will be `true` on mouse or touch release only when the drag displacement is inferior to `3` pixels.
+
+You'll usually want to use the `tap` attribute in conjunction with the [`filterTaps`](options.mdx#filtertaps-drag-only) option.

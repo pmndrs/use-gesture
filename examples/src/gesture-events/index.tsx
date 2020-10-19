@@ -9,10 +9,12 @@ export default function GestureEvents() {
 
   useGesture(
     {
-      onDrag: ({ offset: [x, y] }) => {
+      onDrag: ({ event, offset: [x, y] }) => {
+        event.preventDefault()
         set({ x, y })
       },
-      onPinch: ({ offset: [d, a] }) => {
+      onPinch: ({ event, offset: [d, a] }) => {
+        event.preventDefault()
         set({ scale: 1 + d / 200, rotateZ: a })
       },
     },
