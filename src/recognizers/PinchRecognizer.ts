@@ -89,7 +89,7 @@ export class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
 
   onGestureStart = (event: WebKitGestureEvent): void => {
     if (!this.enabled) return
-    event.preventDefault()
+    event.preventDefault() // useless
 
     const values = getWebkitGestureEventValues(event)
 
