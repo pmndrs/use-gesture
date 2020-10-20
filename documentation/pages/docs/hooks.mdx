@@ -35,6 +35,23 @@ return <div {...bind(arg)} />
 - `config` is an object containing options for the gesture. You can find all config options in the [Gesture options section](options.mdx).
 - `arg` is a custom argument you can pass to the bind function. See this [example](https://codesandbox.io/s/fh8r8) to see where it can be useful.
 
+### About the drag gesture
+
+The drag gesture is possibly the most popular gesture of <ReactUseGesture />. Because of the way pointer events work, dragging might cause conflict with scrolling on touch-based devices. So to signify that your element is draggable and therefore shouldn't trigger the browser scrolling, you **need** to use the [`touch-action`](https://developer.mozilla.org/en-US/docs/Web/CSS/touch-action) css property. [Read more here](/docs/extras/#touch-action).
+
+### About the pinch gesture
+
+The pinch gesture is a bit specific because depending on your device input, it might behave differently. On touch devices, two pointers (generally your fingers) allow for zooming and rotating.
+
+But Macbook trackpads also support pinching and rotating in Safari, but because React doesn't support proprietary Webkit GestureEvents, you will need to attach the gesture using a ref, with the `domTarget` [option](/docs/options/#domtarget). To make sure the zooming gesture doesn't interfere with Safari accessibility zoom, you will need to prevent the gesture like so:
+
+```js
+document.addEventListener('gesturestart', e => e.preventDefault())
+document.addEventListener('gesturechange', e => e.preventDefault())
+```
+
+Also, a pretty unknown feature allows devices supporting wheel to **zoom** (not rotate) by wheeling and pressing the **control** modifier key. <ReactUseGesture /> supports it, but to make sure the zooming doesn't interefere with the browser accessibility zoom, you'll also be better using the `domTarget` [option](/docs/options/#domtarget).
+
 ## Handling multiple gestures in one hook with useGesture
 
 `useGesture` is a hook that allows you to manage different gestures at once: for example you might want to enable pinching and dragging on the same component, in that case `useGesture` is the way to go.
