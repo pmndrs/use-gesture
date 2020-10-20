@@ -54,10 +54,12 @@ function PullRelease() {
   })
 
   // Bind it to a component
-  return <animated.div {...bind()} style={{ x, y }} />
+  return <animated.div {...bind()} style={{ x, y, touchAction: 'none' }} />
 ```
 
 The example above makes a `div` draggable so that it follows your mouse on drag, and returns to its initial position on release.
+
+**Make sure you always set [`touchAction`](https://developer.mozilla.org/en-US/docs/Web/CSS/touch-action) on a draggable element to prevent glitches with the browser native scrolling on touch devices**.
 
 ### Available hooks
 
