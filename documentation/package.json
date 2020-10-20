@@ -19,7 +19,7 @@
     "react-player": "^2.6.2",
     "react-spring": "9.0.0-rc.2",
     "react-toastify": "^6.0.9",
-    "react-use-gesture": "^8.0.0-alpha.10",
+    "react-use-gesture": "^8.0.0-beta.3",
     "smooth-doc": "^5.1.1"
   }
 }

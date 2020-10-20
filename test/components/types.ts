@@ -8,6 +8,7 @@ interface Props {
   canceled?: boolean
   memoArg?: any
   config?: UseGestureConfig
+  domTarget?: EventTarget | React.RefObject<EventTarget>
 }
 
 export type InteractiveType = React.FunctionComponent<Props>

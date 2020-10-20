@@ -74,12 +74,14 @@ const InternalCoordinatesOptionsNormalizers = {
   },
 }
 
+const isBrowser = typeof window !== 'undefined' && window.document && window.document.createElement
+
 const InternalGenericOptionsNormalizers = {
   enabled(value = true) {
     return value
   },
   domTarget: true,
-  window(value = typeof window !== 'undefined' ? window : undefined) {
+  window(value = isBrowser ? window : undefined) {
     return value
   },
   eventOptions({ passive = true, capture = false } = {}) {

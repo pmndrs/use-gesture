@@ -18,7 +18,9 @@ const HeroTitle = animated(styled(HT)`
 
 export default function Title({ children }) {
   const [{ x }, set] = useSpring(() => ({ x: 0 }))
-  useMove(({ xy: [x, y] }) => set({ x: x / window.innerWidth }), { domTarget: window })
+  useMove(({ xy: [x, y] }) => set({ x: x / window.innerWidth }), {
+    domTarget: typeof window === 'object' ? window : null,
+  })
 
   return <HeroTitle style={{ backgroundPositionX: x.to([0, 1], ['0%', '200%']) }}>{children}</HeroTitle>
 }

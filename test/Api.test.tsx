@@ -4,6 +4,7 @@ import '@testing-library/jest-dom/extend-expect'
 import { BindProps, GenuineHandlers } from './components/Api'
 import Interactive from './components/Interactive'
 import InteractiveDom from './components/InteractiveDom'
+
 // import InteractiveDomBackwardCompat from './components/InteractiveDomBackwardCompat'
 
 afterEach(cleanup)
