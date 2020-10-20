@@ -16,11 +16,15 @@ With the data you receive, it becomes easy to set up complex gestures like dragg
 
 ## Installation
 
-```bash {1-100}
+Using `yarn`:
+
+```bash {1 - 100}
 yarn add react-use-gesture
 ```
 
-```bash {1-100}
+Using `npm`:
+
+```bash {1 - 100}
 npm install --save react-use-gesture
 ```
 
@@ -31,6 +35,8 @@ npm install --save react-use-gesture
 The following example makes a <EasterDiv><code>&lt;div/&gt;</code></EasterDiv> draggable so that it follows your mouse or finger on drag, and returns to its initial position on release.
 
 > All examples in this documentation use React-spring v9, that you can install with the `next` tag: `react-spring@next`. v9 api is more convenient and allows for more compact, less distracting code. The following example is the only one available with React-spring v8.
+
+Using React Spring v9:
 
 ```jsx {1-100}
 import { useSpring, animated } from 'react-spring'
@@ -48,6 +54,8 @@ function PullRelease() {
   return <animated.div {...bind()} style={{ x, y }} />
 }
 ```
+
+\_Using React Spring v8:
 
 ```jsx {1-100}
 import { useSpring, animated } from 'react-spring'

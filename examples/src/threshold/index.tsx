@@ -12,11 +12,7 @@ export default function Threshold() {
 
   const bind = useDrag(
     ({ down, movement: [mx, my] }) => {
-<<<<<<< HEAD
-      set({ x: down ? mx : 0, y: down ? my : 0, immediate: true })
-=======
       set({ x: down ? mx : 0, y: down ? my : 0, immediate: down })
->>>>>>> pr/164
     },
     { threshold: 100 }
   )

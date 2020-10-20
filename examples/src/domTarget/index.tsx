@@ -3,11 +3,7 @@ import { useSpring, animated } from 'react-spring'
 import { useDrag } from 'react-use-gesture'
 import styles from './styles.css'
 
-<<<<<<< HEAD
-export default function Simple() {
-=======
 export default function DomTarget() {
->>>>>>> pr/164
   const domTarget = React.useRef(null)
   const [{ x, y }, set] = useSpring(() => ({ x: 0, y: 0 }))
 

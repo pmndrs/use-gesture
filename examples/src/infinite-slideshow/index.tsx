@@ -4,11 +4,8 @@ import InfiniteSlider from './Slider'
 import items from './items'
 import styles from './styles.css'
 
-<<<<<<< HEAD
-=======
 // TODO Fix this example
 
->>>>>>> pr/164
 export default function InfiniteSlideshow() {
   return (
     <div className={styles.wrapper}>

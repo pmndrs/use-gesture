@@ -2,17 +2,10 @@
   overscroll-behavior-y: contain;
   position: relative;
   overflow: hidden;
-<<<<<<< HEAD
-  width: 100%;
-  height: 100%;
-  cursor: url('https://uploads.codesandbox.io/uploads/user/b3e56831-8b98-4fee-b941-0e27f39883ab/Ad1_-cursor.png')
-      39 39,
-=======
   touch-action: none;
   width: 100%;
   height: 100%;
   cursor: url('https://uploads.codesandbox.io/uploads/user/b3e56831-8b98-4fee-b941-0e27f39883ab/Ad1_-cursor.png') 39 39,
->>>>>>> pr/164
     auto;
 }
 
@@ -30,10 +23,5 @@
   width: 100%;
   height: 100%;
   will-change: transform;
-<<<<<<< HEAD
-  box-shadow: 0 62.5px 125px -25px rgba(50, 50, 73, 0.5),
-    0 37.5px 75px -37.5px rgba(0, 0, 0, 0.6);
-=======
   box-shadow: 0 62.5px 125px -25px rgba(50, 50, 73, 0.5), 0 37.5px 75px -37.5px rgba(0, 0, 0, 0.6);
->>>>>>> pr/164
 }
