@@ -32,13 +32,13 @@
 .drag {
   width: 240px;
   height: 180px;
-  background: url('https://mixkit.imgix.net/art/preview/mixkit-two-people-holding-hands-480-original-large.png?q=80&auto=format%2Ccompress&h=200&q=50&dpr=2')
+  background: url('https://mixkit.imgix.net/art/preview/mixkit-woman-with-a-handbag-walking-her-small-dog-207-original-large.png?q=80&auto=format%2Ccompress&h=200&q=50&dpr=2')
     center / cover;
   border-radius: 8px;
   touch-action: none;
   user-select: none;
   position: absolute;
-  box-shadow: 0 8px 30px rgba(14, 21, 47, 0.3);
+  box-shadow: 0 8px 30px rgba(14, 21, 47, 0.1);
   transition: box-shadow 200ms ease-out;
   overflow: hidden;
   cursor: grab;

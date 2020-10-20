@@ -4,9 +4,13 @@ section: Reference
 order: 1
 ---
 
+import ReactUseGesture from './code/rug'
+
 # Available hooks
 
-React UseGesture exports several hooks that can handle different gestures.
+<p>
+  <ReactUseGesture /> exports several hooks that can handle different gestures.
+</p>
 
 | Hook         | Description                                |
 | ------------ | ------------------------------------------ |
@@ -22,7 +26,7 @@ React UseGesture exports several hooks that can handle different gestures.
 
 With the exception of `useGesture` which is a special hook, all other hooks share the same API:
 
-```jsx {1-100}
+```jsx
 const bind = useDrag(state => doSomethingWith(state), config)
 return <div {...bind(arg)} />
 ```
@@ -35,7 +39,7 @@ return <div {...bind(arg)} />
 
 `useGesture` is a hook that allows you to manage different gestures at once: for example you might want to enable pinching and dragging on the same component, in that case `useGesture` is the way to go.
 
-```jsx {1-100}
+```jsx
 const bind = useGesture(
   {
     onDrag: state => doSomethingWith(state),
@@ -72,7 +76,7 @@ Note that **end event handlers** for `wheel`, `scroll` and `move` are **debounce
 
 Imagine you want to add an action when you mouse down on a draggable component. You'll probably be tempted to try the following code at first:
 
-```jsx {1,4-11}
+```jsx highlight={1,4-5}
 // This won't work as you'd expect
 function DragAndMouseDown() {
   const [{ x, y }, set] = useSpring(() => ({ x: 0, y: 0 }))
@@ -85,7 +89,7 @@ This looks fine on paper, but it actually won't work: the reason is that the att
 
 Fortunately, the hook `useGesture` supports native React event handlers, and will make sure they are executed on the side without overwriting anything:
 
-```jsx {1,4-7}
+```jsx highlight={1,4-8}
 // This will work as intended
 function DragAndMouseDown() {
   const [{ x, y }, set] = useSpring(() => ({ x: 0, y: 0 }))

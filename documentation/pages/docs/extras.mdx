@@ -26,7 +26,7 @@ Setting `touch-action: pan-y` on your draggable element class or style indicates
 
 > If you don't want the browser scrolling either vertically or horizontally, set `touch-action: none`.
 
-```jsx {3-12}
+```jsx highlight={3-8}
 function TouchActionExample() {
   const [springs, set] = useSprings(4, () => ({ x: 0 }))
 

@@ -43,7 +43,7 @@ Scrolling and wheeling are structurally different events although they produce s
 
 You're probably trying to access an event in `onScroll`, `onMove` or `onWheel` handlers. The last event is debounced, and therefore not accessible asynchronously because of how React pools events. A possible solution would be to make sure the event is not part of the last state update:
 
-```jsx {1-100}
+```jsx
 useScroll(
   ({ event, last }) => {
     !last && event.preventDefault() // <-- event will not be accessed in the last event
@@ -62,7 +62,7 @@ It may sound silly but returning `memo` makes sure that we continue holding a re
 
 This is typically a-feature-not-a-bug situation 🙃 Drag is triggered as soon as you mouse down on your component, which means it will be triggered when you just briefly click on it. However, there is an option to not trigger the drag handler before a certain delay, using the config option [`delay`](/docs/options/#delay-drag-only).
 
-```jsx {1-100}
+```jsx
 // using the default delay
 const bind = useDrag(() => console.log(`Won't show if you hold your mouse less than 180ms`), { delay: true })
 ```

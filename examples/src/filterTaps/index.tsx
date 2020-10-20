@@ -14,12 +14,12 @@ export default function FilterTaps() {
       setDragged(active)
       set({ x, y, immediate: true })
     },
-    { filterTaps: true, threshold: 100 }
+    { threshold: 100 }
   )
   return (
     <div className="flex">
       <a.div className={styles.drag} {...bind()} style={style}>
-        {/* <Button text={dragged ? `Dragged: won't respond to click` : 'Click Me'} /> */}
+        <Button text={dragged ? `Dragged: won't respond to click` : 'Click Me'} />
       </a.div>
     </div>
   )

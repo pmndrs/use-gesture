@@ -169,7 +169,6 @@ export function Threshold({ setActive }) {
           </div>
         </animated.div>
       </animated.div>
-      .
     </>
   )
 }

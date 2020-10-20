@@ -8,5 +8,12 @@ export const theme = {
   colors: {
     ...baseTheme.colors,
     'editor-background': 'rgb(1, 22, 39)',
+    modes: {
+      ...baseTheme.colors.modes,
+      dark: {
+        ...baseTheme.colors.modes.dark,
+        'editor-background': 'rgb(1, 22, 39)',
+      },
+    },
   },
 }
