@@ -2,6 +2,7 @@
   position: relative;
   height: 40vh;
   background-color: var(--xstyled-colors-grey-100);
+  z-index: 1;
 }
 .wrapper,
 .bg {

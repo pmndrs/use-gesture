@@ -10,6 +10,10 @@ import styles from './hero.module.css'
 
 toast.configure({ position: 'bottom-right', pauseOnHover: false, draggable: false })
 
+function supportsTouchEvents() {
+  return typeof window !== 'undefined' && window.ontouchstart === null
+}
+
 export default function Hero() {
   const [config, setConfig] = useState(initialConfig)
   const [shadow, setShadow] = useState(false)
@@ -77,27 +81,25 @@ export default function Hero() {
 
   const bind = useGesture(
     {
-      onDrag: ({ hovering, intentional, tap, swipe: [swipeX, swipeY], down, movement: [mx, my], offset: [x, y] }) => {
+      onDrag: ({ hovering, tap, swipe: [swipeX, swipeY], down, movement: [mx, my], offset: [x, y] }) => {
         if (tap) toast('Tap!')
         if (swipeX) toast(`Swipe ${swipeX > 0 ? 'Right' : 'Left'}`)
         if (swipeY) toast(`Swipe ${swipeY > 0 ? 'Bottom' : 'Top'}`)
-        if (intentional) {
-          document.body.classList.toggle('dragged', down)
+        document.body.classList.toggle('dragged', down)
 
-          if (down) {
-            resetShineAndText()
-            set({ x: mx, y: my, scale: 1, rotateX: 0, rotateY: 0 })
-            setDragging(true)
-            setShadow(true)
-          } else {
-            set({
-              x: 0,
-              y: 0,
-              scale: hovering ? 0.9 : 0.8,
-              onRest: () => setDragging(false),
-            })
-            setShadow(false)
-          }
+        if (down) {
+          resetShineAndText()
+          set({ x: mx, y: my, scale: 1, rotateX: 0, rotateY: 0, immediate: supportsTouchEvents() })
+          setDragging(true)
+          setShadow(true)
+        } else {
+          set({
+            x: 0,
+            y: 0,
+            scale: hovering ? 0.9 : 0.8,
+            onRest: () => setDragging(false),
+          })
+          setShadow(false)
         }
       },
       onHover: ({ active }) => {

@@ -23,7 +23,7 @@ export function PullRelease({ setActive }) {
   const [{ x, y }, set] = useSpring(() => ({ x: 0, y: 0 }))
   const bind = useDrag(({ down, movement: [mx, my] }) => {
     setActive && setActive(down)
-    set({ x: down ? mx : 0, y: down ? my : 0 })
+    set({ x: down ? mx : 0, y: down ? my : 0, immediate: down })
   })
   return <animated.div className={styles.drag} {...bind()} style={{ x, y }} />
 }
