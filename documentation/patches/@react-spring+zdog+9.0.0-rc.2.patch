@@ -1,0 +1,12 @@
+diff --git a/node_modules/@react-spring/zdog/package.json b/node_modules/@react-spring/zdog/package.json
+index 80553af..72d116c 100644
+--- a/node_modules/@react-spring/zdog/package.json
++++ b/node_modules/@react-spring/zdog/package.json
+@@ -22,7 +22,6 @@
+   "contributors": [
+     "Alec Larson (https://github.com/aleclarson)"
+   ],
+-  "sideEffects": false,
+   "main": "index.cjs.js",
+   "module": "index.js",
+   "types": "index.d.ts",
