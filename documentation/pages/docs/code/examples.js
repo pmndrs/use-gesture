@@ -85,14 +85,12 @@ export function Swipe({ setActive }) {
 
 export function DomTarget() {
   const [{ width }, set] = useSpring(() => ({ width: '0%' }))
-  const bind = useScroll(
+  useScroll(
     ({ xy: [, y] }) => {
       set({ width: (y / document.documentElement.scrollHeight) * 100 + '%' })
     },
     { domTarget: typeof window === 'object' ? window : null }
   )
-
-  useEffect(bind, [bind])
 
   return <animated.div className={styles.scroll} style={{ width }} />
 }
@@ -431,7 +429,7 @@ export function TouchAction() {
 
   return springs.map(({ moving, ...style }, i) => (
     <animated.div key={i} className={styles.drag} {...bind(i)} style={{ ...style, touchAction: 'pan-y' }}>
-      {moving.to(m => (m ? 'body scroll is frozen' : '← Drag me →'))}
+      {moving.to(m => (m ? `body shouldn't scroll` : '← Drag me →'))}
     </animated.div>
   ))
 }
