@@ -14,6 +14,8 @@ import {
   ScreenContainer,
 } from 'smooth-doc/components'
 
+import { Link } from 'gatsby'
+
 import Sandbox from './HeroSandbox'
 import Title from './HeroSandbox/Title'
 import ReactUseGesture from './docs/code/rug'
@@ -34,7 +36,7 @@ import Shields from './partials/shields'
     </HeroTeaser>
     <HeroActionList style={{ justifyContent: 'center' }}>
       <HeroAction>
-        <Button variant="primary" forwardedAs="a" href="/docs/">
+        <Button variant="primary" forwardedAs={Link} href="/docs/">
           Browse Docs
         </Button>
       </HeroAction>
@@ -81,13 +83,13 @@ import Shields from './partials/shields'
       <a href="https://pmnd.rs/" target="_blank" rel="noopener noreferrer">
         <strong>pmndrs</strong>
       </a>
-      . Built with{' '}
-      <a href="https://smooth-doc.com/" target="_blank" rel="noopener noreferrer">
+      . Built with <a href="https://smooth-doc.com/" target="_blank" rel="noopener noreferrer">
         Smooth Doc
-      </a>
-      . Illustrations by <a href="https://illlustrations.co/" target="_blank" rel="noopener noreferrer">
+      </a>. Illustrations by{' '}
+      <a href="https://illlustrations.co/" target="_blank" rel="noopener noreferrer">
         Vijay Verma
-      </a>.
+      </a>
+      .
     </div>
   </ScreenContainer>
 </footer>
