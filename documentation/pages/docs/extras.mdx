@@ -47,3 +47,59 @@ In your drag options, you should then set [`{axis:'x'}`](/docs/options/#axis-xy-
 When you have a menu overlay on top of your page you generally don't want the `body` to scroll along with the menu content. [Body scroll lock](https://github.com/willmcpo/body-scroll-lock) is a javascript library that disable body scroll.
 
 Make sure you can't solve your problem scroll problem with [`touch-action`](#touch-action) before using this library though.
+
+### Lethargy
+
+[Lethargy](https://github.com/d4nyll/lethargy) is a library which objective is _to help distinguish between scroll events initiated by the user, and those by inertial scrolling_. It's especially useful when you want to create full page sliders. Here is an example on how to use it with `useWheel`.
+
+> This demo only makes sense on wheel-based devices. The sensitivity to wheeling depends on your device and can be adjusted with Lethargy options.
+
+<Code id="LethargyWheel" />
+
+<details>
+  <summary>Show code</summary>
+
+
+```jsx
+const slides = [0, 1, 2, 3, 4, 5]
+// creates a new Lethargy check
+// could be stored as a ref, or a global anywhere in your app
+const lethargy = new Lethargy()
+
+function LethargyWheel() {
+  const [index, setIndex] = useState(0)
+  const ref = useRef()
+
+  useWheel(
+    ({ event, last, memo: wait = false }) => {
+      if (last) return // event can be undefined as the last event is debounced
+      event.preventDefault() // this is needed to prevent the native browser scroll
+      const wheelDirection = lethargy.check(event)
+      // wheelDirection === 0 when Lethargy thinks it's an inertia-triggered event
+      if (wheelDirection) {
+        // wait is going to switch from false to true when an intentional wheel
+        // event has been detected
+        if (!wait) setIndex(i => clamp(i - wheelDirection, 0, slides.length - 1))
+        return true // will set to wait to true in the next event frame
+      }
+      return false // will set to wait to false in the next event frame
+    },
+    // we need to use a ref to be able to get non passive events and be able
+    // to trigger event.preventDefault()
+    { domTarget: ref, eventOptions: { passive: false } }
+  )
+
+  return (
+    <div ref={ref} style={{ transform: `translateY(${-index * 330}px)` }}>
+      {slides.map(i => (
+        <div key={i}>{i}</div>
+      ))}
+    </div>
+  )
+}
+```
+
+</details>
+
+
+Example on CodeSandbox: https://codesandbox.io/s/lethargy-2coe8

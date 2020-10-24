@@ -52,6 +52,10 @@ document.addEventListener('gesturechange', e => e.preventDefault())
 
 Also, a pretty unknown feature allows devices supporting wheel to **zoom** (not rotate) by wheeling and pressing the **control** modifier key. <ReactUseGesture /> supports it, but to make sure the zooming doesn't interefere with the browser accessibility zoom, you'll also be better using the `domTarget` [option](/docs/options/#domtarget).
 
+### About the wheel gesture
+
+The wheel gesture is a bit tricky, due to the nature of the wheel event. In fact, mouse devices such as the Macbook trackpad, or the Magic Mouse have inertia, but there is no native way to distinguish between an actual wheel intent and its resulting inertia. To detect intent, you can use [Lethargy](https://github.com/d4nyll/lethargy) and [read more about it here](/docs/extras/#lethargy).
+
 ## Handling multiple gestures in one hook with useGesture
 
 `useGesture` is a hook that allows you to manage different gestures at once: for example you might want to enable pinching and dragging on the same component, in that case `useGesture` is the way to go.

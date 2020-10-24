@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useSpring, useSprings, animated, to } from 'react-spring'
-import { useDrag, useScroll, useGesture } from 'react-use-gesture'
+import { useDrag, useScroll, useGesture, useWheel } from 'react-use-gesture'
+import { Lethargy } from 'lethargy'
 import cn from 'classnames'
 import styles from './styles.module.css'
 
@@ -432,4 +433,37 @@ export function TouchAction() {
       {moving.to(m => (m ? `body shouldn't scroll` : '← Drag me →'))}
     </animated.div>
   ))
+}
+
+const clamp = (value, min, max) => Math.max(Math.min(max, value), min)
+
+const slides = [0, 1, 2, 3, 4, 5]
+const lethargy = new Lethargy()
+
+export function LethargyWheel() {
+  const [index, setIndex] = useState(0)
+  const ref = useRef()
+
+  useWheel(
+    ({ event, last, memo: wait = false }) => {
+      if (last) return
+      event.preventDefault()
+      event.stopPropagation()
+      const s = lethargy.check(event)
+      if (s) {
+        if (!wait) setIndex(i => clamp(i - s, 0, slides.length - 1))
+        return true
+      }
+      return false
+    },
+    { domTarget: ref, eventOptions: { passive: false } }
+  )
+
+  return (
+    <div ref={ref} style={{ transform: `translateY(${-index * 330}px)` }}>
+      {slides.map(i => (
+        <div key={i}>{i}</div>
+      ))}
+    </div>
+  )
 }

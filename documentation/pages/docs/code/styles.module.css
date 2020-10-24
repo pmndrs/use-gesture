@@ -165,3 +165,30 @@
   color: white;
   font-weight: bold;
 }
+
+.LethargyWheel {
+  overflow: hidden;
+  height: 400px;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 30px 0 0 0;
+}
+
+.LethargyWheel > div {
+  width: 80%;
+  transition: transform 350ms ease-in-out;
+}
+
+.LethargyWheel > div > div {
+  border-radius: 4px;
+  font-size: 50px;
+  color: white;
+  min-height: 320px;
+  width: 100%;
+  background-color: royalblue;
+  margin: 10px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
