@@ -143,14 +143,15 @@ const InternalDragOptionsNormalizers = {
   },
 }
 
+export function getInternalGenericOptions(config: GenericOptions = {}): InternalGenericOptions {
+  // TODO warn when passive is set to true and domTarget is undefined
+  return resolveWith<GenericOptions, InternalGenericOptions>(config, InternalGenericOptionsNormalizers)
+}
+
 export function getInternalGestureOptions<T extends StateKey>(
   config: GestureOptions<T> = {}
 ): InternalGestureOptions<T> {
   return resolveWith<GestureOptions<T>, InternalGestureOptions<T>>(config, InternalGestureOptionsNormalizers)
-}
-
-export function getInternalGenericOptions(config: GenericOptions = {}): InternalGenericOptions {
-  return resolveWith<GenericOptions, InternalGenericOptions>(config, InternalGenericOptionsNormalizers)
 }
 
 export function getInternalCoordinatesOptions<T extends CoordinatesKey>(
