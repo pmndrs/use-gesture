@@ -9,11 +9,10 @@ export default function Inner() {
 
   const bindInner = useDrag(
     ({ event, down, offset: [x, y] }) => {
-      // @ts-ignore
       event.stopPropagation()
       setInner({ x, y, scale: down ? 1.2 : 1, immediate: key => key !== 'scale' })
     },
-    { threshold: 100 }
+    { threshold: 100, triggerAllEvents: true }
   )
 
   const bind = useDrag(({ offset: [x, y] }) => {
