@@ -135,7 +135,7 @@ function CancelExample() {
 }
 ```
 
-This is obviously very simple abstract logic, but please go over the [Examples section](examples.mdx) for more compelling use cases. Note that only `drag` and `pinch` gestures are cancellable (calling `cancel` on other gestures won't do anything).
+This is obviously very simple abstract logic, but please go over the [Examples section](/docs/examples) for more compelling use cases. Note that only `drag` and `pinch` gestures are cancellable (calling `cancel` on other gestures won't do anything).
 
 ### swipe (drag only)
 
@@ -165,10 +165,10 @@ Here are the conditions for a swipe to be detected on the `x` axis:
 - `movement[0]` is superior to the `swipeDistance[0]` option.
 - `vxvy[0]` is superior to the `swipeVelocity[0]` option.
 
-> Visit the [swipe options](options.mdx) documentation for more info about how to configure swipe detection to your needs.
+> Visit the [swipe options](/docs/options) documentation for more info about how to configure swipe detection to your needs.
 
 ### tap (drag only)
 
 `tap` is a `boolean` state attribute for the **drag** gesture that will be set to true if the drag gesture can be assimilated to a tap or click. In other words, `tap` will be `true` on mouse or touch release only when the drag displacement is inferior to `3` pixels.
 
-You'll usually want to use the `tap` attribute in conjunction with the [`filterTaps`](options.mdx#filtertaps-drag-only) option.
+You'll usually want to use the `tap` attribute in conjunction with the [`filterTaps`](/docs/options/#filtertaps-drag-only) option.
