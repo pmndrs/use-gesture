@@ -116,10 +116,3 @@ details > pre {
     margin: 16px -8px;
   }
 }
-
-h1,
-h2,
-h3,
-h4 {
-  scroll-margin-top: 40px;
-}
