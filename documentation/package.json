@@ -12,7 +12,7 @@
   "dependencies": {
     "@tim-soft/react-dat-gui": "^4.0.11",
     "classnames": "^2.2.6",
-    "gatsby": "^2.24.85",
+    "gatsby": "^2.24.88",
     "gatsby-plugin-google-analytics": "^2.3.19",
     "lethargy": "^1.0.9",
     "parse-numeric-range": "^1.2.0",
@@ -22,7 +22,7 @@
     "react-spring": "9.0.0-rc.2",
     "react-toastify": "^6.0.9",
     "react-use-gesture": "^8.0.0-beta.3",
-    "smooth-doc": "^5.1.1"
+    "smooth-doc": "^5.2.0"
   },
   "devDependencies": {
     "patch-package": "^6.2.2",

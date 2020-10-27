@@ -79,7 +79,7 @@ export function Swipe({ setActive }) {
         className={cn(styles.square, { [styles.active]: position === 1 })}
         style={{ transform: `translateX(${space}px) scale(1.1)` }}
       />
-      <animated.div className={styles.drag} {...bind()} style={{ x }} />
+      <animated.div className={styles.drag} {...bind()} style={{ x, touchAction: 'auto' }} />
     </>
   )
 }
