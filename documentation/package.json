@@ -21,7 +21,7 @@
     "react-player": "^2.6.2",
     "react-spring": "9.0.0-rc.2",
     "react-toastify": "^6.0.9",
-    "react-use-gesture": "^8.0.0-beta.3",
+    "react-use-gesture": "^8.0.0",
     "smooth-doc": "^5.2.0"
   },
   "devDependencies": {
