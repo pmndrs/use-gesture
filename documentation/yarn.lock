@@ -6013,6 +6013,11 @@ fast-levenshtein@^2.0.6, fast-levenshtein@~2.0.6:
   resolved "https://registry.yarnpkg.com/fast-levenshtein/-/fast-levenshtein-2.0.6.tgz#3d8a5c66883a16a30ca8643e851f19baa7797917"
   integrity sha1-PYpcZog6FqMMqGQ+hR8Zuqd5eRc=
 
+fast-memoize@2.5.2:
+  version "2.5.2"
+  resolved "https://registry.yarnpkg.com/fast-memoize/-/fast-memoize-2.5.2.tgz#79e3bb6a4ec867ea40ba0e7146816f6cdce9b57e"
+  integrity sha512-Ue0LwpDYErFbmNnZSF0UH6eImUwDmogUO1jyE+JbN2gsQz/jICm1Ve7t9QT0rNSsfJt+Hs4/S3GnsDVjL4HVrw==
+
 fastest-levenshtein@^1.0.12:
   version "1.0.12"
   resolved "https://registry.yarnpkg.com/fastest-levenshtein/-/fastest-levenshtein-1.0.12.tgz#9990f7d3a88cc5a9ffd1f1745745251700d497e2"
@@ -7946,6 +7951,11 @@ imagemin@^7.0.1:
     make-dir "^3.0.0"
     p-pipe "^3.0.0"
     replace-ext "^1.0.0"
+
+immer@^7.0.7:
+  version "7.0.14"
+  resolved "https://registry.yarnpkg.com/immer/-/immer-7.0.14.tgz#3e605f8584b15a9520d2f2f3fda9441cc9170d25"
+  integrity sha512-BxCs6pJwhgSEUEOZjywW7OA8DXVzfHjkBelSEl0A+nEu0+zS4cFVdNOONvt55N4WOm8Pu4xqSPYxhm1Lv2iBBA==
 
 import-cwd@^2.0.0:
   version "2.1.0"
@@ -12073,10 +12083,10 @@ react-transition-group@^4.4.1:
     loose-envify "^1.4.0"
     prop-types "^15.6.2"
 
-react-use-gesture@^8.0.0-beta.3:
-  version "8.0.0-beta.3"
-  resolved "https://registry.yarnpkg.com/react-use-gesture/-/react-use-gesture-8.0.0-beta.3.tgz#ae012592734bde8b8da61053e749e27be6173d75"
-  integrity sha512-FRGA9LbTMqRqE93NmTsfS32qNOGVxntNOcxIavUG0LBBzOiabc7Xgt7Q+WzktRvAwtNPatxG8OIMSO7Y/eeLKQ==
+react-use-gesture@^8.0.0:
+  version "8.0.0"
+  resolved "https://registry.yarnpkg.com/react-use-gesture/-/react-use-gesture-8.0.0.tgz#0ce80c602625816b39bf5d3171b9efd29d70eb69"
+  integrity sha512-Xn4gWYn7GZPTPj1GL8gi8SvI4CJX77ia8tCkKIt7m2hBuXgHeNeRR9QwRiuPZy6xgtLBddPk5O5PLccNxuwFWA==
 
 react@^17.0.1:
   version "17.0.1"
@@ -14308,6 +14318,11 @@ tunnel-agent@^0.6.0:
   dependencies:
     safe-buffer "^5.0.1"
 
+tweakpane@^1.5.3:
+  version "1.5.5"
+  resolved "https://registry.yarnpkg.com/tweakpane/-/tweakpane-1.5.5.tgz#1171557031cf0d7d66caeae8bcb4178353bc7579"
+  integrity sha512-cp5HdDc3F83PJzsuCVCp2/L4zSNH5YAZhHRU8tR8/pQ+ok7Dm/3MxNSLEGe/sQQfwltV1e6PCKV8rcu+wu1XdQ==
+
 tweetnacl@^0.14.3, tweetnacl@~0.14.0:
   version "0.14.5"
   resolved "https://registry.yarnpkg.com/tweetnacl/-/tweetnacl-0.14.5.tgz#5ae68177f192d4456269d108afa93ff8743f4f64"
@@ -14802,6 +14817,16 @@ use-memo-one@^1.1.0:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/use-memo-one/-/use-memo-one-1.1.1.tgz#39e6f08fe27e422a7d7b234b5f9056af313bd22c"
   integrity sha512-oFfsyun+bP7RX8X2AskHNTxu+R3QdE/RC5IefMbqptmACAA/gfol1KDD5KRzPsGMa62sWxGZw+Ui43u6x4ddoQ==
+
+use-tweaks@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/use-tweaks/-/use-tweaks-0.1.0.tgz#7e7e906b2307d3c175a0c2e8d42ce4835587ad98"
+  integrity sha512-EYeALXA3RIIVfS+iaE+Qbh6pLLReaRrfRIoc6grcYDZM9p5vBhACHr0qp1hEjnWAuhWdVU+mGkIRKhj86C9hHg==
+  dependencies:
+    fast-memoize "2.5.2"
+    immer "^7.0.7"
+    tweakpane "^1.5.3"
+    zustand "^3.0.1"
 
 use@^3.1.0:
   version "3.1.1"
@@ -15493,6 +15518,11 @@ yurnalist@^1.1.2:
     semver "^6.3.0"
     strip-ansi "^5.2.0"
     strip-bom "^4.0.0"
+
+zustand@^3.0.1:
+  version "3.1.3"
+  resolved "https://registry.yarnpkg.com/zustand/-/zustand-3.1.3.tgz#33df7f56ec11b3003458b60606addc94225b282c"
+  integrity sha512-Otuzh3r0GsatvsUWeXEwdYjZEw1TItWcAXwDGEHdXE4/k6WbAdVDxC21t/Poq4ZMB+2VaQNKICWu7eCBUJ65tQ==
 
 zwitch@^1.0.0:
   version "1.0.5"

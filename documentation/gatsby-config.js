@@ -8,6 +8,10 @@ module.exports = {
         description: `React UseGesture allows you to implement advanced UI interactions with just a few lines of code.`,
         author: 'David Bismut',
         sections: ['About', 'Reference', 'More'],
+        navItems: [
+          { title: 'Docs', url: '/docs/' },
+          { title: 'API', url: '/docs/hooks' },
+        ],
         twitterAccount: 'pmndrs',
         githubRepositoryURL: 'https://github.com/pmndrs/react-use-gesture',
       },
