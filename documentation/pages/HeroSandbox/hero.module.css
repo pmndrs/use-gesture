@@ -1,7 +1,7 @@
 .header {
   position: relative;
   height: 40vh;
-  background-color: var(--xstyled-colors-grey-100);
+  background-color: #86b4ff1a;
   z-index: 1;
 }
 .wrapper,
