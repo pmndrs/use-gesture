@@ -77,11 +77,6 @@ p a > code:after {
   margin-left: 0.3em;
 }
 
-p a:hover > code {
-  font-weight: bold;
-  text-decoration: underline;
-}
-
 blockquote p {
   font-size: 14px;
 }
