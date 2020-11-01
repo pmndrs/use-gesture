@@ -194,8 +194,8 @@ Forces the handler to fire even for non intentional displacement (ignores the `t
 ### bounds
 
 <Specs
-  types={['Bounds: {top?: number, bottom?: number, left?: number, right?: number}', '(gestureState) => Bounds)']}
-  defaultValue="{top: -Infinity, bottom: Infinity, left: -Infinity, right: Infinity}"
+  types={['Bounds: { top?: number, bottom?: number, left?: number, right?: number }', '(gestureState) => Bounds']}
+  defaultValue="{ top: -Infinity, bottom: Infinity, left: -Infinity, right: Infinity }"
 />
 
 If you want to set contraints to the user gesture, then you should use the `bounds` option. In that case, **both** the gesture `movement` and `offset` will be clamped to the specified `bounds`. `bounds` will be defaulted to `Infinity` when not set.
@@ -217,15 +217,15 @@ function BoundsExample() {
 ### distanceBounds
 
 <Specs
-  types={['DistanceBounds: {min?: number, max?: number}', '(gestureState) => DistanceBounds)']}
-  defaultValue="{min: -Infinity, max: Infinity}"
+  types={['DistanceBounds: { min?: number, max?: number }', '(gestureState) => DistanceBounds']}
+  defaultValue="{ min: -Infinity, max: Infinity }"
 />
 
 ### angleBounds
 
 <Specs
-  types={['AngleBounds: {min?: number, max?: number}', '(gestureState) => AngleBounds)']}
-  defaultValue="{min: -Infinity, max: Infinity}"
+  types={['AngleBounds: { min?: number, max?: number }', '(gestureState) => AngleBounds']}
+  defaultValue="{ min: -Infinity, max: Infinity }"
 />
 
 ### rubberband

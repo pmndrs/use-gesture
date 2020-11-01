@@ -66,9 +66,20 @@ p code {
   font-variant: no-common-ligatures no-discretionary-ligatures no-historical-ligatures no-contextual;
 }
 
-table a {
-  text-decoration: none !important;
+table a > code,
+p a > code {
   font-weight: bold;
+}
+
+table a > code:after,
+p a > code:after {
+  content: '→';
+  margin-left: 0.3em;
+}
+
+p a:hover > code {
+  font-weight: bold;
+  text-decoration: underline;
 }
 
 blockquote p {

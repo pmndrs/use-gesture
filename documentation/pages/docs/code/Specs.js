@@ -31,8 +31,8 @@ const Row = styled.box`
     margin-right: 10px;
     flex-shrink: 0;
   }
-  ul {
-    margin: 0;
+  ${Specs} > & > ul {
+    margin-top: 0;
     font-size: inherit;
     padding-left: 0;
     li {
