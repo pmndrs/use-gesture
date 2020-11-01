@@ -25,10 +25,8 @@ const Editor = styled.div`
         }
 
         .token-line.highlight-line {
-          display: block;
-          opacity: 1 !important;
+          opacity: 1;
         }
-        color: ${props.highlight ? 'red' : 'blue'};
       `
     )
   }}
