@@ -20,19 +20,22 @@ Some options are generic to the way <ReactUseGesture/> behaves while some other 
 
 Depending on whether you use gesture-specific hooks or if you use the `useGesture` hook, you'll need to structure the config option object differently.
 
+<!-- prettier-ignore -->
 ```jsx
 // when you use a gesture-specific hook
 useDrag(state => doSomethingWith(state), { ...genericOptions, ...dragOptions })
 
 // when you use the useGesture hook
 useGesture(state => doSomethingWith(state), {
+  // global options such as domTarget
   ...genericOptions,
-  drag: dragOptions,
-  wheel: wheelOptions,
-  pinch: pinchOptions,
+  // gesture specific options
+  drag:   dragOptions,
+  wheel:  wheelOptions,
+  pinch:  pinchOptions,
   scroll: scrollOptions,
-  wheel: wheelOptions,
-  hover: hoverOptions,
+  wheel:  wheelOptions,
+  hover:  hoverOptions,
 })
 ```
 
