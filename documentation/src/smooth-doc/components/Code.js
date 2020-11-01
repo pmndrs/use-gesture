@@ -45,9 +45,8 @@ const calculateLinesToHighlight = meta => {
     const strlineNumbers = RE.exec(meta)[1]
     const lineNumbers = rangeParser(strlineNumbers)
     return index => lineNumbers.includes(index + 1)
-  } else {
-    return () => false
   }
+  return () => false
 }
 
 const LivePreview = styled(BaseLivePreview)`
