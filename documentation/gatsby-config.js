@@ -16,6 +16,7 @@ module.exports = {
         githubRepositoryURL: 'https://github.com/pmndrs/react-use-gesture',
       },
     },
+    'gatsby-plugin-catch-links',
     {
       resolve: `gatsby-plugin-google-analytics`,
       options: {
