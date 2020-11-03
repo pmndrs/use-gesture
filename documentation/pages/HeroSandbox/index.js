@@ -4,7 +4,7 @@ import { useGesture } from 'react-use-gesture'
 import { toast } from 'react-toastify'
 import cn from 'classnames'
 import { useTweaks } from 'use-tweaks'
-import { tweaks } from './GUI'
+import { tweaks } from './data'
 
 import 'react-toastify/dist/ReactToastify.css'
 import styles from './hero.module.css'
@@ -126,7 +126,7 @@ export default function Hero() {
 
   return (
     <div className={styles.header}>
-      <div ref={tweakRef} style={{ position: 'absolute', top: 10, right: 10, zIndex: 1 }} />
+      <div ref={tweakRef} className={styles.gui} />
       <div className={styles.bg}>React UseGesture</div>
       <div className={styles.wrapper}>
         {activateBounds && (
