@@ -3,7 +3,8 @@ import { useSpring, animated } from 'react-spring'
 import { useGesture } from 'react-use-gesture'
 import { toast } from 'react-toastify'
 import cn from 'classnames'
-import GUI, { initialConfig } from './GUI'
+import { useTweaks } from 'use-tweaks'
+import { tweaks } from './GUI'
 
 import 'react-toastify/dist/ReactToastify.css'
 import styles from './hero.module.css'
@@ -11,22 +12,19 @@ import styles from './hero.module.css'
 toast.configure({ position: 'bottom-right', pauseOnHover: false, draggable: false })
 
 export default function Hero() {
-  const [config, setConfig] = useState(initialConfig)
   const [shadow, setShadow] = useState(false)
   const [dragging, setDragging] = useState(false)
-  const ref = useRef(null)
+  const tweakRef = useRef()
+  const ref = useRef()
   const rect = useRef({})
   const prevAngleTurns = useRef([135, 0])
 
-  const { threshold, swipeDist, swipeVel, bounds, activateBounds, rubberband, ...rest } = config
+  // const { threshold, swipeDist, swipeVel, bounds, activateBounds, rubberband, ...rest } = config
+  const { axis, threshold, activateBounds, top, bottom, left, right, rubberband, ...rest } = useTweaks(tweaks, {
+    container: tweakRef,
+  })
 
-  const [props, set] = useSpring(() => ({
-    x: 0,
-    y: 0,
-    rotateX: 0,
-    rotateY: 0,
-    scale: 0.8,
-  }))
+  const [props, set] = useSpring(() => ({ x: 0, y: 0, rotateX: 0, rotateY: 0, scale: 0.8 }))
 
   const rotX = py => (py - props.y.get() - rect.current.y - rect.current.height / 2) / 5
   const rotY = px => -(px - props.x.get() - rect.current.x - rect.current.width / 2) / 5
@@ -118,8 +116,9 @@ export default function Hero() {
     {
       drag: {
         ...rest,
-        threshold: threshold < 0 ? undefined : [threshold, threshold],
-        bounds: activateBounds ? { ...bounds, left: -bounds.left, top: -bounds.top } : undefined,
+        axis: axis === 'free' ? undefined : axis,
+        threshold: [threshold, threshold],
+        bounds: activateBounds ? { bottom, right, left: -left, top: -top } : undefined,
         rubberband: activateBounds ? rubberband : 0,
       },
     }
@@ -127,16 +126,16 @@ export default function Hero() {
 
   return (
     <div className={styles.header}>
-      <GUI data={config} onUpdate={setConfig} style={{ position: 'absolute', top: 0, right: 0, zIndex: 1 }} />
+      <div ref={tweakRef} style={{ position: 'absolute', top: 10, right: 10, zIndex: 1 }} />
       <div className={styles.bg}>React UseGesture</div>
       <div className={styles.wrapper}>
         {activateBounds && (
           <div
             className={styles.bounds}
             style={{
-              width: bounds.right + bounds.left + 240,
-              height: bounds.bottom + bounds.top + 180,
-              transform: `translate(${(bounds.right - bounds.left) / 2}px, ${(bounds.bottom - bounds.top) / 2}px)`,
+              width: right + left + 240,
+              height: bottom + top + 180,
+              transform: `translate(${(right - left) / 2}px, ${(bottom - top) / 2}px)`,
             }}
           ></div>
         )}

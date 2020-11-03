@@ -10,11 +10,10 @@
     "postinstall": "patch-package"
   },
   "dependencies": {
-    "@tim-soft/react-dat-gui": "^4.0.11",
     "classnames": "^2.2.6",
-    "gatsby": "^2.24.88",
+    "gatsby": "^2.25.1",
     "gatsby-plugin-catch-links": "^2.3.15",
-    "gatsby-plugin-google-analytics": "^2.3.19",
+    "gatsby-plugin-google-analytics": "^2.4.0",
     "lethargy": "^1.0.9",
     "parse-numeric-range": "^1.2.0",
     "react": "^17.0.1",
@@ -24,7 +23,8 @@
     "react-toastify": "^6.0.9",
     "react-use-gesture": "^8.0.0",
     "smooth-doc": "^5.2.0",
-    "use-tweaks": "^0.1.0"
+    "tweakpane": "^1.5.6",
+    "use-tweaks": "^0.2.0"
   },
   "devDependencies": {
     "patch-package": "^6.2.2",
