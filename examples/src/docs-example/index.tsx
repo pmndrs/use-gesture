@@ -3,8 +3,8 @@ import { useSpring, animated } from 'react-spring'
 import { useGesture } from 'react-use-gesture'
 import { toast } from 'react-toastify'
 import cn from 'classnames'
-// @ts-ignore
-import GUI, { initialConfig } from './GUI'
+import { useTweaks } from 'use-tweaks'
+import { tweaks } from './data'
 
 import 'react-toastify/dist/ReactToastify.css'
 import styles from './styles.css'
@@ -16,14 +16,13 @@ toast.configure({
 })
 
 export default function DocsExample() {
-  const [config, setConfig] = useState(initialConfig)
   const [shadow, setShadow] = useState(false)
   const [dragging, setDragging] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
   const rect = useRef<DOMRect>()
   const prevAngleTurns = useRef([135, 0])
 
-  const { threshold, swipeDist, swipeVel, bounds, activateBounds, rubberband, ...rest } = config
+  const { enabled, axis, threshold, activateBounds, top, bottom, left, right, rubberband, ...rest } = useTweaks(tweaks)
 
   const [props, set] = useSpring(() => ({
     x: 0,
@@ -119,36 +118,34 @@ export default function DocsExample() {
       },
     },
     {
+      // domTarget: ref,
       drag: {
+        enabled,
         ...rest,
-        swipeVelocity: [swipeVel, swipeVel],
-        swipeDistance: [swipeDist, swipeDist],
-        threshold: threshold < 0 ? undefined : [threshold, threshold],
-        bounds: activateBounds ? bounds : undefined,
+        axis: axis === 'free' ? undefined : axis,
+        threshold: [threshold, threshold],
+        bounds: activateBounds ? { bottom, right, left: -left, top: -top } : undefined,
         rubberband: activateBounds ? rubberband : 0,
       },
     }
   )
 
   return (
-    <>
-      <GUI data={config} onUpdate={setConfig} style={{ position: 'absolute', zIndex: 100 }} />
-      <div className={styles.wrapper}>
-        {activateBounds && (
-          <div
-            className={styles.bounds}
-            style={{
-              width: bounds.right - bounds.left,
-              height: bounds.bottom - bounds.top,
-              transform: `translate3d(${bounds.left}, ${bounds.top})`,
-            }}
-          ></div>
-        )}
-        <animated.div ref={ref} {...bind()} className={cn(styles.drag, { [styles.shadow]: shadow })} style={props}>
-          <animated.div style={shine} />
-          <animated.div style={text}>Drag me!</animated.div>
-        </animated.div>
-      </div>
-    </>
+    <div className={styles.wrapper}>
+      {activateBounds && (
+        <div
+          className={styles.bounds}
+          style={{
+            width: right + left + 240,
+            height: bottom + top + 180,
+            transform: `translate(${(right - left) / 2}px, ${(bottom - top) / 2}px)`,
+          }}
+        ></div>
+      )}
+      <animated.div ref={ref} {...bind()} className={cn(styles.drag, { [styles.shadow]: shadow })} style={props}>
+        <animated.div style={shine} />
+        <animated.div style={text}>Drag me!</animated.div>
+      </animated.div>
+    </div>
   )
 }

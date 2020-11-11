@@ -19,7 +19,6 @@ export default function Hero() {
   const rect = useRef({})
   const prevAngleTurns = useRef([135, 0])
 
-  // const { threshold, swipeDist, swipeVel, bounds, activateBounds, rubberband, ...rest } = config
   const { axis, threshold, activateBounds, top, bottom, left, right, rubberband, ...rest } = useTweaks(tweaks, {
     container: tweakRef,
   })

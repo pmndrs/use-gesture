@@ -9,12 +9,12 @@ export default function FilterTaps() {
   const [dragged, setDragged] = useState(false)
   const [style, set] = useSpring(() => ({ x: 0, y: 0 }))
   const bind = useDrag(
-    ({ tap, active, intentional, offset: [x, y] }) => {
-      console.log({ tap, active, intentional })
+    ({ tap, active, down, intentional, offset: [x, y] }) => {
+      console.log({ tap, active, intentional, down })
       setDragged(active)
       set({ x, y, immediate: true })
     },
-    { threshold: 100 }
+    { threshold: 100, triggerAllEvents: true }
   )
   return (
     <div className="flex">

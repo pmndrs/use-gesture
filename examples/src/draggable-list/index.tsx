@@ -30,13 +30,16 @@ const fn = (order: number[], down?: boolean, originalIndex?: number, curIndex?: 
 export default function DraggableList({ items = 'Lorem ipsum dolor sit'.split(' ') }) {
   const order = useRef(items.map((_, index) => index)) // Store indicies as a local ref, this represents the item order
   const [springs, setSprings] = useSprings(items.length, fn(order.current)) // Create springs, each corresponds to an item, controlling its transform, scale, etc.
-  const bind = useDrag(({ args: [originalIndex], down, movement: [, y] }) => {
-    const curIndex = order.current.indexOf(originalIndex)
-    const curRow = clamp(Math.round((curIndex * 100 + y) / 100), 0, items.length - 1)
-    const newOrder = swap(order.current, curIndex, curRow)
-    setSprings(fn(newOrder, down, originalIndex, curIndex, y)) // Feed springs new style data, they'll animate the view without causing a single render
-    if (!down) order.current = newOrder
-  })
+  const bind = useDrag(
+    ({ args: [originalIndex], down, movement: [, y] }) => {
+      const curIndex = order.current.indexOf(originalIndex)
+      const curRow = clamp(Math.round((curIndex * 100 + y) / 100), 0, items.length - 1)
+      const newOrder = swap(order.current, curIndex, curRow)
+      setSprings(fn(newOrder, down, originalIndex, curIndex, y)) // Feed springs new style data, they'll animate the view without causing a single render
+      if (!down) order.current = newOrder
+    },
+    { enabled: false }
+  )
   return (
     <div className={`${styles.dragList} flex`} style={{ height: items.length * 100 }}>
       {springs.map(({ zIndex, shadow, y, scale }, i) => (

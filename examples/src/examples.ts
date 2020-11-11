@@ -14,5 +14,6 @@ export { default as twoElements } from './two-elements'
 export { default as touchAction } from './touch-action'
 export { default as gestureEvents } from './gesture-events'
 export { default as nested } from './nested'
+export { default as scrollableList } from './draggable-list-scrollable'
 
 // TODO possibly add domTarget site-wide option to test domTarget for all examples
