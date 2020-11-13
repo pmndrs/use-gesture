@@ -44,7 +44,7 @@ export default function Two() {
 
   return (
     <div className="flex">
-      <animated.div {...bind(3)} className={styles.drag} style={style}></animated.div>
+      <animated.div {...bind()} className={styles.drag} style={style}></animated.div>
       <animated.div {...bind2()} className={styles.drag} style={{ ...style2, background: 'hotpink' }}></animated.div>
     </div>
   )
