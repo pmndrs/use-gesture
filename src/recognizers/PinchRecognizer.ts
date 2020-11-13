@@ -28,10 +28,7 @@ export class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
     this.updateSharedState(getGenericEventData(event))
 
     this.updateGestureState({
-      // TODO remove after type update
-      // @ts-ignore
       ...getStartGestureState(this, values, event),
-      // @ts-ignore
       ...getGenericPayload(this, event, true),
       cancel: this.onCancel,
       origin,
