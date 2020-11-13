@@ -16,8 +16,8 @@ export class DragRecognizer extends CoordinatesRecognizer<'drag'> {
   private setPointers = (event: React.PointerEvent | PointerEvent) => {
     const { target, pointerId } = event
     if (target) {
-      // @ts-expect-error
-      target.addEventListener('pointermove', this.onDragChange, this.controller.config.eventOptions)
+      // this would work in the DOM but doesn't with react three fiber
+      // target.addEventListener('pointermove', this.onDragChange, this.controller.config.eventOptions)
       // @ts-expect-error
       target.setPointerCapture(pointerId)
     }
@@ -27,8 +27,8 @@ export class DragRecognizer extends CoordinatesRecognizer<'drag'> {
   private removePointers = () => {
     const { target, pointerId } = this.state
     if (target && pointerId) {
-      // @ts-expect-error
-      target.removeEventListener('pointermove', this.onDragChange, this.controller.config.eventOptions)
+      // this would work in the DOM but doesn't with react three fiber
+      // target.removeEventListener('pointermove', this.onDragChange, this.controller.config.eventOptions)
       // @ts-expect-error
       target.releasePointerCapture(pointerId)
     }
@@ -153,6 +153,7 @@ export class DragRecognizer extends CoordinatesRecognizer<'drag'> {
 
   addBindings(bindings: any): void {
     addBindings(bindings, 'onPointerDown', this.onDragStart)
+    addBindings(bindings, 'onPointerMove', this.onDragChange) // this is needed for react-three-fiber
     addBindings(bindings, 'onPointerUp', this.onDragEnd)
     addBindings(bindings, 'onPointerCancel', this.onDragEnd)
 
