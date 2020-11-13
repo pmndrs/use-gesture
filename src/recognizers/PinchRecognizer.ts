@@ -98,6 +98,7 @@ export class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
     this.updateGestureState({
       ...getStartGestureState(this, values, event),
       ...getGenericPayload(this, event, true),
+      origin: [event.clientX, event.clientY] as Vector2, // only used on dekstop
       cancel: this.onCancel,
     })
 
@@ -121,6 +122,7 @@ export class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
     this.updateGestureState({
       ...getGenericPayload(this, event),
       ...kinematics,
+      origin: [event.clientX, event.clientY] as Vector2, // only used on dekstop
     })
 
     this.fireGestureHandler()
@@ -135,6 +137,7 @@ export class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
     this.updateGestureState({
       ...getGenericPayload(this, event),
       ...this.getMovement(this.state.values),
+      origin: [event.clientX, event.clientY] as Vector2, // only used on dekstop
     })
     this.fireGestureHandler()
   }
