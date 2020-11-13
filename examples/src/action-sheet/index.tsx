@@ -12,10 +12,10 @@ export default function ActionSheet() {
   const open = (canceled?: boolean) => {
     // when cancel is true, it means that the user passed the upwards threshold
     // so we change the spring config to create a nice wobbly effect
-    set({ y: 0, config: canceled ? config.wobbly : config.stiff })
+    set({ y: 0, immediate: false, config: canceled ? config.wobbly : config.stiff })
   }
   const close = (velocity = 0) => {
-    set({ y: height, config: { ...config.stiff, velocity } })
+    set({ y: height, immediate: false, config: { ...config.stiff, velocity } })
   }
 
   const bind = useDrag(
@@ -26,12 +26,14 @@ export default function ActionSheet() {
 
       // when the user releases the sheet, we check whether it passed
       // the threshold for it to close, or if we reset it to its open positino
-      if (last) my > height * 0.75 || vy > 0.5 ? close(vy) : open(canceled)
+      if (last) {
+        my > height * 0.5 || vy > 0.5 ? close(vy) : open(canceled)
+      }
       // when the user keeps dragging, we just move the sheet according to
       // the cursor position
-      else set({ y: my, immediate: false, config: config.stiff })
+      else set({ y: my, immediate: true })
     },
-    { initial: () => [0, y.get()], bounds: { top: 0 }, rubberband: true, filterTaps: true }
+    { initial: () => [0, y.get()], filterTaps: true, bounds: { top: 0 }, rubberband: true }
   )
 
   const display = y.to(py => (py < height ? 'block' : 'none'))
@@ -56,8 +58,12 @@ export default function ActionSheet() {
       </a.div>
       <div className={styles.actionBtn} onClick={() => open()} />
       <a.div className={styles.sheet} {...bind()} style={{ display, bottom: `calc(-100vh + ${height - 100}px)`, y }}>
-        {items.map(entry => (
-          <div key={entry} onClick={() => close()} children={entry} />
+        {items.map((entry, i) => (
+          <div
+            key={entry}
+            onClick={() => (i < items.length - 1 ? alert('clicked on ' + entry) : close())}
+            children={entry}
+          />
         ))}
       </a.div>
     </div>

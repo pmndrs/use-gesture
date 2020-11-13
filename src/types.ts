@@ -218,9 +218,8 @@ export interface CommonGestureState {
   _initial: Vector2
   _bounds: [Vector2, Vector2]
   _lastEventType?: string
-  _pointerIds?: number[]
   event?: React.UIEvent | UIEvent
-  currentTarget?: EventTarget | (EventTarget & Element) | null
+  target?: EventTarget | (EventTarget & Element) | null
   pointerId?: number | null
   intentional: boolean
   values: Vector2
@@ -255,7 +254,6 @@ export interface Coordinates {
 export interface DragState {
   _isTap: boolean
   _delayedEvent: boolean
-  _pointerId?: number
   tap: boolean
   swipe: Vector2
 }

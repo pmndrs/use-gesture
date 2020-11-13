@@ -11,25 +11,22 @@ export default function Threshold() {
   const [movY, setMovY] = React.useState(false)
 
   const bind = useDrag(
-    ({ down, movement: [mx, my] }) => {
-      set({ x: down ? mx : 0, y: down ? my : 0, immediate: down })
+    ({ _movement: [mx, my], _intentional: [ix, iy], down, movement: [x, y], intentional }) => {
+      if (intentional) {
+        set({ x: down ? x : 0, y: down ? y : 0, immediate: down })
+      }
+      if (!down) {
+        setMovX(false)
+        setMovY(false)
+        setL({ x: 0, y: 0, opacity: 0 })
+      } else {
+        setL({ opacity: 1 })
+        ix ? setMovX(true) : setL({ x: mx })
+        iy ? setMovY(true) : setL({ y: my })
+      }
     },
-    { threshold: 100 }
+    { threshold: 100, triggerAllEvents: true }
   )
-
-  const bindL = useDrag(({ down, movement: [mx, my] }) => {
-    if (!down) {
-      setMovX(false)
-      setMovY(false)
-      setL({ x: 0, y: 0, opacity: 0 })
-      return
-    }
-    setL({ opacity: 1 })
-    if (Math.abs(mx) >= 100) setMovX(true)
-    else if (!movX) setL({ x: mx })
-    if (Math.abs(my) >= 100) setMovY(true)
-    else if (!movY) setL({ y: my })
-  })
 
   const th = (index: number) => (v: number) => {
     const displ = Math.floor(100 - Math.abs(v))
@@ -42,7 +39,7 @@ export default function Threshold() {
   return (
     <div className="flex">
       <animated.div className={styles.drag} {...bind()} style={{ x, y }}>
-        <animated.div {...bindL()} style={props}>
+        <animated.div style={props}>
           <div>
             <animated.div style={{ color: movX ? 'red' : 'black' }}>{props.x.to(th(0))}</animated.div>
             <animated.div style={{ color: movY ? 'blue' : 'black' }}>{props.y.to(th(1))}</animated.div>

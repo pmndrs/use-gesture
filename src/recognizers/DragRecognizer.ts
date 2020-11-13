@@ -14,26 +14,30 @@ export class DragRecognizer extends CoordinatesRecognizer<'drag'> {
   // TODO add back when setPointerCapture is widely wupported
   // https://caniuse.com/#search=setPointerCapture
   private setPointers = (event: React.PointerEvent | PointerEvent) => {
-    const { currentTarget, pointerId } = event
-    // @ts-expect-error
-    if (currentTarget) currentTarget.setPointerCapture(pointerId)
-    this.updateGestureState({ currentTarget, pointerId })
+    const { target, pointerId } = event
+    if (target) {
+      // @ts-expect-error
+      target.addEventListener('pointermove', this.onDragChange, this.controller.config.eventOptions)
+      // @ts-expect-error
+      target.setPointerCapture(pointerId)
+    }
+    this.updateGestureState({ target, pointerId })
   }
 
   private removePointers = () => {
-    const { currentTarget, pointerId } = this.state
-    // @ts-expect-error
-    if (currentTarget && pointerId) currentTarget.releasePointerCapture(pointerId)
+    const { target, pointerId } = this.state
+    if (target && pointerId) {
+      // @ts-expect-error
+      target.removeEventListener('pointermove', this.onDragChange, this.controller.config.eventOptions)
+      // @ts-expect-error
+      target.releasePointerCapture(pointerId)
+    }
   }
 
   onDragStart = (event: React.PointerEvent | PointerEvent): void => {
     if (!this.enabled || this.state._active) return
 
     this.setPointers(event as PointerEvent)
-
-    // We set the state pointerId to the event.pointerId so we can make sure
-    // that we lock the drag to the event initiating the gesture
-    this.updateGestureState({ _pointerId: event.pointerId })
 
     if (this.config.delay > 0) {
       this.state._delayedEvent = true
@@ -52,7 +56,6 @@ export class DragRecognizer extends CoordinatesRecognizer<'drag'> {
     this.updateGestureState({
       ...getStartGestureState(this, values, event),
       ...getGenericPayload(this, event, true),
-      _pointerId: event.pointerId,
       cancel: this.onCancel,
     })
 
@@ -63,10 +66,6 @@ export class DragRecognizer extends CoordinatesRecognizer<'drag'> {
   onDragChange = (event: PointerEvent): void => {
     // If the gesture was canceled don't respond to the event.
     if (this.state.canceled) return
-
-    // If the event pointerId doesn't match the initiating pointerId
-    // don't respond to the event.
-    if (event.pointerId !== this.state._pointerId) return
 
     // If the gesture isn't active then respond to the event only if
     // it's been delayed via the `delay` option, in which case start
@@ -108,10 +107,6 @@ export class DragRecognizer extends CoordinatesRecognizer<'drag'> {
   }
 
   onDragEnd = (event: PointerEvent): void => {
-    // If the event pointerId doesn't match the initiating pointerId
-    // don't respond to the event.
-    if (event.pointerId !== this.state._pointerId) return
-
     this.state._active = false
     this.updateSharedState({ down: false, buttons: 0, touches: 0 })
 
@@ -158,7 +153,6 @@ export class DragRecognizer extends CoordinatesRecognizer<'drag'> {
 
   addBindings(bindings: any): void {
     addBindings(bindings, 'onPointerDown', this.onDragStart)
-    addBindings(bindings, 'onPointerMove', this.onDragChange)
     addBindings(bindings, 'onPointerUp', this.onDragEnd)
     addBindings(bindings, 'onPointerCancel', this.onDragEnd)
 

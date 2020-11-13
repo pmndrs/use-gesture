@@ -14,8 +14,8 @@ function getInitial<T>(mixed: T): T & CommonGestureState {
     ],
     _lastEventType: undefined,
     event: undefined,
-    // currentTarget: undefined,
-    // pointerId: undefined,
+    target: undefined,
+    pointerId: undefined,
     intentional: false,
     values: [0, 0],
     velocities: [0, 0],
@@ -65,7 +65,6 @@ export function getInitialState(): State {
     distance: 0,
     _isTap: true,
     _delayedEvent: false,
-    _pointerId: undefined,
     tap: false,
     swipe: [0, 0],
   })
