@@ -34,7 +34,14 @@ export class DragRecognizer extends CoordinatesRecognizer<'drag'> {
   }
 
   private preventScroll = (event: TouchEvent) => {
-    if (this.persistentVariables.preventScroll && event.cancelable) event.preventDefault()
+    if (this.persistentVariables.preventScroll && event.cancelable) {
+      event.preventDefault()
+    }
+  }
+
+  private releaseScroll = (_event: TouchEvent) => {
+    this.persistentVariables.preventScroll = false
+    clearWindowListeners(this.controller, this.stateKey)
   }
 
   onDragStart = (event: React.PointerEvent | PointerEvent): void => {
@@ -46,7 +53,15 @@ export class DragRecognizer extends CoordinatesRecognizer<'drag'> {
     // if the user wants to prevent vertical window scroll when user starts dragging
     if (this.config.experimental_preventWindowScrollY && this.controller.supportsTouchEvents) {
       // we add window listeners that will prevent the scroll when the user has started dragging
-      updateWindowListeners(this.controller, this.stateKey, [['touchmove', this.preventScroll]], { passive: false })
+      updateWindowListeners(
+        this.controller,
+        this.stateKey,
+        [
+          ['touchmove', this.preventScroll],
+          ['touchend', this.releaseScroll],
+        ],
+        { passive: false }
+      )
       this.setTimeout(() => {
         this.persistentVariables.preventScroll = true
         this.startDrag(event)
