@@ -92,7 +92,7 @@ const InternalGenericOptionsNormalizers = {
 const InternalDistanceAngleOptionsNormalizers = {
   ...InternalGestureOptionsNormalizers,
 
-  bounds(_value: undefined, _key: string, { distanceBounds = {}, angleBounds = {} }: any) {
+  bounds(_value: undefined, _key: string, { distanceBounds = {}, angleBounds = {} }) {
     const _distanceBounds = (state?: State) => {
       const D = assignDefault(valueFn(distanceBounds, state), { min: -Infinity, max: Infinity })
       return [D.min, D.max]
@@ -114,10 +114,10 @@ const InternalDragOptionsNormalizers = {
   ...InternalCoordinatesOptionsNormalizers,
 
   threshold(
-    this: any,
+    this: InternalDragOptions,
     v: number | Vector2 | undefined,
     _k: string,
-    { filterTaps = false, lockDirection = false, axis = undefined }: any
+    { filterTaps = false, lockDirection = false, axis = undefined }
   ) {
     const A = ensureVector(v, filterTaps ? 3 : lockDirection ? 1 : axis ? 1 : 0) as Vector2
     this.filterTaps = filterTaps || A[0] + A[1] > 0
