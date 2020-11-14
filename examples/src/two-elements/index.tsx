@@ -19,11 +19,6 @@ export default function Two() {
       },
     },
     {
-      drag: {
-        bounds: () => {
-          return { left: -100, right: 100 }
-        },
-      },
       pinch: {
         distanceBounds: ({ args }) => {
           console.log('pinch', args)
