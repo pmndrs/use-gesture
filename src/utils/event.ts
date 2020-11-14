@@ -17,7 +17,7 @@ export function supportsGestureEvents(): boolean {
 }
 
 export function supportsTouchEvents(): boolean {
-  return typeof window !== 'undefined' && window.ontouchstart === null
+  return typeof window !== 'undefined' && 'ontouchstart' in window
 }
 
 function getTouchEvents(event: DomEvents) {
