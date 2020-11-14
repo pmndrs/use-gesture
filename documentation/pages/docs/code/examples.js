@@ -500,12 +500,12 @@ const material = new THREE.MeshStandardMaterial({
 })
 
 export function PreventWindowScrollY() {
-  const [{ pos }, set] = useSpring(() => ({ pos: [0, 0, 0] }))
+  const [{ rot, scale }, set] = useSpring(() => ({ rot: [0, 0, 0], scale: [0.8, 0.8, 1] }))
   const ref = useRef()
   const bind = useGesture(
     {
       onDrag: ({ active, offset: [y, z] }) => {
-        set({ pos: [z / 50, y / 50, 0] })
+        set({ rot: [z / 50, y / 50, 0], scale: active ? [1, 1, 1] : [0.8, 0.8, 1] })
         ref.current.style.cursor = active ? 'grabbing' : 'initial'
       },
       onHover: ({ dragging, hovering }) => !dragging && (ref.current.style.cursor = hovering ? 'grab' : 'initial'),
@@ -515,7 +515,7 @@ export function PreventWindowScrollY() {
   return (
     <Canvas concurrent camera={{ position: [0, 0, 16], fov: 50 }} onCreated={({ gl }) => (ref.current = gl.domElement)}>
       <Suspense fallback={null}>
-        <a3f.mesh {...bind()} rotation={pos} geometry={torusknot} material={material} />
+        <a3f.mesh {...bind()} rotation={rot} geometry={torusknot} material={material} scale={scale} />
         <Environment />
       </Suspense>
     </Canvas>

@@ -332,13 +332,15 @@ function FilterTapsExample() {
 
 <Specs types={'false'} defaultValue="false" />
 
-**This is an experimental feature**.
+**This is an experimental feature, relevant for mobile devices**.
 
 `touch-action: none` is a common css property that you'll set on draggable items so that scroll doesn't interfere with the drag behavior on touch devices. However, this generally means that the scroll of the page can't be initiated from the draggable element. This is fine if your page isn't meant to be scrolled or if your draggable element is relatively small, but in case of large draggable areas this might become a usability issue.
 
 `preventWindowScrollY` is a convenient way to have both vertical drag and vertical scrolling coexist. Note that scroll will always have precedence over drag. To drag vertically the user will have to press the draggable area for `250ms` without moving. After these `250ms` the element is draggable and scroll is prevented. Note that if you drag horizontally the scroll will immediately be prevented without waiting for `250ms`.
 
 <Code id="PreventWindowScrollY" />
+
+On desktop, you should be able to drag the torus as you would expect. On mobile, initiating the scroll from the torus should let you scroll the page as expected. Hold touch and drag and you should be able to drag the canvas.
 
 ### `delay` (drag only)
 
