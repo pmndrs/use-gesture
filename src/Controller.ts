@@ -8,6 +8,7 @@ import {
   InternalHandlers,
   RecognizerClass,
 } from './types'
+import { supportsTouchEvents, supportsGestureEvents } from './utils/event'
 import { getInitialState } from './utils/state'
 import { chainFns } from './utils/utils'
 
@@ -94,20 +95,25 @@ export function clearAllWindowListeners(controller: Controller) {
   controller.windowListeners = {}
 }
 
-export function clearWindowListeners({ config, windowListeners }: Controller, stateKey: StateKey) {
+export function clearWindowListeners(
+  { config, windowListeners }: Controller,
+  stateKey: StateKey,
+  options = config.eventOptions
+) {
   if (!config.window) return
-  removeListeners(config.window, windowListeners[stateKey], config.eventOptions)
+  removeListeners(config.window, windowListeners[stateKey], options)
   delete windowListeners[stateKey]
 }
 
 export function updateWindowListeners(
   { config, windowListeners }: Controller,
   stateKey: StateKey,
-  listeners: [string, Fn][] = []
+  listeners: [string, Fn][] = [],
+  options = config.eventOptions
 ) {
   if (!config.window) return
-  removeListeners(config.window, windowListeners[stateKey], config.eventOptions)
-  addListeners(config.window, (windowListeners[stateKey] = listeners), config.eventOptions)
+  removeListeners(config.window, windowListeners[stateKey], options)
+  addListeners(config.window, (windowListeners[stateKey] = listeners), options)
 }
 
 function updateDomListeners({ config, domListeners }: Controller, bindings: { [key: string]: Function[] }) {
