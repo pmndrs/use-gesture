@@ -44,6 +44,7 @@ export default function DraggableList({ items = 'Lorem ipsum dolor sit'.split(' 
 
   const bind = useDrag(
     ({ event, first, last, distance, cancel, canceled, ...state }) => {
+      console.log('drag', first)
       move(state)
     },
     { experimental_preventWindowScrollY: true }

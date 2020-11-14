@@ -42,6 +42,8 @@ export class WheelRecognizer extends CoordinatesRecognizer<'wheel'> {
   }
 
   onEnd = (): void => {
+    this.clean()
+    if (!this.state._active) return
     const movement = this.getMovement(this.state.values)
     this.updateGestureState(movement)
     this.updateGestureState({ _active: false, velocities: [0, 0], velocity: 0 })

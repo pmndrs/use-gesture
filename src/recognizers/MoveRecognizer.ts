@@ -43,6 +43,8 @@ export class MoveRecognizer extends CoordinatesRecognizer<'move'> {
   }
 
   onMoveEnd = (): void => {
+    this.clean()
+    if (!this.state._active) return
     const values = this.state.values
     this.updateGestureState(this.getMovement(values))
     this.updateGestureState({ velocities: [0, 0], velocity: 0, _active: false })

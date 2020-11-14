@@ -127,6 +127,8 @@ export class DragRecognizer extends CoordinatesRecognizer<'drag'> {
   }
 
   onDragEnd = (event: PointerEvent): void => {
+    this.clean()
+    if (!this.state._active) return
     this.state._active = false
     this.updateSharedState({ down: false, buttons: 0, touches: 0 })
 

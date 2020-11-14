@@ -58,22 +58,21 @@ export class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
   }
 
   onPinchEnd = (event: React.TouchEvent | TouchEvent): void => {
-    if (!this.state.active) return
-    this.state._active = false
+    this.clean()
+    if (!this.state._active) return
     this.updateSharedState({ down: false, touches: 0 })
 
     this.updateGestureState({
-      // @ts-ignore
       ...getGenericPayload(this, event),
       ...this.getMovement(this.state.values),
+      _active: false,
     })
     this.fireGestureHandler()
   }
 
   onCancel = (): void => {
     if (this.state.canceled) return
-    this.state._active = false
-    this.updateGestureState({ canceled: true })
+    this.updateGestureState({ _active: false, canceled: true })
     this.updateSharedState({ down: false, touches: 0 })
 
     requestAnimationFrame(() => this.fireGestureHandler())
@@ -124,14 +123,14 @@ export class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
   }
 
   onGestureEnd = (event: WebKitGestureEvent): void => {
-    event.preventDefault()
-    if (!this.state.active) return
-    this.state._active = false
+    this.clean()
+    if (!this.state._active) return
     this.updateSharedState({ down: false, touches: 0 })
 
     this.updateGestureState({
       ...getGenericPayload(this, event),
       ...this.getMovement(this.state.values),
+      _active: false,
       origin: [event.clientX, event.clientY] as Vector2, // only used on dekstop
     })
     this.fireGestureHandler()
@@ -208,6 +207,8 @@ export class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
   }
 
   onWheelEnd = (): void => {
+    this.clean()
+    if (!this.state._active) return
     this.state._active = false
     this.updateGestureState(this.getMovement(this.state.values))
     this.fireGestureHandler()

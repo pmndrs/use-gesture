@@ -220,9 +220,6 @@ export default abstract class Recognizer<T extends StateKey = StateKey> {
     // Sets memo to the returned value of the handler (unless it's not undefined)
     this.state.memo = newMemo !== void 0 ? newMemo : this.state.memo
 
-    // Cleans the gesture when the gesture is no longer active.
-    if (!this.state._active) this.clean()
-
     return state
   }
 }
