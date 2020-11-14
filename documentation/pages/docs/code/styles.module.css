@@ -192,3 +192,14 @@
   justify-content: center;
   text-align: center;
 }
+
+.PreventWindowScrollY {
+  padding: 0;
+  height: 400px;
+  background: rgb(39, 39, 48);
+  overflow: hidden;
+}
+
+.PreventWindowScrollY canvas {
+  touch-action: pan-y;
+}

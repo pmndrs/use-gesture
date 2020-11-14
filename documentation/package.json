@@ -10,9 +10,9 @@
     "postinstall": "patch-package"
   },
   "dependencies": {
+    "@react-three/drei": "^2.2.7",
     "classnames": "^2.2.6",
     "gatsby": "^2.25.1",
-    "gatsby-plugin-catch-links": "^2.3.15",
     "gatsby-plugin-google-analytics": "^2.4.0",
     "lethargy": "^1.0.9",
     "parse-numeric-range": "^1.2.0",
@@ -20,9 +20,11 @@
     "react-dom": "^17.0.1",
     "react-player": "^2.6.2",
     "react-spring": "9.0.0-rc.2",
+    "react-three-fiber": "^5.2.1",
     "react-toastify": "^6.0.9",
     "react-use-gesture": "^8.0.0@next",
     "smooth-doc": "^5.2.0",
+    "three": "^0.122.0",
     "tweakpane": "^1.5.6",
     "use-tweaks": "^0.2.0"
   },

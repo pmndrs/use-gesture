@@ -1,8 +1,13 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { Suspense, useState, useEffect, useRef } from 'react'
 import { useSpring, useSprings, animated, to } from 'react-spring'
+import { a as a3f } from '@react-spring/three'
+import { Canvas, useLoader, useThree } from 'react-three-fiber'
+import { EXRLoader } from 'three/examples/jsm/loaders/EXRLoader'
 import { useDrag, useScroll, useGesture, useWheel } from 'react-use-gesture'
 import { Lethargy } from 'lethargy'
 import cn from 'classnames'
+import * as THREE from 'three'
+
 import styles from './styles.module.css'
 
 export function EasterDiv({ children }) {
@@ -461,5 +466,58 @@ export function LethargyWheel() {
         <div key={i}>{i}</div>
       ))}
     </div>
+  )
+}
+
+function Environment() {
+  const { gl, scene } = useThree()
+  const loaderResult = useLoader(EXRLoader, '/piz_compressed.exr')
+  const map = loaderResult
+
+  useEffect(() => {
+    const generator = new THREE.PMREMGenerator(gl)
+    const texture = generator.fromEquirectangular(map).texture
+
+    // scene.background = texture
+    scene.environment = texture
+
+    map.dispose()
+    generator.dispose()
+
+    return () => {
+      scene.environment = scene.background = null
+    }
+  }, [gl, map, scene])
+
+  return null
+}
+
+const torusknot = new THREE.TorusKnotBufferGeometry(3, 0.8, 256, 16)
+const material = new THREE.MeshStandardMaterial({
+  metalness: 1,
+  roughness: 0,
+  envMapIntensity: 1.0,
+})
+
+export function PreventWindowScrollY() {
+  const [{ pos }, set] = useSpring(() => ({ pos: [0, 0, 0] }))
+  const ref = useRef()
+  const bind = useGesture(
+    {
+      onDrag: ({ active, offset: [y, z] }) => {
+        set({ pos: [z / 50, y / 50, 0] })
+        ref.current.style.cursor = active ? 'grabbing' : 'initial'
+      },
+      onHover: ({ dragging, hovering }) => !dragging && (ref.current.style.cursor = hovering ? 'grab' : 'initial'),
+    },
+    { drag: { experimental_preventWindowScrollY: true } }
+  )
+  return (
+    <Canvas concurrent camera={{ position: [0, 0, 16], fov: 50 }} onCreated={({ gl }) => (ref.current = gl.domElement)}>
+      <Suspense fallback={null}>
+        <a3f.mesh {...bind()} rotation={pos} geometry={torusknot} material={material} />
+        <Environment />
+      </Suspense>
+    </Canvas>
   )
 }
