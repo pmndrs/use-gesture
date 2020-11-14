@@ -116,8 +116,10 @@ export class DragRecognizer extends CoordinatesRecognizer<'drag'> {
     if (this.config.experimental_preventWindowScrollY && this.controller.supportsTouchEvents) {
       if (!this.persistentVariables.preventScroll && kinematics.axis) {
         // if the user is dragging horizontally then we should allow the drag
-        if (kinematics.axis === 'x') this.persistentVariables.preventScroll = true
-        else return this.onCancel()
+        if (kinematics.axis === 'x') {
+          this.clearTimeout()
+          this.persistentVariables.preventScroll = true
+        } else return this.onCancel()
       }
     }
 
