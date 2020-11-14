@@ -56,6 +56,16 @@ export default abstract class Recognizer<T extends StateKey = StateKey> {
     return this.controller.handlers[this.stateKey]!
   }
 
+  // Returns the gesture persistentVariables (avoid storing in state)
+  get persistentVariables() {
+    return this.controller.persistentVariables[this.stateKey]
+  }
+
+  // Returns the gesture persistentVariables (avoid storing in state)
+  set persistentVariables(obj: any) {
+    this.controller.persistentVariables[this.stateKey] = obj
+  }
+
   // Convenience method to update the shared state
   protected updateSharedState(sharedState: Partial<SharedGestureState> | null) {
     Object.assign(this.controller.state.shared, sharedState)

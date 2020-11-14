@@ -35,11 +35,10 @@ export class DragRecognizer extends CoordinatesRecognizer<'drag'> {
 
   onDragStart = (event: React.PointerEvent | PointerEvent): void => {
     if (!this.enabled || this.state._active) return
+    this.persistentVariables = { preventScroll: false, isTap: true, delayedEvent: false }
 
     this.setPointers(event as PointerEvent)
 
-    if (this.config.delay > 0) {
-      this.state._delayedEvent = true
       // If it's a React SyntheticEvent we need to persist it so that we can use it async
       if ('persist' in event && typeof event.persist === 'function') event.persist()
       this.setTimeout(this.startDrag.bind(this), this.config.delay, event)
@@ -70,7 +69,7 @@ export class DragRecognizer extends CoordinatesRecognizer<'drag'> {
     // it's been delayed via the `delay` option, in which case start
     // the gesture immediately.
     if (!this.state._active) {
-      if (this.state._delayedEvent) {
+      if (this.persistentVariables?.delayedEvent) {
         this.clearTimeout()
         this.startDrag(event)
       }
@@ -96,11 +95,9 @@ export class DragRecognizer extends CoordinatesRecognizer<'drag'> {
     // This verifies if the drag can be assimilated to a tap by checking
     // if the real distance of the drag (ie not accounting for the threshold) is
     // greater than the TAP_DISTANCE_THRESHOLD.
-    let { _isTap } = this.state
     const realDistance = calculateDistance(kinematics._movement!)
-    if (_isTap && realDistance >= TAP_DISTANCE_THRESHOLD) _isTap = false
 
-    this.updateGestureState({ ...genericPayload, ...kinematics, _isTap })
+    this.updateGestureState({ ...genericPayload, ...kinematics })
 
     this.fireGestureHandler()
   }
@@ -109,7 +106,7 @@ export class DragRecognizer extends CoordinatesRecognizer<'drag'> {
     this.state._active = false
     this.updateSharedState({ down: false, buttons: 0, touches: 0 })
 
-    const tap = this.state._isTap
+    const tap = this.persistentVariables.isTap
     const [vx, vy] = this.state.velocities
     const [mx, my] = this.state.movement
     const [ix, iy] = this.state._intentional
@@ -134,7 +131,6 @@ export class DragRecognizer extends CoordinatesRecognizer<'drag'> {
 
   clean = (): void => {
     super.clean()
-    this.state._delayedEvent = false // can't remember if this is useful?
     this.removePointers()
   }
 
@@ -147,10 +143,12 @@ export class DragRecognizer extends CoordinatesRecognizer<'drag'> {
   }
 
   onClick = (event: React.UIEvent | UIEvent): void => {
-    if (!this.state._isTap) event.stopPropagation()
+    if (!this.persistentVariables.isTap) event.stopPropagation()
   }
 
   addBindings(bindings: any): void {
+    this.persistentVariables = { preventScroll: false, isTap: true, delayedEvent: false }
+
     addBindings(bindings, 'onPointerDown', this.onDragStart)
     addBindings(bindings, 'onPointerMove', this.onDragChange) // this is needed for react-three-fiber
     addBindings(bindings, 'onPointerUp', this.onDragEnd)

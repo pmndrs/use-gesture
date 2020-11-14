@@ -31,6 +31,7 @@ export default class Controller {
   public domListeners: [string, Fn][] // when config.domTarget is set, we attach events directly to the dom
   public windowListeners: { [stateKey in StateKey]?: [string, Function][] } // keeps track of window listeners added by gestures (drag only at the moment)
 
+  public persistentVariables: { [stateKey in StateKey]?: any }
 
   public supportsTouchEvents = supportsTouchEvents()
   public supportsGestureEvents = supportsGestureEvents()
@@ -40,6 +41,7 @@ export default class Controller {
     this.timeouts = {}
     this.domListeners = []
     this.windowListeners = {}
+    this.persistentVariables = {}
   }
 
   public bind = (...args: any[]) => {
