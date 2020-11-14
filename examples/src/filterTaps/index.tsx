@@ -14,7 +14,7 @@ export default function FilterTaps() {
       setDragged(active)
       set({ x, y, immediate: true })
     },
-    { threshold: 100, triggerAllEvents: true }
+    { filterTaps: true, triggerAllEvents: true }
   )
   return (
     <div className="flex">

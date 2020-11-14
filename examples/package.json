@@ -3,8 +3,7 @@
   "version": "1.0.0",
   "main": "./src/index.tsx",
   "scripts": {
-    "start": "parcel index.html",
-    "build": "parcel build index.html"
+    "start": "parcel index.html --no-cache"
   },
   "author": "David Bismut",
   "license": "MIT",
