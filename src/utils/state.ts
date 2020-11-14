@@ -63,8 +63,6 @@ export function getInitialState(): State {
     vxvy: [0, 0] as Vector2,
     velocity: 0,
     distance: 0,
-    _isTap: true,
-    _delayedEvent: false,
     tap: false,
     swipe: [0, 0],
   })

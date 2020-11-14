@@ -2,7 +2,7 @@ import CoordinatesRecognizer from './CoordinatesRecognizer'
 import { getPointerEventValues, getGenericEventData } from '../utils/event'
 import { calculateDistance, sign } from '../utils/math'
 import { getStartGestureState, getGenericPayload } from './Recognizer'
-import { addBindings } from '../Controller'
+import { addBindings, updateWindowListeners, clearWindowListeners } from '../Controller'
 
 export const TAP_DISTANCE_THRESHOLD = 3
 export const SWIPE_MAX_ELAPSED_TIME = 220
@@ -33,12 +33,26 @@ export class DragRecognizer extends CoordinatesRecognizer<'drag'> {
     }
   }
 
+  private preventScroll = (event: TouchEvent) => {
+    if (this.persistentVariables.preventScroll && event.cancelable) event.preventDefault()
+  }
+
   onDragStart = (event: React.PointerEvent | PointerEvent): void => {
     if (!this.enabled || this.state._active) return
     this.persistentVariables = { preventScroll: false, isTap: true, delayedEvent: false }
 
     this.setPointers(event as PointerEvent)
 
+    // if the user wants to prevent vertical window scroll when user starts dragging
+    if (this.config.experimental_preventWindowScrollY && this.controller.supportsTouchEvents) {
+      // we add window listeners that will prevent the scroll when the user has started dragging
+      updateWindowListeners(this.controller, this.stateKey, [['touchmove', this.preventScroll]], { passive: false })
+      this.setTimeout(() => {
+        this.persistentVariables.preventScroll = true
+        this.startDrag(event)
+      }, 250)
+    } else if (this.config.delay > 0) {
+      this.persistentVariables.delayedEvent = true
       // If it's a React SyntheticEvent we need to persist it so that we can use it async
       if ('persist' in event && typeof event.persist === 'function') event.persist()
       this.setTimeout(this.startDrag.bind(this), this.config.delay, event)
@@ -96,6 +110,16 @@ export class DragRecognizer extends CoordinatesRecognizer<'drag'> {
     // if the real distance of the drag (ie not accounting for the threshold) is
     // greater than the TAP_DISTANCE_THRESHOLD.
     const realDistance = calculateDistance(kinematics._movement!)
+    if (this.persistentVariables.isTap && realDistance >= TAP_DISTANCE_THRESHOLD) this.persistentVariables.isTap = false
+
+    // if the user wants to prevent vertical window scroll when user starts dragging
+    if (this.config.experimental_preventWindowScrollY && this.controller.supportsTouchEvents) {
+      if (!this.persistentVariables.preventScroll && kinematics.axis) {
+        // if the user is dragging horizontally then we should allow the drag
+        if (kinematics.axis === 'x') this.persistentVariables.preventScroll = true
+        else return this.onCancel()
+      }
+    }
 
     this.updateGestureState({ ...genericPayload, ...kinematics })
 
@@ -132,6 +156,7 @@ export class DragRecognizer extends CoordinatesRecognizer<'drag'> {
   clean = (): void => {
     super.clean()
     this.removePointers()
+    clearWindowListeners(this.controller, this.stateKey)
   }
 
   onCancel = (): void => {

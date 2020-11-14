@@ -113,6 +113,9 @@ const InternalDistanceAngleOptionsNormalizers = {
 const InternalDragOptionsNormalizers = {
   ...InternalCoordinatesOptionsNormalizers,
 
+  experimental_preventWindowScrollY(value = false) {
+    return value
+  },
   threshold(
     this: InternalDragOptions,
     v: number | Vector2 | undefined,

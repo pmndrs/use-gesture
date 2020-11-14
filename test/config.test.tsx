@@ -58,6 +58,7 @@ describe('testing derived config', () => {
         axis: undefined,
         initial: [0, 0],
         lockDirection: false,
+        experimental_preventWindowScrollY: false,
         filterTaps: false,
       })
     })

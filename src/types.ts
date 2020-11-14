@@ -49,6 +49,7 @@ export type DragConfig = CoordinatesConfig<'drag'> & {
   filterTaps?: boolean
   swipeVelocity?: number | Vector2
   swipeDistance?: number | Vector2
+  experimental_preventWindowScrollY?: boolean
   delay?: boolean | number
 }
 
@@ -93,6 +94,7 @@ export interface InternalDistanceAngleOptions<T extends DistanceAngleKey> extend
 
 export interface InternalDragOptions extends InternalCoordinatesOptions<'drag'> {
   filterTaps: boolean
+  experimental_preventWindowScrollY: boolean
   swipeVelocity: Vector2
   swipeDistance: Vector2
   delay: number
@@ -252,8 +254,6 @@ export interface Coordinates {
 }
 
 export interface DragState {
-  _isTap: boolean
-  _delayedEvent: boolean
   tap: boolean
   swipe: Vector2
 }
