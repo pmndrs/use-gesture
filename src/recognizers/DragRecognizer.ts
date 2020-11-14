@@ -172,8 +172,6 @@ export class DragRecognizer extends CoordinatesRecognizer<'drag'> {
   }
 
   addBindings(bindings: any): void {
-    this.persistentVariables = { preventScroll: false, isTap: true, delayedEvent: false }
-
     addBindings(bindings, 'onPointerDown', this.onDragStart)
     addBindings(bindings, 'onPointerMove', this.onDragChange) // this is needed for react-three-fiber
     addBindings(bindings, 'onPointerUp', this.onDragEnd)
