@@ -31,6 +31,10 @@ export default class Controller {
   public domListeners: [string, Fn][] // when config.domTarget is set, we attach events directly to the dom
   public windowListeners: { [stateKey in StateKey]?: [string, Function][] } // keeps track of window listeners added by gestures (drag only at the moment)
 
+
+  public supportsTouchEvents = supportsTouchEvents()
+  public supportsGestureEvents = supportsGestureEvents()
+
   constructor(private classes: Set<RecognizerClass>) {
     this.state = getInitialState()
     this.timeouts = {}

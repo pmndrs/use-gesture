@@ -4,9 +4,7 @@ import {
   getGenericEventData,
   getTwoTouchesEventData,
   getWheelEventValues,
-  supportsGestureEvents,
   getWebkitGestureEventValues,
-  supportsTouchEvents,
 } from '../utils/event'
 import { getStartGestureState, getGenericPayload } from './Recognizer'
 import { addBindings } from '../Controller'
@@ -218,7 +216,11 @@ export class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
   addBindings(bindings: any): void {
     // Only try to use gesture events when they are supported and domTarget is set
     // as React doesn't support gesture handlers.
-    if (this.controller.config.domTarget && !supportsTouchEvents() && supportsGestureEvents()) {
+    if (
+      this.controller.config.domTarget &&
+      !this.controller.supportsTouchEvents &&
+      this.controller.supportsGestureEvents
+    ) {
       addBindings(bindings, 'onGestureStart', this.onGestureStart)
       addBindings(bindings, 'onGestureChange', this.onGestureChange)
       addBindings(bindings, 'onGestureEnd', this.onGestureEnd)
