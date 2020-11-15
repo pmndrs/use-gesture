@@ -7,10 +7,11 @@ export default function Delay() {
   const [{ x, y, scale }, set] = useSpring(() => ({ x: 0, y: 0, scale: 1, immediate: true }))
 
   const bind = useDrag(
-    ({ down, movement: [x, y] }) => {
+    ({ down, movement: [x, y], last }) => {
+      console.log(down, last)
       set({ x: down ? x : 0, y: down ? y : 0, scale: down ? 1.2 : 1, immediate: k => k !== 'scale' && down })
-    }
-    // { delay: 1000 }
+    },
+    { delay: 1000 }
   )
 
   return (
