@@ -17,8 +17,6 @@ function getInitial<T>(mixed: T): T & CommonGestureState {
     _dragPreventScroll: false,
     _dragIsTap: true,
     _dragDelayed: false,
-    _dragPointerId: undefined,
-    _dragTarget: undefined,
     event: undefined,
     intentional: false,
     values: [0, 0],

@@ -17,7 +17,7 @@ export class DragRecognizer extends CoordinatesRecognizer<'drag'> {
 
   // TODO add back when setPointerCapture is widely wupported
   // https://caniuse.com/#search=setPointerCapture
-  private setPointers = (event: React.PointerEvent | PointerEvent) => {
+  private setPointerCapture = (event: React.PointerEvent | PointerEvent) => {
     const { target, pointerId } = event
     if (target && 'setPointerCapture' in target) {
       // this would work in the DOM but doesn't with react three fiber
@@ -28,10 +28,10 @@ export class DragRecognizer extends CoordinatesRecognizer<'drag'> {
     }
   }
 
-  private removePointers = () => {
+  private releasePointerCapture = () => {
     // TODO push this as locales
     const { _dragTarget, _dragPointerId } = this.state
-    if (_dragPointerId && _dragTarget && 'setPointerCapture' in _dragTarget) {
+    if (_dragPointerId && _dragTarget && 'releasePointerCapture' in _dragTarget) {
       // this would work in the DOM but doesn't with react three fiber
       // target.removeEventListener('pointermove', this.onDragChange, this.controller.config.eventOptions)
       _dragTarget.releasePointerCapture(_dragPointerId)
@@ -44,25 +44,13 @@ export class DragRecognizer extends CoordinatesRecognizer<'drag'> {
     }
   }
 
-  private releaseScroll = (_event: TouchEvent) => {
-    clearWindowListeners(this.controller, this.stateKey)
-  }
-
   private shouldPreventWindowScrollY =
     this.config.experimental_preventWindowScrollY && this.controller.supportsTouchEvents
 
   private setUpWindowScrollDetection = (event: React.PointerEvent | PointerEvent) => {
     persistEvent(event)
     // we add window listeners that will prevent the scroll when the user has started dragging
-    updateWindowListeners(
-      this.controller,
-      this.stateKey,
-      [
-        ['touchmove', this.preventScroll],
-        ['touchend', this.releaseScroll],
-      ],
-      { passive: false }
-    )
+    updateWindowListeners(this.controller, this.stateKey, [['touchmove', this.preventScroll]], { passive: false })
     this.setTimeout(this.startDrag.bind(this), 250, event)
   }
 
@@ -81,9 +69,9 @@ export class DragRecognizer extends CoordinatesRecognizer<'drag'> {
 
   onDragStart = (event: React.PointerEvent | PointerEvent): void => {
     if (!this.enabled || this.state._active) return
-    this.setPointers(event as PointerEvent)
 
     this.setStartState(event)
+    this.setPointerCapture(event as PointerEvent)
 
     if (this.shouldPreventWindowScrollY) this.setUpWindowScrollDetection(event)
     else if (this.config.delay > 0) this.setUpDelayedDragTrigger(event)
@@ -123,6 +111,7 @@ export class DragRecognizer extends CoordinatesRecognizer<'drag'> {
           if (kinematics.axis === 'x') {
             this.startDrag(event)
           } else {
+            this.releasePointerCapture()
             this.state._dragStarted = false
             this.state._active = false
             return
@@ -189,7 +178,7 @@ export class DragRecognizer extends CoordinatesRecognizer<'drag'> {
   clean = (): void => {
     super.clean()
     this.state._dragStarted = false
-    this.removePointers()
+    this.releasePointerCapture()
     clearWindowListeners(this.controller, this.stateKey)
   }
 
