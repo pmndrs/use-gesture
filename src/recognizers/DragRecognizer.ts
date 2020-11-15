@@ -34,7 +34,10 @@ export class DragRecognizer extends CoordinatesRecognizer<'drag'> {
     if (_dragPointerId && _dragTarget && 'releasePointerCapture' in _dragTarget) {
       // this would work in the DOM but doesn't with react three fiber
       // target.removeEventListener('pointermove', this.onDragChange, this.controller.config.eventOptions)
-      _dragTarget.hasPointerCapture(_dragPointerId) && _dragTarget.releasePointerCapture(_dragPointerId)
+      if (!('hasPointerCapture' in _dragTarget) || _dragTarget.hasPointerCapture(_dragPointerId))
+        try {
+          _dragTarget.releasePointerCapture(_dragPointerId)
+        } catch (e) {}
     }
   }
 
