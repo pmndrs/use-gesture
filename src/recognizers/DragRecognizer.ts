@@ -7,6 +7,10 @@ import { addBindings, updateWindowListeners, clearWindowListeners } from '../Con
 export const TAP_DISTANCE_THRESHOLD = 3
 export const SWIPE_MAX_ELAPSED_TIME = 220
 
+function persistEvent(event: React.PointerEvent | PointerEvent) {
+  'persist' in event && typeof event.persist === 'function' && event.persist()
+}
+
 export class DragRecognizer extends CoordinatesRecognizer<'drag'> {
   readonly ingKey = 'dragging'
   readonly stateKey = 'drag'
@@ -20,89 +24,110 @@ export class DragRecognizer extends CoordinatesRecognizer<'drag'> {
       // target.addEventListener('pointermove', this.onDragChange, this.controller.config.eventOptions)
       // @ts-expect-error
       target.setPointerCapture(pointerId)
+      this.updateGestureState({ _dragTarget: target, _dragPointerId: pointerId })
     }
-    this.updateGestureState({ target, pointerId })
   }
 
   private removePointers = () => {
-    const { target, pointerId } = this.state
-    if (target && 'setPointerCapture' in target && pointerId) {
+    // TODO push this as locales
+    const { _dragTarget, _dragPointerId } = this.state
+    if (_dragPointerId && _dragTarget && 'setPointerCapture' in _dragTarget) {
       // this would work in the DOM but doesn't with react three fiber
       // target.removeEventListener('pointermove', this.onDragChange, this.controller.config.eventOptions)
-      target.releasePointerCapture(pointerId)
+      _dragTarget.releasePointerCapture(_dragPointerId)
     }
   }
 
   private preventScroll = (event: TouchEvent) => {
-    if (this.persistentVariables.preventScroll && event.cancelable) {
+    if (this.state._dragPreventScroll && event.cancelable) {
       event.preventDefault()
     }
   }
 
   private releaseScroll = (_event: TouchEvent) => {
-    this.persistentVariables.preventScroll = false
     clearWindowListeners(this.controller, this.stateKey)
+  }
+
+  private shouldPreventWindowScrollY =
+    this.config.experimental_preventWindowScrollY && this.controller.supportsTouchEvents
+
+  private setUpWindowScrollDetection = (event: React.PointerEvent | PointerEvent) => {
+    persistEvent(event)
+    // we add window listeners that will prevent the scroll when the user has started dragging
+    updateWindowListeners(
+      this.controller,
+      this.stateKey,
+      [
+        ['touchmove', this.preventScroll],
+        ['touchend', this.releaseScroll],
+      ],
+      { passive: false }
+    )
+    this.setTimeout(this.startDrag.bind(this), 250, event)
+  }
+
+  private setUpDelayedDragTrigger = (event: React.PointerEvent | PointerEvent) => {
+    this.state._dragDelayed = true
+    persistEvent(event)
+    this.setTimeout(this.startDrag.bind(this), this.config.delay, event)
+  }
+
+  private setStartState = (event: React.PointerEvent | PointerEvent) => {
+    const values = getPointerEventValues(event)
+    this.updateSharedState(getGenericEventData(event))
+    this.updateGestureState({ ...getStartGestureState(this, values, event), ...getGenericPayload(this, event, true) })
+    this.updateGestureState(this.getMovement(values))
   }
 
   onDragStart = (event: React.PointerEvent | PointerEvent): void => {
     if (!this.enabled || this.state._active) return
-    this.persistentVariables = { preventScroll: false, isTap: true, delayedEvent: false }
-
     this.setPointers(event as PointerEvent)
 
-    // if the user wants to prevent vertical window scroll when user starts dragging
-    if (this.config.experimental_preventWindowScrollY && this.controller.supportsTouchEvents) {
-      // we add window listeners that will prevent the scroll when the user has started dragging
-      updateWindowListeners(
-        this.controller,
-        this.stateKey,
-        [
-          ['touchmove', this.preventScroll],
-          ['touchend', this.releaseScroll],
-        ],
-        { passive: false }
-      )
-      this.setTimeout(() => {
-        this.persistentVariables.preventScroll = true
-        this.startDrag(event)
-      }, 250)
-    } else if (this.config.delay > 0) {
-      this.persistentVariables.delayedEvent = true
-      // If it's a React SyntheticEvent we need to persist it so that we can use it async
-      if ('persist' in event && typeof event.persist === 'function') event.persist()
-      this.setTimeout(this.startDrag.bind(this), this.config.delay, event)
-    } else {
-      this.startDrag(event)
-    }
+    this.setStartState(event)
+
+    if (this.shouldPreventWindowScrollY) this.setUpWindowScrollDetection(event)
+    else if (this.config.delay > 0) this.setUpDelayedDragTrigger(event)
+    else this.startDrag(event, true) // we pass the values to the startDrag event
   }
 
-  startDrag(event: React.PointerEvent | PointerEvent) {
-    const values = getPointerEventValues(event)
-    this.updateSharedState(getGenericEventData(event))
+  startDrag(event: React.PointerEvent | PointerEvent, onDragIsStart: boolean = false) {
+    if (!this.state._active || this.state._dragStarted) return
 
-    this.updateGestureState({
-      ...getStartGestureState(this, values, event),
-      ...getGenericPayload(this, event, true),
-      cancel: this.onCancel,
-    })
-
-    this.updateGestureState(this.getMovement(values))
+    if (!onDragIsStart) this.setStartState(event)
+    this.updateGestureState({ _dragStarted: true, _dragPreventScroll: true, cancel: this.onCancel })
+    this.clearTimeout()
     this.fireGestureHandler()
   }
 
   onDragChange = (event: PointerEvent): void => {
-    // If the gesture was canceled don't respond to the event.
-    if (this.state.canceled) return
+    // If the gesture was canceled or if onDragStart hasn't been fired
+    // (ie: _active = false) don't respond to the event.
+    if (!this.state._active || this.state.canceled) return
 
-    // If the gesture isn't active then respond to the event only if
-    // it's been delayed via the `delay` option, in which case start
-    // the gesture immediately.
-    if (!this.state._active) {
-      if (this.persistentVariables?.delayedEvent) {
-        this.clearTimeout()
+    const values = getPointerEventValues(event)
+    const kinematics = this.getKinematics(values, event)
+
+    // if startDrag hasn't fired
+    if (!this.state._dragStarted) {
+      // If the gesture isn't active then respond to the event only if
+      // it's been delayed via the `delay` option, in which case start
+      // the gesture immediately.
+      if (this.state._dragDelayed) {
         this.startDrag(event)
+        return
       }
-      return
+      // if the user wants to prevent vertical window scroll when user starts dragging
+      if (this.shouldPreventWindowScrollY) {
+        if (!this.state._dragPreventScroll && kinematics.axis) {
+          // if the user is dragging horizontally then we should allow the drag
+          if (kinematics.axis === 'x') {
+            this.startDrag(event)
+          } else {
+            this.state._active = false
+            return
+          }
+        } else return
+      } else return
     }
 
     const genericEventData = getGenericEventData(event)
@@ -116,29 +141,16 @@ export class DragRecognizer extends CoordinatesRecognizer<'drag'> {
     }
 
     this.updateSharedState(genericEventData)
-    const values = getPointerEventValues(event)
-
-    const kinematics = this.getKinematics(values, event)
     const genericPayload = getGenericPayload(this, event)
 
     // This verifies if the drag can be assimilated to a tap by checking
     // if the real distance of the drag (ie not accounting for the threshold) is
     // greater than the TAP_DISTANCE_THRESHOLD.
     const realDistance = calculateDistance(kinematics._movement!)
-    if (this.persistentVariables.isTap && realDistance >= TAP_DISTANCE_THRESHOLD) this.persistentVariables.isTap = false
+    let { _dragIsTap } = this.state
+    if (_dragIsTap && realDistance >= TAP_DISTANCE_THRESHOLD) _dragIsTap = false
 
-    // if the user wants to prevent vertical window scroll when user starts dragging
-    if (this.config.experimental_preventWindowScrollY && this.controller.supportsTouchEvents) {
-      if (!this.persistentVariables.preventScroll && kinematics.axis) {
-        // if the user is dragging horizontally then we should allow the drag
-        if (kinematics.axis === 'x') {
-          this.clearTimeout()
-          this.persistentVariables.preventScroll = true
-        } else return this.onCancel()
-      }
-    }
-
-    this.updateGestureState({ ...genericPayload, ...kinematics })
+    this.updateGestureState({ ...genericPayload, ...kinematics, _dragIsTap })
 
     this.fireGestureHandler()
   }
@@ -146,10 +158,10 @@ export class DragRecognizer extends CoordinatesRecognizer<'drag'> {
   onDragEnd = (event: PointerEvent): void => {
     this.clean()
     if (!this.state._active) return
-    this.state._active = false
-    this.updateSharedState({ down: false, buttons: 0, touches: 0 })
 
-    const tap = this.persistentVariables.isTap
+    this.state._active = false
+
+    const tap = this.state._dragIsTap
     const [vx, vy] = this.state.velocities
     const [mx, my] = this.state.movement
     const [ix, iy] = this.state._intentional
@@ -168,26 +180,27 @@ export class DragRecognizer extends CoordinatesRecognizer<'drag'> {
       if (iy !== false && Math.abs(vy) > svy && Math.abs(my) > sy) swipe[1] = sign(vy)
     }
 
+    this.updateSharedState({ down: false, buttons: 0, touches: 0 })
     this.updateGestureState({ ...endState, tap, swipe })
     this.fireGestureHandler(tap === true)
   }
 
   clean = (): void => {
     super.clean()
+    this.state._dragStarted = false
     this.removePointers()
     clearWindowListeners(this.controller, this.stateKey)
   }
 
   onCancel = (): void => {
     if (this.state.canceled) return
-    this.updateGestureState({ canceled: true })
-    this.state._active = false
+    this.updateGestureState({ canceled: true, _active: false })
     this.updateSharedState({ down: false, buttons: 0, touches: 0 })
     requestAnimationFrame(() => this.fireGestureHandler())
   }
 
   onClick = (event: React.UIEvent | UIEvent): void => {
-    if (!this.persistentVariables.isTap) event.stopPropagation()
+    if (!this.state._dragIsTap) event.stopPropagation()
   }
 
   addBindings(bindings: any): void {

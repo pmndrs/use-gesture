@@ -220,9 +220,13 @@ export interface CommonGestureState {
   _initial: Vector2
   _bounds: [Vector2, Vector2]
   _lastEventType?: string
+  _dragTarget?: EventTarget | (EventTarget & Element) | null
+  _dragPointerId?: number | null
+  _dragStarted: boolean
+  _dragPreventScroll: boolean
+  _dragIsTap: boolean
+  _dragDelayed: boolean
   event?: React.UIEvent | UIEvent
-  target?: EventTarget | (EventTarget & Element) | null
-  pointerId?: number | null
   intentional: boolean
   values: Vector2
   velocities: Vector2
