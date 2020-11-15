@@ -377,10 +377,8 @@ export function Delay({ setActive }) {
           backgroundColor: down ? 'hotpink' : 'lightskyblue',
         })
       },
-      onMouseDown: startCountdown,
-      onTouchStart: startCountdown,
-      onMouseUp: clearCountdown,
-      onTouchEnd: startCountdown,
+      onPointerDown: startCountdown,
+      onPointerUp: clearCountdown,
     },
     { drag: { delay: 1000 } }
   )
