@@ -198,6 +198,7 @@
   height: 400px;
   background: rgb(39, 39, 48);
   overflow: hidden;
+  user-select: none;
 }
 
 .PreventWindowScrollY canvas {
