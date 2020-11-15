@@ -54,6 +54,7 @@ describe.each([
     expect(getByTestId(`${prefix}drag-down`)).toHaveTextContent('true')
     expect(getByTestId(`${prefix}drag-initial`)).toHaveTextContent('10,20')
   })
+
   test('initiating the gesture should fire onDragStart', () => {
     expect(getByTestId(`${prefix}drag-start`)).toHaveTextContent(/^fired$/)
     expect(getByTestId(`${prefix}drag-end`)).toHaveTextContent(/^not fired$/)
