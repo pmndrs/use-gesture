@@ -1,24 +1,23 @@
 import React, { Suspense, useEffect, useRef } from 'react'
 import { useSpring } from 'react-spring'
 import { a as a3f } from '@react-spring/three'
-import { Canvas, useLoader, useThree } from 'react-three-fiber'
-import { EXRLoader } from 'three/examples/jsm/loaders/EXRLoader'
+import { Canvas, useThree } from 'react-three-fiber'
 import { useGesture } from 'react-use-gesture'
+import { useTexture } from '@react-three/drei'
 import * as THREE from 'three'
 
 import styles from './styles.css'
 
 function Environment() {
   const { gl, scene } = useThree()
-  const loaderResult = useLoader(EXRLoader, '/piz_compressed.exr')
-  const map = loaderResult
+  const map = useTexture('/equirectangular.png') as THREE.Texture
 
   useEffect(() => {
     const generator = new THREE.PMREMGenerator(gl)
-    const texture = generator.fromEquirectangular(map).texture
+    const pngCubeRenderTarget = generator.fromEquirectangular(map).texture
 
     // scene.background = texture
-    scene.environment = texture
+    scene.environment = pngCubeRenderTarget
 
     map.dispose()
     generator.dispose()

@@ -1,8 +1,8 @@
 import React, { Suspense, useState, useEffect, useRef } from 'react'
 import { useSpring, useSprings, animated, to } from 'react-spring'
 import { a as a3f } from '@react-spring/three'
-import { Canvas, useLoader, useThree } from 'react-three-fiber'
-import { EXRLoader } from 'three/examples/jsm/loaders/EXRLoader'
+import { Canvas, useThree } from 'react-three-fiber'
+import { useTexture } from '@react-three/drei'
 import { useDrag, useScroll, useGesture, useWheel } from 'react-use-gesture'
 import { Lethargy } from 'lethargy'
 import cn from 'classnames'
@@ -471,15 +471,14 @@ export function LethargyWheel() {
 
 function Environment() {
   const { gl, scene } = useThree()
-  const loaderResult = useLoader(EXRLoader, '/piz_compressed.exr')
-  const map = loaderResult
+  const map = useTexture('/equirectangular.png')
 
   useEffect(() => {
     const generator = new THREE.PMREMGenerator(gl)
-    const texture = generator.fromEquirectangular(map).texture
+    const pngCubeRenderTarget = generator.fromEquirectangular(map).texture
 
     // scene.background = texture
-    scene.environment = texture
+    scene.environment = pngCubeRenderTarget
 
     map.dispose()
     generator.dispose()
@@ -491,7 +490,6 @@ function Environment() {
 
   return null
 }
-
 const torusknot = new THREE.TorusKnotBufferGeometry(3, 0.8, 256, 16)
 const material = new THREE.MeshStandardMaterial({
   metalness: 1,
@@ -500,12 +498,12 @@ const material = new THREE.MeshStandardMaterial({
 })
 
 export function PreventWindowScrollY() {
-  const [{ rot, scale }, set] = useSpring(() => ({ rot: [0, 0, 0], scale: [0.8, 0.8, 1] }))
+  const [{ rot, scale }, set] = useSpring(() => ({ rot: [0, 0, 0], scale: [0.8, 0.8, 0.8] }))
   const ref = useRef()
   const bind = useGesture(
     {
       onDrag: ({ active, offset: [y, z] }) => {
-        set({ rot: [z / 50, y / 50, 0], scale: active ? [1, 1, 1] : [0.8, 0.8, 1] })
+        set({ rot: [z / 50, y / 50, 0], scale: active ? [1, 1, 1] : [0.8, 0.8, 0.8] })
         ref.current.style.cursor = active ? 'grabbing' : 'initial'
       },
       onHover: ({ dragging, hovering }) => !dragging && (ref.current.style.cursor = hovering ? 'grab' : 'initial'),
