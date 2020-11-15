@@ -1,0 +1,5 @@
+.three {
+  background-color: #272727;
+  touch-action: pan-y;
+  height: 400px;
+}
