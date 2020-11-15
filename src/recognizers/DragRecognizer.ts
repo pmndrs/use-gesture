@@ -123,6 +123,7 @@ export class DragRecognizer extends CoordinatesRecognizer<'drag'> {
           if (kinematics.axis === 'x') {
             this.startDrag(event)
           } else {
+            this.state._dragStarted = false
             this.state._active = false
             return
           }
