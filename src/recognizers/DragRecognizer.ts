@@ -29,7 +29,6 @@ export class DragRecognizer extends CoordinatesRecognizer<'drag'> {
   }
 
   private releasePointerCapture = () => {
-    // TODO push this as locales
     const { _dragTarget, _dragPointerId } = this.state
     if (_dragPointerId && _dragTarget && 'releasePointerCapture' in _dragTarget) {
       // this would work in the DOM but doesn't with react three fiber
@@ -53,7 +52,16 @@ export class DragRecognizer extends CoordinatesRecognizer<'drag'> {
   private setUpWindowScrollDetection = (event: React.PointerEvent | PointerEvent) => {
     persistEvent(event)
     // we add window listeners that will prevent the scroll when the user has started dragging
-    updateWindowListeners(this.controller, this.stateKey, [['touchmove', this.preventScroll]], { passive: false })
+    updateWindowListeners(
+      this.controller,
+      this.stateKey,
+      [
+        ['touchmove', this.preventScroll],
+        ['touchend', this.clean.bind(this)],
+        ['touchcancel', this.clean.bind(this)],
+      ],
+      { passive: false }
+    )
     this.setTimeout(this.startDrag.bind(this), 250, event)
   }
 
@@ -114,8 +122,6 @@ export class DragRecognizer extends CoordinatesRecognizer<'drag'> {
           if (kinematics.axis === 'x') {
             this.startDrag(event)
           } else {
-            this.releasePointerCapture()
-            this.state._dragStarted = false
             this.state._active = false
             return
           }
