@@ -13,7 +13,6 @@ toast.configure({ position: 'bottom-right', pauseOnHover: false, draggable: fals
 
 export default function Hero() {
   const [shadow, setShadow] = useState(false)
-  const [dragging, setDragging] = useState(false)
   const tweakRef = useRef()
   const ref = useRef()
   const rect = useRef({})
@@ -82,8 +81,14 @@ export default function Hero() {
 
         if (down) {
           resetShineAndText()
-          set({ x: mx, y: my, scale: 1, rotateX: 0, rotateY: 0, immediate: event.pointerType === 'touch' })
-          setDragging(true)
+          set({
+            x: mx,
+            y: my,
+            scale: 1,
+            rotateX: 0,
+            rotateY: 0,
+            immediate: k => k !== 'scale' && event.pointerType === 'touch',
+          })
           setShadow(true)
         } else {
           set({
@@ -91,19 +96,18 @@ export default function Hero() {
             y: 0,
             scale: hovering ? 0.9 : 0.8,
             immediate: false,
-            onRest: () => setDragging(false),
           })
           setShadow(false)
         }
       },
-      onHover: ({ active }) => {
+      onHover: ({ dragging, active }) => {
         if (!dragging) {
           if (!active) resetShineAndText()
           set({ scale: active ? 0.9 : 0.8, rotateX: 0, rotateY: 0 })
           setShadow(active)
         }
       },
-      onMove: ({ hovering, first, xy: [px, py] }) => {
+      onMove: ({ dragging, hovering, first, xy: [px, py] }) => {
         if (first) rect.current = ref.current.getBoundingClientRect()
         if (!dragging && hovering) {
           set({ rotateX: rotX(py), rotateY: rotY(px) })
