@@ -123,7 +123,7 @@ const InternalDragOptionsNormalizers = {
     { filterTaps = false, lockDirection = false, axis = undefined }
   ) {
     const A = ensureVector(v, filterTaps ? 3 : lockDirection ? 1 : axis ? 1 : 0) as Vector2
-    this.filterTaps = filterTaps || A[0] + A[1] > 0
+    this.filterTaps = filterTaps
     return A
   },
 

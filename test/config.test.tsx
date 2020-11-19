@@ -76,11 +76,6 @@ describe('testing derived config', () => {
       expect(getInternalDragOptions(dragConfig)).toHaveProperty('threshold', [1, 1])
     })
 
-    test(`filterTaps is set to true when threshold is positive`, () => {
-      dragConfig = { threshold: [0, 1] }
-      expect(getInternalDragOptions(dragConfig)).toHaveProperty('filterTaps', true)
-    })
-
     test(`derived delay is set to default when boolean`, () => {
       dragConfig = { delay: true }
       expect(getInternalDragOptions(dragConfig)).toHaveProperty('delay', 180)
