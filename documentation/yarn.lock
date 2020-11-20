@@ -12129,10 +12129,10 @@ react-transition-group@^4.4.1:
     loose-envify "^1.4.0"
     prop-types "^15.6.2"
 
-react-use-gesture@^8.1.0-beta.1:
-  version "8.1.0-beta.1"
-  resolved "https://registry.yarnpkg.com/react-use-gesture/-/react-use-gesture-8.1.0-beta.1.tgz#e818bd0e171034cc5dff8fd2b4bd761ee902dd3d"
-  integrity sha512-MEcX/c3PJSvVfpIwr3JKY2bywxyMNfZMvNE/ypv3oXKbUllDwpqduRZYjKUAn2jhzy2zqypl3SS/b0VcryimLA==
+react-use-gesture@^8.1.0-beta.2:
+  version "8.1.0-beta.2"
+  resolved "https://registry.yarnpkg.com/react-use-gesture/-/react-use-gesture-8.1.0-beta.2.tgz#7110fbbbb2463df7408a850d458f0c508cc2ad48"
+  integrity sha512-boOURP76aChpXxBV5cdRHCLaSNrKIYuLFwmJepiKO1XV5hZu+AOoj78/r37sv5hhhIhS46wyRmOT8VcRDJYLJA==
 
 react-use-measure@^2.0.3:
   version "2.0.3"
