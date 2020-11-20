@@ -19,6 +19,8 @@ import { valueFn } from '../utils/utils'
 
 export const RecognizersMap = new Map<GestureKey, RecognizerClass>()
 
+const identity = (xy: Vector2) => xy
+
 /**
  * @private
  * Recognizer abstract class.
@@ -57,7 +59,7 @@ export default abstract class Recognizer<T extends StateKey = StateKey> {
   }
 
   get transform() {
-    return this.config.transform || this.controller.config.transform
+    return this.config.transform || this.controller.config.transform || identity
   }
 
   // Convenience method to update the shared state
@@ -111,8 +113,10 @@ export default abstract class Recognizer<T extends StateKey = StateKey> {
     const { _bounds, _initial, _active, _intentional: wasIntentional, lastOffset, movement: prevMovement } = this.state
     const M = this.getInternalMovement(values, this.state)
 
-    const i0 = wasIntentional[0] === false ? getIntentionalDisplacement(M[0], T[0]) : wasIntentional[0]
-    const i1 = wasIntentional[1] === false ? getIntentionalDisplacement(M[1], T[1]) : wasIntentional[1]
+    const _T = this.transform(T)
+
+    const i0 = wasIntentional[0] === false ? getIntentionalDisplacement(M[0], _T[0]) : wasIntentional[0]
+    const i1 = wasIntentional[1] === false ? getIntentionalDisplacement(M[1], _T[1]) : wasIntentional[1]
 
     // Get gesture specific state properties based on intentionality and movement.
     const intentionalityCheck = this.checkIntentionality([i0, i1], M)

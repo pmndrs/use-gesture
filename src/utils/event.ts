@@ -38,8 +38,7 @@ export function getGenericEventData(event: DomEvents) {
   return { touches, down, buttons, shiftKey, altKey, metaKey, ctrlKey }
 }
 
-type TransformType = (v: Vector2) => Vector2
-const identity: TransformType = xy => xy
+const identity = (xy: Vector2) => xy
 
 /**
  * Gets pointer event values.
