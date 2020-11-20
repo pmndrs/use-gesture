@@ -24,8 +24,8 @@ export default function Threshold() {
         ix ? setMovX(true) : setL({ x: mx })
         iy ? setMovY(true) : setL({ y: my })
       }
-    },
-    { threshold: 100, triggerAllEvents: true }
+    }
+    { threshold: 100, triggerAllEvents: true, transform: xy => [xy[0] / 2, xy[1] / 2] }
   )
 
   const th = (index: number) => (v: number) => {
