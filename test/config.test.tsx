@@ -12,6 +12,7 @@ describe('testing derived config', () => {
       expect(getInternalGenericOptions(undefined)).toStrictEqual({
         enabled: true,
         domTarget: undefined,
+        transform: undefined,
         eventOptions: { capture: false, passive: true },
         window: window,
       })
@@ -49,6 +50,7 @@ describe('testing derived config', () => {
           [-Infinity, Infinity],
           [-Infinity, Infinity],
         ],
+        transform: undefined,
         triggerAllEvents: false,
         delay: 0,
         swipeDistance: [60, 60],
@@ -92,6 +94,7 @@ describe('testing derived config', () => {
           [-Infinity, Infinity],
           [-Infinity, Infinity],
         ],
+        transform: undefined,
         triggerAllEvents: false,
         initial: [0, 0],
         threshold: [0, 0],

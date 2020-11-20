@@ -53,6 +53,8 @@ const InternalGestureOptionsNormalizers = {
     if (typeof value === 'function') return value
     return ensureVector(value)
   },
+
+  transform: true,
 }
 
 const InternalCoordinatesOptionsNormalizers = {
@@ -87,6 +89,7 @@ const InternalGenericOptionsNormalizers = {
   eventOptions({ passive = true, capture = false } = {}) {
     return { passive, capture }
   },
+  transform: true,
 }
 
 const InternalDistanceAngleOptionsNormalizers = {

@@ -15,6 +15,7 @@ export interface GenericOptions {
   window?: EventTarget
   eventOptions?: { capture?: boolean; passive?: boolean }
   enabled?: boolean
+  transform?: (v: Vector2) => Vector2
 }
 
 export interface GestureOptions<T extends StateKey> {
@@ -23,6 +24,7 @@ export interface GestureOptions<T extends StateKey> {
   threshold?: number | Vector2
   triggerAllEvents?: boolean
   rubberband?: boolean | number | Vector2
+  transform?: (v: Vector2) => Vector2
 }
 
 export type Bounds = {
@@ -74,6 +76,7 @@ export interface InternalGenericOptions {
   eventOptions: { capture?: boolean; passive?: boolean }
   window?: EventTarget
   enabled: boolean
+  transform?: (v: Vector2) => Vector2
 }
 
 export interface InternalGestureOptions<T extends StateKey> {
@@ -83,6 +86,7 @@ export interface InternalGestureOptions<T extends StateKey> {
   triggerAllEvents: boolean
   rubberband: Vector2
   bounds: [Vector2, Vector2] | ((state: State[T]) => [Vector2, Vector2])
+  transform?: (v: Vector2) => Vector2
 }
 
 export interface InternalCoordinatesOptions<T extends CoordinatesKey> extends InternalGestureOptions<T> {
@@ -106,7 +110,7 @@ export type InternalConfig = InternalGenericOptions & {
   scroll?: InternalCoordinatesOptions<'scroll'>
   move?: InternalCoordinatesOptions<'move'>
   pinch?: InternalDistanceAngleOptions<'pinch'>
-  hover?: { enabled: boolean }
+  hover?: { enabled: boolean; transform?: (v: Vector2) => Vector2 }
 }
 
 export type WebKitGestureEvent = PointerEvent & { scale: number; rotation: number }
