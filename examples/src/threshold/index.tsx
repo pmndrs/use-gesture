@@ -24,7 +24,7 @@ export default function Threshold() {
         ix ? setMovX(true) : setL({ x: mx })
         iy ? setMovY(true) : setL({ y: my })
       }
-    }
+    },
     { threshold: 100, triggerAllEvents: true, transform: xy => [xy[0] / 2, xy[1] / 2] }
   )
 
@@ -37,7 +37,7 @@ export default function Threshold() {
   }
 
   return (
-    <div className="flex">
+    <div className="flex" style={{ transform: 'scale(2)' }}>
       <animated.div className={styles.drag} {...bind()} style={{ x, y }}>
         <animated.div style={props}>
           <div>
