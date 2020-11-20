@@ -108,12 +108,12 @@ export default abstract class Recognizer<T extends StateKey = StateKey> {
    * Returns basic movement properties for the gesture based on the next values and current state.
    */
   protected getMovement(values: Vector2): PartialGestureState<T> {
-    const { initial, bounds, rubberband, threshold: T } = this.config
+    const { rubberband, threshold: T } = this.config
 
     const { _bounds, _initial, _active, _intentional: wasIntentional, lastOffset, movement: prevMovement } = this.state
     const M = this.getInternalMovement(values, this.state)
 
-    const _T = this.transform(T)
+    const _T = this.transform(T).map(Math.abs)
 
     const i0 = wasIntentional[0] === false ? getIntentionalDisplacement(M[0], _T[0]) : wasIntentional[0]
     const i1 = wasIntentional[1] === false ? getIntentionalDisplacement(M[1], _T[1]) : wasIntentional[1]
@@ -127,29 +127,13 @@ export default abstract class Recognizer<T extends StateKey = StateKey> {
     const _intentional = intentionalityCheck._intentional!
     const _movement = M
 
-    let __cachedBounds
-    let __cachedInitial
-
-    if (_intentional[0] !== false && wasIntentional[0] === false) {
-      __cachedInitial = valueFn(initial, this.state)
-      __cachedBounds = valueFn(bounds, this.state)
-      _initial[0] = __cachedInitial[0]
-      _bounds[0] = __cachedBounds[0]
-    }
-    if (_intentional[1] !== false && wasIntentional[1] === false) {
-      __cachedInitial = __cachedInitial ?? valueFn(initial, this.state)
-      __cachedBounds = __cachedBounds ?? valueFn(bounds, this.state)
-      _initial[1] = __cachedInitial[1]
-      _bounds[1] = __cachedBounds[1]
-    }
-
     /**
      * The movement sent to the handler has 0 in its dimensions when intentionality is false.
      * It is calculated from the actual movement minus the threshold.
      */
     let movement: Vector2 = [
-      _intentional[0] !== false ? M[0] - _intentional[0] : _initial[0],
-      _intentional[1] !== false ? M[1] - _intentional[1] : _initial[1],
+      _intentional[0] !== false ? M[0] - _intentional[0] : 0,
+      _intentional[1] !== false ? M[1] - _intentional[1] : 0,
     ]
 
     const offset = addV(movement, lastOffset)
@@ -244,14 +228,14 @@ function computeRubberband(bounds: [Vector2, Vector2], [Vx, Vy]: Vector2, [Rx, R
  * Returns a generic, common payload for all gestures from an event.
  */
 export function getGenericPayload<T extends StateKey>(
-  { state, args }: Recognizer<T>,
+  { state }: Recognizer<T>,
   event: EventTypes[T],
   isStartEvent?: boolean
 ) {
   const { timeStamp, type: _lastEventType } = event
   const previous = state.values
   const elapsedTime = isStartEvent ? 0 : timeStamp - state.startTime!
-  return { _lastEventType, event, timeStamp, elapsedTime, args, previous }
+  return { _lastEventType, event, timeStamp, elapsedTime, previous }
 }
 
 /**
@@ -259,20 +243,25 @@ export function getGenericPayload<T extends StateKey>(
  * Should be common to all gestures.
  */
 export function getStartGestureState<T extends StateKey>(
-  recognizer: Recognizer<T>,
+  { state, config, stateKey, args }: Recognizer<T>,
   values: Vector2,
   event: EventTypes[T]
 ) {
-  const offset = recognizer.state.offset
+  const offset = state.offset
   const startTime = event.timeStamp
 
-  return {
-    ...getInitialState()[recognizer.stateKey],
+  const { initial, bounds } = config
+
+  const _state = {
+    ...getInitialState()[stateKey],
     _active: true,
+    args,
     values,
     initial: values,
     offset,
     lastOffset: offset,
     startTime,
   }
+
+  return { ..._state, _initial: valueFn(initial, _state), _bounds: valueFn(bounds, _state) }
 }

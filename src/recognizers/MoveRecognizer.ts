@@ -66,6 +66,7 @@ export class MoveRecognizer extends CoordinatesRecognizer<'move'> {
         ...this.controller.state.shared,
         ...this.state,
         ...getGenericPayload(this, event, true),
+        args: this.args,
         values,
         active: true,
         hovering: true,
@@ -88,6 +89,7 @@ export class MoveRecognizer extends CoordinatesRecognizer<'move'> {
       ...this.controller.state.shared,
       ...this.state,
       ...getGenericPayload(this, event),
+      args: this.args,
       values,
       active: false,
     }
