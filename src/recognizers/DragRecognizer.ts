@@ -72,7 +72,7 @@ export class DragRecognizer extends CoordinatesRecognizer<'drag'> {
   }
 
   private setStartState = (event: React.PointerEvent | PointerEvent) => {
-    const values = getPointerEventValues(event)
+    const values = getPointerEventValues(event, this.transform)
     this.updateSharedState(getGenericEventData(event))
     this.updateGestureState({ ...getStartGestureState(this, values, event), ...getGenericPayload(this, event, true) })
     this.updateGestureState(this.getMovement(values))
@@ -103,7 +103,7 @@ export class DragRecognizer extends CoordinatesRecognizer<'drag'> {
     // (ie: _active = false) don't respond to the event.
     if (!this.state._active || this.state.canceled) return
 
-    const values = getPointerEventValues(event)
+    const values = getPointerEventValues(event, this.transform)
     const kinematics = this.getKinematics(values, event)
 
     // if startDrag hasn't fired

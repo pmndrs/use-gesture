@@ -19,7 +19,7 @@ export class MoveRecognizer extends CoordinatesRecognizer<'move'> {
 
   onMoveStart = (event: React.PointerEvent | PointerEvent): void => {
     this.updateSharedState(getGenericEventData(event))
-    const values = getPointerEventValues(event)
+    const values = getPointerEventValues(event, this.transform)
 
     this.updateGestureState({
       ...getStartGestureState(this, values, event),
@@ -32,7 +32,7 @@ export class MoveRecognizer extends CoordinatesRecognizer<'move'> {
 
   onMoveChange = (event: React.PointerEvent | PointerEvent): void => {
     this.updateSharedState(getGenericEventData(event))
-    const values = getPointerEventValues(event)
+    const values = getPointerEventValues(event, this.transform)
 
     this.updateGestureState({
       ...getGenericPayload(this, event),
@@ -51,12 +51,16 @@ export class MoveRecognizer extends CoordinatesRecognizer<'move'> {
     this.fireGestureHandler()
   }
 
+  hoverTransform = () => {
+    return this.controller.config.hover!.transform || this.controller.config.transform
+  }
+
   onPointerEnter = (event: React.PointerEvent | PointerEvent): void => {
     this.controller.state.shared.hovering = true
     if (!this.controller.config.enabled) return
 
     if (this.controller.config.hover!.enabled) {
-      const values = getPointerEventValues(event)
+      const values = getPointerEventValues(event, this.hoverTransform())
 
       const state = {
         ...this.controller.state.shared,
@@ -78,7 +82,7 @@ export class MoveRecognizer extends CoordinatesRecognizer<'move'> {
     if ('move' in this.controller.handlers) this.onMoveEnd()
     if (!this.controller.config.hover!.enabled) return
 
-    const values = getPointerEventValues(event)
+    const values = getPointerEventValues(event, this.hoverTransform())
 
     const state = {
       ...this.controller.state.shared,

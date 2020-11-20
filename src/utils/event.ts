@@ -38,17 +38,21 @@ export function getGenericEventData(event: DomEvents) {
   return { touches, down, buttons, shiftKey, altKey, metaKey, ctrlKey }
 }
 
+type TransformType = (v: Vector2) => Vector2
+const identity: TransformType = xy => xy
+
 /**
  * Gets pointer event values.
  * @param event
  * @returns pointer event values
  */
 export function getPointerEventValues(
-  event: TouchEvent | React.TouchEvent | React.PointerEvent | PointerEvent
+  event: TouchEvent | React.TouchEvent | React.PointerEvent | PointerEvent,
+  transform = identity
 ): Vector2 {
   const touchEvents = getTouchEvents(event)
   const { clientX, clientY } = touchEvents ? touchEvents[0] : (event as React.PointerEvent)
-  return [clientX, clientY]
+  return transform([clientX, clientY])
 }
 
 /**
@@ -56,11 +60,11 @@ export function getPointerEventValues(
  * @param event
  * @returns scroll event values
  */
-export function getScrollEventValues(event: React.UIEvent | UIEvent): Vector2 {
+export function getScrollEventValues(event: React.UIEvent | UIEvent, transform = identity): Vector2 {
   // If the currentTarget is the window then we return the scrollX/Y position.
   // If not (ie the currentTarget is a DOM element), then we return scrollLeft/Top
   const { scrollX, scrollY, scrollLeft, scrollTop } = event.currentTarget as Element & Window
-  return [scrollX || scrollLeft || 0, scrollY || scrollTop || 0]
+  return transform([scrollX || scrollLeft || 0, scrollY || scrollTop || 0])
 }
 
 /**
@@ -68,11 +72,11 @@ export function getScrollEventValues(event: React.UIEvent | UIEvent): Vector2 {
  * @param event
  * @returns wheel event values
  */
-export function getWheelEventValues(event: React.WheelEvent | WheelEvent): Vector2 {
+export function getWheelEventValues(event: React.WheelEvent | WheelEvent, transform = identity): Vector2 {
   const { deltaX, deltaY } = event
   //TODO implement polyfill ?
   // https://developer.mozilla.org/en-US/docs/Web/Events/wheel#Polyfill
-  return [deltaX, deltaY]
+  return transform([deltaX, deltaY])
 }
 
 /**
@@ -80,8 +84,8 @@ export function getWheelEventValues(event: React.WheelEvent | WheelEvent): Vecto
  * @param event
  * @returns webkit gesture event values
  */
-export function getWebkitGestureEventValues(event: WebKitGestureEvent): Vector2 {
-  return [event.scale * WEBKIT_DISTANCE_SCALE_FACTOR, event.rotation]
+export function getWebkitGestureEventValues(event: WebKitGestureEvent, transform = identity): Vector2 {
+  return transform([event.scale * WEBKIT_DISTANCE_SCALE_FACTOR, event.rotation])
 }
 
 /**
@@ -89,7 +93,7 @@ export function getWebkitGestureEventValues(event: WebKitGestureEvent): Vector2 
  * @param event
  * @returns two touches event data
  */
-export function getTwoTouchesEventData(event: React.TouchEvent | TouchEvent) {
+export function getTwoTouchesEventData(event: React.TouchEvent | TouchEvent, transform = identity) {
   const { targetTouches } = event
   const A = targetTouches[0],
     B = targetTouches[1]
@@ -104,8 +108,8 @@ export function getTwoTouchesEventData(event: React.TouchEvent | TouchEvent) {
   const distance = Math.hypot(dx, dy)
   const angle = (e.rotation as number) ?? -(Math.atan2(dx, dy) * 180) / Math.PI
 
-  const values: Vector2 = [distance, angle]
-  const origin: Vector2 = [cx, cy]
+  const values: Vector2 = transform([distance, angle])
+  const origin: Vector2 = transform([cx, cy])
 
   return { values, origin }
 }

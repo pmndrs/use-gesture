@@ -17,7 +17,7 @@ export class WheelRecognizer extends CoordinatesRecognizer<'wheel'> {
     this.setTimeout(this.onEnd)
     this.updateSharedState(getGenericEventData(event))
 
-    const values = addV(getWheelEventValues(event), this.state.values)
+    const values = addV(getWheelEventValues(event, this.transform), this.state.values)
 
     if (!this.state._active) {
       this.updateGestureState({

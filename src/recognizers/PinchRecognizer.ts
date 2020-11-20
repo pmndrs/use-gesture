@@ -21,7 +21,7 @@ export class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
   onPinchStart = (event: React.TouchEvent | TouchEvent) => {
     if (!this.pinchShouldStart(event)) return
 
-    const { values, origin } = getTwoTouchesEventData(event)
+    const { values, origin } = getTwoTouchesEventData(event, this.transform)
 
     this.updateSharedState(getGenericEventData(event))
 
@@ -43,7 +43,7 @@ export class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
 
     this.updateSharedState(genericEventData)
 
-    const { values, origin } = getTwoTouchesEventData(event)
+    const { values, origin } = getTwoTouchesEventData(event, this.transform)
     // @ts-ignore
     const kinematics = this.getKinematics(values, event)
 
@@ -85,7 +85,7 @@ export class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
     if (!this.enabled) return
     event.preventDefault() // useless
 
-    const values = getWebkitGestureEventValues(event)
+    const values = getWebkitGestureEventValues(event, this.transform)
 
     this.updateSharedState(getGenericEventData(event))
 
@@ -110,7 +110,7 @@ export class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
 
     this.updateSharedState(genericEventData)
 
-    const values = getWebkitGestureEventValues(event)
+    const values = getWebkitGestureEventValues(event, this.transform)
     const kinematics = this.getKinematics(values, event)
 
     this.updateGestureState({
@@ -144,7 +144,7 @@ export class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
   }
 
   private getWheelValuesFromEvent = (event: React.WheelEvent | WheelEvent) => {
-    const [, delta_d] = getWheelEventValues(event)
+    const [, delta_d] = getWheelEventValues(event, this.transform)
     const {
       values: [prev_d, prev_a],
     } = this.state
