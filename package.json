@@ -14,7 +14,7 @@
     "build": "tsdx build",
     "lint": "tsdx lint",
     "prepare": "yarn build",
-    "build-docs": "cd ./documentation && yarn build",
+    "docs": "yarn --cwd ./documentation start",
     "test": "tsdx test",
     "test:watch": "tsdx test --watchAll",
     "size": "size-limit",

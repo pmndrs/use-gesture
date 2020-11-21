@@ -7,6 +7,23 @@ section: More
 
 Here is the change log since version 5.
 
+## 8.1.0 Release
+
+**Summary:** this release is pretty major since it changes the way it handles the drag gesture, using `setPointerCapture`. It also adds two new configuration options, `transform` and `experimental_preventWindowScrollY`.
+
+### Breaking
+
+1. Drag now uses `setPointerCapture` and `releasePointerCapture`. This is no breaking change in the API and it's very likely that no code will break, but it's still a major shift. Please report any undesirable behavior.
+
+### Added
+
+1. New `transform` options to map pointer coordinates to another space where the gesture takes place.
+2. New `experimental_preventWindowScrollY` that prevents window scroll when interacting with draggable items.
+
+### Fixed
+
+1. Fixed a bug with `threshold` and `initial` options set together, where the unintentional axis was set to `0` instead of `intial[axisIndex]`.
+
 ## 8.0.1 Release
 
 **Summary:** fixes origin on Pinch for Safari desktop.

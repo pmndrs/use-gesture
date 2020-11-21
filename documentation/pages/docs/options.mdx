@@ -68,6 +68,7 @@ Here are all options that can be applied to gestures.
 | [`distanceBounds`](#distancebounds)                                                 | **pinch** | Limits the distance `movement` and `offset` to the specified bounds.                                                                                                                                 |
 | [`angleBounds`](#anglebounds)                                                       | **pinch** | Limits the angle `movement` and `offset` to the specified bounds.                                                                                                                                    |
 | [`rubberband`](#rubberband)                                                         |  **all**  | The elasticity coefficient of the gesture when going out of bounds. When set to `true`, the elasticiy coefficient will be defaulted to `0.15`                                                        |
+| [`transform`](#transform)                                                           |  **all**  | A function that you can use to transform pointer values. Useful to map your screen coordinates to custom space coordinates such as a canvas.                                                         |
 | [`filterTaps`](#filtertaps-drag-only)                                               | **drag**  | If `true`, the component won't trigger your drag logic if the user just clicked on the component.                                                                                                    |
 | [`experimental_preventWindowScrollY`](#experimental_preventwindowscrolly-drag-only) | **drag**  | If `true`, drag will be triggered after `250ms` and will prevent window scrolling.                                                                                                                   |
 | [`delay`](#delay-drag-only)                                                         | **drag**  | If set, the handler will be delayed for the duration of the delay (in `ms`) — or if the user starts moving. When set to `true`, `delay` is defaulted to `180ms`.                                     |
@@ -258,6 +259,58 @@ function RubberbandExample() {
 Note that you have to set [`bounds`](#bounds) for rubberbanding to take effect.
 
 > If you stop your gesture while being off-bounds, **the `offset` or `movement` for the last event will be reverted to the closest bounds**.
+
+### transform
+
+<Specs types="(xy: Vector2) => Vector2" defaultValue="undefined" />
+
+When you're interacting with canvas objects, you're dealing with space coordinates that aren't measured in pixels. In that case, you can tell <ReactUseGesture /> to map screen values to the space with a `transform` function.
+
+<Code id="Transform" />
+
+As you can see from the example below, we use the `transform` function to map the screen coordinates to THREE coordinates. Note that `bounds` or `initial` values are expected to be expressed in the new space coordinates. Only `threshold` always refers to screen pixel values.
+
+```jsx highlight={6-11}
+function Box() {
+  const { viewport } = useThree()
+  const { width, height, factor } = viewport
+  const [spring, setSpring] = useSpring(() => ({ position: [0, 0, 0], scale: [1, 1, 1] }))
+
+  const bind = useDrag(({ offset: [x, y] }) => setSpring({ position: [x, y, 0] }), {
+    // bounds are expressed in canvas coordinates!
+    bounds: { left: -width / 2, right: width / 2, top: -height / 2, bottom: height / 2 },
+    rubberband: true,
+    transform: ([x, y]) => [x / factor, -y / factor],
+  })
+
+  return (
+    <a3f.mesh {...bind()} {...spring}>
+      <boxBufferGeometry args={[1, 1, 1]} />
+      <meshStandardMaterial color="orange" />
+    </a3f.mesh>
+  )
+}
+function Transform() {
+  return (
+    <Canvas>
+      <ambientLight intensity={0.5} />
+      <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
+      <Box />
+    </Canvas>
+  )
+}
+```
+
+> When you use the `useGesture` hook, you can set the `transform` option at the shared level and at the gesture level, with the `transform` set at the gesture level oveerriding the shared one.
+
+```js
+useGesture({/* handlers */ }, {
+  transform: ([x, y]) => [x/2, y/2 ] // shared transform applies to all gestures
+  pinch: {
+    transform: xy => xy // specific pinch transform overrides shared
+  }
+})
+```
 
 ### axis (xy gestures only)
 

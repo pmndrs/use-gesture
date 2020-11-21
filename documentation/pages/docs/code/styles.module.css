@@ -193,7 +193,8 @@
   text-align: center;
 }
 
-.PreventWindowScrollY {
+.PreventWindowScrollY,
+.Transform {
   padding: 0;
   height: 400px;
   background: rgb(39, 39, 48);
@@ -203,4 +204,12 @@
 
 .PreventWindowScrollY canvas {
   touch-action: pan-y;
+}
+
+.Transform {
+  height: 300px;
+}
+
+.Transform canvas {
+  touch-action: none;
 }
