@@ -99,7 +99,7 @@ Imagine you want to add an action when you mouse down on a draggable component. 
 
 ```jsx highlight={1,4-5}
 // This won't work as you'd expect
-function DragAndMouseDown() {
+function DragAndPointerDown() {
   const [{ x, y }, set] = useSpring(() => ({ x: 0, y: 0 }))
   const bind = useDrag(({ down, offset: [x, y] }) => set({ x, y }))
   return <animated.div {...bind()} onPointerDown={() => console.log('pointer down')} style={{ x, y }} />
@@ -112,7 +112,7 @@ Fortunately, the hook `useGesture` supports native React event handlers, and wil
 
 ```jsx highlight={1,4-8}
 // This will work as intended
-function DragAndMouseDown() {
+function DragAndPointerDown() {
   const [{ x, y }, set] = useSpring(() => ({ x: 0, y: 0 }))
   const bind = useGesture({
     onDrag: ({ down, offset: [x, y] }) => set({ x, y }),
