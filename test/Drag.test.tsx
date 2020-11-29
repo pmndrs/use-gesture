@@ -39,7 +39,6 @@ describe.each([
     fireEvent(element, event)
     delta_t = event.timeStamp
 
-    // @ts-ignore
     expect(getByTestId(`${prefix}drag-active`)).toHaveTextContent('true')
     expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('true')
     expect(getByTestId(`${prefix}drag-first`)).toHaveTextContent('true')
@@ -87,7 +86,16 @@ describe.each([
     expect(getByTestId(`${prefix}drag-previous`)).toHaveTextContent('20,50')
   })
 
-  test('mouseUp should terminate the gesture', () => {
+  test(`adding another pointer to the element shouldn't disturb the drag`, () => {
+    fireEvent.pointerDown(element, { pointerId: 111 })
+    fireEvent.pointerMove(element, { pointerId: 111, clientX: -10, clientY: 30, buttons: 1 })
+    fireEvent.pointerUp(element, { pointerId: 111 })
+    expect(getByTestId(`${prefix}drag-active`)).toHaveTextContent('true')
+    expect(getByTestId(`${prefix}drag-offset`)).toHaveTextContent('-20,10')
+    expect(getByTestId(`${prefix}drag-movement`)).toHaveTextContent('-20,10')
+  })
+
+  test('pointerUp should terminate the gesture', () => {
     fireEvent.pointerUp(element, { pointerId: 1 })
     expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('false')
     expect(getByTestId(`${prefix}drag-active`)).toHaveTextContent('false')
