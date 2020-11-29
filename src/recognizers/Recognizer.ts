@@ -196,7 +196,7 @@ export default abstract class Recognizer<T extends StateKey = StateKey> {
       ...this.controller.state.shared,
       ...this.state,
       ...this.mapStateValues(this.state), // Sets xy or da to the gesture state values
-      touches: this.controller.pointerIds.size,
+      touches: this.controller.state.shared.touches || this.controller.pointerIds.size,
     } as FullGestureState<T>
 
     // @ts-ignore
