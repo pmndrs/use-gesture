@@ -32,6 +32,7 @@ export default class Controller {
   public domListeners: [string, Fn][] // when config.domTarget is set, we attach events directly to the dom
   public windowListeners: { [stateKey in StateKey]?: [string, Function][] } // keeps track of window listeners added by gestures (drag only at the moment)
 
+  public pointerIds = new Set<number>()
   public supportsTouchEvents = supportsTouchEvents()
   public supportsGestureEvents = supportsGestureEvents()
 
@@ -75,6 +76,14 @@ export default class Controller {
     Object.values(this.timeouts).forEach(clearTimeout)
     clearAllWindowListeners(this)
   }
+}
+
+export function addPointer(controller: Controller, pointerId: number) {
+  controller.pointerIds.add(pointerId)
+}
+
+export function removePointer(controller: Controller, pointerId: number) {
+  controller.pointerIds.delete(pointerId)
 }
 
 export function clearAllWindowListeners(controller: Controller) {

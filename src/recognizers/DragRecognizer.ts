@@ -2,7 +2,7 @@ import CoordinatesRecognizer from './CoordinatesRecognizer'
 import { getPointerEventValues, getGenericEventData } from '../utils/event'
 import { calculateDistance, sign } from '../utils/math'
 import { getStartGestureState, getGenericPayload } from './Recognizer'
-import { addBindings, updateWindowListeners, clearWindowListeners } from '../Controller'
+import { addBindings, updateWindowListeners, clearWindowListeners, addPointer, removePointer } from '../Controller'
 
 export const TAP_DISTANCE_THRESHOLD = 3
 export const SWIPE_MAX_ELAPSED_TIME = 220
@@ -85,6 +85,7 @@ export class DragRecognizer extends CoordinatesRecognizer<'drag'> {
   }
 
   onDragStart = (event: React.PointerEvent | PointerEvent): void => {
+    addPointer(this.controller, event.pointerId)
     if (!this.enabled || this.state._active) return
 
     this.setStartState(event)
@@ -176,6 +177,8 @@ export class DragRecognizer extends CoordinatesRecognizer<'drag'> {
   }
 
   onDragEnd = (event: PointerEvent): void => {
+    removePointer(this.controller, event.pointerId)
+
     // if the event pointerId doesn't match the one that initiated the drag
     // we don't want to end the drag
     if (this.state._pointerId !== event.pointerId) return
