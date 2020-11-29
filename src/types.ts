@@ -262,6 +262,7 @@ export interface Coordinates {
 }
 
 export interface DragState {
+  _pointerId?: number
   tap: boolean
   swipe: Vector2
 }

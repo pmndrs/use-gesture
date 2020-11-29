@@ -60,6 +60,7 @@ export function getInitialState(): State {
   }
 
   const drag = getInitial<DragState & Coordinates>({
+    _pointerId: undefined,
     axis: undefined,
     xy: [0, 0] as Vector2,
     vxvy: [0, 0] as Vector2,

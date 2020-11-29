@@ -74,7 +74,13 @@ export class DragRecognizer extends CoordinatesRecognizer<'drag'> {
   private setStartState = (event: React.PointerEvent | PointerEvent) => {
     const values = getPointerEventValues(event, this.transform)
     this.updateSharedState(getGenericEventData(event))
-    this.updateGestureState({ ...getStartGestureState(this, values, event), ...getGenericPayload(this, event, true) })
+
+    this.updateGestureState({
+      ...getStartGestureState(this, values, event),
+      ...getGenericPayload(this, event, true),
+      _pointerId: event.pointerId, // setting pointerId locks the gesture to this specific event
+    })
+
     this.updateGestureState(this.getMovement(values))
   }
 
@@ -90,7 +96,16 @@ export class DragRecognizer extends CoordinatesRecognizer<'drag'> {
   }
 
   startDrag(event: React.PointerEvent | PointerEvent, onDragIsStart: boolean = false) {
-    if (!this.state._active || this.state._dragStarted) return
+    // startDrag can happen after a timeout, so we need to check if the gesture is still active
+    // as the user might have lift up the pointer in between.
+
+    if (
+      // if the gesture isn't active (probably means)
+      !this.state._active ||
+      // if the drag has already started we should ignore subsequent attempts
+      this.state._dragStarted
+    )
+      return
 
     if (!onDragIsStart) this.setStartState(event)
     this.updateGestureState({ _dragStarted: true, _dragPreventScroll: true, cancel: this.onCancel })
@@ -99,9 +114,15 @@ export class DragRecognizer extends CoordinatesRecognizer<'drag'> {
   }
 
   onDragChange = (event: PointerEvent): void => {
-    // If the gesture was canceled or if onDragStart hasn't been fired
-    // (ie: _active = false) don't respond to the event.
-    if (!this.state._active || this.state.canceled) return
+    if (
+      // if the gesture was canceled or
+      this.state.canceled ||
+      // if onDragStart wasn't fired or
+      !this.state._active ||
+      // if the event pointerId doesn't match the one that initiated the drag
+      this.state._pointerId !== event.pointerId
+    )
+      return
 
     const values = getPointerEventValues(event, this.transform)
     const kinematics = this.getKinematics(values, event)
@@ -155,8 +176,11 @@ export class DragRecognizer extends CoordinatesRecognizer<'drag'> {
   }
 
   onDragEnd = (event: PointerEvent): void => {
+    // if the event pointerId doesn't match the one that initiated the drag
+    // we don't want to end the drag
+    if (this.state._pointerId !== event.pointerId) return
     this.clean()
-    if (!this.state._active) return
+    if (this.state._pointerId !== event.pointerId) return
 
     this.state._active = false
 
