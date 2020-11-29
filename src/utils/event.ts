@@ -66,15 +66,25 @@ export function getScrollEventValues(event: React.UIEvent | UIEvent, transform =
   return transform([scrollX || scrollLeft || 0, scrollY || scrollTop || 0])
 }
 
+// wheel delta defaults from https://github.com/facebookarchive/fixed-data-table/blob/master/src/vendor_upstream/dom/normalizeWheel.js
+const LINE_HEIGHT = 40
+const PAGE_HEIGHT = 800
+
 /**
  * Gets wheel event values.
  * @param event
  * @returns wheel event values
  */
 export function getWheelEventValues(event: React.WheelEvent | WheelEvent, transform = identity): Vector2 {
-  const { deltaX, deltaY } = event
-  //TODO implement polyfill ?
-  // https://developer.mozilla.org/en-US/docs/Web/Events/wheel#Polyfill
+  let { deltaX, deltaY, deltaMode } = event
+  // normalize wheel values, especially for Firefox
+  if (deltaMode === 1) {
+    deltaX *= LINE_HEIGHT
+    deltaY *= LINE_HEIGHT
+  } else if (deltaMode === 2) {
+    deltaX *= PAGE_HEIGHT
+    deltaY *= PAGE_HEIGHT
+  }
   return transform([deltaX, deltaY])
 }
 
