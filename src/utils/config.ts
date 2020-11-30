@@ -19,6 +19,7 @@ import {
   CoordinatesKey,
   DistanceAngleKey,
 } from '../types'
+import { supportsTouchEvents } from './event'
 
 export const DEFAULT_DRAG_DELAY = 180
 export const DEFAULT_RUBBERBAND = 0.15
@@ -116,6 +117,9 @@ const InternalDistanceAngleOptionsNormalizers = {
 const InternalDragOptionsNormalizers = {
   ...InternalCoordinatesOptionsNormalizers,
 
+  useTouch(value = false) {
+    return value && supportsTouchEvents()
+  },
   experimental_preventWindowScrollY(value = false) {
     return value
   },

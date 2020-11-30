@@ -46,6 +46,11 @@ export class DragRecognizer extends CoordinatesRecognizer<'drag'> {
     }
   }
 
+  private isValidEvent = (event: any) => {
+    if (this.config.useTouch) return event.type !== 'touchend' || event.targetTouches.length === 0
+    return this.state._pointerId === event.pointerId
+  }
+
   private shouldPreventWindowScrollY =
     this.config.experimental_preventWindowScrollY && this.controller.supportsTouchEvents
 
@@ -89,7 +94,7 @@ export class DragRecognizer extends CoordinatesRecognizer<'drag'> {
     if (!this.enabled || this.state._active) return
 
     this.setStartState(event)
-    this.setPointerCapture(event as PointerEvent)
+    if (!this.config.useTouch) this.setPointerCapture(event as PointerEvent)
 
     if (this.shouldPreventWindowScrollY) this.setUpWindowScrollDetection(event)
     else if (this.config.delay > 0) this.setUpDelayedDragTrigger(event)
@@ -121,7 +126,7 @@ export class DragRecognizer extends CoordinatesRecognizer<'drag'> {
       // if onDragStart wasn't fired or
       !this.state._active ||
       // if the event pointerId doesn't match the one that initiated the drag
-      this.state._pointerId !== event.pointerId
+      !this.isValidEvent(event)
     )
       return
 
@@ -181,9 +186,8 @@ export class DragRecognizer extends CoordinatesRecognizer<'drag'> {
 
     // if the event pointerId doesn't match the one that initiated the drag
     // we don't want to end the drag
-    if (this.state._pointerId !== event.pointerId) return
+    if (!this.isValidEvent(event)) return
     this.clean()
-    if (this.state._pointerId !== event.pointerId) return
 
     this.state._active = false
 
@@ -214,7 +218,7 @@ export class DragRecognizer extends CoordinatesRecognizer<'drag'> {
   clean = (): void => {
     super.clean()
     this.state._dragStarted = false
-    this.releasePointerCapture()
+    if (!this.config.useTouch) this.releasePointerCapture()
     clearWindowListeners(this.controller, this.stateKey)
   }
 
@@ -230,10 +234,17 @@ export class DragRecognizer extends CoordinatesRecognizer<'drag'> {
   }
 
   addBindings(bindings: any): void {
-    addBindings(bindings, 'onPointerDown', this.onDragStart)
-    addBindings(bindings, 'onPointerMove', this.onDragChange) // this is needed for react-three-fiber
-    addBindings(bindings, 'onPointerUp', this.onDragEnd)
-    addBindings(bindings, 'onPointerCancel', this.onDragEnd)
+    if (this.config.useTouch) {
+      addBindings(bindings, 'onTouchStart', this.onDragStart)
+      addBindings(bindings, 'onTouchMove', this.onDragChange) // this is needed for react-three-fiber
+      addBindings(bindings, 'onTouchEnd', this.onDragEnd)
+      addBindings(bindings, 'onTouchCancel', this.onDragEnd)
+    } else {
+      addBindings(bindings, 'onPointerDown', this.onDragStart)
+      addBindings(bindings, 'onPointerMove', this.onDragChange) // this is needed for react-three-fiber
+      addBindings(bindings, 'onPointerUp', this.onDragEnd)
+      addBindings(bindings, 'onPointerCancel', this.onDragEnd)
+    }
 
     if (this.config.filterTaps) {
       const handler = this.controller.config.eventOptions.capture ? 'onClick' : 'onClickCapture'

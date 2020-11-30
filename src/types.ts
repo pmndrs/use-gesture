@@ -49,6 +49,7 @@ export type DistanceAngleConfig<T extends DistanceAngleKey> = GestureOptions<T> 
 
 export type DragConfig = CoordinatesConfig<'drag'> & {
   filterTaps?: boolean
+  useTouch?: boolean
   swipeVelocity?: number | Vector2
   swipeDistance?: number | Vector2
   experimental_preventWindowScrollY?: boolean
@@ -98,6 +99,7 @@ export interface InternalDistanceAngleOptions<T extends DistanceAngleKey> extend
 
 export interface InternalDragOptions extends InternalCoordinatesOptions<'drag'> {
   filterTaps: boolean
+  useTouch: boolean
   experimental_preventWindowScrollY: boolean
   swipeVelocity: Vector2
   swipeDistance: Vector2

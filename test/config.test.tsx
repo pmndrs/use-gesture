@@ -62,6 +62,7 @@ describe('testing derived config', () => {
         lockDirection: false,
         experimental_preventWindowScrollY: false,
         filterTaps: false,
+        useTouch: false,
       })
     })
 
