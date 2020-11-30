@@ -23,7 +23,7 @@
   "size-limit": [
     {
       "path": "dist/react-use-gesture.cjs.production.min.js",
-      "limit": "8 KB"
+      "limit": "9 KB"
     },
     {
       "path": "dist/react-use-gesture.esm.js",
