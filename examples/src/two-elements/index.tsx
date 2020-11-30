@@ -9,33 +9,43 @@ export default function Two() {
 
   const bind = useGesture(
     {
-      onDrag: ({ down, offset: [x, y], _bounds }) => {
-        console.log(_bounds)
-        set({ scale: down ? 1.2 : 1, x, y })
+      onDrag: ({ down, movement: [x, y], _bounds, touches, initial, _initial }) => {
+        console.log({ initial, _initial })
+        set({ x, y })
       },
       onPinch: ({ offset: [d, a], _bounds }) => {
-        console.log(_bounds)
         set({ scale: 1 + d / 200, rotateZ: a })
       },
     },
     {
-      pinch: {
-        distanceBounds: ({ args }) => {
-          console.log('pinch', args)
-          return { min: -100, max: 100 }
+      drag: {
+        initial: () => {
+          return [style.x.get(), style.y.get()]
         },
       },
     }
   )
 
-  const bind2 = useGesture({
-    onDrag: ({ down, offset: [x, y] }) => {
-      set2({ scale: down ? 1.2 : 1, x, y })
+  const bind2 = useGesture(
+    {
+      onDrag: ({ _pointerId, down, offset: [x, y] }) => {
+        // set2({ scale: down ? 1.2 : 1, x, y })
+      },
+      onPinch: ({ movement: [d, a], turns }) => {
+        console.log({ d, a, turns })
+        set2({ scale: d / 100, rotateZ: a })
+      },
     },
-    onPinch: ({ offset: [d, a] }) => {
-      set2({ scale: 1 + d / 200, rotateZ: a })
-    },
-  })
+    {
+      pinch: {
+        initial: () => {
+          console.log('Initial movement angle', style2.rotateZ.get())
+          console.log('Initial movement distance', 100 * style2.scale.get())
+          return [100 * style2.scale.get(), style2.rotateZ.get()]
+        },
+      },
+    }
+  )
 
   return (
     <div className="flex">
