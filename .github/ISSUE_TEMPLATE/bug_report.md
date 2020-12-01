@@ -21,4 +21,4 @@ assignees: dbismut
 
 **Checklist:**
   - [ ] I've read the [documentation](https://use-gesture.netlify.app/).
-  - [ ] If this is an issue with drag, I've tried setting `pointer-events: none` to the draggable element.
+  - [ ] If this is an issue with drag, I've tried setting `touch-action: none` to the draggable element.
