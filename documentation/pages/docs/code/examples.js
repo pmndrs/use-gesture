@@ -45,13 +45,13 @@ export function Offset({ setActive }) {
 
 export function Cancel({ setActive }) {
   const [{ x, bg }, set] = useSpring(() => ({ x: 0, bg: 'cornflowerblue' }))
-  const bind = useDrag(({ down, movement: [mx], cancel, canceled }) => {
-    setActive && setActive(down)
+  const bind = useDrag(({ active, movement: [mx], cancel, canceled }) => {
+    setActive && setActive(active)
     if (mx > 200) cancel()
     set({
-      x: down ? mx : 0,
+      x: active ? mx : 0,
       bg: canceled ? 'lightpink' : 'cornflowerblue',
-      immediate: down,
+      immediate: active,
     })
   })
 
