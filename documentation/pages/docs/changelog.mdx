@@ -14,6 +14,7 @@ Here is the change log since version 5.
 ### Breaking
 
 1. Drag now uses `setPointerCapture` and `releasePointerCapture`. This is no breaking change in the API and it's very likely that no code will break, but it's still a major shift. Please report any undesirable behavior.
+2. The `down` state attribute that indicates if the mouse button is down or if a pointer is pressing the screen is now more consistent and will remain true even when the gesture is canceled. To make sure you want to handle cases where the gesture is active, use the `active` state attribute.
 
 ### Added
 
@@ -26,6 +27,7 @@ Here is the change log since version 5.
 2. Fixed a bug affecting drag when used together with pinch [#234](https://github.com/pmndrs/react-use-gesture/issues/234).
 3. Fixes `touches` with the drag gesture [#233](https://github.com/pmndrs/react-use-gesture/issues/233).
 4. Normalize wheel event delta values for FireFox [#236](https://github.com/pmndrs/react-use-gesture/issues/236).
+5. Fixes conflicts between drag and pinch!
 
 ## 8.0.1 Release
 
