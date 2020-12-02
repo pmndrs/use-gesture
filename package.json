@@ -1,9 +1,9 @@
 {
   "name": "react-use-gesture",
-  "version": "8.1.0-beta.8",
+  "version": "8.1.0-beta.9",
   "description": "React hook for receiving gestures https://use-gesture.netlify.app",
   "main": "dist/index.js",
-  "module": "dist/react-use-gesture.esm.js",
+  "module": "dist/reactusegesture.esm.js",
   "typings": "dist/index.d.ts",
   "files": [
     "dist"
@@ -11,7 +11,7 @@
   "sideEffects": false,
   "scripts": {
     "start": "tsdx watch",
-    "build": "tsdx build",
+    "build": "tsdx build --name ReactUseGesture --format cjs,esm,umd",
     "lint": "tsdx lint",
     "prepare": "yarn build",
     "docs": "yarn --cwd ./documentation start",
@@ -22,11 +22,11 @@
   },
   "size-limit": [
     {
-      "path": "dist/react-use-gesture.cjs.production.min.js",
+      "path": "dist/reactusegesture.cjs.production.min.js",
       "limit": "9 KB"
     },
     {
-      "path": "dist/react-use-gesture.esm.js",
+      "path": "dist/reactusegesture.esm.js",
       "limit": "10 KB"
     }
   ],
