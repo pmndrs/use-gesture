@@ -69,11 +69,12 @@ export function getTwoTouchesEventValues(
   const cx = (B.clientX + A.clientX) / 2
   const cy = (B.clientY + A.clientY) / 2
 
-  const e: any = 'nativeEvent' in event ? event.nativeEvent : event
+  // const e: any = 'nativeEvent' in event ? event.nativeEvent : event
 
   const distance = Math.hypot(dx, dy)
-  const angle = (e.rotation as number) ?? -(Math.atan2(dx, dy) * 180) / Math.PI
-
+  // FIXME rotation has inconsistant values so we're not using it atm
+  // const angle = (e.rotation as number) ?? -(Math.atan2(dx, dy) * 180) / Math.PI
+  const angle = -(Math.atan2(dx, dy) * 180) / Math.PI
   const values: Vector2 = transform([distance, angle])
   const origin: Vector2 = transform([cx, cy])
 
