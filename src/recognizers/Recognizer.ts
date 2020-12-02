@@ -192,14 +192,17 @@ export default abstract class Recognizer<T extends StateKey = StateKey> {
 
       this.controller.state.shared[this.ingKey] = next_active // Sets dragging, pinching, etc. to the gesture active state
     }
+    const touches = this.controller.pointerIds.size || this.controller.touchIds.size
+
     const state = {
       ...this.controller.state.shared,
       ...this.state,
       ...this.mapStateValues(this.state), // Sets xy or da to the gesture state values
-      touches: this.controller.state.shared.touches || this.controller.pointerIds.size,
+      touches,
+      down: this.controller.state.shared.buttons > 0 || touches > 0,
     } as FullGestureState<T>
 
-    // @ts-ignore
+    // @ts-expect-error
     const newMemo = this.handler(state)
 
     // Sets memo to the returned value of the handler (unless it's not undefined)

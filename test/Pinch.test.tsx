@@ -8,6 +8,25 @@ import { InteractiveType } from './components/types'
 
 afterAll(cleanup)
 
+// patching createEvent
+for (let key in createEvent) {
+  if (key.indexOf('touch') === 0) {
+    // @ts-ignore
+    const fn = createEvent[key]
+    // prettier-ignore
+    // @ts-ignore
+    createEvent[key] = function (type, { targetTouches: _targetTouches = [], changedTouches: _changedTouches = [], id,...rest }:any) {
+      // @ts-ignore
+      const targetTouches = _targetTouches.map((t, i) => ({ ...t, identifier: id + i }))
+      // @ts-ignore
+      const changedTouches = _changedTouches.map((t, i) => ({ ...t, identifier: id + i + targetTouches.length }))
+      const touches = targetTouches
+      const event = fn(type, { targetTouches, changedTouches, touches, ...rest })
+      return event
+    }
+  }
+}
+
 // TODO test with gesturechange
 
 describe.each([
@@ -21,12 +40,11 @@ describe.each([
   let delta_t: number
 
   test('one-finger touch should NOT initiate the gesture', () => {
-    fireEvent.touchStart(element)
+    fireEvent.touchStart(element, { targetTouches: [{ clientX: 0, clientY: 0 }], id: 0 })
     expect(queryByTestId(`${prefix}pinch-active`)).not.toBeInTheDocument()
   })
-
   test('one-finger touch release should NOT trigger on end', () => {
-    fireEvent.touchEnd(element)
+    fireEvent.touchEnd(element, { changedTouches: [{}], id: 0 })
     expect(getByTestId(`${prefix}pinch-end`)).toHaveTextContent(/^not fired$/)
   })
 
@@ -36,6 +54,7 @@ describe.each([
         { clientX: 0, clientY: 0 },
         { clientX: 0, clientY: 40 },
       ],
+      id: 10,
     })
     fireEvent(element, event)
     delta_t = event.timeStamp
@@ -64,6 +83,7 @@ describe.each([
         { clientX: 0, clientY: 0 },
         { clientX: 30, clientY: 0 },
       ],
+      id: 10,
     })
     fireEvent(element, event)
     delta_t = event.timeStamp - delta_t
@@ -84,7 +104,7 @@ describe.each([
 
   // TODO potentially having three fingers on target and only ONE lifted up would trigger pinchEnd
   test('touchEnd should terminate the gesture', () => {
-    fireEvent.touchEnd(element)
+    fireEvent.touchEnd(element, { changedTouches: [{}, {}], id: 10 })
     expect(getByTestId(`${prefix}pinch-pinching`)).toHaveTextContent('false')
     expect(getByTestId(`${prefix}pinch-active`)).toHaveTextContent('false')
     expect(getByTestId(`${prefix}pinch-last`)).toHaveTextContent('true')
@@ -101,12 +121,14 @@ describe.each([
         { clientX: 0, clientY: 0 },
         { clientX: 0, clientY: 40 },
       ],
+      id: 20,
     })
     fireEvent.touchMove(element, {
       targetTouches: [
         { clientX: 0, clientY: 0 },
         { clientX: -30, clientY: 0 },
       ],
+      id: 20,
     })
     expect(getByTestId(`${prefix}pinch-da`)).toHaveTextContent(`30,90`)
     expect(getByTestId(`${prefix}pinch-offset`)).toHaveTextContent(`-20,0`)
@@ -124,19 +146,21 @@ describe.each([
         { clientX: 0, clientY: 0 },
         { clientX: 3, clientY: -30 },
       ],
+      id: 20,
     })
     fireEvent.touchMove(element, {
       targetTouches: [
         { clientX: 0, clientY: 0 },
         { clientX: -3, clientY: -30 },
       ],
+      id: 20,
     })
     expect(getByTestId(`${prefix}pinch-turns`)).toHaveTextContent(`1`)
   })
 
   test('canceling the gesture should cancel the gesture in the next RAF tick', async () => {
     rerender(<Component gestures={['Pinch']} canceled />)
-    fireEvent.touchMove(element, { targetTouches: [{}, {}] })
+    fireEvent.touchMove(element, { targetTouches: [{}, {}], id: 20 })
     await waitFor(() => {
       expect(getByTestId(`${prefix}pinch-canceled`)).toHaveTextContent('true')
       expect(getByTestId(`${prefix}pinch-pinching`)).toHaveTextContent('false')
@@ -144,14 +168,17 @@ describe.each([
   })
 
   test('disabling all gestures should prevent state from updating', () => {
+    fireEvent.touchEnd(element, { changedTouches: [{}, {}], id: 20 })
     rerender(<Component gestures={['Pinch']} config={{ enabled: false }} />)
     fireEvent.touchStart(element, {
       targetTouches: [
         { clientX: 0, clientY: 0 },
         { clientX: 0, clientY: 40 },
       ],
+      id: 30,
     })
     expect(getByTestId(`${prefix}pinch-pinching`)).toHaveTextContent('false')
+    fireEvent.touchEnd(element, { changedTouches: [{}, {}], id: 30 })
   })
 
   test('disabling the pinch gesture should prevent state from updating', () => {
@@ -161,8 +188,10 @@ describe.each([
         { clientX: 0, clientY: 0 },
         { clientX: 0, clientY: 40 },
       ],
+      id: 40,
     })
     expect(getByTestId(`${prefix}pinch-pinching`)).toHaveTextContent('false')
+    fireEvent.touchEnd(element, { changedTouches: [{}, {}], id: 40 })
   })
 
   // this test uses bindArgs which are only accessible when attaching handlers to the component
@@ -186,6 +215,7 @@ describe.each([
           { clientX: 0, clientY: 0 },
           { clientX: 0, clientY: 40 },
         ],
+        id: 50,
       })
       expect(getByTestId(`${prefix}pinch-_bounds`)).toHaveTextContent('200,-400,-600,Infinity')
     })

@@ -20,22 +20,20 @@ export function supportsTouchEvents(): boolean {
   return typeof window !== 'undefined' && 'ontouchstart' in window
 }
 
-function getTouchEvents(event: DomEvents) {
-  if ('touches' in event) {
-    const { targetTouches, changedTouches } = event
-    return targetTouches.length > 0 ? targetTouches : changedTouches
-  }
-  return null
+function getEventTouches(event: PointerEvent | React.PointerEvent | TouchEvent | React.TouchEvent) {
+  if ('pointerId' in event) return null
+  return event.type === 'touchend' ? event.changedTouches : event.targetTouches
+}
+
+export function getPointerIds(event: PointerEvent | React.PointerEvent | TouchEvent | React.TouchEvent): number[] {
+  if ('pointerId' in event) return [event.pointerId]
+  return Array.from(getEventTouches(event)!).map(t => t.identifier)
 }
 
 export function getGenericEventData(event: DomEvents) {
   const buttons = 'buttons' in event ? event.buttons : 0
-  const touchEvents = getTouchEvents(event)
-  const touches = (touchEvents && touchEvents.length) || 0
-  const down = touches > 0 || buttons > 0
-
   const { shiftKey, altKey, metaKey, ctrlKey } = event as any // TODO check if this might create some overrides?
-  return { touches, down, buttons, shiftKey, altKey, metaKey, ctrlKey }
+  return { buttons, shiftKey, altKey, metaKey, ctrlKey }
 }
 
 const identity = (xy: Vector2) => xy
@@ -49,9 +47,37 @@ export function getPointerEventValues(
   event: TouchEvent | React.TouchEvent | React.PointerEvent | PointerEvent,
   transform = identity
 ): Vector2 {
-  const touchEvents = getTouchEvents(event)
+  const touchEvents = getEventTouches(event)
   const { clientX, clientY } = touchEvents ? touchEvents[0] : (event as React.PointerEvent)
   return transform([clientX, clientY])
+}
+
+/**
+ * Gets two touches event data
+ * @param event
+ * @returns two touches event data
+ */
+export function getTwoTouchesEventValues(
+  event: React.TouchEvent | TouchEvent,
+  pointerIds: [number, number],
+  transform = identity
+) {
+  const [A, B] = Array.from(event.touches).filter(t => pointerIds.includes(t.identifier))
+
+  const dx = B.clientX - A.clientX
+  const dy = B.clientY - A.clientY
+  const cx = (B.clientX + A.clientX) / 2
+  const cy = (B.clientY + A.clientY) / 2
+
+  const e: any = 'nativeEvent' in event ? event.nativeEvent : event
+
+  const distance = Math.hypot(dx, dy)
+  const angle = (e.rotation as number) ?? -(Math.atan2(dx, dy) * 180) / Math.PI
+
+  const values: Vector2 = transform([distance, angle])
+  const origin: Vector2 = transform([cx, cy])
+
+  return { values, origin }
 }
 
 /**
@@ -95,30 +121,4 @@ export function getWheelEventValues(event: React.WheelEvent | WheelEvent, transf
  */
 export function getWebkitGestureEventValues(event: WebKitGestureEvent, transform = identity): Vector2 {
   return transform([event.scale * WEBKIT_DISTANCE_SCALE_FACTOR, event.rotation])
-}
-
-/**
- * Gets two touches event data
- * @param event
- * @returns two touches event data
- */
-export function getTwoTouchesEventData(event: React.TouchEvent | TouchEvent, transform = identity) {
-  const { targetTouches } = event
-  const A = targetTouches[0],
-    B = targetTouches[1]
-
-  const dx = B.clientX - A.clientX
-  const dy = B.clientY - A.clientY
-  const cx = (B.clientX + A.clientX) / 2
-  const cy = (B.clientY + A.clientY) / 2
-
-  const e: any = 'nativeEvent' in event ? event.nativeEvent : event
-
-  const distance = Math.hypot(dx, dy)
-  const angle = (e.rotation as number) ?? -(Math.atan2(dx, dy) * 180) / Math.PI
-
-  const values: Vector2 = transform([distance, angle])
-  const origin: Vector2 = transform([cx, cy])
-
-  return { values, origin }
 }

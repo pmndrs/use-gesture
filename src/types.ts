@@ -269,6 +269,10 @@ export interface DragState {
   swipe: Vector2
 }
 
+export interface PinchState {
+  _pointerIds: [number, number]
+}
+
 export interface DistanceAngle {
   da: Vector2
   vdva: Vector2
@@ -282,7 +286,7 @@ export type State = {
   wheel: CommonGestureState & Coordinates
   scroll: CommonGestureState & Coordinates
   move: CommonGestureState & Coordinates
-  pinch: CommonGestureState & DistanceAngle
+  pinch: CommonGestureState & DistanceAngle & PinchState
 }
 
 export type GestureState<T extends StateKey> = State[T]

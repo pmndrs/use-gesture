@@ -2,32 +2,34 @@ import DistanceAngleRecognizer from './DistanceAngleRecognizer'
 import { Vector2, WebKitGestureEvent } from '../types'
 import {
   getGenericEventData,
-  getTwoTouchesEventData,
+  getTwoTouchesEventValues,
   getWheelEventValues,
   getWebkitGestureEventValues,
+  getPointerIds,
 } from '../utils/event'
 import { getStartGestureState, getGenericPayload } from './Recognizer'
-import { addBindings } from '../Controller'
+import { addBindings, addEventIds, removeEventIds } from '../Controller'
 
 export class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
   readonly ingKey = 'pinching'
   readonly stateKey = 'pinch'
 
-  private pinchShouldStart = (event: React.TouchEvent | TouchEvent) => {
-    const { touches } = getGenericEventData(event)
-    return this.enabled && touches === 2
-  }
-
   onPinchStart = (event: React.TouchEvent | TouchEvent) => {
-    if (!this.pinchShouldStart(event)) return
+    addEventIds(this.controller, event)
 
-    const { values, origin } = getTwoTouchesEventData(event, this.transform)
+    if (!this.enabled || this.state._active) return
+    // until we reach two fingers on the target don't react
+    if (this.controller.touchIds.size < 2) return
+    const _pointerIds = Array.from(this.controller.touchIds).slice(0, 2) as [number, number]
+
+    const { values, origin } = getTwoTouchesEventValues(event, _pointerIds, this.transform)
 
     this.updateSharedState(getGenericEventData(event))
 
     this.updateGestureState({
       ...getStartGestureState(this, values, event),
       ...getGenericPayload(this, event, true),
+      _pointerIds,
       cancel: this.onCancel,
       origin,
     })
@@ -43,12 +45,10 @@ export class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
 
     this.updateSharedState(genericEventData)
 
-    const { values, origin } = getTwoTouchesEventData(event, this.transform)
-    // @ts-ignore
+    const { values, origin } = getTwoTouchesEventValues(event, this.state._pointerIds, this.transform)
     const kinematics = this.getKinematics(values, event)
 
     this.updateGestureState({
-      // @ts-ignore
       ...getGenericPayload(this, event),
       ...kinematics,
       origin,
@@ -58,9 +58,14 @@ export class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
   }
 
   onPinchEnd = (event: React.TouchEvent | TouchEvent): void => {
+    removeEventIds(this.controller, event)
+    const pointerIds = getPointerIds(event)
+
+    // if none of the lifted pointerIds is in the state pointerIds don't do anything
+    if (this.state._pointerIds.every(id => !pointerIds.includes(id))) return
+
     this.clean()
     if (!this.state._active) return
-    this.updateSharedState({ down: false, touches: 0 })
 
     this.updateGestureState({
       ...getGenericPayload(this, event),
@@ -73,9 +78,7 @@ export class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
   onCancel = (): void => {
     if (this.state.canceled) return
     this.updateGestureState({ _active: false, canceled: true })
-    this.updateSharedState({ down: false, touches: 0 })
-
-    requestAnimationFrame(() => this.fireGestureHandler())
+    setTimeout(() => this.fireGestureHandler(), 0)
   }
   /**
    * PINCH WITH WEBKIT GESTURES
@@ -125,7 +128,6 @@ export class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
   onGestureEnd = (event: WebKitGestureEvent): void => {
     this.clean()
     if (!this.state._active) return
-    this.updateSharedState({ down: false, touches: 0 })
 
     this.updateGestureState({
       ...getGenericPayload(this, event),

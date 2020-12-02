@@ -2,7 +2,7 @@ import CoordinatesRecognizer from './CoordinatesRecognizer'
 import { getPointerEventValues, getGenericEventData } from '../utils/event'
 import { calculateDistance, sign } from '../utils/math'
 import { getStartGestureState, getGenericPayload } from './Recognizer'
-import { addBindings, updateWindowListeners, clearWindowListeners, addPointer, removePointer } from '../Controller'
+import { addBindings, updateWindowListeners, clearWindowListeners, addEventIds, removeEventIds } from '../Controller'
 
 export const TAP_DISTANCE_THRESHOLD = 3
 export const SWIPE_MAX_ELAPSED_TIME = 220
@@ -46,9 +46,14 @@ export class DragRecognizer extends CoordinatesRecognizer<'drag'> {
     }
   }
 
+  private getEventId = (event: any): number => {
+    if (this.config.useTouch) return event.changedTouches[0].identifier
+    return event.pointerId
+  }
+
   private isValidEvent = (event: any) => {
-    if (this.config.useTouch) return event.type !== 'touchend' || event.targetTouches.length === 0
-    return this.state._pointerId === event.pointerId
+    // if we were using pointer events only event.isPrimary === 1 would suffice
+    return this.state._pointerId === this.getEventId(event)
   }
 
   private shouldPreventWindowScrollY =
@@ -83,14 +88,14 @@ export class DragRecognizer extends CoordinatesRecognizer<'drag'> {
     this.updateGestureState({
       ...getStartGestureState(this, values, event),
       ...getGenericPayload(this, event, true),
-      _pointerId: event.pointerId, // setting pointerId locks the gesture to this specific event
+      _pointerId: this.getEventId(event), // setting pointerId locks the gesture to this specific event
     })
 
     this.updateGestureState(this.getMovement(values))
   }
 
   onDragStart = (event: React.PointerEvent | PointerEvent): void => {
-    addPointer(this.controller, event.pointerId)
+    addEventIds(this.controller, event)
     if (!this.enabled || this.state._active) return
 
     this.setStartState(event)
@@ -161,10 +166,12 @@ export class DragRecognizer extends CoordinatesRecognizer<'drag'> {
     // If the event doesn't have any button / touches left we should cancel
     // the gesture. This may happen if the drag release happens outside the browser
     // window.
-    if (!genericEventData.down) {
-      this.onDragEnd(event)
-      return
-    }
+
+    // FIXME fix this asap
+    // if (!genericEventData.down) {
+    //   this.onDragEnd(event)
+    //   return
+    // }
 
     this.updateSharedState(genericEventData)
     const genericPayload = getGenericPayload(this, event)
@@ -182,13 +189,16 @@ export class DragRecognizer extends CoordinatesRecognizer<'drag'> {
   }
 
   onDragEnd = (event: PointerEvent): void => {
-    removePointer(this.controller, event.pointerId)
+    removeEventIds(this.controller, event)
 
     // if the event pointerId doesn't match the one that initiated the drag
     // we don't want to end the drag
     if (!this.isValidEvent(event)) return
     this.clean()
 
+    // if the gesture is no longer active (ie canceled)
+    // don't do anything
+    if (!this.state._active) return
     this.state._active = false
 
     const tap = this.state._dragIsTap
@@ -210,7 +220,7 @@ export class DragRecognizer extends CoordinatesRecognizer<'drag'> {
       if (iy !== false && Math.abs(vy) > svy && Math.abs(my) > sy) swipe[1] = sign(vy)
     }
 
-    this.updateSharedState({ down: false, buttons: 0, touches: 0 })
+    this.updateSharedState({ buttons: 0 })
     this.updateGestureState({ ...endState, tap, swipe })
     this.fireGestureHandler(this.config.filterTaps && tap === true)
   }
@@ -225,8 +235,8 @@ export class DragRecognizer extends CoordinatesRecognizer<'drag'> {
   onCancel = (): void => {
     if (this.state.canceled) return
     this.updateGestureState({ canceled: true, _active: false })
-    this.updateSharedState({ down: false, buttons: 0, touches: 0 })
-    requestAnimationFrame(() => this.fireGestureHandler())
+    this.updateSharedState({ buttons: 0 })
+    setTimeout(() => this.fireGestureHandler(), 0)
   }
 
   onClick = (event: React.UIEvent | UIEvent): void => {

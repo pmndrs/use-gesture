@@ -1,6 +1,6 @@
 {
   "name": "react-use-gesture",
-  "version": "8.1.0-beta.6",
+  "version": "8.1.0-beta.7",
   "description": "React hook for receiving gestures https://use-gesture.netlify.app",
   "main": "dist/index.js",
   "module": "dist/react-use-gesture.esm.js",

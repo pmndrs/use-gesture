@@ -1,5 +1,5 @@
 import { noop } from './utils'
-import { CommonGestureState, Coordinates, State, DistanceAngle, Vector2, DragState } from '../types'
+import { CommonGestureState, Coordinates, State, DistanceAngle, Vector2, DragState, PinchState } from '../types'
 
 function getInitial<T>(mixed: T): T & CommonGestureState {
   return {
@@ -70,10 +70,12 @@ export function getInitialState(): State {
     swipe: [0, 0],
   })
 
-  const pinch = getInitial<DistanceAngle>({
+  const pinch = getInitial<DistanceAngle & PinchState>({
+    // @ts-expect-error when used _pointerIds we can assert its type will be [number, number]
+    _pointerIds: [],
     da: [0, 0] as Vector2,
     vdva: [0, 0] as Vector2,
-    // @ts-ignore origin can never be passed as undefined in userland
+    // @ts-expect-error origin can never be passed as undefined in userland
     origin: undefined,
     turns: 0,
   })

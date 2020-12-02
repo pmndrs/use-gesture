@@ -8,7 +8,7 @@ import {
   InternalHandlers,
   RecognizerClass,
 } from './types'
-import { supportsTouchEvents, supportsGestureEvents } from './utils/event'
+import { supportsTouchEvents, supportsGestureEvents, getPointerIds } from './utils/event'
 import { getInitialState } from './utils/state'
 import { chainFns } from './utils/utils'
 
@@ -32,7 +32,8 @@ export default class Controller {
   public domListeners: [string, Fn][] // when config.domTarget is set, we attach events directly to the dom
   public windowListeners: { [stateKey in StateKey]?: [string, Function][] } // keeps track of window listeners added by gestures (drag only at the moment)
 
-  public pointerIds = new Set<number>()
+  public pointerIds = new Set<number>() // register Pointer Events pointerIds
+  public touchIds = new Set<number>() // register Touch Events identifiers
   public supportsTouchEvents = supportsTouchEvents()
   public supportsGestureEvents = supportsGestureEvents()
 
@@ -78,12 +79,20 @@ export default class Controller {
   }
 }
 
-export function addPointer(controller: Controller, pointerId: number) {
-  controller.pointerIds.add(pointerId)
+export function addEventIds(
+  controller: Controller,
+  event: React.TouchEvent | TouchEvent | React.PointerEvent | PointerEvent
+) {
+  const idList = 'pointerId' in event ? controller.pointerIds : controller.touchIds
+  getPointerIds(event).forEach(idList.add, idList)
 }
 
-export function removePointer(controller: Controller, pointerId: number) {
-  controller.pointerIds.delete(pointerId)
+export function removeEventIds(
+  controller: Controller,
+  event: React.TouchEvent | TouchEvent | React.PointerEvent | PointerEvent
+) {
+  const idList = 'pointerId' in event ? controller.pointerIds : controller.touchIds
+  getPointerIds(event).forEach(idList.delete, idList)
 }
 
 export function clearAllWindowListeners(controller: Controller) {
