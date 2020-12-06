@@ -8,7 +8,7 @@ import { Vector2, PartialGestureState, GestureState, CoordinatesKey } from '../t
  */
 export default abstract class CoordinatesRecognizer<T extends CoordinatesKey> extends Recognizer<T> {
   /**
-   * Returns the real movement (without taking intentionality into acount)
+   * Returns the real movement (without taking intentionality into account)
    */
   protected getInternalMovement(values: Vector2, state: GestureState<T>): Vector2 {
     return subV(values, state.initial)
