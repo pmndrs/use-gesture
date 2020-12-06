@@ -199,6 +199,7 @@ export default abstract class Recognizer<T extends StateKey = StateKey> {
       ...this.controller.state.shared,
       ...this.state,
       ...this.mapStateValues(this.state), // Sets xy or da to the gesture state values
+      locked: !!document.pointerLockElement,
       touches,
       down,
     } as FullGestureState<T>

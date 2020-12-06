@@ -207,6 +207,7 @@ export type SharedGestureState = { [ingKey in IngKey]: boolean } & {
   altKey: boolean
   metaKey: boolean
   ctrlKey: boolean
+  locked: boolean
 }
 
 export type EventTypes = {

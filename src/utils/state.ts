@@ -57,6 +57,7 @@ export function getInitialState(): State {
     altKey: false,
     metaKey: false,
     ctrlKey: false,
+    locked: false,
   }
 
   const drag = getInitial<DragState & Coordinates>({
