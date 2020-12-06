@@ -1,6 +1,6 @@
 import CoordinatesRecognizer from './CoordinatesRecognizer'
 import { getPointerEventValues, getGenericEventData } from '../utils/event'
-import { calculateDistance, sign } from '../utils/math'
+import { addV, calculateDistance, sign } from '../utils/math'
 import { getStartGestureState, getGenericPayload } from './Recognizer'
 import { addBindings, updateWindowListeners, clearWindowListeners, addEventIds, removeEventIds } from '../Controller'
 
@@ -18,17 +18,23 @@ export class DragRecognizer extends CoordinatesRecognizer<'drag'> {
   // TODO add back when setPointerCapture is widely wupported
   // https://caniuse.com/#search=setPointerCapture
   private setPointerCapture = (event: React.PointerEvent | PointerEvent) => {
+    // don't perform pointere capture when user wants to use touch events or
+    // when a pointerLockElement exists as this would throw an error
+    if (this.config.useTouch || document.pointerLockElement) return
+
     const { target, pointerId } = event
     if (target && 'setPointerCapture' in target) {
       // this would work in the DOM but doesn't with react three fiber
       // target.addEventListener('pointermove', this.onDragChange, this.controller.config.eventOptions)
       // @ts-expect-error
       target.setPointerCapture(pointerId)
-      this.updateGestureState({ _dragTarget: target, _dragPointerId: pointerId })
     }
+    this.updateGestureState({ _dragTarget: target, _dragPointerId: pointerId })
   }
 
   private releasePointerCapture = () => {
+    if (this.config.useTouch || document.pointerLockElement) return
+
     const { _dragTarget, _dragPointerId } = this.state
     if (_dragPointerId && _dragTarget && 'releasePointerCapture' in _dragTarget) {
       // this would work in the DOM but doesn't with react three fiber
@@ -99,7 +105,7 @@ export class DragRecognizer extends CoordinatesRecognizer<'drag'> {
     if (!this.enabled || this.state._active) return
 
     this.setStartState(event)
-    if (!this.config.useTouch) this.setPointerCapture(event as PointerEvent)
+    this.setPointerCapture(event as PointerEvent)
 
     if (this.shouldPreventWindowScrollY) this.setUpWindowScrollDetection(event)
     else if (this.config.delay > 0) this.setUpDelayedDragTrigger(event)
@@ -135,7 +141,13 @@ export class DragRecognizer extends CoordinatesRecognizer<'drag'> {
     )
       return
 
-    const values = getPointerEventValues(event, this.transform)
+    let values
+
+    if (document.pointerLockElement) {
+      const { movementX, movementY } = event
+      values = addV(this.transform([movementX, movementY]), this.state.values)
+    } else values = getPointerEventValues(event, this.transform)
+
     const kinematics = this.getKinematics(values, event)
 
     // if startDrag hasn't fired
@@ -162,16 +174,6 @@ export class DragRecognizer extends CoordinatesRecognizer<'drag'> {
     }
 
     const genericEventData = getGenericEventData(event)
-
-    // If the event doesn't have any button / touches left we should cancel
-    // the gesture. This may happen if the drag release happens outside the browser
-    // window.
-
-    // FIXME fix this asap
-    // if (!genericEventData.down) {
-    //   this.onDragEnd(event)
-    //   return
-    // }
 
     this.updateSharedState(genericEventData)
     const genericPayload = getGenericPayload(this, event)
@@ -228,7 +230,7 @@ export class DragRecognizer extends CoordinatesRecognizer<'drag'> {
   clean = (): void => {
     super.clean()
     this.state._dragStarted = false
-    if (!this.config.useTouch) this.releasePointerCapture()
+    this.releasePointerCapture()
     clearWindowListeners(this.controller, this.stateKey)
   }
 
