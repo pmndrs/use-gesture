@@ -8,7 +8,6 @@ export default function Delay() {
 
   const bind = useDrag(
     ({ down, movement: [x, y], last }) => {
-      console.log(down, last)
       set({ x: down ? x : 0, y: down ? y : 0, scale: down ? 1.2 : 1, immediate: k => k !== 'scale' && down })
     },
     { delay: 1000 }

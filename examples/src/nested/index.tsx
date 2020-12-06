@@ -10,6 +10,8 @@ export default function Inner() {
   const bindInner = useDrag(
     ({ event, down, offset: [x, y] }) => {
       event.stopPropagation()
+      console.log('hello2')
+
       setInner({ x, y, scale: down ? 1.2 : 1, immediate: key => key !== 'scale' })
     },
     { threshold: 100, triggerAllEvents: true }

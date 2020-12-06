@@ -17,5 +17,6 @@ export { default as gestureEvents } from './gesture-events'
 export { default as nested } from './nested'
 export { default as scrollableList } from './draggable-list-scrollable'
 export { default as preventWindowScroll } from './prevent-window-scroll'
+export { default as pointerLock } from './pointerLock'
 
 // TODO possibly add domTarget site-wide option to test domTarget for all examples
