@@ -69,6 +69,7 @@ Here are all options that can be applied to gestures.
 | [`transform`](#transform)                                                           |  **all**  | A function that you can use to transform pointer values. Useful to map your screen coordinates to custom space coordinates such as a canvas.                                                         |
 | [`filterTaps`](#filtertaps-drag-only)                                               | **drag**  | If `true`, the component won't trigger your drag logic if the user just clicked on the component.                                                                                                    |
 | [`experimental_preventWindowScrollY`](#experimental_preventwindowscrolly-drag-only) | **drag**  | If `true`, drag will be triggered after `250ms` and will prevent window scrolling.                                                                                                                   |
+| [`useTouch`](#usetouch-drag-only)                                                   | **drag**  | If `true`, drag will use touch events on touch-enabled devices. [Read more below](#usetouch-drag-only).                                                                                              |
 | [`delay`](#delay-drag-only)                                                         | **drag**  | If set, the handler will be delayed for the duration of the delay (in `ms`) — or if the user starts moving. When set to `true`, `delay` is defaulted to `180ms`.                                     |
 | [`swipeDistance`](#swipedistance)                                                   | **drag**  | The minimum distance per axis (in `pixels`) the drag gesture needs to travel to trigger a swipe.                                                                                                     |
 | [`swipeVelocity`](#swipevelocity)                                                   | **drag**  | The minimum velocity per axis (in `pixels / ms`) the drag gesture needs to reach before the pointer is released.                                                                                     |
@@ -390,7 +391,11 @@ function FilterTapsExample() {
 
 On desktop, you should be able to drag the torus as you would expect. On mobile, initiating the scroll from the torus should let you scroll the page as expected. Hold touch and drag and you should be able to drag the canvas. This might be clunky as still under test.
 
-### `delay` (drag only)
+### useTouch (drag only)
+
+Most gestures, drag included, use [pointer events](https://developer.mozilla.org/en-US/docs/Web/API/Pointer_events). This works well in 99 situations in 100, but pointer events get canceled on touch devices when the user starts scrolling. Usually this is what you actually want, and the browser does it for you. But in some situations you may want the drag to persist while scrolling. In that case you'll need to indicate <ReactUseGesture /> to use touch events, which aren't canceled on scroll.
+
+### delay (drag only)
 
 <Specs types={['boolean', 'number']} defaultValue="0" />
 
