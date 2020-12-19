@@ -194,8 +194,9 @@ export class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
   }
 
   onWheelChange = (event: React.WheelEvent | WheelEvent): void => {
-    this.updateSharedState(getGenericEventData(event))
+    if (event.cancelable) event.preventDefault()
 
+    this.updateSharedState(getGenericEventData(event))
     const { values, origin, delta } = this.getWheelValuesFromEvent(event)
 
     this.updateGestureState({
