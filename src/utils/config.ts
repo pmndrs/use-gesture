@@ -25,6 +25,7 @@ export const DEFAULT_DRAG_DELAY = 180
 export const DEFAULT_RUBBERBAND = 0.15
 export const DEFAULT_SWIPE_VELOCITY = 0.5
 export const DEFAULT_SWIPE_DISTANCE = 60
+export const DEFAULT_SWIPE_DURATION = 220
 
 const InternalGestureOptionsNormalizers = {
   threshold(value: number | Vector2 = 0) {
@@ -140,7 +141,9 @@ const InternalDragOptionsNormalizers = {
   swipeDistance(v: number | Vector2 = DEFAULT_SWIPE_DISTANCE) {
     return ensureVector(v)
   },
-
+  swipeDuration(value = DEFAULT_SWIPE_DURATION) {
+    return value
+  },
   delay(value: number | boolean = 0) {
     switch (value) {
       case true:

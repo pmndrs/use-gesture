@@ -52,6 +52,7 @@ export type DragConfig = CoordinatesConfig<'drag'> & {
   useTouch?: boolean
   swipeVelocity?: number | Vector2
   swipeDistance?: number | Vector2
+  swipeDuration?: number
   experimental_preventWindowScrollY?: boolean
   delay?: boolean | number
 }
@@ -103,6 +104,7 @@ export interface InternalDragOptions extends InternalCoordinatesOptions<'drag'> 
   experimental_preventWindowScrollY: boolean
   swipeVelocity: Vector2
   swipeDistance: Vector2
+  swipeDuration: number
   delay: number
 }
 

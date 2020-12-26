@@ -209,6 +209,7 @@ export class DragRecognizer extends CoordinatesRecognizer<'drag'> {
     const [ix, iy] = this.state._intentional
     const [svx, svy] = this.config.swipeVelocity
     const [sx, sy] = this.config.swipeDistance
+    const sd = this.config.swipeDuration
 
     const endState = {
       ...getGenericPayload(this, event),
@@ -217,7 +218,7 @@ export class DragRecognizer extends CoordinatesRecognizer<'drag'> {
 
     const swipe: [number, number] = [0, 0]
 
-    if (endState.elapsedTime < SWIPE_MAX_ELAPSED_TIME) {
+    if (endState.elapsedTime < sd) {
       if (ix !== false && Math.abs(vx) > svx && Math.abs(mx) > sx) swipe[0] = sign(vx)
       if (iy !== false && Math.abs(vy) > svy && Math.abs(my) > sy) swipe[1] = sign(vy)
     }

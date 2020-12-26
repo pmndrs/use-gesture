@@ -55,6 +55,7 @@ describe('testing derived config', () => {
         delay: 0,
         swipeDistance: [60, 60],
         swipeVelocity: [0.5, 0.5],
+        swipeDuration: 220,
         threshold: [0, 0],
         rubberband: [0, 0],
         axis: undefined,
