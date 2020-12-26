@@ -24,8 +24,8 @@ import { supportsTouchEvents } from './event'
 export const DEFAULT_DRAG_DELAY = 180
 export const DEFAULT_RUBBERBAND = 0.15
 export const DEFAULT_SWIPE_VELOCITY = 0.5
-export const DEFAULT_SWIPE_DISTANCE = 60
-export const DEFAULT_SWIPE_DURATION = 220
+export const DEFAULT_SWIPE_DISTANCE = 50
+export const DEFAULT_SWIPE_DURATION = 250
 
 const InternalGestureOptionsNormalizers = {
   threshold(value: number | Vector2 = 0) {
