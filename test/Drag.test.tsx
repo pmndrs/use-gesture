@@ -3,7 +3,6 @@ import { render, cleanup, fireEvent, createEvent, waitFor } from '@testing-libra
 import '@testing-library/jest-dom/extend-expect'
 import Interactive from './components/Interactive'
 import InteractiveDom from './components/InteractiveDom'
-import InteractiveDomBackwardCompat from './components/InteractiveDomBackwardCompat'
 import { InteractiveType } from './components/types'
 
 afterAll(cleanup)
@@ -26,7 +25,6 @@ for (let key in createEvent) {
 describe.each([
   ['attached to component', Interactive, ''],
   ['attached to node', InteractiveDom, 'dom-'],
-  ['attached to node and called effect', InteractiveDomBackwardCompat, 'backward-dom-'],
 ])('testing onDrag %s', (_testName, C, prefix): any => {
   const Component = C as InteractiveType
   const { getByTestId, rerender } = render(<Component bindArgs={[2]} gestures={['Drag']} memoArg="memo" />)
@@ -76,7 +74,6 @@ describe.each([
     expect(getByTestId(`${prefix}drag-velocity`)).not.toHaveTextContent(/^0$/)
     expect(getByTestId(`${prefix}drag-vxvy`)).toHaveTextContent(`${10 * (1 / delta_t)},${30 * (1 / delta_t)}`)
   })
-
   test('moving again should further update xy and movement', () => {
     fireEvent.pointerMove(element, { pointerId: 1, clientX: -10, clientY: 30, buttons: 1 })
     expect(getByTestId(`${prefix}drag-xy`)).toHaveTextContent('-10,30')
@@ -152,7 +149,7 @@ describe.each([
     fireEvent.pointerUp(element, { pointerId: 6 })
   })
 
-  test('applying a dragDelay should start the gesture after a delay', () => {
+  test('moving the pointer with a dragDelay should start the gesture without waiting', () => {
     fireEvent.pointerDown(element, { pointerId: 7, clientX: 100, clientY: 200 })
     fireEvent.pointerMove(element, { pointerId: 7, clientX: 20, clientY: 50, buttons: 1 })
     expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('true')

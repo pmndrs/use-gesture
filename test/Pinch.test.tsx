@@ -3,7 +3,6 @@ import { render, cleanup, fireEvent, createEvent, waitFor } from '@testing-libra
 import '@testing-library/jest-dom/extend-expect'
 import Interactive from './components/Interactive'
 import InteractiveDom from './components/InteractiveDom'
-import InteractiveDomBackwardCompat from './components/InteractiveDomBackwardCompat'
 import { InteractiveType } from './components/types'
 
 afterAll(cleanup)
@@ -32,7 +31,6 @@ for (let key in createEvent) {
 describe.each([
   ['attached to component', Interactive, ''],
   ['attached to node', InteractiveDom, 'dom-'],
-  ['attached to node and called effect', InteractiveDomBackwardCompat, 'backward-dom-'],
 ])('testing onPinch %s)', (_testName, C, prefix) => {
   const Component = C as InteractiveType
   const { getByTestId, queryByTestId, rerender } = render(<Component gestures={['Pinch']} memoArg="memo" />)

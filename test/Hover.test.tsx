@@ -4,7 +4,6 @@ import '@testing-library/jest-dom/extend-expect'
 import Interactive from './components/Interactive'
 import { InteractiveType } from './components/types'
 // import InteractiveDom from './components/InteractiveDom'
-// import InteractiveDomBackwardCompat from './components/InteractiveDomBackwardCompat'
 
 afterAll(cleanup)
 
