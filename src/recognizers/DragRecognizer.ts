@@ -137,7 +137,10 @@ export class DragRecognizer extends CoordinatesRecognizer<'drag'> {
       // if onDragStart wasn't fired or
       !this.state._active ||
       // if the event pointerId doesn't match the one that initiated the drag
-      !this.isValidEvent(event)
+      !this.isValidEvent(event) ||
+      // if the event has the same timestamp as the previous event
+      // note that checking type equality is ONLY for tests ¯\_(ツ)_/¯
+      (this.state._lastEventType === event.type && event.timeStamp === this.state.timeStamp)
     )
       return
 

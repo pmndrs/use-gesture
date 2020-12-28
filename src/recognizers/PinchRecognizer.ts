@@ -40,7 +40,13 @@ export class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
 
   onPinchChange = (event: React.TouchEvent | TouchEvent): void => {
     const { canceled, _active } = this.state
-    if (canceled || !_active) return
+    if (
+      canceled ||
+      !_active ||
+      // if the event has the same timestamp as the previous event
+      event.timeStamp === this.state.timeStamp
+    )
+      return
     const genericEventData = getGenericEventData(event)
 
     this.updateSharedState(genericEventData)
