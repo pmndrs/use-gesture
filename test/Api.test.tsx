@@ -16,7 +16,7 @@ for (let key in createEvent) {
     const fn = createEvent[key.replace('pointer', 'mouse')]
     if (!fn) break
     // @ts-ignore
-    createEvent[key] = function (type, { pointerId = Date.now(), ...rest }) {
+    createEvent[key] = function (type, { pointerId, ...rest }) {
       const event = fn(type, rest)
       event.pointerId = pointerId
       return event
@@ -77,15 +77,15 @@ test('testing memo', () => {
 test('testing timestamp', () => {
   const { getByTestId } = render(<Interactive gestures={['Drag']} memoArg="memo" />)
   const element = getByTestId('drag-el')
-  let event = createEvent.pointerDown(element, { clientX: 10, clientY: 20, buttons: 1, pointerId: 9 })
+  let event = createEvent.pointerDown(element, { pointerId: 9, clientX: 10, clientY: 20, buttons: 1 })
   fireEvent(element, event)
   const start = event.timeStamp
   expect(getByTestId('drag-timeStamp').innerHTML).toBe(String(start))
   expect(getByTestId('drag-startTime').innerHTML).toBe(String(start))
   expect(getByTestId('drag-elapsedTime').innerHTML).toBe('0')
 
-  event = createEvent.pointerMove(window, { clientX: 20, clientY: 50, buttons: 1, pointerId: 9 })
-  fireEvent(window, event)
+  event = createEvent.pointerMove(element, { pointerId: 9, clientX: 20, clientY: 50, buttons: 1 })
+  fireEvent(element, event)
   let time = event.timeStamp
   expect(getByTestId('drag-timeStamp').innerHTML).toBe(String(time))
   expect(getByTestId('drag-startTime').innerHTML).toBe(String(start))
@@ -96,7 +96,7 @@ test('testing unmount with domTarget', () => {
   const { getByTestId, unmount } = render(<InteractiveDom gestures={['Drag']} />)
   const element = getByTestId('dom-drag-el')
   fireEvent.pointerDown(element, { pointerId: 10 })
-  fireEvent.pointerMove(window, { clientX: 20, clientY: 50, buttons: 1, pointerId: 10 })
+  fireEvent.pointerMove(element, { pointerId: 10, clientX: 20, clientY: 50, buttons: 1 })
   expect(getByTestId('dom-drag-dragging')).toHaveTextContent('true')
   unmount()
 })

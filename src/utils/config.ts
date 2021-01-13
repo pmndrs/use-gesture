@@ -19,11 +19,13 @@ import {
   CoordinatesKey,
   DistanceAngleKey,
 } from '../types'
+import { supportsTouchEvents } from './event'
 
 export const DEFAULT_DRAG_DELAY = 180
 export const DEFAULT_RUBBERBAND = 0.15
 export const DEFAULT_SWIPE_VELOCITY = 0.5
-export const DEFAULT_SWIPE_DISTANCE = 60
+export const DEFAULT_SWIPE_DISTANCE = 50
+export const DEFAULT_SWIPE_DURATION = 250
 
 const InternalGestureOptionsNormalizers = {
   threshold(value: number | Vector2 = 0) {
@@ -53,6 +55,8 @@ const InternalGestureOptionsNormalizers = {
     if (typeof value === 'function') return value
     return ensureVector(value)
   },
+
+  transform: true,
 }
 
 const InternalCoordinatesOptionsNormalizers = {
@@ -87,12 +91,13 @@ const InternalGenericOptionsNormalizers = {
   eventOptions({ passive = true, capture = false } = {}) {
     return { passive, capture }
   },
+  transform: true,
 }
 
 const InternalDistanceAngleOptionsNormalizers = {
   ...InternalGestureOptionsNormalizers,
 
-  bounds(_value: undefined, _key: string, { distanceBounds = {}, angleBounds = {} }: any) {
+  bounds(_value: undefined, _key: string, { distanceBounds = {}, angleBounds = {} }) {
     const _distanceBounds = (state?: State) => {
       const D = assignDefault(valueFn(distanceBounds, state), { min: -Infinity, max: Infinity })
       return [D.min, D.max]
@@ -113,14 +118,20 @@ const InternalDistanceAngleOptionsNormalizers = {
 const InternalDragOptionsNormalizers = {
   ...InternalCoordinatesOptionsNormalizers,
 
+  useTouch(value = false) {
+    return value && supportsTouchEvents()
+  },
+  experimental_preventWindowScrollY(value = false) {
+    return value
+  },
   threshold(
-    this: any,
+    this: InternalDragOptions,
     v: number | Vector2 | undefined,
     _k: string,
-    { filterTaps = false, lockDirection = false, axis = undefined }: any
+    { filterTaps = false, lockDirection = false, axis = undefined }
   ) {
     const A = ensureVector(v, filterTaps ? 3 : lockDirection ? 1 : axis ? 1 : 0) as Vector2
-    this.filterTaps = filterTaps || A[0] + A[1] > 0
+    this.filterTaps = filterTaps
     return A
   },
 
@@ -130,7 +141,9 @@ const InternalDragOptionsNormalizers = {
   swipeDistance(v: number | Vector2 = DEFAULT_SWIPE_DISTANCE) {
     return ensureVector(v)
   },
-
+  swipeDuration(value = DEFAULT_SWIPE_DURATION) {
+    return value
+  },
   delay(value: number | boolean = 0) {
     switch (value) {
       case true:

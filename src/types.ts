@@ -15,6 +15,7 @@ export interface GenericOptions {
   window?: EventTarget
   eventOptions?: { capture?: boolean; passive?: boolean }
   enabled?: boolean
+  transform?: (v: Vector2) => Vector2
 }
 
 export interface GestureOptions<T extends StateKey> {
@@ -23,6 +24,7 @@ export interface GestureOptions<T extends StateKey> {
   threshold?: number | Vector2
   triggerAllEvents?: boolean
   rubberband?: boolean | number | Vector2
+  transform?: (v: Vector2) => Vector2
 }
 
 export type Bounds = {
@@ -47,8 +49,11 @@ export type DistanceAngleConfig<T extends DistanceAngleKey> = GestureOptions<T> 
 
 export type DragConfig = CoordinatesConfig<'drag'> & {
   filterTaps?: boolean
+  useTouch?: boolean
   swipeVelocity?: number | Vector2
   swipeDistance?: number | Vector2
+  swipeDuration?: number
+  experimental_preventWindowScrollY?: boolean
   delay?: boolean | number
 }
 
@@ -73,6 +78,7 @@ export interface InternalGenericOptions {
   eventOptions: { capture?: boolean; passive?: boolean }
   window?: EventTarget
   enabled: boolean
+  transform?: (v: Vector2) => Vector2
 }
 
 export interface InternalGestureOptions<T extends StateKey> {
@@ -82,6 +88,7 @@ export interface InternalGestureOptions<T extends StateKey> {
   triggerAllEvents: boolean
   rubberband: Vector2
   bounds: [Vector2, Vector2] | ((state: State[T]) => [Vector2, Vector2])
+  transform?: (v: Vector2) => Vector2
 }
 
 export interface InternalCoordinatesOptions<T extends CoordinatesKey> extends InternalGestureOptions<T> {
@@ -93,8 +100,11 @@ export interface InternalDistanceAngleOptions<T extends DistanceAngleKey> extend
 
 export interface InternalDragOptions extends InternalCoordinatesOptions<'drag'> {
   filterTaps: boolean
+  useTouch: boolean
+  experimental_preventWindowScrollY: boolean
   swipeVelocity: Vector2
   swipeDistance: Vector2
+  swipeDuration: number
   delay: number
 }
 
@@ -104,7 +114,7 @@ export type InternalConfig = InternalGenericOptions & {
   scroll?: InternalCoordinatesOptions<'scroll'>
   move?: InternalCoordinatesOptions<'move'>
   pinch?: InternalDistanceAngleOptions<'pinch'>
-  hover?: { enabled: boolean }
+  hover?: { enabled: boolean; transform?: (v: Vector2) => Vector2 }
 }
 
 export type WebKitGestureEvent = PointerEvent & { scale: number; rotation: number }
@@ -199,6 +209,7 @@ export type SharedGestureState = { [ingKey in IngKey]: boolean } & {
   altKey: boolean
   metaKey: boolean
   ctrlKey: boolean
+  locked: boolean
 }
 
 export type EventTypes = {
@@ -218,10 +229,13 @@ export interface CommonGestureState {
   _initial: Vector2
   _bounds: [Vector2, Vector2]
   _lastEventType?: string
-  _pointerIds?: number[]
+  _dragTarget?: EventTarget | (EventTarget & Element) | null
+  _dragPointerId?: number | null
+  _dragStarted: boolean
+  _dragPreventScroll: boolean
+  _dragIsTap: boolean
+  _dragDelayed: boolean
   event?: React.UIEvent | UIEvent
-  // currentTarget?: (EventTarget & Element) | null
-  // pointerId?: number | null
   intentional: boolean
   values: Vector2
   velocities: Vector2
@@ -253,11 +267,13 @@ export interface Coordinates {
 }
 
 export interface DragState {
-  _isTap: boolean
-  _delayedEvent: boolean
   _pointerId?: number
   tap: boolean
   swipe: Vector2
+}
+
+export interface PinchState {
+  _pointerIds: [number, number]
 }
 
 export interface DistanceAngle {
@@ -273,7 +289,7 @@ export type State = {
   wheel: CommonGestureState & Coordinates
   scroll: CommonGestureState & Coordinates
   move: CommonGestureState & Coordinates
-  pinch: CommonGestureState & DistanceAngle
+  pinch: CommonGestureState & DistanceAngle & PinchState
 }
 
 export type GestureState<T extends StateKey> = State[T]

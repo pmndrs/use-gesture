@@ -4,7 +4,7 @@ export const tweaks = {
   ...makeFolder('Movement', {
     axis: { value: 'free', options: { free: 'free', 'x axis': 'x', 'y axis': 'y' } },
     lockDirection: { value: false, label: 'lock direction' },
-    threshold: { value: 10, min: 0, max: 100, step: 1 },
+    threshold: { value: 0, min: 0, max: 100, step: 1 },
     rubberband: { value: 0.15, min: 0, max: 3 },
   }),
   ...makeFolder('Bounds', {

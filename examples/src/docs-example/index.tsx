@@ -81,14 +81,21 @@ export default function DocsExample() {
 
   const bind = useGesture(
     {
-      onDrag: ({ hovering, tap, swipe: [swipeX, swipeY], down, movement: [mx, my] }) => {
+      onDrag: ({ event, hovering, tap, swipe: [swipeX, swipeY], down, movement: [mx, my], last }) => {
         if (tap) toast('Click!')
         if (swipeX) toast(`Swipe ${swipeX > 0 ? 'Right' : 'Left'}`)
         if (swipeY) toast(`Swipe ${swipeY > 0 ? 'Bottom' : 'Top'}`)
         document.body.classList.toggle('dragged', down)
         if (down) {
           resetShineAndText()
-          set({ x: mx, y: my, scale: 1, rotateX: 0, rotateY: 0 })
+          set({
+            x: mx,
+            y: my,
+            scale: 1,
+            rotateX: 0,
+            rotateY: 0,
+            immediate: k => k !== 'scale' && event.pointerType === 'touch',
+          })
           setDragging(true)
           setShadow(true)
         } else {

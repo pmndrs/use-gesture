@@ -51,6 +51,7 @@ const bind = useXXXX(state => {
     altKey,      // "      "  alt     "      "
     shiftKey,    // "      "  shift   "      "
     metaKey,     // "      "  meta    "      "
+    locked,      // whether document.pointerLockElement is set
     dragging,    // is the component currently being dragged
     moving,      // "              "              "  moved
     scrolling,   // "              "              "  scrolled
@@ -126,9 +127,9 @@ If you drag the blue square over the pink zone, you'll notice that the gesture i
 ```jsx highlight={3-6}
 function CancelExample() {
   const [{ x }, set] = useSpring(() => ({ x: 0 }))
-  const bind = useDrag(({ down, movement: [mx], cancel }) => {
+  const bind = useDrag(({ active, movement: [mx], cancel }) => {
     if (mx > 200) cancel()
-    set({ x: down ? mx : 0, immediate: down })
+    set({ x: active ? mx : 0, immediate: active })
   })
 
   return <animated.div {...bind()} style={{ x }} />

@@ -12,6 +12,7 @@ describe('testing derived config', () => {
       expect(getInternalGenericOptions(undefined)).toStrictEqual({
         enabled: true,
         domTarget: undefined,
+        transform: undefined,
         eventOptions: { capture: false, passive: true },
         window: window,
       })
@@ -49,16 +50,20 @@ describe('testing derived config', () => {
           [-Infinity, Infinity],
           [-Infinity, Infinity],
         ],
+        transform: undefined,
         triggerAllEvents: false,
         delay: 0,
-        swipeDistance: [60, 60],
+        swipeDistance: [50, 50],
         swipeVelocity: [0.5, 0.5],
+        swipeDuration: 250,
         threshold: [0, 0],
         rubberband: [0, 0],
         axis: undefined,
         initial: [0, 0],
         lockDirection: false,
+        experimental_preventWindowScrollY: false,
         filterTaps: false,
+        useTouch: false,
       })
     })
 
@@ -73,11 +78,6 @@ describe('testing derived config', () => {
 
       dragConfig = { axis: 'y' }
       expect(getInternalDragOptions(dragConfig)).toHaveProperty('threshold', [1, 1])
-    })
-
-    test(`filterTaps is set to true when threshold is positive`, () => {
-      dragConfig = { threshold: [0, 1] }
-      expect(getInternalDragOptions(dragConfig)).toHaveProperty('filterTaps', true)
     })
 
     test(`derived delay is set to default when boolean`, () => {
@@ -96,6 +96,7 @@ describe('testing derived config', () => {
           [-Infinity, Infinity],
           [-Infinity, Infinity],
         ],
+        transform: undefined,
         triggerAllEvents: false,
         initial: [0, 0],
         threshold: [0, 0],

@@ -17,26 +17,26 @@ export function supportsGestureEvents(): boolean {
 }
 
 export function supportsTouchEvents(): boolean {
-  return typeof window !== 'undefined' && window.ontouchstart === null
+  return typeof window !== 'undefined' && 'ontouchstart' in window
 }
 
-function getTouchEvents(event: DomEvents) {
-  if ('touches' in event) {
-    const { targetTouches, changedTouches } = event
-    return targetTouches.length > 0 ? targetTouches : changedTouches
-  }
-  return null
+function getEventTouches(event: PointerEvent | React.PointerEvent | TouchEvent | React.TouchEvent) {
+  if ('pointerId' in event) return null
+  return event.type === 'touchend' ? event.changedTouches : event.targetTouches
+}
+
+export function getPointerIds(event: PointerEvent | React.PointerEvent | TouchEvent | React.TouchEvent): number[] {
+  if ('pointerId' in event) return [event.pointerId]
+  return Array.from(getEventTouches(event)!).map(t => t.identifier)
 }
 
 export function getGenericEventData(event: DomEvents) {
   const buttons = 'buttons' in event ? event.buttons : 0
-  const touchEvents = getTouchEvents(event)
-  const touches = (touchEvents && touchEvents.length) || 0
-  const down = touches > 0 || buttons > 0
-
   const { shiftKey, altKey, metaKey, ctrlKey } = event as any // TODO check if this might create some overrides?
-  return { touches, down, buttons, shiftKey, altKey, metaKey, ctrlKey }
+  return { buttons, shiftKey, altKey, metaKey, ctrlKey }
 }
+
+const identity = (xy: Vector2) => xy
 
 /**
  * Gets pointer event values.
@@ -44,44 +44,12 @@ export function getGenericEventData(event: DomEvents) {
  * @returns pointer event values
  */
 export function getPointerEventValues(
-  event: TouchEvent | React.TouchEvent | React.PointerEvent | PointerEvent
+  event: TouchEvent | React.TouchEvent | React.PointerEvent | PointerEvent,
+  transform = identity
 ): Vector2 {
-  const touchEvents = getTouchEvents(event)
+  const touchEvents = getEventTouches(event)
   const { clientX, clientY } = touchEvents ? touchEvents[0] : (event as React.PointerEvent)
-  return [clientX, clientY]
-}
-
-/**
- * Gets scroll event values
- * @param event
- * @returns scroll event values
- */
-export function getScrollEventValues(event: React.UIEvent | UIEvent): Vector2 {
-  // If the currentTarget is the window then we return the scrollX/Y position.
-  // If not (ie the currentTarget is a DOM element), then we return scrollLeft/Top
-  const { scrollX, scrollY, scrollLeft, scrollTop } = event.currentTarget as Element & Window
-  return [scrollX || scrollLeft || 0, scrollY || scrollTop || 0]
-}
-
-/**
- * Gets wheel event values.
- * @param event
- * @returns wheel event values
- */
-export function getWheelEventValues(event: React.WheelEvent | WheelEvent): Vector2 {
-  const { deltaX, deltaY } = event
-  //TODO implement polyfill ?
-  // https://developer.mozilla.org/en-US/docs/Web/Events/wheel#Polyfill
-  return [deltaX, deltaY]
-}
-
-/**
- * Gets webkit gesture event values.
- * @param event
- * @returns webkit gesture event values
- */
-export function getWebkitGestureEventValues(event: WebKitGestureEvent): Vector2 {
-  return [event.scale * WEBKIT_DISTANCE_SCALE_FACTOR, event.rotation]
+  return transform([clientX, clientY])
 }
 
 /**
@@ -89,23 +57,69 @@ export function getWebkitGestureEventValues(event: WebKitGestureEvent): Vector2 
  * @param event
  * @returns two touches event data
  */
-export function getTwoTouchesEventData(event: React.TouchEvent | TouchEvent) {
-  const { targetTouches } = event
-  const A = targetTouches[0],
-    B = targetTouches[1]
+export function getTwoTouchesEventValues(
+  event: React.TouchEvent | TouchEvent,
+  pointerIds: [number, number],
+  transform = identity
+) {
+  const [A, B] = Array.from(event.touches).filter(t => pointerIds.includes(t.identifier))
 
   const dx = B.clientX - A.clientX
   const dy = B.clientY - A.clientY
   const cx = (B.clientX + A.clientX) / 2
   const cy = (B.clientY + A.clientY) / 2
 
-  const e: any = 'nativeEvent' in event ? event.nativeEvent : event
+  // const e: any = 'nativeEvent' in event ? event.nativeEvent : event
 
   const distance = Math.hypot(dx, dy)
-  const angle = (e.rotation as number) ?? -(Math.atan2(dx, dy) * 180) / Math.PI
-
-  const values: Vector2 = [distance, angle]
-  const origin: Vector2 = [cx, cy]
+  // FIXME rotation has inconsistant values so we're not using it atm
+  // const angle = (e.rotation as number) ?? -(Math.atan2(dx, dy) * 180) / Math.PI
+  const angle = -(Math.atan2(dx, dy) * 180) / Math.PI
+  const values: Vector2 = transform([distance, angle])
+  const origin: Vector2 = transform([cx, cy])
 
   return { values, origin }
+}
+
+/**
+ * Gets scroll event values
+ * @param event
+ * @returns scroll event values
+ */
+export function getScrollEventValues(event: React.UIEvent | UIEvent, transform = identity): Vector2 {
+  // If the currentTarget is the window then we return the scrollX/Y position.
+  // If not (ie the currentTarget is a DOM element), then we return scrollLeft/Top
+  const { scrollX, scrollY, scrollLeft, scrollTop } = event.currentTarget as Element & Window
+  return transform([scrollX || scrollLeft || 0, scrollY || scrollTop || 0])
+}
+
+// wheel delta defaults from https://github.com/facebookarchive/fixed-data-table/blob/master/src/vendor_upstream/dom/normalizeWheel.js
+const LINE_HEIGHT = 40
+const PAGE_HEIGHT = 800
+
+/**
+ * Gets wheel event values.
+ * @param event
+ * @returns wheel event values
+ */
+export function getWheelEventValues(event: React.WheelEvent | WheelEvent, transform = identity): Vector2 {
+  let { deltaX, deltaY, deltaMode } = event
+  // normalize wheel values, especially for Firefox
+  if (deltaMode === 1) {
+    deltaX *= LINE_HEIGHT
+    deltaY *= LINE_HEIGHT
+  } else if (deltaMode === 2) {
+    deltaX *= PAGE_HEIGHT
+    deltaY *= PAGE_HEIGHT
+  }
+  return transform([deltaX, deltaY])
+}
+
+/**
+ * Gets webkit gesture event values.
+ * @param event
+ * @returns webkit gesture event values
+ */
+export function getWebkitGestureEventValues(event: WebKitGestureEvent, transform = identity): Vector2 {
+  return transform([event.scale * WEBKIT_DISTANCE_SCALE_FACTOR, event.rotation])
 }

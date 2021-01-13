@@ -15,7 +15,7 @@ export class ScrollRecognizer extends CoordinatesRecognizer<'scroll'> {
     this.clearTimeout()
     this.setTimeout(this.onEnd)
 
-    const values = getScrollEventValues(event)
+    const values = getScrollEventValues(event, this.transform)
     this.updateSharedState(getGenericEventData(event))
 
     if (!this.state._active) {
@@ -41,8 +41,9 @@ export class ScrollRecognizer extends CoordinatesRecognizer<'scroll'> {
   }
 
   onEnd = (): void => {
-    this.state._active = false
-    this.updateGestureState({ ...this.getMovement(this.state.values), velocities: [0, 0], velocity: 0 })
+    this.clean()
+    if (!this.state._active) return
+    this.updateGestureState({ ...this.getMovement(this.state.values), _active: false, velocities: [0, 0], velocity: 0 })
     this.fireGestureHandler()
   }
 
@@ -50,5 +51,3 @@ export class ScrollRecognizer extends CoordinatesRecognizer<'scroll'> {
     addBindings(bindings, 'onScroll', this.handleEvent)
   }
 }
-
-

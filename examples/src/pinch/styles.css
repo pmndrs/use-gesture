@@ -5,7 +5,3 @@
   border-radius: 16px;
   touch-action: none;
 }
-
-.simple > div:last-child {
-  background: indigo;
-}

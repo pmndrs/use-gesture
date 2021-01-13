@@ -54,9 +54,15 @@ export function _buildWheelConfig({ domTarget, eventOptions, window, enabled, ..
 }
 
 export function buildComplexConfig(config: UseGestureConfig = {}, actions: Set<string> = new Set()) {
-  const { drag, wheel, move, scroll, pinch, hover, eventOptions, window, domTarget, enabled } = config
+  const { drag, wheel, move, scroll, pinch, hover, eventOptions, window, transform, domTarget, enabled } = config
 
-  const mergedConfig: InternalConfig = getInternalGenericOptions({ eventOptions, window, domTarget, enabled })
+  const mergedConfig: InternalConfig = getInternalGenericOptions({
+    domTarget,
+    eventOptions,
+    transform,
+    window,
+    enabled,
+  })
 
   if (actions.has('onDrag')) mergedConfig.drag = getInternalDragOptions(drag)
   if (actions.has('onWheel')) mergedConfig.wheel = getInternalCoordinatesOptions(wheel)

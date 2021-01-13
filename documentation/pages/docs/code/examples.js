@@ -1,8 +1,13 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { Suspense, useState, useEffect, useRef } from 'react'
 import { useSpring, useSprings, animated, to } from 'react-spring'
+import { a as a3f } from '@react-spring/three'
+import { Canvas, useThree, useFrame } from 'react-three-fiber'
+import { useTexture } from '@react-three/drei'
 import { useDrag, useScroll, useGesture, useWheel } from 'react-use-gesture'
 import { Lethargy } from 'lethargy'
 import cn from 'classnames'
+import * as THREE from 'three'
+
 import styles from './styles.module.css'
 
 export function EasterDiv({ children }) {
@@ -40,13 +45,13 @@ export function Offset({ setActive }) {
 
 export function Cancel({ setActive }) {
   const [{ x, bg }, set] = useSpring(() => ({ x: 0, bg: 'cornflowerblue' }))
-  const bind = useDrag(({ down, movement: [mx], cancel, canceled }) => {
-    setActive && setActive(down)
+  const bind = useDrag(({ active, movement: [mx], cancel, canceled }) => {
+    setActive && setActive(active)
     if (mx > 200) cancel()
     set({
-      x: down ? mx : 0,
+      x: active ? mx : 0,
       bg: canceled ? 'lightpink' : 'cornflowerblue',
-      immediate: down,
+      immediate: active,
     })
   })
 
@@ -63,7 +68,7 @@ export function Swipe({ setActive }) {
   const space = 100
 
   const { x } = useSpring({ x: position * space })
-  const bind = useDrag(({ movement, down, swipe: [swipeX], vxvy }) => {
+  const bind = useDrag(({ down, swipe: [swipeX] }) => {
     setPosition(p => Math.min(Math.max(-1, p + swipeX), 1))
     setActive && setActive(down)
   })
@@ -79,7 +84,7 @@ export function Swipe({ setActive }) {
         className={cn(styles.square, { [styles.active]: position === 1 })}
         style={{ transform: `translateX(${space}px) scale(1.1)` }}
       />
-      <animated.div className={styles.drag} {...bind()} style={{ x, touchAction: 'auto' }} />
+      <animated.div className={styles.drag} {...bind()} style={{ x }} />
     </>
   )
 }
@@ -129,26 +134,22 @@ export function Threshold({ setActive }) {
   const [movY, setMovY] = useState(false)
 
   const bind = useDrag(
-    ({ down, movement: [mx, my] }) => {
-      set({ x: down ? mx : 0, y: down ? my : 0 })
+    ({ _movement: [mx, my], _intentional: [ix, iy], down, movement: [x, y], intentional }) => {
+      if (intentional) {
+        set({ x: down ? x : 0, y: down ? y : 0, immediate: down })
+      }
+      if (!down) {
+        setMovX(false)
+        setMovY(false)
+        setL({ x: 0, y: 0, opacity: 0 })
+      } else {
+        setL({ opacity: 1 })
+        ix ? setMovX(true) : setL({ x: mx })
+        iy ? setMovY(true) : setL({ y: my })
+      }
     },
-    { threshold: 100 }
+    { threshold: 100, triggerAllEvents: true }
   )
-
-  const bindL = useDrag(({ down, movement: [mx, my] }) => {
-    setActive && setActive(down)
-    if (!down) {
-      setMovX(false)
-      setMovY(false)
-      setL({ x: 0, y: 0, opacity: 0 })
-      return
-    }
-    setL({ opacity: 1 })
-    if (Math.abs(mx) >= 100) setMovX(true)
-    else if (!movX) setL({ x: mx })
-    if (Math.abs(my) >= 100) setMovY(true)
-    else if (!movY) setL({ y: my })
-  })
 
   const th = index => v => {
     const displ = Math.floor(100 - Math.abs(v))
@@ -161,7 +162,7 @@ export function Threshold({ setActive }) {
   return (
     <>
       <animated.div className={styles.drag} {...bind()} style={{ x, y }}>
-        <animated.div {...bindL()} style={props}>
+        <animated.div style={props}>
           <div>
             <animated.div style={{ color: movX ? 'red' : 'black' }}>{props.x.to(th(0))}</animated.div>
             <animated.div style={{ color: movY ? 'blue' : 'black' }}>{props.y.to(th(1))}</animated.div>
@@ -376,10 +377,8 @@ export function Delay({ setActive }) {
           backgroundColor: down ? 'hotpink' : 'lightskyblue',
         })
       },
-      onMouseDown: startCountdown,
-      onTouchStart: startCountdown,
-      onMouseUp: clearCountdown,
-      onTouchEnd: startCountdown,
+      onPointerDown: startCountdown,
+      onPointerUp: clearCountdown,
     },
     { drag: { delay: 1000 } }
   )
@@ -465,5 +464,89 @@ export function LethargyWheel() {
         <div key={i}>{i}</div>
       ))}
     </div>
+  )
+}
+
+function Environment() {
+  const { gl, scene } = useThree()
+  const map = useTexture('/equirectangular.png')
+
+  useEffect(() => {
+    const generator = new THREE.PMREMGenerator(gl)
+    const pngCubeRenderTarget = generator.fromEquirectangular(map).texture
+
+    // scene.background = texture
+    scene.environment = pngCubeRenderTarget
+
+    map.dispose()
+    generator.dispose()
+
+    return () => {
+      scene.environment = scene.background = null
+    }
+  }, [gl, map, scene])
+
+  return null
+}
+const torusknot = new THREE.TorusKnotBufferGeometry(3, 0.8, 256, 16)
+const material = new THREE.MeshStandardMaterial({
+  metalness: 1,
+  roughness: 0,
+  envMapIntensity: 1.0,
+})
+
+export function PreventWindowScrollY() {
+  const [{ rot, scale }, set] = useSpring(() => ({ rot: [0, 0, 0], scale: [0.8, 0.8, 0.8] }))
+  const ref = useRef()
+  const bind = useGesture(
+    {
+      onDrag: ({ active, offset: [y, z] }) => {
+        set({ rot: [z / 50, y / 50, 0], scale: active ? [1, 1, 1] : [0.8, 0.8, 0.8] })
+        ref.current.style.cursor = active ? 'grabbing' : 'initial'
+      },
+      onHover: ({ dragging, hovering }) => !dragging && (ref.current.style.cursor = hovering ? 'grab' : 'initial'),
+    },
+    { drag: { experimental_preventWindowScrollY: true } }
+  )
+  return (
+    <Canvas concurrent camera={{ position: [0, 0, 16], fov: 50 }} onCreated={({ gl }) => (ref.current = gl.domElement)}>
+      <Suspense fallback={null}>
+        <a3f.mesh {...bind()} rotation={rot} geometry={torusknot} material={material} scale={scale} />
+        <Environment />
+      </Suspense>
+    </Canvas>
+  )
+}
+
+function Box() {
+  const mesh = useRef()
+
+  const { viewport } = useThree()
+  const { width, height, factor } = viewport
+  const [spring, setSpring] = useSpring(() => ({ position: [0, 0, 0], scale: [1, 1, 1] }))
+
+  const bind = useDrag(({ offset: [x, y] }) => setSpring({ position: [x, y, 0] }), {
+    bounds: { left: -width / 2.2, right: width / 2.2, top: -height / 2.2, bottom: height / 2.2 },
+    rubberband: true,
+    transform: ([x, y]) => [x / factor, -y / factor],
+  })
+
+  useFrame(() => (mesh.current.rotation.x = mesh.current.rotation.y += 0.01))
+
+  return (
+    <a3f.mesh ref={mesh} {...bind()} {...spring}>
+      <boxBufferGeometry args={[1, 1, 1]} />
+      <meshStandardMaterial color="orange" />
+    </a3f.mesh>
+  )
+}
+
+export function Transform() {
+  return (
+    <Canvas>
+      <ambientLight intensity={0.5} />
+      <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
+      <Box />
+    </Canvas>
   )
 }

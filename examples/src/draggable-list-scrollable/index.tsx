@@ -1,12 +1,11 @@
 // Original: https://github.com/chenglou/react-motion/tree/master/demos/demo8-draggable-list
-import React, { useRef, useEffect, useCallback } from 'react'
+import React, { useRef, useCallback } from 'react'
 import { clamp } from 'lodash'
 // @ts-ignore
 import swap from 'lodash-move'
 import { useDrag } from 'react-use-gesture'
 import { useSprings, animated } from 'react-spring'
 import styles from './styles.css'
-import { lock, unlock } from 'tua-body-scroll-lock'
 
 // Returns fitting styles for dragged/idle items
 const fn = (order: number[], down?: boolean, originalIndex?: number, curIndex?: number, y?: number) => (
@@ -29,8 +28,6 @@ const fn = (order: number[], down?: boolean, originalIndex?: number, curIndex?: 
       }
 
 export default function DraggableList({ items = 'Lorem ipsum dolor sit'.split(' ') }) {
-  const timer = useRef<number>()
-  const shouldDrag = useRef(false)
   const order = useRef(items.map((_, index) => index)) // Store indicies as a local ref, this represents the item order
   const [springs, setSprings] = useSprings(items.length, fn(order.current)) // Create springs, each corresponds to an item, controlling its transform, scale, etc.
 
@@ -45,49 +42,13 @@ export default function DraggableList({ items = 'Lorem ipsum dolor sit'.split(' 
     [setSprings, items.length]
   )
 
-  const clean = useCallback(() => {
-    clearTimeout(timer.current)
-    shouldDrag.current = false
-    // unlock()
-  }, [])
-
-  // useEffect(() => clean, [clean])
-
-  useEffect(() => {
-    const handleTouch = (e: TouchEvent) => {
-      if (shouldDrag.current) {
-        console.log('preventingDefault')
-        e.preventDefault()
-      }
-    }
-    window.addEventListener('touchmove', handleTouch, { passive: false })
-    return () => {
-      window.removeEventListener('touchmove', handleTouch)
-      clearTimeout(timer.current)
-    }
-  }, [])
-
-  const bind = useDrag(({ event, first, last, distance, cancel, canceled, ...state }) => {
-    // on non touch devices
-    if (event.pointerType !== 'touch') {
+  const bind = useDrag(
+    ({ event, first, last, distance, cancel, canceled, ...state }) => {
       move(state)
-      return
-    }
-    // on touch devices
-    if (first) {
-      timer.current = window.setTimeout(() => {
-        console.log('should drag')
-        // lock()
-        shouldDrag.current = true
-        move(state)
-      }, 250)
-    } else if (!shouldDrag.current) {
-      clean()
-      console.log('canceling drag', { first, last })
-      !last && cancel()
-    } else move(state)
-    if (last) clean()
-  })
+    },
+    { experimental_preventWindowScrollY: true }
+  )
+
   return (
     <>
       <div className={`${styles.dragList} flex`}>

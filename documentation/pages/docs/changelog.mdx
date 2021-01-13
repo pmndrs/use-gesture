@@ -7,6 +7,33 @@ section: More
 
 Here is the change log since version 5.
 
+## 9.0.0 Release
+
+**Summary:** this release is pretty major since it changes the way it handles the drag gesture, using `setPointerCapture`. It also adds two new configuration options, `transform` and `experimental_preventWindowScrollY`.
+
+### Breaking
+
+1. Drag now uses `setPointerCapture` and `releasePointerCapture`. This is no breaking change in the API and it's very likely that no code will break, but it's still a major shift. Please report any undesirable behavior.
+2. The `down` state attribute that indicates if the mouse button is down or if a pointer is pressing the screen is now more consistent and will remain true even when the gesture is canceled. To make sure you want to handle cases where the gesture is active, use the `active` state attribute.
+
+### Added
+
+1. New `transform` options to map pointer coordinates to another space where the gesture takes place.
+2. New `experimental_preventWindowScrollY` that prevents window scroll when interacting with draggable items.
+3. Support for pointer lock [#244](https://github.com/pmndrs/react-use-gesture/issues/244).
+4. Adds a `locked` flag in the state to indicate whether the document is in lock mode.
+5. `useTouch` option for drag in case you want to not lose dragging while the window is scrolling on mobile [#237](https://github.com/pmndrs/react-use-gesture/issues/237).
+6. Adds `swipeDuration` option to configure the maximum duration that a swipe is detected.
+
+### Fixed
+
+1. Fixed a bug with `threshold` and `initial` options set together, where the unintentional axis was set to `0` instead of `intial[axisIndex]`.
+2. Fixed a bug affecting drag when used together with pinch [#234](https://github.com/pmndrs/react-use-gesture/issues/234).
+3. Fixes `touches` with the drag gesture [#233](https://github.com/pmndrs/react-use-gesture/issues/233).
+4. Normalize wheel event delta values for FireFox [#236](https://github.com/pmndrs/react-use-gesture/issues/236).
+5. Fixes conflicts between drag and pinch!
+6. Increased maximum default swipe duration from `220` to `250` and decreased minimum swipe distance from `60` to `50` (pixels).
+
 ## 8.0.1 Release
 
 **Summary:** fixes origin on Pinch for Safari desktop.

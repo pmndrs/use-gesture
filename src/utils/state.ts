@@ -1,5 +1,5 @@
 import { noop } from './utils'
-import { CommonGestureState, Coordinates, State, DistanceAngle, Vector2, DragState } from '../types'
+import { CommonGestureState, Coordinates, State, DistanceAngle, Vector2, DragState, PinchState } from '../types'
 
 function getInitial<T>(mixed: T): T & CommonGestureState {
   return {
@@ -13,9 +13,11 @@ function getInitial<T>(mixed: T): T & CommonGestureState {
       [-Infinity, Infinity],
     ],
     _lastEventType: undefined,
+    _dragStarted: false,
+    _dragPreventScroll: false,
+    _dragIsTap: true,
+    _dragDelayed: false,
     event: undefined,
-    // currentTarget: undefined,
-    // pointerId: undefined,
     intentional: false,
     values: [0, 0],
     velocities: [0, 0],
@@ -55,25 +57,26 @@ export function getInitialState(): State {
     altKey: false,
     metaKey: false,
     ctrlKey: false,
+    locked: false,
   }
 
   const drag = getInitial<DragState & Coordinates>({
+    _pointerId: undefined,
     axis: undefined,
     xy: [0, 0] as Vector2,
     vxvy: [0, 0] as Vector2,
     velocity: 0,
     distance: 0,
-    _isTap: true,
-    _delayedEvent: false,
-    _pointerId: undefined,
     tap: false,
     swipe: [0, 0],
   })
 
-  const pinch = getInitial<DistanceAngle>({
+  const pinch = getInitial<DistanceAngle & PinchState>({
+    // @ts-expect-error when used _pointerIds we can assert its type will be [number, number]
+    _pointerIds: [],
     da: [0, 0] as Vector2,
     vdva: [0, 0] as Vector2,
-    // @ts-ignore origin can never be passed as undefined in userland
+    // @ts-expect-error origin can never be passed as undefined in userland
     origin: undefined,
     turns: 0,
   })

@@ -9,42 +9,50 @@ export default function Two() {
 
   const bind = useGesture(
     {
-      onDrag: ({ down, offset: [x, y], _bounds }) => {
-        console.log(_bounds)
-        set({ scale: down ? 1.2 : 1, x, y })
+      onDrag: ({ event, down, movement: [x, y], _bounds, touches, initial, _initial }) => {
+        console.log(touches)
+        set({ x, y })
       },
-      onPinch: ({ offset: [d, a], _bounds }) => {
-        console.log(_bounds)
-        set({ scale: 1 + d / 200, rotateZ: a })
-      },
+      onTouchStart: ({ event }) => console.log('start', event.nativeEvent),
+      onTouchEnd: ({ event }) => console.log('end', event.nativeEvent),
+      // onPinch: ({ offset: [d, a], _bounds }) => {
+      //   set({ scale: 1 + d / 200, rotateZ: a })
+      // },
     },
     {
       drag: {
-        bounds: () => {
-          return { left: -100, right: 100 }
-        },
-      },
-      pinch: {
-        distanceBounds: ({ args }) => {
-          console.log('pinch', args)
-          return { min: -100, max: 100 }
+        useTouch: true,
+        initial: () => {
+          return [style.x.get(), style.y.get()]
         },
       },
     }
   )
 
-  const bind2 = useGesture({
-    onDrag: ({ down, offset: [x, y] }) => {
-      set2({ scale: down ? 1.2 : 1, x, y })
+  const bind2 = useGesture(
+    {
+      onDrag: ({ _pointerId, down, offset: [x, y] }) => {
+        // set2({ scale: down ? 1.2 : 1, x, y })
+      },
+      onPinch: ({ movement: [d, a], turns, touches }) => {
+        console.log({ d, a, turns, touches })
+        set2({ scale: d / 100, rotateZ: a })
+      },
     },
-    onPinch: ({ offset: [d, a] }) => {
-      set2({ scale: 1 + d / 200, rotateZ: a })
-    },
-  })
+    {
+      pinch: {
+        initial: () => {
+          console.log('Initial movement angle', style2.rotateZ.get())
+          console.log('Initial movement distance', 100 * style2.scale.get())
+          return [100 * style2.scale.get(), style2.rotateZ.get()]
+        },
+      },
+    }
+  )
 
   return (
     <div className="flex">
-      <animated.div {...bind(3)} className={styles.drag} style={style}></animated.div>
+      <animated.div {...bind()} className={styles.drag} style={style}></animated.div>
       <animated.div {...bind2()} className={styles.drag} style={{ ...style2, background: 'hotpink' }}></animated.div>
     </div>
   )

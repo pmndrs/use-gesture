@@ -17,8 +17,10 @@ function Dodecahedron() {
   }))
 
   const bind = useGesture({
-    onDrag: ({ offset: [x, y] }) =>
-      set({ position: [x / aspect, -y / aspect, 0], rotation: [y / aspect, x / aspect, 0] }),
+    onDrag: ({ offset: [x, y], last }) => {
+      console.log(last)
+      // set({ position: [x / aspect, -y / aspect, 0], rotation: [y / aspect, x / aspect, 0] })
+    },
     onHover: ({ hovering }) => set({ scale: hovering ? [1.2, 1.2, 1.2] : [1, 1, 1] }),
   })
 

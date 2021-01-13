@@ -19,12 +19,12 @@ export default function Pinch() {
         set({ scale: 1 + d / 200, rotateZ: a })
       },
     },
-    { domTarget: domTarget }
+    { domTarget }
   )
 
   return (
     <div className={`${styles.simple} flex`}>
-      <animated.div id="one" ref={domTarget} style={style} />
+      <animated.div ref={domTarget} style={style} />
     </div>
   )
 }

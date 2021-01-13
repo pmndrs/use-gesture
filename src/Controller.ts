@@ -8,6 +8,7 @@ import {
   InternalHandlers,
   RecognizerClass,
 } from './types'
+import { supportsTouchEvents, supportsGestureEvents, getPointerIds } from './utils/event'
 import { getInitialState } from './utils/state'
 import { chainFns } from './utils/utils'
 
@@ -31,7 +32,13 @@ export default class Controller {
   public domListeners: [string, Fn][] // when config.domTarget is set, we attach events directly to the dom
   public windowListeners: { [stateKey in StateKey]?: [string, Function][] } // keeps track of window listeners added by gestures (drag only at the moment)
 
+  public pointerIds = new Set<number>() // register Pointer Events pointerIds
+  public touchIds = new Set<number>() // register Touch Events identifiers
+  public supportsTouchEvents = supportsTouchEvents()
+  public supportsGestureEvents = supportsGestureEvents()
+
   constructor(private classes: Set<RecognizerClass>) {
+    this.classes = classes
     this.state = getInitialState()
     this.timeouts = {}
     this.domListeners = []
@@ -73,6 +80,22 @@ export default class Controller {
   }
 }
 
+export function addEventIds(
+  controller: Controller,
+  event: React.TouchEvent | TouchEvent | React.PointerEvent | PointerEvent
+) {
+  const idList = 'pointerId' in event ? controller.pointerIds : controller.touchIds
+  getPointerIds(event).forEach(idList.add, idList)
+}
+
+export function removeEventIds(
+  controller: Controller,
+  event: React.TouchEvent | TouchEvent | React.PointerEvent | PointerEvent
+) {
+  const idList = 'pointerId' in event ? controller.pointerIds : controller.touchIds
+  getPointerIds(event).forEach(idList.delete, idList)
+}
+
 export function clearAllWindowListeners(controller: Controller) {
   const {
     config: { window: el, eventOptions },
@@ -88,20 +111,25 @@ export function clearAllWindowListeners(controller: Controller) {
   controller.windowListeners = {}
 }
 
-export function clearWindowListeners({ config, windowListeners }: Controller, stateKey: StateKey) {
+export function clearWindowListeners(
+  { config, windowListeners }: Controller,
+  stateKey: StateKey,
+  options = config.eventOptions
+) {
   if (!config.window) return
-  removeListeners(config.window, windowListeners[stateKey], config.eventOptions)
+  removeListeners(config.window, windowListeners[stateKey], options)
   delete windowListeners[stateKey]
 }
 
 export function updateWindowListeners(
   { config, windowListeners }: Controller,
   stateKey: StateKey,
-  listeners: [string, Fn][] = []
+  listeners: [string, Fn][] = [],
+  options = config.eventOptions
 ) {
   if (!config.window) return
-  removeListeners(config.window, windowListeners[stateKey], config.eventOptions)
-  addListeners(config.window, (windowListeners[stateKey] = listeners), config.eventOptions)
+  removeListeners(config.window, windowListeners[stateKey], options)
+  addListeners(config.window, (windowListeners[stateKey] = listeners), options)
 }
 
 function updateDomListeners({ config, domListeners }: Controller, bindings: { [key: string]: Function[] }) {

@@ -10,9 +10,7 @@ import Specs from './code/Specs'
 
 # Gesture options
 
-<p>
-  <ReactUseGesture /> offers different options to configure the gestures.
-</p>
+&zwnj;<ReactUseGesture /> offers different options to configure the gestures.
 
 Some options are generic to the way <ReactUseGesture/> behaves while some other options can be configured per gesture.
 
@@ -46,7 +44,7 @@ Generic options deal with how <ReactUseGesture/> will set event listeners.
 | Option                          | Description                                                                                                     |
 | ------------------------------- | --------------------------------------------------------------------------------------------------------------- |
 | [`domTarget`](#domtarget)       | Lets you specify a dom node or React ref you want to attach the gesture to.                                     |
-| [`eventOptions`](#eventoptions) | Lets you customize if you want events to be passive or captured.                                               |
+| [`eventOptions`](#eventoptions) | Lets you customize if you want events to be passive or captured.                                                |
 | [`window`](#window)             | Lets you specify which window element the gesture should bind events to (only relevant for the `drag` gesture). |
 | [`enabled`](#enabled)           | When set to `false` none of your handlers will be fired.                                                        |
 
@@ -56,22 +54,26 @@ Here are all options that can be applied to gestures.
 
 > All options are not available to all gestures. In the table below **xy** designates coordinates-based gestures: drag, move, wheel and scroll.
 
-| Options                                            | Gestures  | Description                                                                                                                                                                                          |
-| -------------------------------------------------- | :-------: | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [`enabled`](#enabled)                              |  **all**  | Whether the gesture is enabled.                                                                                                                                                                      |
-| [`initial`](#initial)                              |  **all**  | The initial position `movement` should start from.                                                                                                                                                   |
-| [`threshold`](#threshold)                          |  **all**  | The handler will fire only when the gesture displacement is greater than the threshold.                                                                                                              |
-| [`triggerAllEvents`](#triggerallevents)            |  **all**  | Forces the handler to fire even for non intentional displacement (ignores the `threshold`). In that case, the `intentional` attribute from state will remain `false` until the threshold is reached. |
-| [`axis`](#axis-xy-gestures-only)                   |  **xy**   | Your handler will only trigger if a movement is detected on the specified axis.                                                                                                                      |
-| [`lockDirection`](#lockdirection-xy-gestures-only) |  **xy**   | If `true`, the gesture will lock the first detected direction.                                                                                                                                       |
-| [`bounds`](#bounds)                                |  **xy**   | Limits the gesture `movement` and `offset` to the specified bounds.                                                                                                                                  |
-| [`distanceBounds`](#distancebounds)                | **pinch** | Limits the distance `movement` and `offset` to the specified bounds.                                                                                                                                 |
-| [`angleBounds`](#anglebounds)                      | **pinch** | Limits the angle `movement` and `offset` to the specified bounds.                                                                                                                                    |
-| [`rubberband`](#rubberband)                        |  **all**  | The elasticity coefficient of the gesture when going out of bounds. When set to `true`, the elasticiy coefficient will be defaulted to `0.15`                                                        |
-| [`filterTaps`](#filtertaps-drag-only)              | **drag**  | If `true`, the component won't trigger your drag logic if the user just clicked on the component.                                                                                                    |
-| [`delay`](#delay-drag-only)                        | **drag**  | If set, the handler will be delayed for the duration of the delay (in `ms`) — or if the user starts moving. When set to `true`, `delay` is defaulted to `180ms`.                                     |
-| [`swipeDistance`](#swipedistance)                  | **drag**  | The minimum distance per axis (in `pixels`) the drag gesture needs to travel to trigger a swipe.                                                                                                     |
-| [`swipeVelocity`](#swipevelocity)                  | **drag**  | The minimum velocity per axis (in `pixels / ms`) the drag gesture needs to reach before the pointer is released.                                                                                     |
+| Options                                                                             | Gestures  | Description                                                                                                                                                                                          |
+| ----------------------------------------------------------------------------------- | :-------: | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [`enabled`](#enabled)                                                               |  **all**  | Whether the gesture is enabled.                                                                                                                                                                      |
+| [`initial`](#initial)                                                               |  **all**  | The initial position `movement` should start from.                                                                                                                                                   |
+| [`threshold`](#threshold)                                                           |  **all**  | The handler will fire only when the gesture displacement is greater than the threshold.                                                                                                              |
+| [`triggerAllEvents`](#triggerallevents)                                             |  **all**  | Forces the handler to fire even for non intentional displacement (ignores the `threshold`). In that case, the `intentional` attribute from state will remain `false` until the threshold is reached. |
+| [`axis`](#axis-xy-gestures-only)                                                    |  **xy**   | Your handler will only trigger if a movement is detected on the specified axis.                                                                                                                      |
+| [`lockDirection`](#lockdirection-xy-gestures-only)                                  |  **xy**   | If `true`, the gesture will lock the first detected direction.                                                                                                                                       |
+| [`bounds`](#bounds)                                                                 |  **xy**   | Limits the gesture `movement` and `offset` to the specified bounds.                                                                                                                                  |
+| [`distanceBounds`](#distancebounds)                                                 | **pinch** | Limits the distance `movement` and `offset` to the specified bounds.                                                                                                                                 |
+| [`angleBounds`](#anglebounds)                                                       | **pinch** | Limits the angle `movement` and `offset` to the specified bounds.                                                                                                                                    |
+| [`rubberband`](#rubberband)                                                         |  **all**  | The elasticity coefficient of the gesture when going out of bounds. When set to `true`, the elasticiy coefficient will be defaulted to `0.15`                                                        |
+| [`transform`](#transform)                                                           |  **all**  | A function that you can use to transform pointer values. Useful to map your screen coordinates to custom space coordinates such as a canvas.                                                         |
+| [`filterTaps`](#filtertaps-drag-only)                                               | **drag**  | If `true`, the component won't trigger your drag logic if the user just clicked on the component.                                                                                                    |
+| [`experimental_preventWindowScrollY`](#experimental_preventwindowscrolly-drag-only) | **drag**  | If `true`, drag will be triggered after `250ms` and will prevent window scrolling.                                                                                                                   |
+| [`useTouch`](#usetouch-drag-only)                                                   | **drag**  | If `true`, drag will use touch events on touch-enabled devices. [Read more below](#usetouch-drag-only).                                                                                              |
+| [`delay`](#delay-drag-only)                                                         | **drag**  | If set, the handler will be delayed for the duration of the delay (in `ms`) — or if the user starts moving. When set to `true`, `delay` is defaulted to `180ms`.                                     |
+| [`swipeDistance`](#swipedistance-drag-only)                                         | **drag**  | The minimum distance per axis (in `pixels`) the drag gesture needs to travel to trigger a swipe.                                                                                                     |
+| [`swipeVelocity`](#swipevelocity-drag-only)                                         | **drag**  | The minimum velocity per axis (in `pixels / ms`) the drag gesture needs to reach before the pointer is released.                                                                                     |
+| [`swipeDuration`](#swipeduration-drag-only)                                         | **drag**  | The maximum duration in milliseconds that a swipe is detected.                                                                                                                                       |
 
 ## Options explained
 
@@ -79,11 +81,8 @@ Here are all options that can be applied to gestures.
 
 <Specs types={['node', 'Ref']} defaultValue="undefined" />
 
-<p>
-  <ReactUseGesture /> also supports adding handlers to dom nodes directly (or the <code>window</code> or{' '}
-  <code>document</code> objects). In that case, you shouldn't spread the <code>bind()</code> object returned by the
-  hooks as a prop. Cleaning is handled automatically.
-</p>
+&zwnj;<ReactUseGesture /> also supports adding handlers to dom nodes directly (or the <code>window</code> or <code>document</code> objects). In that case, you shouldn't spread the <code>bind()</code> object returned by the
+hooks as a prop. Cleaning is handled automatically.
 
 ```jsx highlight={5-6}
 function ScrollExample() {
@@ -258,6 +257,58 @@ Note that you have to set [`bounds`](#bounds) for rubberbanding to take effect.
 
 > If you stop your gesture while being off-bounds, **the `offset` or `movement` for the last event will be reverted to the closest bounds**.
 
+### transform
+
+<Specs types="(xy: Vector2) => Vector2" defaultValue="undefined" />
+
+When you're interacting with canvas objects, you're dealing with space coordinates that aren't measured in pixels. In that case, you can tell <ReactUseGesture /> to map screen values to the space with a `transform` function.
+
+<Code id="Transform" />
+
+As you can see from the example below, we use the `transform` function to map the screen coordinates to THREE coordinates. Note that `bounds` or `initial` values are expected to be expressed in the new space coordinates. Only `threshold` always refers to screen pixel values.
+
+```jsx highlight={6-11}
+function Box() {
+  const { viewport } = useThree()
+  const { width, height, factor } = viewport
+  const [spring, setSpring] = useSpring(() => ({ position: [0, 0, 0], scale: [1, 1, 1] }))
+
+  const bind = useDrag(({ offset: [x, y] }) => setSpring({ position: [x, y, 0] }), {
+    // bounds are expressed in canvas coordinates!
+    bounds: { left: -width / 2, right: width / 2, top: -height / 2, bottom: height / 2 },
+    rubberband: true,
+    transform: ([x, y]) => [x / factor, -y / factor],
+  })
+
+  return (
+    <a3f.mesh {...bind()} {...spring}>
+      <boxBufferGeometry args={[1, 1, 1]} />
+      <meshStandardMaterial color="orange" />
+    </a3f.mesh>
+  )
+}
+function Transform() {
+  return (
+    <Canvas>
+      <ambientLight intensity={0.5} />
+      <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
+      <Box />
+    </Canvas>
+  )
+}
+```
+
+> When you use the `useGesture` hook, you can set the `transform` option at the shared level and at the gesture level, with the `transform` set at the gesture level oveerriding the shared one.
+
+```js
+useGesture({/* handlers */ }, {
+  transform: ([x, y]) => [x/2, y/2 ] // shared transform applies to all gestures
+  pinch: {
+    transform: xy => xy // specific pinch transform overrides shared
+  }
+})
+```
+
 ### axis (xy gestures only)
 
 <Specs types={['x', 'y', 'undefined']} defaultValue="undefined" />
@@ -280,7 +331,7 @@ But in reality `axis` does slightly more than just locking the gesture direction
 
 <Code id="Axis2" />
 
-The component above can only move along the `x` axis. But try dragging the component on the vertically. Without the `axis` option, you should notice the component movement will slightly jiggle horizontally because you're movement won't be perfectly vertical.
+The component above can only move along the `x` axis. But try dragging and moving the component on the vertical axis. Without the `axis` option, you should notice the component movement will slightly jiggle horizontally because your movement won't be perfectly vertical.
 
 ### lockDirection (xy gestures only)
 
@@ -327,7 +378,25 @@ function FilterTapsExample() {
 
 > If you still want your handler to be triggered for non intentional displacement, this is where the `triggerAllEvents` config option and the `intentional` state attribute become useful.
 
-### `delay` (drag only)
+### experimental_preventWindowScrollY (drag only)
+
+<Specs types={'false'} defaultValue="false" />
+
+**This is an experimental feature, relevant for mobile devices**.
+
+`touch-action: none` is a common css property that you'll set on draggable items so that scroll doesn't interfere with the drag behavior on touch devices. However, this generally means that the scroll of the page can't be initiated from the draggable element. This is fine if your page isn't meant to be scrolled or if your draggable element is relatively small, but in case of large draggable areas this might become a usability issue.
+
+`preventWindowScrollY` is a convenient way to have both vertical drag and vertical scrolling coexist. Note that scroll will always have precedence over drag. To drag vertically the user will have to press the draggable area for `250ms` without moving. After these `250ms` the element is draggable and scroll is prevented. Note that if you drag horizontally the scroll will immediately be prevented without waiting for `250ms`.
+
+<Code id="PreventWindowScrollY" />
+
+On desktop, you should be able to drag the torus as you would expect. On mobile, initiating the scroll from the torus should let you scroll the page as expected. Hold touch and drag and you should be able to drag the canvas. This might be clunky as still under test.
+
+### useTouch (drag only)
+
+Most gestures, drag included, use [pointer events](https://developer.mozilla.org/en-US/docs/Web/API/Pointer_events). This works well in 99 situations in 100, but pointer events get canceled on touch devices when the user starts scrolling. Usually this is what you actually want, and the browser does it for you. But in some situations you may want the drag to persist while scrolling. In that case you'll need to indicate <ReactUseGesture /> to use touch events, which aren't canceled on scroll.
+
+### delay (drag only)
 
 <Specs types={['boolean', 'number']} defaultValue="0" />
 
@@ -350,10 +419,20 @@ function DelayExample() {
 
 > Note that `delay` and `threshold` don't play well together: without moving your pointer, your handler will never get triggered.
 
-### swipeDistance
+### swipeDistance (drag only)
 
-<Specs types={['number', 'vector']} defaultValue="[60,60]" />
+<Specs types={['number', 'vector']} defaultValue="[50,50]" />
 
-### swipeVelocity
+See the [`swipe`](/docs/state/#swipe-drag-only) state attribute for more.
+
+### swipeVelocity (drag only)
 
 <Specs types={['number', 'vector']} defaultValue="[0.5,0.5]" />
+
+See the [`swipe`](/docs/state/#swipe-drag-only) state attribute for more.
+
+### swipeDuration (drag only)
+
+<Specs types="number" defaultValue="250" />
+
+A drag gesture lasting moore than `swipeDuration` (in milliseconds) will never be considered a swipe. See the [`swipe`](/docs/state/#swipe-drag-only) state attribute for more.

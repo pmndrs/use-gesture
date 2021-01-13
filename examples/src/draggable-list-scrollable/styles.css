@@ -13,6 +13,7 @@
   background: lightblue;
   text-transform: uppercase;
   letter-spacing: 2px;
+  touch-action: pan-y;
 }
 
 .dragList > div > div:nth-child(1) {
