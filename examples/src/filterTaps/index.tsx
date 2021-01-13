@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { a, useSpring } from 'react-spring'
-import { useDrag } from 'react-use-gesture'
+import { useGesture } from 'react-use-gesture'
 import styles from './styles.css'
 
 const Button = ({ text }: { text: string }) => <button onClick={() => alert('button clicked')}>{text}</button>
@@ -8,14 +8,17 @@ const Button = ({ text }: { text: string }) => <button onClick={() => alert('but
 export default function FilterTaps() {
   const [dragged, setDragged] = useState(false)
   const [style, set] = useSpring(() => ({ x: 0, y: 0 }))
-  const bind = useDrag(
-    ({ active, offset: [x, y] }) => {
-      // console.log({ tap, active, intentional, down })
-      // setDragged(active)
-      set({ x, y, immediate: true })
+  const bind = useGesture(
+    {
+      onDrag: ({ active, offset: [x, y] }) => {
+        setDragged(active)
+        set({ x, y, immediate: true })
+      },
+      onClick: () => alert('Div Clicked'),
     },
-    { filterTaps: true, triggerAllEvents: true }
+    { drag: { filterTaps: true } }
   )
+
   return (
     <div className="flex">
       <a.div className={styles.drag} {...bind()} style={style}>

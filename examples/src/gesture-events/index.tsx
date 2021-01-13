@@ -19,8 +19,7 @@ export default function GestureEvents() {
         setLog(dragging ? 'dragging' : 'still')
         set({ x, y })
       },
-      onPinch: ({ _pointerIds, distance, touches, pinching, offset: [d, a] }) => {
-        console.log({ distance })
+      onPinch: ({ _pointerIds, touches, pinching, offset: [d, a] }) => {
         setPinchState(pinching ? 'Yes' : 'No')
         set({ scale: 1 + d / 200, rotateZ: a })
       },

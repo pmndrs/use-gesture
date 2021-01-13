@@ -36,7 +36,10 @@ export default abstract class Recognizer<T extends StateKey = StateKey> {
    * @param controller the controller attached to the gesture
    * @param [args] the args that should be passed to the gesture handler
    */
-  constructor(readonly controller: Controller, readonly args: any[] = []) {}
+  constructor(readonly controller: Controller, readonly args: any[] = []) {
+    this.controller = controller
+    this.args = args
+  }
 
   // Returns the gesture config
   get config(): NonNullable<InternalConfig[T]> {

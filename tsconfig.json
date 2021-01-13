@@ -1,9 +1,8 @@
 {
-  "include": ["src", "types"],
+  "include": ["src", "types", "src/stories"],
   "compilerOptions": {
     "module": "esnext",
-    "target": "ES2019",
-    "lib": ["dom", "esnext"],
+    "lib": ["dom", "es2019"],
     "allowSyntheticDefaultImports": true,
     "declaration": true,
     "sourceMap": true,

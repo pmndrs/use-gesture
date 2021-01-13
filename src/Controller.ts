@@ -38,6 +38,7 @@ export default class Controller {
   public supportsGestureEvents = supportsGestureEvents()
 
   constructor(private classes: Set<RecognizerClass>) {
+    this.classes = classes
     this.state = getInitialState()
     this.timeouts = {}
     this.domListeners = []
