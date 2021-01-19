@@ -1,4 +1,5 @@
 import { Vector2, WebKitGestureEvent, DomEvents } from '../types'
+import { hypot } from './math'
 
 const WEBKIT_DISTANCE_SCALE_FACTOR = 260
 
@@ -71,7 +72,7 @@ export function getTwoTouchesEventValues(
 
   // const e: any = 'nativeEvent' in event ? event.nativeEvent : event
 
-  const distance = Math.hypot(dx, dy)
+  const distance = hypot(dx, dy)
   // FIXME rotation has inconsistant values so we're not using it atm
   // const angle = (e.rotation as number) ?? -(Math.atan2(dx, dy) * 180) / Math.PI
   const angle = -(Math.atan2(dx, dy) * 180) / Math.PI
