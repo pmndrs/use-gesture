@@ -15,7 +15,8 @@ section: More
 - [Accessing source event triggers a warning in the console!](#accessing-source-event-triggers-a-warning-in-the-console)
 - [Why do I need to return `memo`?](#why-do-i-need-to-return-memo)
 - [Why is drag being triggered when I just click on an element?](#why-is-drag-being-triggered-when-i-just-click-on-an-element)
-- [Why am I getting warnings from `preventDefault()` after I pass `{passive:false}`](#why-am-i-getting-warnings-from-preventdefault-after-i-pass-passivefalse)
+- [Why am I getting warnings from `preventDefault()` after I pass `{passive:false}`?](#why-am-i-getting-warnings-from-preventdefault-after-i-pass-passivefalse)
+- [Why can't I properly drag an image or a link?](#why-cant-i-properly-drag-an-image-or-a-link)
 
 ### What is the difference the React-with-gesture library?
 
@@ -70,3 +71,27 @@ const bind = useDrag(() => console.log(`Won't show if you hold your mouse less t
 ### Why am I getting warnings from `preventDefault()` after I pass `{passive:false}`
 
 The basic use of `<Component {...bind()) />` passes the task of attaching listeners to React. React does not [yet](https://github.com/facebook/react/issues/6436) support binding passive listeners via props. To have `useGesture` attach the listeners, you must also [use the `domTarget` option](/docs/options/#domtarget). This is only required if you plan to `preventDefault` or cancel the event.
+
+### Why can't I properly drag an image or a link?
+
+Dragging an image or a link might interfere with the browser native drag and drop. This is why you need to set additional styling on top of `touch-action: none`:
+
+```css
+img.drag {
+  touch-action: none;
+  -moz-user-select: none;
+  -webkit-user-drag: none;
+  user-select: none;
+}
+```
+
+Unfortunately, that may not be enough for Firefox because of [this issue](https://bugzilla.mozilla.org/show_bug.cgi?id=1376369), so you should also prevent default.
+
+```js
+useDrag(({ event, ...state }) => {
+  event.preventDefault()
+  // rest of your gesture logic logic
+})
+```
+
+Have a look at this sandbox for an example with dragging an image: https://codesandbox.io/s/react-use-gesture-image-drag-kr70c
