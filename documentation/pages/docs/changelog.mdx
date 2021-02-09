@@ -7,6 +7,18 @@ section: More
 
 Here is the change log since version 5.
 
+## 9.0.1 Release
+
+**Summary:** fix a silly bug that happened when minifying a Safaro while pinching on iPad.
+
+### Fixed
+
+1. Fixed the bug below:
+
+- Start a pinch gesture
+- Do the gesture for the mobile OS to go back to home (for example on iOS, 5 fingers pinch in or swipe from the bottom)
+- Come back to the page, start a gesture => the following error message is displayed (from the multi gesture card example)
+
 ## 9.0.0 Release
 
 **Summary:** this release is pretty major since it changes the way it handles the drag gesture, using `setPointerCapture`. It also adds two new configuration options, `transform` and `experimental_preventWindowScrollY`.
