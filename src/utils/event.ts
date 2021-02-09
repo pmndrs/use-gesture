@@ -25,8 +25,7 @@ function getEventTouches(event: PointerEvent | React.PointerEvent | TouchEvent |
   return event.type === 'touchend' ? event.changedTouches : event.targetTouches
 }
 
-export function getPointerIds(event: PointerEvent | React.PointerEvent | TouchEvent | React.TouchEvent): number[] {
-  if ('pointerId' in event) return [event.pointerId]
+export function getTouchIds(event: TouchEvent | React.TouchEvent): number[] {
   return Array.from(getEventTouches(event)!).map(t => t.identifier)
 }
 
@@ -63,6 +62,8 @@ export function getTwoTouchesEventValues(
   transform = identity
 ) {
   const [A, B] = Array.from(event.touches).filter(t => pointerIds.includes(t.identifier))
+
+  if (!A || !B) throw Error(`The event doesn't have two pointers matching the pointerIds`)
 
   const dx = B.clientX - A.clientX
   const dy = B.clientY - A.clientY

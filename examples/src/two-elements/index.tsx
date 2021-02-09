@@ -35,7 +35,7 @@ export default function Two() {
         // set2({ scale: down ? 1.2 : 1, x, y })
       },
       onPinch: ({ movement: [d, a], turns, touches }) => {
-        console.log({ d, a, turns, touches })
+        // console.log({ d, a, turns, touches })
         set2({ scale: d / 100, rotateZ: a })
       },
     },

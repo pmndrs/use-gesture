@@ -5,7 +5,7 @@ import {
   getTwoTouchesEventValues,
   getWheelEventValues,
   getWebkitGestureEventValues,
-  getPointerIds,
+  getTouchIds,
 } from '../utils/event'
 import { getStartGestureState, getGenericPayload } from './Recognizer'
 import { addBindings, addEventIds, removeEventIds } from '../Controller'
@@ -16,11 +16,20 @@ export class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
 
   onPinchStart = (event: React.TouchEvent | TouchEvent) => {
     addEventIds(this.controller, event)
+    const touchIds = this.controller.touchIds
 
-    if (!this.enabled || this.state._active) return
+    if (!this.enabled) return
+
+    if (this.state._active) {
+      // check that the pointerIds that initiated the gesture
+      // are still enabled. This is useful for when the page
+      // loses track of the pointers (minifying gesture on iPad).
+      if (this.state._pointerIds.every(id => touchIds.has(id))) return
+      // something was wrong with the pointers but we let it go.
+    }
     // until we reach two fingers on the target don't react
-    if (this.controller.touchIds.size < 2) return
-    const _pointerIds = Array.from(this.controller.touchIds).slice(0, 2) as [number, number]
+    if (touchIds.size < 2) return
+    const _pointerIds = Array.from(touchIds).slice(0, 2) as [number, number]
 
     const { values, origin } = getTwoTouchesEventValues(event, _pointerIds, this.transform)
 
@@ -50,22 +59,25 @@ export class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
     const genericEventData = getGenericEventData(event)
 
     this.updateSharedState(genericEventData)
+    try {
+      const { values, origin } = getTwoTouchesEventValues(event, this.state._pointerIds, this.transform)
+      const kinematics = this.getKinematics(values, event)
 
-    const { values, origin } = getTwoTouchesEventValues(event, this.state._pointerIds, this.transform)
-    const kinematics = this.getKinematics(values, event)
+      this.updateGestureState({
+        ...getGenericPayload(this, event),
+        ...kinematics,
+        origin,
+      })
 
-    this.updateGestureState({
-      ...getGenericPayload(this, event),
-      ...kinematics,
-      origin,
-    })
-
-    this.fireGestureHandler()
+      this.fireGestureHandler()
+    } catch (e) {
+      this.onPinchEnd(event)
+    }
   }
 
   onPinchEnd = (event: React.TouchEvent | TouchEvent): void => {
     removeEventIds(this.controller, event)
-    const pointerIds = getPointerIds(event)
+    const pointerIds = getTouchIds(event)
 
     // if none of the lifted pointerIds is in the state pointerIds don't do anything
     if (this.state._pointerIds.every(id => !pointerIds.includes(id))) return

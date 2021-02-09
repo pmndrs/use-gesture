@@ -8,7 +8,7 @@ import {
   InternalHandlers,
   RecognizerClass,
 } from './types'
-import { supportsTouchEvents, supportsGestureEvents, getPointerIds } from './utils/event'
+import { supportsTouchEvents, supportsGestureEvents, getTouchIds } from './utils/event'
 import { getInitialState } from './utils/state'
 import { chainFns } from './utils/utils'
 
@@ -84,16 +84,22 @@ export function addEventIds(
   controller: Controller,
   event: React.TouchEvent | TouchEvent | React.PointerEvent | PointerEvent
 ) {
-  const idList = 'pointerId' in event ? controller.pointerIds : controller.touchIds
-  getPointerIds(event).forEach(idList.add, idList)
+  if ('pointerId' in event) {
+    controller.pointerIds.add(event.pointerId)
+  } else {
+    controller.touchIds = new Set(getTouchIds(event))
+  }
 }
 
 export function removeEventIds(
   controller: Controller,
   event: React.TouchEvent | TouchEvent | React.PointerEvent | PointerEvent
 ) {
-  const idList = 'pointerId' in event ? controller.pointerIds : controller.touchIds
-  getPointerIds(event).forEach(idList.delete, idList)
+  if ('pointerId' in event) {
+    controller.pointerIds.delete(event.pointerId)
+  } else {
+    getTouchIds(event).forEach(id => controller.touchIds.delete(id))
+  }
 }
 
 export function clearAllWindowListeners(controller: Controller) {
