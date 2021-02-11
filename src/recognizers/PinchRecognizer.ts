@@ -10,6 +10,8 @@ import {
 import { getStartGestureState, getGenericPayload } from './Recognizer'
 import { addBindings, addEventIds, removeEventIds } from '../Controller'
 
+const ZOOM_CONSTANT = 7
+
 export class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
   readonly ingKey = 'pinching'
   readonly stateKey = 'pinch'
@@ -168,7 +170,8 @@ export class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
     const {
       values: [prev_d, prev_a],
     } = this.state
-    const d = prev_d - delta_d
+    // ZOOM_CONSTANT is based on Safari trackpad natural zooming
+    const d = prev_d - delta_d * ZOOM_CONSTANT
     const a = prev_a !== void 0 ? prev_a : 0
 
     return {
