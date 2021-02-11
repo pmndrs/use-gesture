@@ -16,10 +16,10 @@ export default function Pinch() {
         set({ x, y })
       },
       onPinch: ({ offset: [d, a] }) => {
-        set({ scale: 1 + d / 200, rotateZ: a })
+        set({ scale: 1 + d / 260, rotateZ: a })
       },
     },
-    { domTarget }
+    { domTarget, eventOptions: { passive: false } }
   )
 
   return (
