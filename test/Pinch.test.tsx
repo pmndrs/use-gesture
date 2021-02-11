@@ -135,7 +135,7 @@ describe.each([
 
   test('using wheel with ctrl key pressed should update pinch distance/angle', () => {
     fireEvent.wheel(element, { deltaX: 4, deltaY: -5, ctrlKey: true })
-    expect(getByTestId(`${prefix}pinch-da`)).toHaveTextContent(`35,90`)
+    expect(getByTestId(`${prefix}pinch-da`)).toHaveTextContent(`65,90`)
   })
 
   test('passing the 180° angle between clockwise between two move events should account for a new turn', () => {
