@@ -191,6 +191,7 @@ export class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
 
     if (event.cancelable) event.preventDefault()
     else if (process.env.NODE_ENV === 'development') {
+      // eslint-disable-next-line no-console
       console.warn(
         'To properly support zoom on trackpads, try using the `domTarget` option and `config.eventOptions.passive` set to `false`. This message will only appear in development mode.'
       )

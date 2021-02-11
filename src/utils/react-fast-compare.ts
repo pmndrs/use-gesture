@@ -64,6 +64,7 @@ export default function isEqual(a: any, b: any) {
     return equal(a, b)
   } catch (error) {
     if ((error.message || '').match(/stack|recursion/i)) {
+      // eslint-disable-next-line no-console
       console.warn('react-fast-compare cannot handle circular refs')
       return false
     }

@@ -42,6 +42,7 @@ export default function useRecognizers<Config extends Partial<GenericOptions>>(
 
 function deprecationNoticeForDomTarget() {
   if (process.env.NODE_ENV === 'development') {
+    // eslint-disable-next-line no-console
     console.warn(
       `Deprecation notice: When the \`domTarget\` option is specified, you don't need to write \`useEffect(bind, [bind])\` anymore: event binding is now made handled internally to this lib.\n\nNext version won't return anything when \`domTarget\` is provided, therefore your code will break if you try to call \`useEffect\`.`
     )
