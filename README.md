@@ -1,7 +1,7 @@
 # React UseGesture
 
 
-[![npm (tag)](https://img.shields.io/npm/v/react-use-gesture?style=flat&colorA=000000&colorB=000000)](https://www.npmjs.com/package/react-use-gesture) ![npm bundle size](https://img.shields.io/bundlephobia/minzip/react-use-gesture?style=flat&colorA=000000&colorB=000000) ![NPM](https://img.shields.io/npm/l/react-use-gesture?style=flat&colorA=000000&colorB=000000) ![Travis (.org) branch](https://img.shields.io/travis/pmndrs/react-use-gesture/master?style=flat&colorA=000000&colorB=000000) [![Discord Shield](https://img.shields.io/discord/740090768164651008?style=flat&colorA=000000&colorB=000000&label=discord&logo=discord&logoColor=ffffff)](https://discord.gg/ZZjjNvJ)
+[![npm (tag)](https://img.shields.io/npm/v/react-use-gesture?style=flat&colorA=000000&colorB=000000)](https://www.npmjs.com/package/react-use-gesture) ![npm bundle size](https://img.shields.io/bundlephobia/minzip/react-use-gesture?style=flat&colorA=000000&colorB=000000) ![NPM](https://img.shields.io/npm/l/react-use-gesture?style=flat&colorA=000000&colorB=000000) ![Travis (.org) branch](https://img.shields.io/travis/pmndrs/react-use-gesture/master?style=flat&colorA=000000&colorB=000000) [![Discord Shield](https://img.shields.io/discord/740090768164651008?style=flat&colorA=000000&colorB=000000&label=discord&logo=discord&logoColor=ffffff)](https://discord.gg/poimandres)
 
 React UseGesture is a hook that lets you bind richer mouse and touch events to any component or view. With the data you receive, it becomes trivial to set up gestures, and often takes no more than a few lines of code.
 
