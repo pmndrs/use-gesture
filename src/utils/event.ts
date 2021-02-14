@@ -1,7 +1,5 @@
 import { Vector2, WebKitGestureEvent, DomEvents } from '../types'
 
-const WEBKIT_DISTANCE_SCALE_FACTOR = 260
-
 /**
  * Whether the browser supports GestureEvent (ie Safari)
  * @returns true if the browser supports gesture event
@@ -122,5 +120,5 @@ export function getWheelEventValues(event: React.WheelEvent | WheelEvent, transf
  * @returns webkit gesture event values
  */
 export function getWebkitGestureEventValues(event: WebKitGestureEvent, transform = identity): Vector2 {
-  return transform([event.scale * WEBKIT_DISTANCE_SCALE_FACTOR, event.rotation])
+  return transform([event.scale, event.rotation])
 }

@@ -11,6 +11,7 @@ import { getStartGestureState, getGenericPayload } from './Recognizer'
 import { addBindings, addEventIds, removeEventIds } from '../Controller'
 
 const ZOOM_CONSTANT = 7
+const WEBKIT_DISTANCE_SCALE_FACTOR = 260
 
 export class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
   readonly ingKey = 'pinching'
@@ -103,7 +104,6 @@ export class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
   /**
    * PINCH WITH WEBKIT GESTURES
    */
-
   onGestureStart = (event: WebKitGestureEvent): void => {
     if (!this.enabled) return
     event.preventDefault() // useless
@@ -133,7 +133,12 @@ export class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
 
     this.updateSharedState(genericEventData)
 
+    // this normalizes the values of the Safari's WebkitEvent by calculating
+    // the delta and then multiplying it by a constant.
     const values = getWebkitGestureEventValues(event, this.transform)
+    values[0] =
+      (values[0] - (this.state.event as WebKitGestureEvent).scale) * WEBKIT_DISTANCE_SCALE_FACTOR + this.state.values[0]
+
     const kinematics = this.getKinematics(values, event)
 
     this.updateGestureState({

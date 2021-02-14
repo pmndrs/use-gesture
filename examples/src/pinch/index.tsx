@@ -15,11 +15,17 @@ export default function Pinch() {
       onDrag: ({ offset: [x, y] }) => {
         set({ x, y })
       },
-      onPinch: ({ offset: [d, a] }) => {
+      onPinch: ({ values, movement: [d, a] }) => {
         set({ scale: 1 + d / 260, rotateZ: a })
       },
     },
-    { domTarget, eventOptions: { passive: false } }
+    {
+      domTarget,
+      eventOptions: { passive: false },
+      pinch: {
+        initial: () => [(style.scale.get() - 1) * 260, style.rotateZ.get()],
+      },
+    }
   )
 
   return (
