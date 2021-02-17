@@ -106,7 +106,7 @@ export class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
    */
   onGestureStart = (event: WebKitGestureEvent): void => {
     if (!this.enabled) return
-    event.preventDefault() // useless
+    event.preventDefault()
 
     const values = getWebkitGestureEventValues(event, this.transform)
 
@@ -133,7 +133,7 @@ export class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
 
     this.updateSharedState(genericEventData)
 
-    // this normalizes the values of the Safari's WebkitEvent by calculating
+    // this normalizes the values of the Safari's WebKitEvent by calculating
     // the delta and then multiplying it by a constant.
     const values = getWebkitGestureEventValues(event, this.transform)
     values[0] =
