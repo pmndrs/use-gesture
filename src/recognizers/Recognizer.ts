@@ -254,23 +254,24 @@ export function getGenericPayload<T extends StateKey>(
 export function getStartGestureState<T extends StateKey>(
   { state, config, stateKey, args }: Recognizer<T>,
   values: Vector2,
-  event: EventTypes[T]
+  event: EventTypes[T],
+  initial?: Vector2
 ) {
   const offset = state.offset
   const startTime = event.timeStamp
 
-  const { initial, bounds } = config
+  const { initial: initialFn, bounds } = config
 
   const _state = {
     ...getInitialState()[stateKey],
     _active: true,
     args,
     values,
-    initial: values,
+    initial: initial ?? values,
     offset,
     lastOffset: offset,
     startTime,
   }
 
-  return { ..._state, _initial: valueFn(initial, _state), _bounds: valueFn(bounds, _state) }
+  return { ..._state, _initial: valueFn(initialFn, _state), _bounds: valueFn(bounds, _state) }
 }

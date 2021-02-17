@@ -208,9 +208,8 @@ export class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
     this.updateSharedState(getGenericEventData(event))
 
     this.updateGestureState({
-      ...getStartGestureState(this, values, event),
+      ...getStartGestureState(this, values, event, this.state.values),
       ...getGenericPayload(this, event, true),
-      initial: this.state.values,
       offset: values,
       delta,
       origin,

@@ -21,9 +21,8 @@ export class WheelRecognizer extends CoordinatesRecognizer<'wheel'> {
 
     if (!this.state._active) {
       this.updateGestureState({
-        ...getStartGestureState(this, values, event),
+        ...getStartGestureState(this, values, event, this.state.values),
         ...getGenericPayload(this, event, true),
-        initial: this.state.values,
       })
 
       const movement = this.getMovement(values)

@@ -20,9 +20,8 @@ export class ScrollRecognizer extends CoordinatesRecognizer<'scroll'> {
 
     if (!this.state._active) {
       this.updateGestureState({
-        ...getStartGestureState(this, values, event),
+        ...getStartGestureState(this, values, event, this.state.values),
         ...getGenericPayload(this, event, true),
-        initial: this.state.values,
       })
 
       const movementDetection = this.getMovement(values)
