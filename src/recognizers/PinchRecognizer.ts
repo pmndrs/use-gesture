@@ -176,13 +176,15 @@ export class PinchRecognizer extends DistanceAngleRecognizer<'pinch'> {
       values: [prev_d, prev_a],
     } = this.state
     // ZOOM_CONSTANT is based on Safari trackpad natural zooming
-    const d = prev_d - delta_d * ZOOM_CONSTANT
+    const _delta_d = -delta_d * ZOOM_CONSTANT
+    // new distance is the previous state distance added to the delta
+    const d = prev_d + _delta_d
     const a = prev_a !== void 0 ? prev_a : 0
 
     return {
       values: [d, a] as Vector2,
       origin: [event.clientX, event.clientY] as Vector2,
-      delta: [0, delta_d] as Vector2,
+      delta: [_delta_d, a] as Vector2,
     }
   }
 
