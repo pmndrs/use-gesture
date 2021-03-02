@@ -19,7 +19,7 @@ import {
   CoordinatesKey,
   DistanceAngleKey,
 } from '../types'
-import { supportsTouchEvents } from './event'
+import { supportsTouchEvents, supportsPointerEvents } from './event'
 
 export const DEFAULT_DRAG_DELAY = 180
 export const DEFAULT_RUBBERBAND = 0.15
@@ -119,7 +119,17 @@ const InternalDragOptionsNormalizers = {
   ...InternalCoordinatesOptionsNormalizers,
 
   useTouch(value = false) {
-    return value && supportsTouchEvents()
+    const supportsTouch = supportsTouchEvents()
+    const supportsPointer = supportsPointerEvents()
+    if (value && supportsTouch) return true
+    if (supportsTouch && !supportsPointer) return true
+    if (!supportsPointer) {
+      // eslint-disable-next-line no-console
+      console.warn(
+        `React useGesture: this device doesn't support touch nor pointer events. Most interactions using this lib won't work.`
+      )
+    }
+    return value
   },
   experimental_preventWindowScrollY(value = false) {
     return value

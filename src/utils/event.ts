@@ -18,6 +18,10 @@ export function supportsTouchEvents(): boolean {
   return typeof window !== 'undefined' && 'ontouchstart' in window
 }
 
+export function supportsPointerEvents(): boolean {
+  return typeof window !== 'undefined' && 'onpointerdown' in window
+}
+
 function getEventTouches(event: PointerEvent | React.PointerEvent | TouchEvent | React.TouchEvent) {
   if ('pointerId' in event) return null
   return event.type === 'touchend' ? event.changedTouches : event.targetTouches
