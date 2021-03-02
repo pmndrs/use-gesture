@@ -123,7 +123,7 @@ const InternalDragOptionsNormalizers = {
     const supportsPointer = supportsPointerEvents()
     if (value && supportsTouch) return true
     if (supportsTouch && !supportsPointer) return true
-    if (!supportsPointer) {
+    if (window !== undefined && !supportsPointer) {
       // eslint-disable-next-line no-console
       console.warn(
         `React useGesture: this device doesn't support touch nor pointer events. Most interactions using this lib won't work.`
