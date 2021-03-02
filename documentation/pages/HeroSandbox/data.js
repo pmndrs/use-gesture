@@ -1,17 +1,18 @@
-import { makeFolder } from 'use-tweaks'
+import { folder } from 'leva'
 
 export const tweaks = {
-  ...makeFolder('Movement', {
-    axis: { value: 'free', options: { free: 'free', 'x axis': 'x', 'y axis': 'y' } },
+  Movement: folder({
+    axis: { value: undefined, options: { 'x axis': 'x', 'y axis': 'y' } },
     lockDirection: { value: false, label: 'lock direction' },
     threshold: { value: 0, min: 0, max: 100, step: 1 },
-    rubberband: { value: 0.15, min: 0, max: 3 },
   }),
-  ...makeFolder('Bounds', {
-    activateBounds: { value: false, label: 'activate bounds' },
-    top: { value: 100, min: 0, max: 200, step: 1 },
-    bottom: { value: 100, min: 0, max: 200, step: 1 },
-    left: { value: 100, min: 0, max: 200, step: 1 },
-    right: { value: 100, min: 0, max: 200, step: 1 },
-  }),
+  activateBounds: { value: false, label: 'activate bounds' },
+  rubberband: { value: 0.15, min: 0, max: 3, render: get => get('activateBounds') },
+  Bounds: folder(
+    {
+      vertical: { value: [-100, 100], min: -200, max: 200, step: 1 },
+      horizontal: { value: [-100, 100], min: -200, max: 200, step: 1 },
+    },
+    { render: get => get('activateBounds') }
+  ),
 }

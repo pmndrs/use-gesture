@@ -46,7 +46,8 @@ export default function PreventWindowScrollY() {
         set({ rot: [z / 50, y / 50, 0], scale: active ? [1, 1, 1] : [0.8, 0.8, 0.8] })
         ref.current!.style.cursor = active ? 'grabbing' : 'initial'
       },
-      onHover: ({ dragging, hovering }) => !dragging && (ref.current!.style.cursor = hovering ? 'grab' : 'initial'),
+      onHover: ({ dragging, hovering }) =>
+        !dragging && ref.current && (ref.current!.style.cursor = hovering ? 'grab' : 'initial'),
     },
     { drag: { experimental_preventWindowScrollY: true } }
   )
