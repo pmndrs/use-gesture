@@ -116,6 +116,7 @@ export default abstract class Recognizer<T extends StateKey = StateKey> {
     const { _bounds, _initial, _active, _intentional: wasIntentional, lastOffset, movement: prevMovement } = this.state
     const M = this.getInternalMovement(values, this.state)
 
+    // TODO: optimize this to avoid performing this at every frame
     const _T = this.transform(T).map(Math.abs)
 
     const i0 = wasIntentional[0] === false ? getIntentionalDisplacement(M[0], _T[0]) : wasIntentional[0]
