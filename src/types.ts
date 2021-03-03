@@ -228,6 +228,7 @@ export interface CommonGestureState {
   _movement: Vector2
   _initial: Vector2
   _bounds: [Vector2, Vector2]
+  _threshold: Vector2
   _lastEventType?: string
   _dragTarget?: EventTarget | (EventTarget & Element) | null
   _dragPointerId?: number | null

@@ -12,6 +12,7 @@ function getInitial<T>(mixed: T): T & CommonGestureState {
       [-Infinity, Infinity],
       [-Infinity, Infinity],
     ],
+    _threshold: [0, 0],
     _lastEventType: undefined,
     _dragStarted: false,
     _dragPreventScroll: false,

@@ -111,13 +111,18 @@ export default abstract class Recognizer<T extends StateKey = StateKey> {
    * Returns basic movement properties for the gesture based on the next values and current state.
    */
   protected getMovement(values: Vector2): PartialGestureState<T> {
-    const { rubberband, threshold: T } = this.config
+    const { rubberband } = this.config
 
-    const { _bounds, _initial, _active, _intentional: wasIntentional, lastOffset, movement: prevMovement } = this.state
+    const {
+      _bounds,
+      _initial,
+      _active,
+      _intentional: wasIntentional,
+      lastOffset,
+      movement: prevMovement,
+      _threshold: _T,
+    } = this.state
     const M = this.getInternalMovement(values, this.state)
-
-    // TODO: optimize this to avoid performing this at every frame
-    const _T = this.transform(T).map(Math.abs)
 
     const i0 = wasIntentional[0] === false ? getIntentionalDisplacement(M[0], _T[0]) : wasIntentional[0]
     const i1 = wasIntentional[1] === false ? getIntentionalDisplacement(M[1], _T[1]) : wasIntentional[1]
@@ -253,7 +258,7 @@ export function getGenericPayload<T extends StateKey>(
  * Should be common to all gestures.
  */
 export function getStartGestureState<T extends StateKey>(
-  { state, config, stateKey, args }: Recognizer<T>,
+  { state, config, stateKey, args, transform }: Recognizer<T>,
   values: Vector2,
   event: EventTypes[T],
   initial?: Vector2
@@ -261,7 +266,11 @@ export function getStartGestureState<T extends StateKey>(
   const offset = state.offset
   const startTime = event.timeStamp
 
-  const { initial: initialFn, bounds } = config
+  const { initial: initialFn, bounds, threshold } = config
+
+  // the _threshold is the difference between a [0,0] offset converted to
+  // its new space coordinates
+  const _threshold = subV(transform(threshold), transform([0, 0])).map(Math.abs)
 
   const _state = {
     ...getInitialState()[stateKey],
@@ -269,6 +278,7 @@ export function getStartGestureState<T extends StateKey>(
     args,
     values,
     initial: initial ?? values,
+    _threshold,
     offset,
     lastOffset: offset,
     startTime,
