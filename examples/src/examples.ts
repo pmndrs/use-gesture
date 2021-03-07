@@ -18,5 +18,6 @@ export { default as nested } from './nested'
 export { default as scrollableList } from './draggable-list-scrollable'
 export { default as preventWindowScroll } from './prevent-window-scroll'
 export { default as pointerLock } from './pointerLock'
+export { default as scroll } from './scroll'
 
 // TODO possibly add domTarget site-wide option to test domTarget for all examples

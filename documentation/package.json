@@ -23,7 +23,7 @@
     "react-spring": "9.0.0-rc.2",
     "react-three-fiber": "^5.3.19",
     "react-toastify": "^7.0.3",
-    "react-use-gesture": "^9.1.2",
+    "react-use-gesture": "^9.1.3",
     "smooth-doc": "5.2.1",
     "three": "^0.126.0"
   },
