@@ -46,7 +46,7 @@ const Row = styled.box`
   }
 `
 
-export default function ({ types, defaultValue }) {
+export default function SpecsFn({ types, defaultValue }) {
   const t = Array.isArray(types) ? types : [types]
   const l = t.join('').length
   return (

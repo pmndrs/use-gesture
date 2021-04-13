@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react'
-import { useSpring, animated } from 'react-spring'
+import { useSpring, animated } from '@react-spring/web'
 import { useGesture } from 'react-use-gesture'
 import { toast } from 'react-toastify'
 import cn from 'classnames'
@@ -21,7 +21,7 @@ export default function Hero() {
   const [top, bottom] = vertical
   const [left, right] = horizontal
 
-  const [props, set] = useSpring(() => ({ x: 0, y: 0, rotateX: 0, rotateY: 0, scale: 0.8 }))
+  const [props, api] = useSpring(() => ({ x: 0, y: 0, rotateX: 0, rotateY: 0, scale: 0.8 }))
 
   const rotX = py => (py - props.y.get() - rect.current.y - rect.current.height / 2) / 5
   const rotY = px => -(px - props.x.get() - rect.current.x - rect.current.width / 2) / 5
@@ -80,7 +80,7 @@ export default function Hero() {
 
         if (down) {
           resetShineAndText()
-          set({
+          api.start({
             x: mx,
             y: my,
             scale: 1,
@@ -90,7 +90,7 @@ export default function Hero() {
           })
           setShadow(true)
         } else {
-          set({
+          api.start({
             x: 0,
             y: 0,
             scale: hovering ? 0.9 : 0.8,
@@ -102,14 +102,14 @@ export default function Hero() {
       onHover: ({ dragging, active }) => {
         if (!dragging) {
           if (!active) resetShineAndText()
-          set({ scale: active ? 0.9 : 0.8, rotateX: 0, rotateY: 0 })
+          api.start({ scale: active ? 0.9 : 0.8, rotateX: 0, rotateY: 0 })
           setShadow(active)
         }
       },
       onMove: ({ dragging, hovering, first, xy: [px, py] }) => {
         if (first) rect.current = ref.current.getBoundingClientRect()
         if (!dragging && hovering) {
-          set({ rotateX: rotX(py), rotateY: rotY(px) })
+          api.start({ rotateX: rotX(py), rotateY: rotY(px) })
           setText({ y: yText(py), x: xText(px), scale: 1.6 })
           setShine({ background: bgShine(px, py) })
         }
@@ -128,7 +128,7 @@ export default function Hero() {
   return (
     <div className={styles.header}>
       <div className={styles.gui}>
-        <Leva theme={{ sizes: { controlWidth: '140px' } }} detached={false} hideTitleBar />
+        <Leva theme={{ sizes: { controlWidth: '140px' } }} flat fill titleBar={false} />
       </div>
       <div className={styles.bg}>React UseGesture</div>
       <div className={styles.wrapper}>

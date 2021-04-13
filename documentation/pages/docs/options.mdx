@@ -86,10 +86,10 @@ hooks as a prop. Cleaning is handled automatically.
 
 ```jsx highlight={5-6}
 function ScrollExample() {
-  const [{ width }, set] = useSpring(() => ({ width: '0%' }))
+  const [{ width }, api] = useSpring(() => ({ width: '0%' }))
   const height = document.documentElement.scrollHeight
 
-  useScroll(({ xy: [, y] }) => set({ width: (y / height) * 100 + '%' }), { domTarget: window })
+  useScroll(({ xy: [, y] }) => api.start({ width: (y / height) * 100 + '%' }), { domTarget: window })
   return <animated.div style={{ width }} />
 }
 ```
@@ -149,9 +149,9 @@ The code below shows how the example works:
 
 ```jsx highlight={3-7}
 function InitialExample() {
-  const [{ x }, set] = useSpring(() => ({ x: 0 }))
+  const [{ x }, api] = useSpring(() => ({ x: 0 }))
   const bind = useDrag(
-    ({ down, movement: [mx] }) => set({ x: down ? mx : 0, immediate: down, config: { duration: 3000 } }),
+    ({ down, movement: [mx] }) => api.start({ x: down ? mx : 0, immediate: down, config: { duration: 3000 } }),
     { initial: () => [x.get(), 0] }
   )
   return <animated.div {...bind()} style={{ x }} />
@@ -177,8 +177,8 @@ In this example, we've set the `threshold` to `100`[^2] and made visible when th
 
 ```jsx highlight={3-5}
 function ThresholdExample() {
-  const [{ x, y }, set] = useSpring(() => ({ x: 0, y: 0 }))
-  const bind = useDrag(({ offset: [x, y] }) => set({ x, y }), {
+  const [{ x, y }, api] = useSpring(() => ({ x: 0, y: 0 }))
+  const bind = useDrag(({ offset: [x, y] }) => api.start({ x, y }), {
     threshold: 10,
   })
   return <animated.div {...bind()} style={{ x, y }} />
@@ -206,8 +206,8 @@ If you want to set contraints to the user gesture, then you should use the `boun
 
 ```jsx highlight={3-6}
 function BoundsExample() {
-  const [{ x, y }, set] = useSpring(() => ({ x: 0, y: 0 }))
-  const bind = useDrag(({ down, offset: [ox, oy] }) => set({ x: ox, y: oy, immediate: down }), {
+  const [{ x, y }, api] = useSpring(() => ({ x: 0, y: 0 }))
+  const bind = useDrag(({ down, offset: [ox, oy] }) => api.start({ x: ox, y: oy, immediate: down }), {
     bounds: { left: -100, right: 100, top: -50, bottom: 50 },
   })
   return <animated.div {...bind()} style={{ x, y }} />
@@ -244,8 +244,8 @@ You can set `rubberband` to `true` to use the default elasticity coeffecient of 
 
 ```jsx highlight={3-6}
 function RubberbandExample() {
-  const [{ x, y }, set] = useSpring(() => ({ x: 0, y: 0 }))
-  const bind = useDrag(({ down, offset: [ox, oy] }) => set({ x: ox, y: oy, immediate: down }), {
+  const [{ x, y }, api] = useSpring(() => ({ x: 0, y: 0 }))
+  const bind = useDrag(({ down, offset: [ox, oy] }) => api.start({ x: ox, y: oy, immediate: down }), {
     bounds: { left: -100, right: 100, top: -50, bottom: 50 },
     rubberband: true,
   })
@@ -319,8 +319,8 @@ useGesture({/* handlers */ }, {
 
 ```jsx highlight={3}
 function AxisExample() {
-  const [{ x }, set] = useSpring(() => ({ x: 0 }))
-  const bind = useDrag(({ down, movement: [mx] }) => set({ x: down ? mx : 0 }), { axis: 'x' })
+  const [{ x }, api] = useSpring(() => ({ x: 0 }))
+  const bind = useDrag(({ down, movement: [mx] }) => api.start({ x: down ? mx : 0 }), { axis: 'x' })
   return <animated.div {...bind()} style={{ x }} />
 }
 ```
@@ -343,10 +343,10 @@ The component above can only move along the `x` axis. But try dragging and movin
 
 ```jsx highlight={3-8}
 function LockDirectionExample() {
-  const [{ x, y }, set] = useSpring(() => ({ x: 0, y: 0 }))
+  const [{ x, y }, api] = useSpring(() => ({ x: 0, y: 0 }))
   const bind = useDrag(
     ({ down, movement: [mx, my] }) => {
-      set({ x: down ? mx : 0, y: down ? my : 0, immediate: down })
+      api.start({ x: down ? mx : 0, y: down ? my : 0, immediate: down })
     },
     { lockDirection: true }
   )
@@ -364,11 +364,11 @@ Making a draggable component tappable or clickable can be tricky: differenciatin
 
 ```jsx highlight={3-5,7-9}
 function FilterTapsExample() {
-  const [{ x, y }, set] = useSpring(() => ({ x: 0, y: 0 }))
+  const [{ x, y }, api] = useSpring(() => ({ x: 0, y: 0 }))
   const bind = useDrag(
     ({ down, movement: [mx, my], tap }) => {
       if (tap) alert('tap!')
-      set({ x: down ? mx : 0, y: down ? my : 0 })
+      api.start({ x: down ? mx : 0, y: down ? my : 0 })
     },
     { filterTaps: true }
   )
@@ -408,9 +408,9 @@ Note that if the the pointer is moved by the user, the drag gesture will fire im
 
 ```jsx highlight={3-7}
 function DelayExample() {
-  const [{ x, y, scale }, set] = useSpring(() => ({ x: 0, y: 0, scale: 1 }))
+  const [{ x, y, scale }, api] = useSpring(() => ({ x: 0, y: 0, scale: 1 }))
   const bind = useDrag(
-    ({ down, movement: [mx, my] }) => set({ x: down ? mx : 0, y: down ? my : 0, scale: down ? 1.2 : 1 }),
+    ({ down, movement: [mx, my] }) => api.start({ x: down ? mx : 0, y: down ? my : 0, scale: down ? 1.2 : 1 }),
     { delay: 1000 }
   )
   return <animated.div {...bind()} style={{ x, y, scale }} />
