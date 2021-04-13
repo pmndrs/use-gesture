@@ -2,7 +2,7 @@ import React from 'react'
 import { HeroTitle as HT } from 'smooth-doc/components'
 import styled from '@xstyled/styled-components'
 import { useMove } from 'react-use-gesture'
-import { useSpring, animated } from 'react-spring'
+import { useSpring, animated } from '@react-spring/web'
 
 const HeroTitle = animated(styled(HT)`
   color: red;
@@ -17,8 +17,8 @@ const HeroTitle = animated(styled(HT)`
 `)
 
 export default function Title({ children }) {
-  const [{ x }, set] = useSpring(() => ({ x: 0 }))
-  useMove(({ xy: [x, y] }) => set({ x: x / window.innerWidth }), {
+  const [{ x }, api] = useSpring(() => ({ x: 0 }))
+  useMove(({ xy: [x, y] }) => api.start({ x: x / window.innerWidth }), {
     domTarget: typeof window === 'object' ? window : null,
   })
 

@@ -1,7 +1,7 @@
 import React, { Suspense, useState, useEffect, useRef } from 'react'
-import { useSpring, useSprings, animated, to } from 'react-spring'
+import { useSpring, useSprings, animated, to } from '@react-spring/web'
 import { a as a3f } from '@react-spring/three'
-import { Canvas, useThree, useFrame } from 'react-three-fiber'
+import { Canvas, useThree, useFrame } from '@react-three/fiber'
 import { useTexture } from '@react-three/drei'
 import { useDrag, useScroll, useGesture, useWheel } from 'react-use-gesture'
 import { Lethargy } from 'lethargy'
@@ -11,11 +11,11 @@ import * as THREE from 'three'
 import styles from './styles.module.css'
 
 export function EasterDiv({ children }) {
-  const [{ x, y, live }, set] = useSpring(() => ({ x: 0, y: 0, live: false }))
+  const [{ x, y, live }, api] = useSpring(() => ({ x: 0, y: 0, live: false }))
 
   const bind = useDrag(({ down, movement: [mx, my] }) => {
     document.body.classList.toggle('dragged', down)
-    set({ x: down ? mx : 0, y: down ? my : 0, live: down })
+    api.start({ x: down ? mx : 0, y: down ? my : 0, live: down })
   })
 
   return (
@@ -26,29 +26,29 @@ export function EasterDiv({ children }) {
 }
 
 export function PullRelease({ setActive }) {
-  const [{ x, y }, set] = useSpring(() => ({ x: 0, y: 0 }))
+  const [{ x, y }, api] = useSpring(() => ({ x: 0, y: 0 }))
   const bind = useDrag(({ down, movement: [mx, my] }) => {
     setActive && setActive(down)
-    set({ x: down ? mx : 0, y: down ? my : 0, immediate: down })
+    api.start({ x: down ? mx : 0, y: down ? my : 0, immediate: down })
   })
   return <animated.div className={styles.drag} {...bind()} style={{ x, y }} />
 }
 
 export function Offset({ setActive }) {
-  const [{ x, y }, set] = useSpring(() => ({ x: 0, y: 0 }))
+  const [{ x, y }, api] = useSpring(() => ({ x: 0, y: 0 }))
   const bind = useDrag(({ down, offset: [x, y] }) => {
     setActive && setActive(down)
-    set({ x, y })
+    api.start({ x, y })
   })
   return <animated.div className={styles.drag} {...bind()} style={{ x, y }} />
 }
 
 export function Cancel({ setActive }) {
-  const [{ x, bg }, set] = useSpring(() => ({ x: 0, bg: 'cornflowerblue' }))
+  const [{ x, bg }, api] = useSpring(() => ({ x: 0, bg: 'cornflowerblue' }))
   const bind = useDrag(({ active, movement: [mx], cancel, canceled }) => {
     setActive && setActive(active)
     if (mx > 200) cancel()
-    set({
+    api.start({
       x: active ? mx : 0,
       bg: canceled ? 'lightpink' : 'cornflowerblue',
       immediate: active,
@@ -90,10 +90,10 @@ export function Swipe({ setActive }) {
 }
 
 export function DomTarget() {
-  const [{ width }, set] = useSpring(() => ({ width: '0%' }))
+  const [{ width }, api] = useSpring(() => ({ width: '0%' }))
   useScroll(
     ({ xy: [, y] }) => {
-      set({ width: (y / document.documentElement.scrollHeight) * 100 + '%' })
+      api.start({ width: (y / document.documentElement.scrollHeight) * 100 + '%' })
     },
     { domTarget: typeof window === 'object' ? window : null }
   )
@@ -103,11 +103,11 @@ export function DomTarget() {
 
 export function Initial({ setActive }) {
   const [usingInitial, setUsingInitial] = useState(true)
-  const [{ x }, set] = useSpring(() => ({ x: 0 }))
+  const [{ x }, api] = useSpring(() => ({ x: 0 }))
   const bind = useDrag(
     ({ down, movement: [mx] }) => {
       setActive && setActive(down)
-      set({ x: down ? mx : 0, immediate: down, config: { duration: 3000 } })
+      api.start({ x: down ? mx : 0, immediate: down, config: { duration: 3000 } })
     },
     {
       initial: usingInitial ? () => [x.get(), 0] : [0, 0],
@@ -127,8 +127,8 @@ export function Initial({ setActive }) {
 }
 
 export function Threshold({ setActive }) {
-  const [{ x, y }, set] = useSpring(() => ({ x: 0, y: 0 }))
-  const [props, setL] = useSpring(() => ({ x: 0, y: 0, opacity: 0 }))
+  const [{ x, y }, api] = useSpring(() => ({ x: 0, y: 0 }))
+  const [props, apiL] = useSpring(() => ({ x: 0, y: 0, opacity: 0 }))
 
   const [movX, setMovX] = useState(false)
   const [movY, setMovY] = useState(false)
@@ -136,16 +136,16 @@ export function Threshold({ setActive }) {
   const bind = useDrag(
     ({ _movement: [mx, my], _intentional: [ix, iy], down, movement: [x, y], intentional }) => {
       if (intentional) {
-        set({ x: down ? x : 0, y: down ? y : 0, immediate: down })
+        api.start({ x: down ? x : 0, y: down ? y : 0, immediate: down })
       }
       if (!down) {
         setMovX(false)
         setMovY(false)
-        setL({ x: 0, y: 0, opacity: 0 })
+        apiL.start({ x: 0, y: 0, opacity: 0 })
       } else {
-        setL({ opacity: 1 })
-        ix ? setMovX(true) : setL({ x: mx })
-        iy ? setMovY(true) : setL({ y: my })
+        apiL.start({ opacity: 1 })
+        ix ? setMovX(true) : apiL.start({ x: mx })
+        iy ? setMovY(true) : apiL.start({ y: my })
       }
     },
     { threshold: 100, triggerAllEvents: true }
@@ -176,11 +176,11 @@ export function Threshold({ setActive }) {
 const bounds = { left: -85, right: 85, top: -50, bottom: 50 }
 
 export function Bounds({ setActive }) {
-  const [{ x, y }, set] = useSpring(() => ({ x: 0, y: 0 }))
+  const [{ x, y }, api] = useSpring(() => ({ x: 0, y: 0 }))
   const bind = useDrag(
     ({ down, offset: [ox, oy] }) => {
       setActive && setActive(down)
-      set({ x: ox, y: oy, immediate: down })
+      api.start({ x: ox, y: oy, immediate: down })
     },
     { bounds }
   )
@@ -207,11 +207,11 @@ const limitFn = (b, y) =>
 const closestLimit = (x, y) => Math.max(limitFn(xBounds, x), limitFn(yBounds, y))
 
 export function Rubberband({ setActive }) {
-  const [{ x, y }, set] = useSpring(() => ({ x: 0, y: 0 }))
+  const [{ x, y }, api] = useSpring(() => ({ x: 0, y: 0 }))
   const bind = useDrag(
     ({ down, offset: [ox, oy] }) => {
       setActive && setActive(down)
-      set({ x: ox, y: oy, immediate: down })
+      api.start({ x: ox, y: oy, immediate: down })
     },
     { bounds, rubberband: true }
   )
@@ -230,11 +230,11 @@ export function Rubberband({ setActive }) {
 
 export function Axis({ setActive }) {
   const [axis, setAxis] = useState('x')
-  const [{ x, y }, set] = useSpring(() => ({ x: 0, y: 0 }))
+  const [{ x, y }, api] = useSpring(() => ({ x: 0, y: 0 }))
   const bind = useDrag(
     ({ down, movement: [mx, my] }) => {
       setActive && setActive(down)
-      set({ x: down ? mx : 0, y: down ? my : 0, immediate: down })
+      api.start({ x: down ? mx : 0, y: down ? my : 0, immediate: down })
     },
     { axis: axis === 'false' ? undefined : axis }
   )
@@ -260,11 +260,11 @@ export function Axis({ setActive }) {
 
 export function Axis2({ setActive }) {
   const [axis, setAxis] = useState('false')
-  const [{ x }, set] = useSpring(() => ({ x: 0 }))
+  const [{ x }, api] = useSpring(() => ({ x: 0 }))
   const bind = useDrag(
     ({ down, movement: [mx] }) => {
       setActive && setActive(down)
-      set({ x: down ? mx : 0, immediate: down })
+      api.start({ x: down ? mx : 0, immediate: down })
     },
     { axis: axis === 'false' ? undefined : axis }
   )
@@ -286,11 +286,11 @@ export function Axis2({ setActive }) {
 }
 
 export function LockDirection({ setActive }) {
-  const [{ x, y }, set] = useSpring(() => ({ x: 0, y: 0 }))
+  const [{ x, y }, api] = useSpring(() => ({ x: 0, y: 0 }))
   const bind = useDrag(
     ({ down, movement: [mx, my] }) => {
       setActive && setActive(down)
-      set({ x: down ? mx : 0, y: down ? my : 0, immediate: down })
+      api.start({ x: down ? mx : 0, y: down ? my : 0, immediate: down })
     },
     { lockDirection: true }
   )
@@ -298,7 +298,7 @@ export function LockDirection({ setActive }) {
 }
 
 export function FilterTaps({ setActive }) {
-  const [{ x, y }, set] = useSpring(() => ({ x: 0, y: 0 }))
+  const [{ x, y }, api] = useSpring(() => ({ x: 0, y: 0 }))
   const [status, setStatus] = useState('idle')
   const bind = useDrag(
     ({ down, movement: [mx, my], tap, elapsedTime }) => {
@@ -310,7 +310,7 @@ export function FilterTaps({ setActive }) {
         setStatus(down ? 'dragging' : 'idle')
 
         setActive && setActive(down)
-        set({ x: down ? mx : 0, y: down ? my : 0 })
+        api.start({ x: down ? mx : 0, y: down ? my : 0 })
       }
     },
     { filterTaps: true }
@@ -327,13 +327,13 @@ export function FilterTaps({ setActive }) {
 }
 
 export function Delay({ setActive }) {
-  const [style, set] = useSpring(() => ({
+  const [style, api] = useSpring(() => ({
     x: 0,
     y: 0,
     scale: 1,
     backgroundColor: 'lightskyblue',
   }))
-  const [{ countdown }, setCountdown] = useSpring(() => ({
+  const [{ countdown }, countdownApi] = useSpring(() => ({
     countdown: 1000,
   }))
 
@@ -350,14 +350,14 @@ export function Delay({ setActive }) {
         clearInterval(timer.current)
         setStatus('elapsed')
       }
-      setCountdown({ countdown: elapsedTime, immediate: true })
+      countdownApi.start({ countdown: elapsedTime, immediate: true })
     }, 10)
   }
 
   const clearCountdown = () => {
     setActive(false)
     clearInterval(timer.current)
-    setCountdown({ countdown: 1000, immediate: true })
+    countdownApi.start({ countdown: 1000, immediate: true })
     setStatus('idle')
   }
 
@@ -370,7 +370,7 @@ export function Delay({ setActive }) {
         }
         if (last) clearCountdown()
 
-        set({
+        api.start({
           x: down ? mx : 0,
           y: down ? my : 0,
           scale: down ? 1.2 : 1,
@@ -412,7 +412,7 @@ export function Delay({ setActive }) {
 const colors = ['lightcoral', 'cadetblue', 'mediumpurple', 'darkorange']
 
 export function TouchAction() {
-  const [springs, set] = useSprings(colors.length, i => ({
+  const [springs, api] = useSprings(colors.length, i => ({
     x: 0,
     opacity: 1,
     moving: false,
@@ -420,7 +420,7 @@ export function TouchAction() {
   }))
   const bind = useDrag(
     ({ active, down, movement: [x], args: [index] }) =>
-      set(i => {
+      api.start(i => {
         if (i === index) return { x: active ? x : 0, moving: active, immediate: down }
         else return { opacity: down ? 0.6 : 1 }
       }),
@@ -496,12 +496,12 @@ const material = new THREE.MeshStandardMaterial({
 })
 
 export function PreventWindowScrollY() {
-  const [{ rot, scale }, set] = useSpring(() => ({ rot: [0, 0, 0], scale: [0.8, 0.8, 0.8] }))
+  const [{ rot, scale }, api] = useSpring(() => ({ rot: [0, 0, 0], scale: [0.8, 0.8, 0.8] }))
   const ref = useRef()
   const bind = useGesture(
     {
       onDrag: ({ active, offset: [y, z] }) => {
-        set({ rot: [z / 50, y / 50, 0], scale: active ? [1, 1, 1] : [0.8, 0.8, 0.8] })
+        api.start({ rot: [z / 50, y / 50, 0], scale: active ? [1, 1, 1] : [0.8, 0.8, 0.8] })
         ref.current.style.cursor = active ? 'grabbing' : 'initial'
       },
       onHover: ({ dragging, hovering }) => !dragging && (ref.current.style.cursor = hovering ? 'grab' : 'initial'),
@@ -523,9 +523,9 @@ function Box() {
 
   const { viewport } = useThree()
   const { width, height, factor } = viewport
-  const [spring, setSpring] = useSpring(() => ({ position: [0, 0, 0], scale: [1, 1, 1] }))
+  const [spring, springApi] = useSpring(() => ({ position: [0, 0, 0], scale: [1, 1, 1] }))
 
-  const bind = useDrag(({ offset: [x, y] }) => setSpring({ position: [x, y, 0] }), {
+  const bind = useDrag(({ offset: [x, y] }) => springApi.start({ position: [x, y, 0] }), {
     bounds: { left: -width / 2.2, right: width / 2.2, top: -height / 2.2, bottom: height / 2.2 },
     rubberband: true,
     transform: ([x, y]) => [x / factor, -y / factor],

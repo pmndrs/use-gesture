@@ -28,9 +28,9 @@ Setting `touch-action: pan-y` on your draggable element class or style indicates
 
 ```jsx highlight={3-8}
 function TouchActionExample() {
-  const [springs, set] = useSprings(4, () => ({ x: 0 }))
+  const [springs, api] = useSprings(4, () => ({ x: 0 }))
 
-  const bind = useDrag(({ down, movement: [x], args: [index] }) => set(i => i === index && { x: down ? x : 0 }), {
+  const bind = useDrag(({ down, movement: [x], args: [index] }) => api.start(i => i === index && { x: down ? x : 0 }), {
     axis: 'x',
   })
 
@@ -58,7 +58,6 @@ Make sure you can't solve your problem scroll problem with [`touch-action`](#tou
 
 <details>
   <summary>Show code</summary>
-
 
 ```jsx
 const slides = [0, 1, 2, 3, 4, 5]
@@ -100,6 +99,5 @@ function LethargyWheel() {
 ```
 
 </details>
-
 
 Example on CodeSandbox: https://codesandbox.io/s/lethargy-2coe8

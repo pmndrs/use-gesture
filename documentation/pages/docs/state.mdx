@@ -106,8 +106,8 @@ In practical terms, `movement` is handy when your element returns back to its or
 
 ```jsx
 function OffsetExample() {
-  const [{ x, y }, set] = useSpring(() => ({ x: 0, y: 0 }))
-  const bind = useDrag(({ offset: [x, y] }) => set({ x, y }))
+  const [{ x, y }, api] = useSpring(() => ({ x: 0, y: 0 }))
+  const bind = useDrag(({ offset: [x, y] }) => api.start({ x, y }))
   return <animated.div {...bind()} style={{ x, y }} />
 }
 ```
@@ -126,10 +126,10 @@ If you drag the blue square over the pink zone, you'll notice that the gesture i
 
 ```jsx highlight={3-6}
 function CancelExample() {
-  const [{ x }, set] = useSpring(() => ({ x: 0 }))
+  const [{ x }, api] = useSpring(() => ({ x: 0 }))
   const bind = useDrag(({ active, movement: [mx], cancel }) => {
     if (mx > 200) cancel()
-    set({ x: active ? mx : 0, immediate: active })
+    api.start({ x: active ? mx : 0, immediate: active })
   })
 
   return <animated.div {...bind()} style={{ x }} />
