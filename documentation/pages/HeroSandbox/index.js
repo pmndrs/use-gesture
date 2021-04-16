@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react'
-import { useSpring, animated } from '@react-spring/web'
+import { useSpring, animated, config } from '@react-spring/web'
 import { useGesture } from 'react-use-gesture'
 import { toast } from 'react-toastify'
 import cn from 'classnames'
@@ -10,6 +10,11 @@ import 'react-toastify/dist/ReactToastify.css'
 import styles from './hero.module.css'
 
 toast.configure({ position: 'bottom-right', pauseOnHover: false, draggable: false })
+
+const _config = {
+  stiff: { tension: 200, friction: 20 },
+  soft: config.default,
+}
 
 export default function Hero() {
   const [shadow, setShadow] = useState(false)
@@ -62,31 +67,31 @@ export default function Hero() {
   }
 
   const defaultText = { x: 0, y: 0, scale: 1 }
-  const [shine, setShine] = useSpring(() => ({ background: defaultBgShine() }))
-  const [text, setText] = useSpring(() => defaultText)
+  const [shine, apiShine] = useSpring(() => ({ background: defaultBgShine() }))
+  const [text, apiText] = useSpring(() => defaultText)
 
-  const resetShineAndText = () => {
-    setShine({ background: defaultBgShine() })
-    setText(defaultText)
+  const reapiShineAndText = () => {
+    apiShine.start({ background: defaultBgShine() })
+    apiText.start(defaultText)
   }
 
   const bind = useGesture(
     {
-      onDrag: ({ event, hovering, tap, swipe: [swipeX, swipeY], down, movement: [mx, my], offset: [x, y] }) => {
+      onDrag: ({ hovering, tap, swipe: [swipeX, swipeY], active, movement: [mx, my], offset: [x, y] }) => {
         if (tap) toast('Tap!')
         if (swipeX) toast(`Swipe ${swipeX > 0 ? 'Right' : 'Left'}`)
         if (swipeY) toast(`Swipe ${swipeY > 0 ? 'Bottom' : 'Top'}`)
-        document.body.classList.toggle('dragged', down)
+        document.body.classList.toggle('dragged', active)
 
-        if (down) {
-          resetShineAndText()
+        if (active) {
+          reapiShineAndText()
           api.start({
             x: mx,
             y: my,
             scale: 1,
             rotateX: 0,
             rotateY: 0,
-            immediate: k => k !== 'scale' && event.pointerType === 'touch',
+            config: _config.stiff,
           })
           setShadow(true)
         } else {
@@ -94,14 +99,14 @@ export default function Hero() {
             x: 0,
             y: 0,
             scale: hovering ? 0.9 : 0.8,
-            immediate: false,
+            config: _config.soft,
           })
           setShadow(false)
         }
       },
       onHover: ({ dragging, active }) => {
         if (!dragging) {
-          if (!active) resetShineAndText()
+          if (!active) reapiShineAndText()
           api.start({ scale: active ? 0.9 : 0.8, rotateX: 0, rotateY: 0 })
           setShadow(active)
         }
@@ -110,8 +115,8 @@ export default function Hero() {
         if (first) rect.current = ref.current.getBoundingClientRect()
         if (!dragging && hovering) {
           api.start({ rotateX: rotX(py), rotateY: rotY(px) })
-          setText({ y: yText(py), x: xText(px), scale: 1.6 })
-          setShine({ background: bgShine(px, py) })
+          apiText.start({ y: yText(py), x: xText(px), scale: 1.6 })
+          apiShine.start({ background: bgShine(px, py) })
         }
       },
     },
