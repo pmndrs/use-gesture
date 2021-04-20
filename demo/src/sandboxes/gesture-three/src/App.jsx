@@ -14,7 +14,8 @@ const Mesh = () => {
 
   const bind = useDrag(
     ({ event, offset: [x, y] }) => {
-      rEuler.set(y / factor, x / factor, 0)
+      console.log(event)
+      rEuler.set(x, y, 0)
       event.object.quaternion.setFromEuler(rEuler)
     },
     { r3f: true }

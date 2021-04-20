@@ -9,13 +9,15 @@ function capitalize(string) {
 }
 
 export function toReactHandlerProp(device, action) {
-  const _action = EVENT_TYPE_MAP[device][action]
-  return 'on' + capitalize(device) + capitalize(_action)
+  const deviceKey = EVENT_TYPE_MAP[device]
+  const actionKey = deviceKey ? deviceKey[action] : action
+  return 'on' + capitalize(device) + capitalize(actionKey)
 }
 
 export function toDomHandlerProp(device, action) {
-  const _action = EVENT_TYPE_MAP[device][action]
-  return device + _action
+  const deviceKey = EVENT_TYPE_MAP[device]
+  const actionKey = deviceKey ? deviceKey[action] : action
+  return device + actionKey
 }
 
 function isTouch(event) {
@@ -26,7 +28,7 @@ function getValueEvent(event) {
   return isTouch(event) ? (event.type === 'touchend' ? event.changedTouches[0] : event.targetTouches[0]) : event
 }
 
-export const PointerHelper = {
+export const Pointer = {
   id(event) {
     const valueEvent = getValueEvent(event)
     return isTouch(event) ? valueEvent.identifier : valueEvent.pointerId
