@@ -3,7 +3,6 @@
   "version": "10.0.0",
   "description": "Core engine for receiving gestures",
   "license": "MIT",
-  "sideEffects": false,
   "main": "dist/use-gesture-core.cjs.js",
   "module": "dist/use-gesture-core.esm.js",
   "peerDependencies": {

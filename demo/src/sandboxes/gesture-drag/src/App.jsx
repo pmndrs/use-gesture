@@ -8,7 +8,7 @@ import styles from './styles.module.css'
 export default function App() {
   const [style, api] = useSpring(() => ({ scale: 1, x: 0, y: 0 }))
   const options = useControls({
-    gesture: { options: ['movement', 'offset'] },
+    gesture: { options: ['offset', 'movement'] },
     touch: false,
     capture: true,
     lock: false
