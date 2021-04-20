@@ -1,3 +1,5 @@
 {
-  "sandboxes": ["zuwji", "rkgzi", "v364z", "fh8r8", "fduch"]
+  "packages": ["packages/*"],
+  "sandboxes": ["/demo/src/sandboxes/gesture-drag", "/demo/src/sandboxes/gesture-three"],
+  "node": "14"
 }
