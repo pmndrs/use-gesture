@@ -1,5 +1,5 @@
 import { DragEngine } from './DragEngineCore'
-import { V } from '../../Vector'
+import { V } from '../../utils/maths'
 
 const DISPLACEMENT = 10
 
@@ -17,12 +17,10 @@ DragEngine.prototype.keydown = function (event) {
     const factor = event.shiftKey ? 10 : event.altKey ? 0.1 : 1
     const delta = deltaFn(factor)
 
-    this.start()
+    this.start(event)
     this.state._keyboardActive = true
 
-    V.addTo(this.state.movement, delta)
-    this.state.offset = V.add(this.state.lastOffset, this.state.movement)
-    this.state.event = event
+    V.addTo(this.state._movement, delta)
 
     this.emit()
   }
@@ -32,6 +30,6 @@ DragEngine.prototype.keyup = function (event) {
   if (!(event.key in KEYS_DELTA_MAP)) return
   this.state.event = event
   this.state._keyboardActive = false
-  this.end()
+  this.end(event)
   this.emit()
 }

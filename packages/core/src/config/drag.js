@@ -18,5 +18,25 @@ export const dragConfigResolver = {
   },
   capture(value = true) {
     return !this.lock && this.device === 'pointer' && value
+  },
+  bounds(value = {}) {
+    if (typeof value === 'function') {
+      return (state) => dragConfigResolver.bounds(value(state))
+    }
+
+    if ('current' in value) {
+      return () => value.current
+    }
+
+    if (typeof HTMLElement === 'function' && value instanceof HTMLElement) {
+      return value
+    }
+
+    const { left = -Infinity, right = Infinity, top = -Infinity, bottom = Infinity } = value
+
+    return [
+      [left, right],
+      [top, bottom]
+    ]
   }
 }

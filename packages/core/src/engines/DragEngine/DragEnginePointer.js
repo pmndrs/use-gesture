@@ -1,21 +1,23 @@
 import { DragEngine } from './DragEngineCore'
-import { Pointer } from '../../events'
-import { V } from '../../Vector'
+import { Pointer } from '../../utils/events'
+import { V } from '../../utils/maths'
 
 DragEngine.prototype.setupPointer = function (event) {
   let device = this.config.device
 
+  const target = event.currentTarget
+
   if (this.config.lock) {
-    event.target.requestPointerLock()
+    target.requestPointerLock()
   }
   if (device === 'touch' || this.config.capture) {
     if (this.config.capture) {
-      event.target.setPointerCapture(event.pointerId)
+      target.setPointerCapture(event.pointerId)
     }
     if (!this.config.r3f) {
-      if (document.pointerLockElement === event.target) device = 'mouse'
-      this.eventStore.add(event.target, device, 'move', this.move.bind(this))
-      this.eventStore.add(event.target, device, 'up', this.up.bind(this))
+      if (document.pointerLockElement === target) device = 'mouse'
+      this.eventStore.add(target, device, 'move', this.move.bind(this))
+      this.eventStore.add(target, device, 'up', this.up.bind(this))
     }
   } else {
     if (!this.config.r3f) {
@@ -28,7 +30,7 @@ DragEngine.prototype.setupPointer = function (event) {
 DragEngine.prototype.down = function (event) {
   if (this.state._pointerActive) return
 
-  this.start()
+  this.start(event)
   this.state.event = event
 
   this.state.pointerId = Pointer.id(event)
@@ -49,16 +51,16 @@ DragEngine.prototype.move = function (event) {
   this.state.event = event
 
   const values = Pointer.values(event)
+  let delta
 
   if (document.pointerLockElement === event.target) {
-    this.state.delta = [event.movementX, event.movementY]
+    delta = [event.movementX, event.movementY]
   } else {
-    this.state.delta = V.sub(values, this.state.values)
+    delta = V.sub(values, this.state.values)
     this.state.values = values
   }
 
-  V.addTo(this.state.movement, this.state.delta)
-  this.state.offset = V.add(this.state.lastOffset, this.state.movement)
+  V.addTo(this.state._movement, delta)
   this.emit()
 }
 
@@ -72,7 +74,7 @@ DragEngine.prototype.up = function (event) {
   this.state._pointerActive = false
   this.pointerClean(event)
 
-  this.end()
+  this.end(event)
   this.emit()
 }
 

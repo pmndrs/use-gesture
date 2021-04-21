@@ -1,4 +1,4 @@
-import { toDomHandlerProp } from './events'
+import { toDomHandlerProp } from './utils/events'
 
 export function EventStore() {
   this.listeners = []

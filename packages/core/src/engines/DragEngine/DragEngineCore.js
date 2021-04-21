@@ -1,6 +1,8 @@
 import { EventStore } from '../../EventStore'
 import { ConfigMap } from '../../imports'
 import { dragConfigResolver } from '../../config/drag'
+import { V } from '../../utils/maths'
+import { call } from '../../utils/fn'
 
 ConfigMap.set('drag', dragConfigResolver)
 
@@ -32,6 +34,8 @@ DragEngine.prototype = {
     this.state._pointerActive = false
     this.state._keyboardActive = false
     this.state._active = false
+    this.state._movement = [0, 0]
+
     this.state.active = false
     this.state.pointerId = undefined
     this.state.delta = [0, 0]
@@ -40,20 +44,42 @@ DragEngine.prototype = {
   },
   merge(state) {
     Object.assign(this.ctrl.state.drag, state)
-  },
-  emit() {
-    const state = this.state
-    state.first = state._active && !state.active
-    state.last = !state._active && state.active
-    state.active = state._active
-    this.ctrl._handlers.drag({ ...state })
   }
 }
 
-DragEngine.prototype.start = function () {
+DragEngine.prototype.emit = function () {
+  const state = this.state
+
+  const movement = V.clamp(state._movement, state._bounds[0], state._bounds[1])
+  state.delta = V.sub(movement, state.movement)
+  state.movement = movement
+  state.offset = V.add(state.lastOffset, state.movement)
+
+  state.first = state._active && !state.active
+  state.last = !state._active && state.active
+  state.active = state._active
+
+  this.ctrl._handlers.drag({ ...state })
+}
+
+DragEngine.prototype.start = function (event) {
   if (!this.state._active) {
     this.reset()
+    this.state.event = event
     this.state._active = true
+    let bounds = call(this.config.bounds, this.state)
+
+    if (bounds instanceof HTMLElement) {
+      const boundRect = bounds.getBoundingClientRect()
+      const targetRect = event.currentTarget.getBoundingClientRect()
+      bounds = {
+        left: boundRect.left - targetRect.left,
+        right: boundRect.right - targetRect.right,
+        top: boundRect.top - targetRect.top,
+        bottom: boundRect.bottom - targetRect.bottom
+      }
+    }
+    this.state._bounds = dragConfigResolver.bounds(bounds)
   }
 }
 
