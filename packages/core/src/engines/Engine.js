@@ -38,9 +38,12 @@ Engine.prototype = {
 Engine.prototype.reset = function () {
   this.state._active = false
   this.state._movement = [0, 0]
+  this.state._bounds = [
+    [-Infinity, Infinity],
+    [-Infinity, Infinity]
+  ]
 
   this.state.active = false
-  this.state.pointerId = undefined
   this.state.delta = [0, 0]
   this.state.movement = [0, 0]
   this.state.lastOffset = this.state.offset
@@ -51,7 +54,7 @@ Engine.prototype.start = function (event) {
     this.reset()
     this.state.event = event
     this.state._active = true
-    if (this.onStart) this.onStart(event)
+    if (this.setup) this.setup(event)
   }
 }
 

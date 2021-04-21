@@ -5,7 +5,7 @@ import { V } from '../../utils/maths'
 DragEngine.prototype.setupPointer = function (event) {
   let device = this.config.device
 
-  const target = event.currentTarget
+  const target = event.target
 
   if (this.config.lock) {
     target.requestPointerLock()
@@ -28,17 +28,18 @@ DragEngine.prototype.setupPointer = function (event) {
 }
 
 DragEngine.prototype.pointerDown = function (event) {
+  this.ctrl.setEventIds(event)
+
   if (this.state._pointerActive) return
 
   this.start(event)
-  this.state.event = event
+  this.setupPointer(event)
 
-  this.state.pointerId = Pointer.id(event)
   this.state.values = Pointer.values(event)
   this.state.initial = this.state.values
 
+  this.state._pointerId = Pointer.id(event)
   this.state._pointerActive = true
-  this.setupPointer(event)
 
   this.emit()
 }
@@ -46,7 +47,7 @@ DragEngine.prototype.pointerDown = function (event) {
 DragEngine.prototype.pointerMove = function (event) {
   if (!this.state._active) return
   const id = Pointer.id(event)
-  if (this.state.pointerId && id !== this.state.pointerId) return
+  if (this.state._pointerId && id !== this.state._pointerId) return
 
   this.state.event = event
 
@@ -65,10 +66,12 @@ DragEngine.prototype.pointerMove = function (event) {
 }
 
 DragEngine.prototype.pointerUp = function (event) {
+  this.ctrl.setEventIds(event)
+
   if (!this.state._active) return
 
   const id = Pointer.id(event)
-  if (this.state.pointerId && id !== this.state.pointerId) return
+  if (this.state._pointerId && id !== this.state._pointerId) return
 
   this.state.event = event
   this.state._pointerActive = false

@@ -14,11 +14,12 @@ DragEngine.prototype = Object.create(Engine.prototype)
 // super seeds generic Engine reset call
 DragEngine.prototype.reset = function () {
   Engine.prototype.reset.call(this)
+  this.state._pointerId = undefined
   this.state._pointerActive = false
   this.state._keyboardActive = false
 }
 
-DragEngine.prototype.onStart = function (event) {
+DragEngine.prototype.setup = function (event) {
   let bounds = call(this.config.bounds, this.state)
 
   if (bounds instanceof HTMLElement) {

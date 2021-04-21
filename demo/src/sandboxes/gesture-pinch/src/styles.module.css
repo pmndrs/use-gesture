@@ -1,0 +1,32 @@
+.drag {
+  position: absolute;
+  height: 80px;
+  width: 80px;
+  background-color: #ec625c;
+  cursor: grab;
+  touch-action: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.drag > div {
+  margin: 10%;
+  width: 80%;
+  height: 80%;
+  background-color: #000;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: monospace;
+}
+
+.hover {
+  height: 200px;
+  width: 200px;
+  background-color: royalblue;
+}
+
+.hover:hover {
+  background-color: darkblue;
+}

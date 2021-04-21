@@ -1,13 +1,26 @@
 import { Bindings } from './Bindings'
 import { EngineMap, ConfigMap } from './imports'
 import { resolveWith } from './config/resolver'
+import { Touches, isTouch } from './utils/events'
 
 export function Controller(handlers) {
   this._classes = resolveClasses(handlers)
   this._eventStores = {}
   this._handlers = {}
   this._config = {}
+  this._pointerIds = new Set()
+  this._touchIds = new Set()
+
   this.state = {}
+}
+
+Controller.prototype.setEventIds = function (event) {
+  if (isTouch(event)) {
+    this._touchIds = new Set(Touches.ids(event))
+  } else if ('pointerId' in event) {
+    if (event.type === 'pointerup') this._pointerIds.delete(event.pointerId)
+    else this._pointerIds.add(event.pointerId)
+  }
 }
 
 Controller.prototype.applyHandlers = function (handlers) {

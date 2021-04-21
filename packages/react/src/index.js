@@ -1,1 +1,2 @@
-export * from './useDrag'
+export { useDrag } from './useDrag'
+export { usePinch } from './usePinch'
