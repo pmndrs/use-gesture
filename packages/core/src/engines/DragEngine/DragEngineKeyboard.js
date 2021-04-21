@@ -10,7 +10,7 @@ const KEYS_DELTA_MAP = {
   ArrowDown: (factor = 1) => [0, DISPLACEMENT * factor]
 }
 
-DragEngine.prototype.keydown = function (event) {
+DragEngine.prototype.keyDown = function (event) {
   const deltaFn = KEYS_DELTA_MAP[event.key]
 
   if (deltaFn) {
@@ -26,7 +26,7 @@ DragEngine.prototype.keydown = function (event) {
   }
 }
 
-DragEngine.prototype.keyup = function (event) {
+DragEngine.prototype.keyUp = function (event) {
   if (!(event.key in KEYS_DELTA_MAP)) return
   this.state.event = event
   this.state._keyboardActive = false

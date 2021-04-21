@@ -23,7 +23,7 @@ Controller.prototype.applyConfig = function (config) {
 
 Controller.prototype.bind = function () {
   const bindings = new Bindings()
-  for (const Engine of this._classes) bindings.addAll(new Engine(this).getBindings(bindings))
+  for (const Engine of this._classes) new Engine(this).bind(bindings)
   return bindings.toPropsHandlers()
 }
 

@@ -1,3 +1,4 @@
+import { V } from '../utils/maths'
 import { SUPPORT } from './support'
 
 export const dragConfigResolver = {
@@ -7,7 +8,9 @@ export const dragConfigResolver = {
   touch(value = false) {
     return SUPPORT.touch && value
   },
-  r3f: false,
+  r3f(value = false) {
+    return value
+  },
   device() {
     if (this.r3f) return 'pointer'
     if (this.touch) return 'touch'
@@ -38,5 +41,8 @@ export const dragConfigResolver = {
       [left, right],
       [top, bottom]
     ]
+  },
+  threshold(value = [0, 0]) {
+    return V.toVector(value)
   }
 }

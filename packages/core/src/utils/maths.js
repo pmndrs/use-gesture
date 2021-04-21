@@ -1,8 +1,11 @@
-function clamp(v, min, max) {
+export function clamp(v, min, max) {
   return Math.max(min, Math.min(v, max))
 }
 
 export const V = {
+  toVector(v) {
+    return Array.isArray(v) ? v : [v, v]
+  },
   add(v1, v2) {
     return [v1[0] + v2[0], v1[1] + v2[1]]
   },

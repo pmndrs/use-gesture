@@ -10,7 +10,7 @@ export function resolveWith(config = {}, resolvers) {
         result[key] = resolveWith(config[key], resolver)
         break
       case 'boolean':
-        result[key] = config[key] ?? resolver
+        if (resolver) result[key] = config[key]
         break
     }
 

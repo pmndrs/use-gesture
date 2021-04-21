@@ -16,18 +16,18 @@ DragEngine.prototype.setupPointer = function (event) {
     }
     if (!this.config.r3f) {
       if (document.pointerLockElement === target) device = 'mouse'
-      this.eventStore.add(target, device, 'move', this.move.bind(this))
-      this.eventStore.add(target, device, 'up', this.up.bind(this))
+      this.eventStore.add(target, device, 'change', this.pointerMove.bind(this))
+      this.eventStore.add(target, device, 'end', this.pointerUp.bind(this))
     }
   } else {
     if (!this.config.r3f) {
-      this.eventStore.add(window, device, 'move', this.move.bind(this))
-      this.eventStore.add(window, device, 'up', this.up.bind(this))
+      this.eventStore.add(window, device, 'change', this.pointerMove.bind(this))
+      this.eventStore.add(window, device, 'end', this.pointerUp.bind(this))
     }
   }
 }
 
-DragEngine.prototype.down = function (event) {
+DragEngine.prototype.pointerDown = function (event) {
   if (this.state._pointerActive) return
 
   this.start(event)
@@ -43,7 +43,7 @@ DragEngine.prototype.down = function (event) {
   this.emit()
 }
 
-DragEngine.prototype.move = function (event) {
+DragEngine.prototype.pointerMove = function (event) {
   if (!this.state._active) return
   const id = Pointer.id(event)
   if (this.state.pointerId && id !== this.state.pointerId) return
@@ -64,7 +64,7 @@ DragEngine.prototype.move = function (event) {
   this.emit()
 }
 
-DragEngine.prototype.up = function (event) {
+DragEngine.prototype.pointerUp = function (event) {
   if (!this.state._active) return
 
   const id = Pointer.id(event)
