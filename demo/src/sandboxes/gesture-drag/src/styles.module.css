@@ -3,7 +3,9 @@
   height: 80px;
   width: 80px;
   background-color: #ec625c;
+  cursor: grab;
   touch-action: none;
+  -webkit-user-select: none;
   user-select: none;
 }
 
