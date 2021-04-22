@@ -5,7 +5,7 @@ import { pinchConfigResolver } from '../../config/pinch'
 ConfigResolverMap.set('pinch', pinchConfigResolver)
 
 export function PinchEngine(...args) {
-  Engine.call(this, ...args, 'drag')
+  Engine.call(this, ...args, 'pinch')
 }
 
 PinchEngine.prototype = Object.create(Engine.prototype)

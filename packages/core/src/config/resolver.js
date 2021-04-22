@@ -31,7 +31,7 @@ export function parse(config, gestureKey) {
   } else {
     for (const key in rest) {
       const resolver = ConfigResolverMap.get(key)
-      this._config[key] = resolveWith(rest[key], resolver)
+      _config[key] = resolveWith(rest[key], resolver)
     }
   }
   return _config
