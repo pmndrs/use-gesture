@@ -1,17 +1,25 @@
 import { Bindings } from './Bindings'
-import { EngineMap, ConfigMap } from './imports'
-import { resolveWith } from './config/resolver'
+import { EngineMap } from './imports'
+import { parse } from './config/resolver'
 import { Touches, isTouch } from './utils/events'
+import { EventStore } from './EventStore'
 
 export function Controller(handlers) {
-  this._classes = resolveClasses(handlers)
-  this._eventStores = {}
+  this._gestures = new Set()
+  this._targetEventStore = new EventStore(this)
+  this._gestureEventStores = {}
   this._handlers = {}
   this._config = {}
   this._pointerIds = new Set()
   this._touchIds = new Set()
-
   this.state = {}
+
+  resolveGestures(this, handlers)
+}
+
+Controller.prototype.setupGesture = function (gestureKey) {
+  this._gestures.add(gestureKey)
+  this._gestureEventStores[gestureKey] = new EventStore(this)
 }
 
 Controller.prototype.setEventIds = function (event) {
@@ -27,28 +35,49 @@ Controller.prototype.applyHandlers = function (handlers) {
   this._handlers = handlers
 }
 
-Controller.prototype.applyConfig = function (config) {
-  for (const key in config) {
-    const resolver = ConfigMap.get(key)
-    this._config[key] = resolveWith(config[key], resolver)
+Controller.prototype.applyConfig = function (config, gestureKey) {
+  this._config = parse(config, gestureKey)
+}
+
+Controller.prototype.clean = function () {
+  for (const key in this._gestureEventStores) {
+    this._gestureEventStores[key].clean()
   }
 }
 
-Controller.prototype.bind = function () {
-  const bindings = new Bindings()
-  for (const Engine of this._classes) new Engine(this).bind(bindings)
-  return bindings.toPropsHandlers()
+Controller.prototype.effect = function () {
+  if (this._config.shared.target) this.bind()
+  return () => this._targetEventStore.clean()
 }
 
-function resolveClasses(internalHandlers) {
-  const classes = new Set()
+Controller.prototype.bind = function (...args) {
+  const bindings = new Bindings()
+  const sharedConfig = this._config.shared
+  const capture = sharedConfig.eventOptions.capture
 
-  if (internalHandlers.drag) classes.add(EngineMap.get('drag'))
-  if (internalHandlers.wheel) classes.add(EngineMap.get('wheel'))
-  if (internalHandlers.scroll) classes.add(EngineMap.get('scroll'))
-  if (internalHandlers.move) classes.add(EngineMap.get('move'))
-  if (internalHandlers.pinch) classes.add(EngineMap.get('pinch'))
-  if (internalHandlers.hover) classes.add(EngineMap.get('hover'))
+  if (sharedConfig.enabled) {
+    for (const gestureKey of this._gestures) {
+      if (this._config[gestureKey].enabled) {
+        const Engine = EngineMap.get(gestureKey)
+        new Engine(this, args).bind(bindings)
+      }
+    }
+  }
 
-  return classes
+  if (sharedConfig.target) {
+    // If config.target is set we add event listeners to it and return the clean function.
+    bindings.bindToEventStore(this._targetEventStore, sharedConfig.target())
+  } else {
+    // If not, we return an object that contains gesture handlers mapped to react handler event keys.
+    return bindings.toPropsHandlers(capture)
+  }
+}
+
+function resolveGestures(ctrl, internalHandlers) {
+  if (internalHandlers.drag) ctrl.setupGesture('drag')
+  if (internalHandlers.wheel) ctrl.setupGesture('wheel')
+  if (internalHandlers.scroll) ctrl.setupGesture('scroll')
+  if (internalHandlers.move) ctrl.setupGesture('move')
+  if (internalHandlers.pinch) ctrl.setupGesture('pinch')
+  if (internalHandlers.hover) ctrl.setupGesture('hover')
 }

@@ -13,6 +13,7 @@ function supportsLock(): boolean {
 }
 
 export const SUPPORT = {
+  isBrowser,
   touch: supportsTouchEvents(),
   pointer: supportsPointerEvents(),
   lock: supportsLock()

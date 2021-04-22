@@ -1,12 +1,12 @@
 import { Engine } from '../Engine'
-import { ConfigMap } from '../../imports'
+import { ConfigResolverMap } from '../../imports'
 import { dragConfigResolver } from '../../config/drag'
 import { call } from '../../utils/fn'
 
-ConfigMap.set('drag', dragConfigResolver)
+ConfigResolverMap.set('drag', dragConfigResolver)
 
-export function DragEngine(ctrl) {
-  Engine.call(this, ctrl, 'drag')
+export function DragEngine(...args) {
+  Engine.call(this, ...args, 'drag')
 }
 
 DragEngine.prototype = Object.create(Engine.prototype)

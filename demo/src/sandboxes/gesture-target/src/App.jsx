@@ -7,6 +7,7 @@ import styles from './styles.module.css'
 
 function Draggable() {
   const ref = React.useRef()
+  const target = React.useRef()
   const [coords, set] = React.useState({ x: 0, y: 0 })
   const [style, api] = useSpring(() => ({ scale: 1, x: 0, y: 0 }))
   const { boundToParent, ...options } = useControls({
@@ -18,7 +19,7 @@ function Draggable() {
     boundToParent: false
   })
 
-  const bind = useDrag(
+  useDrag(
     ({ active, ...state }) => {
       let [x, y] = state[options.gesture]
       set({ x, y })
@@ -36,14 +37,14 @@ function Draggable() {
         immediate: options.lock
       })
     },
-    { ...options, ...(boundToParent && { bounds: ref }) }
+    { target, ...options, ...(boundToParent && { bounds: ref }) }
   )
 
   return (
     <>
-      <a.div tabIndex="-1" {...bind()} className={styles.drag} style={style}>
+      <a.div tabIndex="-1" ref={target} className={styles.drag} style={style}>
         <div>
-          <span>bind</span>
+          <span>target</span>
           <span>
             x:{Math.round(coords.x)}, y:{Math.round(coords.y)}
           </span>
@@ -57,9 +58,5 @@ function Draggable() {
 export default function App() {
   const [shown, show] = React.useState()
   useControls({ [shown ? 'Hide' : 'Show']: button(() => show((s) => !s)) }, [shown])
-  return (
-    <div className="flex fill center">
-      <Draggable />
-    </div>
-  )
+  return <div className="flex fill center">{shown && <Draggable />}</div>
 }

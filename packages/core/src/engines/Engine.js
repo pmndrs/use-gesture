@@ -1,10 +1,9 @@
-import { EventStore } from '../EventStore'
 import { V } from '../utils/maths'
 
-export function Engine(ctrl, key) {
+export function Engine(ctrl, args, key) {
   this.ctrl = ctrl
   this.key = key
-  ctrl._eventStores[key] = new EventStore()
+  this.args = args
 
   if (!this.state) {
     this.state = {}
@@ -22,10 +21,13 @@ Engine.prototype = {
     this.ctrl.state[this.key] = state
   },
   get eventStore() {
-    return this.ctrl._eventStores[this.key]
+    return this.ctrl._gestureEventStores[this.key]
   },
   get config() {
     return this.ctrl._config[this.key]
+  },
+  get shared() {
+    return this.ctrl._config.shared
   },
   get handler() {
     return this.ctrl._handlers[this.key]
@@ -70,5 +72,14 @@ Engine.prototype.emit = function () {
   state.last = !state._active && state.active
   state.active = state._active
 
-  this.handler({ ...state })
+  this.handler({
+    ...state,
+    args: this.args
+  })
+
+  if (!state._active) this.clean()
+}
+
+Engine.prototype.clean = function () {
+  this.eventStore.clean()
 }

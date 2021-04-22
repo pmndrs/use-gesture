@@ -4,5 +4,5 @@ import { useRecognizers } from './useRecognizers'
 registerEngine('drag', DragEngine)
 
 export function useDrag(dragHandler, config = {}) {
-  return useRecognizers({ drag: dragHandler }, { drag: config })
+  return useRecognizers({ drag: dragHandler }, config, 'drag')
 }

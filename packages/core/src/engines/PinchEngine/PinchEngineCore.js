@@ -1,19 +1,14 @@
 import { Engine } from '../Engine'
-import { ConfigMap } from '../../imports'
+import { ConfigResolverMap } from '../../imports'
 import { pinchConfigResolver } from '../../config/pinch'
 
-ConfigMap.set('pinch', pinchConfigResolver)
+ConfigResolverMap.set('pinch', pinchConfigResolver)
 
-export function PinchEngine(ctrl) {
-  Engine.call(this, ctrl, 'pinch')
-  this.configResolver = pinchConfigResolver
+export function PinchEngine(...args) {
+  Engine.call(this, ...args, 'drag')
 }
 
 PinchEngine.prototype = Object.create(Engine.prototype)
-
-PinchEngine.prototype.end = function () {
-  this.state._active = false
-}
 
 PinchEngine.prototype.bind = function (bindings) {
   const device = this.config.device

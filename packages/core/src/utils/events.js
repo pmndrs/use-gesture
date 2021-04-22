@@ -10,10 +10,10 @@ function capitalize(string) {
   return string[0].toUpperCase() + string.slice(1)
 }
 
-export function toReactHandlerProp(device, action = '') {
+export function toReactHandlerProp(device, action = '', capture) {
   const deviceKey = EVENT_TYPE_MAP[device]
   const actionKey = deviceKey ? deviceKey[action] : action
-  return 'on' + capitalize(device) + capitalize(actionKey)
+  return 'on' + capitalize(device) + capitalize(actionKey) + (capture ? 'Capture' : '')
 }
 
 export function toDomHandlerProp(device, action = '') {

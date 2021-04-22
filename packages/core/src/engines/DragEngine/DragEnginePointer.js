@@ -7,6 +7,18 @@ DragEngine.prototype.setupPointer = function (event) {
 
   const target = event.target
 
+  if (process.env.NODE_ENV === 'development') {
+    if (device === 'pointer') {
+      const style = window.getComputedStyle(event.currentTarget)
+      if (style.touchAction === 'auto') {
+        // eslint-disable-next-line no-console
+        console.warn(
+          `[@use-gesture]: The drag target has its \`touch-action\` style property set to \`auto\`. It is recommended to add \`touch-action: 'none'\` so that the drag gesture behaves correctly on touch-enabled devices. For more information read this: https://use-gesture.netlify.app/docs/extras/#touch-action.\n\nThis message will only show in development mode. It won't appear in production. If this is intended, you can ignore it.`
+        )
+      }
+    }
+  }
+
   if (this.config.lock) {
     target.requestPointerLock()
   }
@@ -21,8 +33,8 @@ DragEngine.prototype.setupPointer = function (event) {
     }
   } else {
     if (!this.config.r3f) {
-      this.eventStore.add(window, device, 'change', this.pointerMove.bind(this))
-      this.eventStore.add(window, device, 'end', this.pointerUp.bind(this))
+      this.eventStore.add(this.shared.window, device, 'change', this.pointerMove.bind(this))
+      this.eventStore.add(this.shared.window, device, 'end', this.pointerUp.bind(this))
     }
   }
 }

@@ -1,7 +1,9 @@
 import { V } from '../utils/maths'
+import { commonConfigResolver } from './common'
 import { SUPPORT } from './support'
 
 export const dragConfigResolver = {
+  ...commonConfigResolver,
   lock(value = false) {
     return SUPPORT.lock && value
   },
