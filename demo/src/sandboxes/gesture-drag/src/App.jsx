@@ -1,7 +1,7 @@
 import React from 'react'
 import { useDrag } from '@use-gesture/react'
 import { a, useSpring } from '@react-spring/web'
-import { useControls, button } from 'leva'
+import { useControls } from 'leva'
 
 import styles from './styles.module.css'
 
@@ -55,11 +55,6 @@ function Draggable() {
 }
 
 export default function App() {
-  const [shown, show] = React.useState(true)
-  useControls({ [shown ? 'Hide' : 'Show']: button(() => show((s) => !s)) }, [shown])
-  return (
-    <div className="flex fill center">
-      <Draggable />
-    </div>
-  )
+  const { shown } = useControls({ shown: true })
+  return <div className="flex fill center">{shown && <Draggable />}</div>
 }
