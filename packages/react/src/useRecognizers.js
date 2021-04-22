@@ -8,8 +8,9 @@ export function useRecognizers(handlers, config, gestureKey) {
   ctrl.applyConfig(config, gestureKey)
 
   React.useEffect(ctrl.effect.bind(ctrl))
+
   React.useEffect(() => {
-    return () => ctrl.clean()
+    return ctrl.clean.bind(ctrl)
   }, [])
 
   return ctrl.bind.bind(ctrl)

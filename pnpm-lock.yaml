@@ -81,6 +81,7 @@ importers:
       '@types/react': ^17.0.3
       '@types/react-dom': ^17.0.3
       '@use-gesture/react': '*'
+      '@use-gesture/vanilla': '*'
       '@vitejs/plugin-react-refresh': ^1.3.2
       leva: '*'
       react: ^17.0.2
@@ -95,6 +96,7 @@ importers:
       '@react-three/drei': 4.1.8_d017d17db3c5dc748551aca234c0c7be
       '@react-three/fiber': 6.0.14_7ccc4c6d29e37f3f960e66b11d7b5f41
       '@use-gesture/react': link:../packages/react
+      '@use-gesture/vanilla': link:../packages/vanilla
       leva: 0.9.8_react-dom@17.0.2+react@17.0.2
       react: 17.0.2
       react-dom: 17.0.2_react@17.0.2
@@ -111,6 +113,12 @@ importers:
     specifiers: {}
 
   packages/react:
+    specifiers:
+      '@use-gesture/core': ^10.0.0
+    dependencies:
+      '@use-gesture/core': link:../core
+
+  packages/vanilla:
     specifiers:
       '@use-gesture/core': ^10.0.0
     dependencies:

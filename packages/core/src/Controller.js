@@ -40,6 +40,7 @@ Controller.prototype.applyConfig = function (config, gestureKey) {
 }
 
 Controller.prototype.clean = function () {
+  this._targetEventStore.clean()
   for (const key in this._gestureEventStores) {
     this._gestureEventStores[key].clean()
   }

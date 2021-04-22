@@ -8,6 +8,8 @@
 
 ## Features:
 
+### General
+
 ### Drag
 
 - `lock`

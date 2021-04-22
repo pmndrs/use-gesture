@@ -1,5 +1,11 @@
 {
   "packages": ["packages/*"],
-  "sandboxes": ["/demo/src/sandboxes/gesture-drag", "/demo/src/sandboxes/gesture-three"],
+  "sandboxes": [
+    "/demo/src/sandboxes/gesture-drag",
+    "/demo/src/sandboxes/gesture-target",
+    "/demo/src/sandboxes/gesture-vanilla",
+    "/demo/src/sandboxes/gesture-pinch",
+    "/demo/src/sandboxes/gesture-three"
+  ],
   "node": "14"
 }

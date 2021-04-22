@@ -14,6 +14,7 @@
     "@react-three/drei": "^4.1.4",
     "@react-three/fiber": "^6.0.10",
     "@use-gesture/react": "*",
+    "@use-gesture/vanilla": "*",
     "leva": "*",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",

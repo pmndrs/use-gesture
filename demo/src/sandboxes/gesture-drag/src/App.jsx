@@ -55,7 +55,7 @@ function Draggable() {
 }
 
 export default function App() {
-  const [shown, show] = React.useState()
+  const [shown, show] = React.useState(true)
   useControls({ [shown ? 'Hide' : 'Show']: button(() => show((s) => !s)) }, [shown])
   return (
     <div className="flex fill center">

@@ -3,6 +3,6 @@ import { useRecognizers } from './useRecognizers'
 
 registerEngine('drag', DragEngine)
 
-export function useDrag(dragHandler, config = {}) {
-  return useRecognizers({ drag: dragHandler }, config, 'drag')
+export function useDrag(handler, config = {}) {
+  return useRecognizers({ drag: handler }, config, 'drag')
 }
