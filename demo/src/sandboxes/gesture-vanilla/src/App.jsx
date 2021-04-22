@@ -10,7 +10,7 @@ function Draggable() {
   const target = React.useRef()
   const [coords, set] = React.useState({ x: 0, y: 0 })
   const [style, api] = useSpring(() => ({ scale: 1, x: 0, y: 0 }))
-  const { boundToParent, ...options } = useControls({
+  const options = useControls({
     enabled: true,
     gesture: { options: ['offset', 'movement'] },
     touch: false,
@@ -20,11 +20,12 @@ function Draggable() {
   })
 
   React.useEffect(() => {
+    const { boundToParent, ...rest } = options
     const gesture = new DragGesture(
       target.current,
       ({ active, ...state }) => {
         let [x, y] = state[options.gesture]
-        // set({ x, y })
+        set({ x, y })
 
         if (options.lock) {
           const dx = window.innerWidth / 2 - 40
@@ -36,13 +37,13 @@ function Draggable() {
           scale: active ? 1.2 : 1,
           x: active || options.gesture === 'offset' ? x : 0,
           y: active || options.gesture === 'offset' ? y : 0,
-          immediate: options.lock
+          immediate: rest.lock
         })
       },
-      { ...options, ...(boundToParent && { bounds: ref.current }) }
+      { ...rest, ...(boundToParent && { bounds: ref.current }) }
     )
     return () => gesture.destroy()
-  }, [api, boundToParent, options])
+  }, [api, options])
 
   return (
     <>
