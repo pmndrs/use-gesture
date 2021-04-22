@@ -23,7 +23,7 @@
     "test": "jest test",
     "test:watch": "jest test --watchAll",
     "size": "size-limit",
-    "analyze": "size-limit --why"
+    "size:analyze": "size-limit --why"
   },
   "size-limit": [
     {
