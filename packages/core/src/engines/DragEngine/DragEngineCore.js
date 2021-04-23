@@ -47,7 +47,7 @@ DragEngine.prototype.bind = function (bindings) {
   bindings.add('key', 'up', this.keyUp.bind(this))
 
   if (this.config.r3f) {
-    bindings.add(device, 'start', this.pointerMove.bind(this))
+    bindings.add(device, 'change', this.pointerMove.bind(this))
     bindings.add(device, 'end', this.pointerUp.bind(this))
   }
 }

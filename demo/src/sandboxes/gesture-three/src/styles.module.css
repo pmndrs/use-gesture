@@ -1,25 +1,3 @@
-.drag {
-  position: absolute;
-  height: 80px;
-  width: 80px;
-  background-color: #ec625c;
+.canvas > canvas {
   touch-action: none;
-  user-select: none;
-}
-
-.drag > div {
-  margin: 10%;
-  width: 80%;
-  height: 80%;
-  background-color: cyan;
-}
-
-.hover {
-  height: 200px;
-  width: 200px;
-  background-color: royalblue;
-}
-
-.hover:hover {
-  background-color: darkblue;
 }
