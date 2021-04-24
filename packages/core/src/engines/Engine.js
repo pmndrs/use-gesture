@@ -39,6 +39,8 @@ Engine.prototype = {
 
 Engine.prototype.reset = function () {
   this.state._active = false
+  this.state._blocked = false
+  this.state._force = false
   this.state._movement = [0, 0]
   this.state._intentional = [false, false]
   this.state._threshold = this.config.threshold
@@ -47,6 +49,7 @@ Engine.prototype.reset = function () {
     [-Infinity, Infinity]
   ]
 
+  this.state.distance = [0, 0]
   this.state.active = false
   this.state.delta = [0, 0]
   this.state.movement = [0, 0]
@@ -62,8 +65,9 @@ Engine.prototype.start = function (event) {
   }
 }
 
-Engine.prototype.emit = function () {
+Engine.prototype.compute = function (event) {
   const state = this.state
+  state.event = event
 
   const [_mx, _my] = state._movement
   const [_tx, _ty] = state._threshold
@@ -72,7 +76,9 @@ Engine.prototype.emit = function () {
   if (_ix === false) _ix = Math.abs(_mx) >= _tx && Math.sign(_mx) * _tx
   if (_iy === false) _iy = Math.abs(_my) >= _ty && Math.sign(_my) * _ty
 
-  if (_ix === false && _iy === false) return
+  state._blocked = _ix === false && _iy === false
+
+  if (state._blocked) return
 
   state._intentional = [_ix, _iy]
 
@@ -83,6 +89,7 @@ Engine.prototype.emit = function () {
 
   state.delta = V.sub(movement, state.movement)
   state.movement = movement
+  V.addTo(state.distance, state.delta.map(Math.abs))
   state.offset = V.add(state.lastOffset, state.movement)
   state.first = state._active && !state.active
   if (state.first) state.startTime = state.event.timeStamp
@@ -90,6 +97,12 @@ Engine.prototype.emit = function () {
   state.elapsedTime = state.event.timeStamp - state.startTime
   state.last = !state._active && state.active
   state.active = state._active
+}
+
+Engine.prototype.emit = function () {
+  const state = this.state
+
+  if (state._blocked && !state._force) return
 
   this.handler({
     ...state,

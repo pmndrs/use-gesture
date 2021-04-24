@@ -17,6 +17,7 @@ DragEngine.prototype.reset = function () {
   this.state._pointerId = undefined
   this.state._pointerActive = false
   this.state._keyboardActive = false
+  this.state.tap = false
 }
 
 DragEngine.prototype.setup = function (event) {
@@ -49,5 +50,8 @@ DragEngine.prototype.bind = function (bindings) {
   if (this.config.r3f) {
     bindings.add(device, 'change', this.pointerMove.bind(this))
     bindings.add(device, 'end', this.pointerUp.bind(this))
+  }
+  if (this.config.filterTaps) {
+    bindings.add('click', null, () => console.log('hello'))
   }
 }

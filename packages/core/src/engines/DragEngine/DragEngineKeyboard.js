@@ -22,6 +22,7 @@ DragEngine.prototype.keyDown = function (event) {
 
     V.addTo(this.state._movement, delta)
 
+    this.compute(event)
     this.emit()
   }
 }
@@ -30,6 +31,8 @@ DragEngine.prototype.keyUp = function (event) {
   if (!(event.key in KEYS_DELTA_MAP)) return
   this.state.event = event
   this.state._keyboardActive = false
-  this.end(event)
+
+  this.compute(event)
+  this.end()
   this.emit()
 }

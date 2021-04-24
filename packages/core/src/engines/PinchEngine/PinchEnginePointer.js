@@ -17,6 +17,7 @@ PinchEngine.prototype.touchStart = function (event) {
   this.state.initial = this.state.values
   this.state.turns = 0
 
+  this.compute(event)
   this.emit()
 }
 
@@ -36,6 +37,7 @@ PinchEngine.prototype.touchMove = function (event) {
   state.origin = payload.origin
   state._movement = [state.values[0] / state.initial[0] - 1, state.values[1] - state.initial[1]]
 
+  this.compute(event)
   this.emit()
 }
 
@@ -45,6 +47,8 @@ PinchEngine.prototype.touchEnd = function (event) {
 
   if (this.state._touchIds.some((id) => !this.ctrl._touchIds.has(id))) {
     this.state._active = false
+
+    this.compute(event)
     this.emit()
   }
 }

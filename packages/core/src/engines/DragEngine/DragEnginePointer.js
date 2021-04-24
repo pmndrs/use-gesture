@@ -57,6 +57,7 @@ DragEngine.prototype.pointerDown = function (event) {
   this.state._pointerId = Pointer.id(event)
   this.state._pointerActive = true
 
+  this.compute(event)
   this.emit()
 }
 
@@ -64,8 +65,6 @@ DragEngine.prototype.pointerMove = function (event) {
   if (!this.state._active) return
   const id = Pointer.id(event)
   if (this.state._pointerId && id !== this.state._pointerId) return
-
-  this.state.event = event
 
   const values = Pointer.values(event)
   let delta
@@ -78,6 +77,7 @@ DragEngine.prototype.pointerMove = function (event) {
   }
 
   V.addTo(this.state._movement, delta)
+  this.compute(event)
   this.emit()
 }
 
@@ -93,7 +93,16 @@ DragEngine.prototype.pointerUp = function (event) {
   this.state._pointerActive = false
   this.pointerClean(event)
 
-  this.end(event)
+  this.end()
+  this.compute(event)
+
+  const [dx, dy] = this.state.distance
+  this.state.tap = dx <= 3 && dy <= 3
+
+  if (this.state.tap && this.config.filterTaps) {
+    this.state._force = true
+  }
+
   this.emit()
 }
 
