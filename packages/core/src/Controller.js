@@ -37,6 +37,7 @@ Controller.prototype.applyHandlers = function (handlers) {
 
 Controller.prototype.applyConfig = function (config, gestureKey) {
   this._config = parse(config, gestureKey)
+  console.log(this._config)
 }
 
 Controller.prototype.clean = function () {

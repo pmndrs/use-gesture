@@ -23,11 +23,11 @@ DragEngine.prototype.setupPointer = function (event) {
     } catch {}
   }
 
-  if (this.config.lock) {
+  if (this.config.pointerLock) {
     target.requestPointerLock()
   }
-  if (device === 'touch' || this.config.capture) {
-    if (this.config.capture) {
+  if (device === 'touch' || this.config.pointerCapture) {
+    if (this.config.pointerCapture) {
       target.setPointerCapture(event.pointerId)
     }
     if (!this.config.r3f) {
@@ -98,7 +98,7 @@ DragEngine.prototype.pointerUp = function (event) {
 }
 
 DragEngine.prototype.pointerClean = function (event) {
-  if (this.config.lock && document.pointerLockElement === event.target) {
+  if (this.config.pointerLock && document.pointerLockElement === event.target) {
     document.exitPointerLock()
   }
   if (this.config.capture && (this.config.r3f || event.target.hasPointerCapture(event.pointerId))) {

@@ -1,6 +1,6 @@
 import { Engine } from '../Engine'
 import { ConfigResolverMap } from '../../imports'
-import { pinchConfigResolver } from '../../config/pinch'
+import { pinchConfigResolver } from '../../config/pinchConfigResolver'
 
 ConfigResolverMap.set('pinch', pinchConfigResolver)
 

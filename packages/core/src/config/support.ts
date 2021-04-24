@@ -8,7 +8,7 @@ function supportsPointerEvents(): boolean {
   return isBrowser && 'onpointerdown' in window
 }
 
-function supportsLock(): boolean {
+function supportsPointerLock(): boolean {
   return isBrowser && 'exitPointerLock' in window.document
 }
 
@@ -16,5 +16,5 @@ export const SUPPORT = {
   isBrowser,
   touch: supportsTouchEvents(),
   pointer: supportsPointerEvents(),
-  lock: supportsLock()
+  pointerLock: supportsPointerLock()
 }

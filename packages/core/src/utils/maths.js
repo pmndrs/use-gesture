@@ -3,7 +3,8 @@ export function clamp(v, min, max) {
 }
 
 export const V = {
-  toVector(v) {
+  toVector(v, fallback) {
+    if (v === undefined) v = fallback
     return Array.isArray(v) ? v : [v, v]
   },
   add(v1, v2) {
