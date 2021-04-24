@@ -1,14 +1,14 @@
 import { V } from '../utils/maths'
 import { commonConfigResolver } from './commonConfigResolver'
+import { coordinatesConfigResolver } from './coordinatesConfigResolver'
 import { SUPPORT } from './support'
 
 export const dragConfigResolver = {
   ...commonConfigResolver,
-  pointerLock(_v, _k, { pointer: { lock = false } = {} }) {
+  ...coordinatesConfigResolver,
+  pointerLock(_v, _k, { pointer: { lock = false, touch = false } = {} }) {
+    this.useTouch = SUPPORT.touch && touch
     return SUPPORT.pointerLock && lock
-  },
-  useTouch(_v, _k, { pointer: { touch = false } = {} }) {
-    return SUPPORT.touch && touch
   },
   r3f(value = false) {
     return value
@@ -43,9 +43,6 @@ export const dragConfigResolver = {
       [left, right],
       [top, bottom]
     ]
-  },
-  lockDirection(_v, _k, { axis }) {
-    return axis === 'lock'
   },
   threshold(value, _key, { filterTaps = false, axis = undefined }) {
     const threshold = V.toVector(value, filterTaps ? 3 : axis ? 1 : 0)

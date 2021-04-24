@@ -40,6 +40,8 @@ Engine.prototype = {
 Engine.prototype.reset = function () {
   this.state._active = false
   this.state._movement = [0, 0]
+  this.state._intentional = [false, false]
+  this.state._threshold = this.config.threshold
   this.state._bounds = [
     [-Infinity, Infinity],
     [-Infinity, Infinity]
@@ -63,12 +65,29 @@ Engine.prototype.start = function (event) {
 Engine.prototype.emit = function () {
   const state = this.state
 
-  const movement = V.clamp(state._movement, state._bounds[0], state._bounds[1])
+  const [_mx, _my] = state._movement
+  const [_tx, _ty] = state._threshold
+  let [_ix, _iy] = state._intentional
+
+  if (_ix === false) _ix = Math.abs(_mx) >= _tx && Math.sign(_mx) * _tx
+  if (_iy === false) _iy = Math.abs(_my) >= _ty && Math.sign(_my) * _ty
+
+  if (_ix === false && _iy === false) return
+
+  state._intentional = [_ix, _iy]
+
+  const mx = _ix !== false ? _mx - _ix : 0
+  const my = _iy !== false ? _my - _iy : 0
+
+  const movement = V.clamp([mx, my], state._bounds[0], state._bounds[1])
+
   state.delta = V.sub(movement, state.movement)
   state.movement = movement
   state.offset = V.add(state.lastOffset, state.movement)
-
   state.first = state._active && !state.active
+  if (state.first) state.startTime = state.event.timeStamp
+
+  state.elapsedTime = state.event.timeStamp - state.startTime
   state.last = !state._active && state.active
   state.active = state._active
 

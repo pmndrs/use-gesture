@@ -9,11 +9,15 @@ function Draggable() {
   const ref = React.useRef()
   const [coords, set] = React.useState({ x: 0, y: 0 })
   const [style, api] = useSpring(() => ({ scale: 1, x: 0, y: 0 }))
-  const { boundToParent, gesture, enabled } = useControls({
+
+  const { boundToParent, gesture, ...options } = useControls({
     enabled: true,
     gesture: { options: ['offset', 'movement'] },
+    axis: { options: [undefined, 'x', 'y', 'lock'] },
+    filterTaps: false,
     boundToParent: false
   })
+
   const pointerOptions = useControls('pointer', { touch: false, capture: true, lock: false })
 
   const bind = useDrag(
@@ -35,7 +39,7 @@ function Draggable() {
       })
     },
     {
-      enabled,
+      ...options,
       pointer: pointerOptions,
       ...(boundToParent && { bounds: ref })
     }
