@@ -1,4 +1,4 @@
-import { commonConfigResolver } from './common'
+import { commonConfigResolver } from './commonConfigResolver'
 
 export const pinchConfigResolver = {
   ...commonConfigResolver,

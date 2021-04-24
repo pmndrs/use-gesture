@@ -1,6 +1,6 @@
 import { Engine } from '../Engine'
 import { ConfigResolverMap } from '../../imports'
-import { dragConfigResolver } from '../../config/drag'
+import { dragConfigResolver } from '../../config/dragConfigResolver'
 import { call } from '../../utils/fn'
 
 ConfigResolverMap.set('drag', dragConfigResolver)

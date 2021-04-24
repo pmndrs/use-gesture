@@ -6,11 +6,13 @@
 
 - `domTarget` is renamed `target`
 
-## Features:
+## Features
 
 ### General
 
 ### Drag
+
+- shows warning when `touch-action` is not properly set in development mode
 
 - `lock`
 - `capture`

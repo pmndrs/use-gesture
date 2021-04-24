@@ -1,4 +1,4 @@
-import { sharedConfigResolver } from './shared'
+import { sharedConfigResolver } from './sharedConfigResolver'
 import { ConfigResolverMap } from '../imports'
 
 export function resolveWith(config = {}, resolvers) {

@@ -1,5 +1,5 @@
 import { V } from '../utils/maths'
-import { commonConfigResolver } from './common'
+import { commonConfigResolver } from './commonConfigResolver'
 import { SUPPORT } from './support'
 
 export const dragConfigResolver = {
