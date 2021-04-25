@@ -16,8 +16,11 @@
     "@use-gesture/react": "*",
     "@use-gesture/vanilla": "*",
     "leva": "*",
+    "lodash-move": "^1.1.1",
+    "lodash.clamp": "^4.0.3",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-use-measure": "^2.0.4",
     "three": "^0.127.0",
     "wouter": "^2.7.4"
   },

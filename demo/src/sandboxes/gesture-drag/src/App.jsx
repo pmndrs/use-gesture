@@ -25,9 +25,13 @@ function Draggable() {
   const pointerOptions = useControls('pointer', { touch: false, capture: true, lock: false })
 
   const bind = useDrag(
-    ({ active, tap, ...state }) => {
+    ({ active, tap, cancel, canceled, ...state }) => {
       let [x, y] = state[gesture]
       set({ x, y })
+
+      if (state.movement[0] > 100) {
+        cancel()
+      }
 
       if (pointerOptions.lock) {
         const dx = window.innerWidth / 2 - 40

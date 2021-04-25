@@ -1,12 +1,10 @@
 {
-  "name": "gesture-pinch",
+  "name": "spring-cards-stack",
   "version": "1.0.0",
-  "main": "src/index.jsx",
+  "main": "src/index.tsx",
   "dependencies": {
-    "@leva-ui/plugin-spring": "*",
     "@react-spring/web": "*",
     "@use-gesture/react": "*",
-    "leva": "*",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-scripts": "4.0.3"
@@ -22,5 +20,11 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "bic": false,
+  "devDependencies": {
+    "@types/react": "^17.0.2",
+    "@types/react-dom": "^17.0.1",
+    "typescript": "^4.2.3"
+  }
 }

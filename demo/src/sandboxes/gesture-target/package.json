@@ -4,6 +4,7 @@
   "main": "src/index.jsx",
   "dependencies": {
     "@leva-ui/plugin-spring": "*",
+    "@react-spring/web": "*",
     "@use-gesture/react": "*",
     "leva": "*",
     "react": "^17.0.1",
