@@ -10,10 +10,10 @@ export function PinchEngine(...args) {
 
 PinchEngine.prototype = Object.create(Engine.prototype)
 
-PinchEngine.prototype.bind = function (bindings) {
+PinchEngine.prototype.bind = function (bindFunction) {
   const device = this.config.device
 
-  bindings.add(device, 'start', this.touchStart.bind(this))
-  bindings.add(device, 'change', this.touchMove.bind(this))
-  bindings.add(device, 'end', this.touchEnd.bind(this))
+  bindFunction(device, 'start', this.touchStart.bind(this))
+  bindFunction(device, 'change', this.touchMove.bind(this))
+  bindFunction(device, 'end', this.touchEnd.bind(this))
 }

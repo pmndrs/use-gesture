@@ -1,7 +1,7 @@
 .drag {
   position: absolute;
-  height: 80px;
-  width: 80px;
+  height: 300px;
+  width: 300px;
   background-color: #ec625c;
   cursor: grab;
   touch-action: none;
@@ -10,23 +10,13 @@
 }
 
 .drag > div {
-  margin: 10%;
-  width: 80%;
-  height: 80%;
+  margin: 20%;
+  width: 60%;
+  height: 60%;
   background-color: #000;
   color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
   font-family: monospace;
-}
-
-.hover {
-  height: 200px;
-  width: 200px;
-  background-color: royalblue;
-}
-
-.hover:hover {
-  background-color: darkblue;
 }

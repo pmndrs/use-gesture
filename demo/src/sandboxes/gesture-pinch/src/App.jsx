@@ -26,7 +26,6 @@ export default function App() {
       <a.div {...bind()} className={styles.drag} style={style}>
         <div>child</div>
       </a.div>
-      <div ref={ref} className={styles.hover} />
     </div>
   )
 }
