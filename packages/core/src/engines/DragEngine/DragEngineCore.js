@@ -42,14 +42,18 @@ DragEngine.prototype.setup = function (event) {
 
 DragEngine.prototype.cancel = function () {
   const state = this.state
+  const event = state.event
   if (state.canceled) return
-  state.canceled = true
-  state._active = false
-  setTimeout(() => this.emit(), 0)
+  setTimeout(() => {
+    state.canceled = true
+    state._active = false
+    this.compute(event)
+    this.emit()
+  }, 0)
 }
 
-DragEngine.prototype.setActive = function () {
-  this.state._active = this.state._pointerActive || this.state._keyboardActive
+DragEngine.prototype.setActive = function ({ pointer, keyboard } = {}) {
+  this.state._active = (pointer ?? this.state._pointerActive) || (keyboard ?? this.state._keyboardActive)
 }
 
 // superseeds Engine clean function

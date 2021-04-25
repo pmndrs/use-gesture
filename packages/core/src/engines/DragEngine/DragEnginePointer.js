@@ -62,7 +62,7 @@ DragEngine.prototype.pointerDown = function (event) {
 }
 
 DragEngine.prototype.pointerMove = function (event) {
-  if (!this.state._active) return
+  if (!this.state._pointerActive) return
   const id = Pointer.id(event)
   if (this.state._pointerId && id !== this.state._pointerId) return
 
@@ -84,16 +84,13 @@ DragEngine.prototype.pointerMove = function (event) {
 DragEngine.prototype.pointerUp = function (event) {
   this.ctrl.setEventIds(event)
 
-  if (!this.state._active) return
-
+  if (!this.state._pointerActive) return
   const id = Pointer.id(event)
   if (this.state._pointerId && id !== this.state._pointerId) return
 
   this.state.event = event
-  this.pointerClean(event)
 
-  this.state._pointerActive = false
-  this.setActive()
+  this.setActive({ pointer: false })
   this.compute(event)
 
   const [dx, dy] = this.state.distance

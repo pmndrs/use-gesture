@@ -70,7 +70,7 @@ Engine.prototype.start = function (event) {
     state.event = event
     state._active = true
     state._from = call(this.config.from, state)
-    state.lastOffset = state._from
+    state.lastOffset = state.offset = state._from
     state.timeStamp = event.timeStamp
     if (this.setup) this.setup(event)
   }
@@ -90,27 +90,34 @@ Engine.prototype.compute = function (event) {
 
   if (state._blocked) return
 
-  state._intentional = [_ix, _iy]
-
-  const mx = _ix !== false ? _mx - _ix : 0
-  const my = _iy !== false ? _my - _iy : 0
-
-  const movement = V.clamp([mx, my], state._bounds[0], state._bounds[1])
-
-  state.delta = V.sub(movement, state.movement)
-  state.direction = state.delta.map(Math.sign)
-  state.movement = movement
-
-  V.addTo(state.distance, state.delta.map(Math.abs))
-  state.offset = V.add(state.lastOffset, state.movement)
-
   state.event = event
   const dt = event.timeStamp - state.timeStamp
   state.timeStamp = event.timeStamp
 
+  state.first = state._active && !state.active
+  state.last = !state._active && state.active
+  state.active = state._active
+  if (state.first) state.startTime = state.timeStamp
+  state.elapsedTime = state.timeStamp - state.startTime
+
   // calculate velocity if time delta is strictly positive
-  if (dt > 0) {
-    state.velocity = [state.delta[0] / dt, state.delta[1] / dt]
+  if (!state.first && !state.last && dt > 0) {
+    state._intentional = [_ix, _iy]
+
+    const mx = _ix !== false ? _mx - _ix : 0
+    const my = _iy !== false ? _my - _iy : 0
+
+    const movement = V.clamp([mx, my], state._bounds[0], state._bounds[1])
+
+    state.delta = V.sub(movement, state.movement)
+    state.movement = movement
+
+    const absoluteDelta = state.delta.map(Math.abs)
+
+    V.addTo(state.distance, absoluteDelta)
+    state.offset = V.add(state.lastOffset, state.movement)
+    state.direction = state.delta.map(Math.sign)
+    state.velocity = [absoluteDelta[0] / dt, absoluteDelta[1] / dt]
   }
 }
 
@@ -119,18 +126,14 @@ Engine.prototype.emit = function () {
 
   if (state._blocked && !state._force) return
 
-  state.first = state._active && !state.active
-  state.last = !state._active && state.active
-  state.active = state._active
-  if (state.first) state.startTime = state.timeStamp
-  state.elapsedTime = state.timeStamp - state.startTime
-
   this.handler({
     ...state,
     args: this.args
   })
 
-  if (!state._active) this.clean()
+  if (!state._active) {
+    this.clean()
+  }
 }
 
 Engine.prototype.clean = function () {

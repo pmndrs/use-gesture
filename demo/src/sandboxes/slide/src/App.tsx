@@ -47,7 +47,7 @@ const Slider: React.FC = ({ children }) => {
 
 export default function App() {
   return (
-    <div className={styles.container}>
+    <div className="flex fill center">
       <Slider>Slide.</Slider>
     </div>
   )

@@ -22,7 +22,7 @@ const links = {
   slide: Slide,
   'draggable-list': DraggableList,
   'cards-stack': CardsStack,
-  viewpage: Viewpager
+  viewpager: Viewpager
 }
 
 const Example = ({ link }) => {

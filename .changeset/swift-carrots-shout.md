@@ -7,6 +7,7 @@
 - `config.domTarget` is renamed `config.target`
 - `config.initial` is renamed `config.from`
 - `config.from` accounts for `offset` and not for `movement` as it was the case for `config.initial`
+- `velocity` is now a Vector with absolute (use `direction` if you need relative velocity)
 
 ## Features
 

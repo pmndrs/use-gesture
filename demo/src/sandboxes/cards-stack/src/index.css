@@ -7,6 +7,7 @@ body,
 
 body {
   font-family: system-ui;
+  min-height: 100vh;
   margin: 0;
 }
 
@@ -14,4 +15,17 @@ body {
 *:after,
 *:before {
   box-sizing: border-box;
+}
+
+.flex {
+  display: flex;
+  align-items: center;
+}
+
+.flex.fill {
+  height: 100%;
+}
+
+.flex.center {
+  justify-content: center;
 }

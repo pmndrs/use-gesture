@@ -1,6 +1,5 @@
 import React, { useRef } from 'react'
 import { useSprings, animated } from '@react-spring/web'
-import useMeasure from 'react-use-measure'
 import { useDrag } from '@use-gesture/react'
 import clamp from 'lodash.clamp'
 
@@ -23,7 +22,7 @@ function Viewpager() {
     scale: 1,
     display: 'block',
   }))
-  const bind = useDrag(({ active, movement: [mx], direction: [xDir], cancel }) => {
+  const bind = useDrag(({ canceled, first, last, active, movement: [mx], direction: [xDir], cancel }) => {
     if (active && Math.abs(mx) > width / 2) {
       index.current = clamp(index.current + (xDir > 0 ? -1 : 1), 0, pages.length - 1)
       cancel()
@@ -48,7 +47,7 @@ function Viewpager() {
 
 export default function App() {
   return (
-    <div className={styles.container}>
+    <div className="flex fill center">
       <Viewpager />
     </div>
   )
