@@ -7,6 +7,10 @@ import styles from './styles.module.css'
 
 function Draggable() {
   const ref = React.useRef()
+
+  const [color, setColor] = React.useState('black')
+  const toggleColor = () => setColor((c) => (c === 'black' ? '#ec625c' : 'black'))
+
   const [coords, set] = React.useState({ x: 0, y: 0 })
   const [style, api] = useSpring(() => ({ scale: 1, x: 0, y: 0 }))
 
@@ -48,7 +52,7 @@ function Draggable() {
   return (
     <>
       <a.div tabIndex="-1" {...bind()} className={styles.drag} style={style}>
-        <div>
+        <div onClick={toggleColor} style={{ backgroundColor: color }}>
           <span>bind</span>
           <span>
             x:{Math.round(coords.x)}, y:{Math.round(coords.y)}

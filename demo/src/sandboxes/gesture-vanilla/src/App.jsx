@@ -8,18 +8,25 @@ import styles from './styles.module.css'
 function Draggable() {
   const ref = React.useRef()
   const target = React.useRef()
+
+  const [color, setColor] = React.useState('black')
+  const toggleColor = () => setColor((c) => (c === 'black' ? '#ec625c' : 'black'))
+
   const [coords, set] = React.useState({ x: 0, y: 0 })
   const [style, api] = useSpring(() => ({ scale: 1, x: 0, y: 0 }))
 
   const options = useControls({
     enabled: true,
     gesture: { options: ['offset', 'movement'] },
+    axis: { options: [undefined, 'x', 'y', 'lock'] },
+    filterTaps: false,
     boundToParent: false
   })
   const pointerOptions = useControls('pointer', { touch: false, capture: true, lock: false })
 
   React.useEffect(() => {
-    const { boundToParent, gesture, enabled } = options
+    api.set({ scale: 1, x: 0, y: 0 })
+    const { boundToParent, gesture, ...rest } = options
     const dragGesture = new DragGesture(
       target.current,
       ({ active, ...state }) => {
@@ -39,7 +46,7 @@ function Draggable() {
           immediate: pointerOptions.lock
         })
       },
-      { enabled, pointer: pointerOptions, ...(boundToParent && { bounds: ref }) }
+      { ...rest, pointer: pointerOptions, ...(boundToParent && { bounds: ref }) }
     )
     return () => dragGesture.destroy()
   }, [api, options, pointerOptions])
@@ -47,7 +54,7 @@ function Draggable() {
   return (
     <>
       <a.div ref={target} tabIndex="-1" className={styles.drag} style={style}>
-        <div>
+        <div onClick={toggleColor} style={{ backgroundColor: color }}>
           <span>vanilla</span>
           <span>
             x:{Math.round(coords.x)}, y:{Math.round(coords.y)}

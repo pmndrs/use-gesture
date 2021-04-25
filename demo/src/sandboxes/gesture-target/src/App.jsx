@@ -8,17 +8,25 @@ import styles from './styles.module.css'
 function Draggable() {
   const ref = React.useRef()
   const target = React.useRef()
+
+  const [color, setColor] = React.useState('black')
+  const toggleColor = () => setColor((c) => (c === 'black' ? '#ec625c' : 'black'))
+
   const [coords, set] = React.useState({ x: 0, y: 0 })
   const [style, api] = useSpring(() => ({ scale: 1, x: 0, y: 0 }))
-  const { boundToParent, gesture, enabled } = useControls({
+
+  const { boundToParent, gesture, ...options } = useControls({
     enabled: true,
     gesture: { options: ['offset', 'movement'] },
+    axis: { options: [undefined, 'x', 'y', 'lock'] },
+    filterTaps: false,
     boundToParent: false
   })
+
   const pointerOptions = useControls('pointer', { touch: false, capture: true, lock: false })
 
   useDrag(
-    ({ active, ...state }) => {
+    ({ active, tap, ...state }) => {
       let [x, y] = state[gesture]
       set({ x, y })
 
@@ -37,7 +45,7 @@ function Draggable() {
     },
     {
       target,
-      enabled,
+      ...options,
       pointer: pointerOptions,
       ...(boundToParent && { bounds: ref })
     }
@@ -46,7 +54,7 @@ function Draggable() {
   return (
     <>
       <a.div tabIndex="-1" ref={target} className={styles.drag} style={style}>
-        <div>
+        <div onClick={toggleColor} style={{ backgroundColor: color }}>
           <span>target</span>
           <span>
             x:{Math.round(coords.x)}, y:{Math.round(coords.y)}

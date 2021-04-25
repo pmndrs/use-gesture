@@ -24,26 +24,6 @@ export const dragConfigResolver = {
   pointerCapture(_v, _k, { pointer: { capture = true } = {} }) {
     return !this.pointerLock && this.device === 'pointer' && capture
   },
-  bounds(value = {}) {
-    if (typeof value === 'function') {
-      return (state) => dragConfigResolver.bounds(value(state))
-    }
-
-    if ('current' in value) {
-      return () => value.current
-    }
-
-    if (typeof HTMLElement === 'function' && value instanceof HTMLElement) {
-      return value
-    }
-
-    const { left = -Infinity, right = Infinity, top = -Infinity, bottom = Infinity } = value
-
-    return [
-      [left, right],
-      [top, bottom]
-    ]
-  },
   threshold(value, _key, { filterTaps = false, axis = undefined }) {
     const threshold = V.toVector(value, filterTaps ? 3 : axis ? 1 : 0)
     this.filterTaps = filterTaps

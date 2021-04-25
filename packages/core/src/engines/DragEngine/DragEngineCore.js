@@ -1,6 +1,7 @@
 import { Engine } from '../Engine'
 import { ConfigResolverMap } from '../../imports'
 import { dragConfigResolver } from '../../config/dragConfigResolver'
+import { coordinatesConfigResolver } from '../../config/coordinatesConfigResolver'
 import { call } from '../../utils/fn'
 
 ConfigResolverMap.set('drag', dragConfigResolver)
@@ -33,25 +34,25 @@ DragEngine.prototype.setup = function (event) {
       bottom: boundRect.bottom - targetRect.bottom
     }
   }
-  this.state._bounds = dragConfigResolver.bounds(bounds)
+  this.state._bounds = coordinatesConfigResolver.bounds(bounds)
 }
 
 DragEngine.prototype.end = function () {
   this.state._active = this.state._pointerActive || this.state._keyboardActive
 }
 
-DragEngine.prototype.bind = function (bindings) {
+DragEngine.prototype.bind = function (bindFunction) {
   const device = this.config.device
 
-  bindings.add(device, 'start', this.pointerDown.bind(this))
-  bindings.add('key', 'down', this.keyDown.bind(this))
-  bindings.add('key', 'up', this.keyUp.bind(this))
+  bindFunction(device, 'start', this.pointerDown.bind(this))
+  bindFunction('key', 'down', this.keyDown.bind(this))
+  bindFunction('key', 'up', this.keyUp.bind(this))
 
   if (this.config.r3f) {
-    bindings.add(device, 'change', this.pointerMove.bind(this))
-    bindings.add(device, 'end', this.pointerUp.bind(this))
+    bindFunction(device, 'change', this.pointerMove.bind(this))
+    bindFunction(device, 'end', this.pointerUp.bind(this))
   }
   if (this.config.filterTaps) {
-    bindings.add('click', null, () => console.log('hello'))
+    bindFunction('click', '', this.click.bind(this), { capture: true })
   }
 }

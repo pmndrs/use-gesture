@@ -1,8 +1,8 @@
-import { Bindings } from './Bindings'
 import { EngineMap } from './imports'
 import { parse } from './config/resolver'
-import { Touches, isTouch } from './utils/events'
+import { Touches, isTouch, toReactHandlerProp } from './utils/events'
 import { EventStore } from './EventStore'
+import { chain } from './utils/fn'
 
 export function Controller(handlers) {
   this._gestures = new Set()
@@ -52,25 +52,30 @@ Controller.prototype.effect = function () {
 }
 
 Controller.prototype.bind = function (...args) {
-  const bindings = new Bindings()
   const sharedConfig = this._config.shared
-  const capture = sharedConfig.eventOptions.capture
+  const eventOptions = sharedConfig.eventOptions
+  const props = {}
+
+  const bindFunction = sharedConfig.target
+    ? bindToEventStore(this._targetEventStore, sharedConfig.target())
+    : bindToProps(props, eventOptions)
 
   if (sharedConfig.enabled) {
     for (const gestureKey of this._gestures) {
       if (this._config[gestureKey].enabled) {
         const Engine = EngineMap.get(gestureKey)
-        new Engine(this, args).bind(bindings)
+        new Engine(this, args).bind(bindFunction)
       }
     }
   }
 
-  if (sharedConfig.target) {
-    // If config.target is set we add event listeners to it and return the clean function.
-    bindings.bindToEventStore(this._targetEventStore, sharedConfig.target())
-  } else {
-    // If not, we return an object that contains gesture handlers mapped to react handler event keys.
-    return bindings.toPropsHandlers(capture)
+  // If target isn't set, we return an object that contains gesture handlers
+  // mapped to props handler event keys.
+  if (!sharedConfig.target) {
+    for (const handlerProp in props) {
+      props[handlerProp] = chain(...props[handlerProp])
+    }
+    return props
   }
 }
 
@@ -81,4 +86,15 @@ function resolveGestures(ctrl, internalHandlers) {
   if (internalHandlers.move) ctrl.setupGesture('move')
   if (internalHandlers.pinch) ctrl.setupGesture('pinch')
   if (internalHandlers.hover) ctrl.setupGesture('hover')
+}
+
+const bindToEventStore = (eventStore, target) => (device, action, handler, options) => {
+  eventStore.add(target, device, action, handler, options)
+}
+
+const bindToProps = (props, eventOptions) => (device, action, handler, options = {}) => {
+  const capture = options.capture ?? eventOptions.capture
+  const handlerProp = toReactHandlerProp(device, action, capture)
+  props[handlerProp] = props[handlerProp] || []
+  props[handlerProp].push(handler)
 }

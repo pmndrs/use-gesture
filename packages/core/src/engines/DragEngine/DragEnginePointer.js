@@ -115,3 +115,7 @@ DragEngine.prototype.pointerClean = function (event) {
   }
   this.eventStore.clean()
 }
+
+DragEngine.prototype.click = function (event) {
+  if (!this.state.tap) event.stopPropagation()
+}

@@ -16,7 +16,7 @@ export function toReactHandlerProp(device, action = '', capture) {
   return 'on' + capitalize(device) + capitalize(actionKey) + (capture ? 'Capture' : '')
 }
 
-export function toDomHandlerProp(device, action = '') {
+export function toDomEventType(device, action = '') {
   const deviceKey = EVENT_TYPE_MAP[device]
   const actionKey = deviceKey ? deviceKey[action] : action
   return device + actionKey
