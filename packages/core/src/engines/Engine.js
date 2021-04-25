@@ -1,3 +1,4 @@
+import { call } from '../utils/fn'
 import { V } from '../utils/maths'
 
 export function Engine(ctrl, args, key) {
@@ -61,6 +62,8 @@ Engine.prototype.start = function (event) {
     this.reset()
     this.state.event = event
     this.state._active = true
+    this.state._from = call(this.config.from, this.state)
+    this.state.lastOffset = this.state._from
     if (this.setup) this.setup(event)
   }
 }

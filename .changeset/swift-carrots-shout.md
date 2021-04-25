@@ -2,9 +2,11 @@
 '@use-gesture/core': patch
 ---
 
-## Breaking changes:
+## General breaking changes:
 
-- `domTarget` is renamed `target`
+- `config.domTarget` is renamed `config.target`
+- `config.initial` is renamed `config.from`
+- `config.from` accounts for `offset` and not for `movement` as it was the case for `config.initial`
 
 ## Features
 

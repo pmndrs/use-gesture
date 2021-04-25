@@ -5,7 +5,7 @@ export const coordinatesConfigResolver = {
   },
   bounds(value = {}) {
     if (typeof value === 'function') {
-      return (state) => dragConfigResolver.bounds(value(state))
+      return (state) => coordinatesConfigResolver.bounds(value(state))
     }
 
     if ('current' in value) {
