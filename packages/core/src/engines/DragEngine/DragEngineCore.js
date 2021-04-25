@@ -12,13 +12,16 @@ export function DragEngine(...args) {
 
 DragEngine.prototype = Object.create(Engine.prototype)
 
-// super seeds generic Engine reset call
+// superseeds generic Engine reset call
 DragEngine.prototype.reset = function () {
   Engine.prototype.reset.call(this)
-  this.state._pointerId = undefined
-  this.state._pointerActive = false
-  this.state._keyboardActive = false
-  this.state.tap = false
+  const state = this.state
+  state._pointerId = undefined
+  state._pointerActive = false
+  state._keyboardActive = false
+  state.canceled = false
+  state.tap = false
+  state.cancel = this.cancel.bind(this)
 }
 
 DragEngine.prototype.setup = function (event) {
@@ -37,8 +40,24 @@ DragEngine.prototype.setup = function (event) {
   this.state._bounds = coordinatesConfigResolver.bounds(bounds)
 }
 
-DragEngine.prototype.end = function () {
+DragEngine.prototype.cancel = function () {
+  const state = this.state
+  if (state.canceled) return
+  state.canceled = true
+  state._active = false
+  setTimeout(() => this.emit(), 0)
+}
+
+DragEngine.prototype.setActive = function () {
   this.state._active = this.state._pointerActive || this.state._keyboardActive
+}
+
+// superseeds Engine clean function
+DragEngine.prototype.clean = function () {
+  this.pointerClean()
+  this.state._pointerActive = false
+  this.state._keyboardActive = false
+  Engine.prototype.clean.call(this)
 }
 
 DragEngine.prototype.bind = function (bindFunction) {

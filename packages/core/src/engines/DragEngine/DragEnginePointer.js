@@ -90,10 +90,10 @@ DragEngine.prototype.pointerUp = function (event) {
   if (this.state._pointerId && id !== this.state._pointerId) return
 
   this.state.event = event
-  this.state._pointerActive = false
   this.pointerClean(event)
 
-  this.end()
+  this.state._pointerActive = false
+  this.setActive()
   this.compute(event)
 
   const [dx, dy] = this.state.distance
@@ -106,14 +106,15 @@ DragEngine.prototype.pointerUp = function (event) {
   this.emit()
 }
 
-DragEngine.prototype.pointerClean = function (event) {
+DragEngine.prototype.pointerClean = function () {
+  if (!this.state._pointerActive) return
+  const event = this.state.event
   if (this.config.pointerLock && document.pointerLockElement === event.target) {
     document.exitPointerLock()
   }
   if (this.config.capture && (this.config.r3f || event.target.hasPointerCapture(event.pointerId))) {
     event.target.releasePointerCapture(event.pointerId)
   }
-  this.eventStore.clean()
 }
 
 DragEngine.prototype.click = function (event) {
