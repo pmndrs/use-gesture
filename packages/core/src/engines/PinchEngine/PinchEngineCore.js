@@ -6,6 +6,7 @@ ConfigResolverMap.set('pinch', pinchConfigResolver)
 
 export function PinchEngine(...args) {
   Engine.call(this, ...args, 'pinch')
+  this.ingKey = 'pinching'
 }
 
 PinchEngine.prototype = Object.create(Engine.prototype)

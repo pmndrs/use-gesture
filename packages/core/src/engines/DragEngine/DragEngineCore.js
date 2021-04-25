@@ -8,6 +8,7 @@ ConfigResolverMap.set('drag', dragConfigResolver)
 
 export function DragEngine(...args) {
   Engine.call(this, ...args, 'drag')
+  this.ingKey = 'dragging'
 }
 
 DragEngine.prototype = Object.create(Engine.prototype)
@@ -42,12 +43,12 @@ DragEngine.prototype.setup = function (event) {
 
 DragEngine.prototype.cancel = function () {
   const state = this.state
-  const event = state.event
   if (state.canceled) return
   setTimeout(() => {
     state.canceled = true
     state._active = false
-    this.compute(event)
+    // we run compute with no event so that kinematics won't be computed
+    this.compute()
     this.emit()
   }, 0)
 }

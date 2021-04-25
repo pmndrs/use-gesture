@@ -53,7 +53,7 @@ Engine.prototype.reset = function () {
   ]
 
   state.active = false
-
+  state.memo = undefined
   state.direction = [0, 0]
   state.distance = [0, 0]
   state.velocity = [0, 0]
@@ -78,6 +78,7 @@ Engine.prototype.start = function (event) {
 
 Engine.prototype.compute = function (event) {
   const state = this.state
+  const shared = this.shared
 
   const [_mx, _my] = state._movement
   const [_tx, _ty] = state._threshold
@@ -90,13 +91,18 @@ Engine.prototype.compute = function (event) {
 
   if (state._blocked) return
 
+  state.first = state._active && !state.active
+  state.last = !state._active && state.active
+  state.active = shared[this.ingKey] = state._active
+
+  // it is possible that this function is run by cancel with no event. If so,
+  // no need to calculate kinematics and other stuff.
+  if (!event || state.event === event) return
+
   state.event = event
   const dt = event.timeStamp - state.timeStamp
   state.timeStamp = event.timeStamp
 
-  state.first = state._active && !state.active
-  state.last = !state._active && state.active
-  state.active = state._active
   if (state.first) state.startTime = state.timeStamp
   state.elapsedTime = state.timeStamp - state.startTime
 
@@ -123,13 +129,18 @@ Engine.prototype.compute = function (event) {
 
 Engine.prototype.emit = function () {
   const state = this.state
+  const shared = this.shared
 
   if (state._blocked && !state._force) return
 
-  this.handler({
+  const memo = this.handler({
+    ...shared,
     ...state,
     args: this.args
   })
+
+  // Sets memo to the returned value of the handler (unless it's  undefined)
+  if (memo !== undefined) state.memo = memo
 
   if (!state._active) {
     this.clean()
