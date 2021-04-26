@@ -82,27 +82,24 @@ Engine.prototype.compute = function (event) {
 
   if (!state._intentional) return
 
-  // it is possible that this function is run by cancel with no event. If so,
-  // no need to calculate kinematics and other stuff.
-  if (event && state.event !== event) {
-    state.event = event
+  state._step = [_s0, _s1]
 
-    state._step = [_s0, _s1]
+  const movement = [0, 0]
 
-    const movement = [0, 0]
+  movement[0] = _s0 !== false ? _m0 - _s0 : 0
+  movement[1] = _s1 !== false ? _m1 - _s1 : 0
 
-    movement[0] = _s0 !== false ? _m0 - _s0 : 0
-    movement[1] = _s1 !== false ? _m1 - _s1 : 0
+  if (this.intent) this.intent(movement)
 
-    if (this.intent) this.intent(movement)
+  if ((state._active && !state._blocked) || state.active) {
+    state.first = state._active && !state.active
+    state.last = !state._active && state.active
+    state.active = shared[this.ingKey] = state._active
 
-    if ((state._active && !state._blocked) || state.active) {
+    if (event) {
+      state.event = event
       const dt = event.timeStamp - state.timeStamp
       state.timeStamp = event.timeStamp
-
-      state.first = state._active && !state.active
-      state.last = !state._active && state.active
-      state.active = shared[this.ingKey] = state._active
 
       if (state.first) {
         state._bounds = call(this.config.bounds, state)
@@ -125,10 +122,10 @@ Engine.prototype.compute = function (event) {
         state.velocity = [absoluteDelta[0] / dt, absoluteDelta[1] / dt]
       }
     }
-
-    const rubberband = state._active ? this.config.rubberband : [0, 0]
-    state.offset = computeRubberband(state._bounds, state.offset, rubberband)
   }
+
+  const rubberband = state._active ? this.config.rubberband : [0, 0]
+  state.offset = computeRubberband(state._bounds, state.offset, rubberband)
 }
 
 Engine.prototype.emit = function () {
