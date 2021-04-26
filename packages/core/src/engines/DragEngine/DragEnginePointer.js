@@ -83,21 +83,20 @@ DragEngine.prototype.pointerMove = function (event) {
 
 DragEngine.prototype.pointerUp = function (event) {
   this.ctrl.setEventIds(event)
+  const state = this.state
 
-  if (!this.state._pointerActive) return
+  if (!state._pointerActive) return
   const id = Pointer.id(event)
-  if (this.state._pointerId && id !== this.state._pointerId) return
-
-  this.state.event = event
+  if (state._pointerId && id !== state._pointerId) return
 
   this.setActive({ pointer: false })
   this.compute(event)
 
-  const [dx, dy] = this.state.distance
-  this.state.tap = dx <= 3 && dy <= 3
+  const [dx, dy] = state.distance
+  state.tap = dx <= 3 && dy <= 3
 
-  if (this.state.tap && this.config.filterTaps) {
-    this.state._force = true
+  if (state.tap && this.config.filterTaps) {
+    state._force = true
   }
 
   this.emit()

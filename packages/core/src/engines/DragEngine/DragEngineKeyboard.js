@@ -29,7 +29,6 @@ DragEngine.prototype.keyDown = function (event) {
 
 DragEngine.prototype.keyUp = function (event) {
   if (!(event.key in KEYS_DELTA_MAP)) return
-  this.state.event = event
 
   this.setActive({ keyboard: false })
   this.compute(event)

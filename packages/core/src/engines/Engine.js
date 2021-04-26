@@ -47,11 +47,6 @@ Engine.prototype.reset = function () {
   state._intentional = false
   state._movement = [0, 0]
   state._threshold = this.config.threshold
-  state._bounds = [
-    [-Infinity, Infinity],
-    [-Infinity, Infinity]
-  ]
-
   state.memo = state.axis = undefined
   state.direction = [0, 0]
   state.distance = [0, 0]
@@ -70,6 +65,7 @@ Engine.prototype.start = function (event) {
     state.lastOffset = this.config.from ? call(this.config.from, state) : state.offset
     state.offset = state.lastOffset
     state.timeStamp = event.timeStamp
+    state._bounds = call(this.config.bounds, state)
     if (this.setup) this.setup(event)
   }
 }
@@ -95,42 +91,41 @@ Engine.prototype.compute = function (event) {
 
   // it is possible that this function is run by cancel with no event. If so,
   // no need to calculate kinematics and other stuff.
-  if (!event || state.event === event) return
+  if (event && state.event !== event) {
+    state.event = event
+    const dt = event.timeStamp - state.timeStamp
+    state.timeStamp = event.timeStamp
 
-  state.event = event
-  const dt = event.timeStamp - state.timeStamp
-  state.timeStamp = event.timeStamp
+    if (state.first) state.startTime = state.timeStamp
+    state.elapsedTime = state.timeStamp - state.startTime
 
-  if (state.first) state.startTime = state.timeStamp
-  state.elapsedTime = state.timeStamp - state.startTime
+    // calculate velocity if time delta is strictly positive
+    if (!state.first && !state.last && dt > 0) {
+      state._step = [_s0, _s1]
 
-  // calculate velocity if time delta is strictly positive
-  if (!state.first && !state.last && dt > 0) {
-    state._step = [_s0, _s1]
+      const movement = [0, 0]
 
-    const v = [0, 0]
+      movement[0] = _s0 !== false ? _m0 - _s0 : 0
+      movement[1] = _s1 !== false ? _m1 - _s1 : 0
 
-    v[0] = _s0 !== false ? _m0 - _s0 : 0
-    v[1] = _s1 !== false ? _m1 - _s1 : 0
+      if (this.intent) this.intent(movement)
 
-    if (this.intent) this.intent(v)
+      if (state._active && !state._blocked) {
+        state.delta = V.sub(movement, state.movement)
+        state.movement = movement
 
-    if (!state._active || state._blocked) return
+        const absoluteDelta = state.delta.map(Math.abs)
 
-    const movement = V.clamp(v, state._bounds[0], state._bounds[1])
+        V.addTo(state.distance, absoluteDelta)
+        this.computeOffset()
 
-    state.delta = V.sub(movement, state.movement)
-    state.movement = movement
+        state.direction = state.delta.map(Math.sign)
+        state.velocity = [absoluteDelta[0] / dt, absoluteDelta[1] / dt]
+      }
+    }
 
-    const absoluteDelta = state.delta.map(Math.abs)
-
-    V.addTo(state.distance, absoluteDelta)
-    this.computeOffset()
-
-    // state.offset = computeRubberband(state._bounds, state.offset, this.config.rubberband)
-
-    state.direction = state.delta.map(Math.sign)
-    state.velocity = [absoluteDelta[0] / dt, absoluteDelta[1] / dt]
+    const rubberband = state._active ? this.config.rubberband : [0, 0]
+    state.offset = computeRubberband(state._bounds, state.offset, rubberband)
   }
 }
 

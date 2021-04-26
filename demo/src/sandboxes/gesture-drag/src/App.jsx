@@ -19,7 +19,8 @@ function Draggable() {
     gesture: { options: ['offset', 'movement'] },
     axis: { options: [undefined, 'x', 'y', 'lock'] },
     filterTaps: false,
-    boundToParent: false
+    boundToParent: false,
+    rubberband: false
   })
 
   const pointerOptions = useControls('pointer', { touch: false, capture: true, lock: false })
@@ -45,6 +46,7 @@ function Draggable() {
     {
       ...options,
       pointer: pointerOptions,
+      // bounds: { top: -40, bottom: 40, left: -40, right: 40 }
       ...(boundToParent && { bounds: ref })
     }
   )

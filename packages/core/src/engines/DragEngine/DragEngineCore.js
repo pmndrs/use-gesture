@@ -2,7 +2,6 @@ import { CoordinatesEngine } from '../CoordinatesEngine'
 import { ConfigResolverMap } from '../../imports'
 import { dragConfigResolver } from '../../config/dragConfigResolver'
 import { coordinatesConfigResolver } from '../../config/coordinatesConfigResolver'
-import { call } from '../../utils/fn'
 
 ConfigResolverMap.set('drag', dragConfigResolver)
 
@@ -27,19 +26,18 @@ DragEngine.prototype.reset = function () {
 
 DragEngine.prototype.setup = function (event) {
   const state = this.state
-  let bounds = call(this.config.bounds, state)
 
-  if (bounds instanceof HTMLElement) {
-    const boundRect = bounds.getBoundingClientRect()
+  if (state._bounds instanceof HTMLElement) {
+    const boundRect = state._bounds.getBoundingClientRect()
     const targetRect = event.currentTarget.getBoundingClientRect()
-    bounds = {
-      left: boundRect.left - targetRect.left,
-      right: boundRect.right - targetRect.right,
-      top: boundRect.top - targetRect.top,
-      bottom: boundRect.bottom - targetRect.bottom
+    state._bounds = {
+      left: boundRect.left - targetRect.left + state.offset[0],
+      right: boundRect.right - targetRect.right + state.offset[0],
+      top: boundRect.top - targetRect.top + state.offset[1],
+      bottom: boundRect.bottom - targetRect.bottom + state.offset[1]
     }
+    state._bounds = coordinatesConfigResolver.bounds(state._bounds)
   }
-  state._bounds = coordinatesConfigResolver.bounds(bounds)
 }
 
 DragEngine.prototype.cancel = function () {

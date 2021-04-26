@@ -22,9 +22,6 @@ export const V = {
   subTo(v1: Vector, v2: Vector) {
     v1[0] -= v2[0]
     v1[1] -= v2[1]
-  },
-  clamp(v1: Vector, v2: Vector, v3: Vector): Vector {
-    return [clamp(v1[0], v2[0], v2[1]), clamp(v1[1], v3[0], v3[1])]
   }
 }
 
