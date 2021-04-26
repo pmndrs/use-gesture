@@ -2,7 +2,7 @@ import { PinchEngine } from './PinchEngineCore'
 import { Wheel } from '../../utils/events'
 import { V } from '../../utils/maths'
 
-const PINCH_WHEEL_RATIO = 30
+const PINCH_WHEEL_RATIO = 60
 
 PinchEngine.prototype.wheel = function (event) {
   if (!event.ctrlKey) return

@@ -27,11 +27,11 @@ export function parse(config, gestureKey) {
   }
 
   if (gestureKey) {
-    _config[gestureKey] = resolveWith(rest, ConfigResolverMap.get(gestureKey))
+    _config[gestureKey] = resolveWith({ shared: _config.shared, ...rest }, ConfigResolverMap.get(gestureKey))
   } else {
     for (const key in rest) {
       const resolver = ConfigResolverMap.get(key)
-      _config[key] = resolveWith(rest[key], resolver)
+      _config[key] = resolveWith({ shared: _config.shared, ...rest[key] }, resolver)
     }
   }
   return _config

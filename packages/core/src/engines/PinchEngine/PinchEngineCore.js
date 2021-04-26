@@ -46,8 +46,9 @@ PinchEngine.prototype.cancel = function () {
 PinchEngine.prototype.bind = function (bindFunction) {
   const device = this.config.device
 
-  bindFunction(device, 'start', this.touchStart.bind(this))
-  bindFunction(device, 'change', this.touchMove.bind(this))
-  bindFunction(device, 'end', this.touchEnd.bind(this))
-  bindFunction('wheel', '', this.wheel.bind(this))
+  if (!!device) {
+    bindFunction(device, 'start', this[device + 'Start'].bind(this))
+    bindFunction(device, 'change', this[device + 'Move'].bind(this))
+    bindFunction(device, 'end', this[device + 'End'].bind(this))
+  } else bindFunction('wheel', '', this.wheel.bind(this))
 }
