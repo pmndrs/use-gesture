@@ -1,5 +1,5 @@
 import { call } from '../utils/fn'
-import { V } from '../utils/maths'
+import { V, rubberbandIfOutOfBounds } from '../utils/maths'
 
 export function Engine(ctrl, args, key) {
   this.ctrl = ctrl
@@ -42,7 +42,7 @@ Engine.prototype = {
 
 Engine.prototype.reset = function () {
   const state = this.state
-  state._active = state.active = state._force = false
+  state._active = state.active = state._blocked = state._force = false
   state._step = [false, false]
   state._intentional = false
   state._movement = [0, 0]
@@ -115,7 +115,7 @@ Engine.prototype.compute = function (event) {
 
     if (this.intent) this.intent(v)
 
-    if (!state._active) return
+    if (!state._active || state._blocked) return
 
     const movement = V.clamp(v, state._bounds[0], state._bounds[1])
 
@@ -126,6 +126,9 @@ Engine.prototype.compute = function (event) {
 
     V.addTo(state.distance, absoluteDelta)
     this.computeOffset()
+
+    // state.offset = computeRubberband(state._bounds, state.offset, this.config.rubberband)
+
     state.direction = state.delta.map(Math.sign)
     state.velocity = [absoluteDelta[0] / dt, absoluteDelta[1] / dt]
   }
@@ -137,7 +140,7 @@ Engine.prototype.emit = function () {
 
   if (!state._active) this.clean()
 
-  if ((!state._active || !state._intentional) && !state._force) return
+  if ((state._blocked || !state._intentional) && !state._force) return
 
   const memo = this.handler({
     ...shared,
@@ -151,4 +154,9 @@ Engine.prototype.emit = function () {
 
 Engine.prototype.clean = function () {
   this.eventStore.clean()
+}
+
+function computeRubberband(bounds, [Vx, Vy], [Rx, Ry]) {
+  const [[X0, X1], [Y0, Y1]] = bounds
+  return [rubberbandIfOutOfBounds(Vx, X0, X1, Rx), rubberbandIfOutOfBounds(Vy, Y0, Y1, Ry)]
 }

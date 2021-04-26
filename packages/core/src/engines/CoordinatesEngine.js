@@ -30,8 +30,10 @@ CoordinatesEngine.prototype.intent = function (v) {
     if (state.axis === 'x') v[1] = 0
     else if (state.axis === 'y') v[0] = 0
   } else if (state.axis && this.config.axis) {
-    if (state.axis !== this.config.axis) state._active = false
-    else if (state.axis === 'x') v[1] = 0
+    if (state.axis !== this.config.axis) {
+      state._active = false
+      state._blocked = true
+    } else if (state.axis === 'x') v[1] = 0
     else if (state.axis === 'y') v[0] = 0
   }
 }
