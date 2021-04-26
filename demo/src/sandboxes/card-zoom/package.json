@@ -1,5 +1,5 @@
 {
-  "name": "spring-cards-stack",
+  "name": "gesture-cards-zoom",
   "version": "1.0.0",
   "main": "src/index.tsx",
   "dependencies": {
