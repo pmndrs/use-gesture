@@ -3,6 +3,10 @@ import { commonConfigResolver } from './commonConfigResolver'
 import { coordinatesConfigResolver } from './coordinatesConfigResolver'
 import { SUPPORT } from './support'
 
+export const DEFAULT_SWIPE_VELOCITY = 0.5
+export const DEFAULT_SWIPE_DISTANCE = 50
+export const DEFAULT_SWIPE_DURATION = 250
+
 export const dragConfigResolver = {
   ...commonConfigResolver,
   ...coordinatesConfigResolver,
@@ -28,5 +32,16 @@ export const dragConfigResolver = {
     const threshold = V.toVector(value, filterTaps ? 3 : axis ? 1 : 0)
     this.filterTaps = filterTaps
     return threshold
+  },
+  swipe({
+    velocity = DEFAULT_SWIPE_VELOCITY,
+    distance = DEFAULT_SWIPE_DISTANCE,
+    duration = DEFAULT_SWIPE_DURATION
+  } = {}) {
+    return {
+      velocity: V.toVector(velocity),
+      distance: V.toVector(distance),
+      duration
+    }
   }
 }

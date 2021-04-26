@@ -84,6 +84,7 @@ DragEngine.prototype.pointerMove = function (event) {
 DragEngine.prototype.pointerUp = function (event) {
   this.ctrl.setEventIds(event)
   const state = this.state
+  const config = this.config
 
   if (!state._pointerActive) return
   const id = Pointer.id(event)
@@ -95,21 +96,34 @@ DragEngine.prototype.pointerUp = function (event) {
   const [dx, dy] = state.distance
   state.tap = dx <= 3 && dy <= 3
 
-  if (state.tap && this.config.filterTaps) {
+  if (state.tap && config.filterTaps) {
     state._force = true
+  } else {
+    const [dirx, diry] = state.direction
+    const [vx, vy] = state.velocity
+    const [mx, my] = state.movement
+    const [svx, svy] = config.swipe.velocity
+    const [sx, sy] = config.swipe.distance
+    const sdt = config.swipe.duration
+
+    if (state.elapsedTime < sdt) {
+      if (Math.abs(vx) > svx && Math.abs(mx) > sx) state.swipe[0] = dirx
+      if (Math.abs(vy) > svy && Math.abs(my) > sy) state.swipe[1] = diry
+    }
   }
 
   this.emit()
 }
 
 DragEngine.prototype.pointerClean = function () {
-  if (!this.state._pointerActive) return
-  const event = this.state.event
-  if (this.config.pointerLock && document.pointerLockElement === event.target) {
+  const state = this.state
+  if (!state._pointerActive) return
+  const event = state.event
+  if (this.config.pointerLock && document.pointerLockElement === state.target) {
     document.exitPointerLock()
   }
-  if (this.config.capture && (this.config.r3f || event.target.hasPointerCapture(event.pointerId))) {
-    event.target.releasePointerCapture(event.pointerId)
+  if (this.config.capture && (this.config.r3f || state.target.hasPointerCapture(event.pointerId))) {
+    state.target.releasePointerCapture(event.pointerId)
   }
 }
 

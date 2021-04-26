@@ -60,13 +60,10 @@ Engine.prototype.start = function (event) {
   const state = this.state
   if (!state._active) {
     this.reset()
-    state.event = event
+    state.target = event.currentTarget
     state._active = true
     state.lastOffset = this.config.from ? call(this.config.from, state) : state.offset
     state.offset = state.lastOffset
-    state.timeStamp = event.timeStamp
-    state._bounds = call(this.config.bounds, state)
-    if (this.setup) this.setup(event)
   }
 }
 
@@ -85,32 +82,37 @@ Engine.prototype.compute = function (event) {
 
   if (!state._intentional) return
 
-  state.first = state._active && !state.active
-  state.last = !state._active && state.active
-  state.active = shared[this.ingKey] = state._active
-
   // it is possible that this function is run by cancel with no event. If so,
   // no need to calculate kinematics and other stuff.
   if (event && state.event !== event) {
     state.event = event
-    const dt = event.timeStamp - state.timeStamp
-    state.timeStamp = event.timeStamp
 
-    if (state.first) state.startTime = state.timeStamp
-    state.elapsedTime = state.timeStamp - state.startTime
+    state._step = [_s0, _s1]
 
-    // calculate velocity if time delta is strictly positive
-    if (!state.first && !state.last && dt > 0) {
-      state._step = [_s0, _s1]
+    const movement = [0, 0]
 
-      const movement = [0, 0]
+    movement[0] = _s0 !== false ? _m0 - _s0 : 0
+    movement[1] = _s1 !== false ? _m1 - _s1 : 0
 
-      movement[0] = _s0 !== false ? _m0 - _s0 : 0
-      movement[1] = _s1 !== false ? _m1 - _s1 : 0
+    if (this.intent) this.intent(movement)
 
-      if (this.intent) this.intent(movement)
+    if ((state._active && !state._blocked) || state.active) {
+      const dt = event.timeStamp - state.timeStamp
+      state.timeStamp = event.timeStamp
 
-      if (state._active && !state._blocked) {
+      state.first = state._active && !state.active
+      state.last = !state._active && state.active
+      state.active = shared[this.ingKey] = state._active
+
+      if (state.first) {
+        state._bounds = call(this.config.bounds, state)
+        state.startTime = state.timeStamp
+        if (this.setup) this.setup()
+      }
+
+      state.elapsedTime = state.timeStamp - state.startTime
+
+      if (!state.first && !state.last && dt > 0) {
         state.delta = V.sub(movement, state.movement)
         state.movement = movement
 

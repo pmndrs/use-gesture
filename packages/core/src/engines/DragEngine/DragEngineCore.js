@@ -19,17 +19,18 @@ DragEngine.prototype.reset = function () {
   state._pointerId = undefined
   state._pointerActive = false
   state._keyboardActive = false
+  state.swipe = [0, 0]
   state.tap = false
   state.canceled = false
   state.cancel = this.cancel.bind(this)
 }
 
-DragEngine.prototype.setup = function (event) {
+DragEngine.prototype.setup = function () {
   const state = this.state
 
   if (state._bounds instanceof HTMLElement) {
     const boundRect = state._bounds.getBoundingClientRect()
-    const targetRect = event.currentTarget.getBoundingClientRect()
+    const targetRect = state.target.getBoundingClientRect()
     state._bounds = {
       left: boundRect.left - targetRect.left + state.offset[0],
       right: boundRect.right - targetRect.right + state.offset[0],
