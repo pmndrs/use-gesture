@@ -3,19 +3,28 @@ import { Touches } from '../../utils/events'
 
 PinchEngine.prototype.touchStart = function (event) {
   this.ctrl.setEventIds(event)
+  const state = this.state
+  const ctrlTouchIds = this.ctrl._touchIds
 
-  if (this.state._active) return
+  if (state._active) {
+    // check that the touchIds that initiated the gesture are still enabled
+    // This is useful for when the page loses track of the pointers (minifying
+    // gesture on iPad).
+    if (state._touchIds.every((id) => ctrlTouchIds.has(id))) return
+    // The gesture is still active, but probably didn't have the opportunity to
+    // end properly, so we restart the pinch.
+  }
 
-  if (this.ctrl._touchIds.size < 2) return
+  if (ctrlTouchIds.size < 2) return
 
   this.start(event)
-  this.state._touchIds = Array.from(this.ctrl._touchIds).slice(0, 2)
-  const payload = Touches.distanceAngle(event, this.state._touchIds)
+  state._touchIds = Array.from(ctrlTouchIds).slice(0, 2)
+  const payload = Touches.distanceAngle(event, state._touchIds)
 
-  this.state.origin = payload.origin
-  this.state.values = [payload.distance, payload.angle]
-  this.state.initial = this.state.values
-  this.state.turns = 0
+  state.origin = payload.origin
+  state.values = [payload.distance, payload.angle]
+  state.initial = state.values
+  state.turns = 0
 
   this.compute(event)
   this.emit()
