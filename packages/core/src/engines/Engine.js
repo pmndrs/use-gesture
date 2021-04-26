@@ -41,26 +41,23 @@ Engine.prototype = {
 
 Engine.prototype.reset = function () {
   const state = this.state
-  state._active = false
-  state._blocked = false
-  state._force = false
+  state._active = state.active = state._force = false
   state._movement = [0, 0]
-  state._intentional = [false, false]
+  state._step = [false, false]
+  state._intentional = false
   state._threshold = this.config.threshold
   state._bounds = [
     [-Infinity, Infinity],
     [-Infinity, Infinity]
   ]
 
-  state.active = false
-  state.memo = undefined
+  state.memo = state.axis = undefined
   state.direction = [0, 0]
   state.distance = [0, 0]
   state.velocity = [0, 0]
   state.delta = [0, 0]
   state.movement = [0, 0]
   state.timeStamp = 0
-  state.lastOffset = state.offset
 }
 
 Engine.prototype.start = function (event) {
@@ -80,16 +77,16 @@ Engine.prototype.compute = function (event) {
   const state = this.state
   const shared = this.shared
 
-  const [_mx, _my] = state._movement
-  const [_tx, _ty] = state._threshold
-  let [_ix, _iy] = state._intentional
+  const [_m0, _m1] = state._movement
+  const [_t0, _t1] = state._threshold
+  let [_s0, _s1] = state._step
 
-  if (_ix === false) _ix = Math.abs(_mx) >= _tx && Math.sign(_mx) * _tx
-  if (_iy === false) _iy = Math.abs(_my) >= _ty && Math.sign(_my) * _ty
+  if (_s0 === false) _s0 = Math.abs(_m0) >= _t0 && Math.sign(_m0) * _t0
+  if (_s1 === false) _s1 = Math.abs(_m1) >= _t1 && Math.sign(_m1) * _t1
 
-  state._blocked = _ix === false && _iy === false
+  state._intentional = _s0 !== false || _s1 !== false
 
-  if (state._blocked) return
+  if (!state._intentional) return
 
   state.first = state._active && !state.active
   state.last = !state._active && state.active
@@ -108,12 +105,18 @@ Engine.prototype.compute = function (event) {
 
   // calculate velocity if time delta is strictly positive
   if (!state.first && !state.last && dt > 0) {
-    state._intentional = [_ix, _iy]
+    state._step = [_s0, _s1]
 
-    const mx = _ix !== false ? _mx - _ix : 0
-    const my = _iy !== false ? _my - _iy : 0
+    const v = [0, 0]
 
-    const movement = V.clamp([mx, my], state._bounds[0], state._bounds[1])
+    v[0] = _s0 !== false ? _m0 - _s0 : 0
+    v[1] = _s1 !== false ? _m1 - _s1 : 0
+
+    if (this.intent) this.intent(v)
+
+    if (!state._active) return
+
+    const movement = V.clamp(v, state._bounds[0], state._bounds[1])
 
     state.delta = V.sub(movement, state.movement)
     state.movement = movement
@@ -131,7 +134,9 @@ Engine.prototype.emit = function () {
   const state = this.state
   const shared = this.shared
 
-  if (state._blocked && !state._force) return
+  if (!state._active) this.clean()
+
+  if ((!state._active || !state._intentional) && !state._force) return
 
   const memo = this.handler({
     ...shared,
@@ -141,10 +146,6 @@ Engine.prototype.emit = function () {
 
   // Sets memo to the returned value of the handler (unless it's  undefined)
   if (memo !== undefined) state.memo = memo
-
-  if (!state._active) {
-    this.clean()
-  }
 }
 
 Engine.prototype.clean = function () {

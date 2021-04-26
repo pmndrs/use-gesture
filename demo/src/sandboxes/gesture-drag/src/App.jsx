@@ -11,8 +11,8 @@ function Draggable() {
   const [color, setColor] = React.useState('black')
   const toggleColor = () => setColor((c) => (c === 'black' ? '#ec625c' : 'black'))
 
-  const [style, api] = useSpring(() => ({ scale: 1, x: 50, y: 50 }))
-  const [coords, set] = React.useState({ x: style.x.get(), y: style.y.get() })
+  const [style, api] = useSpring(() => ({ scale: 1, x: 0, y: 0 }))
+  const [coords, set] = React.useState({ x: 0, y: 0 })
 
   const { boundToParent, gesture, ...options } = useControls({
     enabled: true,
@@ -25,13 +25,9 @@ function Draggable() {
   const pointerOptions = useControls('pointer', { touch: false, capture: true, lock: false })
 
   const bind = useDrag(
-    ({ active, tap, cancel, canceled, ...state }) => {
+    ({ active, tap, canceled, ...state }) => {
       let [x, y] = state[gesture]
       set({ x, y })
-
-      if (state.movement[0] > 100) {
-        cancel()
-      }
 
       if (pointerOptions.lock) {
         const dx = window.innerWidth / 2 - 40
@@ -49,8 +45,7 @@ function Draggable() {
     {
       ...options,
       pointer: pointerOptions,
-      ...(boundToParent && { bounds: ref }),
-      from: () => [style.x.get(), style.y.get()]
+      ...(boundToParent && { bounds: ref })
     }
   )
 
