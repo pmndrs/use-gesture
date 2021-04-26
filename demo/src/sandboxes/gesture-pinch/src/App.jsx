@@ -16,7 +16,7 @@ export default function App() {
 
     api.start({
       rotate: active || options.gesture === 'offset' ? angle : 0,
-      scale: active || options.gesture === 'offset' ? 1 + scale : 1
+      scale: active || options.gesture === 'offset' ? scale : 1
     })
   })
 

@@ -8,9 +8,6 @@ export function Engine(ctrl, args, key) {
 
   if (!this.state) {
     this.state = {}
-    this.state.offset = [0, 0]
-    this.state.lastOffset = [0, 0]
-
     this.reset()
   }
 }
@@ -42,9 +39,9 @@ Engine.prototype = {
 Engine.prototype.reset = function () {
   const state = this.state
   state._active = state.active = state._force = false
-  state._movement = [0, 0]
   state._step = [false, false]
   state._intentional = false
+  state._movement = [0, 0]
   state._threshold = this.config.threshold
   state._bounds = [
     [-Infinity, Infinity],
@@ -55,8 +52,8 @@ Engine.prototype.reset = function () {
   state.direction = [0, 0]
   state.distance = [0, 0]
   state.velocity = [0, 0]
-  state.delta = [0, 0]
   state.movement = [0, 0]
+  state.delta = [0, 0]
   state.timeStamp = 0
 }
 
@@ -124,7 +121,7 @@ Engine.prototype.compute = function (event) {
     const absoluteDelta = state.delta.map(Math.abs)
 
     V.addTo(state.distance, absoluteDelta)
-    state.offset = V.add(state.lastOffset, state.movement)
+    this.computeOffset()
     state.direction = state.delta.map(Math.sign)
     state.velocity = [absoluteDelta[0] / dt, absoluteDelta[1] / dt]
   }

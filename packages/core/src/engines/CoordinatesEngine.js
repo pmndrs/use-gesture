@@ -1,10 +1,18 @@
 import { Engine } from './Engine'
+import { V } from '../utils/maths'
 
 export function CoordinatesEngine(...args) {
   Engine.call(this, ...args)
+  this.state.offset = [0, 0]
+  this.state.lastOffset = [0, 0]
 }
 
 CoordinatesEngine.prototype = Object.create(Engine.prototype)
+
+CoordinatesEngine.prototype.computeOffset = function () {
+  const state = this.state
+  state.offset = V.add(state.lastOffset, state.movement)
+}
 
 CoordinatesEngine.prototype.intent = function (v) {
   const state = this.state

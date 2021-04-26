@@ -12,6 +12,7 @@ import Slide from './sandboxes/slide/src/App'
 import DraggableList from './sandboxes/draggable-list/src/App'
 import CardsStack from './sandboxes/cards-stack/src/App'
 import Viewpager from './sandboxes/viewpager/src/App'
+import CardZoom from './sandboxes/card-zoom/src/App'
 
 const links = {
   'gesture-drag': Drag,
@@ -22,7 +23,8 @@ const links = {
   slide: Slide,
   'draggable-list': DraggableList,
   'cards-stack': CardsStack,
-  viewpager: Viewpager
+  viewpager: Viewpager,
+  'card-zoom': CardZoom
 }
 
 const Example = ({ link }) => {
