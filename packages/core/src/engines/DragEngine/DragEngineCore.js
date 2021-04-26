@@ -20,8 +20,8 @@ DragEngine.prototype.reset = function () {
   state._pointerId = undefined
   state._pointerActive = false
   state._keyboardActive = false
-  state.canceled = false
   state.tap = false
+  state.canceled = false
   state.cancel = this.cancel.bind(this)
 }
 

@@ -9,6 +9,7 @@ export function Engine(ctrl, args, key) {
   if (!this.state) {
     this.state = {}
     this.reset()
+    if (this.init) this.init()
   }
 }
 
