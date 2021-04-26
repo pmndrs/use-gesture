@@ -67,3 +67,22 @@ export const Pointer = {
     return [valueEvent.clientX, valueEvent.clientY]
   }
 }
+
+// wheel delta defaults from https://github.com/facebookarchive/fixed-data-table/blob/master/src/vendor_upstream/dom/normalizeWheel.js
+const LINE_HEIGHT = 40
+const PAGE_HEIGHT = 800
+
+export const Wheel = {
+  values(event) {
+    let { deltaX, deltaY, deltaMode } = event
+    // normalize wheel values, especially for Firefox
+    if (deltaMode === 1) {
+      deltaX *= LINE_HEIGHT
+      deltaY *= LINE_HEIGHT
+    } else if (deltaMode === 2) {
+      deltaX *= PAGE_HEIGHT
+      deltaY *= PAGE_HEIGHT
+    }
+    return [deltaX, deltaY]
+  }
+}

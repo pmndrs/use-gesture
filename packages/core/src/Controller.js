@@ -2,12 +2,14 @@ import { EngineMap } from './imports'
 import { parse } from './config/resolver'
 import { Touches, isTouch, toReactHandlerProp } from './utils/events'
 import { EventStore } from './EventStore'
+import { TimeoutStore } from './TimeoutStore'
 import { chain } from './utils/fn'
 
 export function Controller(handlers) {
   this._gestures = new Set()
   this._targetEventStore = new EventStore(this)
   this._gestureEventStores = {}
+  this._gestureTimeoutStores = {}
   this._handlers = {}
   this._config = {}
   this._pointerIds = new Set()
@@ -20,6 +22,7 @@ export function Controller(handlers) {
 Controller.prototype.setupGesture = function (gestureKey) {
   this._gestures.add(gestureKey)
   this._gestureEventStores[gestureKey] = new EventStore(this)
+  this._gestureTimeoutStores[gestureKey] = new TimeoutStore()
 }
 
 Controller.prototype.setEventIds = function (event) {
@@ -41,8 +44,9 @@ Controller.prototype.applyConfig = function (config, gestureKey) {
 
 Controller.prototype.clean = function () {
   this._targetEventStore.clean()
-  for (const key in this._gestureEventStores) {
+  for (const key of this._gestures) {
     this._gestureEventStores[key].clean()
+    this._gestureTimeoutStores[key].clean()
   }
 }
 

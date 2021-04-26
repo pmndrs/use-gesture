@@ -5,7 +5,8 @@
     "/demo/src/sandboxes/gesture-target",
     "/demo/src/sandboxes/gesture-vanilla",
     "/demo/src/sandboxes/gesture-pinch",
-    "/demo/src/sandboxes/gesture-three"
+    "/demo/src/sandboxes/gesture-three",
+    "/demo/src/sandboxes/card-zoom"
   ],
   "node": "14"
 }

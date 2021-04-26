@@ -23,6 +23,7 @@ PinchEngine.prototype.reset = function () {
   state._touchIds = []
   state.canceled = false
   state.cancel = this.cancel.bind(this)
+  state.turns = 0
 }
 
 PinchEngine.prototype.computeOffset = function () {
@@ -48,4 +49,5 @@ PinchEngine.prototype.bind = function (bindFunction) {
   bindFunction(device, 'start', this.touchStart.bind(this))
   bindFunction(device, 'change', this.touchMove.bind(this))
   bindFunction(device, 'end', this.touchEnd.bind(this))
+  bindFunction('wheel', '', this.wheel.bind(this))
 }

@@ -23,6 +23,9 @@ Engine.prototype = {
   get eventStore() {
     return this.ctrl._gestureEventStores[this.key]
   },
+  get timeoutStore() {
+    return this.ctrl._gestureTimeoutStores[this.key]
+  },
   get config() {
     return this.ctrl._config[this.key]
   },

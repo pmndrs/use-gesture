@@ -24,7 +24,6 @@ PinchEngine.prototype.touchStart = function (event) {
   state.origin = payload.origin
   state.values = [payload.distance, payload.angle]
   state.initial = state.values
-  state.turns = 0
 
   this.compute(event)
   this.emit()
