@@ -20,3 +20,7 @@ export function chain(...fns) {
     return result
   }
 }
+
+export function assignDefault(value, fallback) {
+  return Object.assign({}, fallback, value || {})
+}

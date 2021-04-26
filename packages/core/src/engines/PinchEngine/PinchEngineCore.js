@@ -27,8 +27,13 @@ PinchEngine.prototype.reset = function () {
 }
 
 PinchEngine.prototype.computeOffset = function () {
-  const state = this.state
-  state.offset = [(1 + state.movement[0]) * state.lastOffset[0], state.movement[1] + state.lastOffset[1]]
+  const { movement, lastOffset } = this.state
+  this.state.offset = [(1 + movement[0]) * lastOffset[0], movement[1] + lastOffset[1]]
+}
+
+PinchEngine.prototype.computeMovement = function () {
+  const { offset, lastOffset } = this.state
+  this.state.movement = [offset[0] / lastOffset[0] - 1, offset[1] - lastOffset[1]]
 }
 
 PinchEngine.prototype.cancel = function () {

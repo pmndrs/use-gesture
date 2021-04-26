@@ -33,6 +33,7 @@ export default function App() {
     {
       target: ref,
       eventOptions: { passive: false },
+      scaleBounds: { min: 0.5, max: 2 },
     }
   )
 

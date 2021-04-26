@@ -126,6 +126,7 @@ Engine.prototype.compute = function (event) {
 
   const rubberband = state._active ? this.config.rubberband : [0, 0]
   state.offset = computeRubberband(state._bounds, state.offset, rubberband)
+  this.computeMovement()
 }
 
 Engine.prototype.emit = function () {

@@ -17,6 +17,11 @@ CoordinatesEngine.prototype.computeOffset = function () {
   state.offset = V.add(state.lastOffset, state.movement)
 }
 
+CoordinatesEngine.prototype.computeMovement = function () {
+  const { offset, lastOffset } = this.state
+  this.state.movement = V.sub(offset, lastOffset)
+}
+
 CoordinatesEngine.prototype.intent = function (v) {
   const state = this.state
 
