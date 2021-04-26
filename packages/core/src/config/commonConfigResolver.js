@@ -7,8 +7,9 @@ export const commonConfigResolver = {
   threshold(value = 0) {
     return V.toVector(value)
   },
-  from(value = 0) {
+  from(value) {
     if (typeof value === 'function') return value
-    return V.toVector(value)
+    // eslint-disable-next-line eqeqeq
+    if (value != null) return V.toVector(value)
   }
 }

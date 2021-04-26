@@ -69,8 +69,8 @@ Engine.prototype.start = function (event) {
     this.reset()
     state.event = event
     state._active = true
-    state._from = call(this.config.from, state)
-    state.lastOffset = state.offset = state._from
+    state.lastOffset = this.config.from ? call(this.config.from, state) : state.offset
+    state.offset = state.lastOffset
     state.timeStamp = event.timeStamp
     if (this.setup) this.setup(event)
   }
