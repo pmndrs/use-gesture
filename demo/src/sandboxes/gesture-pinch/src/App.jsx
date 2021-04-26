@@ -6,7 +6,6 @@ import { useControls } from 'leva'
 import styles from './styles.module.css'
 
 export default function App() {
-  const ref = React.useRef()
   const [style, api] = useSpring(() => ({ scale: 1, rotate: 0 }))
   const options = useControls({
     gesture: { options: ['offset', 'movement'] }
