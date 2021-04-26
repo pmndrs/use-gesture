@@ -25,7 +25,6 @@ export default function App() {
         memo = [style.x.get(), style.y.get(), tx, ty]
       }
 
-      console.log({ ms })
       const x = memo[0] - ms * memo[2]
       const y = memo[1] - ms * memo[3]
       api.start({ scale: s, rotateZ: a, x, y })
