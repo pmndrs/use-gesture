@@ -1,5 +1,5 @@
 {
-  "name": "gesture-cards-zoom",
+  "name": "gesture-card-zoom",
   "version": "1.0.0",
   "main": "src/index.tsx",
   "dependencies": {
