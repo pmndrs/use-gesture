@@ -86,3 +86,12 @@ export const Wheel = {
     return [deltaX, deltaY]
   }
 }
+
+export const Scroll = {
+  values(event) {
+    // If the currentTarget is the window then we return the scrollX/Y position.
+    // If not (ie the currentTarget is a DOM element), then we return scrollLeft/Top
+    const { scrollX, scrollY, scrollLeft, scrollTop } = event.currentTarget
+    return [scrollX ?? scrollLeft ?? 0, scrollY ?? scrollTop ?? 0]
+  }
+}

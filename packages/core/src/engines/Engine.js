@@ -7,7 +7,10 @@ export function Engine(ctrl, args, key) {
   this.args = args
 
   if (!this.state) {
-    this.state = {}
+    this.state = {
+      values: [0, 0],
+      initial: [0, 0]
+    }
     this.reset()
     if (this.init) this.init()
   }
@@ -60,8 +63,9 @@ Engine.prototype.start = function (event) {
   const state = this.state
   if (!state._active) {
     this.reset()
-    state.target = event.currentTarget
     state._active = true
+    state.target = event.currentTarget
+    state.initial = state.values
     state.lastOffset = this.config.from ? call(this.config.from, state) : state.offset
     state.offset = state.lastOffset
   }

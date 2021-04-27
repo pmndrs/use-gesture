@@ -7,6 +7,7 @@
 - `config.domTarget` is renamed `config.target`
 - `config.initial` is renamed `config.from`
 - `config.from` accounts for `offset` and not for `movement` as it was the case for `config.initial`
+- `config.bounds` accounts for `offset`
 - `velocity` is now a Vector with absolute (use `direction` if you need relative velocity)
 
 ## Features
@@ -16,6 +17,7 @@
 ### Drag
 
 - shows warning when `touch-action` is not properly set in development mode
+- `bounds` accepts an `HTMLElement` or a React ref
 
 ```js
 useDrag(handler, {
@@ -25,6 +27,15 @@ useDrag(handler, {
     lock: true, // will perform a pointer lock when drag starts, and exit pointer lock when drag ends,
   },
   axis: undefined | 'x' | 'y' | 'lock',
-  r3f: true // will set up the hook to perform the best it can with @react-three/fiber  
+  r3f: true, // will set up the hook to perform the best it can with @react-three/fiber,
+  swipe: {
+    distance: 50,
+    velocity: 0.5,
+    duration: 250
+  }
 })
 ```
+
+### Pinch
+
+- `distanceBounds` is now `scaleBounds`

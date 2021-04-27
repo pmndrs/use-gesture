@@ -8,11 +8,13 @@ import Target from './sandboxes/gesture-target/src/App'
 import Vanilla from './sandboxes/gesture-vanilla/src/App'
 import Pinch from './sandboxes/gesture-pinch/src/App'
 import Three from './sandboxes/gesture-three/src/App'
+import Scroll from './sandboxes/gesture-scroll/src/App'
 import Slide from './sandboxes/slide/src/App'
 import DraggableList from './sandboxes/draggable-list/src/App'
 import CardsStack from './sandboxes/cards-stack/src/App'
 import Viewpager from './sandboxes/viewpager/src/App'
 import CardZoom from './sandboxes/card-zoom/src/App'
+import InfiniteSlideshow from './sandboxes/infinite-slideshow/src/App'
 
 const links = {
   'gesture-drag': Drag,
@@ -20,11 +22,13 @@ const links = {
   'gesture-vanilla': Vanilla,
   'gesture-pinch': Pinch,
   'gesture-three': Three,
+  'gesture-scroll': Scroll,
   slide: Slide,
   'draggable-list': DraggableList,
   'cards-stack': CardsStack,
   viewpager: Viewpager,
-  'card-zoom': CardZoom
+  'card-zoom': CardZoom,
+  'infinite-slideshow': InfiniteSlideshow
 }
 
 const Example = ({ link }) => {

@@ -62,9 +62,10 @@ DragEngine.prototype.pointerDown = function (event) {
 }
 
 DragEngine.prototype.pointerMove = function (event) {
-  if (!this.state._pointerActive) return
+  const state = this.state
+  if (!state._pointerActive) return
   const id = Pointer.id(event)
-  if (this.state._pointerId && id !== this.state._pointerId) return
+  if (state._pointerId && id !== state._pointerId) return
 
   const values = Pointer.values(event)
   let delta
@@ -72,11 +73,11 @@ DragEngine.prototype.pointerMove = function (event) {
   if (document.pointerLockElement === event.target) {
     delta = [event.movementX, event.movementY]
   } else {
-    delta = V.sub(values, this.state.values)
-    this.state.values = values
+    delta = V.sub(values, state.values)
+    state.values = values
   }
 
-  V.addTo(this.state._movement, delta)
+  V.addTo(state._movement, delta)
   this.compute(event)
   this.emit()
 }
