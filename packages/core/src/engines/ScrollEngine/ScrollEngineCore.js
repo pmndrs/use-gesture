@@ -21,6 +21,7 @@ ScrollEngine.prototype.scroll = function (event) {
 
 ScrollEngine.prototype.scrollStart = function (event) {
   this.start(event)
+  this.state.values = Scroll.values(event)
   this.scrollChange(event)
 }
 
