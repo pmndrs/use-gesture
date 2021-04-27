@@ -11,6 +11,7 @@ export function Controller(handlers) {
   this._gestureEventStores = {}
   this._gestureTimeoutStores = {}
   this._handlers = {}
+  this._nativeHandlers = {}
   this._config = {}
   this._pointerIds = new Set()
   this._touchIds = new Set()
@@ -34,8 +35,9 @@ Controller.prototype.setEventIds = function (event) {
   }
 }
 
-Controller.prototype.applyHandlers = function (handlers) {
+Controller.prototype.applyHandlers = function (handlers, nativeHandlers) {
   this._handlers = handlers
+  this._nativeHandlers = nativeHandlers
 }
 
 Controller.prototype.applyConfig = function (config, gestureKey) {
@@ -65,6 +67,12 @@ Controller.prototype.bind = function (...args) {
     : bindToProps(props, eventOptions)
 
   if (sharedConfig.enabled) {
+    // Adding native handlers
+    for (const eventKey in this._nativeHandlers) {
+      bindFunction(eventKey, '', (event) => this._nativeHandlers[eventKey]({ ...this.state.shared, event, args }))
+    }
+
+    // Adding gesture handlers
     for (const gestureKey of this._gestures) {
       if (this._config[gestureKey].enabled) {
         const Engine = EngineMap.get(gestureKey)

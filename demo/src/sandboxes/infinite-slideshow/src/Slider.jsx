@@ -1,9 +1,9 @@
 import React, { useRef, useCallback } from 'react'
-import { useWheel } from '@use-gesture/react'
+import { useGesture } from '@use-gesture/react'
 import { useSprings, a } from '@react-spring/web'
 
 const styles = {
-  container: { position: 'relative', height: '100%', width: '100%' },
+  container: { position: 'relative', height: '100%', width: '100%', touchAction: 'none' },
   item: { position: 'absolute', height: '100%', willChange: 'transform' },
 }
 
@@ -48,13 +48,21 @@ export function Slider({ items, width = 600, visible = 4, style, children }) {
   //   onDrag: ({ offset: [x], vxvy: [vx] }) => vx && ((dragOffset.current = -x), runSprings(wheelOffset.current + -x, -vx)),
   //   onWheel: ({ offset: [, y], vxvy: [, vy] }) => vy && ((wheelOffset.current = y), runSprings(dragOffset.current + y, vy))
   // })
-  useWheel(
-    ({ event, offset: [, y], direction: [, dy] }) => {
-      event.preventDefault()
-      if (dy) {
-        wheelOffset.current = y
-        runSprings(dragOffset.current + y, dy)
-      }
+  useGesture(
+    {
+      onDrag: ({ offset: [x], direction: [dx] }) => {
+        if (dx) {
+          dragOffset.current = -x
+          runSprings(wheelOffset.current + -x, -dx)
+        }
+      },
+      onWheel: ({ event, offset: [, y], direction: [, dy] }) => {
+        event.preventDefault()
+        if (dy) {
+          wheelOffset.current = y
+          runSprings(dragOffset.current + y, dy)
+        }
+      },
     },
     { target, eventOptions: { passive: false } }
   )

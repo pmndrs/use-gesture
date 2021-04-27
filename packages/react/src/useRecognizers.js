@@ -2,9 +2,9 @@
 import React from 'react'
 import { Controller } from '@use-gesture/core'
 
-export function useRecognizers(handlers, config, gestureKey) {
+export function useRecognizers(handlers, config, gestureKey, nativeHandlers) {
   const ctrl = React.useMemo(() => new Controller(handlers), [])
-  ctrl.applyHandlers(handlers)
+  ctrl.applyHandlers(handlers, nativeHandlers)
   ctrl.applyConfig(config, gestureKey)
 
   React.useEffect(ctrl.effect.bind(ctrl))
