@@ -10,6 +10,7 @@
 - `config.bounds` accounts for `offset`
 - `velocity` is now a Vector with absolute (use `direction` if you need relative velocity)
 
+
 ## Features
 
 ### General
@@ -18,6 +19,7 @@
 
 - shows warning when `touch-action` is not properly set in development mode
 - `bounds` accepts an `HTMLElement` or a React ref
+- `config.experimental_preventWindowScrollY` is now `config.preventScroll`
 
 ```js
 useDrag(handler, {
