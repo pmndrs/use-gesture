@@ -110,7 +110,8 @@ DragEngine.prototype.pointerMove = function (event) {
         return
       } else {
         state._active = false
-        state._blocked = true
+        this.clean()
+        return
       }
     } else {
       return
