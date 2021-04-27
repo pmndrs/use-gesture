@@ -50,7 +50,7 @@ Engine.prototype.reset = function () {
   state._intentional = false
   state._movement = [0, 0]
   state._threshold = this.config.threshold
-  state.memo = state.axis = undefined
+  state.memo = undefined
   state.direction = [0, 0]
   state.distance = [0, 0]
   state.velocity = [0, 0]
@@ -153,6 +153,7 @@ Engine.prototype.emit = function () {
 
 Engine.prototype.clean = function () {
   this.eventStore.clean()
+  this.timeoutStore.clean()
 }
 
 function computeRubberband(bounds, [Vx, Vy], [Rx, Ry]) {

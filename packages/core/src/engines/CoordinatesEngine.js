@@ -7,6 +7,11 @@ export function CoordinatesEngine(...args) {
 
 CoordinatesEngine.prototype = Object.create(Engine.prototype)
 
+CoordinatesEngine.prototype.reset = function () {
+  Engine.prototype.reset.call(this)
+  this.state.axis = undefined
+}
+
 CoordinatesEngine.prototype.init = function () {
   this.state.offset = [0, 0]
   this.state.lastOffset = [0, 0]

@@ -25,6 +25,9 @@ export const dragConfigResolver = {
     if (SUPPORT.touch) return 'touch'
     return 'mouse'
   },
+  preventScroll(value = false) {
+    return value && SUPPORT.touch
+  },
   pointerCapture(_v, _k, { pointer: { capture = true } = {} }) {
     return !this.pointerLock && this.device === 'pointer' && capture
   },

@@ -8,6 +8,7 @@ import Target from './sandboxes/gesture-target/src/App'
 import Vanilla from './sandboxes/gesture-vanilla/src/App'
 import Pinch from './sandboxes/gesture-pinch/src/App'
 import Three from './sandboxes/gesture-three/src/App'
+import ThreePreventScroll from './sandboxes/gesture-three-prevent-scroll/src/App'
 import Scroll from './sandboxes/gesture-scroll/src/App'
 import Slide from './sandboxes/slide/src/App'
 import DraggableList from './sandboxes/draggable-list/src/App'
@@ -22,6 +23,7 @@ const links = {
   'gesture-vanilla': Vanilla,
   'gesture-pinch': Pinch,
   'gesture-three': Three,
+  'gesture-three-prevent-scroll': ThreePreventScroll,
   'gesture-scroll': Scroll,
   slide: Slide,
   'draggable-list': DraggableList,

@@ -19,6 +19,7 @@ DragEngine.prototype.reset = function () {
   state._pointerId = undefined
   state._pointerActive = false
   state._keyboardActive = false
+  state._preventScroll = false
   state.swipe = [0, 0]
   state.tap = false
   state.canceled = false

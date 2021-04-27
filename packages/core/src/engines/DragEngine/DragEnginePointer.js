@@ -31,6 +31,14 @@ DragEngine.prototype.setupPointer = function (event) {
       target.setPointerCapture(event.pointerId)
     }
     if (!this.config.r3f) {
+      if (process.env.NODE_ENV === 'development') {
+        if (event.uv) {
+          // eslint-disable-next-line no-console
+          console.warn(
+            `[@use-gesture]: You're probably using \`use-gesture\` on with \`@react-three/fiber\` without setting the drag config option \`r3f: true\`. The gesture will now fail.`
+          )
+        }
+      }
       if (document.pointerLockElement === target) device = 'mouse'
       this.eventStore.add(target, device, 'change', this.pointerMove.bind(this))
       this.eventStore.add(target, device, 'end', this.pointerUp.bind(this))
@@ -46,16 +54,30 @@ DragEngine.prototype.setupPointer = function (event) {
 DragEngine.prototype.pointerDown = function (event) {
   this.ctrl.setEventIds(event)
 
-  if (this.state._pointerActive) return
+  const state = this.state
+
+  if (state._pointerActive) return
 
   this.start(event)
   this.setupPointer(event)
 
-  this.state.values = Pointer.values(event)
-  this.state.initial = this.state.values
+  state._pointerId = Pointer.id(event)
+  state._pointerActive = true
 
-  this.state._pointerId = Pointer.id(event)
-  this.state._pointerActive = true
+  state.values = Pointer.values(event)
+  state.initial = state.values
+
+  if (this.config.preventScroll) {
+    this.detectWindowScroll(event)
+  } else {
+    this.startPointerDrag(event)
+  }
+}
+
+DragEngine.prototype.startPointerDrag = function (event) {
+  const state = this.state
+  state._active = true
+  state._preventScroll = true
 
   this.compute(event)
   this.emit()
@@ -79,6 +101,21 @@ DragEngine.prototype.pointerMove = function (event) {
 
   V.addTo(state._movement, delta)
   this.compute(event)
+
+  if (this.config.preventScroll && !state._preventScroll) {
+    if (state.axis) {
+      if (state.axis === 'x') {
+        this.timeoutStore.remove('startPointerDrag')
+        this.startPointerDrag(event)
+        return
+      } else {
+        state._active = false
+      }
+    } else {
+      return
+    }
+  }
+
   this.emit()
 }
 
@@ -130,4 +167,23 @@ DragEngine.prototype.pointerClean = function () {
 
 DragEngine.prototype.click = function (event) {
   if (!this.state.tap) event.stopPropagation()
+}
+
+DragEngine.prototype.preventScroll = function (event) {
+  if (this.state._preventScroll && event.cancelable) {
+    event.preventDefault()
+  }
+}
+
+DragEngine.prototype.detectWindowScroll = function (event) {
+  persistEvent(event)
+  // we add window listeners that will prevent the scroll when the user has started dragging
+  this.eventStore.add(this.shared.window, 'touch', 'change', this.preventScroll.bind(this), { passive: false })
+  this.eventStore.add(this.shared.window, 'touch', 'end', this.clean.bind(this), { passive: false })
+  this.eventStore.add(this.shared.window, 'touch', 'cancel', this.clean.bind(this), { passive: false })
+  this.timeoutStore.add('startPointerDrag', this.startPointerDrag.bind(this), 250, event)
+}
+
+function persistEvent(event) {
+  'persist' in event && typeof event.persist === 'function' && event.persist()
 }
