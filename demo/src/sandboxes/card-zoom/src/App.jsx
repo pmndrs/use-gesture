@@ -1,6 +1,6 @@
 import React from 'react'
 import { useSpring, animated } from '@react-spring/web'
-import { usePinch } from '@use-gesture/react'
+import { useGesture } from '@use-gesture/react'
 
 import styles from './styles.module.css'
 
@@ -16,24 +16,31 @@ export default function App() {
   }))
   const ref = React.useRef(null)
 
-  usePinch(
-    ({ origin: [ox, oy], first, movement: [ms], offset: [s, a], memo }) => {
-      if (first) {
-        const { width, height, x, y } = ref.current.getBoundingClientRect()
-        const tx = ox - (x + width / 2)
-        const ty = oy - (y + height / 2)
-        memo = [style.x.get(), style.y.get(), tx, ty]
-      }
+  useGesture(
+    {
+      onDrag: ({ pinching, cancel, offset: [x, y] }) => {
+        if (pinching) return cancel()
+        api.start({ x, y })
+      },
+      onPinch: ({ origin: [ox, oy], first, movement: [ms], offset: [s, a], memo }) => {
+        if (first) {
+          const { width, height, x, y } = ref.current.getBoundingClientRect()
+          const tx = ox - (x + width / 2)
+          const ty = oy - (y + height / 2)
+          memo = [style.x.get(), style.y.get(), tx, ty]
+        }
 
-      const x = memo[0] - ms * memo[2]
-      const y = memo[1] - ms * memo[3]
-      api.start({ scale: s, rotateZ: a, x, y })
-      return memo
+        const x = memo[0] - ms * memo[2]
+        const y = memo[1] - ms * memo[3]
+        api.start({ scale: s, rotateZ: a, x, y })
+        return memo
+      },
     },
     {
       target: ref,
       eventOptions: { passive: false },
-      scaleBounds: { min: 0.5, max: 2 },
+      drag: { from: () => [style.x.get(), style.y.get()] },
+      pinch: { scaleBounds: { min: 0.5, max: 2 } },
     }
   )
 
