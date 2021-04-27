@@ -44,10 +44,7 @@ export function Slider({ items, width = 600, visible = 4, style, children }) {
 
   const wheelOffset = useRef(0)
   const dragOffset = useRef(0)
-  // const bind = useGesture({
-  //   onDrag: ({ offset: [x], vxvy: [vx] }) => vx && ((dragOffset.current = -x), runSprings(wheelOffset.current + -x, -vx)),
-  //   onWheel: ({ offset: [, y], vxvy: [, vy] }) => vy && ((wheelOffset.current = y), runSprings(dragOffset.current + y, vy))
-  // })
+
   useGesture(
     {
       onDrag: ({ offset: [x], direction: [dx] }) => {
