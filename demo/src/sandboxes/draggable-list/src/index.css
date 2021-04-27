@@ -6,7 +6,7 @@ body,
 }
 
 body {
-  font-family: system-ui;
+  font-family: system-ui, sans-serif;
   margin: 0;
 }
 
