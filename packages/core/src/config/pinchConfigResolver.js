@@ -11,7 +11,7 @@ export const pinchConfigResolver = {
     if (sharedConfig.target && !SUPPORT.touch && SUPPORT.gesture) return 'gesture'
     if (SUPPORT.touch) return 'touch'
   },
-  bounds(_value, _key, { scaleBounds = {}, angleBounds = {}, ...rest }) {
+  bounds(_value, _key, { scaleBounds = {}, angleBounds = {} }) {
     const _scaleBounds = (state) => {
       const D = assignDefault(call(scaleBounds, state), { min: -Infinity, max: Infinity })
       return [D.min, D.max]
