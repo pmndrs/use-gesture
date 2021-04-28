@@ -1,4 +1,4 @@
-import './PinchEngineTouches'
+import './PinchEngineTouch'
 import './PinchEngineWheel'
 import './PinchEngineGesture'
 
