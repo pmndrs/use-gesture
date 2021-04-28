@@ -123,14 +123,15 @@ DragEngine.prototype.pointerClick = function (event) {
 }
 
 DragEngine.prototype.setupPointer = function (event) {
-  let device = this.config.device
+  const config = this.config
+  let device = config.device
 
   const target = event.target
 
   if (process.env.NODE_ENV === 'development') {
     try {
       if (device === 'pointer') {
-        const currentTarget = this.config.r3f ? event.sourceEvent.currentTarget : event.currentTarget
+        const currentTarget = config.r3f ? event.sourceEvent.currentTarget : event.currentTarget
         const style = window.getComputedStyle(currentTarget)
         if (style.touchAction === 'auto') {
           // eslint-disable-next-line no-console
@@ -143,14 +144,14 @@ DragEngine.prototype.setupPointer = function (event) {
     } catch {}
   }
 
-  if (this.config.pointerLock) {
+  if (config.pointerLock) {
     event.currentTarget.requestPointerLock()
   }
-  if (device === 'touch' || this.config.pointerCapture) {
-    if (this.config.pointerCapture) {
+  if (device === 'touch' || config.pointerCapture) {
+    if (config.pointerCapture) {
       target.setPointerCapture(event.pointerId)
     }
-    if (!this.config.r3f) {
+    if (!config.r3f) {
       if (process.env.NODE_ENV === 'development') {
         if (event.uv) {
           // eslint-disable-next-line no-console
@@ -164,7 +165,7 @@ DragEngine.prototype.setupPointer = function (event) {
       this.eventStore.add(target, device, 'end', this.pointerUp.bind(this))
     }
   } else {
-    if (!this.config.r3f) {
+    if (!config.r3f) {
       this.eventStore.add(this.shared.window, device, 'change', this.pointerMove.bind(this))
       this.eventStore.add(this.shared.window, device, 'end', this.pointerUp.bind(this))
     }
