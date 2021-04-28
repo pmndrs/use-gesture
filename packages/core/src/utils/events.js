@@ -38,21 +38,25 @@ function getValueEvent(event) {
   return isTouch(event) ? getTouchesList(event)[0] : event
 }
 
+export function distanceAngle(P1, P2) {
+  const dx = P2.clientX - P1.clientX
+  const dy = P2.clientY - P1.clientY
+  const cx = (P2.clientX + P1.clientX) / 2
+  const cy = (P2.clientY + P1.clientY) / 2
+
+  const distance = Math.hypot(dx, dy)
+  const angle = -(Math.atan2(dx, dy) * 180) / Math.PI
+  const origin = [cx, cy]
+  return { angle, distance, origin }
+}
+
 export const Touches = {
   ids(event) {
     return getTouchesList(event, true).map((touch) => touch.identifier)
   },
   distanceAngle(event, ids) {
     const [P1, P2] = Array.from(event.touches).filter((touch) => ids.includes(touch.identifier))
-    const dx = P2.clientX - P1.clientX
-    const dy = P2.clientY - P1.clientY
-    const cx = (P2.clientX + P1.clientX) / 2
-    const cy = (P2.clientY + P1.clientY) / 2
-
-    const distance = Math.hypot(dx, dy)
-    const angle = -(Math.atan2(dx, dy) * 180) / Math.PI
-    const origin = [cx, cy]
-    return { angle, distance, origin }
+    return distanceAngle(P1, P2)
   }
 }
 

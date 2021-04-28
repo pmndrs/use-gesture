@@ -147,16 +147,17 @@ DragEngine.prototype.setupPointer = function (event) {
   if (config.pointerLock) {
     event.currentTarget.requestPointerLock()
   }
+  if (config.pointerCapture) {
+    target.setPointerCapture(event.pointerId)
+  }
+
   if (device === 'touch' || config.pointerCapture) {
-    if (config.pointerCapture) {
-      target.setPointerCapture(event.pointerId)
-    }
     if (!config.r3f) {
       if (process.env.NODE_ENV === 'development') {
         if (event.uv) {
           // eslint-disable-next-line no-console
           console.warn(
-            `[@use-gesture]: You're probably using \`use-gesture\` on with \`@react-three/fiber\` without setting the drag config option \`r3f: true\`. The gesture will now fail.`
+            `[@use-gesture]: You're probably using \`use-gesture\` on with \`@react-three/fiber\` without setting the drag config option \`r3f: true\`. The gesture will now probably fail.`
           )
         }
       }

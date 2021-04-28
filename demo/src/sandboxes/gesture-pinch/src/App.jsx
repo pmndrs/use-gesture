@@ -8,20 +8,21 @@ import styles from './styles.module.css'
 export default function App() {
   const target = React.useRef()
   const [style, api] = useSpring(() => ({ scale: 1, rotate: 0 }))
-  const options = useControls({
-    gesture: { options: ['offset', 'movement'] }
+  const { gesture, touch } = useControls({
+    gesture: { options: ['offset', 'movement'] },
+    touch: false
   })
 
   usePinch(
     ({ active, ...state }) => {
-      let [scale, angle] = state[options.gesture]
+      let [scale, angle] = state[gesture]
 
       api.start({
-        rotate: active || options.gesture === 'offset' ? angle : 0,
-        scale: active || options.gesture === 'offset' ? scale : 1
+        rotate: active || gesture === 'offset' ? angle : 0,
+        scale: active || gesture === 'offset' ? scale : 1
       })
     },
-    { target, eventOptions: { passive: false } }
+    { target, eventOptions: { passive: false }, pointer: { touch } }
   )
 
   return (

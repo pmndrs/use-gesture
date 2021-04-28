@@ -14,6 +14,7 @@ PinchEngine.prototype = Object.create(Engine.prototype)
 PinchEngine.prototype.init = function () {
   this.state.offset = [1, 0]
   this.state.lastOffset = [1, 0]
+  this.state._pointerEvents = new Map()
 }
 
 // superseeds generic Engine reset call
@@ -50,7 +51,6 @@ PinchEngine.prototype.cancel = function () {
 
 PinchEngine.prototype.bind = function (bindFunction) {
   const device = this.config.device
-
   if (!!device) {
     bindFunction(device, 'start', this[device + 'Start'].bind(this))
     bindFunction(device, 'change', this[device + 'Move'].bind(this))

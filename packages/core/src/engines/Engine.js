@@ -12,8 +12,8 @@ export function Engine(ctrl, args, key) {
       values: [0, 0],
       initial: [0, 0]
     }
-    this.reset()
     if (this.init) this.init()
+    this.reset()
   }
 }
 
