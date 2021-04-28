@@ -52,6 +52,7 @@ export function parseMergedHandlers(mergedHandlers, mergedConfig) {
   registerGesture(actions, handlers, 'onScroll', 'scroll', internalHandlers, mergedConfig)
   registerGesture(actions, handlers, 'onPinch', 'pinch', internalHandlers, mergedConfig)
   registerGesture(actions, handlers, 'onMove', 'move', internalHandlers, mergedConfig)
+  registerGesture(actions, handlers, 'onHover', 'hover', internalHandlers, mergedConfig)
 
   return { handlers: internalHandlers, config: mergedConfig, nativeHandlers }
 }

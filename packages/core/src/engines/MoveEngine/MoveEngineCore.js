@@ -36,13 +36,14 @@ MoveEngine.prototype.moveChange = function (event) {
   this.emit()
 }
 
-MoveEngine.prototype.moveEnd = function () {
+MoveEngine.prototype.moveEnd = function (event) {
   if (!this.state._active) return
   this.state._active = false
-  this.compute()
+  this.compute(event)
   this.emit()
 }
 
 MoveEngine.prototype.bind = function (bindFunction) {
   bindFunction('pointer', 'change', this.move.bind(this))
+  bindFunction('pointer', 'leave', this.moveEnd.bind(this))
 }

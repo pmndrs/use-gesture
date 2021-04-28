@@ -18,7 +18,7 @@ export function toReactHandlerProp(device, action = '', capture) {
 
 export function toDomEventType(device, action = '') {
   const deviceKey = EVENT_TYPE_MAP[device]
-  const actionKey = deviceKey ? deviceKey[action] : action
+  const actionKey = deviceKey ? deviceKey[action] || action : action
   return device + actionKey
 }
 

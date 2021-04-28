@@ -24,7 +24,7 @@ DragEngine.prototype.setupPointer = function (event) {
   }
 
   if (this.config.pointerLock) {
-    target.requestPointerLock()
+    event.currentTarget.requestPointerLock()
   }
   if (device === 'touch' || this.config.pointerCapture) {
     if (this.config.pointerCapture) {

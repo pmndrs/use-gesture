@@ -49,7 +49,9 @@ Engine.prototype.reset = function () {
   state._step = [false, false]
   state._intentional = false
   state._movement = [0, 0]
-  state._threshold = this.config.threshold
+  state._threshold = this.config.threshold || [0, 0]
+  // prettier-ignore
+  state._bounds = [[-Infinity, Infinity], [-Infinity, Infinity]]
   state.memo = undefined
   state.direction = [0, 0]
   state.distance = [0, 0]
@@ -61,18 +63,20 @@ Engine.prototype.reset = function () {
 
 Engine.prototype.start = function (event) {
   const state = this.state
+  const config = this.config
   if (!state._active) {
     this.reset()
     state._active = true
     state.target = event.currentTarget
     state.initial = state.values
-    state.lastOffset = this.config.from ? call(this.config.from, state) : state.offset
+    state.lastOffset = config.from ? call(config.from, state) : state.offset
     state.offset = state.lastOffset
   }
 }
 
 Engine.prototype.compute = function (event) {
   const state = this.state
+  const config = this.config
   const shared = this.shared
 
   const [_m0, _m1] = state._movement
@@ -106,29 +110,30 @@ Engine.prototype.compute = function (event) {
       state.timeStamp = event.timeStamp
 
       if (state.first) {
-        state._bounds = call(this.config.bounds, state)
+        if (config.bounds) state._bounds = call(config.bounds, state)
         state.startTime = state.timeStamp
         if (this.setup) this.setup()
       }
 
       state.elapsedTime = state.timeStamp - state.startTime
 
+      const previousMovement = state.movement
+      state.movement = movement
+
+      const absoluteDelta = state.delta.map(Math.abs)
+
+      V.addTo(state.distance, absoluteDelta)
+      this.computeOffset()
+
       if (!state.first && !state.last && dt > 0) {
-        state.delta = V.sub(movement, state.movement)
-        state.movement = movement
-
-        const absoluteDelta = state.delta.map(Math.abs)
-
-        V.addTo(state.distance, absoluteDelta)
-        this.computeOffset()
-
+        state.delta = V.sub(movement, previousMovement)
         state.direction = state.delta.map(Math.sign)
         state.velocity = [absoluteDelta[0] / dt, absoluteDelta[1] / dt]
       }
     }
   }
 
-  const rubberband = state._active ? this.config.rubberband : [0, 0]
+  const rubberband = state._active ? config.rubberband || [0, 0] : [0, 0]
   state.offset = computeRubberband(state._bounds, state.offset, rubberband)
   this.computeMovement()
 }
