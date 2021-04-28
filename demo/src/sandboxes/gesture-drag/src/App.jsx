@@ -20,7 +20,8 @@ function Draggable() {
     axis: { options: [undefined, 'x', 'y', 'lock'] },
     filterTaps: false,
     boundToParent: false,
-    rubberband: false
+    rubberband: false,
+    delay: { value: 1000, step: 100, min: 0, max: 3000, optional: true, disabled: true }
   })
 
   const pointerOptions = useControls('pointer', { touch: false, capture: true, lock: false })

@@ -20,6 +20,7 @@ DragEngine.prototype.reset = function () {
   state._pointerActive = false
   state._keyboardActive = false
   state._preventScroll = false
+  state._delayed = false
   state.swipe = [0, 0]
   state.tap = false
   state.canceled = false
@@ -78,6 +79,6 @@ DragEngine.prototype.bind = function (bindFunction) {
     bindFunction(device, 'end', this.pointerUp.bind(this))
   }
   if (this.config.filterTaps) {
-    bindFunction('click', '', this.click.bind(this), { capture: true })
+    bindFunction('click', '', this.pointerClick.bind(this), { capture: true })
   }
 }

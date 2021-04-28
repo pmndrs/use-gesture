@@ -3,6 +3,7 @@ import { commonConfigResolver } from './commonConfigResolver'
 import { coordinatesConfigResolver } from './coordinatesConfigResolver'
 import { SUPPORT } from './support'
 
+export const DEFAULT_DRAG_DELAY = 180
 export const DEFAULT_SWIPE_VELOCITY = 0.5
 export const DEFAULT_SWIPE_DISTANCE = 50
 export const DEFAULT_SWIPE_DURATION = 250
@@ -45,6 +46,16 @@ export const dragConfigResolver = {
       velocity: V.toVector(velocity),
       distance: V.toVector(distance),
       duration
+    }
+  },
+  delay(value = 0) {
+    switch (value) {
+      case true:
+        return DEFAULT_DRAG_DELAY
+      case false:
+        return 0
+      default:
+        return value
     }
   }
 }
