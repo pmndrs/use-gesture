@@ -29,6 +29,7 @@ HoverEngine.prototype.pointerLeave = function (event) {
   this.state.values = values
 
   this.compute(event)
+  this.state.delta = this.state.movement
   this.emit()
 }
 
