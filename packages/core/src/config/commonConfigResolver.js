@@ -6,6 +6,9 @@ export const commonConfigResolver = {
   enabled(value = true) {
     return value
   },
+  triggerAllEvents(value = false) {
+    return value
+  },
   threshold(value = 0) {
     return V.toVector(value)
   },

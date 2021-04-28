@@ -79,6 +79,8 @@ Engine.prototype.compute = function (event) {
   const config = this.config
   const shared = this.shared
 
+  if (event) state.event = event
+
   const [_m0, _m1] = state._movement
   const [_t0, _t1] = state._threshold
   let [_s0, _s1] = state._step
@@ -105,7 +107,6 @@ Engine.prototype.compute = function (event) {
     state.active = shared[this.ingKey] = state._active
 
     if (event) {
-      state.event = event
       const dt = event.timeStamp - state.timeStamp
       state.timeStamp = event.timeStamp
 
@@ -141,10 +142,11 @@ Engine.prototype.compute = function (event) {
 Engine.prototype.emit = function () {
   const state = this.state
   const shared = this.shared
+  const config = this.config
 
   if (!state._active) this.clean()
 
-  if ((state._blocked || !state._intentional) && !state._force) return
+  if ((state._blocked || !state._intentional) && !state._force && !config.triggerAllEvents) return
 
   const memo = this.handler({
     ...shared,

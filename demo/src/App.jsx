@@ -5,6 +5,7 @@ import styles from './styles.module.css'
 
 import Drag from './sandboxes/gesture-drag/src/App'
 import Target from './sandboxes/gesture-target/src/App'
+import Nested from './sandboxes/gesture-nested/src/App'
 import Vanilla from './sandboxes/gesture-vanilla/src/App'
 import Pinch from './sandboxes/gesture-pinch/src/App'
 import Three from './sandboxes/gesture-three/src/App'
@@ -21,6 +22,7 @@ import InfiniteSlideshow from './sandboxes/infinite-slideshow/src/App'
 const links = {
   'gesture-drag': Drag,
   'gesture-target': Target,
+  'gesture-nested': Nested,
   'gesture-vanilla': Vanilla,
   'gesture-pinch': Pinch,
   'gesture-three': Three,
