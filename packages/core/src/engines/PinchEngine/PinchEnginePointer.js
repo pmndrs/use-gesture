@@ -32,7 +32,7 @@ PinchEngine.prototype.pointerStart = function (event) {
 
   if (state._active) {
     // see touchStart comment
-    if (Array.from(state._pointerIds).every((id) => ctrlPointerIds.has(id))) return
+    if (Array.from(_pointerEvents.keys()).every((id) => ctrlPointerIds.has(id))) return
   }
 
   if (_pointerEvents.size < 2) {

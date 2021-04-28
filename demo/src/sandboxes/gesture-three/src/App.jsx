@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 import { Canvas, useThree } from '@react-three/fiber'
-import { useDrag } from '@use-gesture/react'
+import { useGesture } from '@use-gesture/react'
 import * as THREE from 'three'
 
 import styles from './styles.module.css'
@@ -11,12 +11,17 @@ const Mesh = () => {
   const rEuler = useMemo(() => new THREE.Euler(), [])
   const { viewport } = useThree()
 
-  const bind = useDrag(
-    ({ event, offset: [x, y] }) => {
-      rEuler.set(y / viewport.factor, x / viewport.factor, 0)
-      event.object.quaternion.setFromEuler(rEuler)
+  const bind = useGesture(
+    {
+      onDrag: ({ event, offset: [x, y] }) => {
+        rEuler.set(y / viewport.factor, x / viewport.factor, 0)
+        event.object.quaternion.setFromEuler(rEuler)
+      },
+      onPinch: ({ event, offset: [s] }) => {
+        event.object.scale.set(s, s, s)
+      }
     },
-    { r3f: true }
+    { drag: { r3f: true } }
   )
 
   return (
