@@ -95,3 +95,9 @@ export const Scroll = {
     return [scrollX ?? scrollLeft ?? 0, scrollY ?? scrollTop ?? 0]
   }
 }
+
+export function getEventDetails(event) {
+  const buttons = 'buttons' in event ? event.buttons : 0
+  const { shiftKey, altKey, metaKey, ctrlKey } = event
+  return { buttons, shiftKey, altKey, metaKey, ctrlKey }
+}

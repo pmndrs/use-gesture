@@ -1,3 +1,4 @@
+import { getEventDetails } from '../utils/events'
 import { call } from '../utils/fn'
 import { V, rubberbandIfOutOfBounds } from '../utils/maths'
 
@@ -79,7 +80,13 @@ Engine.prototype.compute = function (event) {
   const config = this.config
   const shared = this.shared
 
-  if (event) state.event = event
+  if (event) {
+    state.event = event
+    shared.touches = this.ctrl._pointerIds.size || this.ctrl._touchIds.size
+    shared.locked = !!document.pointerLockElement
+    Object.assign(shared, getEventDetails(event))
+    shared.down = shared.pressed = shared.buttons > 0 || shared.touches > 0
+  }
 
   const [_m0, _m1] = state._movement
   const [_t0, _t1] = state._threshold
