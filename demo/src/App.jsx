@@ -8,6 +8,7 @@ import Target from './sandboxes/gesture-target/src/App'
 import Nested from './sandboxes/gesture-nested/src/App'
 import Vanilla from './sandboxes/gesture-vanilla/src/App'
 import Pinch from './sandboxes/gesture-pinch/src/App'
+import PinchMultiple from './sandboxes/gesture-pinch-multiple/src/App'
 import Three from './sandboxes/gesture-three/src/App'
 import ThreePreventScroll from './sandboxes/gesture-three-prevent-scroll/src/App'
 import Scroll from './sandboxes/gesture-scroll/src/App'
@@ -25,6 +26,7 @@ const links = {
   'gesture-nested': Nested,
   'gesture-vanilla': Vanilla,
   'gesture-pinch': Pinch,
+  'gesture-pinch-multiple': PinchMultiple,
   'gesture-three': Three,
   'gesture-three-prevent-scroll': ThreePreventScroll,
   'gesture-scroll': Scroll,
