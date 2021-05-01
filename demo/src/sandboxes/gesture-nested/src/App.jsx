@@ -60,7 +60,7 @@ function Draggable() {
 
   return (
     <a.div ref={ref} {...bindOuter()} className={styles.hover} style={styleOuter}>
-      <a.div tabIndex="-1" {...bind()} className={styles.drag} style={style}>
+      <a.div tabIndex={-1} {...bind()} className={styles.drag} style={style}>
         <div onClick={toggleColor} style={{ backgroundColor: color }}>
           <span>bind</span>
           <span>

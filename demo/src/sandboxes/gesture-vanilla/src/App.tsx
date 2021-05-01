@@ -6,8 +6,8 @@ import { useControls } from 'leva'
 import styles from './styles.module.css'
 
 function Draggable() {
-  const ref = React.useRef()
-  const target = React.useRef()
+  const ref = React.useRef<HTMLDivElement>(null)
+  const target = React.useRef<HTMLDivElement>(null)
 
   const [color, setColor] = React.useState('black')
   const toggleColor = () => setColor((c) => (c === 'black' ? '#ec625c' : 'black'))
@@ -28,8 +28,9 @@ function Draggable() {
     api.set({ scale: 1, x: 0, y: 0 })
     const { boundToParent, gesture, ...rest } = options
     const dragGesture = new DragGesture(
-      target.current,
+      target.current!,
       ({ active, ...state }) => {
+        // @ts-ignore
         let [x, y] = state[gesture]
         set({ x, y })
 
@@ -46,6 +47,7 @@ function Draggable() {
           immediate: pointerOptions.lock
         })
       },
+      // @ts-ignore
       { ...rest, pointer: pointerOptions, ...(boundToParent && { bounds: ref }) }
     )
     return () => dragGesture.destroy()
@@ -53,7 +55,7 @@ function Draggable() {
 
   return (
     <>
-      <a.div ref={target} tabIndex="-1" className={styles.drag} style={style}>
+      <a.div ref={target} tabIndex={-1} className={styles.drag} style={style}>
         <div onClick={toggleColor} style={{ backgroundColor: color }}>
           <span>vanilla</span>
           <span>

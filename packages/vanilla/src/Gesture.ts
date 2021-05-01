@@ -6,7 +6,9 @@ import {
   WheelEngine,
   MoveEngine,
   HoverEngine,
-  parseMergedHandlers
+  parseMergedHandlers,
+  GestureHandlers,
+  UserGestureConfig
 } from '@use-gesture/core'
 import { Recognizer } from './Recognizer'
 
@@ -17,7 +19,17 @@ registerEngine('wheel', WheelEngine)
 registerEngine('move', MoveEngine)
 registerEngine('hover', HoverEngine)
 
-export function Gesture(target, _handlers, _config = {}) {
+interface GestureConstructor {
+  new (target: HTMLElement, _handlers: GestureHandlers, _config: UserGestureConfig): Gesture
+}
+
+export interface Gesture extends Recognizer {}
+
+export const Gesture: GestureConstructor = function (
+  target: HTMLElement,
+  _handlers: GestureHandlers,
+  _config: UserGestureConfig | {} = {}
+) {
   const { handlers, nativeHandlers, config } = parseMergedHandlers(_handlers, _config)
   return new Recognizer(target, handlers, config, undefined, nativeHandlers)
-}
+} as any

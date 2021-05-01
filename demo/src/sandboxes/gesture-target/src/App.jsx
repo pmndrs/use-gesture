@@ -53,7 +53,7 @@ function Draggable() {
 
   return (
     <>
-      <a.div tabIndex="-1" ref={target} className={styles.drag} style={style}>
+      <a.div tabIndex={-1} ref={target} className={styles.drag} style={style}>
         <div onClick={toggleColor} style={{ backgroundColor: color }}>
           <span>target</span>
           <span>
