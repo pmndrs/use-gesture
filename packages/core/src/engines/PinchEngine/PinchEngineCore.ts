@@ -1,7 +1,9 @@
 import { Engine } from '../Engine'
 import { ConfigResolverMap } from '../../imports'
-import type { Controller } from '../../Controller'
+import { CoordinatesEngine } from '../CoordinatesEngine'
 import { pinchConfigResolver } from '../../config/pinchConfigResolver'
+
+import type { Controller } from '../../Controller'
 import { Vector2, WebKitGestureEvent } from '../../types'
 
 ConfigResolverMap.set('pinch', pinchConfigResolver)
