@@ -17,9 +17,9 @@ export interface HoverEngine extends CoordinatesEngine<'hover'> {
 }
 
 export const HoverEngine: HoverEngineConstructor = function (this: HoverEngine, ctrl: Controller, args: any[]) {
+  this.ingKey = 'hovering'
   // @ts-ignore
   CoordinatesEngine.call(this, ctrl, args, 'hover')
-  this.ingKey = 'hovering'
 } as any
 
 HoverEngine.prototype = Object.create(CoordinatesEngine.prototype)

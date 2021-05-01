@@ -29,9 +29,9 @@ export interface DragEngine extends CoordinatesEngine<'drag'> {
 }
 
 export const DragEngine: DragEngineConstructor = function (this: DragEngine, ctrl: Controller, args: any[]) {
+  this.ingKey = 'dragging'
   // @ts-ignore
   CoordinatesEngine.call(this, ctrl, args, 'drag')
-  this.ingKey = 'dragging'
 } as any
 
 DragEngine.prototype = Object.create(CoordinatesEngine.prototype)

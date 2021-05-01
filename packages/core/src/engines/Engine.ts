@@ -91,8 +91,8 @@ Engine.prototype = {
 }
 
 Engine.prototype.reset = function () {
-  const state = this.state
-  state._active = state.active = state._blocked = state._force = false
+  const { state, shared, ingKey } = this
+  shared[ingKey] = state._active = state.active = state._blocked = state._force = false
   state._step = [false, false]
   state.intentional = false
   state._movement = [0, 0]

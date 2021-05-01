@@ -7,7 +7,7 @@ import { chain } from './utils/fn'
 import { GestureKey, InternalConfig, InternalHandlers, NativeHandlers, State, UserGestureConfig } from './types'
 
 interface ControllerConstructor {
-  new (): Controller
+  new (handlers: InternalHandlers): Controller
 }
 
 export interface Controller {
@@ -16,17 +16,17 @@ export interface Controller {
   _gestureEventStores: { [key in GestureKey]?: EventStore }
   _gestureTimeoutStores: { [key in GestureKey]?: TimeoutStore }
   _handlers: InternalHandlers
-  _nativeHandlers: NativeHandlers
+  _nativeHandlers?: NativeHandlers
   _config: InternalConfig
   _pointerIds: Set<number>
   _touchIds: Set<number>
   state: State
   setEventIds(this: Controller, event: TouchEvent | PointerEvent): void
-  applyHandlers(this: Controller, handlers: InternalHandlers, nativeHandlers: NativeHandlers): void
+  applyHandlers(this: Controller, handlers: InternalHandlers, nativeHandlers?: NativeHandlers): void
   applyConfig(this: Controller, config: UserGestureConfig, gestureKey?: GestureKey): void
   clean(this: Controller): void
   effect(this: Controller): void
-  bind(this: Controller, ...args: any[]): any | void
+  bind(this: Controller, ...args: any[]): NativeHandlers | void
 }
 
 export const Controller: ControllerConstructor = function (this: Controller, handlers: InternalHandlers) {

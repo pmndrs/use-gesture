@@ -19,9 +19,9 @@ export interface ScrollEngine extends CoordinatesEngine<'scroll'> {
 }
 
 export const ScrollEngine: ScrollEngineConstructor = function (this: ScrollEngine, ctrl: Controller, args: any[]) {
+  this.ingKey = 'scrolling'
   // @ts-ignore
   CoordinatesEngine.call(this, ctrl, args, 'scroll')
-  this.ingKey = 'scrolling'
 } as any
 
 ScrollEngine.prototype = Object.create(CoordinatesEngine.prototype)

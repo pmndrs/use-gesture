@@ -6,3 +6,5 @@ export { ScrollEngine } from './engines/ScrollEngine'
 export { MoveEngine } from './engines/MoveEngine'
 export { HoverEngine } from './engines/HoverEngine'
 export { registerEngine, parseMergedHandlers } from './imports'
+
+export * from './types'

@@ -19,9 +19,9 @@ export interface MoveEngine extends CoordinatesEngine<'move'> {
 }
 
 export const MoveEngine: MoveEngineConstructor = function (this: MoveEngine, ctrl: Controller, args: any[]) {
+  this.ingKey = 'moving'
   // @ts-ignore
   CoordinatesEngine.call(this, ctrl, args, 'move')
-  this.ingKey = 'moving'
 } as any
 
 MoveEngine.prototype = Object.create(CoordinatesEngine.prototype)

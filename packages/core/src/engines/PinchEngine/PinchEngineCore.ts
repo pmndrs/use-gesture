@@ -40,9 +40,9 @@ export interface PinchEngine extends Engine<'pinch'> {
 }
 
 export const PinchEngine: PinchEngineConstructor = function (this: PinchEngine, ctrl: Controller, args: any[]) {
+  this.ingKey = 'pinching'
   // @ts-ignore
   CoordinatesEngine.call(this, ctrl, args, 'pinch')
-  this.ingKey = 'pinching'
 } as any
 
 PinchEngine.prototype = Object.create(Engine.prototype)

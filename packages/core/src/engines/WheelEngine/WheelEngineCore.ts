@@ -19,9 +19,9 @@ export interface WheelEngine extends CoordinatesEngine<'wheel'> {
 }
 
 export const WheelEngine: WheelEngineConstructor = function (this: WheelEngine, ctrl: Controller, args: any[]) {
+  this.ingKey = 'wheeling'
   // @ts-ignore
   CoordinatesEngine.call(this, ctrl, args, 'wheel')
-  this.ingKey = 'wheeling'
 } as any
 
 WheelEngine.prototype = Object.create(CoordinatesEngine.prototype)

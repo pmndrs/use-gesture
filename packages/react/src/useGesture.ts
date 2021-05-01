@@ -6,7 +6,9 @@ import {
   WheelEngine,
   MoveEngine,
   HoverEngine,
-  parseMergedHandlers
+  parseMergedHandlers,
+  GestureHandlers,
+  UserGestureConfig
 } from '@use-gesture/core'
 import { useRecognizers } from './useRecognizers'
 
@@ -17,7 +19,7 @@ registerEngine('wheel', WheelEngine)
 registerEngine('move', MoveEngine)
 registerEngine('hover', HoverEngine)
 
-export function useGesture(_handlers, _config = {}) {
+export function useGesture<Config extends UserGestureConfig>(_handlers: GestureHandlers, _config: Config | {} = {}) {
   const { handlers, nativeHandlers, config } = parseMergedHandlers(_handlers, _config)
-  return useRecognizers(handlers, config, undefined, nativeHandlers)
+  return useRecognizers<Config>(handlers, config, undefined, nativeHandlers)
 }

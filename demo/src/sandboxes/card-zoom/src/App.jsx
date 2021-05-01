@@ -18,7 +18,7 @@ export default function App() {
 
   useGesture(
     {
-      onDrag: ({ pinching, cancel, offset: [x, y] }) => {
+      onDrag: ({ pinching, cancel, offset: [x, y], ...rest }) => {
         if (pinching) return cancel()
         api.start({ x, y })
       },
