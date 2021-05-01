@@ -37,6 +37,7 @@ PinchEngine.prototype.pointerStart = function (event) {
 
   if (_pointerEvents.size < 2) {
     _pointerEvents.set(event.pointerId, event)
+    event.target.setPointerCapture(event.pointerId)
   }
 
   if (state._pointerEvents.size < 2) return
@@ -101,12 +102,18 @@ PinchEngine.prototype.touchEnd = function (event) {
 }
 
 PinchEngine.prototype.pointerEnd = function (event) {
-  this.state._pointerEvents.delete(event.pointerId)
+  const state = this.state
   this.ctrl.setEventIds(event)
-  if (!this.state._active) return
 
-  if (this.state._pointerEvents.size < 2) {
-    this.state._active = false
+  if (state._pointerEvents.has(event.pointerId)) {
+    state._pointerEvents.delete(event.pointerId)
+    state.target.releasePointerCapture(event.pointerId)
+  }
+
+  if (!state._active) return
+
+  if (state._pointerEvents.size < 2) {
+    state._active = false
     this.compute(event)
     this.emit()
   }

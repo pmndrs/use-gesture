@@ -1,44 +1,46 @@
-const EVENT_TYPE_MAP = {
+const EVENT_TYPE_MAP: any = {
   pointer: { start: 'down', change: 'move', end: 'up' },
   mouse: { start: 'down', change: 'move', end: 'up' },
   touch: { start: 'start', change: 'move', end: 'end' },
   gesture: { start: 'start', change: 'change', end: 'end' }
 }
 
-function capitalize(string) {
+function capitalize(string: string) {
   if (!string) return ''
   return string[0].toUpperCase() + string.slice(1)
 }
 
-export function toReactHandlerProp(device, action = '', capture) {
+export function toReactHandlerProp(device: string, action = '', capture: boolean = false) {
   const deviceKey = EVENT_TYPE_MAP[device]
   const actionKey = deviceKey ? deviceKey[action] : action
   return 'on' + capitalize(device) + capitalize(actionKey) + (capture ? 'Capture' : '')
 }
 
-export function toDomEventType(device, action = '') {
+export function toDomEventType(device: string, action = '') {
   const deviceKey = EVENT_TYPE_MAP[device]
   const actionKey = deviceKey ? deviceKey[action] || action : action
   return device + actionKey
 }
 
-export function isTouch(event) {
-  return event.touches
+export function isTouch(event: UIEvent) {
+  return 'touches' in event
 }
 
-function getTouchesList(event, useAllTouches = false) {
-  if (useAllTouches) {
-    return Array.from(event.touches).filter((e) => event.currentTarget.contains(e.target))
-  }
+function getCurrentTargetTouchList(event: TouchEvent) {
+  return Array.from(event.touches).filter((e) => (event.currentTarget as Node)?.contains(e.target as Node))
+}
 
+function getTouchList(event: TouchEvent) {
   return event.type === 'touchend' ? event.changedTouches : event.targetTouches
 }
 
-function getValueEvent(event) {
-  return isTouch(event) ? getTouchesList(event)[0] : event
+function getValueEvent<EventType extends TouchEvent | PointerEvent>(
+  event: EventType
+): EventType extends TouchEvent ? Touch : PointerEvent {
+  return (isTouch(event) ? getTouchList(event as TouchEvent)[0] : event) as any
 }
 
-export function distanceAngle(P1, P2) {
+export function distanceAngle(P1: Touch | PointerEvent, P2: Touch | PointerEvent) {
   const dx = P2.clientX - P1.clientX
   const dy = P2.clientY - P1.clientY
   const cx = (P2.clientX + P1.clientX) / 2
@@ -51,21 +53,21 @@ export function distanceAngle(P1, P2) {
 }
 
 export const Touches = {
-  ids(event) {
-    return getTouchesList(event, true).map((touch) => touch.identifier)
+  ids(event: TouchEvent) {
+    return getCurrentTargetTouchList(event).map((touch) => touch.identifier)
   },
-  distanceAngle(event, ids) {
+  distanceAngle(event: TouchEvent, ids: number[]) {
     const [P1, P2] = Array.from(event.touches).filter((touch) => ids.includes(touch.identifier))
     return distanceAngle(P1, P2)
   }
 }
 
 export const Pointer = {
-  id(event) {
+  id(event: PointerEvent | TouchEvent) {
     const valueEvent = getValueEvent(event)
-    return isTouch(event) ? valueEvent.identifier : valueEvent.pointerId
+    return isTouch(event) ? (valueEvent as Touch).identifier : (valueEvent as PointerEvent).pointerId
   },
-  values(event) {
+  values(event: PointerEvent | TouchEvent) {
     const valueEvent = getValueEvent(event)
     // if (valueEvent.uv) return [valueEvent.uv.x, valueEvent.uv.y]
     return [valueEvent.clientX, valueEvent.clientY]
@@ -77,7 +79,7 @@ const LINE_HEIGHT = 40
 const PAGE_HEIGHT = 800
 
 export const Wheel = {
-  values(event) {
+  values(event: WheelEvent) {
     let { deltaX, deltaY, deltaMode } = event
     // normalize wheel values, especially for Firefox
     if (deltaMode === 1) {
@@ -92,15 +94,15 @@ export const Wheel = {
 }
 
 export const Scroll = {
-  values(event) {
+  values(event: UIEvent) {
     // If the currentTarget is the window then we return the scrollX/Y position.
     // If not (ie the currentTarget is a DOM element), then we return scrollLeft/Top
-    const { scrollX, scrollY, scrollLeft, scrollTop } = event.currentTarget
+    const { scrollX, scrollY, scrollLeft, scrollTop } = event.currentTarget as Element & Window
     return [scrollX ?? scrollLeft ?? 0, scrollY ?? scrollTop ?? 0]
   }
 }
 
-export function getEventDetails(event) {
+export function getEventDetails(event: any) {
   const buttons = 'buttons' in event ? event.buttons : 0
   const { shiftKey, altKey, metaKey, ctrlKey } = event
   return { buttons, shiftKey, altKey, metaKey, ctrlKey }

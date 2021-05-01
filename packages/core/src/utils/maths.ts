@@ -5,8 +5,8 @@ export function clamp(v: number, min: number, max: number) {
 type Vector = [number, number]
 
 export const V = {
-  toVector<T>(v: T | T[], fallback: T | T[]): T[] {
-    if (v === undefined) v = fallback
+  toVector<T>(v: T | [T, T] | undefined, fallback?: T | [T, T]): [T, T] {
+    if (v === undefined) v = fallback as T | [T, T]
     return Array.isArray(v) ? v : [v, v]
   },
   add(v1: Vector, v2: Vector): Vector {

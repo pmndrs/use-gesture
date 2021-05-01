@@ -1,22 +1,28 @@
-export const EngineMap = new Map()
-export const ConfigResolverMap = new Map()
+import { ResolverMap } from './config/resolver'
+import { EngineConstructor } from './engines/Engine'
+import { FullGestureState, GestureHandlers, GestureKey, InternalHandlers, UserGestureConfig } from './types'
 
-export function registerEngine(action, Engine) {
+export const EngineMap = new Map<GestureKey, EngineConstructor>()
+export const ConfigResolverMap = new Map<GestureKey, ResolverMap>()
+
+export function registerEngine(action: GestureKey, Engine: EngineConstructor) {
   EngineMap.set(action, Engine)
 }
 
 const RE_NOT_NATIVE = /^on(Drag|Wheel|Scroll|Move|Pinch|Hover)/
 
-function sortHandlers(_handlers) {
-  const native = {}
-  const handlers = {}
+function sortHandlers(_handlers: GestureHandlers) {
+  const native: any = {}
+  const handlers: InternalHandlers = {}
   const actions = new Set()
 
   for (let key in _handlers) {
     if (RE_NOT_NATIVE.test(key)) {
       actions.add(RegExp.lastMatch)
+      // @ts-ignore
       handlers[key] = _handlers[key]
     } else {
+      // @ts-ignore
       native[key.slice(2).toLowerCase()] = _handlers[key]
     }
   }
@@ -24,16 +30,28 @@ function sortHandlers(_handlers) {
   return [handlers, native, actions]
 }
 
-function registerGesture(actions, handlers, handlerKey, key, internalHandlers, config) {
+type HandlerKey = 'onDrag' | 'onPinch' | 'onWheel' | 'onMove' | 'onScroll' | 'onHover'
+
+function registerGesture(
+  actions: Set<unknown>,
+  handlers: GestureHandlers,
+  handlerKey: HandlerKey,
+  key: GestureKey,
+  internalHandlers: any,
+  config: any
+) {
   if (!actions.has(handlerKey)) return
 
   const startKey = handlerKey + 'Start'
   const endKey = handlerKey + 'End'
 
-  const fn = (state) => {
+  const fn = (state: FullGestureState<GestureKey>) => {
     let memo = undefined
+    // @ts-ignore
     if (state.first && startKey in handlers) handlers[startKey](state)
+    // @ts-ignore
     if (handlerKey in handlers) memo = handlers[handlerKey](state)
+    // @ts-ignore
     if (state.last && endKey in handlers) handlers[endKey](state)
     return memo
   }
@@ -42,7 +60,7 @@ function registerGesture(actions, handlers, handlerKey, key, internalHandlers, c
   config[key] = config[key] || {}
 }
 
-export function parseMergedHandlers(mergedHandlers, mergedConfig) {
+export function parseMergedHandlers(mergedHandlers: GestureHandlers, mergedConfig: UserGestureConfig) {
   const [handlers, nativeHandlers, actions] = sortHandlers(mergedHandlers)
 
   const internalHandlers = {}

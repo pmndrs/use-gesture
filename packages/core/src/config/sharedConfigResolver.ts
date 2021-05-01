@@ -1,7 +1,8 @@
+import { Target } from '../types'
 import { SUPPORT } from './support'
 
 export const sharedConfigResolver = {
-  target(value) {
+  target(value: Target) {
     if (value) {
       return () => ('current' in value ? value.current : value)
     }

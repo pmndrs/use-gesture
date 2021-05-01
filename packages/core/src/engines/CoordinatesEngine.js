@@ -25,6 +25,8 @@ CoordinatesEngine.prototype.computeOffset = function () {
 CoordinatesEngine.prototype.computeMovement = function () {
   const { offset, lastOffset } = this.state
   this.state.movement = V.sub(offset, lastOffset)
+  // let's take profit from this function to set `values` alias to `xy`
+  this.state.xy = this.state.values
 }
 
 CoordinatesEngine.prototype.intent = function (v) {

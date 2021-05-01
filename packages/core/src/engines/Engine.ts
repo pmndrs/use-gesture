@@ -1,8 +1,46 @@
+import { Controller } from '../Controller'
+import { EventStore } from '../EventStore'
+import { TimeoutStore } from '../TimeoutStore'
 import { getEventDetails } from '../utils/events'
 import { call } from '../utils/fn'
 import { V, rubberbandIfOutOfBounds } from '../utils/maths'
+import { GestureKey, Handler, IngKey, InternalConfig, State, Vector2 } from '../types'
 
-export function Engine(ctrl, args, key) {
+export interface EngineConstructor {
+  new (ctrl: Controller, args: any[]): Engine
+}
+
+export interface Engine<Key extends GestureKey = GestureKey> {
+  ctrl: Controller
+  key: Key
+  ingKey: IngKey
+  args: any[]
+  state: NonNullable<State[Key]>
+  shared: State['shared']
+  config: NonNullable<InternalConfig[Key]>
+  eventStore: EventStore
+  timeoutStore: TimeoutStore
+  handler: Handler<Key>
+  init?(this: Engine<Key>): void
+  setup?(this: Engine<Key>): void
+  intent?(this: Engine<Key>, movement: Vector2): void
+  reset(this: Engine<Key>): void
+  start(this: Engine<Key>, event: NonNullable<State[Key]>['event']): void
+  compute(this: Engine<Key>, event: NonNullable<State[Key]>['event']): void
+  computeOffset(this: Engine<Key>): void
+  computeMovement(this: Engine<Key>): void
+  bind(
+    this: Engine<Key>,
+    bindFunction: (
+      device: string,
+      action: string,
+      handler: EventListenerOrEventListenerObject,
+      options?: AddEventListenerOptions
+    ) => void
+  ): void
+}
+
+export const Engine = (function <Key extends GestureKey>(this: Engine<Key>, ctrl: Controller, args: any[], key: Key) {
   this.ctrl = ctrl
   this.key = key
   this.args = args
@@ -11,11 +49,11 @@ export function Engine(ctrl, args, key) {
     this.state = {
       values: [0, 0],
       initial: [0, 0]
-    }
+    } as any
     if (this.init) this.init()
     this.reset()
   }
-}
+} as any) as EngineConstructor
 
 Engine.prototype = {
   get state() {
@@ -23,6 +61,9 @@ Engine.prototype = {
   },
   set state(state) {
     this.ctrl.state[this.key] = state
+  },
+  get shared() {
+    return this.ctrl._config.shared
   },
   get eventStore() {
     return this.ctrl._gestureEventStores[this.key]
@@ -33,14 +74,8 @@ Engine.prototype = {
   get config() {
     return this.ctrl._config[this.key]
   },
-  get shared() {
-    return this.ctrl._config.shared
-  },
   get handler() {
     return this.ctrl._handlers[this.key]
-  },
-  merge(state) {
-    Object.assign(this.ctrl.state[this.key], state)
   }
 }
 
@@ -48,8 +83,9 @@ Engine.prototype.reset = function () {
   const state = this.state
   state._active = state.active = state._blocked = state._force = false
   state._step = [false, false]
-  state._intentional = false
+  state.intentional = false
   state._movement = [0, 0]
+  // @ts-ignore
   state._threshold = this.config.threshold || [0, 0]
   // prettier-ignore
   state._bounds = [[-Infinity, Infinity], [-Infinity, Infinity]]
@@ -60,7 +96,7 @@ Engine.prototype.reset = function () {
   state.movement = [0, 0]
   state.delta = [0, 0]
   state.timeStamp = 0
-}
+} as Engine['reset']
 
 Engine.prototype.start = function (event) {
   const state = this.state
@@ -68,12 +104,12 @@ Engine.prototype.start = function (event) {
   if (!state._active) {
     this.reset()
     state._active = true
-    state.target = event.currentTarget
+    state.target = event.currentTarget!
     state.initial = state.values
-    state.lastOffset = config.from ? call(config.from, state) : state.offset
+    state.lastOffset = 'from' in config ? call(config.from, state) : state.offset
     state.offset = state.lastOffset
   }
-}
+} as Engine['start']
 
 Engine.prototype.compute = function (event) {
   const state = this.state
@@ -95,13 +131,13 @@ Engine.prototype.compute = function (event) {
   if (_s0 === false) _s0 = Math.abs(_m0) >= _t0 && Math.sign(_m0) * _t0
   if (_s1 === false) _s1 = Math.abs(_m1) >= _t1 && Math.sign(_m1) * _t1
 
-  state._intentional = _s0 !== false || _s1 !== false
+  state.intentional = _s0 !== false || _s1 !== false
 
-  if (!state._intentional) return
+  if (!state.intentional) return
 
   state._step = [_s0, _s1]
 
-  const movement = [0, 0]
+  const movement: Vector2 = [0, 0]
 
   movement[0] = _s0 !== false ? _m0 - _s0 : 0
   movement[1] = _s1 !== false ? _m1 - _s1 : 0
@@ -118,7 +154,7 @@ Engine.prototype.compute = function (event) {
       state.timeStamp = event.timeStamp
 
       if (state.first) {
-        if (config.bounds) state._bounds = call(config.bounds, state)
+        if ('bounds' in config) state._bounds = call(config.bounds, state)
         state.startTime = state.timeStamp
         if (this.setup) this.setup()
       }
@@ -128,23 +164,24 @@ Engine.prototype.compute = function (event) {
       const previousMovement = state.movement
       state.movement = movement
 
-      const absoluteDelta = state.delta.map(Math.abs)
+      const absoluteDelta = state.delta.map(Math.abs) as Vector2
 
       V.addTo(state.distance, absoluteDelta)
       this.computeOffset()
 
       if (!state.first && !state.last && dt > 0) {
         state.delta = V.sub(movement, previousMovement)
-        state.direction = state.delta.map(Math.sign)
+        state.direction = state.delta.map(Math.sign) as Vector2
         state.velocity = [absoluteDelta[0] / dt, absoluteDelta[1] / dt]
       }
     }
   }
 
+  // @ts-ignore
   const rubberband = state._active ? config.rubberband || [0, 0] : [0, 0]
   state.offset = computeRubberband(state._bounds, state.offset, rubberband)
   this.computeMovement()
-}
+} as Engine['compute']
 
 Engine.prototype.emit = function () {
   const state = this.state
@@ -153,7 +190,7 @@ Engine.prototype.emit = function () {
 
   if (!state._active) this.clean()
 
-  if ((state._blocked || !state._intentional) && !state._force && !config.triggerAllEvents) return
+  if ((state._blocked || !state.intentional) && !state._force && !config.triggerAllEvents) return
 
   const memo = this.handler({
     ...shared,
@@ -170,7 +207,7 @@ Engine.prototype.clean = function () {
   this.timeoutStore.clean()
 }
 
-function computeRubberband(bounds, [Vx, Vy], [Rx, Ry]) {
+function computeRubberband(bounds: [Vector2, Vector2], [Vx, Vy]: Vector2, [Rx, Ry]: Vector2): Vector2 {
   const [[X0, X1], [Y0, Y1]] = bounds
   return [rubberbandIfOutOfBounds(Vx, X0, X1, Rx), rubberbandIfOutOfBounds(Vy, Y0, Y1, Ry)]
 }

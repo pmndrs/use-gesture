@@ -1,3 +1,4 @@
+import { DragConfig, InternalDragOptions, Vector2 } from '../types'
 import { V } from '../utils/maths'
 import { commonConfigResolver } from './commonConfigResolver'
 import { coordinatesConfigResolver } from './coordinatesConfigResolver'
@@ -11,14 +12,19 @@ export const DEFAULT_SWIPE_DURATION = 250
 export const dragConfigResolver = {
   ...commonConfigResolver,
   ...coordinatesConfigResolver,
-  pointerLock(_v, _k, { pointer: { lock = false, touch = false } = {} }) {
+  pointerLock(
+    this: InternalDragOptions,
+    _v: any,
+    _k: string,
+    { pointer: { lock = false, touch = false } = {} }: DragConfig
+  ) {
     this.useTouch = SUPPORT.touch && touch
     return SUPPORT.pointerLock && lock
   },
   r3f(value = false) {
     return value
   },
-  device() {
+  device(this: InternalDragOptions) {
     if (this.r3f) return 'pointer'
     if (this.useTouch) return 'touch'
     if (this.pointerLock) return 'mouse'
@@ -29,10 +35,10 @@ export const dragConfigResolver = {
   preventScroll(value = false) {
     return value && SUPPORT.touch
   },
-  pointerCapture(_v, _k, { pointer: { capture = true } = {} }) {
+  pointerCapture(this: InternalDragOptions, _v: any, _k: string, { pointer: { capture = true } = {} }) {
     return !this.pointerLock && this.device === 'pointer' && capture
   },
-  threshold(value, _key, { filterTaps = false, axis = undefined }) {
+  threshold(this: InternalDragOptions, value: number | Vector2, _k: string, { filterTaps = false, axis = undefined }) {
     const threshold = V.toVector(value, filterTaps ? 3 : axis ? 1 : 0)
     this.filterTaps = filterTaps
     return threshold
@@ -48,7 +54,7 @@ export const dragConfigResolver = {
       duration
     }
   },
-  delay(value = 0) {
+  delay(value: number | boolean = 0) {
     switch (value) {
       case true:
         return DEFAULT_DRAG_DELAY
