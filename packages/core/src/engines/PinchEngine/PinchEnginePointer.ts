@@ -109,7 +109,10 @@ PinchEngine.prototype.pointerEnd = function (event) {
 
   if (state._pointerEvents.has(event.pointerId)) {
     state._pointerEvents.delete(event.pointerId)
-    ;(state.target as HTMLElement).releasePointerCapture(event.pointerId)
+    try {
+      // @ts-ignore r3f
+      event.target.releasePointerCapture(event.pointerId)
+    } catch {}
   }
 
   if (!state._active) return
