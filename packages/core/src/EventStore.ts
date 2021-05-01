@@ -13,15 +13,15 @@ export interface EventStore {
     element: EventTarget,
     device: string,
     action: string,
-    handler: EventListenerOrEventListenerObject,
+    handler: (event: any) => void,
     options?: AddEventListenerOptions
   ): void
 }
 
-export const EventStore = (function (this: EventStore, ctrl: any) {
+export const EventStore: EventStoreConstructor = function (this: EventStore, ctrl: any) {
   this._ctrl = ctrl
   this._listeners = []
-} as any) as EventStoreConstructor
+} as any
 
 EventStore.prototype.add = function (element, device, action, handler, options) {
   const type = toDomEventType(device, action)

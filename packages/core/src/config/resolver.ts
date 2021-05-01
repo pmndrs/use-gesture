@@ -2,7 +2,7 @@ import { sharedConfigResolver } from './sharedConfigResolver'
 import { ConfigResolverMap } from '../imports'
 import { GestureKey, InternalConfig, UserGestureConfig } from '../types'
 
-export type Resolver = (x: any, key: string, obj: object) => any
+export type Resolver = (x: any, key: string, obj: any) => any
 export type ResolverMap = { [k: string]: Resolver | ResolverMap | boolean }
 
 export function resolveWith<T extends { [k: string]: any }, V extends { [k: string]: any }>(

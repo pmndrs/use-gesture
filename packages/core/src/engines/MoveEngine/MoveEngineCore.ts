@@ -3,13 +3,26 @@ import { moveConfigResolver } from '../../config/moveConfigResolver'
 import { CoordinatesEngine } from '../CoordinatesEngine'
 import { Pointer } from '../../utils/events'
 import { V } from '../../utils/maths'
+import type { Controller } from '../../Controller'
 
 ConfigResolverMap.set('move', moveConfigResolver)
 
-export function MoveEngine(...args) {
-  CoordinatesEngine.call(this, ...args, 'move')
-  this.ingKey = 'moving'
+export interface MoveEngineConstructor {
+  new (ctrl: Controller, args: any[]): MoveEngine
 }
+
+export interface MoveEngine extends CoordinatesEngine<'move'> {
+  move(this: MoveEngine, event: PointerEvent): void
+  moveStart(this: MoveEngine, event: PointerEvent): void
+  moveChange(this: MoveEngine, event: PointerEvent): void
+  moveEnd(this: MoveEngine, event?: PointerEvent): void
+}
+
+export const MoveEngine: MoveEngineConstructor = function (this: MoveEngine, ctrl: Controller, args: any[]) {
+  // @ts-ignore
+  CoordinatesEngine.call(this, ctrl, args, 'move')
+  this.ingKey = 'moving'
+} as any
 
 MoveEngine.prototype = Object.create(CoordinatesEngine.prototype)
 
@@ -17,13 +30,13 @@ MoveEngine.prototype.move = function (event) {
   if (!this.state._active) this.moveStart(event)
   else this.moveChange(event)
   this.timeoutStore.add('moveEnd', this.moveEnd.bind(this))
-}
+} as MoveEngine['move']
 
 MoveEngine.prototype.moveStart = function (event) {
   this.start(event)
   this.state.values = Pointer.values(event)
   this.moveChange(event)
-}
+} as MoveEngine['moveStart']
 
 MoveEngine.prototype.moveChange = function (event) {
   if (event.cancelable) event.preventDefault()
@@ -34,16 +47,16 @@ MoveEngine.prototype.moveChange = function (event) {
 
   this.compute(event)
   this.emit()
-}
+} as MoveEngine['moveChange']
 
 MoveEngine.prototype.moveEnd = function (event) {
   if (!this.state._active) return
   this.state._active = false
   this.compute(event)
   this.emit()
-}
+} as MoveEngine['moveEnd']
 
-MoveEngine.prototype.bind = function (bindFunction) {
+MoveEngine.prototype.bind = function (this: MoveEngine, bindFunction) {
   bindFunction('pointer', 'change', this.move.bind(this))
   bindFunction('pointer', 'leave', this.moveEnd.bind(this))
-}
+} as MoveEngine['bind']

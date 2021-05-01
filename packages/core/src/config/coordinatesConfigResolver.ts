@@ -1,6 +1,8 @@
+import { commonConfigResolver } from './commonConfigResolver'
 import { InternalCoordinatesOptions, CoordinatesConfig, Bounds, DragBounds, State, Vector2 } from '../types'
 
 export const coordinatesConfigResolver = {
+  ...commonConfigResolver,
   axis(
     this: InternalCoordinatesOptions,
     _v: any,

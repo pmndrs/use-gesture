@@ -5,7 +5,6 @@ import { SUPPORT } from './support'
 
 export const pinchConfigResolver = {
   ...commonConfigResolver,
-
   useTouch(_v: any, _k: string, { pointer: { touch = false } = {} }) {
     return SUPPORT.touch && touch
   },

@@ -18,11 +18,11 @@ PinchEngine.prototype.touchStart = function (event) {
   if (ctrlTouchIds.size < 2) return
 
   this.start(event)
-  state._touchIds = Array.from(ctrlTouchIds).slice(0, 2)
+  state._touchIds = Array.from(ctrlTouchIds).slice(0, 2) as [number, number]
 
   const payload = Touches.distanceAngle(event, state._touchIds)
   this.pinchStart(event, payload)
-}
+} as PinchEngine['touchStart']
 
 PinchEngine.prototype.pointerStart = function (event) {
   this.ctrl.setEventIds(event)
@@ -37,16 +37,17 @@ PinchEngine.prototype.pointerStart = function (event) {
 
   if (_pointerEvents.size < 2) {
     _pointerEvents.set(event.pointerId, event)
-    event.target.setPointerCapture(event.pointerId)
+    ;(event.target as HTMLElement).setPointerCapture(event.pointerId)
   }
 
   if (state._pointerEvents.size < 2) return
 
   this.start(event)
 
+  // @ts-ignore
   const payload = distanceAngle(...Array.from(_pointerEvents.values()))
   this.pinchStart(event, payload)
-}
+} as PinchEngine['pointerStart']
 
 PinchEngine.prototype.pinchStart = function (event, payload) {
   const state = this.state
@@ -56,13 +57,13 @@ PinchEngine.prototype.pinchStart = function (event, payload) {
 
   this.compute(event)
   this.emit()
-}
+} as PinchEngine['pinchStart']
 
 PinchEngine.prototype.touchMove = function (event) {
   if (!this.state._active) return
   const payload = Touches.distanceAngle(event, this.state._touchIds)
   this.pinchMove(event, payload)
-}
+} as PinchEngine['touchMove']
 
 PinchEngine.prototype.pointerMove = function (event) {
   if (!this.state._active) return
@@ -70,9 +71,10 @@ PinchEngine.prototype.pointerMove = function (event) {
   if (_pointerEvents.has(event.pointerId)) {
     _pointerEvents.set(event.pointerId, event)
   }
+  // @ts-ignore
   const payload = distanceAngle(...Array.from(_pointerEvents.values()))
   this.pinchMove(event, payload)
-}
+} as PinchEngine['pointerMove']
 
 PinchEngine.prototype.pinchMove = function (event, payload) {
   const state = this.state
@@ -87,7 +89,7 @@ PinchEngine.prototype.pinchMove = function (event, payload) {
 
   this.compute(event)
   this.emit()
-}
+} as PinchEngine['pinchMove']
 
 PinchEngine.prototype.touchEnd = function (event) {
   this.ctrl.setEventIds(event)
@@ -99,7 +101,7 @@ PinchEngine.prototype.touchEnd = function (event) {
     this.compute(event)
     this.emit()
   }
-}
+} as PinchEngine['touchEnd']
 
 PinchEngine.prototype.pointerEnd = function (event) {
   const state = this.state
@@ -107,7 +109,7 @@ PinchEngine.prototype.pointerEnd = function (event) {
 
   if (state._pointerEvents.has(event.pointerId)) {
     state._pointerEvents.delete(event.pointerId)
-    state.target.releasePointerCapture(event.pointerId)
+    ;(state.target as HTMLElement).releasePointerCapture(event.pointerId)
   }
 
   if (!state._active) return
@@ -117,4 +119,4 @@ PinchEngine.prototype.pointerEnd = function (event) {
     this.compute(event)
     this.emit()
   }
-}
+} as PinchEngine['pointerEnd']

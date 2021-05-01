@@ -1,5 +1,3 @@
-export const hoverConfigResolver = {
-  enabled(value = true) {
-    return value
-  }
-}
+import { coordinatesConfigResolver } from './coordinatesConfigResolver'
+
+export const hoverConfigResolver = coordinatesConfigResolver

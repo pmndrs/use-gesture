@@ -56,5 +56,5 @@ export type InternalConfig = {
   scroll?: InternalCoordinatesOptions<'scroll'>
   move?: InternalCoordinatesOptions<'move'>
   pinch?: InternalPinchOptions
-  hover?: { enabled: boolean; transform?: (v: Vector2) => Vector2 }
+  hover?: InternalCoordinatesOptions<'hover'>
 }

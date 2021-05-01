@@ -167,8 +167,8 @@ export type CoordinatesState = CommonGestureState & {
 
 export type DragState = CoordinatesState & {
   _pointerId?: number
-  _pointerActive: number
-  _keyboardActive: number
+  _pointerActive: boolean
+  _keyboardActive: boolean
   _preventScroll: boolean
   _delayed: boolean
   /**
@@ -192,7 +192,7 @@ export type DragState = CoordinatesState & {
 
 export interface PinchState extends CommonGestureState {
   _pointerEvents: Map<number, PointerEvent>
-  _touchIds: [number, number]
+  _touchIds: [] | [number, number]
   /**
    * Coordinates of the center of touch events, or the cursor when using wheel
    * to pinch.

@@ -1,3 +1,5 @@
+import { Vector2 } from '../types'
+
 const EVENT_TYPE_MAP: any = {
   pointer: { start: 'down', change: 'move', end: 'up' },
   mouse: { start: 'down', change: 'move', end: 'up' },
@@ -48,7 +50,7 @@ export function distanceAngle(P1: Touch | PointerEvent, P2: Touch | PointerEvent
 
   const distance = Math.hypot(dx, dy)
   const angle = -(Math.atan2(dx, dy) * 180) / Math.PI
-  const origin = [cx, cy]
+  const origin = [cx, cy] as Vector2
   return { angle, distance, origin }
 }
 
@@ -67,7 +69,7 @@ export const Pointer = {
     const valueEvent = getValueEvent(event)
     return isTouch(event) ? (valueEvent as Touch).identifier : (valueEvent as PointerEvent).pointerId
   },
-  values(event: PointerEvent | TouchEvent) {
+  values(event: PointerEvent | TouchEvent): Vector2 {
     const valueEvent = getValueEvent(event)
     // if (valueEvent.uv) return [valueEvent.uv.x, valueEvent.uv.y]
     return [valueEvent.clientX, valueEvent.clientY]
@@ -79,7 +81,7 @@ const LINE_HEIGHT = 40
 const PAGE_HEIGHT = 800
 
 export const Wheel = {
-  values(event: WheelEvent) {
+  values(event: WheelEvent): Vector2 {
     let { deltaX, deltaY, deltaMode } = event
     // normalize wheel values, especially for Firefox
     if (deltaMode === 1) {
@@ -94,7 +96,7 @@ export const Wheel = {
 }
 
 export const Scroll = {
-  values(event: UIEvent) {
+  values(event: UIEvent): Vector2 {
     // If the currentTarget is the window then we return the scrollX/Y position.
     // If not (ie the currentTarget is a DOM element), then we return scrollLeft/Top
     const { scrollX, scrollY, scrollLeft, scrollTop } = event.currentTarget as Element & Window

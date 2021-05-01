@@ -7,7 +7,7 @@ import { V, rubberbandIfOutOfBounds } from '../utils/maths'
 import { GestureKey, Handler, IngKey, InternalConfig, State, Vector2 } from '../types'
 
 export interface EngineConstructor {
-  new (ctrl: Controller, args: any[]): Engine
+  new <Key extends GestureKey>(ctrl: Controller, args: any[], key: Key): Engine<Key>
 }
 
 export interface Engine<Key extends GestureKey = GestureKey> {
@@ -18,6 +18,7 @@ export interface Engine<Key extends GestureKey = GestureKey> {
   state: NonNullable<State[Key]>
   shared: State['shared']
   config: NonNullable<InternalConfig[Key]>
+  sharedConfig: InternalConfig['shared']
   eventStore: EventStore
   timeoutStore: TimeoutStore
   handler: Handler<Key>
@@ -26,21 +27,28 @@ export interface Engine<Key extends GestureKey = GestureKey> {
   intent?(this: Engine<Key>, movement: Vector2): void
   reset(this: Engine<Key>): void
   start(this: Engine<Key>, event: NonNullable<State[Key]>['event']): void
-  compute(this: Engine<Key>, event: NonNullable<State[Key]>['event']): void
+  compute(this: Engine<Key>, event?: NonNullable<State[Key]>['event']): void
   computeOffset(this: Engine<Key>): void
   computeMovement(this: Engine<Key>): void
+  emit(this: Engine<Key>): void
+  clean(this: Engine<Key>): void
   bind(
     this: Engine<Key>,
     bindFunction: (
       device: string,
       action: string,
-      handler: EventListenerOrEventListenerObject,
+      handler: (event: any) => void,
       options?: AddEventListenerOptions
     ) => void
   ): void
 }
 
-export const Engine = (function <Key extends GestureKey>(this: Engine<Key>, ctrl: Controller, args: any[], key: Key) {
+export const Engine: EngineConstructor = function <Key extends GestureKey>(
+  this: Engine<Key>,
+  ctrl: Controller,
+  args: any[],
+  key: Key
+) {
   this.ctrl = ctrl
   this.key = key
   this.args = args
@@ -53,7 +61,7 @@ export const Engine = (function <Key extends GestureKey>(this: Engine<Key>, ctrl
     if (this.init) this.init()
     this.reset()
   }
-} as any) as EngineConstructor
+} as any
 
 Engine.prototype = {
   get state() {
@@ -63,7 +71,7 @@ Engine.prototype = {
     this.ctrl.state[this.key] = state
   },
   get shared() {
-    return this.ctrl._config.shared
+    return this.ctrl.state.shared
   },
   get eventStore() {
     return this.ctrl._gestureEventStores[this.key]
@@ -73,6 +81,9 @@ Engine.prototype = {
   },
   get config() {
     return this.ctrl._config[this.key]
+  },
+  get sharedConfig() {
+    return this.ctrl._config.shared
   },
   get handler() {
     return this.ctrl._handlers[this.key]
@@ -106,7 +117,7 @@ Engine.prototype.start = function (event) {
     state._active = true
     state.target = event.currentTarget!
     state.initial = state.values
-    state.lastOffset = 'from' in config ? call(config.from, state) : state.offset
+    state.lastOffset = config.from ? call(config.from, state) : state.offset
     state.offset = state.lastOffset
   }
 } as Engine['start']
@@ -178,7 +189,7 @@ Engine.prototype.compute = function (event) {
   }
 
   // @ts-ignore
-  const rubberband = state._active ? config.rubberband || [0, 0] : [0, 0]
+  const rubberband: Vector2 = state._active ? config.rubberband || [0, 0] : [0, 0]
   state.offset = computeRubberband(state._bounds, state.offset, rubberband)
   this.computeMovement()
 } as Engine['compute']
@@ -200,12 +211,12 @@ Engine.prototype.emit = function () {
 
   // Sets memo to the returned value of the handler (unless it's  undefined)
   if (memo !== undefined) state.memo = memo
-}
+} as Engine['emit']
 
 Engine.prototype.clean = function () {
   this.eventStore.clean()
   this.timeoutStore.clean()
-}
+} as Engine['clean']
 
 function computeRubberband(bounds: [Vector2, Vector2], [Vx, Vy]: Vector2, [Rx, Ry]: Vector2): Vector2 {
   const [[X0, X1], [Y0, Y1]] = bounds

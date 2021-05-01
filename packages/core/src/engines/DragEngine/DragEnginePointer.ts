@@ -1,6 +1,7 @@
 import { DragEngine } from './DragEngineCore'
 import { Pointer } from '../../utils/events'
 import { V } from '../../utils/maths'
+import { Vector2 } from '../../types'
 
 DragEngine.prototype.pointerDown = function (event) {
   this.ctrl.setEventIds(event)
@@ -26,7 +27,7 @@ DragEngine.prototype.pointerDown = function (event) {
   } else {
     this.startPointerDrag(event)
   }
-}
+} as DragEngine['pointerDown']
 
 DragEngine.prototype.startPointerDrag = function (event) {
   const state = this.state
@@ -36,7 +37,7 @@ DragEngine.prototype.startPointerDrag = function (event) {
 
   this.compute(event)
   this.emit()
-}
+} as DragEngine['startPointerDrag']
 
 DragEngine.prototype.pointerMove = function (event) {
   const state = this.state
@@ -47,7 +48,7 @@ DragEngine.prototype.pointerMove = function (event) {
   if (state._pointerId && id !== state._pointerId) return
 
   const values = Pointer.values(event)
-  let delta
+  let delta: Vector2
 
   if (document.pointerLockElement === event.target) {
     delta = [event.movementX, event.movementY]
@@ -82,7 +83,7 @@ DragEngine.prototype.pointerMove = function (event) {
   }
 
   this.emit()
-}
+} as DragEngine['pointerMove']
 
 DragEngine.prototype.pointerUp = function (event) {
   this.ctrl.setEventIds(event)
@@ -116,21 +117,23 @@ DragEngine.prototype.pointerUp = function (event) {
   }
 
   this.emit()
-}
+} as DragEngine['pointerUp']
 
 DragEngine.prototype.pointerClick = function (event) {
   if (!this.state.tap) event.stopPropagation()
-}
+} as DragEngine['pointerClick']
 
 DragEngine.prototype.setupPointer = function (event) {
   const config = this.config
   let device = config.device
 
-  const target = event.target
+  const target = event.target as HTMLElement
+  const currentTarget = event.currentTarget as HTMLElement
 
   if (process.env.NODE_ENV === 'development') {
     try {
       if (device === 'pointer') {
+        // @ts-ignore r3f
         const currentTarget = config.r3f ? event.sourceEvent.currentTarget : event.currentTarget
         const style = window.getComputedStyle(currentTarget)
         if (style.touchAction === 'auto') {
@@ -145,7 +148,7 @@ DragEngine.prototype.setupPointer = function (event) {
   }
 
   if (config.pointerLock) {
-    event.currentTarget.requestPointerLock()
+    currentTarget.requestPointerLock()
   }
   if (config.pointerCapture) {
     target.setPointerCapture(event.pointerId)
@@ -154,6 +157,7 @@ DragEngine.prototype.setupPointer = function (event) {
   if (device === 'touch' || config.pointerCapture) {
     if (!config.r3f) {
       if (process.env.NODE_ENV === 'development') {
+        // @ts-ignore r3f
         if (event.uv) {
           // eslint-disable-next-line no-console
           console.warn(
@@ -167,44 +171,45 @@ DragEngine.prototype.setupPointer = function (event) {
     }
   } else {
     if (!config.r3f) {
-      this.eventStore.add(this.shared.window, device, 'change', this.pointerMove.bind(this))
-      this.eventStore.add(this.shared.window, device, 'end', this.pointerUp.bind(this))
+      this.eventStore.add(this.sharedConfig.window!, device, 'change', this.pointerMove.bind(this))
+      this.eventStore.add(this.sharedConfig.window!, device, 'end', this.pointerUp.bind(this))
     }
   }
-}
+} as DragEngine['setupPointer']
 
 DragEngine.prototype.pointerClean = function () {
   const state = this.state
+  const target = state.target as HTMLElement
   if (!state._pointerActive) return
-  const event = state.event
+  const event = state.event as PointerEvent
   if (this.config.pointerLock && document.pointerLockElement === state.target) {
     document.exitPointerLock()
   }
-  if (this.config.capture && (this.config.r3f || state.target.hasPointerCapture(event.pointerId))) {
-    state.target.releasePointerCapture(event.pointerId)
+  if (this.config.pointerCapture && (this.config.r3f || target.hasPointerCapture(event.pointerId))) {
+    target.releasePointerCapture(event.pointerId)
   }
-}
+} as DragEngine['pointerClean']
 
 DragEngine.prototype.preventScroll = function (event) {
   if (this.state._preventScroll && event.cancelable) {
     event.preventDefault()
   }
-}
+} as DragEngine['preventScroll']
 
 DragEngine.prototype.setupScrollPrevention = function (event) {
   persistEvent(event)
   // we add window listeners that will prevent the scroll when the user has started dragging
-  this.eventStore.add(this.shared.window, 'touch', 'change', this.preventScroll.bind(this), { passive: false })
-  this.eventStore.add(this.shared.window, 'touch', 'end', this.clean.bind(this), { passive: false })
-  this.eventStore.add(this.shared.window, 'touch', 'cancel', this.clean.bind(this), { passive: false })
+  this.eventStore.add(this.sharedConfig.window!, 'touch', 'change', this.preventScroll.bind(this), { passive: false })
+  this.eventStore.add(this.sharedConfig.window!, 'touch', 'end', this.clean.bind(this), { passive: false })
+  this.eventStore.add(this.sharedConfig.window!, 'touch', 'cancel', this.clean.bind(this), { passive: false })
   this.timeoutStore.add('startPointerDrag', this.startPointerDrag.bind(this), 250, event)
-}
-
-function persistEvent(event) {
-  'persist' in event && typeof event.persist === 'function' && event.persist()
-}
+} as DragEngine['setupScrollPrevention']
 
 DragEngine.prototype.setupDelayTrigger = function (event) {
   this.state._delayed = true
   this.timeoutStore.add('dragDelay', this.startPointerDrag.bind(this), this.config.delay, event)
+} as DragEngine['setupDelayTrigger']
+
+function persistEvent(event: React.PointerEvent | PointerEvent) {
+  'persist' in event && typeof event.persist === 'function' && event.persist()
 }

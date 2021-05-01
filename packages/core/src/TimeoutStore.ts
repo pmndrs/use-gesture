@@ -8,16 +8,16 @@ export interface TimeoutStore {
     this: TimeoutStore,
     key: string,
     callback: FunctionType,
-    ms: number,
+    ms?: number,
     ...args: Parameters<FunctionType>
   ): void
   remove(this: TimeoutStore, key: string): void
   clean(this: TimeoutStore): void
 }
 
-export const TimeoutStore = (function (this: TimeoutStore) {
+export const TimeoutStore: TimeoutStoreConstructor = function (this: TimeoutStore) {
   this._timeouts = new Map()
-} as any) as TimeoutStoreConstructor
+} as any
 
 TimeoutStore.prototype.add = function (key, callback, ms = 140, ...args) {
   this.remove(key)

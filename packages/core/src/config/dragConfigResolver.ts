@@ -1,6 +1,5 @@
 import { DragConfig, InternalDragOptions, Vector2 } from '../types'
 import { V } from '../utils/maths'
-import { commonConfigResolver } from './commonConfigResolver'
 import { coordinatesConfigResolver } from './coordinatesConfigResolver'
 import { SUPPORT } from './support'
 
@@ -10,7 +9,6 @@ export const DEFAULT_SWIPE_DISTANCE = 50
 export const DEFAULT_SWIPE_DURATION = 250
 
 export const dragConfigResolver = {
-  ...commonConfigResolver,
   ...coordinatesConfigResolver,
   pointerLock(
     this: InternalDragOptions,

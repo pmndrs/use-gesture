@@ -11,6 +11,7 @@ const KEYS_DELTA_MAP = {
 }
 
 DragEngine.prototype.keyDown = function (event) {
+  // @ts-ignore
   const deltaFn = KEYS_DELTA_MAP[event.key]
 
   if (deltaFn) {
@@ -25,7 +26,7 @@ DragEngine.prototype.keyDown = function (event) {
     this.compute(event)
     this.emit()
   }
-}
+} as DragEngine['keyDown']
 
 DragEngine.prototype.keyUp = function (event) {
   if (!(event.key in KEYS_DELTA_MAP)) return
@@ -33,4 +34,4 @@ DragEngine.prototype.keyUp = function (event) {
   this.setActive({ keyboard: false })
   this.compute(event)
   this.emit()
-}
+} as DragEngine['keyUp']

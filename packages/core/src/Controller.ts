@@ -29,7 +29,7 @@ export interface Controller {
   bind(this: Controller, ...args: any[]): any | void
 }
 
-export const Controller = (function (this: Controller, handlers: InternalHandlers) {
+export const Controller: ControllerConstructor = function (this: Controller, handlers: InternalHandlers) {
   this._gestures = new Set()
   this._targetEventStore = new EventStore(this)
   this._gestureEventStores = {}
@@ -39,10 +39,10 @@ export const Controller = (function (this: Controller, handlers: InternalHandler
   this._config = {} as InternalConfig
   this._pointerIds = new Set()
   this._touchIds = new Set()
-  this.state = {} as State
+  this.state = { shared: {} } as State
 
   resolveGestures(this, handlers)
-} as any) as ControllerConstructor
+} as any
 
 Controller.prototype.setEventIds = function (event) {
   if (isTouch(event)) {
@@ -95,6 +95,7 @@ Controller.prototype.bind = function (...args) {
     for (const gestureKey of this._gestures) {
       if (this._config[gestureKey]!.enabled) {
         const Engine = EngineMap.get(gestureKey)!
+        // @ts-ignore
         new Engine(this, args).bind(bindFunction)
       }
     }
@@ -128,7 +129,7 @@ function resolveGestures(ctrl: Controller, internalHandlers: InternalHandlers) {
 const bindToEventStore = (eventStore: EventStore, target: EventTarget) => (
   device: string,
   action: string,
-  handler: EventListenerOrEventListenerObject,
+  handler: (event: any) => void,
   options?: AddEventListenerOptions
 ) => {
   eventStore.add(target, device, action, handler, options)
@@ -137,7 +138,7 @@ const bindToEventStore = (eventStore: EventStore, target: EventTarget) => (
 const bindToProps = (props: any, eventOptions: AddEventListenerOptions) => (
   device: string,
   action: string,
-  handler: EventListenerOrEventListenerObject,
+  handler: (event: any) => void,
   options: AddEventListenerOptions = {}
 ) => {
   const capture = options.capture ?? eventOptions.capture

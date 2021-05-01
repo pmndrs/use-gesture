@@ -12,7 +12,7 @@ PinchEngine.prototype.gestureStart = function (event) {
   this.compute(event)
 
   this.emit()
-}
+} as PinchEngine['gestureStart']
 
 PinchEngine.prototype.gestureMove = function (event) {
   if (event.cancelable) event.preventDefault()
@@ -26,7 +26,7 @@ PinchEngine.prototype.gestureMove = function (event) {
 
   this.compute(event)
   this.emit()
-}
+} as PinchEngine['gestureMove']
 
 PinchEngine.prototype.gestureEnd = function (event) {
   if (!this.state._active) return
@@ -35,4 +35,4 @@ PinchEngine.prototype.gestureEnd = function (event) {
 
   this.compute(event)
   this.emit()
-}
+} as PinchEngine['gestureEnd']
