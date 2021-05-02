@@ -17,12 +17,15 @@
 
 ### General
 
+- Types: Handlers have a better type inference
+
 ### Drag
 
 - keyboard support when target has focus!
 - shows warning when `touch-action` is not properly set in development mode
-- `bounds` accepts an `HTMLElement` or a React ref
+- `bounds` accepts an `HTMLElement` or a React Ref
 - `config.experimental_preventWindowScrollY` is now `config.preventScroll`
+- supports non capturing (uses mouse listeners instead)
 
 ```js
 useDrag(handler, {
@@ -47,3 +50,9 @@ useDrag(handler, {
 - `state.movement` and `state.offset` now reflect scale and not distance
 - Uses pointer events where it can
 - Adds `useTouch` option to use touch events if needed
+
+```js
+usePinch(({ active, offset: [scale, angle] }) => {
+  api.start({ rotate: angle, scale })
+})
+```
