@@ -6,6 +6,16 @@ type HookReturnType<Config extends GenericOptions> = Config['target'] extends ob
   ? void
   : (...args: any[]) => void | NativeHandlers
 
+/**
+ * Utility hook called by all gesture hooks and that will be responsible for
+ * the internals.
+ *
+ * @param {InternalHandlers} handlers
+ * @param {GenericOptions} config
+ * @param {GestureKey} gestureKey
+ * @param {NativeHandler} nativeHandlers
+ * @returns nothing when config.target is set, a binding function when not.
+ */
 export function useRecognizers<Config extends GenericOptions>(
   handlers: InternalHandlers,
   config: Config | {} = {},

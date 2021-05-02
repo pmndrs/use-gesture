@@ -3,7 +3,7 @@ import { EventStore } from '../EventStore'
 import { TimeoutStore } from '../TimeoutStore'
 import { getEventDetails } from '../utils/events'
 import { call } from '../utils/fn'
-import { V, rubberbandIfOutOfBounds } from '../utils/maths'
+import { V, computeRubberband } from '../utils/maths'
 import { GestureKey, Handler, IngKey, InternalConfig, State, Vector2 } from '../types'
 
 export interface EngineConstructor {
@@ -11,27 +11,105 @@ export interface EngineConstructor {
 }
 
 export interface Engine<Key extends GestureKey = GestureKey> {
+  /**
+   * The Controller handling state.
+   */
   ctrl: Controller
+  /**
+   * The gesture key ('drag' | 'pinch' | 'wheel' | 'scroll' | 'move' | 'hover')
+   */
   key: Key
+  /**
+   * The key representing the active state of the gesture in the shared state.
+   * ('dragging' | 'pinching' | 'wheeling' | 'scrolling' | 'moving' | 'hovering')
+   */
   ingKey: IngKey
+  /**
+   * The arguments passed to the `bind` function.
+   */
   args: any[]
+  /**
+   * Shortcut to the gesture state read from the Controller.
+   */
   state: NonNullable<State[Key]>
+  /**
+   * Shortcut to the shared state read from the Controller
+   */
   shared: State['shared']
+  /**
+   * Shortcut to the gesture config read from the Controller.
+   */
   config: NonNullable<InternalConfig[Key]>
+  /**
+   * Shortcut to the shared config read from the Controller.
+   */
   sharedConfig: InternalConfig['shared']
+  /**
+   * Shortcut to the gesture event store read from the Controller.
+   */
   eventStore: EventStore
+  /**
+   * Shortcut to the gesture timeout store read from the Controller.
+   */
   timeoutStore: TimeoutStore
+  /**
+   * Shortcut to the gesture handler read from the Controller.
+   */
   handler: Handler<Key>
+  /**
+   * Function that some gestures can use to add initilization
+   * properties to the state when it is created.
+   */
   init?(this: Engine<Key>): void
+  /**
+   * Setup function that some gestures can use to set additional properties of
+   * the state when the gesture starts.
+   */
   setup?(this: Engine<Key>): void
+  /**
+   * Function used by some gestures to determine the intentionality of a
+   * a movement depending on thresholds. The intent function can change the
+   * `state._active` or `state._blocked` flags if the gesture isn't intentional.
+   * @param movement
+   */
   intent?(this: Engine<Key>, movement: Vector2): void
+  /**
+   * Function that resets the state.
+   */
   reset(this: Engine<Key>): void
+  /**
+   * Function ran at the start of the gesture.
+   * @param event
+   */
   start(this: Engine<Key>, event: NonNullable<State[Key]>['event']): void
+  /**
+   * Computes all sorts of state attributes, including kinematics.
+   * @param event
+   */
   compute(this: Engine<Key>, event?: NonNullable<State[Key]>['event']): void
+  /**
+   * Function implemented by gestures that compute the offset from the state
+   * movement.
+   */
   computeOffset(this: Engine<Key>): void
+  /**
+   * Function implemented by the gestures that compute the movement from the
+   * corrected offset (after bounds and potential rubberbanding).
+   */
   computeMovement(this: Engine<Key>): void
+  /**
+   * Fires the gesture handler.
+   */
   emit(this: Engine<Key>): void
+  /**
+   * Cleans the gesture timeouts and event listeners.
+   */
   clean(this: Engine<Key>): void
+  /**
+   * Executes the bind function so that listeners are properly set by the
+   * Controller.
+   * @param bindFunction
+   */
   bind(
     this: Engine<Key>,
     bindFunction: (
@@ -128,6 +206,7 @@ Engine.prototype.compute = function (event) {
   const shared = this.shared
 
   if (event) {
+    // sets the shared state with event properties
     state.event = event
     shared.touches = this.ctrl._pointerIds.size || this.ctrl._touchIds.size
     shared.locked = !!document.pointerLockElement
@@ -137,6 +216,8 @@ Engine.prototype.compute = function (event) {
 
   const [_m0, _m1] = state._movement
   const [_t0, _t1] = state._threshold
+  // Step will hold the threshold at which point the gesture was triggered. The
+  // threshold is signed depending on which direction triggered it.
   let [_s0, _s1] = state._step
 
   if (_s0 === false) _s0 = Math.abs(_m0) >= _t0 && Math.sign(_m0) * _t0
@@ -153,6 +234,7 @@ Engine.prototype.compute = function (event) {
   movement[0] = _s0 !== false ? _m0 - _s0 : 0
   movement[1] = _s1 !== false ? _m1 - _s1 : 0
 
+  // let's run intentionality check.
   if (this.intent) this.intent(movement)
 
   if ((state._active && !state._blocked) || state.active) {
@@ -181,6 +263,7 @@ Engine.prototype.compute = function (event) {
       this.computeOffset()
 
       if (!state.first && !state.last && dt > 0) {
+        // calculates kinematics unless the gesture starts or ends
         state.delta = V.sub(movement, previousMovement)
         state.direction = state.delta.map(Math.sign) as Vector2
         state.velocity = [absoluteDelta[0] / dt, absoluteDelta[1] / dt]
@@ -201,6 +284,9 @@ Engine.prototype.emit = function () {
 
   if (!state._active) this.clean()
 
+  // we don't trigger the handler if the gesture is blockedor non intentional,
+  // unless the `_force` flag was set or the `triggerAllEvents` option was set
+  // to true in the config.
   if ((state._blocked || !state.intentional) && !state._force && !config.triggerAllEvents) return
 
   const memo = this.handler({
@@ -217,8 +303,3 @@ Engine.prototype.clean = function () {
   this.eventStore.clean()
   this.timeoutStore.clean()
 } as Engine['clean']
-
-function computeRubberband(bounds: [Vector2, Vector2], [Vx, Vy]: Vector2, [Rx, Ry]: Vector2): Vector2 {
-  const [[X0, X1], [Y0, Y1]] = bounds
-  return [rubberbandIfOutOfBounds(Vx, X0, X1, Rx), rubberbandIfOutOfBounds(Vy, Y0, Y1, Ry)]
-}
