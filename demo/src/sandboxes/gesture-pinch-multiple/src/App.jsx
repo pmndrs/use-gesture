@@ -18,8 +18,8 @@ export default function Two() {
   })
 
   const bind2 = useGesture({
-    onDrag: ({ down, offset: [x, y] }) => {
-      api2.start({ scale: down ? 1.05 : 1, x, y })
+    onDrag: ({ offset: [x, y] }) => {
+      api2.start({ x, y })
     },
     onPinch: ({ offset: [s, a] }) => {
       api2.start({ scale: s, rotate: a })

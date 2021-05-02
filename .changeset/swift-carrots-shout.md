@@ -9,7 +9,8 @@
 - `config.from` accounts for `offset` and not for `movement` as it was the case for `config.initial`
 - `config.bounds` accounts for `offset`
 - `velocity` is now a Vector with absolute (use `direction` if you need relative velocity)
-- `distance` is now a Vector with cumulative deltas.
+- `distance` is now a Vector with cumulative deltas
+- `state.pressed` is an alias to `state.down`
 
 
 ## Features
@@ -43,3 +44,6 @@ useDrag(handler, {
 ### Pinch
 
 - `distanceBounds` is now `scaleBounds`
+- `state.movement` and `state.offset` now reflect scale and not distance
+- Uses pointer events where it can
+- Adds `useTouch` option to use touch events if needed

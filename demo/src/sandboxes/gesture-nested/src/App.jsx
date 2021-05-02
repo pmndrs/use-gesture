@@ -30,9 +30,9 @@ function Draggable() {
   const bindOuter = useDrag(({ offset: [x, y] }) => apiOuter.start({ x, y }))
 
   const bind = useDrag(
-    ({ event, active, tap, canceled, ...state }) => {
+    ({ event, active, intentional, tap, canceled, ...state }) => {
       event.stopPropagation()
-      if (active) {
+      if (intentional) {
         let [x, y] = state[gesture]
         set({ x, y })
 
