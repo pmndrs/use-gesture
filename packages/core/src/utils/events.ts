@@ -13,14 +13,14 @@ function capitalize(string: string) {
 }
 
 export function toReactHandlerProp(device: string, action = '', capture: boolean = false) {
-  const deviceKey = EVENT_TYPE_MAP[device]
-  const actionKey = deviceKey ? deviceKey[action] : action
+  const deviceProps = EVENT_TYPE_MAP[device]
+  const actionKey = deviceProps ? deviceProps[action] || action : action
   return 'on' + capitalize(device) + capitalize(actionKey) + (capture ? 'Capture' : '')
 }
 
 export function toDomEventType(device: string, action = '') {
-  const deviceKey = EVENT_TYPE_MAP[device]
-  const actionKey = deviceKey ? deviceKey[action] || action : action
+  const deviceProps = EVENT_TYPE_MAP[device]
+  const actionKey = deviceProps ? deviceProps[action] || action : action
   return device + actionKey
 }
 

@@ -1,10 +1,17 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React from 'react'
-import { Controller, GenericOptions, GestureKey, InternalHandlers, NativeHandlers } from '@use-gesture/core'
+import {
+  Controller,
+  GenericOptions,
+  GestureKey,
+  InternalHandlers,
+  NativeHandlers,
+  ReactDOMAttributes
+} from '@use-gesture/core'
 
 type HookReturnType<Config extends GenericOptions> = Config['target'] extends object
   ? void
-  : (...args: any[]) => void | NativeHandlers
+  : (...args: any[]) => ReactDOMAttributes
 
 /**
  * Utility hook called by all gesture hooks and that will be responsible for

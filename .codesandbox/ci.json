@@ -5,6 +5,7 @@
     "/demo/src/sandboxes/gesture-target",
     "/demo/src/sandboxes/gesture-nested",
     "/demo/src/sandboxes/gesture-vanilla",
+    "/demo/src/sandboxes/gesture-move",
     "/demo/src/sandboxes/gesture-pinch",
     "/demo/src/sandboxes/gesture-pinch-multiple",
     "/demo/src/sandboxes/gesture-three",

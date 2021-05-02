@@ -1,4 +1,4 @@
-import { FullGestureState } from './state'
+import { FullGestureState, State } from './state'
 import { GestureKey } from './config'
 
 export type Handler<Key extends GestureKey> = (state: FullGestureState<Key>) => any | void
@@ -22,8 +22,20 @@ export type UserHandlers = {
   onHover: Handler<'hover'>
 }
 
-export type NativeHandlers = React.DOMAttributes<EventTarget>
+export type ReactDOMAttributes = React.DOMAttributes<EventTarget>
 
-export type GestureHandlers = Partial<UserHandlers & NativeHandlers>
+type NativeHandlersKeys = keyof Omit<ReactDOMAttributes, keyof UserHandlers | 'children' | 'dangerouslySetInnerHTML'>
+
+type GetEventType<Key extends NativeHandlersKeys> = ReactDOMAttributes[Key] extends
+  | React.EventHandler<infer EventType>
+  | undefined
+  ? EventType
+  : UIEvent
+
+export type NativeHandlers = {
+  [key in NativeHandlersKeys]?: (state: State['shared'] & { event: GetEventType<key>; args: any }, ...args: any) => void
+}
+
+export type GestureHandlers = Partial<NativeHandlers & UserHandlers>
 
 export type InternalHandlers = { [Key in GestureKey]?: Handler<Key> }
