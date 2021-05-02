@@ -66,11 +66,11 @@ PinchEngine.prototype.touchMove = function (event) {
 } as PinchEngine['touchMove']
 
 PinchEngine.prototype.pointerMove = function (event) {
-  if (!this.state._active) return
   const _pointerEvents = this.state._pointerEvents
   if (_pointerEvents.has(event.pointerId)) {
     _pointerEvents.set(event.pointerId, event)
   }
+  if (!this.state._active) return
   // @ts-ignore
   const payload = distanceAngle(...Array.from(_pointerEvents.values()))
   this.pinchMove(event, payload)
