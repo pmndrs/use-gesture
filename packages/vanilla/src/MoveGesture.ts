@@ -9,7 +9,7 @@ interface MoveGestureConstructor {
 
 export interface MoveGesture extends Recognizer {}
 
-export const DragGesture: MoveGestureConstructor = function (
+export const MoveGesture: MoveGestureConstructor = function (
   target: Element,
   handler: Handler<'move'>,
   config: UserMoveConfig | {} = {}
