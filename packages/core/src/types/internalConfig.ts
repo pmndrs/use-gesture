@@ -47,6 +47,7 @@ export type InternalPinchOptions = InternalGestureOptions<'pinch'> & {
    * When device is undefined, we'll be using wheel to zoom.
    */
   device: 'gesture' | 'pointer' | 'touch' | undefined
+  useRad: boolean
 }
 
 export type InternalConfig = {

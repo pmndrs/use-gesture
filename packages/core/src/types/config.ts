@@ -96,6 +96,10 @@ export type PinchConfig = GestureOptions<'pinch'> & {
    * Limits the angle `offset` to the specified bounds.
    */
   angleBounds?: PinchBounds | ((state: State['pinch']) => PinchBounds)
+  /**
+   * Which units to use for calculating rotation angle.
+   */
+  angleUnit?: 'deg' | 'rad'
 }
 
 export type DragBounds = Bounds | EventTarget | React.RefObject<EventTarget>

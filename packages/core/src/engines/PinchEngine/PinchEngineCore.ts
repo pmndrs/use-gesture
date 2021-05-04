@@ -96,3 +96,8 @@ PinchEngine.prototype.bind = function (this: PinchEngine, bindFunction) {
     bindFunction(device, 'end', this[device + 'End'].bind(this))
   } else bindFunction('wheel', '', this.wheel.bind(this))
 } as PinchEngine['bind']
+
+export function convertAngle(engine: PinchEngine, value: number) {
+  if (engine.config.useRad) return (value / 180) * Math.PI
+  return value
+}

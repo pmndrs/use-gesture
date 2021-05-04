@@ -1,4 +1,4 @@
-import { PinchEngine } from './PinchEngineCore'
+import { convertAngle, PinchEngine } from './PinchEngineCore'
 import { Touches, distanceAngle } from '../../utils/events'
 
 PinchEngine.prototype.touchStart = function (event) {
@@ -85,7 +85,7 @@ PinchEngine.prototype.pinchMove = function (event, payload) {
 
   state.values = [payload.distance, payload.angle - 360 * next_turns]
   state.origin = payload.origin
-  state._movement = [state.values[0] / state.initial[0] - 1, state.values[1] - state.initial[1]]
+  state._movement = [state.values[0] / state.initial[0] - 1, convertAngle(this, state.values[1] - state.initial[1])]
 
   this.compute(event)
   this.emit()

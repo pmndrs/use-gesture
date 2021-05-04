@@ -7,7 +7,7 @@ import styles from './styles.module.css'
 
 export default function App() {
   const target = React.useRef()
-  const [style, api] = useSpring(() => ({ scale: 1, rotate: 0 }))
+  const [style, api] = useSpring(() => ({ scale: 1, rotate: '0rad' }))
   const { gesture, touch } = useControls({
     gesture: { options: ['offset', 'movement'] },
     touch: false
@@ -18,11 +18,11 @@ export default function App() {
       let [scale, angle] = state[gesture]
 
       api.start({
-        rotate: active || gesture === 'offset' ? angle : 0,
+        rotate: active || gesture === 'offset' ? angle + 'rad' : 0,
         scale: active || gesture === 'offset' ? scale : 1
       })
     },
-    { target, eventOptions: { passive: false }, pointer: { touch } }
+    { target, eventOptions: { passive: false }, pointer: { touch }, angleUnit: 'rad' }
   )
 
   return (

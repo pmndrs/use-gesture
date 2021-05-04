@@ -18,6 +18,9 @@ export const pinchConfigResolver = {
     if (SUPPORT.touch && SUPPORT.pointer) return 'pointer'
     if (SUPPORT.touch) return 'touch'
   },
+  useRad(_v: any, _k: string, config: { shared: GenericOptions } & PinchConfig) {
+    return config.angleUnit === 'rad' || (config.angleUnit == null && config.shared.r3f)
+  },
   bounds(_v: any, _k: string, { scaleBounds = {}, angleBounds = {} }: PinchConfig) {
     const _scaleBounds = (state?: State) => {
       const D = assignDefault(call(scaleBounds, state), { min: -Infinity, max: Infinity })

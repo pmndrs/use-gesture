@@ -1,4 +1,4 @@
-import { PinchEngine } from './PinchEngineCore'
+import { PinchEngine, convertAngle } from './PinchEngineCore'
 
 PinchEngine.prototype.gestureStart = function (event) {
   if (event.cancelable) event.preventDefault()
@@ -22,7 +22,7 @@ PinchEngine.prototype.gestureMove = function (event) {
   const state = this.state
   state.values = [event.scale, event.rotation]
   state.origin = [event.clientX, event.clientY]
-  state._movement = [event.scale - 1, event.rotation]
+  state._movement = [event.scale - 1, convertAngle(this, event.rotation)]
 
   this.compute(event)
   this.emit()
