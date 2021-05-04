@@ -18,6 +18,7 @@
 ### General
 
 - Types: Handlers have a better type inference
+- Adds `r3f` general shared option that will perform some adjustments when using @react-three/fiber 
 
 ### Drag
 

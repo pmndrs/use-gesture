@@ -7,6 +7,7 @@ export type InternalGenericOptions = {
   eventOptions: AddEventListenerOptions
   window?: EventTarget
   enabled: boolean
+  r3f: boolean
   transform?: (v: Vector2) => Vector2
 }
 
@@ -31,7 +32,6 @@ export type InternalDragOptions = InternalCoordinatesOptions<'drag'> & {
   pointerCapture: boolean
   preventScroll: boolean
   pointerLock: boolean
-  r3f: boolean
   device: 'pointer' | 'touch' | 'mouse'
   swipe: {
     velocity: Vector2

@@ -1,4 +1,4 @@
-import { DragConfig, InternalDragOptions, Vector2 } from '../types'
+import { DragConfig, GenericOptions, InternalDragOptions, Vector2 } from '../types'
 import { V } from '../utils/maths'
 import { coordinatesConfigResolver } from './coordinatesConfigResolver'
 import { SUPPORT } from './support'
@@ -19,11 +19,8 @@ export const dragConfigResolver = {
     this.useTouch = SUPPORT.touch && touch
     return SUPPORT.pointerLock && lock
   },
-  r3f(value = false) {
-    return value
-  },
-  device(this: InternalDragOptions) {
-    if (this.r3f) return 'pointer'
+  device(this: InternalDragOptions, _v: any, _k: string, config: { shared: GenericOptions }) {
+    if (config.shared.r3f) return 'pointer'
     if (this.useTouch) return 'touch'
     if (this.pointerLock) return 'mouse'
     if (SUPPORT.pointer) return 'pointer'

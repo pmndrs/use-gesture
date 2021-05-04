@@ -22,6 +22,10 @@ export type GenericOptions = {
    * When set to false none of the handlers will be fired.
    */
   enabled?: boolean
+  /**
+   * Performs @react-three/fiber specific operations when set to true.
+   */
+  r3f?: boolean
 }
 
 export type GestureOptions<T extends GestureKey> = {
@@ -109,7 +113,6 @@ export type DragConfig = CoordinatesConfig<'drag'> & {
    * node.
    */
   bounds?: DragBounds | ((state: State['drag']) => DragBounds)
-  r3f?: boolean
   pointer?: {
     /**
      * If true, drag will use touch events on touch-enabled devices.

@@ -21,7 +21,7 @@ const Mesh = () => {
         event.object.scale.set(s, s, s)
       }
     },
-    { drag: { r3f: true } }
+    { r3f: true }
   )
 
   return (

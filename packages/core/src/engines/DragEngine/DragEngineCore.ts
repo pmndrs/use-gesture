@@ -98,7 +98,7 @@ DragEngine.prototype.bind = function (this: DragEngine, bindFunction) {
   bindFunction('key', 'down', this.keyDown.bind(this))
   bindFunction('key', 'up', this.keyUp.bind(this))
 
-  if (this.config.r3f) {
+  if (this.sharedConfig.r3f) {
     bindFunction(device, 'change', this.pointerMove.bind(this))
     bindFunction(device, 'end', this.pointerUp.bind(this))
   }

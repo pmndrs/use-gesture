@@ -134,7 +134,7 @@ DragEngine.prototype.setupPointer = function (event) {
     try {
       if (device === 'pointer') {
         // @ts-ignore r3f
-        const currentTarget = config.r3f ? event.sourceEvent.currentTarget : event.currentTarget
+        const currentTarget = this.sharedConfig.r3f ? event.sourceEvent.currentTarget : event.currentTarget
         const style = window.getComputedStyle(currentTarget)
         if (style.touchAction === 'auto') {
           // eslint-disable-next-line no-console
@@ -155,7 +155,7 @@ DragEngine.prototype.setupPointer = function (event) {
   }
 
   if (device === 'touch' || config.pointerCapture) {
-    if (!config.r3f) {
+    if (!this.sharedConfig.r3f) {
       if (process.env.NODE_ENV === 'development') {
         // @ts-ignore r3f
         if (event.uv) {
@@ -170,7 +170,7 @@ DragEngine.prototype.setupPointer = function (event) {
       this.eventStore.add(target, device, 'end', this.pointerUp.bind(this))
     }
   } else {
-    if (!config.r3f) {
+    if (!this.sharedConfig.r3f) {
       this.eventStore.add(this.sharedConfig.window!, device, 'change', this.pointerMove.bind(this))
       this.eventStore.add(this.sharedConfig.window!, device, 'end', this.pointerUp.bind(this))
     }
@@ -185,7 +185,7 @@ DragEngine.prototype.pointerClean = function () {
   if (this.config.pointerLock && document.pointerLockElement === state.target) {
     document.exitPointerLock()
   }
-  if (this.config.pointerCapture && (this.config.r3f || target.hasPointerCapture(event.pointerId))) {
+  if (this.config.pointerCapture && (this.sharedConfig.r3f || target.hasPointerCapture(event.pointerId))) {
     target.releasePointerCapture(event.pointerId)
   }
 } as DragEngine['pointerClean']
