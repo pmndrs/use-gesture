@@ -13,6 +13,7 @@ export const pinchConfigResolver = {
     // as React doesn't support gesture handlers.
     const sharedConfig = config.shared
     if (sharedConfig.target && !SUPPORT.touch && SUPPORT.gesture) return 'gesture'
+    if (sharedConfig.r3f) return 'pointer'
     if (this.useTouch) return 'touch'
     if (SUPPORT.touch && SUPPORT.pointer) return 'pointer'
     if (SUPPORT.touch) return 'touch'
