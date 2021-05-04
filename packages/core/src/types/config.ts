@@ -100,6 +100,10 @@ export type PinchConfig = GestureOptions<'pinch'> & {
    * Which units to use for calculating rotation angle.
    */
   angleUnit?: 'deg' | 'rad'
+  /**
+   * Scales OR rotates when set to 'lock'.
+   */
+  axis?: 'lock' | undefined
 }
 
 export type DragBounds = Bounds | EventTarget | React.RefObject<EventTarget>

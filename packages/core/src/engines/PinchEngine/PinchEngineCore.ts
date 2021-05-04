@@ -1,12 +1,14 @@
 import { Engine } from '../Engine'
 import { ConfigResolverMap } from '../../imports'
-import { CoordinatesEngine } from '../CoordinatesEngine'
 import { pinchConfigResolver } from '../../config/pinchConfigResolver'
 
 import type { Controller } from '../../Controller'
 import { Vector2, WebKitGestureEvent } from '../../types'
 
 ConfigResolverMap.set('pinch', pinchConfigResolver)
+
+const SCALE_ANGLE_RATIO_INTENT_DEG = 30
+const SCALE_ANGLE_RATIO_INTENT_RAD = (SCALE_ANGLE_RATIO_INTENT_DEG / 180) * Math.PI
 
 export interface PinchEngineConstructor {
   new (ctrl: Controller, args: any[]): PinchEngine
@@ -42,7 +44,7 @@ export interface PinchEngine extends Engine<'pinch'> {
 export const PinchEngine: PinchEngineConstructor = function (this: PinchEngine, ctrl: Controller, args: any[]) {
   this.ingKey = 'pinching'
   // @ts-ignore
-  CoordinatesEngine.call(this, ctrl, args, 'pinch')
+  Engine.call(this, ctrl, args, 'pinch')
 } as any
 
 PinchEngine.prototype = Object.create(Engine.prototype)
@@ -72,6 +74,22 @@ PinchEngine.prototype.computeMovement = function () {
   const { offset, lastOffset } = this.state
   this.state.movement = [offset[0] / lastOffset[0] - 1, offset[1] - lastOffset[1]]
 } as PinchEngine['computeMovement']
+
+PinchEngine.prototype.intent = function (v) {
+  const state = this.state
+
+  if (!state.axis) {
+    const angleScaleRatio = this.config.useRad ? SCALE_ANGLE_RATIO_INTENT_RAD : SCALE_ANGLE_RATIO_INTENT_DEG
+    const axisMovementDifference = Math.abs(v[0]) * angleScaleRatio - Math.abs(v[1])
+    if (axisMovementDifference < 0) state.axis = 'angle'
+    else if (axisMovementDifference > 0) state.axis = 'scale'
+  }
+
+  if (this.config.lockDirection) {
+    if (state.axis === 'scale') v[1] = 0
+    else if (state.axis === 'angle') v[0] = 0
+  }
+} as PinchEngine['intent']
 
 PinchEngine.prototype.cancel = function () {
   const state = this.state

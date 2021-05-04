@@ -161,6 +161,9 @@ export type CommonGestureState = {
 }
 
 export type CoordinatesState = CommonGestureState & {
+  /**
+   * The initial axis (x or y) of the gesture.
+   */
   axis: 'x' | 'y' | undefined
   xy: Vector2
 }
@@ -193,6 +196,10 @@ export type DragState = CoordinatesState & {
 export interface PinchState extends CommonGestureState {
   _pointerEvents: Map<number, PointerEvent>
   _touchIds: [] | [number, number]
+  /**
+   * The initial axis (scale or angle) of the gesture.
+   */
+  axis: 'scale' | 'angle' | undefined
   /**
    * Coordinates of the center of touch events, or the cursor when using wheel
    * to pinch.

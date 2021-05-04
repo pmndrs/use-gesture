@@ -178,6 +178,7 @@ Engine.prototype.reset = function () {
   state._threshold = this.config.threshold || [0, 0]
   // prettier-ignore
   state._bounds = [[-Infinity, Infinity], [-Infinity, Infinity]]
+  state.axis = undefined
   state.memo = undefined
   state.direction = [0, 0]
   state.distance = [0, 0]

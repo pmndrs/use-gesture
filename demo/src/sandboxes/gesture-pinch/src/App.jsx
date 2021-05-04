@@ -7,10 +7,11 @@ import styles from './styles.module.css'
 
 export default function App() {
   const target = React.useRef()
-  const [style, api] = useSpring(() => ({ scale: 1, rotate: '0rad' }))
-  const { gesture, touch } = useControls({
+  const [style, api] = useSpring(() => ({ scale: 1, rotate: 0 }))
+  const { gesture, touch, ...rest } = useControls({
     gesture: { options: ['offset', 'movement'] },
-    touch: false
+    touch: false,
+    axis: { value: 'lock', options: [undefined, 'lock'] }
   })
 
   usePinch(
@@ -18,11 +19,11 @@ export default function App() {
       let [scale, angle] = state[gesture]
 
       api.start({
-        rotate: active || gesture === 'offset' ? angle + 'rad' : 0,
+        rotate: active || gesture === 'offset' ? angle : 0,
         scale: active || gesture === 'offset' ? scale : 1
       })
     },
-    { target, eventOptions: { passive: false }, pointer: { touch }, angleUnit: 'rad' }
+    { target, eventOptions: { passive: false }, pointer: { touch }, ...rest }
   )
 
   return (

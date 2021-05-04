@@ -10,9 +10,6 @@ export const commonConfigResolver = {
   triggerAllEvents(value = false) {
     return value
   },
-  threshold(value: number | Vector2 = 0) {
-    return V.toVector(value)
-  },
   rubberband(value: number | boolean | Vector2 = 0): Vector2 {
     switch (value) {
       case true:

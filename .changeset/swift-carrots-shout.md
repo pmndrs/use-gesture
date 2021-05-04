@@ -53,6 +53,7 @@ useDrag(handler, {
 - Add `useTouch` option to use touch events if needed
 - Add `angleUnit` which defaults to `deg` unless `config.r3f` is set to `true` in which case it defaults to `rad`.
 Note that `state.values` are still returned in degrees, only `state.movement` and `state.offset` are expressed in the `angleUnit` unit.
+- `config.axis` can be set to `'lock'`, which will either scale or rotate.
 
 ```js
 usePinch(({ offset: [scale, angle] }) => {

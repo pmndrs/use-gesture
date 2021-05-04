@@ -1,5 +1,6 @@
-import { PinchConfig, GenericOptions, InternalPinchOptions, State } from '../types'
+import { PinchConfig, GenericOptions, InternalPinchOptions, State, Vector2 } from '../types'
 import { call, assignDefault } from '../utils/fn'
+import { V } from '../utils/maths'
 import { commonConfigResolver } from './commonConfigResolver'
 import { SUPPORT } from './support'
 
@@ -35,5 +36,11 @@ export const pinchConfigResolver = {
     if (typeof scaleBounds !== 'function' && typeof angleBounds !== 'function') return [_scaleBounds(), _angleBounds()]
 
     return (state: State) => [_scaleBounds(state), _angleBounds(state)]
+  },
+  threshold(this: InternalPinchOptions, value: number | Vector2, _k: string, config: PinchConfig) {
+    this.lockDirection = config.axis === 'lock'
+    const angleRatio = this.useRad ? Math.PI / 180 : 1
+    const threshold = V.toVector(value, this.lockDirection ? [0.1, 3 * angleRatio] : 0)
+    return threshold
   }
 }

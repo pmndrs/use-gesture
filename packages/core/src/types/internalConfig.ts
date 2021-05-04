@@ -48,6 +48,7 @@ export type InternalPinchOptions = InternalGestureOptions<'pinch'> & {
    */
   device: 'gesture' | 'pointer' | 'touch' | undefined
   useRad: boolean
+  lockDirection: boolean
 }
 
 export type InternalConfig = {
