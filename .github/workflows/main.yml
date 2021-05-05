@@ -50,7 +50,3 @@ jobs:
       - name: Build without cache
         if: steps.build-cache.outputs.cache-hit != 'true'
         run: pnpm build
-
-      - uses: andresz1/size-limit-action@v1.0.0
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
