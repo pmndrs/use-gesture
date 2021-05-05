@@ -9,6 +9,10 @@ on:
       - '!docs/**'
       - '!**.md'
       - '!.changeset/**'
+env:
+  CI: true
+  PNPM_CACHE_FOLDER: .pnpm-store
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 jobs:
   build:
     name: Build, lint, and test
