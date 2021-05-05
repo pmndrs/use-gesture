@@ -26,3 +26,25 @@ export const commonConfigResolver = {
     if (value != null) return V.toVector(value)
   }
 }
+
+if (process.env.NODE_ENV === 'development') {
+  Object.assign(commonConfigResolver, {
+    domTarget(value: any) {
+      if (value !== undefined) {
+        console.warn(`[@use-gesture]: \`domTarget\` option has been renamed to \`target\`.`)
+      }
+    },
+    lockDirection(value: any) {
+      if (value !== undefined) {
+        console.warn(
+          `[@use-gesture]: \`lockDirection\` option has been merged with \`axis\`. Use it as in \`{ axis: 'lock' }\``
+        )
+      }
+    },
+    initial(value: any) {
+      if (value !== undefined) {
+        console.warn(`[@use-gesture]: \`initial\` option has been renamed to \`from\`.`)
+      }
+    }
+  })
+}
