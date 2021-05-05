@@ -38,14 +38,13 @@ export const dragConfigResolver = {
     this.filterTaps = filterTaps
     return threshold
   },
-  swipe({
-    velocity = DEFAULT_SWIPE_VELOCITY,
-    distance = DEFAULT_SWIPE_DISTANCE,
-    duration = DEFAULT_SWIPE_DURATION
-  } = {}) {
+  swipe(
+    this: InternalDragOptions,
+    { velocity = DEFAULT_SWIPE_VELOCITY, distance = DEFAULT_SWIPE_DISTANCE, duration = DEFAULT_SWIPE_DURATION } = {}
+  ) {
     return {
-      velocity: V.toVector(velocity),
-      distance: V.toVector(distance),
+      velocity: this.transform(V.toVector(velocity)),
+      distance: this.transform(V.toVector(distance)),
       duration
     }
   },

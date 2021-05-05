@@ -169,13 +169,16 @@ Engine.prototype = {
 }
 
 Engine.prototype.reset = function () {
-  const { state, shared, ingKey } = this
+  const { state, shared, config, ingKey } = this
+  const { transform, threshold } = config
   shared[ingKey] = state._active = state.active = state._blocked = state._force = false
   state._step = [false, false]
   state.intentional = false
   state._movement = [0, 0]
-  // @ts-ignore
-  state._threshold = this.config.threshold || [0, 0]
+
+  // the _threshold is the difference between a [0,0] origin offset converted to
+  // its new space coordinates
+  state._threshold = V.sub(transform(threshold), transform([0, 0])).map(Math.abs) as Vector2
   // prettier-ignore
   state._bounds = [[-Infinity, Infinity], [-Infinity, Infinity]]
   state.axis = undefined
@@ -215,7 +218,7 @@ Engine.prototype.compute = function (event) {
     shared.down = shared.pressed = shared.buttons > 0 || shared.touches > 0
   }
 
-  const [_m0, _m1] = state._movement
+  const [_m0, _m1] = config.transform(state._movement)
   const [_t0, _t1] = state._threshold
   // Step will hold the threshold at which point the gesture was triggered. The
   // threshold is signed depending on which direction triggered it.

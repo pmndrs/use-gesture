@@ -1,4 +1,4 @@
-import { Vector2, State } from '../types'
+import { Vector2, State, GenericOptions } from '../types'
 import { V } from '../utils/maths'
 
 export const DEFAULT_RUBBERBAND = 0.15
@@ -24,6 +24,9 @@ export const commonConfigResolver = {
     if (typeof value === 'function') return value
     // eslint-disable-next-line eqeqeq
     if (value != null) return V.toVector(value)
+  },
+  transform(value: any, _k: string, config: { shared: GenericOptions }) {
+    return value || config.shared.transform
   }
 }
 

@@ -1,5 +1,7 @@
-import { Target } from '../types'
+import { Target, Vector2 } from '../types'
 import { SUPPORT } from './support'
+
+const identity = (v: Vector2) => v
 
 export const sharedConfigResolver = {
   target(value: Target) {
@@ -19,5 +21,8 @@ export const sharedConfigResolver = {
   },
   eventOptions({ passive = true, capture = false } = {}) {
     return { passive, capture }
+  },
+  transform(value = identity) {
+    return value
   }
 }

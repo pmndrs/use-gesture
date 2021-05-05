@@ -11,6 +11,7 @@
 - `velocity` is now a Vector with absolute (use `direction` if you need relative velocity)
 - `distance` is now a Vector with cumulative deltas
 - `state.pressed` is an alias to `state.down`
+- `config.transform` only transforms `movement` and `offset`. Raw values are no longer transformed.
 
 
 ## Features
@@ -48,6 +49,7 @@ useDrag(handler, {
 ### Pinch
 
 - `distanceBounds` is now `scaleBounds`
+- `da` is now `sa`
 - `state.movement` and `state.offset` now reflect scale and not distance
 - Use pointer events where it can
 - Add `useTouch` option to use touch events if needed

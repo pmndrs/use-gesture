@@ -1,9 +1,9 @@
-# React UseGesture
+# @use-gesture
 
 
 [![npm (tag)](https://img.shields.io/npm/v/react-use-gesture?style=flat&colorA=000000&colorB=000000)](https://www.npmjs.com/package/react-use-gesture) ![npm bundle size](https://img.shields.io/bundlephobia/minzip/react-use-gesture?style=flat&colorA=000000&colorB=000000) ![NPM](https://img.shields.io/npm/l/react-use-gesture?style=flat&colorA=000000&colorB=000000) ![Travis (.org) branch](https://img.shields.io/travis/pmndrs/react-use-gesture/master?style=flat&colorA=000000&colorB=000000) [![Discord Shield](https://img.shields.io/discord/740090768164651008?style=flat&colorA=000000&colorB=000000&label=discord&logo=discord&logoColor=ffffff)](https://discord.gg/poimandres)
 
-React UseGesture is a hook that lets you bind richer mouse and touch events to any component or view. With the data you receive, it becomes trivial to set up gestures, and often takes no more than a few lines of code.
+@use-gesture is a library that let you bind richer mouse and touch events to any component or view. With the data you receive, it becomes trivial to set up gestures, and often takes no more than a few lines of code.
 
 You can use it stand-alone, but to make the most of it you should combine it with an animation library like [react-spring](https://github.com/react-spring/react-spring), though you can most certainly use any other.
 
@@ -22,10 +22,10 @@ You can use it stand-alone, but to make the most of it you should combine it wit
 
 ```bash
 #Yarn
-yarn add react-use-gesture
+yarn add @use-gesture/react
 
 #NPM
-npm install react-use-gesture
+npm install @use-gesture/react
 ```
 
 ### [Full documentation website](https://use-gesture.netlify.com)
@@ -44,7 +44,7 @@ npm install react-use-gesture
 
 ```jsx
 import { useSpring, animated } from '@react-spring/web'
-import { useDrag } from 'react-use-gesture'
+import { useDrag } from '@use-gesture/react'
 
 function PullRelease() {
   const [{ x, y }, api] = useSpring(() => ({ x: 0, y: 0 }))
@@ -64,7 +64,7 @@ The example above makes a `div` draggable so that it follows your mouse on drag,
 
 ### Available hooks
 
-React-use-gesture exports several hooks that can handle different gestures:
+@use-gesture/react exports several hooks that can handle different gestures:
 
 | Hook         | Description                                |
 | ------------ | ------------------------------------------ |

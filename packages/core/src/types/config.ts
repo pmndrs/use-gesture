@@ -26,6 +26,12 @@ export type GenericOptions = {
    * Performs @react-three/fiber specific operations when set to true.
    */
   r3f?: boolean
+  /**
+   * A function that you can use to transform movement and offset values. Useful
+   * to map your screen coordinates to custom space coordinates such as a
+   * canvas.
+   */
+  transform?: (v: Vector2) => Vector2
 }
 
 export type GestureOptions<T extends GestureKey> = {
@@ -54,8 +60,9 @@ export type GestureOptions<T extends GestureKey> = {
    */
   rubberband?: boolean | number | Vector2
   /**
-   * A function that you can use to transform pointer values. Useful to map
-   * your screen coordinates to custom space coordinates such as a canvas.
+   * A function that you can use to transform movement and offset values. Useful
+   * to map your screen coordinates to custom space coordinates such as a
+   * canvas.
    */
   transform?: (v: Vector2) => Vector2
 }

@@ -8,7 +8,7 @@ export type InternalGenericOptions = {
   window?: EventTarget
   enabled: boolean
   r3f: boolean
-  transform?: (v: Vector2) => Vector2
+  transform: (v: Vector2) => Vector2
 }
 
 export type InternalGestureOptions<Key extends GestureKey> = {
@@ -18,7 +18,7 @@ export type InternalGestureOptions<Key extends GestureKey> = {
   triggerAllEvents: boolean
   rubberband: Vector2
   bounds: [Vector2, Vector2] | ((state: State[Key]) => [Vector2, Vector2])
-  transform?: (v: Vector2) => Vector2
+  transform: (v: Vector2) => Vector2
 }
 
 export type InternalCoordinatesOptions<Key extends CoordinatesKey = CoordinatesKey> = InternalGestureOptions<Key> & {
