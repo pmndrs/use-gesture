@@ -1,7 +1,9 @@
-import { FullGestureState, State } from './state'
+import { FullGestureState, State, EventTypes } from './state'
 import { GestureKey } from './config'
 
-export type Handler<Key extends GestureKey> = (state: FullGestureState<Key>) => any | void
+export type Handler<Key extends GestureKey, EventType = EventTypes[Key]> = (
+  state: Omit<FullGestureState<Key>, 'event'> & { event: EventType }
+) => any | void
 
 export type UserHandlers = {
   onDrag: Handler<'drag'>
@@ -38,4 +40,4 @@ export type NativeHandlers = {
 
 export type GestureHandlers = Partial<NativeHandlers & UserHandlers>
 
-export type InternalHandlers = { [Key in GestureKey]?: Handler<Key> }
+export type InternalHandlers = { [Key in GestureKey]?: Handler<Key, any> }

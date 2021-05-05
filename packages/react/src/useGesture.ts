@@ -27,7 +27,7 @@ registerEngine('hover', HoverEngine)
  * @param {GestureHandlers} handlers - an object with on[Gesture] keys containg gesture handlers
  * @param {UseGestureConfig} [config={}] - the full config object
  */
-export function useGesture<Config extends UserGestureConfig>(_handlers: GestureHandlers, _config: Config | {} = {}) {
+export function useGesture<Config = UserGestureConfig>(_handlers: GestureHandlers, _config: Config | {} = {}) {
   const { handlers, nativeHandlers, config } = parseMergedHandlers(_handlers, _config)
   return useRecognizers<Config>(handlers, config, undefined, nativeHandlers)
 }

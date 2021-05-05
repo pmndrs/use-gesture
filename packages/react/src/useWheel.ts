@@ -1,4 +1,4 @@
-import { registerEngine, WheelEngine, UserWheelConfig, Handler } from '@use-gesture/core'
+import { registerEngine, WheelEngine, UserWheelConfig, Handler, EventTypes } from '@use-gesture/core'
 import { useRecognizers } from './useRecognizers'
 
 registerEngine('wheel', WheelEngine)
@@ -9,6 +9,9 @@ registerEngine('wheel', WheelEngine)
  * @param {Handler<'wheel'>} handler - the function fired every time the wheel gesture updates
  * @param {UserWheelConfig} [config={}] - the config object including generic options and wheel options
  */
-export function useWheel<Config extends UserWheelConfig>(handler: Handler<'wheel'>, config: Config | {} = {}) {
+export function useWheel<EventType = EventTypes['wheel'], Config = UserWheelConfig>(
+  handler: Handler<'wheel', EventType>,
+  config: Config | {} = {}
+) {
   return useRecognizers({ wheel: handler }, config, 'wheel')
 }

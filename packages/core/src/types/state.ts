@@ -219,14 +219,23 @@ export interface PinchState extends CommonGestureState {
   cancel(): void
 }
 
-export interface State {
-  shared: SharedGestureState
-  drag?: DragState & { event: PointerEvent | TouchEvent | MouseEvent | KeyboardEvent }
-  wheel?: CoordinatesState & { event: WheelEvent }
-  scroll?: CoordinatesState & { event: UIEvent }
-  move?: CoordinatesState & { event: PointerEvent }
-  hover?: CoordinatesState & { event: PointerEvent }
-  pinch?: PinchState & { event: PointerEvent | TouchEvent | WheelEvent | WebKitGestureEvent }
+export type EventTypes = {
+  drag: PointerEvent | TouchEvent | MouseEvent | KeyboardEvent
+  wheel: WheelEvent
+  scroll: UIEvent
+  move: PointerEvent
+  hover: PointerEvent
+  pinch: PointerEvent | TouchEvent | WheelEvent | WebKitGestureEvent
 }
 
-export type FullGestureState<T extends GestureKey> = SharedGestureState & State[T]
+export interface State {
+  shared: SharedGestureState
+  drag?: DragState & { event: EventTypes['drag'] }
+  wheel?: CoordinatesState & { event: EventTypes['wheel'] }
+  scroll?: CoordinatesState & { event: EventTypes['scroll'] }
+  move?: CoordinatesState & { event: EventTypes['move'] }
+  hover?: CoordinatesState & { event: EventTypes['hover'] }
+  pinch?: PinchState & { event: EventTypes['pinch'] }
+}
+
+export type FullGestureState<Key extends GestureKey> = SharedGestureState & NonNullable<State[Key]>
