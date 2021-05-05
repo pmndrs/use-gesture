@@ -2,7 +2,7 @@
 '@use-gesture/core': patch
 ---
 
-## General breaking changes:
+## General breaking changes
 
 - `config.domTarget` is renamed `config.target`
 - `config.initial` is renamed `config.from`
