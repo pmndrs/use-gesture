@@ -29,12 +29,12 @@
     {
       "name": "@use-gesture/core",
       "path": "packages/core/dist/use-gesture-core.cjs.prod.js",
-      "limit": "9 KB"
+      "limit": "8 KB"
     },
     {
       "name": "@use-gesture/react",
       "path": "packages/react/dist/use-gesture-react.cjs.prod.js",
-      "limit": "10 KB",
+      "limit": "9 KB",
       "ignore": [
         "react"
       ]
@@ -42,13 +42,12 @@
     {
       "name": "@use-gesture/vanilla",
       "path": "packages/vanilla/dist/use-gesture-vanilla.cjs.prod.js",
-      "limit": "10 KB"
+      "limit": "9 KB"
     }
   ],
   "jest": {
     "testEnvironment": "jsdom",
     "roots": [
-      "./src",
       "./test"
     ],
     "setupFilesAfterEnv": [

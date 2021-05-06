@@ -167,7 +167,6 @@ DragEngine.prototype.setupPointer = function (event) {
       }
       if (document.pointerLockElement === target) device = 'mouse'
       this.eventStore.add(target, device, 'change', this.pointerMove.bind(this))
-      this.eventStore.add(target, device, 'end', this.pointerUp.bind(this))
     }
   } else {
     if (!this.sharedConfig.r3f) {

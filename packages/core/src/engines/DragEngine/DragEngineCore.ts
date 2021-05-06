@@ -95,12 +95,12 @@ DragEngine.prototype.bind = function (this: DragEngine, bindFunction) {
   const device = this.config.device
 
   bindFunction(device, 'start', this.pointerDown.bind(this))
+  bindFunction(device, 'end', this.pointerUp.bind(this))
   bindFunction('key', 'down', this.keyDown.bind(this))
   bindFunction('key', 'up', this.keyUp.bind(this))
 
   if (this.sharedConfig.r3f) {
     bindFunction(device, 'change', this.pointerMove.bind(this))
-    bindFunction(device, 'end', this.pointerUp.bind(this))
   }
   if (this.config.filterTaps) {
     bindFunction('click', '', this.pointerClick.bind(this), { capture: true })
