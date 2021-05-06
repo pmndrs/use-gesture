@@ -89,7 +89,7 @@ export type CoordinatesConfig<Key extends CoordinatesKey = CoordinatesKey> = Ges
 export type PinchBounds = { min?: number; max?: number }
 
 export type PinchConfig = GestureOptions<'pinch'> & {
-  pointer: {
+  pointer?: {
     /**
      * If true, pinch will use touch events on touch-enabled devices.
      */
