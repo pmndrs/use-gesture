@@ -14,8 +14,7 @@ export function resolveWith<T extends { [k: string]: any }, V extends { [k: stri
   for (const [key, resolver] of Object.entries(resolvers))
     switch (typeof resolver) {
       case 'function':
-        const r = resolver.call(result, config[key], key, config)
-        if (r !== undefined) result[key] = r
+        result[key] = resolver.call(result, config[key], key, config)
         break
       case 'object':
         result[key] = resolveWith(config[key], resolver)

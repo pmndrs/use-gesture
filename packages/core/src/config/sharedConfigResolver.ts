@@ -1,7 +1,7 @@
 import { Target, Vector2 } from '../types'
 import { SUPPORT } from './support'
 
-const identity = (v: Vector2) => v
+export const identity = (v: Vector2) => v
 
 export const sharedConfigResolver = {
   target(value: Target) {
