@@ -96,7 +96,14 @@ export const Controller: ControllerConstructor = function (this: Controller, han
   this._config = {} as InternalConfig
   this._pointerIds = new Set()
   this._touchIds = new Set()
-  this.state = { shared: {} } as State
+  this.state = {
+    shared: {
+      shiftKey: false,
+      metaKey: false,
+      ctrlKey: false,
+      altKey: false
+    }
+  } as State
 
   resolveGestures(this, handlers)
 } as any
