@@ -55,7 +55,7 @@ CoordinatesEngine.prototype.intent = function (v) {
   if (this.config.lockDirection) {
     if (state.axis === 'x') v[1] = 0
     else if (state.axis === 'y') v[0] = 0
-  } else if (this.config.axis) {
+  } else if (this.config.axis && !!state.axis) {
     if (state.axis !== this.config.axis) {
       state._blocked = true
     } else if (state.axis === 'x') v[1] = 0
