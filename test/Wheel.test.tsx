@@ -10,7 +10,7 @@ afterAll(cleanup)
 
 describe.each([
   ['attached to component', Interactive, ''],
-  ['attached to node', InteractiveDom, 'dom-'],
+  ['attached to node', InteractiveDom, 'dom-']
 ])('testing onWheel %s)', (_testName, C, prefix) => {
   const Component = C as InteractiveType
   const { getByTestId, rerender } = render(<Component gestures={['Wheel']} memoArg="memo" />)
@@ -26,8 +26,6 @@ describe.each([
     expect(getByTestId(`${prefix}wheel-active`)).toHaveTextContent('true')
     expect(getByTestId(`${prefix}wheel-wheeling`)).toHaveTextContent('true')
     expect(getByTestId(`${prefix}wheel-first`)).toHaveTextContent('true')
-    expect(getByTestId(`${prefix}wheel-xy`)).toHaveTextContent('1,-1')
-    expect(getByTestId(`${prefix}wheel-previous`)).toHaveTextContent('0,0')
     expect(getByTestId(`${prefix}wheel-delta`)).toHaveTextContent('1,-1')
     expect(getByTestId(`${prefix}wheel-initial`)).toHaveTextContent('0,0')
   })
@@ -50,21 +48,20 @@ describe.each([
   })
 
   test('xy should add wheel event offset', () => {
-    expect(getByTestId(`${prefix}wheel-xy`)).toHaveTextContent('5,-6')
     expect(getByTestId(`${prefix}wheel-delta`)).toHaveTextContent('4,-5')
     expect(getByTestId(`${prefix}wheel-offset`)).toHaveTextContent('5,-6')
   })
 
   test('kinematics should update', () => {
-    expect(getByTestId(`${prefix}wheel-velocity`)).not.toHaveTextContent(/^0$/)
-    expect(getByTestId(`${prefix}wheel-vxvy`)).toHaveTextContent(`${4 * (1 / delta_t)},${-5 * (1 / delta_t)}`)
+    expect(getByTestId(`${prefix}wheel-direction`)).toHaveTextContent(`1,-1`)
+    expect(getByTestId(`${prefix}wheel-velocity`)).toHaveTextContent(`${4 / delta_t},${5 / delta_t}`)
   })
 
   test('the last wheel event should debounce and terminate the gesture', async () => {
     await waitFor(() => {
       expect(getByTestId(`${prefix}wheel-last`)).toHaveTextContent('true')
       expect(getByTestId(`${prefix}wheel-active`)).toHaveTextContent('false')
-      expect(getByTestId(`${prefix}wheel-vxvy`)).toHaveTextContent('0,0')
+      expect(getByTestId(`${prefix}wheel-velocity`)).toHaveTextContent(`${4 / delta_t},${5 / delta_t}`)
       expect(getByTestId(`${prefix}wheel-wheeling`)).toHaveTextContent('false')
     })
   })
@@ -76,7 +73,7 @@ describe.each([
   test('wheeling again should restart the gesture', async () => {
     fireEvent.wheel(element, { deltaX: 10, deltaY: 0 })
     expect(getByTestId(`${prefix}wheel-first`)).toHaveTextContent('true')
-    expect(getByTestId(`${prefix}wheel-previous`)).toHaveTextContent('5,-6')
+    expect(getByTestId(`${prefix}wheel-lastOffset`)).toHaveTextContent('5,-6')
     await waitFor(() => expect(getByTestId(`${prefix}wheel-active`)).toHaveTextContent('false'))
   })
 
@@ -84,7 +81,7 @@ describe.each([
     rerender(<Component gestures={['Wheel']} config={{ wheel: { axis: 'x' } }} />)
     fireEvent.wheel(element, { deltaX: 0, deltaY: 10 })
     fireEvent.wheel(element, { deltaX: 4, deltaY: 0 })
-    expect(getByTestId(`${prefix}wheel-wheeling`)).toHaveTextContent('false')
+    expect(getByTestId(`${prefix}wheel-active`)).toHaveTextContent('false')
     // allow gesture to finish
     await later(200)
   })
@@ -97,7 +94,6 @@ describe.each([
     expect(getByTestId(`${prefix}wheel-movement`)).toHaveTextContent('13,0')
     await waitFor(() => expect(getByTestId(`${prefix}wheel-wheeling`)).toHaveTextContent('false'))
   })
-
   test('disabling all gestures should prevent state from updating', async () => {
     rerender(<Component gestures={['Wheel']} config={{ enabled: false }} />)
     fireEvent.wheel(element)

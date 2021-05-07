@@ -1,32 +1,31 @@
 import React, { ReactChild } from 'react'
-import { Fn } from '../../src/types'
-import { Handlers } from '../../src/types'
+import { UserHandlers } from '../../packages/core/src'
 
 export const createHandlers = ({
   gestures,
   memoArg,
   canceled,
   set,
-  setStartEnd,
+  setStartEnd
 }: {
   gestures: string[]
   memoArg: any[]
   canceled?: boolean
-  set: Fn
+  set: Function
   setStartEnd: React.Dispatch<React.SetStateAction<[number, number]>>
-}): Handlers => {
-  return gestures.reduce((acc: Handlers, g) => {
+}): UserHandlers => {
+  return gestures.reduce((acc: UserHandlers, g) => {
     const gesture = {
       [`on${g}`]: ({
         event,
         cancel,
-        currentTarget,
+        target,
         memo = memoArg,
         ...rest
       }: {
         event: Event
-        cancel: Fn
-        currentTarget: EventTarget
+        cancel: Function
+        target: EventTarget
         memo: any
       }) => {
         set({ ...rest, memo })
@@ -34,7 +33,7 @@ export const createHandlers = ({
           cancel()
         }
         return memo
-      },
+      }
     }
     if (g !== 'Hover') {
       gesture[`on${g}Start`] = () => {
@@ -46,9 +45,9 @@ export const createHandlers = ({
     }
     return {
       ...acc,
-      ...gesture,
+      ...gesture
     }
-  }, {} as Handlers)
+  }, {} as UserHandlers)
 }
 
 export const Common = React.forwardRef(
@@ -59,7 +58,7 @@ export const Common = React.forwardRef(
       state,
       startFired = 0,
       endFired = 0,
-      children,
+      children
     }: {
       listeners?: object
       testKey: string

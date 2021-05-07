@@ -9,14 +9,14 @@ afterAll(cleanup)
 
 describe.each([
   ['attached to component', Interactive, ''],
-  ['attached to node', InteractiveDom, 'dom-'],
+  ['attached to node', InteractiveDom, 'dom-']
 ])('testing onScroll %s)', (_testName, C, prefix) => {
   const Component = C as InteractiveType
   const { getByTestId, rerender } = render(<Component gestures={['Scroll']} memoArg="memo" />)
   const element = getByTestId(`${prefix}scroll-el`)
   let delta_t: number
 
-  test('scroll event should initiate the gesture', () => {
+  test('scroll event should initiate the gesture', async () => {
     element.scrollLeft = 10
     element.scrollTop = 30
 
@@ -59,15 +59,14 @@ describe.each([
   })
 
   test('kinematics should update', () => {
-    expect(getByTestId(`${prefix}scroll-velocity`)).not.toHaveTextContent(/^0$/)
-    expect(getByTestId(`${prefix}scroll-vxvy`)).toHaveTextContent(`${30 * (1 / delta_t)},${20 * (1 / delta_t)}`)
+    expect(getByTestId(`${prefix}scroll-velocity`)).toHaveTextContent(`${30 / delta_t},${20 / delta_t}`)
   })
 
   test('the last scroll event should debounce and terminate the gesture', async () => {
     await waitFor(() => {
       expect(getByTestId(`${prefix}scroll-last`)).toHaveTextContent('true')
       expect(getByTestId(`${prefix}scroll-active`)).toHaveTextContent('false')
-      expect(getByTestId(`${prefix}scroll-vxvy`)).toHaveTextContent('0,0')
+      expect(getByTestId(`${prefix}scroll-velocity`)).toHaveTextContent(`${30 / delta_t},${20 / delta_t}`)
       expect(getByTestId(`${prefix}scroll-scrolling`)).toHaveTextContent('false')
     })
   })

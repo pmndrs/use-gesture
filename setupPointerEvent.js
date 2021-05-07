@@ -19,4 +19,13 @@ if (window.PointerEvent) {
     this._addEventListener = _addEventListener
     this._addEventListener(type.replace('pointer', 'mouse'), fn, capture)
   }
+  EventTarget.prototype.setPointerCapture = function (pointerId) {
+    this.pointerId = pointerId
+  }
+  EventTarget.prototype.hasPointerCapture = function (pointerId) {
+    return this.pointerId === pointerId
+  }
+  EventTarget.prototype.releasePointerCapture = function (pointerId) {
+    if (this.pointerId === pointerId) this.pointerId = null
+  }
 }

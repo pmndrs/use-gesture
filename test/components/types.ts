@@ -1,14 +1,14 @@
 import React from 'react'
-import { Fn, UseGestureConfig } from '../../src/types'
+import { UserGestureConfig } from '../../packages/core/src'
 
 interface Props {
   bindArgs?: any[]
   gestures: string[]
-  cancel?: Fn
+  cancel?: Function
   canceled?: boolean
   memoArg?: any
-  config?: UseGestureConfig
-  domTarget?: EventTarget | React.RefObject<EventTarget>
+  config?: UserGestureConfig
+  target?: EventTarget | React.RefObject<EventTarget>
 }
 
 export type InteractiveType = React.FunctionComponent<Props>
