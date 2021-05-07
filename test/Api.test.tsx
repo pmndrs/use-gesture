@@ -1,5 +1,6 @@
 import React from 'react'
 import { render, cleanup, fireEvent, createEvent } from '@testing-library/react'
+import { patchCreateEvent } from './utils'
 import '@testing-library/jest-dom/extend-expect'
 import { BindProps, GenuineHandlers } from './components/Api'
 import Interactive from './components/Interactive'
@@ -7,20 +8,7 @@ import InteractiveDom from './components/InteractiveDom'
 
 afterEach(cleanup)
 
-// patching createEvent
-for (let key in createEvent) {
-  if (key.indexOf('pointer') === 0) {
-    // @ts-ignore
-    const fn = createEvent[key.replace('pointer', 'mouse')]
-    if (!fn) break
-    // @ts-ignore
-    createEvent[key] = function (type, { pointerId, ...rest }) {
-      const event = fn(type, rest)
-      event.pointerId = pointerId
-      return event
-    }
-  }
-}
+patchCreateEvent(createEvent)
 
 test('bind should dispatch its arguments', () => {
   const { getByTestId } = render(<BindProps args1={['args1']} args2={['args2']} />)

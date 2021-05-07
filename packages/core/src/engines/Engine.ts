@@ -184,6 +184,7 @@ Engine.prototype.reset = function () {
   state._bounds = [[-Infinity, Infinity], [-Infinity, Infinity]]
   state.axis = undefined
   state.memo = undefined
+  state.elapsedTime = 0
   state.direction = [0, 0]
   state.distance = [0, 0]
   state.velocity = [0, 0]
@@ -203,10 +204,14 @@ Engine.prototype.start = function (event) {
     state.lastOffset = config.from ? call(config.from, state) : state.offset
     state.offset = state.lastOffset
   }
+  state.startTime = state.timeStamp = event.timeStamp
 } as Engine['start']
 
 Engine.prototype.compute = function (event) {
   const { state, config, shared } = this
+  state.args = this.args
+
+  let dt = 0
 
   if (event) {
     // sets the shared state with event properties
@@ -215,6 +220,11 @@ Engine.prototype.compute = function (event) {
     shared.locked = !!document.pointerLockElement
     Object.assign(shared, getEventDetails(event))
     shared.down = shared.pressed = shared.buttons > 0 || shared.touches > 0
+
+    // sets time stamps
+    dt = event.timeStamp - state.timeStamp
+    state.timeStamp = event.timeStamp
+    state.elapsedTime = state.timeStamp - state.startTime
   }
 
   const _absoluteDelta = state._delta.map(Math.abs) as Vector2
@@ -249,30 +259,24 @@ Engine.prototype.compute = function (event) {
     state.active = shared[this.ingKey] = state._active
 
     if (event) {
-      const dt = event.timeStamp - state.timeStamp
-      state.timeStamp = event.timeStamp
-
       if (state.first) {
         if ('bounds' in config) state._bounds = call(config.bounds, state)
-        state.startTime = state.timeStamp
         if (this.setup) this.setup()
       }
-
-      state.elapsedTime = state.timeStamp - state.startTime
 
       const previousMovement = state.movement
       state.movement = movement
 
       this.computeOffset()
 
-      if (!state.last && dt > 0) {
+      if (!state.last) {
         state.delta = V.sub(movement, previousMovement)
         const absoluteDelta = state.delta.map(Math.abs) as Vector2
 
         V.addTo(state.distance, absoluteDelta)
         state.direction = state.delta.map(Math.sign) as Vector2
 
-        if (!state.first) {
+        if (!state.first && dt > 0) {
           // calculates kinematics unless the gesture starts or ends
           state.velocity = [absoluteDelta[0] / dt, absoluteDelta[1] / dt]
         }
@@ -300,8 +304,7 @@ Engine.prototype.emit = function () {
 
   const memo = this.handler({
     ...shared,
-    ...state,
-    args: this.args
+    ...state
   })
 
   // Sets memo to the returned value of the handler (unless it's  undefined)

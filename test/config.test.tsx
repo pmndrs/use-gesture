@@ -2,7 +2,7 @@ import { parse } from '../packages/core/src/config/resolver'
 import { dragConfigResolver } from '../packages/core/src/config/dragConfigResolver'
 import { pinchConfigResolver } from '../packages/core/src/config/pinchConfigResolver'
 import { ConfigResolverMap } from '../packages/core/src/imports'
-import { DragConfig, PinchConfig, Vector2 } from '../packages/core/src/types'
+import { DragConfig, PinchConfig } from '../packages/core/src/types'
 import { identity } from '../packages/core/src/config/sharedConfigResolver'
 
 ConfigResolverMap.set('drag', dragConfigResolver)

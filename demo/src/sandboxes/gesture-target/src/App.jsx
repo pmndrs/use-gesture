@@ -26,7 +26,7 @@ function Draggable() {
   const pointerOptions = useControls('pointer', { touch: false, capture: true, lock: false })
 
   useDrag(
-    ({ active, tap, ...state }) => {
+    ({ active, event, ...state }) => {
       let [x, y] = state[gesture]
       set({ x, y })
 
