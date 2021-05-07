@@ -170,7 +170,7 @@ Engine.prototype = {
 
 Engine.prototype.reset = function () {
   const { state, shared, config, ingKey } = this
-  const { transform, threshold } = config
+  const { transform, threshold = [0, 0] } = config
   shared[ingKey] = state._active = state.active = state._blocked = state._force = false
   state._step = [false, false]
   state.intentional = false
