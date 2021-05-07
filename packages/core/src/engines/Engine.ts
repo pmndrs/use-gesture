@@ -261,16 +261,19 @@ Engine.prototype.compute = function (event) {
       const previousMovement = state.movement
       state.movement = movement
 
-      const absoluteDelta = state.delta.map(Math.abs) as Vector2
-
-      V.addTo(state.distance, absoluteDelta)
       this.computeOffset()
 
-      if (!state.first && !state.last && dt > 0) {
-        // calculates kinematics unless the gesture starts or ends
+      if (!state.last && dt > 0) {
         state.delta = V.sub(movement, previousMovement)
+        const absoluteDelta = state.delta.map(Math.abs) as Vector2
+
+        V.addTo(state.distance, absoluteDelta)
         state.direction = state.delta.map(Math.sign) as Vector2
-        state.velocity = [absoluteDelta[0] / dt, absoluteDelta[1] / dt]
+
+        if (!state.first) {
+          // calculates kinematics unless the gesture starts or ends
+          state.velocity = [absoluteDelta[0] / dt, absoluteDelta[1] / dt]
+        }
       }
     }
   }
