@@ -52,13 +52,23 @@ CoordinatesEngine.prototype.intent = function (v) {
     else if (axisMovementDifference > 0) state.axis = 'x'
   }
 
+  const axis = state.axis
+
   if (this.config.lockDirection) {
-    if (state.axis === 'x') v[1] = 0
-    else if (state.axis === 'y') v[0] = 0
-  } else if (this.config.axis && !!state.axis) {
-    if (state.axis !== this.config.axis) {
+    if (axis) {
+      state._blocked = false
+      if (axis === 'x') v[1] = 0
+      else if (axis === 'y') v[0] = 0
+    } else {
+      state._blocked = false
+    }
+  } else if (this.config.axis) {
+    if (!!axis && axis === this.config.axis) {
+      state._blocked = false
+      if (axis === 'x') v[1] = 0
+      else if (axis === 'y') v[0] = 0
+    } else {
       state._blocked = true
-    } else if (state.axis === 'x') v[1] = 0
-    else if (state.axis === 'y') v[0] = 0
+    }
   }
 } as CoordinatesEngine['intent']
