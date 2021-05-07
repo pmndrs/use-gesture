@@ -42,10 +42,12 @@ MoveEngine.prototype.moveStart = function (event) {
 } as MoveEngine['moveStart']
 
 MoveEngine.prototype.moveChange = function (event) {
+  if (!this.state._active) return
   const values = Pointer.values(event)
-  const delta = V.sub(values, this.state.values)
-  V.addTo(this.state._movement, delta)
-  this.state.values = values
+  const state = this.state
+  state._delta = V.sub(values, state.values)
+  V.addTo(state._movement, state._delta)
+  state.values = values
 
   this.compute(event)
   this.emit()

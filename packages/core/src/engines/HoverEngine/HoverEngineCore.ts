@@ -33,14 +33,15 @@ HoverEngine.prototype.enter = function (event) {
 } as HoverEngine['enter']
 
 HoverEngine.prototype.leave = function (event) {
-  if (!this.state._active) return
-  this.state._active = false
+  const state = this.state
+  if (!state._active) return
+  state._active = false
   const values = Pointer.values(event)
-  this.state._movement = V.sub(values, this.state.values)
-  this.state.values = values
+  state._movement = state._delta = V.sub(values, state.values)
+  state.values = values
 
   this.compute(event)
-  this.state.delta = this.state.movement
+  state.delta = state.movement
   this.emit()
 } as HoverEngine['leave']
 

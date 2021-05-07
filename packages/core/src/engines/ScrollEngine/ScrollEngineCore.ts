@@ -35,8 +35,8 @@ ScrollEngine.prototype.scrollChange = function (event) {
   if (event.cancelable) event.preventDefault()
   const state = this.state
   const values = Scroll.values(event)
-  const delta = V.sub(values, state.values)
-  V.addTo(state._movement, delta)
+  state._delta = V.sub(values, state.values)
+  V.addTo(state._movement, state._delta)
   state.values = values
 
   this.compute(event)

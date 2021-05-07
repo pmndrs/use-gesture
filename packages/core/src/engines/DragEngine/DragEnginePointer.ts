@@ -1,7 +1,6 @@
 import { DragEngine } from './DragEngineCore'
 import { Pointer } from '../../utils/events'
 import { V } from '../../utils/maths'
-import { Vector2 } from '../../types'
 
 DragEngine.prototype.pointerDown = function (event) {
   this.ctrl.setEventIds(event)
@@ -48,16 +47,15 @@ DragEngine.prototype.pointerMove = function (event) {
   if (state._pointerId && id !== state._pointerId) return
 
   const values = Pointer.values(event)
-  let delta: Vector2
 
   if (document.pointerLockElement === event.target) {
-    delta = [event.movementX, event.movementY]
+    state._delta = [event.movementX, event.movementY]
   } else {
-    delta = V.sub(values, state.values)
+    state._delta = V.sub(values, state.values)
     state.values = values
   }
 
-  V.addTo(state._movement, delta)
+  V.addTo(state._movement, state._delta)
   this.compute(event)
 
   if (state._delayed) {
@@ -97,7 +95,7 @@ DragEngine.prototype.pointerUp = function (event) {
   this.setActive({ pointer: false })
   this.compute(event)
 
-  const [dx, dy] = state.distance
+  const [dx, dy] = state._distance
   state.tap = dx <= 3 && dy <= 3
 
   if (state.tap && config.filterTaps) {

@@ -26,8 +26,9 @@ PinchEngine.prototype.wheelStart = function (event) {
 
 PinchEngine.prototype.wheelChange = function (event) {
   if (event.cancelable) event.preventDefault()
-  const deltaY = Wheel.values(event)[1]
-  V.addTo(this.state._movement, [-deltaY / PINCH_WHEEL_RATIO, 0])
+  const state = this.state
+  state._delta = [-Wheel.values(event)[1] / PINCH_WHEEL_RATIO, 0]
+  V.addTo(state._movement, state._delta)
 
   this.state.origin = [event.clientX, event.clientY]
 

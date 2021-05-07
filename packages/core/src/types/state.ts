@@ -72,6 +72,8 @@ export type CommonGestureState = {
   _force: boolean
   _step: [false | number, false | number]
   _movement: Vector2
+  _distance: Vector2
+  _delta: Vector2
   _bounds: [Vector2, Vector2]
   _threshold: Vector2
   /**

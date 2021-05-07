@@ -33,8 +33,9 @@ WheelEngine.prototype.wheel = function (event) {
 
 WheelEngine.prototype.wheelChange = function (event) {
   if (event.cancelable) event.preventDefault()
-  const delta = Wheel.values(event)
-  V.addTo(this.state._movement, delta)
+  const state = this.state
+  state._delta = Wheel.values(event)
+  V.addTo(this.state._movement, state._delta)
 
   this.compute(event)
   this.emit()

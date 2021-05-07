@@ -3,6 +3,7 @@ module.exports = {
   extends: ['react-app'],
   rules: {
     'no-console': 'warn',
-    'default-case': 'off'
+    'default-case': 'off',
+    '@typescript-eslint/no-redeclare': 'off'
   }
 }

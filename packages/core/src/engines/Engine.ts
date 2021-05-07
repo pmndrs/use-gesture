@@ -175,7 +175,8 @@ Engine.prototype.reset = function () {
   state._step = [false, false]
   state.intentional = false
   state._movement = [0, 0]
-
+  state._distance = [0, 0]
+  state._delta = [0, 0]
   // the _threshold is the difference between a [0,0] origin offset converted to
   // its new space coordinates
   state._threshold = V.sub(transform(threshold), transform([0, 0])).map(Math.abs) as Vector2
@@ -205,9 +206,7 @@ Engine.prototype.start = function (event) {
 } as Engine['start']
 
 Engine.prototype.compute = function (event) {
-  const state = this.state
-  const config = this.config
-  const shared = this.shared
+  const { state, config, shared } = this
 
   if (event) {
     // sets the shared state with event properties
@@ -217,6 +216,9 @@ Engine.prototype.compute = function (event) {
     Object.assign(shared, getEventDetails(event))
     shared.down = shared.pressed = shared.buttons > 0 || shared.touches > 0
   }
+
+  const _absoluteDelta = state._delta.map(Math.abs) as Vector2
+  V.addTo(state._distance, _absoluteDelta)
 
   const [_m0, _m1] = config.transform(state._movement)
   const [_t0, _t1] = state._threshold

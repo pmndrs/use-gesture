@@ -13,15 +13,15 @@ const KEYS_DELTA_MAP = {
 DragEngine.prototype.keyDown = function (event) {
   // @ts-ignore
   const deltaFn = KEYS_DELTA_MAP[event.key]
-
+  const state = this.state
   if (deltaFn) {
     const factor = event.shiftKey ? 10 : event.altKey ? 0.1 : 1
-    const delta = deltaFn(factor)
+    state._delta = deltaFn(factor)
 
     this.start(event)
-    this.state._keyboardActive = true
+    state._keyboardActive = true
 
-    V.addTo(this.state._movement, delta)
+    V.addTo(state._movement, state._delta)
 
     this.compute(event)
     this.emit()
