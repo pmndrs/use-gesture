@@ -9,6 +9,7 @@
 - `config.from` accounts for `offset` and not for `movement` as it was the case for `config.initial`
 - `config.bounds` accounts for `offset`
 - `velocity` is now a Vector with absolute (use `direction` if you need relative velocity)
+- `vxvy`, `previous`, `vdva` are gone
 - `distance` is now a Vector with cumulative deltas
 - `state.pressed` is an alias to `state.down`
 - `config.transform` only transforms `movement` and `offset`. Raw values are no longer transformed.
