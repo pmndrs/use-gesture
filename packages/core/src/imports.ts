@@ -36,7 +36,7 @@ function sortHandlers(_handlers: GestureHandlers) {
       handlers[key] = _handlers[key]
     } else {
       // @ts-ignore
-      native[key.slice(2).toLowerCase()] = _handlers[key]
+      native[key] = _handlers[key]
     }
   }
 

@@ -144,8 +144,14 @@ Controller.prototype.bind = function (...args) {
   if (sharedConfig.enabled) {
     // Adding native handlers
     for (const eventKey in this._nativeHandlers) {
-      // @ts-ignore
-      bindFunction(eventKey, '', (event) => this._nativeHandlers[eventKey]({ ...this.state.shared, event, args }))
+      bindFunction(
+        eventKey,
+        '',
+        // @ts-ignore
+        (event) => this._nativeHandlers[eventKey]({ ...this.state.shared, event, args }),
+        undefined,
+        true
+      )
     }
 
     // Adding gesture handlers
@@ -187,8 +193,10 @@ const bindToEventStore = (eventStore: EventStore, target: EventTarget) => (
   device: string,
   action: string,
   handler: (event: any) => void,
-  options?: AddEventListenerOptions
+  options?: AddEventListenerOptions,
+  isNative = false
 ) => {
+  if (isNative) device = device.slice(2).toLowerCase() // transforms onMouseDown into mousedown
   eventStore.add(target, device, action, handler, options)
 }
 
@@ -196,10 +204,12 @@ const bindToProps = (props: any, eventOptions: AddEventListenerOptions) => (
   device: string,
   action: string,
   handler: (event: any) => void,
-  options: AddEventListenerOptions = {}
+  options: AddEventListenerOptions = {},
+  isNative = false
 ) => {
   const capture = options.capture ?? eventOptions.capture
-  const handlerProp = toReactHandlerProp(device, action, capture)
+  // a native handler is already passed as a prop like "onMouseDown"
+  const handlerProp = isNative ? device : toReactHandlerProp(device, action, capture)
   props[handlerProp] = props[handlerProp] || []
   props[handlerProp].push(handler)
 }
