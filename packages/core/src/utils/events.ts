@@ -105,7 +105,11 @@ export const Scroll = {
 }
 
 export function getEventDetails(event: any) {
-  const buttons = 'buttons' in event ? event.buttons : 0
-  const { shiftKey, altKey, metaKey, ctrlKey } = event
-  return { buttons, shiftKey, altKey, metaKey, ctrlKey }
+  const payload: any = {}
+  if ('buttons' in event) payload.buttons = event.buttons
+  if ('shiftKey' in event) {
+    const { shiftKey, altKey, metaKey, ctrlKey } = event
+    Object.assign({ shiftKey, altKey, metaKey, ctrlKey })
+  }
+  return payload
 }
