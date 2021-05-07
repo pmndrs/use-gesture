@@ -13,7 +13,6 @@ export interface MoveEngineConstructor {
 
 export interface MoveEngine extends CoordinatesEngine<'move'> {
   move(this: MoveEngine, event: PointerEvent): void
-  moveStart(this: MoveEngine, event: PointerEvent): void
   moveChange(this: MoveEngine, event: PointerEvent): void
   moveEnd(this: MoveEngine, event?: PointerEvent): void
 }
@@ -27,16 +26,11 @@ export const MoveEngine: MoveEngineConstructor = function (this: MoveEngine, ctr
 MoveEngine.prototype = Object.create(CoordinatesEngine.prototype)
 
 MoveEngine.prototype.move = function (event) {
-  if (!this.state._active) this.moveStart(event)
-  else this.moveChange(event)
+  if (!this.state._active) this.start(event)
+
+  this.moveChange(event)
   this.timeoutStore.add('moveEnd', this.moveEnd.bind(this))
 } as MoveEngine['move']
-
-MoveEngine.prototype.moveStart = function (event) {
-  this.start(event)
-  this.state.values = Pointer.values(event)
-  this.moveChange(event)
-} as MoveEngine['moveStart']
 
 MoveEngine.prototype.moveChange = function (event) {
   if (event.cancelable) event.preventDefault()

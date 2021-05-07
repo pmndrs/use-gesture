@@ -13,7 +13,6 @@ export interface WheelEngineConstructor {
 
 export interface WheelEngine extends CoordinatesEngine<'wheel'> {
   wheel(this: WheelEngine, event: WheelEvent): void
-  wheelStart(this: WheelEngine, event: WheelEvent): void
   wheelChange(this: WheelEngine, event: WheelEvent): void
   wheelEnd(this: WheelEngine): void
 }
@@ -27,15 +26,10 @@ export const WheelEngine: WheelEngineConstructor = function (this: WheelEngine, 
 WheelEngine.prototype = Object.create(CoordinatesEngine.prototype)
 
 WheelEngine.prototype.wheel = function (event) {
-  if (!this.state._active) this.wheelStart(event)
-  else this.wheelChange(event)
+  if (!this.state._active) this.start(event)
+  this.wheelChange(event)
   this.timeoutStore.add('wheelEnd', this.wheelEnd.bind(this))
 } as WheelEngine['wheel']
-
-WheelEngine.prototype.wheelStart = function (event) {
-  this.start(event)
-  this.wheelChange(event)
-} as WheelEngine['wheelStart']
 
 WheelEngine.prototype.wheelChange = function (event) {
   if (event.cancelable) event.preventDefault()
