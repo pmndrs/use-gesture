@@ -12,8 +12,8 @@ export interface HoverEngineConstructor {
 }
 
 export interface HoverEngine extends CoordinatesEngine<'hover'> {
-  pointerEnter(this: HoverEngine, event: PointerEvent): void
-  pointerLeave(this: HoverEngine, event: PointerEvent): void
+  enter(this: HoverEngine, event: PointerEvent): void
+  leave(this: HoverEngine, event: PointerEvent): void
 }
 
 export const HoverEngine: HoverEngineConstructor = function (this: HoverEngine, ctrl: Controller, args: any[]) {
@@ -24,15 +24,15 @@ export const HoverEngine: HoverEngineConstructor = function (this: HoverEngine, 
 
 HoverEngine.prototype = Object.create(CoordinatesEngine.prototype)
 
-HoverEngine.prototype.pointerEnter = function (event) {
+HoverEngine.prototype.enter = function (event) {
   this.start(event)
   this.state.values = Pointer.values(event)
 
   this.compute(event)
   this.emit()
-} as HoverEngine['pointerEnter']
+} as HoverEngine['enter']
 
-HoverEngine.prototype.pointerLeave = function (event) {
+HoverEngine.prototype.leave = function (event) {
   if (!this.state._active) return
   this.state._active = false
   const values = Pointer.values(event)
@@ -42,9 +42,9 @@ HoverEngine.prototype.pointerLeave = function (event) {
   this.compute(event)
   this.state.delta = this.state.movement
   this.emit()
-} as HoverEngine['pointerLeave']
+} as HoverEngine['leave']
 
 HoverEngine.prototype.bind = function (this: HoverEngine, bindFunction) {
-  bindFunction('pointer', 'enter', this.pointerEnter.bind(this))
-  bindFunction('pointer', 'leave', this.pointerLeave.bind(this))
+  bindFunction('mouse', 'enter', this.enter.bind(this))
+  bindFunction('mouse', 'leave', this.leave.bind(this))
 } as HoverEngine['bind']

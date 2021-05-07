@@ -59,6 +59,6 @@ MoveEngine.prototype.moveEnd = function (event) {
 } as MoveEngine['moveEnd']
 
 MoveEngine.prototype.bind = function (this: MoveEngine, bindFunction) {
-  bindFunction('pointer', 'change', this.move.bind(this))
-  bindFunction('pointer', 'leave', this.moveEnd.bind(this))
+  bindFunction('mouse', 'change', this.move.bind(this))
+  bindFunction('mouse', 'leave', this.moveEnd.bind(this))
 } as MoveEngine['bind']
