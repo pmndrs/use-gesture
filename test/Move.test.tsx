@@ -10,7 +10,7 @@ afterAll(cleanup)
 
 describe.each([
   ['attached to component', Interactive, ''],
-  ['attached to node', InteractiveDom, 'dom-'],
+  ['attached to node', InteractiveDom, 'dom-']
 ])('testing onMove %s)', (_testName, C, prefix) => {
   const Component = C as InteractiveType
   const { getByTestId, rerender } = render(<Component gestures={['Move']} memoArg="memo" />)
@@ -29,7 +29,6 @@ describe.each([
     expect(getByTestId(`${prefix}move-delta`)).toHaveTextContent('0,0')
     expect(getByTestId(`${prefix}move-initial`)).toHaveTextContent('20,50')
   })
-
   test('initiating the gesture should fire onMoveStart', () => {
     expect(getByTestId(`${prefix}move-start`)).toHaveTextContent(/^fired$/)
     expect(getByTestId(`${prefix}move-end`)).toHaveTextContent(/^not fired$/)
@@ -54,15 +53,14 @@ describe.each([
   })
 
   test('kinematics should update', () => {
-    expect(getByTestId(`${prefix}move-velocity`)).not.toHaveTextContent(/^0$/)
-    expect(getByTestId(`${prefix}move-vxvy`)).toHaveTextContent(`${10 * (1 / delta_t)},${30 * (1 / delta_t)}`)
+    expect(getByTestId(`${prefix}move-velocity`)).toHaveTextContent(`${10 / delta_t},${30 / delta_t}`)
   })
 
   test('the last mouseMove event should debounce and terminate the gesture', async () => {
     await waitFor(() => {
       expect(getByTestId(`${prefix}move-last`)).toHaveTextContent('true')
       expect(getByTestId(`${prefix}move-active`)).toHaveTextContent('false')
-      expect(getByTestId(`${prefix}move-vxvy`)).toHaveTextContent('0,0')
+      expect(getByTestId(`${prefix}move-velocity`)).toHaveTextContent(`${10 / delta_t},${30 / delta_t}`)
       expect(getByTestId(`${prefix}move-moving`)).toHaveTextContent('false')
     })
   })
@@ -98,7 +96,7 @@ describe.each([
 
   test('disabling the move gesture should prevent state from updating', () => {
     rerender(<Component gestures={['Move']} config={{ move: { enabled: false } }} />)
-    fireEvent.mouseMove(element)
+    fireEvent.pointerMove(element)
     expect(getByTestId(`${prefix}move-moving`)).toHaveTextContent('false')
   })
 })

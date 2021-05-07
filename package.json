@@ -20,7 +20,7 @@
     "tsc": "tsc --noEmit",
     "demo:dev": "pnpm run dev --filter demo",
     "demo:build": "pnpm workspace demo build",
-    "test": "jest test",
+    "test": "jest",
     "test:watch": "jest --watchAll",
     "size": "size-limit",
     "size:analyze": "size-limit --why"
