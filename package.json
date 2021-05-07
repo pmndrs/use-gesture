@@ -21,7 +21,7 @@
     "demo:dev": "pnpm run dev --filter demo",
     "demo:build": "pnpm workspace demo build",
     "test": "jest test",
-    "test:watch": "jest test --watchAll",
+    "test:watch": "jest --watchAll",
     "size": "size-limit",
     "size:analyze": "size-limit --why"
   },
@@ -48,7 +48,8 @@
   "jest": {
     "testEnvironment": "jsdom",
     "roots": [
-      "./test"
+      "./test",
+      "./packages"
     ],
     "setupFilesAfterEnv": [
       "jest-chain",

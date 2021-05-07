@@ -94,6 +94,16 @@ describe('testing derived config', () => {
       dragConfig = { delay: false }
       expect(parse(dragConfig, 'drag').drag).toHaveProperty('delay', 0)
     })
+    test(`derived device properly handles r3f, touch and lock`, () => {
+      dragConfig = { r3f: true, pointer: { touch: true, lock: true } }
+      expect(parse(dragConfig, 'drag').drag).toHaveProperty('device', 'pointer')
+      /* @note unfortunately jsdom doesn't support touch events so device is pointer */
+      dragConfig.r3f = false
+      expect(parse(dragConfig, 'drag').drag).toHaveProperty('device', 'pointer')
+      /* @note unfortunately jsdom doesn't support pointer lock so device is pointer */
+      dragConfig.pointer.touch = false
+      expect(parse(dragConfig, 'drag').drag).toHaveProperty('device', 'pointer')
+    })
   })
 
   describe('testing distance / angle configuration', () => {

@@ -34,7 +34,7 @@ export type GenericOptions = {
   transform?: (v: Vector2) => Vector2
 }
 
-export type GestureOptions<T extends GestureKey> = {
+export type GestureOptions<T extends GestureKey> = GenericOptions & {
   /**
    * Whether the gesture is enabled.
    */
