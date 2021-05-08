@@ -47,6 +47,7 @@ Generic options deal with how <ReactUseGesture/> will set event listeners.
 | [`eventOptions`](#eventoptions) | Lets you customize if you want events to be passive or captured.                                                |
 | [`window`](#window)             | Lets you specify which window element the gesture should bind events to (only relevant for the `drag` gesture). |
 | [`enabled`](#enabled)           | When set to `false` none of your handlers will be fired.                                                        |
+| `r3f`                           | Set this option to `true` when using with [`@react-three/fiber`](https://github.com/pmndrs/react-three-fiber)   |
 
 ### Gesture options
 
@@ -64,11 +65,14 @@ Here are all options that can be applied to gestures.
 | [`bounds`](#bounds)                             |     **xy**     | Limits the gesture `offset` to the specified bounds.                                                                                                                                                 |
 | [`scaleBounds`](#scalebounds)                   |   **pinch**    | Limits the scale `offset` to the specified bounds.                                                                                                                                                   |
 | [`angleBounds`](#anglebounds)                   |   **pinch**    | Limits the angle `offset` to the specified bounds.                                                                                                                                                   |
+| `angleUnit`                                     |   **pinch**    | Defaults to `deg`, unless `r3f` is set to `true` in which case it's `rad`.                                                                                                                           |
 | [`rubberband`](#rubberband)                     |    **all**     | The elasticity coefficient of the gesture when going out of bounds. When set to `true`, the elasticiy coefficient will be defaulted to `0.15`                                                        |
 | [`transform`](#transform)                       |    **all**     | A function that you can use to transform pointer values. Useful to map your screen coordinates to custom space coordinates such as a canvas.                                                         |
 | [`filterTaps`](#filtertaps-drag-only)           |    **drag**    | If `true`, the component won't trigger your drag logic if the user just clicked on the component.                                                                                                    |
 | [`preventScroll`](#preventScroll-drag-only)     |    **drag**    | If `true`, drag will be triggered after `250ms` and will prevent window scrolling.                                                                                                                   |
-| [`pointer.touch`](#pointertouch-drag-and-pinch) | **drag,pinch** | If `true`, drag will use touch events on touch-enabled devices. [Read more below](#pointertouc-drag-and-pinch).                                                                                      |
+| [`pointer.touch`](#pointertouch-drag-and-pinch) | **drag,pinch** | If `true`, drag will use touch events on touch-enabled devices. [Read more below](#pointertouch-drag-and-pinch).                                                                                     |
+| `pointer.capture`                               |    **drag**    | If `false`, drag will not use `setPointerCapture` and attach `pointerMove` events to the window.                                                                                                     |
+| `pointer.lock`                                  |    **drag**    | If `true`, the pointer will enter pointer lock mode when drag starts, and exit pointer lock when drag ends.                                                                                          |
 | [`delay`](#delay-drag-only)                     |    **drag**    | If set, the handler will be delayed for the duration of the delay (in `ms`) — or if the user starts moving. When set to `true`, `delay` is defaulted to `180ms`.                                     |
 | [`swipe.distance`](#swipedistance-drag-only)    |    **drag**    | The minimum distance per axis (in `pixels`) the drag gesture needs to travel to trigger a swipe.                                                                                                     |
 | [`swipe.velocity`](#swipevelocity-drag-only)    |   **drag**     | The minimum velocity per axis (in `pixels / ms`) the drag gesture needs to reach before the pointer is released.                                                                                     |
@@ -215,6 +219,15 @@ function BoundsExample() {
 
 > `scaleBounds` and `angleBounds` serve the same purpose as `bounds` for the `pinch` gesture, in a `{min,max}` format.
 
+### bounds (drag only)
+
+<Specs
+  types={['DragBounds: Bounds | HTMLElement | React.RefObject<HTMLElement>', '(gestureState) => DragBounds']}
+  defaultValue="{ top: -Infinity, bottom: Infinity, left: -Infinity, right: Infinity }"
+/>
+
+Since v10, `bounds` can also a be a React ref or an HTMLElement, in which case the dragged element will be constrained to the element bounds.
+
 ### scaleBounds
 
 <Specs
@@ -308,9 +321,11 @@ useGesture({/* handlers */ }, {
 })
 ```
 
-### axis (xy gestures only)
+### axis
 
-<Specs types={['x', 'y', 'undefined']} defaultValue="undefined" />
+#### xy gestures
+
+<Specs types={['x', 'y', 'lock', 'undefined']} defaultValue="undefined" />
 
 `axis` makes it easy to constraint the user gesture to a specific axis.
 
@@ -332,9 +347,7 @@ But in reality `axis` does slightly more than just locking the gesture direction
 
 The component above can only move along the `x` axis. But try dragging and moving the component on the vertical axis. Without the `axis` option, you should notice the component movement will slightly jiggle horizontally because your movement won't be perfectly vertical.
 
-### axis 'lock' (xy gestures only)
-
-<Specs types="boolean" defaultValue="false" />
+#### 'lock' option (pinch as well)
 
 `axis: 'lock'` allows you to lock the movement of the gesture once a direction has been detected. In other words, if the user starts moving horizontally, the gesture will be locked on the `x` axis.
 

@@ -113,7 +113,7 @@ export type PinchConfig = GestureOptions<'pinch'> & {
   axis?: 'lock' | undefined
 }
 
-export type DragBounds = Bounds | EventTarget | React.RefObject<EventTarget>
+export type DragBounds = Bounds | HTMLElement | React.RefObject<HTMLElement>
 
 export type DragConfig = CoordinatesConfig<'drag'> & {
   /**
