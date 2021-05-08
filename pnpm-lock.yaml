@@ -36,7 +36,6 @@ importers:
       jest: ^26.6.3
       jest-chain: ^1.1.5
       patch-package: ^6.4.7
-      pnpm: ^6.2.5
       postinstall-postinstall: ^2.1.0
       prettier: ^2.2.1
       pretty-quick: ^3.1.0
@@ -74,7 +73,6 @@ importers:
       jest: 26.6.3
       jest-chain: 1.1.5
       patch-package: 6.4.7
-      pnpm: 6.2.5
       postinstall-postinstall: 2.1.0
       prettier: 2.2.1
       pretty-quick: 3.1.0_prettier@2.2.1
@@ -142,6 +140,7 @@ importers:
       lethargy: ^1.0.9
       leva: ^0.9.4
       parse-numeric-range: ^1.2.0
+      pnpm: ^6.2.5
       react: ^17.0.2
       react-dom: ^17.0.2
       react-player: ^2.9.0
@@ -162,6 +161,7 @@ importers:
       lethargy: 1.0.9
       leva: 0.9.9_react-dom@17.0.2+react@17.0.2
       parse-numeric-range: 1.2.0
+      pnpm: 6.2.5
       react: 17.0.2
       react-dom: 17.0.2_react@17.0.2
       react-player: 2.9.0_react@17.0.2
@@ -14068,7 +14068,7 @@ packages:
     resolution: {integrity: sha512-klFrPM3JDo+LFA2f7Ih3wnH296ZDDqfFx5BCc3ADZV6zRQFscEL8XIU8jDqsHFv7EZHLP9Z12fzY/HyHca/duw==}
     engines: {node: '>=12.17'}
     hasBin: true
-    dev: true
+    dev: false
 
   /polished/4.1.2:
     resolution: {integrity: sha512-jq4t3PJUpVRcveC53nnbEX35VyQI05x3tniwp26WFdm1dwaNUBHAi5awa/roBlwQxx1uRhwNSYeAi/aMbfiJCQ==}
