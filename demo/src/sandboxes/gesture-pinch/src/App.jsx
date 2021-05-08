@@ -17,7 +17,6 @@ export default function App() {
   usePinch(
     ({ active, turns, ...state }) => {
       let [scale, angle] = state[gesture]
-      console.log({ turns })
       api.start({
         rotate: active || gesture === 'offset' ? angle : 0,
         scale: active || gesture === 'offset' ? scale : 1

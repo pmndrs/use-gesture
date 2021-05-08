@@ -31,8 +31,6 @@ function Draggable() {
       let [x, y] = state[gesture]
       set({ x, y })
 
-      console.log({ tap })
-
       if (pointerOptions.lock) {
         const dx = window.innerWidth / 2 - 40
         const dy = window.innerHeight / 2 - 40
