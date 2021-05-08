@@ -20,6 +20,7 @@ import CardsStack from './sandboxes/cards-stack/src/App'
 import Viewpager from './sandboxes/viewpager/src/App'
 import CardZoom from './sandboxes/card-zoom/src/App'
 import InfiniteSlideshow from './sandboxes/infinite-slideshow/src/App'
+import ActionSheet from './sandboxes/action-sheet/src/App'
 
 const links = {
   'gesture-drag': Drag,
@@ -38,7 +39,8 @@ const links = {
   'cards-stack': CardsStack,
   viewpager: Viewpager,
   'card-zoom': CardZoom,
-  'infinite-slideshow': InfiniteSlideshow
+  'infinite-slideshow': InfiniteSlideshow,
+  'action-sheet': ActionSheet
 }
 
 const Example = ({ link }) => {
