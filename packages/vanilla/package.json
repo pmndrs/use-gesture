@@ -1,6 +1,6 @@
 {
   "name": "@use-gesture/vanilla",
-  "version": "10.0.0",
+  "version": "10.0.0-beta.1",
   "description": "Vanilla target for @use-gesture",
   "keywords": [
     "react",
@@ -23,11 +23,11 @@
   "module": "dist/use-gesture-vanilla.esm.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/pmndrs/react-use-gesture.git",
+    "url": "git+https://github.com/pmndrs/use-gesture.git",
     "directory": "packages/vanilla"
   },
   "bugs": {
-    "url": "https://github.com/pmndrs/react-use-gesture/issues"
+    "url": "https://github.com/pmndrs/use-gesture/issues"
   },
   "author": "Paul Henschel",
   "contributors": [
@@ -35,6 +35,6 @@
   ],
   "homepage": "https://use-gesture.netlify.app",
   "dependencies": {
-    "@use-gesture/core": "^10.0.0"
+    "@use-gesture/core": "^10.0.0-beta.1"
   }
 }

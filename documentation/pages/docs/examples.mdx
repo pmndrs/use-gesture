@@ -11,11 +11,14 @@ import Video from './Video'
 import styles from './video.module.css'
 
 <div className={styles.videos} style={{ marginTop: '4rem' }}>
-  <Video video={'/videos/draggable.mp4'} id="fh8r8" badges={['drag']} />
-  <Video video={'/videos/cards.mp4'} id="fduch" badges={['drag']} />
-  <Video video={'/videos/actionsheet.mp4'} id="zuwji" badges={['drag', 'touchaction', 'initial', 'rubberband']} />
-  <Video video={'/videos/infinitescroll.mp4'} id="nigoy" badges={['wheel', 'drag']} />
-  <Video video={'/videos/viewpager.mp4'} id="v364z" badges={['drag']} />
-  <Video video={'/videos/multi.mp4'} id="rkgzi" badges={['drag', 'pinch', 'wheel', 'move']} />
-  <Video video={'/videos/rocket.mp4'} id="vi1tn" badges={['drag', 'initial']} />
+  <Video video={'/videos/draggable.mp4'} id="draggable-list" badges={['drag']} />
+  <Video video={'/videos/cards.mp4'} id="cards-stack" badges={['drag']} />
+  <Video
+    video={'/videos/actionsheet.mp4'}
+    id="action-sheet"
+    badges={['drag', 'touchaction', 'initial', 'rubberband']}
+  />
+  <Video video={'/videos/infinitescroll.mp4'} id="infinite-slideshow" badges={['wheel', 'drag']} />
+  <Video video={'/videos/viewpager.mp4'} id="viewpager" badges={['drag']} />
+  <Video video={'/videos/multi.mp4'} id="card-zoom" badges={['drag', 'pinch', 'wheel', 'move']} />
 </div>

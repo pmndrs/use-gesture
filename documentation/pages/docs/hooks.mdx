@@ -25,7 +25,7 @@ import ReactUseGesture from './code/rug'
 With the exception of `useGesture` which is a special hook, all other hooks share the same API:
 
 ```jsx
-const bind = useDrag(state => doSomethingWith(state), config)
+const bind = useDrag((state) => doSomethingWith(state), config)
 return <div {...bind(arg)} />
 ```
 
@@ -41,14 +41,14 @@ The drag gesture is possibly the most popular gesture of <ReactUseGesture />. Be
 
 The pinch gesture is a bit specific because depending on your device input, it might behave differently. On touch devices, two pointers (generally your fingers) allow for zooming and rotating.
 
-But Macbook trackpads also support pinching and rotating in Safari, but because React doesn't support proprietary Webkit GestureEvents, you will need to attach the gesture using a ref, with the `domTarget` [option](/docs/options/#domtarget). To make sure the zooming gesture doesn't interfere with Safari accessibility zoom, you will need to prevent the gesture like so:
+But Macbook trackpads also support pinching and rotating in Safari, but because React doesn't support proprietary Webkit GestureEvents, you will need to attach the gesture using a ref, with the `target` [option](/docs/options/#target). To make sure the zooming gesture doesn't interfere with Safari accessibility zoom, you will need to prevent the gesture like so:
 
 ```js
-document.addEventListener('gesturestart', e => e.preventDefault())
-document.addEventListener('gesturechange', e => e.preventDefault())
+document.addEventListener('gesturestart', (e) => e.preventDefault())
+document.addEventListener('gesturechange', (e) => e.preventDefault())
 ```
 
-Also, a pretty unknown feature allows devices supporting wheel to **zoom** (not rotate) by wheeling and pressing the **control** modifier key. <ReactUseGesture /> supports it, but to make sure the zooming doesn't interefere with the browser accessibility zoom, you'll also be better using the `domTarget` [option](/docs/options/#domtarget).
+Also, a pretty unknown feature allows devices supporting wheel to **zoom** (not rotate) by wheeling and pressing the **control** modifier key. <ReactUseGesture /> supports it, but to make sure the zooming doesn't interefere with the browser accessibility zoom, you'll also be better using the `target` [option](/docs/options/#target).
 
 ### About the wheel gesture
 
@@ -61,22 +61,22 @@ The wheel gesture is a bit tricky, due to the nature of the wheel event. In fact
 ```jsx
 const bind = useGesture(
   {
-    onDrag: state => doSomethingWith(state),
-    onDragStart: state => doSomethingWith(state),
-    onDragEnd: state => doSomethingWith(state),
-    onPinch: state => doSomethingWith(state),
-    onPinchStart: state => doSomethingWith(state),
-    onPinchEnd: state => doSomethingWith(state),
-    onScroll: state => doSomethingWith(state),
-    onScrollStart: state => doSomethingWith(state),
-    onScrollEnd: state => doSomethingWith(state),
-    onMove: state => doSomethingWith(state),
-    onMoveStart: state => doSomethingWith(state),
-    onMoveEnd: state => doSomethingWith(state),
-    onWheel: state => doSomethingWith(state),
-    onWheelStart: state => doSomethingWith(state),
-    onWheelEnd: state => doSomethingWith(state),
-    onHover: state => doSomethingWith(state),
+    onDrag: (state) => doSomethingWith(state),
+    onDragStart: (state) => doSomethingWith(state),
+    onDragEnd: (state) => doSomethingWith(state),
+    onPinch: (state) => doSomethingWith(state),
+    onPinchStart: (state) => doSomethingWith(state),
+    onPinchEnd: (state) => doSomethingWith(state),
+    onScroll: (state) => doSomethingWith(state),
+    onScrollStart: (state) => doSomethingWith(state),
+    onScrollEnd: (state) => doSomethingWith(state),
+    onMove: (state) => doSomethingWith(state),
+    onMoveStart: (state) => doSomethingWith(state),
+    onMoveEnd: (state) => doSomethingWith(state),
+    onWheel: (state) => doSomethingWith(state),
+    onWheelStart: (state) => doSomethingWith(state),
+    onWheelEnd: (state) => doSomethingWith(state),
+    onHover: (state) => doSomethingWith(state)
   },
   config
 )
@@ -114,7 +114,7 @@ function DragAndPointerDown() {
   const [{ x, y }, api] = useSpring(() => ({ x: 0, y: 0 }))
   const bind = useGesture({
     onDrag: ({ down, offset: [x, y] }) => api.start({ x, y }),
-    onPointerDown: ({ event, ...sharedState }) => console.log('pointer down', event),
+    onPointerDown: ({ event, ...sharedState }) => console.log('pointer down', event)
   })
   return <animated.div {...bind()} style={{ x, y }} />
 }

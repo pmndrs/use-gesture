@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react'
 import { useSpring, animated, config } from '@react-spring/web'
-import { useGesture } from 'react-use-gesture'
+import { useGesture } from '@use-gesture/react'
 import { toast } from 'react-toastify'
 import cn from 'classnames'
 import { Leva, useControls } from 'leva'
@@ -13,7 +13,7 @@ toast.configure({ position: 'bottom-right', pauseOnHover: false, draggable: fals
 
 const _config = {
   stiff: { tension: 200, friction: 20 },
-  soft: config.default,
+  soft: config.default
 }
 
 export default function Hero() {
@@ -28,8 +28,8 @@ export default function Hero() {
 
   const [props, api] = useSpring(() => ({ x: 0, y: 0, rotateX: 0, rotateY: 0, scale: 0.8 }))
 
-  const rotX = py => (py - props.y.get() - rect.current.y - rect.current.height / 2) / 5
-  const rotY = px => -(px - props.x.get() - rect.current.x - rect.current.width / 2) / 5
+  const rotX = (py) => (py - props.y.get() - rect.current.y - rect.current.height / 2) / 5
+  const rotY = (px) => -(px - props.x.get() - rect.current.x - rect.current.width / 2) / 5
 
   const defaultBgShine = () => {
     prevAngleTurns.current[0] = 135
@@ -56,12 +56,12 @@ export default function Hero() {
     return `linear-gradient(${angle}deg, rgba(255, 255, 255, ${intensity}) 0%, rgba(255, 255, 255, 0) 80%)`
   }
 
-  const yText = py => {
+  const yText = (py) => {
     const cy = rect.current.y + rect.current.height / 2
     return -((py - cy) / rect.current.height) * 10
   }
 
-  const xText = px => {
+  const xText = (px) => {
     const cx = rect.current.x + rect.current.width / 2
     return -((px - cx) / rect.current.width) * 10
   }
@@ -91,7 +91,7 @@ export default function Hero() {
             scale: 1,
             rotateX: 0,
             rotateY: 0,
-            config: _config.stiff,
+            config: _config.stiff
           })
           setShadow(true)
         } else {
@@ -99,7 +99,7 @@ export default function Hero() {
             x: 0,
             y: 0,
             scale: hovering ? 0.9 : 0.8,
-            config: _config.soft,
+            config: _config.soft
           })
           setShadow(false)
         }
@@ -118,15 +118,15 @@ export default function Hero() {
           apiText.start({ y: yText(py), x: xText(px), scale: 1.6 })
           apiShine.start({ background: bgShine(px, py) })
         }
-      },
+      }
     },
     {
       drag: {
         ...rest,
         threshold: [threshold, threshold],
         bounds: activateBounds ? { bottom, right, left, top } : undefined,
-        rubberband: activateBounds ? rubberband : 0,
-      },
+        rubberband: activateBounds ? rubberband : 0
+      }
     }
   )
 
@@ -143,7 +143,7 @@ export default function Hero() {
             style={{
               width: right - left + 240,
               height: bottom - top + 180,
-              transform: `translate(${(right + left) / 2}px, ${(bottom + top) / 2}px)`,
+              transform: `translate(${(right + left) / 2}px, ${(bottom + top) / 2}px)`
             }}
           ></div>
         )}

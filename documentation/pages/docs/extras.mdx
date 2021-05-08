@@ -30,9 +30,12 @@ Setting `touch-action: pan-y` on your draggable element class or style indicates
 function TouchActionExample() {
   const [springs, api] = useSprings(4, () => ({ x: 0 }))
 
-  const bind = useDrag(({ down, movement: [x], args: [index] }) => api.start(i => i === index && { x: down ? x : 0 }), {
-    axis: 'x',
-  })
+  const bind = useDrag(
+    ({ down, movement: [x], args: [index] }) => api.start((i) => i === index && { x: down ? x : 0 }),
+    {
+      axis: 'x'
+    }
+  )
 
   return springs.map(({ x }, i) => <animated.div {...bind(i)} style={{ x, touchAction: 'pan-y' }} />)
 }
@@ -78,19 +81,19 @@ function LethargyWheel() {
       if (wheelDirection) {
         // wait is going to switch from false to true when an intentional wheel
         // event has been detected
-        if (!wait) setIndex(i => clamp(i - wheelDirection, 0, slides.length - 1))
+        if (!wait) setIndex((i) => clamp(i - wheelDirection, 0, slides.length - 1))
         return true // will set to wait to true in the next event frame
       }
       return false // will set to wait to false in the next event frame
     },
     // we need to use a ref to be able to get non passive events and be able
     // to trigger event.preventDefault()
-    { domTarget: ref, eventOptions: { passive: false } }
+    { target: ref, eventOptions: { passive: false } }
   )
 
   return (
     <div ref={ref} style={{ transform: `translateY(${-index * 330}px)` }}>
-      {slides.map(i => (
+      {slides.map((i) => (
         <div key={i}>{i}</div>
       ))}
     </div>

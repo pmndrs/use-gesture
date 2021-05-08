@@ -8,7 +8,7 @@ export default function Rug() {
   return (
     <EasterDiv>
       <span style={{ color: '#ff9800', touchAction: 'none' }}>
-        {randomEmoji()} React <strong>UseGesture</strong>
+        {randomEmoji()} <strong>@use-gesture</strong>/react
       </span>
     </EasterDiv>
   )

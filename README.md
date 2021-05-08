@@ -8,12 +8,12 @@
 You can use it stand-alone, but to make the most of it you should combine it with an animation library like [react-spring](https://github.com/react-spring/react-spring), though you can most certainly use any other.
 
 <p align="middle">
-  <a href="https://codesandbox.io/s/github/pmndrs/react-use-gesture/tree/v10/demo/src/sandboxes/draggable-list"><img src="https://i.imgur.com/qLKJod3.gif" width="400"/></a>
-  <a href="https://codesandbox.io/s/github/pmndrs/react-use-gesture/tree/v10/demo/src/sandboxes/cards-stack"><img src="https://i.imgur.com/H6nXQEq.gif" width="400"/></a>
-  <a href="https://codesandbox.io/s/github/pmndrs/react-use-gesture/tree/v10/demo/src/sandboxes/action-sheet"><img src="https://i.imgur.com/THKPrmR.gif" width="400"/></a>
-  <a href="https://codesandbox.io/s/github/pmndrs/react-use-gesture/tree/v10/demo/src/sandboxes/infinite-slideshow"><img src="https://i.imgur.com/cuOfqST.gif" width="400"/></a>
-  <a href="https://codesandbox.io/s/github/pmndrs/react-use-gesture/tree/v10/demo/src/sandboxes/viewpager"><img src="https://i.imgur.com/iwZOfT9.gif" width="400"/></a>
-  <a href="https://codesandbox.io/s/github/pmndrs/react-use-gesture/tree/v10/demo/src/sandboxes/card-zoom"><img src="https://i.imgur.com/Walt1Ip.gif" width="400"/></a>
+  <a href="https://codesandbox.io/s/github/pmndrs/use-gesture/tree/v10/demo/src/sandboxes/draggable-list"><img src="https://i.imgur.com/qLKJod3.gif" width="400"/></a>
+  <a href="https://codesandbox.io/s/github/pmndrs/use-gesture/tree/v10/demo/src/sandboxes/cards-stack"><img src="https://i.imgur.com/H6nXQEq.gif" width="400"/></a>
+  <a href="https://codesandbox.io/s/github/pmndrs/use-gesture/tree/v10/demo/src/sandboxes/action-sheet"><img src="https://i.imgur.com/THKPrmR.gif" width="400"/></a>
+  <a href="https://codesandbox.io/s/github/pmndrs/use-gesture/tree/v10/demo/src/sandboxes/infinite-slideshow"><img src="https://i.imgur.com/cuOfqST.gif" width="400"/></a>
+  <a href="https://codesandbox.io/s/github/pmndrs/use-gesture/tree/v10/demo/src/sandboxes/viewpager"><img src="https://i.imgur.com/iwZOfT9.gif" width="400"/></a>
+  <a href="https://codesandbox.io/s/github/pmndrs/use-gesture/tree/v10/demo/src/sandboxes/card-zoom"><img src="https://i.imgur.com/Walt1Ip.gif" width="400"/></a>
 </p>
 
 <p align="middle"><i>The demos are real click them!</i></p>

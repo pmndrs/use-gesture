@@ -106,7 +106,7 @@ Here is the change log since version 5.
 ### Breaking
 
 1. The app uses `PointerEvent` wherever it can, [dropping support for some older browsers](https://caniuse.com/#feat=mdn-api_pointerevent).
-2. When adding events directly to the dom element using `domTarget` you no longer need to clean the effect yourself.
+2. When adding events directly to the dom element using `target` you no longer need to clean the effect yourself.
 
 ```jsx
 // before
@@ -114,7 +114,7 @@ const bind = useDrag(
   () => {
     /* your logic */
   },
-  { domTarget: window }
+  { target: window }
 )
 React.useEffect(bind, [bind])
 
@@ -123,7 +123,7 @@ useDrag(
   () => {
     /* your logic */
   },
-  { domTarget: window }
+  { target: window }
 )
 ```
 
@@ -133,12 +133,12 @@ useDrag(
 ```jsx
 // before
 const bind = useGesture({
-  onClick: event => console.log(event),
+  onClick: (event) => console.log(event)
 })
 
 // after
 const bind = useGesture({
-  onClick: ({ event, ...fullState }) => console.log(event), // you can do something with the fullState
+  onClick: ({ event, ...fullState }) => console.log(event) // you can do something with the fullState
 })
 ```
 
@@ -201,7 +201,7 @@ const bind = useGesture({
 
 ### Fixed
 
-1. Only uses webkit gesture events on iOS devices when `domTarget` is specified.
+1. Only uses webkit gesture events on iOS devices when `target` is specified.
 
 ## 7.0.9 Release
 
@@ -294,7 +294,7 @@ useGesture(fn, {
   event: { passive: true, capture: false },
   pointerEvents: true,
   wheel: false,
-  dragDelay: 100,
+  dragDelay: 100
 })
 ```
 
@@ -305,18 +305,18 @@ useGesture(fn, {
   enabled: true,
   eventOptions: { passive: true, capture: false, pointer: true },
   wheel: {
-    enabled: false,
+    enabled: false
   },
   drag: {
-    delay: 100,
-  },
+    delay: 100
+  }
 })
 
 // or
 
 useDrag(fn, {
   eventOptions: { passive: true, capture: false, pointer: true },
-  delay: 100,
+  delay: 100
 })
 ```
 
@@ -464,7 +464,7 @@ useDrag(fn, {
 1. Added `direction` to pinch gestures.
 2. Added `delta` that just calculates the delta between current and previous values.
 3. Added `addV` and `subV` as convenient exports for adding and substracting vectors formed as arrays.
-4. Added a warning when using trackpad zoom without a `domTarget` or `event.passive` set to true.
+4. Added a warning when using trackpad zoom without a `target` or `event.passive` set to true.
 5. Added a `gesture` key to the event passed to handlers indicating which gesture originated the event.
 
 ### Fixed
@@ -526,7 +526,7 @@ useDrag(fn, {
 
 ### Fixed
 
-1. `import { useGesture } from 'react-use-gesture'` should now be functional.
+1. `import { useGesture } from '@use-gesture/react'` should now be functional.
 
 ## ~~5.1.0 Release~~ (do not use)
 
@@ -578,10 +578,10 @@ useDrag(fn, {
 
 2. Support for dynamically enabling or disabling gestures in the `config` object: `useGesture(actions, { enabled: false })` or `useGesture(actions, { drag: true, move: false })` if you want to disable or enable gestures individually.
 
-3. You can now add a gesture to a dom node or the `window` (useful for scroll) with the `domTarget` config prop. In that case you shouldn’t spread `bind` in a component but use the `useEffect` hook that will take care of adding and removing listeners:
+3. You can now add a gesture to a dom node or the `window` (useful for scroll) with the `target` config prop. In that case you shouldn’t spread `bind` in a component but use the `useEffect` hook that will take care of adding and removing listeners:
 
 ```jsx
-const bind = useGesture({ onScroll: () => {...} }, { domTarget: window })
+const bind = useGesture({ onScroll: () => {...} }, { target: window })
 React.useEffect(bind, [bind])
 ```
 
@@ -605,7 +605,7 @@ const bind = useGesture({
   onDrag: ({ first }) => {
     console.log(dragCount) //<-- count will be up to date
     if (first) setDragCount(dragCount + 1)
-  },
+  }
 })
 ```
 
@@ -636,7 +636,7 @@ useGesture({ onDrag: () => {} }, { ...config })
 
 ### Breaking
 
-1. You should now import useGesture as follows: `import { useGesture } from 'react-use-gesture'`
+1. You should now import useGesture as follows: `import { useGesture } from '@use-gesture/react'`
 
 ## 5.0.0-beta.7 Release
 
@@ -660,8 +660,8 @@ useGesture({ onDrag: () => {} }, { ...config })
 
 ### Improved
 
-2. `domTarget` now accepts refs.
-1. Tests are now testing `domTarget`.
+2. `target` now accepts refs.
+1. Tests are now testing `target`.
 1. Tests are now testing `bind` passing arguments.
 
 ### Fixed
@@ -701,10 +701,10 @@ useGesture({ onDrag: () => {} }, { ...config })
 
 2. Support for dynamically enabling or disabling gestures in the `config` object: `useGesture(actions, { enabled: false })` or `useGesture(actions, { drag: true, move: false })` if you want to disable or enable gestures individually.
 
-3. You can now add a gesture to a dom node or the `window` (useful for scroll) with the `domTarget` config prop. In that case you shouldn’t spread `bind` in a component but use the `useEffect` hook that will take care of adding and removing listeners:
+3. You can now add a gesture to a dom node or the `window` (useful for scroll) with the `target` config prop. In that case you shouldn’t spread `bind` in a component but use the `useEffect` hook that will take care of adding and removing listeners:
 
 ```jsx
-const bind = useGesture({ onScroll: () => {...} }, { domTarget: window })
+const bind = useGesture({ onScroll: () => {...} }, { target: window })
 React.useEffect(bind, [bind])
 ```
 
@@ -726,7 +726,7 @@ const bind = useGesture({
   onDrag: ({ first }) => {
     console.log(dragCount) //<-- count will be up to date
     if (first) setDragCount(dragCount + 1)
-  },
+  }
 })
 ```
 

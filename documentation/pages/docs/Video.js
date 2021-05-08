@@ -9,13 +9,17 @@ const links = {
   move: { label: 'useMove', link: 'hooks/#list-of-hooks' },
   initial: { label: 'initial', link: 'options/#initial' },
   rubberband: { label: 'rubberband', link: 'options/#rubberband' },
-  touchaction: { label: 'touch-action', link: 'extras/#touch-action' },
+  touchaction: { label: 'touch-action', link: 'extras/#touch-action' }
 }
 
 const Video = ({ video, id, badges }) => {
   return (
     <div>
-      <a target="_blank" rel="noopener noreferrer" href={`https://codesandbox.io/s/${id}`}>
+      <a
+        target="_blank"
+        rel="noopener noreferrer"
+        href={`https://codesandbox.io/s/github/pmndrs/use-gesture/tree/v10/demo/src/sandboxes/${id}`}
+      >
         <video autoPlay muted playsInline loop width="100%">
           <source src={video} type="video/mp4" />
         </video>

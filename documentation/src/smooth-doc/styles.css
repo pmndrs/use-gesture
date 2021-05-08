@@ -116,6 +116,10 @@ details > pre {
   margin: 16px -16px;
 }
 
+p strong {
+  font-weight: 600 !important;
+}
+
 @media (min-width: 576px) {
   details > pre {
     border-radius: 4px;

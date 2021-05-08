@@ -10,11 +10,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/pmndrs/react-use-gesture.git",
+    "url": "git+https://github.com/pmndrs/use-gesture.git",
     "directory": "packages/core"
   },
   "bugs": {
-    "url": "https://github.com/pmndrs/react-use-gesture/issues"
+    "url": "https://github.com/pmndrs/use-gesture/issues"
   },
   "author": "Paul Henschel",
   "contributors": [

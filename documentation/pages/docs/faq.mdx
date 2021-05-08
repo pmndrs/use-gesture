@@ -18,11 +18,9 @@ section: More
 - [Why am I getting warnings from `preventDefault()` after I pass `{passive:false}`?](#why-am-i-getting-warnings-from-preventdefault-after-i-pass-passivefalse)
 - [Why can't I properly drag an image or a link?](#why-cant-i-properly-drag-an-image-or-a-link)
 
-### What is the difference the React-with-gesture library?
+### What is the difference the react-use-gesture library?
 
-`react-with-gesture` is the old name for `react-use-gesture` and is not maintained anymore[^1]. We decided to drop support for render props and focus on hooks as we believe they’re much more convenient. `react-with-gesture` was solely focused on drag, where `react-use-gesture` supports scroll, wheel, pinch and more.
-
-[^1]: it will be deprecated in a few days (26.12.19).
+`@use-gesture` replaces `react-with-gesture`, and aims at being platform agnostinc.
 
 ### Why use `react-spring` instead of `React.useState`?
 
@@ -49,7 +47,7 @@ useScroll(
   ({ event, last }) => {
     !last && event.preventDefault() // <-- event will not be accessed in the last event
   },
-  { domTarget: myRef }
+  { target: myRef }
 )
 ```
 
@@ -70,7 +68,7 @@ const bind = useDrag(() => console.log(`Won't show if you hold your mouse less t
 
 ### Why am I getting warnings from `preventDefault()` after I pass `{passive:false}`
 
-The basic use of `<Component {...bind()) />` passes the task of attaching listeners to React. React does not [yet](https://github.com/facebook/react/issues/6436) support binding passive listeners via props. To have `useGesture` attach the listeners, you must also [use the `domTarget` option](/docs/options/#domtarget). This is only required if you plan to `preventDefault` or cancel the event.
+The basic use of `<Component {...bind()) />` passes the task of attaching listeners to React. React does not [yet](https://github.com/facebook/react/issues/6436) support binding passive listeners via props. To have `useGesture` attach the listeners, you must also [use the `target` option](/docs/options/#target). This is only required if you plan to `preventDefault` or cancel the event.
 
 ### Why can't I properly drag an image or a link?
 

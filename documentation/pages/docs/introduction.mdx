@@ -12,20 +12,20 @@ import ReactUseGesture from './code/rug'
 
 &zwnj;<ReactUseGesture /> is a set of hooks that let you bind mouse and touch events to any React component.
 
-With the data you receive, it becomes easy to set up complex gestures like dragging and pinching with a few lines of code. You can use this library stand-alone, but to make the most of it you should combine it with an animation library like [React-spring](https://github.com/pmndrs/react-spring).
+With the data you receive, it becomes easy to set up complex gestures like dragging and pinching with a few lines of code. You can use this library stand-alone, but to make the most of it you should combine it with an animation library like [react-spring](https://github.com/pmndrs/react-spring).
 
 ## Installation
 
 Using `yarn`:
 
 ```bash
-yarn add react-use-gesture
+yarn add @use-gesture/react
 ```
 
 Using `npm`:
 
 ```bash
-npm install --save react-use-gesture
+npm install --save @use-gesture/react
 ```
 
 ## Simple example
@@ -36,7 +36,7 @@ The following example makes a <EasterDiv><code>&lt;div/&gt;</code></EasterDiv> d
 
 ```jsx
 import { useSpring, animated } from '@react-spring/web'
-import { useDrag } from 'react-use-gesture'
+import { useDrag } from '@use-gesture/react'
 
 function PullRelease() {
   const [{ x, y }, api] = useSpring(() => ({ x: 0, y: 0 }))
@@ -55,4 +55,4 @@ function PullRelease() {
 
 The `useDrag` hook returns a function (stored in the `bind` constant), which when called returns an object with event handlers. Here, when you spread `{...bind()}` into a component, you're actually adding `onMouseDown` and `onTouchStart` event handlers.
 
-> It's important that you understand <ReactUseGesture/> is not responsible for actually moving the component. The `useDrag` hook just hands over gesture data to React-spring which sets the component transforms. If you're not familiar with React-spring, head over [its documentation here](https://react-spring.io).
+> It's important that you understand <ReactUseGesture/> is not responsible for actually moving the component. The `useDrag` hook just hands over gesture data to react-spring which sets the component transforms. If you're not familiar with react-spring, head over [its documentation here](https://react-spring.io).

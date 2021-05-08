@@ -23,16 +23,14 @@ const bind = useXXXX(state => {
   const {
     event,       // the source event
     xy,          // [x,y] values (pointer position or scroll offset)
-    previous,    // previous xy
     initial,     // xy value when the gesture started
-    intentional, // is the movement intentional -- new in v8
-    movement,    // last gesture offset (xy - initial)
+    intentional, // is the gesture intentional
     delta,       // movement delta (movement - previous movement)
     offset,      // offset since the first gesture
     lastOffset,  // offset when the last gesture started
-    vxvy,        // momentum of the gesture per axis
-    velocity,    // absolute velocity of the gesture
-    distance,    // offset distance
+    movement,    // displacement between offset and lastOffset
+    velocity,    // momentum of the gesture per axis
+    distance,    // offset distance per axis
     direction,   // direction per axis
     startTime,   // gesture start time
     elapsedTime, // gesture elapsed time
@@ -70,8 +68,8 @@ The state attributes for **pinch** include all of the above (with the exception 
 const bind = usePinch(state => {
   const {
     da,          // [d,a] absolute distance and angle of the two pointers
-    vdva,        // momentum of the gesture of distance and rotation
     origin,      // coordinates of the center between the two touch event
+    offset,      // [scale, angle] offsets (starts withs scale=1)
   } = state
 })
 ```
@@ -152,7 +150,7 @@ function SwipeExample() {
   const { x } = useSpring({ x: position * 200 })
   const bind = useDrag(({ swipe: [swipeX] }) => {
     // position will either be -1, 0 or 1
-    setPosition(p => Math.min(Math.max(-1, p + swipeX), 1))
+    setPosition((p) => Math.min(Math.max(-1, p + swipeX), 1))
   })
 
   return <animated.div {...bind()} style={{ x }} />
@@ -163,8 +161,8 @@ Here are the conditions for a swipe to be detected on the `x` axis:
 
 - The drag gesture is over.
 - The drag gesture didn't last more than `220ms`.
-- `movement[0]` is superior to the `swipeDistance[0]` option.
-- `vxvy[0]` is superior to the `swipeVelocity[0]` option.
+- `movement[0]` is superior to the `swipe.distance[0]` option.
+- `velocity[0]` is superior to the `swipe.velocity[0]` option.
 
 > Visit the [swipe options](/docs/options) documentation for more info about how to configure swipe detection to your needs.
 
