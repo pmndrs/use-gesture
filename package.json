@@ -19,7 +19,7 @@
     "release": "pnpm build && pnpm run changeset publish",
     "tsc": "tsc --noEmit",
     "docs:start": "pnpm run start --filter documentation",
-    "docs:build": "npm --prefix ./documentation run build",
+    "docs:build": "pnpm run build --filter documentation",
     "demo:dev": "pnpm run dev --filter demo",
     "demo:build": "pnpm workspace demo build",
     "test": "jest",
