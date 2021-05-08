@@ -10,6 +10,7 @@
     ]
   },
   "scripts": {
+    "prebuild": "test \"$CI\" = true && npx pnpm install -r --store=node_modules/.pnpm-store || echo skiping pnpm install",
     "postinstall": "husky install && preconstruct dev",
     "build": "preconstruct build",
     "watch": "preconstruct watch",
