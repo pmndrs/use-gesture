@@ -3,9 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "prebuild": "test \"$CI\" = true && npx pnpm install -r --store=node_modules/.pnpm-store || echo skiping pnpm install",
     "start": "gatsby develop -H 0.0.0.0",
-    "build": "npm run prebuild && gatsby build",
+    "build": "gatsby build",
     "clean": "gatsby clean",
     "serve": "gatsby serve"
   },
@@ -22,7 +21,6 @@
     "lethargy": "^1.0.9",
     "leva": "^0.9.4",
     "parse-numeric-range": "^1.2.0",
-    "pnpm": "^6.2.5",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-player": "^2.9.0",
