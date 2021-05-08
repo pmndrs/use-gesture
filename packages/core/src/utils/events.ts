@@ -70,8 +70,8 @@ export const Pointer = {
     return isTouch(event) ? (valueEvent as Touch).identifier : (valueEvent as PointerEvent).pointerId
   },
   values(event: PointerEvent | TouchEvent): Vector2 {
+    // if ('spaceX' in event) return [event.spaceX, event.spaceY]
     const valueEvent = getValueEvent(event)
-    // if (valueEvent.uv) return [valueEvent.uv.x, valueEvent.uv.y]
     return [valueEvent.clientX, valueEvent.clientY]
   }
 }

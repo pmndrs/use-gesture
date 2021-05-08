@@ -182,8 +182,16 @@ DragEngine.prototype.pointerClean = function () {
   if (this.config.pointerLock && document.pointerLockElement === state.target) {
     document.exitPointerLock()
   }
-  if (this.config.pointerCapture && (this.sharedConfig.r3f || target.hasPointerCapture(event.pointerId))) {
-    target.releasePointerCapture(event.pointerId)
+  try {
+    if (this.config.pointerCapture && target.hasPointerCapture(event.pointerId)) {
+      target.releasePointerCapture(event.pointerId)
+    }
+  } catch {
+    if (process.env.NODE_ENV === 'development') {
+      console.warn(
+        `[@use-gesture]: If you see this message, it's likely that you're using an outdated version of \`@react-three/fiber\`. \n\nPlease upgrade to the latest version.`
+      )
+    }
   }
 } as DragEngine['pointerClean']
 
