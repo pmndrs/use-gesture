@@ -1,5 +1,6 @@
 import React from 'react'
 import { render, cleanup, fireEvent, createEvent, waitFor } from '@testing-library/react'
+import { patchCreateEvent } from './utils'
 import '@testing-library/jest-dom/extend-expect'
 import Interactive from './components/Interactive'
 import InteractiveDom from './components/InteractiveDom'
@@ -7,30 +8,16 @@ import { InteractiveType } from './components/types'
 
 afterAll(cleanup)
 
-// patching createEvent
-for (let key in createEvent) {
-  if (key.indexOf('pointer') === 0) {
-    // @ts-ignore
-    const fn = createEvent[key.replace('pointer', 'mouse')]
-    if (!fn) break
-    // @ts-ignore
-    createEvent[key] = function (type, { pointerId, ...rest }) {
-      const event = fn(type, rest)
-      event.pointerId = pointerId
-      return event
-    }
-  }
-}
+patchCreateEvent(createEvent)
 
 describe.each([
   ['attached to component', Interactive, ''],
-  ['attached to node', InteractiveDom, 'dom-'],
+  ['attached to node', InteractiveDom, 'dom-']
 ])('testing onDrag %s', (_testName, C, prefix): any => {
   const Component = C as InteractiveType
   const { getByTestId, rerender } = render(<Component bindArgs={[2]} gestures={['Drag']} memoArg="memo" />)
   const element = getByTestId(`${prefix}drag-el`)
   let delta_t: number
-
   test('pointerDown should initiate the gesture', () => {
     const event = createEvent.pointerDown(element, { pointerId: 1, clientX: 10, clientY: 20, buttons: 1 })
 
@@ -41,7 +28,6 @@ describe.each([
     expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('true')
     expect(getByTestId(`${prefix}drag-first`)).toHaveTextContent('true')
     expect(getByTestId(`${prefix}drag-xy`)).toHaveTextContent('10,20')
-    expect(getByTestId(`${prefix}drag-previous`)).toHaveTextContent('0,0')
     expect(getByTestId(`${prefix}drag-offset`)).toHaveTextContent('0,0')
     expect(getByTestId(`${prefix}drag-delta`)).toHaveTextContent('0,0')
     expect(getByTestId(`${prefix}drag-down`)).toHaveTextContent('true')
@@ -70,17 +56,15 @@ describe.each([
     expect(getByTestId(`${prefix}drag-offset`)).toHaveTextContent('10,30')
     expect(getByTestId(`${prefix}drag-movement`)).toHaveTextContent('10,30')
     expect(getByTestId(`${prefix}drag-delta`)).toHaveTextContent('10,30')
-    expect(getByTestId(`${prefix}drag-previous`)).toHaveTextContent('10,20')
-    expect(getByTestId(`${prefix}drag-velocity`)).not.toHaveTextContent(/^0$/)
-    expect(getByTestId(`${prefix}drag-vxvy`)).toHaveTextContent(`${10 * (1 / delta_t)},${30 * (1 / delta_t)}`)
+    expect(getByTestId(`${prefix}drag-velocity`)).toHaveTextContent(`${10 / delta_t},${30 / delta_t}`)
   })
+
   test('moving again should further update xy and movement', () => {
     fireEvent.pointerMove(element, { pointerId: 1, clientX: -10, clientY: 30, buttons: 1 })
     expect(getByTestId(`${prefix}drag-xy`)).toHaveTextContent('-10,30')
     expect(getByTestId(`${prefix}drag-offset`)).toHaveTextContent('-20,10')
     expect(getByTestId(`${prefix}drag-movement`)).toHaveTextContent('-20,10')
     expect(getByTestId(`${prefix}drag-delta`)).toHaveTextContent('-30,-20')
-    expect(getByTestId(`${prefix}drag-previous`)).toHaveTextContent('20,50')
   })
 
   test(`adding another pointer to the element shouldn't disturb the drag`, () => {
@@ -122,7 +106,6 @@ describe.each([
   test('restarting the gesture should book-keep offset and reset movement', () => {
     rerender(<Component gestures={['Drag']} />)
     fireEvent.pointerDown(element, { pointerId: 4, clientX: 30, clientY: 60 })
-    expect(getByTestId(`${prefix}drag-previous`)).toHaveTextContent('-10,30')
     fireEvent.pointerMove(element, { pointerId: 4, clientX: 20, clientY: 50, buttons: 1 })
     expect(getByTestId(`${prefix}drag-offset`)).toHaveTextContent('-30,0')
     expect(getByTestId(`${prefix}drag-movement`)).toHaveTextContent('-10,-10')
@@ -134,7 +117,7 @@ describe.each([
     fireEvent.pointerDown(element, { pointerId: 5, clientX: 30, clientY: 60 })
     await waitFor(() => [
       expect(getByTestId(`${prefix}drag-canceled`)).toHaveTextContent('true'),
-      expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('false'),
+      expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('false')
     ])
   })
 
@@ -144,7 +127,7 @@ describe.each([
     expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('false')
     await waitFor(() => [
       expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('true'),
-      expect(getByTestId(`${prefix}drag-xy`)).toHaveTextContent('100,200'),
+      expect(getByTestId(`${prefix}drag-xy`)).toHaveTextContent('100,200')
     ])
     fireEvent.pointerUp(element, { pointerId: 6 })
   })
@@ -154,6 +137,7 @@ describe.each([
     fireEvent.pointerMove(element, { pointerId: 7, clientX: 20, clientY: 50, buttons: 1 })
     expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('true')
     expect(getByTestId(`${prefix}drag-xy`)).toHaveTextContent('20,50')
+    expect(getByTestId(`${prefix}drag-offset`)).toHaveTextContent('-110,-150')
     fireEvent.pointerUp(element, { pointerId: 7 })
   })
 
@@ -167,15 +151,13 @@ describe.each([
     fireEvent.pointerDown(element, { pointerId: 8, clientX: 0, clientY: 0 })
     fireEvent.pointerMove(element, { pointerId: 8, clientX: 5, clientY: 5, buttons: 1 })
     expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('false')
-    expect(getByTestId(`${prefix}drag-movement`)).toHaveTextContent('0,0')
-    expect(getByTestId(`${prefix}drag-offset`)).toHaveTextContent('-30,0')
   })
 
   test(`applying a threshold should allow the gesture to start when it's reached`, () => {
     fireEvent.pointerMove(element, { pointerId: 8, clientX: 12, clientY: 12, buttons: 1 })
     expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('true')
     expect(getByTestId(`${prefix}drag-movement`)).toHaveTextContent('2,2')
-    expect(getByTestId(`${prefix}drag-offset`)).toHaveTextContent('-28,2')
+    expect(getByTestId(`${prefix}drag-offset`)).toHaveTextContent('-108,-148')
     fireEvent.pointerUp(element, { pointerId: 8 })
   })
 
@@ -198,7 +180,7 @@ describe.each([
   })
 
   test(`applying a direction lock SHOULD only update the first detected direction`, () => {
-    rerender(<Component gestures={['Drag']} config={{ drag: { lockDirection: true } }} />)
+    rerender(<Component gestures={['Drag']} config={{ drag: { axis: 'lock' } }} />)
     fireEvent.pointerDown(element, { pointerId: 10, clientX: 0, clientY: 0 })
     fireEvent.pointerMove(element, { pointerId: 10, clientX: 5, clientY: 15, buttons: 1 })
     fireEvent.pointerMove(element, { pointerId: 10, clientX: 50, clientY: 30, buttons: 1 })
@@ -211,11 +193,13 @@ describe.each([
     fireEvent.pointerMove(element, { pointerId: 11, clientX: 35, clientY: 40, buttons: 1 })
     expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('true')
     expect(getByTestId(`${prefix}drag-movement`)).toHaveTextContent('34,0')
+    expect(getByTestId(`${prefix}drag-offset`)).toHaveTextContent('-55,-119')
     fireEvent.pointerUp(element, { pointerId: 11 })
   })
 
   test(`filtering taps should NOT fire a tap if pointer has moved more than 3px`, () => {
     expect(getByTestId(`${prefix}drag-tap`)).toHaveTextContent('false')
+    expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('false')
     rerender(<Component gestures={['Drag']} config={{ drag: { filterTaps: true, threshold: 10 } }} />)
     fireEvent.pointerDown(element, { pointerId: 12, clientX: 0, clientY: 0 })
     fireEvent.pointerMove(element, { pointerId: 12, clientX: 8, clientY: 1, buttons: 1 })
@@ -233,6 +217,7 @@ describe.each([
     fireEvent(element, event)
     delta_t = event.timeStamp
     fireEvent.pointerMove(element, { pointerId: 13, clientX: 2, clientY: 1, buttons: 1 })
+
     expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('false')
     expect(getByTestId(`${prefix}drag-tap`)).toHaveTextContent('false')
     event = createEvent.pointerUp(element, { pointerId: 13 })
@@ -268,17 +253,17 @@ describe.each([
         config={{ drag: { bounds: { top: -100, bottom: 200, left: -150, right: 250 } } }}
       />
     )
-    expect(getByTestId(`${prefix}drag-offset`)).toHaveTextContent('29,31')
+    expect(getByTestId(`${prefix}drag-offset`)).toHaveTextContent('-51,-119')
 
     fireEvent.pointerDown(element, { pointerId: 15, clientX: 200, clientY: 300 })
     fireEvent.pointerMove(element, { pointerId: 15, clientX: 10, clientY: 150, buttons: 1 })
-    expect(getByTestId(`${prefix}drag-movement`)).toHaveTextContent('-150,-100')
+    expect(getByTestId(`${prefix}drag-movement`)).toHaveTextContent('-99,19')
     expect(getByTestId(`${prefix}drag-offset`)).toHaveTextContent('-150,-100')
 
     fireEvent.pointerUp(element, { pointerId: 15 })
     fireEvent.pointerDown(element, { pointerId: 16, clientX: 100, clientY: 100 })
     fireEvent.pointerMove(element, { pointerId: 16, clientX: 40, clientY: 160, buttons: 1 })
-    expect(getByTestId(`${prefix}drag-movement`)).toHaveTextContent('-60,60')
+    expect(getByTestId(`${prefix}drag-movement`)).toHaveTextContent('0,60')
     expect(getByTestId(`${prefix}drag-offset`)).toHaveTextContent('-150,-40')
     fireEvent.pointerUp(element, { pointerId: 16 })
   })
@@ -291,16 +276,16 @@ describe.each([
     fireEvent.pointerDown(element, { pointerId: 17, clientX: 200, clientY: 300 })
     fireEvent.pointerMove(element, { pointerId: 17, clientX: 200, clientY: 550, buttons: 1 })
 
-    const delta = 550 - 300
+    const delta = 550 - 300 - 40
     const dimension = 200 - -100
     const rubberband = ((delta - 200) * dimension * 0.15) / (dimension + 0.15 * (delta - 200)) + 200
 
-    expect(getByTestId(`${prefix}drag-movement`)).toHaveTextContent(`0,${rubberband}`)
+    expect(getByTestId(`${prefix}drag-offset`)).toHaveTextContent(`-150,${rubberband}`)
   })
 
   test(`releasing drag with rubberbanding should revert movement to its closest bound`, () => {
     fireEvent.pointerUp(element, { pointerId: 17 })
-    expect(getByTestId(`${prefix}drag-movement`)).toHaveTextContent(`0,200`)
+    expect(getByTestId(`${prefix}drag-offset`)).toHaveTextContent(`-150,200`)
   })
 
   test(`rubberbanding should apply rubberband secondary function when only one bound is set`, () => {
@@ -309,10 +294,10 @@ describe.each([
     fireEvent.pointerDown(element, { pointerId: 18, clientX: 200, clientY: 300 })
     fireEvent.pointerMove(element, { pointerId: 18, clientX: 200, clientY: 550, buttons: 1 })
 
-    const delta = 550 - 300
+    const delta = 550 - 300 + 200
     const rubberband = Math.pow(delta - 200, 0.15 * 5) + 200
 
-    expect(getByTestId(`${prefix}drag-movement`)).toHaveTextContent(`0,${rubberband}`)
+    expect(getByTestId(`${prefix}drag-offset`)).toHaveTextContent(`-150,${rubberband}`)
     fireEvent.pointerUp(element, { pointerId: 18 })
   })
 
@@ -327,9 +312,8 @@ describe.each([
           bindArgs={[2]}
           config={{
             drag: {
-              rubberband: true,
-              bounds: ({ args: [i] }) => ({ top: i * 100, left: i * -200 }),
-            },
+              bounds: ({ args: [i] }) => ({ top: i * 100, left: i * -200 })
+            }
           }}
         />
       )
@@ -340,11 +324,13 @@ describe.each([
   }
 
   test(`passing an initial position should affect the movement`, () => {
-    rerender(<Component gestures={['Drag']} config={{ drag: { initial: () => [5, 10] } }} />)
+    rerender(<Component gestures={['Drag']} config={{ drag: { from: () => [5, 10] } }} />)
     fireEvent.pointerDown(element, { pointerId: 20, clientX: 0, clientY: 0 })
-    expect(getByTestId(`${prefix}drag-movement`)).toHaveTextContent(`5,10`)
+    expect(getByTestId(`${prefix}drag-offset`)).toHaveTextContent(`5,10`)
+    expect(getByTestId(`${prefix}drag-movement`)).toHaveTextContent(`0,0`)
     fireEvent.pointerMove(element, { pointerId: 20, clientX: 10, clientY: 20, buttons: 1 })
-    expect(getByTestId(`${prefix}drag-movement`)).toHaveTextContent(`15,30`)
+    expect(getByTestId(`${prefix}drag-offset`)).toHaveTextContent(`15,30`)
+    expect(getByTestId(`${prefix}drag-movement`)).toHaveTextContent(`10,20`)
     fireEvent.pointerUp(element, { pointerId: 20 })
   })
 })

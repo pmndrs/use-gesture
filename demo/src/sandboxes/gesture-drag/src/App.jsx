@@ -18,7 +18,7 @@ function Draggable() {
     enabled: true,
     gesture: { options: ['offset', 'movement'] },
     axis: { options: [undefined, 'x', 'y', 'lock'] },
-    filterTaps: false,
+    filterTaps: true,
     boundToParent: false,
     rubberband: false,
     delay: { value: 1000, step: 100, min: 0, max: 3000, optional: true, disabled: true }
@@ -27,9 +27,11 @@ function Draggable() {
   const pointerOptions = useControls('pointer', { touch: false, capture: true, lock: false })
 
   const bind = useDrag(
-    ({ active, ...state }) => {
+    ({ active, tap, ...state }) => {
       let [x, y] = state[gesture]
       set({ x, y })
+
+      console.log({ tap })
 
       if (pointerOptions.lock) {
         const dx = window.innerWidth / 2 - 40

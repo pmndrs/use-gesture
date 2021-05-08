@@ -227,8 +227,13 @@ Engine.prototype.compute = function (event) {
     state.elapsedTime = state.timeStamp - state.startTime
   }
 
-  const _absoluteDelta = state._delta.map(Math.abs) as Vector2
-  V.addTo(state._distance, _absoluteDelta)
+  // only compute _distance if the state is active otherwise we might compute it
+  // twice when the gesture ends because state._delta wouldn't have changed on
+  // the last frame.
+  if (state._active) {
+    const _absoluteDelta = state._delta.map(Math.abs) as Vector2
+    V.addTo(state._distance, _absoluteDelta)
+  }
 
   const [_m0, _m1] = config.transform(state._movement)
   const [_t0, _t1] = state._threshold
