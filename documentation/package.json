@@ -3,8 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
+    "prebuild": "test \"$CI\" = true && npx pnpm install -r --store=node_modules/.pnpm-store || echo skiping pnpm install",
     "start": "gatsby develop -H 0.0.0.0",
-    "build": "gatsby build",
+    "build": "npm run prebuild && gatsby build",
     "clean": "gatsby clean",
     "serve": "gatsby serve"
   },
