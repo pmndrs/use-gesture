@@ -36,6 +36,7 @@ importers:
       jest: ^26.6.3
       jest-chain: ^1.1.5
       patch-package: ^6.4.7
+      pnpm: ^6.2.5
       postinstall-postinstall: ^2.1.0
       prettier: ^2.2.1
       pretty-quick: ^3.1.0
@@ -73,6 +74,7 @@ importers:
       jest: 26.6.3
       jest-chain: 1.1.5
       patch-package: 6.4.7
+      pnpm: 6.2.5
       postinstall-postinstall: 2.1.0
       prettier: 2.2.1
       pretty-quick: 3.1.0_prettier@2.2.1
@@ -14060,6 +14062,12 @@ packages:
       ts-pnp: 1.2.0_typescript@4.2.4
     transitivePeerDependencies:
       - typescript
+    dev: true
+
+  /pnpm/6.2.5:
+    resolution: {integrity: sha512-klFrPM3JDo+LFA2f7Ih3wnH296ZDDqfFx5BCc3ADZV6zRQFscEL8XIU8jDqsHFv7EZHLP9Z12fzY/HyHca/duw==}
+    engines: {node: '>=12.17'}
+    hasBin: true
     dev: true
 
   /polished/4.1.2:
