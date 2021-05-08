@@ -10,6 +10,7 @@
     ]
   },
   "scripts": {
+    "install-pnpm": "test \"$CI\" = true && npx pnpm install -r --store=node_modules/.pnpm-store || echo skiping pnpm install",
     "postinstall": "husky install && preconstruct dev",
     "build": "preconstruct build",
     "watch": "preconstruct watch",
@@ -19,7 +20,7 @@
     "release": "pnpm build && pnpm run changeset publish",
     "tsc": "tsc --noEmit",
     "docs:start": "pnpm run start --filter documentation",
-    "docs:build": "pnpm run build --filter documentation",
+    "docs:build": "npm run postinstall && pnpm run build --filter documentation",
     "demo:dev": "pnpm run dev --filter demo",
     "demo:build": "pnpm workspace demo build",
     "test": "jest",
