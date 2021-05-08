@@ -202,9 +202,9 @@ export interface PinchState extends CommonGestureState {
   _pointerEvents: Map<number, PointerEvent>
   _touchIds: [] | [number, number]
   /**
-   * Scale and angle raw values (alias to values).
+   * Distance and angle raw values (alias to values).
    */
-  sa: Vector2
+  da: Vector2
   /**
    * The initial axis (scale or angle) of the gesture.
    */

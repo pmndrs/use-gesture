@@ -18,6 +18,7 @@ export const pinchConfigResolver = {
     if (this.useTouch) return 'touch'
     if (SUPPORT.touch && SUPPORT.pointer) return 'pointer'
     if (SUPPORT.touch) return 'touch'
+    // device is undefined and that's ok, we're going to use wheel to zoom.
   },
   useRad(_v: any, _k: string, config: { shared: GenericOptions } & PinchConfig) {
     return config.angleUnit === 'rad' || (config.angleUnit == null && config.shared.r3f)

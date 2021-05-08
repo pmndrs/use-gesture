@@ -74,7 +74,7 @@ PinchEngine.prototype.computeMovement = function () {
   const { offset, lastOffset } = this.state
   this.state.movement = [offset[0] / lastOffset[0] - 1, offset[1] - lastOffset[1]]
   // let's take profit from this function to set `values` alias to `xy`
-  this.state.sa = this.state.values
+  this.state.da = this.state.values
 } as PinchEngine['computeMovement']
 
 PinchEngine.prototype.intent = function (v) {

@@ -50,7 +50,6 @@ useDrag(handler, {
 ### Pinch
 
 - `distanceBounds` is now `scaleBounds`
-- `da` is now `sa`
 - `state.movement` and `state.offset` now reflect scale and not distance
 - Use pointer events where it can
 - Add `useTouch` option to use touch events if needed

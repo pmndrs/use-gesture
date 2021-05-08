@@ -50,3 +50,6 @@ jobs:
       - name: Build without cache
         if: steps.build-cache.outputs.cache-hit != 'true'
         run: pnpm build
+
+      - name: Run tests
+        run: pnpm test

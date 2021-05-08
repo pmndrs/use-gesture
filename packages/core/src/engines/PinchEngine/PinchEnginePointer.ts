@@ -80,13 +80,12 @@ PinchEngine.prototype.pinchMove = function (event, payload) {
   const state = this.state
   const prev_a = state.values[1]
   const delta_a = payload.angle - prev_a
-  let next_turns = state.turns
-  if (Math.abs(delta_a) > 270) next_turns += Math.sign(delta_a)
-
-  state.values = [payload.distance, payload.angle - 360 * next_turns]
+  let delta_turns = 0
+  if (Math.abs(delta_a) > 270) delta_turns += Math.sign(delta_a)
+  state.values = [payload.distance, payload.angle - 360 * delta_turns]
   state.origin = payload.origin
+  state.turns = delta_turns
   state._movement = [state.values[0] / state.initial[0] - 1, convertAngle(this, state.values[1] - state.initial[1])]
-
   this.compute(event)
   this.emit()
 } as PinchEngine['pinchMove']
