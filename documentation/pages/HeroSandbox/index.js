@@ -86,8 +86,8 @@ export default function Hero() {
         if (active) {
           reapiShineAndText()
           api.start({
-            x: mx,
-            y: my,
+            x: x,
+            y: y,
             scale: 1,
             rotateX: 0,
             rotateY: 0,
@@ -125,7 +125,8 @@ export default function Hero() {
         ...rest,
         threshold: [threshold, threshold],
         bounds: activateBounds ? { bottom, right, left, top } : undefined,
-        rubberband: activateBounds ? rubberband : 0
+        rubberband: activateBounds ? rubberband : 0,
+        from: () => [props.x.get(), props.y.get()]
       }
     }
   )
