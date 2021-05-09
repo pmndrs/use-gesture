@@ -40,7 +40,7 @@ export default function App() {
       target: ref,
       eventOptions: { passive: false },
       drag: { from: () => [style.x.get(), style.y.get()] },
-      pinch: { scaleBounds: { min: 0.5, max: 2 } },
+      pinch: { scaleBounds: { min: 0.5, max: 2 }, rubberband: true },
     }
   )
 
