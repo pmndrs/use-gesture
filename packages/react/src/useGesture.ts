@@ -12,13 +12,6 @@ import {
 } from '@use-gesture/core'
 import { useRecognizers } from './useRecognizers'
 
-registerEngine('drag', DragEngine)
-registerEngine('pinch', PinchEngine)
-registerEngine('scroll', ScrollEngine)
-registerEngine('wheel', WheelEngine)
-registerEngine('move', MoveEngine)
-registerEngine('hover', HoverEngine)
-
 /**
  * @public
  *
@@ -28,6 +21,13 @@ registerEngine('hover', HoverEngine)
  * @param {UseGestureConfig} [config={}] - the full config object
  */
 export function useGesture<Config = UserGestureConfig>(_handlers: GestureHandlers, _config: Config | {} = {}) {
+  registerEngine('drag', DragEngine)
+  registerEngine('pinch', PinchEngine)
+  registerEngine('scroll', ScrollEngine)
+  registerEngine('wheel', WheelEngine)
+  registerEngine('move', MoveEngine)
+  registerEngine('hover', HoverEngine)
+
   const { handlers, nativeHandlers, config } = parseMergedHandlers(_handlers, _config)
   return useRecognizers<Config>(handlers, config, undefined, nativeHandlers)
 }

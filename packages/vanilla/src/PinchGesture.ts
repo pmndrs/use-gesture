@@ -1,8 +1,6 @@
 import { registerEngine, PinchEngine, Handler, UserPinchConfig, EventTypes } from '@use-gesture/core'
 import { Recognizer } from './Recognizer'
 
-registerEngine('pinch', PinchEngine)
-
 interface PinchGestureConstructor {
   new <EventType = EventTypes['pinch']>(
     target: EventTarget,
@@ -18,5 +16,6 @@ export const PinchGesture: PinchGestureConstructor = function <EventType = Event
   handler: Handler<'pinch', EventType>,
   config: UserPinchConfig | {} = {}
 ) {
+  registerEngine('pinch', PinchEngine)
   return new Recognizer(target, { pinch: handler }, config, 'pinch')
 } as any

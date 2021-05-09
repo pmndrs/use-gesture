@@ -1,8 +1,6 @@
 import { registerEngine, MoveEngine, Handler, UserMoveConfig, EventTypes } from '@use-gesture/core'
 import { Recognizer } from './Recognizer'
 
-registerEngine('move', MoveEngine)
-
 interface MoveGestureConstructor {
   new <EventType = EventTypes['move']>(
     target: EventTarget,
@@ -18,5 +16,6 @@ export const MoveGesture: MoveGestureConstructor = function <EventType = EventTy
   handler: Handler<'move', EventType>,
   config: UserMoveConfig | {} = {}
 ) {
+  registerEngine('move', MoveEngine)
   return new Recognizer(target, { move: handler }, config, 'move')
 } as any

@@ -1,8 +1,6 @@
 import { registerEngine, WheelEngine, Handler, UserWheelConfig, EventTypes } from '@use-gesture/core'
 import { Recognizer } from './Recognizer'
 
-registerEngine('wheel', WheelEngine)
-
 interface WheelGestureConstructor {
   new <EventType = EventTypes['wheel']>(
     target: EventTarget,
@@ -18,5 +16,6 @@ export const WheelGesture: WheelGestureConstructor = function <EventType = Event
   handler: Handler<'wheel', EventType>,
   config: UserWheelConfig | {} = {}
 ) {
+  registerEngine('wheel', WheelEngine)
   return new Recognizer(target, { wheel: handler }, config, 'wheel')
 } as any

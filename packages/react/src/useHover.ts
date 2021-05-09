@@ -1,8 +1,6 @@
 import { registerEngine, HoverEngine, UserHoverConfig, Handler, EventTypes } from '@use-gesture/core'
 import { useRecognizers } from './useRecognizers'
 
-registerEngine('hover', HoverEngine)
-
 /**
  * Hover hook.
  *
@@ -13,5 +11,6 @@ export function useHover<EventType = EventTypes['hover'], Config = UserHoverConf
   handler: Handler<'hover', EventType>,
   config: Config | {} = {}
 ) {
+  registerEngine('hover', HoverEngine)
   return useRecognizers({ hover: handler }, config, 'hover')
 }

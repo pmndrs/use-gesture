@@ -1,8 +1,6 @@
 import { registerEngine, PinchEngine, UserPinchConfig, Handler, EventTypes } from '@use-gesture/core'
 import { useRecognizers } from './useRecognizers'
 
-registerEngine('pinch', PinchEngine)
-
 /**
  * Pinch hook.
  *
@@ -13,5 +11,6 @@ export function usePinch<EventType = EventTypes['pinch'], Config = UserPinchConf
   handler: Handler<'pinch', EventType>,
   config: Config | {} = {}
 ) {
+  registerEngine('pinch', PinchEngine)
   return useRecognizers({ pinch: handler }, config, 'pinch')
 }
