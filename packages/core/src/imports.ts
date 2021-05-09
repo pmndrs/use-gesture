@@ -1,24 +1,16 @@
 import { ResolverMap } from './config/resolver'
-import { DragEngineConstructor } from './engines/DragEngine/DragEngineCore'
-import { HoverEngineConstructor } from './engines/HoverEngine/HoverEngineCore'
-import { MoveEngineConstructor } from './engines/MoveEngine/MoveEngineCore'
-import { PinchEngineConstructor } from './engines/PinchEngine/PinchEngineCore'
-import { ScrollEngineConstructor } from './engines/ScrollEngine/ScrollEngineCore'
-import { WheelEngineConstructor } from './engines/WheelEngine/WheelEngineCore'
+import type { Controller } from './Controller'
+import type { Engine } from './engines/Engine'
 import { FullGestureState, GestureHandlers, GestureKey, InternalHandlers, UserGestureConfig } from './types'
 
-type GestureEngineConstuctor =
-  | DragEngineConstructor
-  | ScrollEngineConstructor
-  | WheelEngineConstructor
-  | PinchEngineConstructor
-  | HoverEngineConstructor
-  | MoveEngineConstructor
+export type EngineClass<Key extends GestureKey> = {
+  new (controller: Controller, args: any[], key: Key): Engine<Key>
+}
 
-export const EngineMap = new Map<GestureKey, GestureEngineConstuctor>()
+export const EngineMap = new Map<GestureKey, EngineClass<any>>()
 export const ConfigResolverMap = new Map<GestureKey, ResolverMap>()
 
-export function registerEngine(action: GestureKey, Engine: GestureEngineConstuctor) {
+export function registerEngine<Key extends GestureKey>(action: Key, Engine: EngineClass<Key>) {
   EngineMap.set(action, Engine)
 }
 

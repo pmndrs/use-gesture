@@ -6,97 +6,26 @@ import { TimeoutStore } from './TimeoutStore'
 import { chain } from './utils/fn'
 import { GestureKey, InternalConfig, InternalHandlers, NativeHandlers, State, UserGestureConfig } from './types'
 
-interface ControllerConstructor {
-  new (handlers: InternalHandlers): Controller
-}
-
-export interface Controller {
+export class Controller {
   /**
    * The list of gestures handled by the Controller.
    */
-  _gestures: Set<GestureKey>
+  public gestures = new Set<GestureKey>()
   /**
    * The event store that keeps track of the config.target listeners.
    */
-  _targetEventStore: EventStore
+  private _targetEventStore = new EventStore(this)
   /**
    * Object that keeps track of all gesture event listeners.
    */
-  _gestureEventStores: { [key in GestureKey]?: EventStore }
-  /**
-   * Object that keeps track of all gesture timeouts.
-   */
-  _gestureTimeoutStores: { [key in GestureKey]?: TimeoutStore }
-  /**
-   * Gesture handlers.
-   */
-  _handlers: InternalHandlers
-  /**
-   * Native event handlers.
-   */
-  _nativeHandlers?: NativeHandlers
-  /**
-   * Computed configuration.
-   */
-  _config: InternalConfig
-  /**
-   * Pointer ids active on the target.
-   */
-  _pointerIds: Set<number>
-  /**
-   * Touch identifiers active on the target.
-   */
-  _touchIds: Set<number>
-  /**
-   * The Controller state reflecting the state of all gestures.
-   */
-  state: State
-  /**
-   * Sets pointer or touch ids based on the event.
-   * @param event
-   */
-  setEventIds(this: Controller, event: TouchEvent | PointerEvent): void
-  /**
-   * Attaches handlers to the controller.
-   * @param handlers
-   * @param nativeHandlers
-   */
-  applyHandlers(this: Controller, handlers: InternalHandlers, nativeHandlers?: NativeHandlers): void
-  /**
-   * Compute and attaches a config to the controller.
-   * @param config
-   * @param gestureKey
-   */
-  applyConfig(this: Controller, config: UserGestureConfig, gestureKey?: GestureKey): void
-  /**
-   * Cleans all side effects (listeners, timeouts). When the gesture is
-   * destroyed (in React, when the component is unmounted.)
-   */
-  clean(this: Controller): void
-  /**
-   * Executes side effects (attaching listeneds to a `config.target`). Ran on
-   * each render.
-   */
-  effect(this: Controller): void
-  /**
-   * The bind function that can be returned by the gesture handler (a hook in
-   * React for example.)
-   * @param args
-   */
-  bind(this: Controller, ...args: any[]): NativeHandlers | void
-}
-
-export const Controller: ControllerConstructor = function (this: Controller, handlers: InternalHandlers) {
-  this._gestures = new Set()
-  this._targetEventStore = new EventStore(this)
-  this._gestureEventStores = {}
-  this._gestureTimeoutStores = {}
-  this._handlers = {}
-  this._nativeHandlers = {}
-  this._config = {} as InternalConfig
-  this._pointerIds = new Set()
-  this._touchIds = new Set()
-  this.state = {
+  public gestureEventStores: { [key in GestureKey]?: EventStore } = {}
+  public gestureTimeoutStores: { [key in GestureKey]?: TimeoutStore } = {}
+  public handlers: InternalHandlers = {}
+  private nativeHandlers?: NativeHandlers
+  public config = {} as InternalConfig
+  public pointerIds = new Set<number>()
+  public touchIds = new Set<number>()
+  public state = {
     shared: {
       shiftKey: false,
       metaKey: false,
@@ -105,86 +34,109 @@ export const Controller: ControllerConstructor = function (this: Controller, han
     }
   } as State
 
-  resolveGestures(this, handlers)
-} as any
-
-Controller.prototype.setEventIds = function (event) {
-  if (isTouch(event)) {
-    this._touchIds = new Set(Touches.ids(event as TouchEvent))
-  } else if ('pointerId' in event) {
-    if (event.type === 'pointerup') this._pointerIds.delete(event.pointerId)
-    else this._pointerIds.add(event.pointerId)
+  constructor(handlers: InternalHandlers) {
+    resolveGestures(this, handlers)
   }
-} as Controller['setEventIds']
-
-Controller.prototype.applyHandlers = function (handlers, nativeHandlers) {
-  this._handlers = handlers
-  this._nativeHandlers = nativeHandlers
-} as Controller['applyHandlers']
-
-Controller.prototype.applyConfig = function (config, gestureKey) {
-  this._config = parse(config, gestureKey)
-} as Controller['applyConfig']
-
-Controller.prototype.clean = function () {
-  this._targetEventStore.clean()
-  for (const key of this._gestures) {
-    this._gestureEventStores[key]!.clean()
-    this._gestureTimeoutStores[key]!.clean()
-  }
-} as Controller['clean']
-
-Controller.prototype.effect = function () {
-  if (this._config.shared.target) this.bind()
-  return () => this._targetEventStore.clean()
-} as Controller['effect']
-
-Controller.prototype.bind = function (...args) {
-  const sharedConfig = this._config.shared
-  const eventOptions = sharedConfig.eventOptions
-  const props: any = {}
-
-  const bindFunction = sharedConfig.target
-    ? bindToEventStore(this._targetEventStore, sharedConfig.target())
-    : bindToProps(props, eventOptions)
-
-  if (sharedConfig.enabled) {
-    // Adding native handlers
-    for (const eventKey in this._nativeHandlers) {
-      bindFunction(
-        eventKey,
-        '',
-        // @ts-ignore
-        (event) => this._nativeHandlers[eventKey]({ ...this.state.shared, event, args }),
-        undefined,
-        true
-      )
+  /**
+   * Sets pointer or touch ids based on the event.
+   * @param event
+   */
+  setEventIds(event: TouchEvent | PointerEvent) {
+    if (isTouch(event)) {
+      this.touchIds = new Set(Touches.ids(event as TouchEvent))
+    } else if ('pointerId' in event) {
+      if (event.type === 'pointerup') this.pointerIds.delete(event.pointerId)
+      else this.pointerIds.add(event.pointerId)
     }
+  }
+  /**
+   * Attaches handlers to the controller.
+   * @param handlers
+   * @param nativeHandlers
+   */
+  applyHandlers(handlers: InternalHandlers, nativeHandlers?: NativeHandlers) {
+    this.handlers = handlers
+    this.nativeHandlers = nativeHandlers
+  }
+  /**
+   * Compute and attaches a config to the controller.
+   * @param config
+   * @param gestureKey
+   */
+  applyConfig(config: UserGestureConfig, gestureKey?: GestureKey) {
+    this.config = parse(config, gestureKey)
+  }
+  /**
+   * Cleans all side effects (listeners, timeouts). When the gesture is
+   * destroyed (in React, when the component is unmounted.)
+   */
+  clean() {
+    this._targetEventStore.clean()
+    for (const key of this.gestures) {
+      this.gestureEventStores[key]!.clean()
+      this.gestureTimeoutStores[key]!.clean()
+    }
+  }
+  /**
+   * Executes side effects (attaching listeneds to a `config.target`). Ran on
+   * each render.
+   */
+  effect() {
+    if (this.config.shared.target) this.bind()
+    return () => this._targetEventStore.clean()
+  }
+  /**
+   * The bind function that can be returned by the gesture handler (a hook in
+   * React for example.)
+   * @param args
+   */
+  bind(...args: any[]) {
+    const sharedConfig = this.config.shared
+    const eventOptions = sharedConfig.eventOptions
+    const props: any = {}
 
-    // Adding gesture handlers
-    for (const gestureKey of this._gestures) {
-      if (this._config[gestureKey]!.enabled) {
-        const Engine = EngineMap.get(gestureKey)!
-        // @ts-ignore
-        new Engine(this, args).bind(bindFunction)
+    const bindFunction = sharedConfig.target
+      ? bindToEventStore(this._targetEventStore, sharedConfig.target())
+      : bindToProps(props, eventOptions)
+
+    if (sharedConfig.enabled) {
+      // Adding native handlers
+      for (const eventKey in this.nativeHandlers) {
+        bindFunction(
+          eventKey,
+          '',
+          // @ts-ignore
+          (event) => this.nativeHandlers[eventKey]({ ...this.state.shared, event, args }),
+          undefined,
+          true
+        )
+      }
+
+      // Adding gesture handlers
+      for (const gestureKey of this.gestures) {
+        if (this.config[gestureKey]!.enabled) {
+          const Engine = EngineMap.get(gestureKey)!
+          // @ts-ignore
+          new Engine(this, args, gestureKey).bind(bindFunction)
+        }
       }
     }
-  }
 
-  // If target isn't set, we return an object that contains gesture handlers
-  // mapped to props handler event keys.
-  if (!sharedConfig.target) {
-    for (const handlerProp in props) {
-      props[handlerProp] = chain(...props[handlerProp])
+    // If target isn't set, we return an object that contains gesture handlers
+    // mapped to props handler event keys.
+    if (!sharedConfig.target) {
+      for (const handlerProp in props) {
+        props[handlerProp] = chain(...props[handlerProp])
+      }
+      return props
     }
-    return props
   }
-} as Controller['bind']
+}
 
 function setupGesture(ctrl: Controller, gestureKey: GestureKey) {
-  ctrl._gestures.add(gestureKey)
-  ctrl._gestureEventStores[gestureKey] = new EventStore(ctrl)
-  ctrl._gestureTimeoutStores[gestureKey] = new TimeoutStore()
+  ctrl.gestures.add(gestureKey)
+  ctrl.gestureEventStores[gestureKey] = new EventStore(ctrl)
+  ctrl.gestureTimeoutStores[gestureKey] = new TimeoutStore()
 }
 
 function resolveGestures(ctrl: Controller, internalHandlers: InternalHandlers) {
