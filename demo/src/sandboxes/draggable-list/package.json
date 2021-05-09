@@ -24,6 +24,7 @@
     "not op_mini all"
   ],
   "devDependencies": {
+    "@types/lodash.clamp": "^4.0.6",
     "@types/lodash-es": "^4.17.4",
     "@types/react": "^17.0.2",
     "@types/react-dom": "^17.0.1",
