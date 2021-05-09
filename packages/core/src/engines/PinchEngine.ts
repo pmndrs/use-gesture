@@ -70,7 +70,6 @@ export class PinchEngine extends Engine<'pinch'> {
   }
 
   touchStart(event: TouchEvent) {
-    console.log('hello')
     this.ctrl.setEventIds(event)
     const state = this.state
     const ctrlTouchIds = this.ctrl.touchIds
@@ -95,6 +94,7 @@ export class PinchEngine extends Engine<'pinch'> {
 
   pointerStart(event: PointerEvent) {
     this.ctrl.setEventIds(event)
+    ;(event.target as HTMLElement).setPointerCapture(event.pointerId)
     const state = this.state
     const _pointerEvents = state._pointerEvents
     const ctrlPointerIds = this.ctrl.pointerIds
@@ -106,7 +106,6 @@ export class PinchEngine extends Engine<'pinch'> {
 
     if (_pointerEvents.size < 2) {
       _pointerEvents.set(event.pointerId, event)
-      ;(event.target as HTMLElement).setPointerCapture(event.pointerId)
     }
 
     if (state._pointerEvents.size < 2) return
@@ -174,13 +173,13 @@ export class PinchEngine extends Engine<'pinch'> {
   pointerEnd(event: PointerEvent) {
     const state = this.state
     this.ctrl.setEventIds(event)
+    try {
+      // @ts-ignore r3f
+      event.target.releasePointerCapture(event.pointerId)
+    } catch {}
 
     if (state._pointerEvents.has(event.pointerId)) {
       state._pointerEvents.delete(event.pointerId)
-      try {
-        // @ts-ignore r3f
-        event.target.releasePointerCapture(event.pointerId)
-      } catch {}
     }
 
     if (!state._active) return

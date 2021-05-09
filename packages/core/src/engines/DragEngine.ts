@@ -77,6 +77,11 @@ export class DragEngine extends CoordinatesEngine<'drag'> {
 
   pointerDown(event: PointerEvent) {
     this.ctrl.setEventIds(event)
+    // We need to capture all pointer ids so that we can keep track of them when
+    // they're released off the target
+    if (this.config.pointerCapture) {
+      ;(event.target as HTMLElement).setPointerCapture(event.pointerId)
+    }
 
     const state = this.state
     const config = this.config
@@ -158,6 +163,19 @@ export class DragEngine extends CoordinatesEngine<'drag'> {
 
   pointerUp(event: PointerEvent) {
     this.ctrl.setEventIds(event)
+    // We release the pointer id if it has pointer capture
+    try {
+      if (this.config.pointerCapture && (event.target as HTMLElement).hasPointerCapture(event.pointerId)) {
+        ;(event.target as HTMLElement).releasePointerCapture(event.pointerId)
+      }
+    } catch {
+      if (process.env.NODE_ENV === 'development') {
+        console.warn(
+          `[@use-gesture]: If you see this message, it's likely that you're using an outdated version of \`@react-three/fiber\`. \n\nPlease upgrade to the latest version.`
+        )
+      }
+    }
+
     const state = this.state
     const config = this.config
 
@@ -222,9 +240,6 @@ export class DragEngine extends CoordinatesEngine<'drag'> {
     if (config.pointerLock) {
       currentTarget.requestPointerLock()
     }
-    if (config.pointerCapture) {
-      target.setPointerCapture(event.pointerId)
-    }
 
     if (device === 'touch' || config.pointerCapture) {
       if (!this.sharedConfig.r3f) {
@@ -250,22 +265,9 @@ export class DragEngine extends CoordinatesEngine<'drag'> {
 
   pointerClean() {
     const state = this.state
-    const target = state.target as HTMLElement
     if (!state._pointerActive) return
-    const event = state.event as PointerEvent
     if (this.config.pointerLock && document.pointerLockElement === state.target) {
       document.exitPointerLock()
-    }
-    try {
-      if (this.config.pointerCapture && target.hasPointerCapture(event.pointerId)) {
-        target.releasePointerCapture(event.pointerId)
-      }
-    } catch {
-      if (process.env.NODE_ENV === 'development') {
-        console.warn(
-          `[@use-gesture]: If you see this message, it's likely that you're using an outdated version of \`@react-three/fiber\`. \n\nPlease upgrade to the latest version.`
-        )
-      }
     }
   }
 
