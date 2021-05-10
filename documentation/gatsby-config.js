@@ -4,7 +4,7 @@ module.exports = {
     {
       resolve: 'gatsby-plugin-pnpm',
       options: {
-        include: ['smooth-doc']
+        include: ['smooth-doc', 'gatsby-plugin-mdx']
       }
     },
     {
