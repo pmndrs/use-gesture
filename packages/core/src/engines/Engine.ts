@@ -3,6 +3,7 @@ import { getEventDetails } from '../utils/events'
 import { call } from '../utils/fn'
 import { V, computeRubberband } from '../utils/maths'
 import { GestureKey, IngKey, State, Vector2 } from '../types'
+import { ResolverMap } from '../config/resolver'
 
 export interface Engine<Key extends GestureKey> {
   /**
@@ -25,6 +26,7 @@ export interface Engine<Key extends GestureKey> {
 }
 
 export abstract class Engine<Key extends GestureKey> {
+  static Resolver: ResolverMap
   /**
    * The Controller handling state.
    */

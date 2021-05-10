@@ -1,12 +1,10 @@
-import { ConfigResolverMap } from '../imports'
-import { hoverConfigResolver } from '../config/hoverConfigResolver'
 import { CoordinatesEngine } from './CoordinatesEngine'
+import { hoverConfigResolver } from '../config/hoverConfigResolver'
 import { Pointer } from '../utils/events'
 import { V } from '../utils/maths'
 
-ConfigResolverMap.set('hover', hoverConfigResolver)
-
 export class HoverEngine extends CoordinatesEngine<'hover'> {
+  static Resolver = hoverConfigResolver
   ingKey = 'hovering' as const
 
   enter(event: PointerEvent) {

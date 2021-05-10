@@ -1,12 +1,10 @@
-import { ConfigResolverMap } from '../imports'
-import { moveConfigResolver } from '../config/moveConfigResolver'
 import { CoordinatesEngine } from './CoordinatesEngine'
+import { moveConfigResolver } from '../config/moveConfigResolver'
 import { Pointer } from '../utils/events'
 import { V } from '../utils/maths'
 
-ConfigResolverMap.set('move', moveConfigResolver)
-
 export class MoveEngine extends CoordinatesEngine<'move'> {
+  static Resolver = moveConfigResolver
   ingKey = 'moving' as const
 
   move(event: PointerEvent) {

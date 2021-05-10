@@ -1,10 +1,7 @@
-import { ConfigResolverMap } from '../imports'
-import { wheelConfigResolver } from '../config/wheelConfigResolver'
 import { CoordinatesEngine } from './CoordinatesEngine'
+import { wheelConfigResolver } from '../config/wheelConfigResolver'
 import { Wheel } from '../utils/events'
 import { V } from '../utils/maths'
-
-ConfigResolverMap.set('wheel', wheelConfigResolver)
 
 export interface WheelEngine extends CoordinatesEngine<'wheel'> {
   wheel(this: WheelEngine, event: WheelEvent): void
@@ -13,6 +10,7 @@ export interface WheelEngine extends CoordinatesEngine<'wheel'> {
 }
 
 export class WheelEngine extends CoordinatesEngine<'wheel'> {
+  static Resolver = wheelConfigResolver
   ingKey = 'wheeling' as const
 
   wheel(event: WheelEvent) {

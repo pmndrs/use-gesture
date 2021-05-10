@@ -1,12 +1,9 @@
 import { CoordinatesEngine } from './CoordinatesEngine'
-import { ConfigResolverMap } from '../imports'
 import { dragConfigResolver } from '../config/dragConfigResolver'
 import { coordinatesConfigResolver } from '../config/coordinatesConfigResolver'
 import { Pointer } from '../utils/events'
 import { V } from '../utils/maths'
 import { Vector2 } from '../types'
-
-ConfigResolverMap.set('drag', dragConfigResolver)
 
 const DISPLACEMENT = 10
 
@@ -18,6 +15,7 @@ const KEYS_DELTA_MAP = {
 }
 
 export class DragEngine extends CoordinatesEngine<'drag'> {
+  static Resolver = dragConfigResolver
   ingKey = 'dragging' as const
 
   // superseeds generic Engine reset call
