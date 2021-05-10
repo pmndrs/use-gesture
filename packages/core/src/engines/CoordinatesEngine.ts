@@ -2,6 +2,24 @@ import { Engine } from './Engine'
 import { V } from '../utils/maths'
 import { CoordinatesKey, Vector2 } from '../types'
 
+function selectAxis([dx, dy]: Vector2) {
+  const d = Math.abs(dx) - Math.abs(dy)
+  if (d > 0) return 'x'
+  if (d < 0) return 'y'
+  return undefined
+}
+
+function restrictVectorToAxis(v: Vector2, axis?: 'x' | 'y') {
+  switch (axis) {
+    case 'x':
+      v[1] = 0
+      break // [ x, 0 ]
+    case 'y':
+      v[0] = 0
+      break // [ 0, y ]
+  }
+}
+
 export abstract class CoordinatesEngine<Key extends CoordinatesKey> extends Engine<Key> {
   reset() {
     super.reset()
@@ -14,44 +32,29 @@ export abstract class CoordinatesEngine<Key extends CoordinatesKey> extends Engi
   }
 
   computeOffset() {
-    const state = this.state
-    state.offset = V.add(state.lastOffset, state.movement)
+    this.state.offset = V.add(this.state.lastOffset, this.state.movement)
   }
 
   computeMovement() {
-    const { offset, lastOffset } = this.state
-    this.state.movement = V.sub(offset, lastOffset)
+    this.state.movement = V.sub(this.state.offset, this.state.lastOffset)
     // let's take profit from this function to set `values` alias to `xy`
     this.state.xy = this.state.values
   }
 
   intent(v: Vector2) {
-    const state = this.state
+    this.state.axis = this.state.axis || selectAxis(v)
 
-    if (!state.axis) {
-      const axisMovementDifference = Math.abs(v[0]) - Math.abs(v[1])
-      if (axisMovementDifference < 0) state.axis = 'y'
-      else if (axisMovementDifference > 0) state.axis = 'x'
-    }
+    // We block the movement if either:
+    // - config.lockDirection or config.axis was set but axis isn't detected yet
+    // - config.axis was set but is different than detected axis
+    this.state._blocked =
+      ((this.config.lockDirection || !!this.config.axis) && !this.state.axis) ||
+      (!!this.config.axis && this.config.axis !== this.state.axis)
 
-    const axis = state.axis
+    if (this.state._blocked) return
 
-    if (this.config.lockDirection) {
-      if (axis) {
-        state._blocked = false
-        if (axis === 'x') v[1] = 0
-        else if (axis === 'y') v[0] = 0
-      } else {
-        state._blocked = false
-      }
-    } else if (this.config.axis) {
-      if (!!axis && axis === this.config.axis) {
-        state._blocked = false
-        if (axis === 'x') v[1] = 0
-        else if (axis === 'y') v[0] = 0
-      } else {
-        state._blocked = true
-      }
+    if (this.config.axis || this.config.lockDirection) {
+      restrictVectorToAxis(v, this.state.axis)
     }
   }
 }
