@@ -2,5 +2,4 @@ packages:
   # all packages in subdirs of packages/
   - 'packages/*'
   - 'demo'
-  - 'documentation'
   - 'webpack-import-test'
