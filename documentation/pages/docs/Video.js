@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'gatsby'
-import styles from './video.module.css'
+import * as styles from './video.module.css'
 
 const links = {
   drag: { label: 'useDrag', link: 'hooks/#list-of-hooks' },

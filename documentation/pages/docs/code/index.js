@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import cn from 'classnames'
 import * as Examples from './examples'
-import styles from './styles.module.css'
+import * as styles from './styles.module.css'
 
 export default function Example({ id, disableOverlay }) {
   const Component = Examples[id]

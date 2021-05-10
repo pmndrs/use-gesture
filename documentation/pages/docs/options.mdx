@@ -5,14 +5,14 @@ order: 2
 ---
 
 import Code from './code/'
-import ReactUseGesture from './code/rug'
+import UseGesture from './code/rug'
 import Specs from './code/Specs'
 
 # Gesture options
 
-&zwnj;<ReactUseGesture /> offers different options to configure the gestures.
+&zwnj;<UseGesture pkg="react" /> offers different options to configure the gestures.
 
-Some options are generic to the way <ReactUseGesture/> behaves while some other options can be configured per gesture.
+Some options are generic to the way <UseGesture pkg="react" /> behaves while some other options can be configured per gesture.
 
 ## Structure of the config object
 
@@ -39,7 +39,7 @@ useGesture(state => doSomethingWith(state), {
 
 ### Generic options
 
-Generic options deal with how <ReactUseGesture/> will set event listeners.
+Generic options deal with how <UseGesture pkg="react" /> will set event listeners.
 
 | Option                          | Description                                                                                                     |
 | ------------------------------- | --------------------------------------------------------------------------------------------------------------- |
@@ -84,7 +84,7 @@ Here are all options that can be applied to gestures.
 
 <Specs types={['node', 'Ref']} defaultValue="undefined" />
 
-&zwnj;<ReactUseGesture /> also supports adding handlers to dom nodes directly (or the <code>window</code> or <code>document</code> objects). In that case, you shouldn't spread the <code>bind()</code> object returned by the
+&zwnj;<UseGesture pkg="react" /> also supports adding handlers to dom nodes directly (or the <code>window</code> or <code>document</code> objects). In that case, you shouldn't spread the <code>bind()</code> object returned by the
 hooks as a prop. Cleaning is handled automatically.
 
 ```jsx highlight={5-6}
@@ -140,7 +140,7 @@ Whether the gesture is enabled.
 
 Everytime a gesture starts, the `offset` state attribute starts with its previous value. But in some cases, you might want to start `offset` from an initial position that is external to your logic[^1].
 
-[^1]: If you're used to <ReactUseGesture/>, this was the most common usecase for `memo`.
+[^1]: If you're used to <UseGesture pkg="react" />, this was the most common usecase for `memo`.
 
 Let's take a tangible example: say that a draggable component turns back to its initial position **slowly**. In the meantime, the draggable component should still be **interruptible** at any moment. In that case, you can use `initial` to set the position of the component **at the moment** the user drags it to the value of the spring.
 
@@ -273,7 +273,7 @@ Note that you have to set [`bounds`](#bounds) for rubberbanding to take effect.
 
 <Specs types="(xy: Vector2) => Vector2" defaultValue="undefined" />
 
-When you're interacting with canvas objects, you're dealing with space coordinates that aren't measured in pixels. In that case, you can tell <ReactUseGesture /> to map screen values to the space with a `transform` function.
+When you're interacting with canvas objects, you're dealing with space coordinates that aren't measured in pixels. In that case, you can tell <UseGesture pkg="react" /> to map screen values to the space with a `transform` function.
 
 <Code id="Transform" />
 
@@ -406,7 +406,7 @@ On desktop, you should be able to drag the torus as you would expect. On mobile,
 
 ### pointer.touch (drag and pinch)
 
-Most gestures, drag included, use [pointer events](https://developer.mozilla.org/en-US/docs/Web/API/Pointer_events). This works well in 99 situations in 100, but pointer events get canceled on touch devices when the user starts scrolling. Usually this is what you actually want, and the browser does it for you. But in some situations you may want the drag to persist while scrolling. In that case you'll need to indicate <ReactUseGesture /> to use touch events, which aren't canceled on scroll.
+Most gestures, drag included, use [pointer events](https://developer.mozilla.org/en-US/docs/Web/API/Pointer_events). This works well in 99 situations in 100, but pointer events get canceled on touch devices when the user starts scrolling. Usually this is what you actually want, and the browser does it for you. But in some situations you may want the drag to persist while scrolling. In that case you'll need to indicate <UseGesture pkg="react" /> to use touch events, which aren't canceled on scroll.
 
 ### delay (drag only)
 

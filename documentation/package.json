@@ -12,11 +12,11 @@
     "@react-spring/three": "^9.1.1",
     "@react-spring/web": "^9.1.1",
     "@react-three/drei": "^4.1.6",
-    "@react-three/fiber": "^6.0.20",
+    "@react-three/fiber": "^6.0.21",
     "@use-gesture/react": "*",
     "classnames": "^2.2.6",
-    "gatsby": "^2.32.9",
-    "gatsby-plugin-google-analytics": "^2.11.0",
+    "gatsby": "^3.4.2",
+    "gatsby-plugin-google-analytics": "^3.4.0",
     "gatsby-plugin-pnpm": "^1.2.6",
     "lethargy": "^1.0.9",
     "leva": "^0.9.4",
@@ -26,7 +26,7 @@
     "react-player": "^2.9.0",
     "react-toastify": "^7.0.3",
     "sharp": "^0.28.1",
-    "smooth-doc": "5.2.1",
+    "smooth-doc": "7.0.1",
     "three": "^0.128.0"
   }
 }

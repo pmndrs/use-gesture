@@ -6,8 +6,8 @@ import cn from 'classnames'
 import { Leva, useControls } from 'leva'
 import { tweaks } from './data'
 
-import 'react-toastify/dist/ReactToastify.css'
-import styles from './hero.module.css'
+// import 'react-toastify/dist/ReactToastify.css'
+import * as styles from './hero.module.css'
 
 toast.configure({ position: 'bottom-right', pauseOnHover: false, draggable: false })
 

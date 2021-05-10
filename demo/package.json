@@ -12,7 +12,7 @@
     "@leva-ui/plugin-spring": "*",
     "@react-spring/web": "^9.1.0",
     "@react-three/drei": "^4.1.4",
-    "@react-three/fiber": "^6.0.20",
+    "@react-three/fiber": "^6.0.21",
     "@use-gesture/react": "*",
     "@use-gesture/vanilla": "*",
     "leva": "*",

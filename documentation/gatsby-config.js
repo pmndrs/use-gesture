@@ -19,7 +19,7 @@ module.exports = {
           { title: 'API', url: '/docs/hooks' }
         ],
         twitterAccount: 'pmndrs',
-        githubRepositoryURL: 'https://github.com/pmndrs/react-use-gesture'
+        githubRepositoryURL: 'https://github.com/pmndrs/use-gesture'
       }
     },
     {

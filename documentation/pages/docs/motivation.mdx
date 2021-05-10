@@ -4,25 +4,25 @@ section: About
 ---
 
 import ReactPlayer from 'react-player'
-import styles from './video.module.css'
-import ReactUseGesture from './code/rug'
+import * as styles from './video.module.css'
+import UseGesture from './code/rug'
 
 # Why use React UseGesture
 
-&zwnj;<ReactUseGesture /> is a library that focuses on making complex gestures such as drag and pinch easy to configure.
+&zwnj;<UseGesture pkg="react" /> is a library that focuses on making complex gestures such as drag and pinch easy to configure.
 
 In most situations, `onDrag` becomes as easy to set up as `onMouseMove`. However, you remain in control of the full gesture logic, which allows you to make your components behave exactly the way you want.
 
 ## Augmenting events
 
-A secondary aspect of <ReactUseGesture/> is to upgrade gestures with additional kinematics attributes, such as **velocity**, **distance**, **delta** and more, that don't come with native browser events.
+A secondary aspect of <UseGesture pkg="react" /> is to upgrade gestures with additional kinematics attributes, such as **velocity**, **distance**, **delta** and more, that don't come with native browser events.
 
-&zwnj;<ReactUseGesture /> also debounces `scroll`, `wheel` and `move` events, which gives you the capacity to [trigger logic
+&zwnj;<UseGesture pkg="react" /> also debounces `scroll`, `wheel` and `move` events, which gives you the capacity to [trigger logic
 when the gesture starts or ends out of the box](/docs/hooks/#start-and-end-handlers).
 
 ## Going further
 
-Alexandra Holachek ([site](https://alex.holachek.com/), [twitter](https://twitter.com/alex_holachek)) gave a great talk at React Conf about Progressive Web Animations, where she explains the principles of her approach on creating native-like UI. Her demos use React-spring and <ReactUseGesture/>. Alex's talk strongly influenced some of the features in <ReactUseGesture/>.
+Alexandra Holachek ([site](https://alex.holachek.com/), [twitter](https://twitter.com/alex_holachek)) gave a great talk at React Conf about Progressive Web Animations, where she explains the principles of her approach on creating native-like UI. Her demos use React-spring and <UseGesture pkg="react" />. Alex's talk strongly influenced some of the features in <UseGesture pkg="react" />.
 
 <div className={styles.playerWrapper}>
   <ReactPlayer

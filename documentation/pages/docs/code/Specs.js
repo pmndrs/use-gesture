@@ -5,7 +5,8 @@ const Specs = styled.box`
   color: on-background-light;
   opacity: 0.6;
   font-size: 0.85em;
-  margin-top: ${th.px(-9)};
+  margin-top: ${th.px(10)};
+  margin-bottom: 20px;
   overflow-x: scroll;
   border-left: 3px solid;
   border-left-color: layout-border;
@@ -57,7 +58,7 @@ export default function SpecsFn({ types, defaultValue }) {
           t.join(' | ')
         ) : (
           <ul>
-            {t.map(v => (
+            {t.map((v) => (
               <li key={v}>{v}</li>
             ))}
           </ul>

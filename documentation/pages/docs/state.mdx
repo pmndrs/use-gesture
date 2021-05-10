@@ -5,7 +5,7 @@ order: 3
 ---
 
 import Code from './code/'
-import ReactUseGesture from './code/rug'
+import UseGesture from './code/rug'
 
 # Gesture state
 
@@ -96,7 +96,7 @@ const bind = useDrag(state => {
 
 #### The difference between the two
 
-In <ReactUseGesture/>, we call **gesture** the act of the user initiating and terminating an interaction. `movement` expresses the gesture movement, while `offset` is the sum of all gesture movements on the same component. When you start dragging a component, `movement` is reset to `[0,0]`, while `offset` keeps its previous value.
+In <UseGesture pkg="react" />, we call **gesture** the act of the user initiating and terminating an interaction. `movement` expresses the gesture movement, while `offset` is the sum of all gesture movements on the same component. When you start dragging a component, `movement` is reset to `[0,0]`, while `offset` keeps its previous value.
 
 In practical terms, `movement` is handy when your element returns back to its original position at the end of the gesture. Here is an example for `offset`, where the component stays where you left it:
 

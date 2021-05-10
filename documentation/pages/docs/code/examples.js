@@ -8,7 +8,7 @@ import { Lethargy } from 'lethargy'
 import cn from 'classnames'
 import * as THREE from 'three'
 
-import styles from './styles.module.css'
+import * as styles from './styles.module.css'
 
 export function EasterDiv({ children }) {
   const [{ x, y, live }, api] = useSpring(() => ({ x: 0, y: 0, live: false }))

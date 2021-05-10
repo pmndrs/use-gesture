@@ -4,11 +4,11 @@ section: Reference
 order: 1
 ---
 
-import ReactUseGesture from './code/rug'
+import UseGesture from './code/rug'
 
 # Available hooks
 
-&zwnj;<ReactUseGesture /> exports several hooks that can handle different gestures.
+&zwnj;<UseGesture pkg="react" /> exports several hooks that can handle different gestures.
 
 | Hook         | Description                                |
 | ------------ | ------------------------------------------ |
@@ -35,7 +35,7 @@ return <div {...bind(arg)} />
 
 ### About the drag gesture
 
-The drag gesture is possibly the most popular gesture of <ReactUseGesture />. Because of the way pointer events work, dragging might cause conflict with scrolling on touch-based devices. So to signify that your element is draggable and therefore shouldn't trigger the browser scrolling, you **need** to use the [`touch-action`](https://developer.mozilla.org/en-US/docs/Web/CSS/touch-action) css property. [Read more here](/docs/extras/#touch-action).
+The drag gesture is possibly the most popular gesture of <UseGesture pkg="react" />. Because of the way pointer events work, dragging might cause conflict with scrolling on touch-based devices. So to signify that your element is draggable and therefore shouldn't trigger the browser scrolling, you **need** to use the [`touch-action`](https://developer.mozilla.org/en-US/docs/Web/CSS/touch-action) css property. [Read more here](/docs/extras/#touch-action).
 
 ### About the pinch gesture
 
@@ -48,7 +48,7 @@ document.addEventListener('gesturestart', (e) => e.preventDefault())
 document.addEventListener('gesturechange', (e) => e.preventDefault())
 ```
 
-Also, a pretty unknown feature allows devices supporting wheel to **zoom** (not rotate) by wheeling and pressing the **control** modifier key. <ReactUseGesture /> supports it, but to make sure the zooming doesn't interefere with the browser accessibility zoom, you'll also be better using the `target` [option](/docs/options/#target).
+Also, a pretty unknown feature allows devices supporting wheel to **zoom** (not rotate) by wheeling and pressing the **control** modifier key. <UseGesture pkg="react" /> supports it, but to make sure the zooming doesn't interefere with the browser accessibility zoom, you'll also be better using the `target` [option](/docs/options/#target).
 
 ### About the wheel gesture
 

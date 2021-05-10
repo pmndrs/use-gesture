@@ -12,8 +12,8 @@ export const theme = {
       ...baseTheme.colors.modes,
       dark: {
         ...baseTheme.colors.modes.dark,
-        'editor-background': 'rgb(1, 22, 39)',
-      },
-    },
-  },
+        'editor-background': 'rgb(1, 22, 39)'
+      }
+    }
+  }
 }
