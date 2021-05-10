@@ -45,10 +45,10 @@ export abstract class CoordinatesEngine<Key extends CoordinatesKey> extends Engi
   intent(v: Vector2) {
     this.state.axis = selectAxis(v, this.state.axis)
     
-    state._blocked =  this.config.lockDirection !== true && 
+    this.state._blocked =  this.config.lockDirection !== true && 
                       this.config.axis !== this.state.axis;
     
-    if (state._blocked) return;
+    if (this.state._blocked) return;
     
     restrictVectorToAxis(v, this.state.axis)
   }
