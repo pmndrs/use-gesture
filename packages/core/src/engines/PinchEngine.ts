@@ -1,5 +1,5 @@
 import { Engine } from './Engine'
-import { Touches, Wheel, distanceAngle } from '../utils/events'
+import { touchDistanceAngle, distanceAngle, wheelValues } from '../utils/events'
 import { V } from '../utils/maths'
 import { Vector2, WebKitGestureEvent } from '../types'
 
@@ -84,7 +84,7 @@ export class PinchEngine extends Engine<'pinch'> {
     this.start(event)
     state._touchIds = Array.from(ctrlTouchIds).slice(0, 2) as [number, number]
 
-    const payload = Touches.distanceAngle(event, state._touchIds)
+    const payload = touchDistanceAngle(event, state._touchIds)
     this.pinchStart(event, payload)
   }
 
@@ -125,7 +125,7 @@ export class PinchEngine extends Engine<'pinch'> {
 
   touchMove(event: TouchEvent) {
     if (!this.state._active) return
-    const payload = Touches.distanceAngle(event, this.state._touchIds)
+    const payload = touchDistanceAngle(event, this.state._touchIds)
     this.pinchMove(event, payload)
   }
 
@@ -248,7 +248,7 @@ export class PinchEngine extends Engine<'pinch'> {
   wheelChange(event: WheelEvent) {
     if (event.cancelable) event.preventDefault()
     const state = this.state
-    state._delta = [-Wheel.values(event)[1] / PINCH_WHEEL_RATIO, 0]
+    state._delta = [-wheelValues(event)[1] / PINCH_WHEEL_RATIO, 0]
     V.addTo(state._movement, state._delta)
 
     this.state.origin = [event.clientX, event.clientY]

@@ -1,6 +1,6 @@
 import { CoordinatesEngine } from './CoordinatesEngine'
 import { coordinatesConfigResolver } from '../config/coordinatesConfigResolver'
-import { Pointer } from '../utils/events'
+import { pointerId, pointerValues } from '../utils/events'
 import { V } from '../utils/maths'
 import { Vector2 } from '../types'
 
@@ -87,10 +87,10 @@ export class DragEngine extends CoordinatesEngine<'drag'> {
     this.start(event)
     this.setupPointer(event)
 
-    state._pointerId = Pointer.id(event)
+    state._pointerId = pointerId(event)
     state._pointerActive = true
 
-    state.values = Pointer.values(event)
+    state.values = pointerValues(event)
     state.initial = state.values
 
     if (config.preventScroll) {
@@ -117,10 +117,10 @@ export class DragEngine extends CoordinatesEngine<'drag'> {
     const config = this.config
 
     if (!state._pointerActive) return
-    const id = Pointer.id(event)
+    const id = pointerId(event)
     if (state._pointerId && id !== state._pointerId) return
 
-    const values = Pointer.values(event)
+    const values = pointerValues(event)
 
     if (document.pointerLockElement === event.target) {
       state._delta = [event.movementX, event.movementY]
@@ -176,7 +176,7 @@ export class DragEngine extends CoordinatesEngine<'drag'> {
     const config = this.config
 
     if (!state._pointerActive) return
-    const id = Pointer.id(event)
+    const id = pointerId(event)
     if (state._pointerId && id !== state._pointerId) return
 
     this.state._pointerActive = false

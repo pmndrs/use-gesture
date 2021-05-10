@@ -54,54 +54,48 @@ export function distanceAngle(P1: Touch | PointerEvent, P2: Touch | PointerEvent
   return { angle, distance, origin }
 }
 
-export const Touches = {
-  ids(event: TouchEvent) {
-    return getCurrentTargetTouchList(event).map((touch) => touch.identifier)
-  },
-  distanceAngle(event: TouchEvent, ids: number[]) {
-    const [P1, P2] = Array.from(event.touches).filter((touch) => ids.includes(touch.identifier))
-    return distanceAngle(P1, P2)
-  }
+export function touchIds(event: TouchEvent) {
+  return getCurrentTargetTouchList(event).map((touch) => touch.identifier)
 }
 
-export const Pointer = {
-  id(event: PointerEvent | TouchEvent) {
-    const valueEvent = getValueEvent(event)
-    return isTouch(event) ? (valueEvent as Touch).identifier : (valueEvent as PointerEvent).pointerId
-  },
-  values(event: PointerEvent | TouchEvent): Vector2 {
-    // if ('spaceX' in event) return [event.spaceX, event.spaceY]
-    const valueEvent = getValueEvent(event)
-    return [valueEvent.clientX, valueEvent.clientY]
-  }
+export function touchDistanceAngle(event: TouchEvent, ids: number[]) {
+  const [P1, P2] = Array.from(event.touches).filter((touch) => ids.includes(touch.identifier))
+  return distanceAngle(P1, P2)
+}
+
+export function pointerId(event: PointerEvent | TouchEvent) {
+  const valueEvent = getValueEvent(event)
+  return isTouch(event) ? (valueEvent as Touch).identifier : (valueEvent as PointerEvent).pointerId
+}
+
+export function pointerValues(event: PointerEvent | TouchEvent): Vector2 {
+  // if ('spaceX' in event) return [event.spaceX, event.spaceY]
+  const valueEvent = getValueEvent(event)
+  return [valueEvent.clientX, valueEvent.clientY]
 }
 
 // wheel delta defaults from https://github.com/facebookarchive/fixed-data-table/blob/master/src/vendor_upstream/dom/normalizeWheel.js
 const LINE_HEIGHT = 40
 const PAGE_HEIGHT = 800
 
-export const Wheel = {
-  values(event: WheelEvent): Vector2 {
-    let { deltaX, deltaY, deltaMode } = event
-    // normalize wheel values, especially for Firefox
-    if (deltaMode === 1) {
-      deltaX *= LINE_HEIGHT
-      deltaY *= LINE_HEIGHT
-    } else if (deltaMode === 2) {
-      deltaX *= PAGE_HEIGHT
-      deltaY *= PAGE_HEIGHT
-    }
-    return [deltaX, deltaY]
+export function wheelValues(event: WheelEvent): Vector2 {
+  let { deltaX, deltaY, deltaMode } = event
+  // normalize wheel values, especially for Firefox
+  if (deltaMode === 1) {
+    deltaX *= LINE_HEIGHT
+    deltaY *= LINE_HEIGHT
+  } else if (deltaMode === 2) {
+    deltaX *= PAGE_HEIGHT
+    deltaY *= PAGE_HEIGHT
   }
+  return [deltaX, deltaY]
 }
 
-export const Scroll = {
-  values(event: UIEvent): Vector2 {
-    // If the currentTarget is the window then we return the scrollX/Y position.
-    // If not (ie the currentTarget is a DOM element), then we return scrollLeft/Top
-    const { scrollX, scrollY, scrollLeft, scrollTop } = event.currentTarget as Element & Window
-    return [scrollX ?? scrollLeft ?? 0, scrollY ?? scrollTop ?? 0]
-  }
+export function scrollValues(event: UIEvent): Vector2 {
+  // If the currentTarget is the window then we return the scrollX/Y position.
+  // If not (ie the currentTarget is a DOM element), then we return scrollLeft/Top
+  const { scrollX, scrollY, scrollLeft, scrollTop } = event.currentTarget as Element & Window
+  return [scrollX ?? scrollLeft ?? 0, scrollY ?? scrollTop ?? 0]
 }
 
 export function getEventDetails(event: any) {

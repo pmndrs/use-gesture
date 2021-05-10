@@ -1,6 +1,6 @@
 import { EngineMap } from './imports'
 import { parse } from './config/resolver'
-import { Touches, isTouch, toReactHandlerProp } from './utils/events'
+import { isTouch, toReactHandlerProp, touchIds } from './utils/events'
 import { EventStore } from './EventStore'
 import { TimeoutStore } from './TimeoutStore'
 import { chain } from './utils/fn'
@@ -43,7 +43,7 @@ export class Controller {
    */
   setEventIds(event: TouchEvent | PointerEvent) {
     if (isTouch(event)) {
-      this.touchIds = new Set(Touches.ids(event as TouchEvent))
+      this.touchIds = new Set(touchIds(event as TouchEvent))
     } else if ('pointerId' in event) {
       if (event.type === 'pointerup') this.pointerIds.delete(event.pointerId)
       else this.pointerIds.add(event.pointerId)

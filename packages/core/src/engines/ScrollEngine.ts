@@ -1,5 +1,5 @@
 import { CoordinatesEngine } from './CoordinatesEngine'
-import { Scroll } from '../utils/events'
+import { scrollValues } from '../utils/events'
 import { V } from '../utils/maths'
 
 export class ScrollEngine extends CoordinatesEngine<'scroll'> {
@@ -14,7 +14,7 @@ export class ScrollEngine extends CoordinatesEngine<'scroll'> {
   scrollChange(event: UIEvent) {
     if (event.cancelable) event.preventDefault()
     const state = this.state
-    const values = Scroll.values(event)
+    const values = scrollValues(event)
     state._delta = V.sub(values, state.values)
     V.addTo(state._movement, state._delta)
     state.values = values

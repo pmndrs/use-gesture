@@ -1,5 +1,5 @@
 import { CoordinatesEngine } from './CoordinatesEngine'
-import { Pointer } from '../utils/events'
+import { pointerValues } from '../utils/events'
 import { V } from '../utils/maths'
 
 export class MoveEngine extends CoordinatesEngine<'move'> {
@@ -14,7 +14,7 @@ export class MoveEngine extends CoordinatesEngine<'move'> {
   moveStart(event: PointerEvent) {
     this.start(event)
     const state = this.state
-    state.values = Pointer.values(event)
+    state.values = pointerValues(event)
     this.compute(event)
     state.initial = state.values
     this.emit()
@@ -22,7 +22,7 @@ export class MoveEngine extends CoordinatesEngine<'move'> {
 
   moveChange(event: PointerEvent) {
     if (!this.state._active) return
-    const values = Pointer.values(event)
+    const values = pointerValues(event)
     const state = this.state
     state._delta = V.sub(values, state.values)
     V.addTo(state._movement, state._delta)

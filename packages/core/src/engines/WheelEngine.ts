@@ -1,5 +1,5 @@
 import { CoordinatesEngine } from './CoordinatesEngine'
-import { Wheel } from '../utils/events'
+import { wheelValues } from '../utils/events'
 import { V } from '../utils/maths'
 
 export interface WheelEngine extends CoordinatesEngine<'wheel'> {
@@ -20,7 +20,7 @@ export class WheelEngine extends CoordinatesEngine<'wheel'> {
   wheelChange(event: WheelEvent) {
     if (event.cancelable) event.preventDefault()
     const state = this.state
-    state._delta = Wheel.values(event)
+    state._delta = wheelValues(event)
     V.addTo(this.state._movement, state._delta)
 
     this.compute(event)

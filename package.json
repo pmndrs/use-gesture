@@ -36,8 +36,17 @@
     },
     {
       "name": "@use-gesture/react",
-      "path": "packages/react/dist/use-gesture-react.cjs.prod.js",
+      "path": "packages/react/dist/use-gesture-react.esm.js",
       "limit": "9 KB",
+      "ignore": [
+        "react"
+      ]
+    },
+    {
+      "name": "@use-gesture/react -- tree-shaking",
+      "import": "{ useDrag }",
+      "path": "packages/react/dist/use-gesture-react.esm.js",
+      "limit": "6 KB",
       "ignore": [
         "react"
       ]
