@@ -135,6 +135,7 @@ importers:
       '@react-three/drei': ^4.1.6
       '@react-three/fiber': ^6.0.21
       '@use-gesture/react': '*'
+      '@xstyled/styled-components': ^2.5.0
       classnames: ^2.2.6
       gatsby: ^3.4.2
       gatsby-plugin-google-analytics: ^3.4.0
@@ -155,6 +156,7 @@ importers:
       '@react-three/drei': 4.3.3_393acb3e4f7818597c420bccd9b8cba8
       '@react-three/fiber': 6.0.21_8e92467867dafd26e6d8488bbebf6d56
       '@use-gesture/react': link:../packages/react
+      '@xstyled/styled-components': 2.5.0
       classnames: 2.3.1
       gatsby: 3.4.2_react-dom@17.0.2+react@17.0.2
       gatsby-plugin-google-analytics: 3.4.0_b8a8beef540c3782aa8290443da571a0
@@ -5547,6 +5549,16 @@ packages:
     resolution: {integrity: sha512-hxWJUpkPK6buyLd2XB6hjTIN2Vc5QjYW4E4y8Ekqq2kezCIFpdumbI/8oHCxfARBPzQW7son/b8cAZDhXjsIsg==}
     dependencies:
       '@xstyled/system': 2.5.0
+    dev: false
+
+  /@xstyled/styled-components/2.5.0:
+    resolution: {integrity: sha512-5b3qCZtlQAQmU3TQZUGgOhmrWc/K3GTTm08rbj7Vr12a1PdfqEUDyq7fGZo+H3TXFcOqMbOZKF22DYUK5trrNA==}
+    peerDependencies:
+      styled-components: ^4.0.0 || ^5.0.0
+    dependencies:
+      '@xstyled/core': 2.5.0
+      '@xstyled/system': 2.5.0
+      '@xstyled/util': 2.2.3
     dev: false
 
   /@xstyled/styled-components/2.5.0_styled-components@5.3.0:
