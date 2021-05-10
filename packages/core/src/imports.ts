@@ -5,13 +5,12 @@ import { FullGestureState, GestureHandlers, GestureKey, InternalHandlers, UserGe
 
 export type EngineClass<Key extends GestureKey> = {
   new (controller: Controller, args: any[], key: Key): Engine<Key>
-} & { Resolver: ResolverMap }
+}
 
 export const EngineMap = new Map<GestureKey, EngineClass<any>>()
 export const ConfigResolverMap = new Map<GestureKey, ResolverMap>()
 
 export function registerEngine<Key extends GestureKey>(action: Key, Engine: EngineClass<Key>) {
-  ConfigResolverMap.set(action, Engine.Resolver)
   EngineMap.set(action, Engine)
 }
 
