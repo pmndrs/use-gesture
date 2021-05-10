@@ -1,10 +1,6 @@
-import { ConfigResolverMap } from '../imports'
-import { scrollConfigResolver } from '../config/scrollConfigResolver'
 import { CoordinatesEngine } from './CoordinatesEngine'
 import { Scroll } from '../utils/events'
 import { V } from '../utils/maths'
-
-ConfigResolverMap.set('scroll', scrollConfigResolver)
 
 export class ScrollEngine extends CoordinatesEngine<'scroll'> {
   ingKey = 'scrolling' as const

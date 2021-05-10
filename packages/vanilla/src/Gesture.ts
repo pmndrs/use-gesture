@@ -8,7 +8,13 @@ import {
   HoverEngine,
   parseMergedHandlers,
   GestureHandlers,
-  UserGestureConfig
+  UserGestureConfig,
+  dragConfigResolver,
+  hoverConfigResolver,
+  moveConfigResolver,
+  pinchConfigResolver,
+  scrollConfigResolver,
+  wheelConfigResolver
 } from '@use-gesture/core'
 import { Recognizer } from './Recognizer'
 
@@ -23,12 +29,12 @@ export const Gesture: GestureConstructor = function (
   _handlers: GestureHandlers,
   _config: UserGestureConfig | {} = {}
 ) {
-  registerEngine('drag', DragEngine)
-  registerEngine('pinch', PinchEngine)
-  registerEngine('scroll', ScrollEngine)
-  registerEngine('wheel', WheelEngine)
-  registerEngine('move', MoveEngine)
-  registerEngine('hover', HoverEngine)
+  registerEngine('drag', DragEngine, dragConfigResolver)
+  registerEngine('pinch', PinchEngine, pinchConfigResolver)
+  registerEngine('scroll', ScrollEngine, scrollConfigResolver)
+  registerEngine('wheel', WheelEngine, wheelConfigResolver)
+  registerEngine('move', MoveEngine, moveConfigResolver)
+  registerEngine('hover', HoverEngine, hoverConfigResolver)
 
   const { handlers, nativeHandlers, config } = parseMergedHandlers(_handlers, _config)
   return new Recognizer(target, handlers, config, undefined, nativeHandlers)

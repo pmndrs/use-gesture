@@ -1,4 +1,11 @@
-import { registerEngine, ScrollEngine, Handler, UserScrollConfig, EventTypes } from '@use-gesture/core'
+import {
+  registerEngine,
+  ScrollEngine,
+  Handler,
+  UserScrollConfig,
+  EventTypes,
+  scrollConfigResolver
+} from '@use-gesture/core'
 import { Recognizer } from './Recognizer'
 
 interface ScrollGestureConstructor {
@@ -16,6 +23,6 @@ export const ScrollGesture: ScrollGestureConstructor = function <EventType = Eve
   handler: Handler<'scroll', EventType>,
   config: UserScrollConfig | {} = {}
 ) {
-  registerEngine('scroll', ScrollEngine)
+  registerEngine('scroll', ScrollEngine, scrollConfigResolver)
   return new Recognizer(target, { scroll: handler }, config, 'scroll')
 } as any

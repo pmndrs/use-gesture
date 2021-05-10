@@ -1,4 +1,4 @@
-import { registerEngine, MoveEngine, UserMoveConfig, Handler, EventTypes } from '@use-gesture/core'
+import { registerEngine, MoveEngine, UserMoveConfig, Handler, EventTypes, moveConfigResolver } from '@use-gesture/core'
 import { useRecognizers } from './useRecognizers'
 
 /**
@@ -11,6 +11,6 @@ export function useMove<EventType = EventTypes['move'], Config = UserMoveConfig>
   handler: Handler<'move', EventType>,
   config: Config | {} = {}
 ) {
-  registerEngine('move', MoveEngine)
+  registerEngine('move', MoveEngine, moveConfigResolver)
   return useRecognizers({ move: handler }, config, 'move')
 }

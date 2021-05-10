@@ -1,4 +1,11 @@
-import { registerEngine, WheelEngine, UserWheelConfig, Handler, EventTypes } from '@use-gesture/core'
+import {
+  registerEngine,
+  WheelEngine,
+  UserWheelConfig,
+  Handler,
+  EventTypes,
+  wheelConfigResolver
+} from '@use-gesture/core'
 import { useRecognizers } from './useRecognizers'
 
 /**
@@ -11,6 +18,6 @@ export function useWheel<EventType = EventTypes['wheel'], Config = UserWheelConf
   handler: Handler<'wheel', EventType>,
   config: Config | {} = {}
 ) {
-  registerEngine('wheel', WheelEngine)
+  registerEngine('wheel', WheelEngine, wheelConfigResolver)
   return useRecognizers({ wheel: handler }, config, 'wheel')
 }

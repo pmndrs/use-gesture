@@ -1,10 +1,6 @@
-import { ConfigResolverMap } from '../imports'
-import { wheelConfigResolver } from '../config/wheelConfigResolver'
 import { CoordinatesEngine } from './CoordinatesEngine'
 import { Wheel } from '../utils/events'
 import { V } from '../utils/maths'
-
-ConfigResolverMap.set('wheel', wheelConfigResolver)
 
 export interface WheelEngine extends CoordinatesEngine<'wheel'> {
   wheel(this: WheelEngine, event: WheelEvent): void

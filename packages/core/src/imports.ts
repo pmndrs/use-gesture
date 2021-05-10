@@ -10,8 +10,9 @@ export type EngineClass<Key extends GestureKey> = {
 export const EngineMap = new Map<GestureKey, EngineClass<any>>()
 export const ConfigResolverMap = new Map<GestureKey, ResolverMap>()
 
-export function registerEngine<Key extends GestureKey>(action: Key, Engine: EngineClass<Key>) {
+export function registerEngine<Key extends GestureKey>(action: Key, Engine: EngineClass<Key>, resolver: ResolverMap) {
   EngineMap.set(action, Engine)
+  ConfigResolverMap.set(action, resolver)
 }
 
 const RE_NOT_NATIVE = /^on(Drag|Wheel|Scroll|Move|Pinch|Hover)/

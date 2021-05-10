@@ -1,11 +1,7 @@
 import { Engine } from './Engine'
-import { ConfigResolverMap } from '../imports'
-import { pinchConfigResolver } from '../config/pinchConfigResolver'
 import { Touches, Wheel, distanceAngle } from '../utils/events'
 import { V } from '../utils/maths'
 import { Vector2, WebKitGestureEvent } from '../types'
-
-ConfigResolverMap.set('pinch', pinchConfigResolver)
 
 const SCALE_ANGLE_RATIO_INTENT_DEG = 30
 const SCALE_ANGLE_RATIO_INTENT_RAD = (SCALE_ANGLE_RATIO_INTENT_DEG / 180) * Math.PI
