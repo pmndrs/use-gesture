@@ -2,6 +2,12 @@ module.exports = {
   flags: { PRESERVE_WEBPACK_CACHE: true },
   plugins: [
     {
+      resolve: 'gatsby-plugin-pnpm',
+      options: {
+        include: ['smooth-doc']
+      }
+    },
+    {
       resolve: 'smooth-doc',
       options: {
         name: '@use-gesture',
