@@ -213,3 +213,28 @@
 .Transform canvas {
   touch-action: none;
 }
+
+.CaptureFalse {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.CaptureFalse svg {
+  position: relative;
+  width: 328px;
+  overflow: visible;
+}
+
+.CaptureFalse .from {
+  cursor: pointer;
+  touch-action: none;
+}
+
+.CaptureFalse .target:hover {
+  fill: hotpink;
+}
+
+.CaptureFalse > div {
+  position: absolute;
+  font-size: 0.8em;
+}

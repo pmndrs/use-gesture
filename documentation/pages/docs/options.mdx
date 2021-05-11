@@ -70,8 +70,8 @@ Here are all options that can be applied to gestures.
 | [`transform`](#transform)                       |    **all**     | A function that you can use to transform pointer values. Useful to map your screen coordinates to custom space coordinates such as a canvas.                                                         |
 | [`filterTaps`](#filtertaps-drag-only)           |    **drag**    | If `true`, the component won't trigger your drag logic if the user just clicked on the component.                                                                                                    |
 | [`preventScroll`](#preventScroll-drag-only)     |    **drag**    | If `true`, drag will be triggered after `250ms` and will prevent window scrolling.                                                                                                                   |
-| [`pointer.touch`](#pointertouch-drag-and-pinch) | **drag,pinch** | If `true`, drag will use touch events on touch-enabled devices. [Read more below](#pointertouch-drag-and-pinch).                                                                                     |
-| `pointer.capture`                               |    **drag**    | If `false`, drag will not use `setPointerCapture` and attach `pointerMove` events to the window.                                                                                                     |
+| [`pointer.touch`](#pointertouch-drag-and-pinch) | **drag,pinch** | If `true`, drag and pinch will use touch events on touch-enabled devices. [Read more below](#pointertouch-drag-and-pinch).                                                                           |
+| [`pointer.capture`](#pointercapture-drag-only)  |    **drag**    | If `false`, drag will not use `setPointerCapture` and attach `pointerMove` events to the window. [Read more below](#pointercapture-drag-only).                                                       |
 | `pointer.lock`                                  |    **drag**    | If `true`, the pointer will enter pointer lock mode when drag starts, and exit pointer lock when drag ends.                                                                                          |
 | [`delay`](#delay-drag-only)                     |    **drag**    | If set, the handler will be delayed for the duration of the delay (in `ms`) — or if the user starts moving. When set to `true`, `delay` is defaulted to `180ms`.                                     |
 | [`swipe.distance`](#swipedistance-drag-only)    |    **drag**    | The minimum distance per axis (in `pixels`) the drag gesture needs to travel to trigger a swipe.                                                                                                     |
@@ -219,7 +219,7 @@ function BoundsExample() {
 
 > `scaleBounds` and `angleBounds` serve the same purpose as `bounds` for the `pinch` gesture, in a `{min,max}` format.
 
-### bounds (drag only)
+### Node as bounds (drag only)
 
 <Specs
   types={['DragBounds: Bounds | HTMLElement | React.RefObject<HTMLElement>', '(gestureState) => DragBounds']}
@@ -406,7 +406,19 @@ On desktop, you should be able to drag the torus as you would expect. On mobile,
 
 ### pointer.touch (drag and pinch)
 
-Most gestures, drag included, use [pointer events](https://developer.mozilla.org/en-US/docs/Web/API/Pointer_events). This works well in 99 situations in 100, but pointer events get canceled on touch devices when the user starts scrolling. Usually this is what you actually want, and the browser does it for you. But in some situations you may want the drag to persist while scrolling. In that case you'll need to indicate <UseGesture pkg="react" /> to use touch events, which aren't canceled on scroll.
+<Specs types={'boolean'} defaultValue="false" />
+
+Most gestures, drag included, use [pointer events](https://developer.mozilla.org/en-US/docs/Web/API/Pointer_events). This works well in 99 situations in 100, but pointer events get canceled on touch devices when the user starts scrolling. Usually this is what you actually want, and the browser does it for you. But in some situations you may want the drag to persist while scrolling. In that case you'll need to indicate <UseGesture /> to use touch events, which aren't canceled on scroll.
+
+### pointer.capture (drag only)
+
+<Specs types={'boolean'} defaultValue="true" />
+
+By default, drag uses [`setPointerCapture`](https://developer.mozilla.org/en-US/docs/Web/API/Element/setPointerCapture) to track the pointer movement. When a pointer is captured by a target, it won't trigger any listener from another target (even a css `:hover`). Most of the time this is fine, but in some situations, you may want to drag an element and still receive events from another target.
+
+<Code id="CaptureFalse" />
+
+In the example above, the blue dot listens for hover events: when the pink dot is being dragged, it will attach to it. You'll notice that when `pointer.capture` is set to `true`, you won't be able to connect the dots. That's because the blue dot doesn't get pointer events when the pink dot capture the events. Setting `pointer.capture` to false solves this problem.
 
 ### delay (drag only)
 

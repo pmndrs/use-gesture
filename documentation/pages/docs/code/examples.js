@@ -551,3 +551,61 @@ export function Transform() {
     </Canvas>
   )
 }
+
+export function CaptureFalse() {
+  const [{ x2, y2 }, api] = useSpring(() => ({ x2: 0, y2: 0 }))
+  const [hover, setHover] = useState(false)
+  const [dragging, setDragging] = useState(false)
+  const [capture, setCapture] = useState(true)
+  const [attached, setAttached] = useState(false)
+
+  const bind = useDrag(
+    ({ active, last, movement: [x, y] }) => {
+      setDragging(active)
+      if (last) {
+        setAttached(hover)
+        api.start({ x2: hover ? 300 : 0, y2: 0 })
+      } else {
+        setAttached(false)
+        api.start({ x2: x, y2: y, immediate: true })
+      }
+    },
+    { pointer: { capture } }
+  )
+
+  return (
+    <>
+      <div className={cn(styles.ui, styles.horizontal)}>
+        pointer.capture&nbsp;→&nbsp;
+        <label>
+          <input type="radio" checked={capture} value="x" onChange={() => setCapture(true)} />
+          true
+        </label>
+        <label>
+          <input type="radio" checked={!capture} value="y" onChange={() => setCapture(false)} />
+          false
+        </label>
+      </div>
+      <svg viewBox="-14.5 -14.5 328 28" version="1.1" xmlns="http://www.w3.org/2000/svg">
+        <animated.line x1="0" y1="0" x2={x2} y2={y2} stroke="hotpink" strokeLinecap="square" strokeWidth="2" />
+        <circle className={styles.from} {...bind()} fill="hotpink" cx="0" cy="0" r="12" />
+        <circle
+          className={styles.target}
+          onPointerEnter={() => setHover(true)}
+          onPointerLeave={() => setHover(false)}
+          fill={attached ? 'hotpink' : 'blue'}
+          cx="300"
+          cy="0"
+          r="12"
+        />
+      </svg>
+      <div>
+        {attached
+          ? 'Dots are connected!'
+          : dragging && hover
+          ? 'You can release the pointer'
+          : 'Connect the pink dot to the blue dot'}
+      </div>
+    </>
+  )
+}
