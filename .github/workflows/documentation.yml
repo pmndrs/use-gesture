@@ -1,8 +1,9 @@
 name: Docs
 on:
-  push:
+  pull_request:
     paths:
       - 'documentation/**'
+      - '.github/workflows/documentation.yml'
 env:
   CI: true
   PNPM_CACHE_FOLDER: .pnpm-store
