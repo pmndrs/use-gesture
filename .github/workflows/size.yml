@@ -1,9 +1,8 @@
 name: 'size'
 on:
-  push:
-    paths:
-      - '.github/workflows/size.yml'
-      - 'packages/**'
+  pull_request:
+    branches:
+      - main
 jobs:
   size:
     runs-on: ubuntu-latest
