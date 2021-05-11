@@ -5,8 +5,9 @@ on:
       - '.github/**'
       - 'packages/**'
       - 'package.json'
+      - '!documentation/**'
+      - '!webpack-import-test'
       - '!demo/**'
-      - '!docs/**'
       - '!**.md'
       - '!.changeset/**'
 env:
