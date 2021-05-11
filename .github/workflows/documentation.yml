@@ -1,6 +1,6 @@
 name: Docs
 on:
-  pull_request:
+  push:
     paths:
       - 'documentation/**'
       - '.github/workflows/documentation.yml'
