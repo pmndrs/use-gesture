@@ -1,6 +1,8 @@
 name: Docs
 on:
   push:
+    branches:
+      - main
     paths:
       - 'documentation/**'
       - '.github/workflows/documentation.yml'
@@ -36,7 +38,7 @@ jobs:
       - name: Publish
         uses: netlify/actions/cli@master
         with:
-          args: deploy --dir=documentation/public
+          args: deploy --dir=documentation/public --prod
         env:
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
