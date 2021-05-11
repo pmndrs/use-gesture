@@ -2,7 +2,7 @@ name: CI
 on:
   push:
     paths:
-      - '.github/**'
+      - '.github/workflows/main.yml'
       - 'packages/**'
       - 'package.json'
       - '!documentation/**'
