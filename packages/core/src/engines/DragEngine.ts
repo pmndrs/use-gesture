@@ -166,6 +166,7 @@ export class DragEngine extends CoordinatesEngine<'drag'> {
       }
     } catch {
       if (process.env.NODE_ENV === 'development') {
+        // eslint-disable-next-line no-console
         console.warn(
           `[@use-gesture]: If you see this message, it's likely that you're using an outdated version of \`@react-three/fiber\`. \n\nPlease upgrade to the latest version.`
         )
@@ -260,9 +261,7 @@ export class DragEngine extends CoordinatesEngine<'drag'> {
   }
 
   pointerClean() {
-    const state = this.state
-    if (!state._pointerActive) return
-    if (this.config.pointerLock && document.pointerLockElement === state.target) {
+    if (this.config.pointerLock && document.pointerLockElement === this.state.target) {
       document.exitPointerLock()
     }
   }

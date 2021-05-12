@@ -4,6 +4,7 @@ import { call } from '../utils/fn'
 import { V, computeRubberband } from '../utils/maths'
 import { GestureKey, IngKey, State, Vector2 } from '../types'
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export interface Engine<Key extends GestureKey> {
   /**
    * Function that some gestures can use to add initilization
