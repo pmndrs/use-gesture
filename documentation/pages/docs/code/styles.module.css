@@ -238,3 +238,7 @@
   position: absolute;
   font-size: 0.8em;
 }
+
+.PointerTrue {
+  overflow: hidden;
+}

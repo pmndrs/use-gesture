@@ -609,3 +609,23 @@ export function CaptureFalse() {
     </>
   )
 }
+
+export function PointerTrue({ parentRef }) {
+  const [{ x, y }, api] = useSpring(() => ({ x: 0, y: 0 }))
+  const bind = useDrag(
+    ({ first, offset: [x, y], memo }) => {
+      if (first) {
+        memo = parentRef.current.getBoundingClientRect()
+      }
+      const dx = memo.width / 2 - 40
+      const dy = memo.height / 2 - 40
+      x = ((x + Math.sign(x) * dx) % memo.width) - Math.sign(x) * dx
+      y = ((y + Math.sign(y) * dy) % memo.height) - Math.sign(y) * dy
+      api.start({ x, y, immediate: true })
+
+      return memo
+    },
+    { pointer: { lock: true } }
+  )
+  return <animated.div className={styles.drag} {...bind()} style={{ x, y }} />
+}

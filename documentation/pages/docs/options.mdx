@@ -72,7 +72,7 @@ Here are all options that can be applied to gestures.
 | [`preventScroll`](#preventScroll-drag-only)     |    **drag**    | If `true`, drag will be triggered after `250ms` and will prevent window scrolling.                                                                                                                   |
 | [`pointer.touch`](#pointertouch-drag-and-pinch) | **drag,pinch** | If `true`, drag and pinch will use touch events on touch-enabled devices. [Read more below](#pointertouch-drag-and-pinch).                                                                           |
 | [`pointer.capture`](#pointercapture-drag-only)  |    **drag**    | If `false`, drag will not use `setPointerCapture` and attach `pointerMove` events to the window. [Read more below](#pointercapture-drag-only).                                                       |
-| `pointer.lock`                                  |    **drag**    | If `true`, the pointer will enter pointer lock mode when drag starts, and exit pointer lock when drag ends.                                                                                          |
+| [`pointer.lock`](#pointerlock-drag-only)        |    **drag**    | If `true`, the pointer will enter pointer lock mode when drag starts, and exit pointer lock when drag ends. [Read more below](#pointerlock-drag-only).                                               |
 | [`delay`](#delay-drag-only)                     |    **drag**    | If set, the handler will be delayed for the duration of the delay (in `ms`) — or if the user starts moving. When set to `true`, `delay` is defaulted to `180ms`.                                     |
 | [`swipe.distance`](#swipedistance-drag-only)    |    **drag**    | The minimum distance per axis (in `pixels`) the drag gesture needs to travel to trigger a swipe.                                                                                                     |
 | [`swipe.velocity`](#swipevelocity-drag-only)    |   **drag**     | The minimum velocity per axis (in `pixels / ms`) the drag gesture needs to reach before the pointer is released.                                                                                     |
@@ -419,6 +419,16 @@ By default, drag uses [`setPointerCapture`](https://developer.mozilla.org/en-US/
 <Code id="CaptureFalse" />
 
 In the example above, the blue dot listens for hover events: when the pink dot is being dragged, it will attach to it. You'll notice that when `pointer.capture` is set to `true`, you won't be able to connect the dots. That's because the blue dot doesn't get pointer events when the pink dot capture the events. Setting `pointer.capture` to false solves this problem.
+
+### pointer.lock (drag only)
+
+<Specs types={'boolean'} defaultValue="false" />
+
+Set `lock` to `true` and the drag gesture will [`requestPointerLock`](https://developer.mozilla.org/en-US/docs/Web/API/Element/requestPointerLock) when the drag starts and `exitPointerLock` when the drag gesture ends. This feature is only relevant on non-touch devices.
+
+<Code id="PointerTrue" />
+
+In the example above, the cursor will be hidden when the drag starts and the square will "loop" horizontally and vertically inside its parent element.
 
 ### delay (drag only)
 
