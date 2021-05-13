@@ -4,10 +4,11 @@ import { a as a3f } from '@react-spring/three'
 import { Canvas, useThree, useFrame } from '@react-three/fiber'
 import { useTexture } from '@react-three/drei'
 import { useDrag, useScroll, useGesture, useWheel } from '@use-gesture/react'
+import { DragGesture } from '@use-gesture/vanilla'
 import { Lethargy } from 'lethargy'
+import anime from 'animejs/lib/anime.es.js'
 import cn from 'classnames'
 import * as THREE from 'three'
-
 import * as styles from './styles.module.css'
 
 export function EasterDiv({ children }) {
@@ -628,4 +629,23 @@ export function PointerTrue({ parentRef }) {
     { pointer: { lock: true } }
   )
   return <animated.div className={styles.drag} {...bind()} style={{ x, y }} />
+}
+
+export function Vanilla({ setActive }) {
+  const el = useRef()
+  useEffect(() => {
+    const gesture = new DragGesture(el, ({ active, movement: [mx, my] }) => {
+      setActive(active)
+      anime({
+        targets: el.current,
+        translateX: active ? mx : 0,
+        translateY: active ? my : 0,
+        duration: active ? 0 : 1000
+      })
+    })
+
+    return () => gesture.destroy()
+  }, [setActive])
+
+  return <div ref={el} className={styles.drag} />
 }

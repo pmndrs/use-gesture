@@ -10,40 +10,81 @@ import Specs from './code/Specs'
 
 # Gesture options
 
-&zwnj;<UseGesture pkg="react" /> offers different options to configure the gestures.
+&zwnj;<UseGesture /> offers different options to configure the gestures.
 
-Some options are generic to the way <UseGesture pkg="react" /> behaves while some other options can be configured per gesture.
+Some options are generic to the way <UseGesture /> behaves while some other options can be configured per gesture.
 
 ## Structure of the config object
 
-Depending on whether you use gesture-specific hooks or if you use the `useGesture` hook, you'll need to structure the config option object differently.
+Depending on whether you use gesture-specific hooks or if you use the `useGesture` hook or `Gesture` class, you'll need to structure the config option object differently.
 
-<!-- prettier-ignore -->
-```jsx
+<details>
+  <summary>React</summary>
+
+```js
 // when you use a gesture-specific hook
 useDrag(state => doSomethingWith(state), { ...genericOptions, ...dragOptions })
 
 // when you use the useGesture hook
-useGesture(state => doSomethingWith(state), {
-  // global options such as `target`
-  ...genericOptions,
-  // gesture specific options
-  drag:   dragOptions,
-  wheel:  wheelOptions,
-  pinch:  pinchOptions,
-  scroll: scrollOptions,
-  wheel:  wheelOptions,
-  hover:  hoverOptions,
+useGesture({
+onDrag: state => doSomethingWith(state),
+onPinch: state => doSomethingWith(state),
+  // ...
+  {
+    // global options such as `target`
+    ...genericOptions,
+    // gesture specific options
+    drag: dragOptions,
+    wheel: wheelOptions,
+    pinch: pinchOptions,
+    scroll: scrollOptions,
+    wheel: wheelOptions,
+    hover: hoverOptions,
+  }
 })
 ```
 
+</details>
+
+<details>
+  <summary>Vanilla JS</summary>
+
+```js
+// when you use a gesture-specific class
+new DragGesture(
+  element,
+  state => doSomethingWith(state),
+  { ...genericOptions, ...dragOptions }
+)
+
+// when you use the Gesture class
+new Gesture(element, {
+  onDrag: state => doSomethingWith(state),
+  onPinch: state => doSomethingWith(state),
+  // ...
+  {
+    // global options such as `target`
+    ...genericOptions,
+    // gesture specific options
+    drag: dragOptions,
+    wheel: wheelOptions,
+    pinch: pinchOptions,
+    scroll: scrollOptions,
+    wheel: wheelOptions,
+    hover: hoverOptions,
+  }
+})
+```
+
+</details>
+
 ### Generic options
 
-Generic options deal with how <UseGesture pkg="react" /> will set event listeners.
+Generic options deal with how <UseGesture /> will set event listeners.
 
 | Option                          | Description                                                                                                     |
 | ------------------------------- | --------------------------------------------------------------------------------------------------------------- |
-| [`target`](#target)             | Lets you specify a dom node or React ref you want to attach the gesture to.                                     |
+| [`target`](#target-react-only)  | Lets you specify a dom node or React ref you want to attach the gesture to.                                     |
 | [`eventOptions`](#eventoptions) | Lets you customize if you want events to be passive or captured.                                                |
 | [`window`](#window)             | Lets you specify which window element the gesture should bind events to (only relevant for the `drag` gesture). |
 | [`enabled`](#enabled)           | When set to `false` none of your handlers will be fired.                                                        |
@@ -80,11 +121,13 @@ Here are all options that can be applied to gestures.
 
 ## Options explained
 
-### target
+### target (React only)
 
 <Specs types={['node', 'Ref']} defaultValue="undefined" />
 
-&zwnj;<UseGesture pkg="react" /> also supports adding handlers to dom nodes directly (or the <code>window</code> or <code>document</code> objects). In that case, you shouldn't spread the <code>bind()</code> object returned by the
+> In <UseGesture pkg="vanilla" />, you need to attach a target to the gesture as its first argument. Therefore this options is irrelevant.
+
+&zwnj;<UseGesture pkg="react" /> supports adding handlers to dom nodes directly (or the <code>window</code> or <code>document</code> objects). In that case, you shouldn't spread the <code>bind()</code> object returned by the
 hooks as a prop. Cleaning is handled automatically.
 
 ```jsx highlight={5-6}
@@ -140,7 +183,7 @@ Whether the gesture is enabled.
 
 Everytime a gesture starts, the `offset` state attribute starts with its previous value. But in some cases, you might want to start `offset` from an initial position that is external to your logic[^1].
 
-[^1]: If you're used to <UseGesture pkg="react" />, this was the most common usecase for `memo`.
+[^1]: If you're used to <UseGesture />, this was the most common usecase for `memo`.
 
 Let's take a tangible example: say that a draggable component turns back to its initial position **slowly**. In the meantime, the draggable component should still be **interruptible** at any moment. In that case, you can use `initial` to set the position of the component **at the moment** the user drags it to the value of the spring.
 
@@ -219,14 +262,14 @@ function BoundsExample() {
 
 > `scaleBounds` and `angleBounds` serve the same purpose as `bounds` for the `pinch` gesture, in a `{min,max}` format.
 
-### Node as bounds (drag only)
+### Drag bounds
 
 <Specs
   types={['DragBounds: Bounds | HTMLElement | React.RefObject<HTMLElement>', '(gestureState) => DragBounds']}
   defaultValue="{ top: -Infinity, bottom: Infinity, left: -Infinity, right: Infinity }"
 />
 
-Since v10, `bounds` can also a be a React ref or an HTMLElement, in which case the dragged element will be constrained to the element bounds.
+Since v10 and for the drag gesture only, `bounds` can be a React ref or an HTMLElement, in which case the dragged element will be constrained to the element bounds (calculated with `getBoundingClientRect`).
 
 ### scaleBounds
 
@@ -273,7 +316,7 @@ Note that you have to set [`bounds`](#bounds) for rubberbanding to take effect.
 
 <Specs types="(xy: Vector2) => Vector2" defaultValue="undefined" />
 
-When you're interacting with canvas objects, you're dealing with space coordinates that aren't measured in pixels. In that case, you can tell <UseGesture pkg="react" /> to map screen values to the space with a `transform` function.
+When you're interacting with canvas objects, you're dealing with space coordinates that aren't measured in pixels. In that case, you can tell <UseGesture /> to map screen values to the space with a `transform` function.
 
 <Code id="Transform" />
 

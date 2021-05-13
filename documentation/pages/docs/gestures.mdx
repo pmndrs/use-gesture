@@ -1,12 +1,16 @@
 ---
-title: Available hooks
+title: Gestures
 section: Reference
 order: 1
 ---
 
 import UseGesture from './code/rug'
 
-# Available hooks
+# Available gestures
+
+&zwnj;<UseGesture /> exists in two packages, one for React and one for Vanilla JS (which is new from v10).
+
+## React
 
 &zwnj;<UseGesture pkg="react" /> exports several hooks that can handle different gestures.
 
@@ -20,7 +24,7 @@ import UseGesture from './code/rug'
 | `usePinch`   | Handles the pinch gesture                  |
 | `useGesture` | Handles multiple gestures in one hook      |
 
-## Usage
+### Usage
 
 With the exception of `useGesture` which is a special hook, all other hooks share the same API:
 
@@ -31,22 +35,56 @@ return <div {...bind(arg)} />
 
 - `state` is an object containing all attributes of the gesture, including the original event. That state is passed to your handler every time the gesture updates. You can find all state attributes in the [Gesture state section](/docs/state).
 - `config` is an object containing options for the gesture. You can find all config options in the [Gesture options section](/docs/options).
-- `arg` is a custom argument you can pass to the bind function. See this [example](https://codesandbox.io/s/fh8r8) to see where it can be useful.
+- `arg` is a custom argument you can pass to the bind function. See this [example](https://codesandbox.io/s/github/pmndrs/use-gesture/tree/v10/demo/src/sandboxes/draggable-list) to see where it can be useful.
 
-### About the drag gesture
+## Vanilla
 
-The drag gesture is possibly the most popular gesture of <UseGesture pkg="react" />. Because of the way pointer events work, dragging might cause conflict with scrolling on touch-based devices. So to signify that your element is draggable and therefore shouldn't trigger the browser scrolling, you **need** to use the [`touch-action`](https://developer.mozilla.org/en-US/docs/Web/CSS/touch-action) css property. [Read more here](/docs/extras/#touch-action).
+&zwnj;<UseGesture pkg="vanilla" /> exports several classes that can handle different gestures.
+
+| Hook            | Description                                |
+| --------------- | ------------------------------------------ |
+| `DragGesture`   | Handles the drag gesture                   |
+| `MoveGesture`   | Handles mouse move events                  |
+| `HoverGesture`  | Handles mouse enter and mouse leave events |
+| `ScrollGesture` | Handles scroll events                      |
+| `WheelGesture`  | Handles wheel events                       |
+| `PinchGesture`  | Handles the pinch gesture                  |
+| `Gesture`       | Handles multiple gestures in one hook      |
+
+### Usage
+
+With the exception of `Gesture` which is a special hook, all other hooks share the same API:
+
+```html
+<!-- index.js -->
+<div id="drag" />
+```
+
+```js
+// script.js
+const el = document.getElementById('drag')
+const gesture = new DragGesture(el, (state) => doSomethingWithState(state), config)
+```
+
+- `state` is an object containing all attributes of the gesture, including the original event. That state is passed to your handler every time the gesture updates. You can find all state attributes in the [Gesture state section](/docs/state).
+- `config` is an object containing options for the gesture. You can find all config options in the [Gesture options section](/docs/options).
+
+## About the drag gesture
+
+The drag gesture is possibly the most popular gesture of <UseGesture />. Because of the way pointer events work, dragging might cause conflict with scrolling on touch-based devices. So to signify that your element is draggable and therefore shouldn't trigger the browser scrolling, you **need** to use the [`touch-action`](https://developer.mozilla.org/en-US/docs/Web/CSS/touch-action) css property. [Read more here](/docs/extras/#touch-action).
 
 ### About the pinch gesture
 
 The pinch gesture is a bit specific because depending on your device input, it might behave differently. On touch devices, two pointers (generally your fingers) allow for zooming and rotating.
 
-But Macbook trackpads also support pinching and rotating in Safari, but because React doesn't support proprietary Webkit GestureEvents, you will need to attach the gesture using a ref, with the `target` [option](/docs/options/#target). To make sure the zooming gesture doesn't interfere with Safari accessibility zoom, you will need to prevent the gesture like so:
+But Macbook trackpads also support pinching and rotating in Safari. To make sure the zooming gesture doesn't interfere with Safari accessibility zoom, you will need to prevent the gesture like so:
 
 ```js
 document.addEventListener('gesturestart', (e) => e.preventDefault())
 document.addEventListener('gesturechange', (e) => e.preventDefault())
 ```
+
+> Because React doesn't support proprietary Webkit GestureEvents, you will need to attach the gesture using a ref, with the `target` [option](/docs/options/#target).
 
 Also, a pretty unknown feature allows devices supporting wheel to **zoom** (not rotate) by wheeling and pressing the **control** modifier key. <UseGesture pkg="react" /> supports it, but to make sure the zooming doesn't interefere with the browser accessibility zoom, you'll also be better using the `target` [option](/docs/options/#target).
 
@@ -91,7 +129,7 @@ As you can see from the snippet above, the `useGesture` hook allows `drag`, `whe
 
 Note that **end event handlers** for `wheel`, `scroll` and `move` are **debounced** because of the way these events work in the DOM.
 
-### Native React event handlers
+### Native event handlers in React
 
 Imagine you want to add an action when you mouse down on a draggable component. You'll probably be tempted to try the following code at first:
 

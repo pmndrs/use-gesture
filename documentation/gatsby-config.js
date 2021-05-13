@@ -19,10 +19,15 @@ module.exports = {
           { title: 'Docs', url: '/docs/' },
           { title: 'API', url: '/docs/hooks' }
         ],
+        docSearch: {
+          apiKey: '8f83d46775c065911151bd1d02788227',
+          indexName: 'use-gesture'
+        },
         twitterAccount: 'pmndrs',
         githubRepositoryURL: 'https://github.com/pmndrs/use-gesture'
       }
     },
+
     {
       resolve: `gatsby-plugin-google-analytics`,
       options: {

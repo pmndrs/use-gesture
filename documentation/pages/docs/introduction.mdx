@@ -10,25 +10,22 @@ import UseGesture from './code/rug'
 
 # Getting started
 
-&zwnj;<UseGesture pkg="react" /> is a set of hooks that let you bind mouse and touch events to any React component.
+&zwnj;<UseGesture /> is a set of gestures that let you bind mouse and touch events to any node.
 
-With the data you receive, it becomes easy to set up complex gestures like dragging and pinching with a few lines of code. You can use this library stand-alone, but to make the most of it you should combine it with an animation library like [react-spring](https://github.com/pmndrs/react-spring).
+With the data you receive, it becomes easy to set up complex gestures like dragging and pinching with a few lines of code.
 
-## Installation
+## React
 
-Using `yarn`:
+In React, <UseGesture pkg="react"/> consists in multiple hooks you can attach to a component. You can use the library as standalone, but to make the most of it you should combine it with an animation library like [react-spring](https://github.com/pmndrs/react-spring).
+
+### Installation
 
 ```bash
 yarn add @use-gesture/react
+npm install @use-gesture/react
 ```
 
-Using `npm`:
-
-```bash
-npm install --save @use-gesture/react
-```
-
-## Simple example
+### Simple React example
 
 <Code id="PullRelease" />
 
@@ -56,3 +53,44 @@ function PullRelease() {
 The `useDrag` hook returns a function (stored in the `bind` constant), which when called returns an object with event handlers. Here, when you spread `{...bind()}` into a component, you're actually adding `onMouseDown` and `onTouchStart` event handlers.
 
 > It's important that you understand <UseGesture pkg="react" /> is not responsible for actually moving the component. The `useDrag` hook just hands over gesture data to react-spring which sets the component transforms. If you're not familiar with react-spring, head over [its documentation here](https://react-spring.io).
+
+## Vanilla javascript
+
+Although <UseGesture /> was originally built for React, v10 is now platform agnostic, and can work in vanilla javascript.
+
+### Installation
+
+```bash
+yarn add @use-gesture/vanilla
+npm install @use-gesture/vanilla
+```
+
+### Simple Vanilla example
+
+<Code id="Vanilla" />
+
+The following example makes a <EasterDiv><code>&lt;div/&gt;</code></EasterDiv> draggable so that it follows your mouse or finger on drag, and returns to its initial position on release.
+
+```html
+<!-- index.js -->
+<div id="drag" />
+```
+
+```js
+// script.js
+const el = document.getElementById('drag')
+const gesture = new DragGesture(el, ({ active, movement: [mx, my] }) => {
+  setActive(active)
+  anime({
+    targets: el,
+    translateX: active ? mx : 0,
+    translateY: active ? my : 0,
+    duration: active ? 0 : 1000
+  })
+})
+
+// when you want to remove the listener
+gesture.destroy()
+```
+
+> The vanilla api i

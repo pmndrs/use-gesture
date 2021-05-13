@@ -8,11 +8,12 @@ import styles from './styles.module.css'
 const torusknot = new THREE.TorusKnotBufferGeometry(3, 0.8, 256, 16)
 
 const Mesh = () => {
-  const { viewport } = useThree()
+  const { viewport, mouse } = useThree()
 
   const bind = useGesture(
     {
-      onDrag: ({ event, offset: [x, y] }) => {
+      onDrag: ({ xy, event, offset: [x, y] }) => {
+        console.log(xy[0] / viewport.factor, mouse.x, event.spaceX)
         event.object.position.x = x / viewport.factor
         event.object.position.y = -y / viewport.factor
       },
