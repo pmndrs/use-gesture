@@ -64,27 +64,37 @@ if (process.env.NODE_ENV === 'development') {
   Object.assign(dragConfigResolver, {
     useTouch(value: any) {
       if (value !== undefined) {
-        throw `[@use-gesture]: \`useTouch\` option has been renamed to \`pointer.touch\`. Use it as in \`{ pointer: { touch: true } }\`.`
+        throw Error(
+          `[@use-gesture]: \`useTouch\` option has been renamed to \`pointer.touch\`. Use it as in \`{ pointer: { touch: true } }\`.`
+        )
       }
     },
     experimental_preventWindowScrollY(value: any) {
       if (value !== undefined) {
-        throw `[@use-gesture]: \`experimental_preventWindowScrollY\` option has been renamed to \`preventScroll\`.`
+        throw Error(
+          `[@use-gesture]: \`experimental_preventWindowScrollY\` option has been renamed to \`preventScroll\`.`
+        )
       }
     },
     swipeVelocity(value: any) {
       if (value !== undefined) {
-        throw `[@use-gesture]: \`swipeVelocity\` option has been renamed to \`swipe.velocity\`. Use it as in \`{ swipe: { velocity: 0.5 } }\`.`
+        throw Error(
+          `[@use-gesture]: \`swipeVelocity\` option has been renamed to \`swipe.velocity\`. Use it as in \`{ swipe: { velocity: 0.5 } }\`.`
+        )
       }
     },
     swipeDistance(value: any) {
       if (value !== undefined) {
-        throw `[@use-gesture]: \`swipeDistance\` option has been renamed to \`swipe.distance\`. Use it as in \`{ swipe: { distance: 50 } }\`.`
+        throw Error(
+          `[@use-gesture]: \`swipeDistance\` option has been renamed to \`swipe.distance\`. Use it as in \`{ swipe: { distance: 50 } }\`.`
+        )
       }
     },
     swipeDuration(value: any) {
       if (value !== undefined) {
-        throw `[@use-gesture]: \`swipeDuration\` option has been renamed to \`swipe.duration\`. Use it as in \`{ swipe: { duration: 250 } }\`.`
+        throw Error(
+          `[@use-gesture]: \`swipeDuration\` option has been renamed to \`swipe.duration\`. Use it as in \`{ swipe: { duration: 250 } }\`.`
+        )
       }
     }
   })

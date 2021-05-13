@@ -34,17 +34,19 @@ if (process.env.NODE_ENV === 'development') {
   Object.assign(commonConfigResolver, {
     domTarget(value: any) {
       if (value !== undefined) {
-        throw `[@use-gesture]: \`domTarget\` option has been renamed to \`target\`.`
+        throw Error(`[@use-gesture]: \`domTarget\` option has been renamed to \`target\`.`)
       }
     },
     lockDirection(value: any) {
       if (value !== undefined) {
-        throw `[@use-gesture]: \`lockDirection\` option has been merged with \`axis\`. Use it as in \`{ axis: 'lock' }\``
+        throw Error(
+          `[@use-gesture]: \`lockDirection\` option has been merged with \`axis\`. Use it as in \`{ axis: 'lock' }\``
+        )
       }
     },
     initial(value: any) {
       if (value !== undefined) {
-        throw `[@use-gesture]: \`initial\` option has been renamed to \`from\`.`
+        throw Error(`[@use-gesture]: \`initial\` option has been renamed to \`from\`.`)
       }
     }
   })

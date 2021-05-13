@@ -15,6 +15,7 @@
     "watch": "preconstruct watch",
     "dev": "preconstruct dev",
     "validate": "preconstruct validate",
+    "lint:full": "eslint packages/*/src",
     "lint": "pretty-quick --staged",
     "release": "pnpm build && pnpm run changeset publish",
     "tsc": "tsc --noEmit",

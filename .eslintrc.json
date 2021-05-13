@@ -1,0 +1,9 @@
+{
+  "extends": "react-app",
+  "plugins": ["testing-library", "jest-dom"],
+  "rules": {
+    "no-console": "warn",
+    "default-case": "off",
+    "@typescript-eslint/no-redeclare": "off"
+  }
+}
