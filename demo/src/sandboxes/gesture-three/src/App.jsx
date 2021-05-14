@@ -5,7 +5,7 @@ import * as THREE from 'three'
 
 import styles from './styles.module.css'
 
-// document.addEventListener('wheel', (e) => e.preventDefault(), { passive: false })
+document.addEventListener('wheel', (e) => e.preventDefault(), { passive: false })
 
 const torusknot = new THREE.TorusKnotBufferGeometry(3, 0.8, 256, 16)
 
