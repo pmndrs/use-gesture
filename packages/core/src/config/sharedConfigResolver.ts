@@ -13,9 +13,6 @@ export const sharedConfigResolver = {
   enabled(value = true) {
     return value
   },
-  r3f(value = false) {
-    return value
-  },
   window(value = SUPPORT.isBrowser ? window : undefined) {
     return value
   },

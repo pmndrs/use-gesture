@@ -23,10 +23,6 @@ export type GenericOptions = {
    */
   enabled?: boolean
   /**
-   * Performs @react-three/fiber specific operations when set to true.
-   */
-  r3f?: boolean
-  /**
    * A function that you can use to transform movement and offset values. Useful
    * to map your screen coordinates to custom space coordinates such as a
    * canvas.
@@ -103,10 +99,6 @@ export type PinchConfig = GestureOptions<'pinch'> & {
    * Limits the angle `offset` to the specified bounds.
    */
   angleBounds?: PinchBounds | ((state: State['pinch']) => PinchBounds)
-  /**
-   * Which units to use for calculating rotation angle.
-   */
-  angleUnit?: 'deg' | 'rad'
   /**
    * Scales OR rotates when set to 'lock'.
    */

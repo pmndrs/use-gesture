@@ -507,7 +507,7 @@ export function PreventScroll() {
       },
       onHover: ({ dragging, hovering }) => !dragging && (ref.current.style.cursor = hovering ? 'grab' : 'initial')
     },
-    { r3f: true, drag: { preventScroll: true } }
+    { drag: { preventScroll: true } }
   )
   return (
     <Canvas concurrent camera={{ position: [0, 0, 16], fov: 50 }} onCreated={({ gl }) => (ref.current = gl.domElement)}>
@@ -529,8 +529,7 @@ function Box() {
   const bind = useDrag(({ offset: [x, y] }) => springApi.start({ position: [x, y, 0] }), {
     bounds: { left: -width / 2.2, right: width / 2.2, top: -height / 2.2, bottom: height / 2.2 },
     rubberband: true,
-    transform: ([x, y]) => [x / factor, -y / factor],
-    r3f: true
+    transform: ([x, y]) => [x / factor, -y / factor]
   })
 
   useFrame(() => (mesh.current.rotation.x = mesh.current.rotation.y += 0.01))

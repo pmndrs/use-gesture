@@ -14,14 +14,10 @@ export const pinchConfigResolver = {
     // as React doesn't support gesture handlers.
     const sharedConfig = config.shared
     if (sharedConfig.target && !SUPPORT.touch && SUPPORT.gesture) return 'gesture'
-    if (sharedConfig.r3f) return 'pointer'
     if (this.useTouch) return 'touch'
     if (SUPPORT.touch && SUPPORT.pointer) return 'pointer'
     if (SUPPORT.touch) return 'touch'
     // device is undefined and that's ok, we're going to use wheel to zoom.
-  },
-  useRad(_v: any, _k: string, config: { shared: GenericOptions } & PinchConfig) {
-    return config.angleUnit === 'rad' || (config.angleUnit == null && config.shared.r3f)
   },
   bounds(_v: any, _k: string, { scaleBounds = {}, angleBounds = {} }: PinchConfig) {
     const _scaleBounds = (state?: State) => {
@@ -40,8 +36,7 @@ export const pinchConfigResolver = {
   },
   threshold(this: InternalPinchOptions, value: number | Vector2, _k: string, config: PinchConfig) {
     this.lockDirection = config.axis === 'lock'
-    const angleRatio = this.useRad ? Math.PI / 180 : 1
-    const threshold = V.toVector(value, this.lockDirection ? [0.1, 3 * angleRatio] : 0)
+    const threshold = V.toVector(value, this.lockDirection ? [0.1, 3] : 0)
     return threshold
   }
 }

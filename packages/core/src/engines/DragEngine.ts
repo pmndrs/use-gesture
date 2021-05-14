@@ -214,14 +214,11 @@ export class DragEngine extends CoordinatesEngine<'drag'> {
     const config = this.config
     let device = config.device
 
-    const target = event.target as HTMLElement
-    const currentTarget = event.currentTarget as HTMLElement
-
     if (process.env.NODE_ENV === 'development') {
       try {
         if (device === 'pointer') {
-          // @ts-ignore r3f
-          const currentTarget = this.sharedConfig.r3f ? event.sourceEvent.currentTarget : event.currentTarget
+          // @ts-ignore (warning for r3f)
+          const currentTarget = 'uv' in event ? event.sourceEvent.currentTarget : event.currentTarget
           const style = window.getComputedStyle(currentTarget)
           if (style.touchAction === 'auto') {
             // eslint-disable-next-line no-console
@@ -235,28 +232,12 @@ export class DragEngine extends CoordinatesEngine<'drag'> {
     }
 
     if (config.pointerLock) {
-      currentTarget.requestPointerLock()
+      ;(event.currentTarget as HTMLElement).requestPointerLock()
     }
 
-    if (device === 'touch' || config.pointerCapture) {
-      if (!this.sharedConfig.r3f) {
-        if (process.env.NODE_ENV === 'development') {
-          // @ts-ignore r3f
-          if (event.uv) {
-            // eslint-disable-next-line no-console
-            console.warn(
-              `[@use-gesture]: You're probably using \`use-gesture\` on with \`@react-three/fiber\` without setting the drag config option \`r3f: true\`. The gesture will now probably fail.`
-            )
-          }
-        }
-        if (document.pointerLockElement === target) device = 'mouse'
-        this.eventStore.add(target, device, 'change', this.pointerMove.bind(this))
-      }
-    } else {
-      if (!this.sharedConfig.r3f) {
-        this.eventStore.add(this.sharedConfig.window!, device, 'change', this.pointerMove.bind(this))
-        this.eventStore.add(this.sharedConfig.window!, device, 'end', this.pointerUp.bind(this))
-      }
+    if (!config.pointerCapture) {
+      this.eventStore.add(this.sharedConfig.window!, device, 'change', this.pointerMove.bind(this))
+      this.eventStore.add(this.sharedConfig.window!, device, 'end', this.pointerUp.bind(this))
     }
   }
 
@@ -317,13 +298,13 @@ export class DragEngine extends CoordinatesEngine<'drag'> {
     const device = this.config.device
 
     bindFunction(device, 'start', this.pointerDown.bind(this))
-    bindFunction(device, 'end', this.pointerUp.bind(this))
+    if (this.config.pointerCapture) {
+      bindFunction(device, 'change', this.pointerMove.bind(this))
+      bindFunction(device, 'end', this.pointerUp.bind(this))
+    }
     bindFunction('key', 'down', this.keyDown.bind(this))
     bindFunction('key', 'up', this.keyUp.bind(this))
 
-    if (this.sharedConfig.r3f) {
-      bindFunction(device, 'change', this.pointerMove.bind(this))
-    }
     if (this.config.filterTaps) {
       bindFunction('click', '', this.pointerClick.bind(this), { capture: true })
     }

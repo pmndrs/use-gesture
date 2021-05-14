@@ -26,7 +26,7 @@ const Mesh = () => {
       // onHover: ({ dragging, hovering }) =>
       //   !dragging && ref.current && (ref.current.style.cursor = hovering ? 'grab' : 'initial'),
     },
-    { r3f: true, drag: { preventScroll: true } }
+    { drag: { preventScroll: true } }
   )
 
   return <mesh ref={ref} {...bind()} geometry={torusknot} material={material} />

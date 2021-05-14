@@ -7,7 +7,6 @@ export type InternalGenericOptions = {
   eventOptions: AddEventListenerOptions
   window?: EventTarget
   enabled: boolean
-  r3f: boolean
   transform: (v: Vector2) => Vector2
 }
 
@@ -47,7 +46,6 @@ export type InternalPinchOptions = InternalGestureOptions<'pinch'> & {
    * When device is undefined, we'll be using wheel to zoom.
    */
   device: 'gesture' | 'pointer' | 'touch' | undefined
-  useRad: boolean
   lockDirection: boolean
 }
 

@@ -14,13 +14,12 @@
 - `state.pressed` is an alias to `state.down`
 - `config.transform` only transforms `movement` and `offset`. Raw values are no longer transformed.
 
-
 ## Features
 
 ### General
 
 - Types: Handlers have a better type inference
-- Adds `r3f` general shared option that will perform some adjustments when using @react-three/fiber 
+- ~~Adds `r3f` general shared option that will perform some adjustments when using @react-three/fiber~~
 
 ### Drag
 
@@ -35,10 +34,9 @@ useDrag(handler, {
   pointer: {
     touch: true, // uses touch on mobile
     capture: false, // don't use setPointerCapture (uses window)
-    lock: true, // will perform a pointer lock when drag starts, and exit pointer lock when drag ends,
+    lock: true // will perform a pointer lock when drag starts, and exit pointer lock when drag ends,
   },
   axis: undefined | 'x' | 'y' | 'lock',
-  r3f: true, // will set up the hook to perform the best it can with @react-three/fiber,
   swipe: {
     distance: 50,
     velocity: 0.5,
@@ -53,8 +51,7 @@ useDrag(handler, {
 - `state.movement` and `state.offset` now reflect scale and not distance
 - Use pointer events where it can
 - Add `useTouch` option to use touch events if needed
-- Add `angleUnit` which defaults to `deg` unless `config.r3f` is set to `true` in which case it defaults to `rad`.
-Note that `state.values` are still returned in degrees, only `state.movement` and `state.offset` are expressed in the `angleUnit` unit.
+- ~~Add `angleUnit` which defaults to `deg` unless `config.r3f` is set to `true` in which case it defaults to `rad`. Note that `state.values` are still returned in degrees, only `state.movement` and `state.offset` are expressed in the `angleUnit` unit.~~
 - `config.axis` can be set to `'lock'`, which will either scale or rotate.
 
 ```js

@@ -88,7 +88,6 @@ Generic options deal with how <UseGesture /> will set event listeners.
 | [`eventOptions`](#eventoptions) | Lets you customize if you want events to be passive or captured.                                                |
 | [`window`](#window)             | Lets you specify which window element the gesture should bind events to (only relevant for the `drag` gesture). |
 | [`enabled`](#enabled)           | When set to `false` none of your handlers will be fired.                                                        |
-| `r3f`                           | Set this option to `true` when using with [`@react-three/fiber`](https://github.com/pmndrs/react-three-fiber)   |
 
 ### Gesture options
 
@@ -106,7 +105,6 @@ Here are all options that can be applied to gestures.
 | [`bounds`](#bounds)                             |     **xy**     | Limits the gesture `offset` to the specified bounds.                                                                                                                                                 |
 | [`scaleBounds`](#scalebounds)                   |   **pinch**    | Limits the scale `offset` to the specified bounds.                                                                                                                                                   |
 | [`angleBounds`](#anglebounds)                   |   **pinch**    | Limits the angle `offset` to the specified bounds.                                                                                                                                                   |
-| `angleUnit`                                     |   **pinch**    | Defaults to `deg`, unless `r3f` is set to `true` in which case it's `rad`.                                                                                                                           |
 | [`rubberband`](#rubberband)                     |    **all**     | The elasticity coefficient of the gesture when going out of bounds. When set to `true`, the elasticiy coefficient will be defaulted to `0.15`                                                        |
 | [`transform`](#transform)                       |    **all**     | A function that you can use to transform pointer values. Useful to map your screen coordinates to custom space coordinates such as a canvas.                                                         |
 | [`filterTaps`](#filtertaps-drag-only)           |    **drag**    | If `true`, the component won't trigger your drag logic if the user just clicked on the component.                                                                                                    |

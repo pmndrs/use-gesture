@@ -4,7 +4,6 @@ import { V } from '../utils/maths'
 import { Vector2, WebKitGestureEvent } from '../types'
 
 const SCALE_ANGLE_RATIO_INTENT_DEG = 30
-const SCALE_ANGLE_RATIO_INTENT_RAD = (SCALE_ANGLE_RATIO_INTENT_DEG / 180) * Math.PI
 const PINCH_WHEEL_RATIO = 60
 
 export class PinchEngine extends Engine<'pinch'> {
@@ -41,8 +40,7 @@ export class PinchEngine extends Engine<'pinch'> {
   intent(v: Vector2) {
     const state = this.state
     if (!state.axis) {
-      const angleScaleRatio = this.config.useRad ? SCALE_ANGLE_RATIO_INTENT_RAD : SCALE_ANGLE_RATIO_INTENT_DEG
-      const axisMovementDifference = Math.abs(v[0]) * angleScaleRatio - Math.abs(v[1])
+      const axisMovementDifference = Math.abs(v[0]) * SCALE_ANGLE_RATIO_INTENT_DEG - Math.abs(v[1])
       if (axisMovementDifference < 0) state.axis = 'angle'
       else if (axisMovementDifference > 0) state.axis = 'scale'
     }
@@ -149,7 +147,7 @@ export class PinchEngine extends Engine<'pinch'> {
     state.values = [payload.distance, payload.angle - 360 * delta_turns]
     state.origin = payload.origin
     state.turns = delta_turns
-    state._movement = [state.values[0] / state.initial[0] - 1, convertAngle(this, state.values[1] - state.initial[1])]
+    state._movement = [state.values[0] / state.initial[0] - 1, state.values[1] - state.initial[1]]
     this.compute(event)
     this.emit()
   }
@@ -210,7 +208,7 @@ export class PinchEngine extends Engine<'pinch'> {
     state.values = [event.scale, event.rotation]
     state.origin = [event.clientX, event.clientY]
     const _previousMovement = state._movement
-    state._movement = [event.scale - 1, convertAngle(this, event.rotation)]
+    state._movement = [event.scale - 1, event.rotation]
     state._delta = V.sub(state._movement, _previousMovement)
     this.compute(event)
     this.emit()
@@ -233,20 +231,23 @@ export class PinchEngine extends Engine<'pinch'> {
   }
 
   wheelStart(event: WheelEvent) {
-    if (event.cancelable) event.preventDefault()
-    else if (process.env.NODE_ENV === 'development') {
-      // eslint-disable-next-line no-console
-      console.warn(
-        `[@use-gesture]: To properly support zoom on trackpads, try using the \`target\` option and \`config.eventOptions.passive\` set to \`false\`. This message will only appear in development mode.`,
-        event.currentTarget
-      )
-    }
     this.start(event)
     this.wheelChange(event)
   }
 
   wheelChange(event: WheelEvent) {
-    if (event.cancelable) event.preventDefault()
+    const isR3f = 'uv' in event
+    if (!isR3f) {
+      if (event.cancelable) {
+        event.preventDefault()
+      }
+      if (process.env.NODE_ENV === 'development' && !event.defaultPrevented) {
+        // eslint-disable-next-line no-console
+        console.warn(
+          `[@use-gesture]: To properly support zoom on trackpads, try using the \`target\` option.\n\nThis message will only appear in development mode.`
+        )
+      }
+    }
     const state = this.state
     state._delta = [-wheelValues(event)[1] / PINCH_WHEEL_RATIO, 0]
     V.addTo(state._movement, state._delta)
@@ -273,11 +274,10 @@ export class PinchEngine extends Engine<'pinch'> {
       bindFunction(device, 'change', this[device + 'Move'].bind(this))
       // @ts-ignore
       bindFunction(device, 'end', this[device + 'End'].bind(this))
-    } else bindFunction('wheel', '', this.wheel.bind(this))
+    } else {
+      // we try to set a passive listener, knowing that in any case React will
+      // ignore it.
+      bindFunction('wheel', '', this.wheel.bind(this), { passive: false })
+    }
   }
-}
-
-export function convertAngle(engine: PinchEngine, value: number) {
-  if (engine.config.useRad) return (value / 180) * Math.PI
-  return value
 }

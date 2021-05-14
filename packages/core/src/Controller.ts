@@ -148,27 +148,31 @@ function resolveGestures(ctrl: Controller, internalHandlers: InternalHandlers) {
   if (internalHandlers.hover) setupGesture(ctrl, 'hover')
 }
 
-const bindToEventStore = (eventStore: EventStore, target: EventTarget) => (
-  device: string,
-  action: string,
-  handler: (event: any) => void,
-  options?: AddEventListenerOptions,
-  isNative = false
-) => {
-  if (isNative) device = device.slice(2).toLowerCase() // transforms onMouseDown into mousedown
-  eventStore.add(target, device, action, handler, options)
-}
+const bindToEventStore =
+  (eventStore: EventStore, target: EventTarget) =>
+  (
+    device: string,
+    action: string,
+    handler: (event: any) => void,
+    options?: AddEventListenerOptions,
+    isNative = false
+  ) => {
+    if (isNative) device = device.slice(2).toLowerCase() // transforms onMouseDown into mousedown
+    eventStore.add(target, device, action, handler, options)
+  }
 
-const bindToProps = (props: any, eventOptions: AddEventListenerOptions) => (
-  device: string,
-  action: string,
-  handler: (event: any) => void,
-  options: AddEventListenerOptions = {},
-  isNative = false
-) => {
-  const capture = options.capture ?? eventOptions.capture
-  // a native handler is already passed as a prop like "onMouseDown"
-  const handlerProp = isNative ? device : toReactHandlerProp(device, action, capture)
-  props[handlerProp] = props[handlerProp] || []
-  props[handlerProp].push(handler)
-}
+const bindToProps =
+  (props: any, eventOptions: AddEventListenerOptions) =>
+  (
+    device: string,
+    action: string,
+    handler: (event: any) => void,
+    options: AddEventListenerOptions = {},
+    isNative = false
+  ) => {
+    const capture = options.capture ?? eventOptions.capture
+    // a native handler is already passed as a prop like "onMouseDown"
+    const handlerProp = isNative ? device : toReactHandlerProp(device, action, capture)
+    props[handlerProp] = props[handlerProp] || []
+    props[handlerProp].push(handler)
+  }

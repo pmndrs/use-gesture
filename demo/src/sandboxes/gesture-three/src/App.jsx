@@ -5,25 +5,23 @@ import * as THREE from 'three'
 
 import styles from './styles.module.css'
 
+// document.addEventListener('wheel', (e) => e.preventDefault(), { passive: false })
+
 const torusknot = new THREE.TorusKnotBufferGeometry(3, 0.8, 256, 16)
 
 const Mesh = () => {
-  const { viewport, mouse } = useThree()
+  const { viewport } = useThree()
 
-  const bind = useGesture(
-    {
-      onDrag: ({ xy, event, offset: [x, y] }) => {
-        console.log(xy[0] / viewport.factor, mouse.x, event.spaceX)
-        event.object.position.x = x / viewport.factor
-        event.object.position.y = -y / viewport.factor
-      },
-      onPinch: ({ event, offset: [s, a] }) => {
-        event.object.rotation.z = -a
-        event.object.scale.set(s, s, s)
-      }
+  const bind = useGesture({
+    onDrag: ({ event, offset: [x, y] }) => {
+      event.object.position.x = x / viewport.factor
+      event.object.position.y = -y / viewport.factor
     },
-    { r3f: true }
-  )
+    onPinch: ({ event, offset: [s, a] }) => {
+      event.object.rotation.z = (-a * Math.PI) / 180
+      event.object.scale.set(s, s, s)
+    }
+  })
 
   return (
     <mesh {...bind()} geometry={torusknot}>
