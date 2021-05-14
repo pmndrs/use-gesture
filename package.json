@@ -55,6 +55,12 @@
       "name": "@use-gesture/vanilla",
       "path": "packages/vanilla/dist/use-gesture-vanilla.cjs.prod.js",
       "limit": "9 KB"
+    },
+    {
+      "name": "@use-gesture/vanilla -- tree-shaking",
+      "import": "{ WheelGesture }",
+      "path": "packages/vanilla/dist/use-gesture-vanilla.esm.js",
+      "limit": "5 KB"
     }
   ],
   "jest": {
