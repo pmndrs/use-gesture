@@ -6,7 +6,7 @@
     "@leva-ui/plugin-spring": "*",
     "@react-three/drei": "^4.1.4",
     "@react-three/fiber": "^6.0.20",
-    "@use-gesture/react": "*",
+    "@use-gesture/react": "latest",
     "leva": "*",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",

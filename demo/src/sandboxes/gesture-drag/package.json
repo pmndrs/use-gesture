@@ -5,7 +5,7 @@
   "dependencies": {
     "@leva-ui/plugin-spring": "*",
     "@react-spring/web": "*",
-    "@use-gesture/react": "*",
+    "@use-gesture/react": "latest",
     "leva": "*",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",

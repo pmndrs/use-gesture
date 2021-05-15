@@ -4,7 +4,7 @@
   "main": "src/index.tsx",
   "dependencies": {
     "@react-spring/web": "*",
-    "@use-gesture/react": "*",
+    "@use-gesture/react": "latest",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-scripts": "4.0.3"
