@@ -5,10 +5,11 @@ order: 1
 ---
 
 import UseGesture from './code/rug'
+import { CodeSnippet, TabPanel } from './CodeSnippet'
 
 # Available gestures
 
-&zwnj;<UseGesture /> exists in two packages, one for React and one for Vanilla JS (which is new from v10).
+&zwnj;<UseGesture /> exists in two packages, one for React and one for Vanilla&nbsp;JS (which is new from v10).
 
 ## React
 
@@ -69,7 +70,9 @@ const gesture = new DragGesture(el, (state) => doSomethingWithState(state), conf
 - `state` is an object containing all attributes of the gesture, including the original event. That state is passed to your handler every time the gesture updates. You can find all state attributes in the [Gesture state section](/docs/state).
 - `config` is an object containing options for the gesture. You can find all config options in the [Gesture options section](/docs/options).
 
-## About the drag gesture
+## Some notes
+
+### About the drag gesture
 
 The drag gesture is possibly the most popular gesture of <UseGesture />. Because of the way pointer events work, dragging might cause conflict with scrolling on touch-based devices. So to signify that your element is draggable and therefore shouldn't trigger the browser scrolling, you **need** to use the [`touch-action`](https://developer.mozilla.org/en-US/docs/Web/CSS/touch-action) css property. [Read more here](/docs/extras/#touch-action).
 
@@ -92,11 +95,16 @@ Also, a pretty unknown feature allows devices supporting wheel to **zoom** (not 
 
 The wheel gesture is a bit tricky, due to the nature of the wheel event. In fact, mouse devices such as the Macbook trackpad, or the Magic Mouse have inertia, but there is no native way to distinguish between an actual wheel intent and its resulting inertia. To detect intent, you can use [Lethargy](https://github.com/d4nyll/lethargy) and [read more about it here](/docs/extras/#lethargy).
 
-## Handling multiple gestures in one hook with useGesture
+## Handling multiple gestures at once
 
-`useGesture` is a hook that allows you to manage different gestures at once: for example you might want to enable pinching and dragging on the same component, in that case `useGesture` is the way to go.
+&zwnj;<UseGesture /> also allows you to manage different gestures at the same time: for example you might want to enable pinching and dragging on the same component, in that case this is the way to go.
+
+<CodeSnippet>
+  <TabPanel>
 
 ```jsx
+import { useGesture } from '@use-gesture/react'
+
 const bind = useGesture(
   {
     onDrag: (state) => doSomethingWith(state),
@@ -118,10 +126,46 @@ const bind = useGesture(
   },
   config
 )
+
 return <div {...bind()} />
 ```
 
-The `config` object passed to `useGesture` has `drag`, `wheel`, `scroll`, `pinch` and `move` keys for specific gesture options. See here for more details.
+The `config` object passed to `useGesture` has `drag`, `wheel`, `scroll`, `pinch` and `move` keys for specific gesture options. [See here for more details](http://localhost:8000/docs/options/#structure-of-the-config-object).
+
+</TabPanel>
+<TabPanel>
+
+```js
+import { Gesture } from '@use-gesture/vanilla'
+
+const gesture = new Gesture(
+  element,
+  {
+    onDrag: (state) => doSomethingWith(state),
+    onDragStart: (state) => doSomethingWith(state),
+    onDragEnd: (state) => doSomethingWith(state),
+    onPinch: (state) => doSomethingWith(state),
+    onPinchStart: (state) => doSomethingWith(state),
+    onPinchEnd: (state) => doSomethingWith(state),
+    onScroll: (state) => doSomethingWith(state),
+    onScrollStart: (state) => doSomethingWith(state),
+    onScrollEnd: (state) => doSomethingWith(state),
+    onMove: (state) => doSomethingWith(state),
+    onMoveStart: (state) => doSomethingWith(state),
+    onMoveEnd: (state) => doSomethingWith(state),
+    onWheel: (state) => doSomethingWith(state),
+    onWheelStart: (state) => doSomethingWith(state),
+    onWheelEnd: (state) => doSomethingWith(state),
+    onHover: (state) => doSomethingWith(state)
+  },
+  config
+)
+```
+
+The `config` object passed to `Gesture` has `drag`, `wheel`, `scroll`, `pinch` and `move` keys for specific gesture options. [See here for more details](http://localhost:8000/docs/options/#structure-of-the-config-object).
+
+</TabPanel>
+</CodeSnippet>
 
 ### Start and end handlers
 

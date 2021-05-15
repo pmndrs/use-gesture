@@ -7,6 +7,7 @@ order: 2
 import Code from './code/'
 import UseGesture from './code/rug'
 import Specs from './code/Specs'
+import { CodeSnippet, TabPanel } from './CodeSnippet'
 
 # Gesture options
 
@@ -18,8 +19,8 @@ Some options are generic to the way <UseGesture /> behaves while some other opti
 
 Depending on whether you use gesture-specific hooks or if you use the `useGesture` hook or `Gesture` class, you'll need to structure the config option object differently.
 
-<details>
-  <summary>React</summary>
+<CodeSnippet>
+  <TabPanel>
 
 ```js
 // when you use a gesture-specific hook
@@ -27,27 +28,25 @@ useDrag(state => doSomethingWith(state), { ...genericOptions, ...dragOptions })
 
 // when you use the useGesture hook
 useGesture({
-onDrag: state => doSomethingWith(state),
-onPinch: state => doSomethingWith(state),
+  onDrag: state => doSomethingWith(state),
+  onPinch: state => doSomethingWith(state),
   // ...
   {
-    // global options such as `target`
-    ...genericOptions,
-    // gesture specific options
-    drag: dragOptions,
-    wheel: wheelOptions,
-    pinch: pinchOptions,
-    scroll: scrollOptions,
-    wheel: wheelOptions,
-    hover: hoverOptions,
+  // global options such as `target`
+  ...genericOptions,
+  // gesture specific options
+  drag: dragOptions,
+  wheel: wheelOptions,
+  pinch: pinchOptions,
+  scroll: scrollOptions,
+  wheel: wheelOptions,
+  hover: hoverOptions,
   }
 })
 ```
 
-</details>
-
-<details>
-  <summary>Vanilla JS</summary>
+</TabPanel>
+<TabPanel>
 
 ```js
 // when you use a gesture-specific class
@@ -76,7 +75,8 @@ new Gesture(element, {
 })
 ```
 
-</details>
+  </TabPanel>
+</CodeSnippet>
 
 ### Generic options
 
@@ -161,7 +161,9 @@ return <div ref={myRef} />
 
 When `eventOptions.capture` is set to `true`, [events will be captured](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Building_blocks/Events#Event_bubbling_and_capture).
 
-`eventOptions.passive` sets whether events are [passive](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener). Note that if you want events not to be passive, you will need to attach events directly to a node using `target` because of [the way React handles events](https://github.com/facebook/react/issues/6436).
+`eventOptions.passive` sets whether events are [passive](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener).
+
+> React warning: if you want events not to be passive, you will need to attach events directly to a node using `target` because of [the way React handles events](https://github.com/facebook/react/issues/6436).
 
 ### window
 
