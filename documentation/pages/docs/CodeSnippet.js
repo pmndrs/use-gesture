@@ -1,5 +1,5 @@
 import React from 'react'
-import { Tabs, TabList as TL, Tab as T, TabPanels, TabPanel as TP } from '@reach/tabs'
+import { Tabs, TabList as Tlist, Tab as T, TabPanels, TabPanel as Tpanel } from '@reach/tabs'
 import { Observe } from 'mdx-observable'
 import styled from '@xstyled/styled-components'
 import { Article } from 'smooth-doc/components'
@@ -7,10 +7,10 @@ import { Article } from 'smooth-doc/components'
 import '@reach/tabs/styles.css'
 
 export function TabPanel({ as = Article, ...props }) {
-  return <TP as={as} {...props} />
+  return <Tpanel as={as} {...props} />
 }
 
-const TabList = styled(TL)`
+const TabList = styled(Tlist)`
   background: transparent;
   font-weight: bold;
 `
