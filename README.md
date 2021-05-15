@@ -59,7 +59,7 @@ npm install @use-gesture/vanilla
 import { useSpring, animated } from '@react-spring/web'
 import { useDrag } from '@use-gesture/react'
 
-function PullRelease() {
+function Example() {
   const [{ x, y }, api] = useSpring(() => ({ x: 0, y: 0 }))
 
   // Set the drag hook and define component movement based on gesture data
@@ -69,6 +69,7 @@ function PullRelease() {
 
   // Bind it to a component
   return <animated.div {...bind()} style={{ x, y, touchAction: 'none' }} />
+}
 ```
 
 </details>
