@@ -3,6 +3,7 @@ import { Link, Route } from 'wouter'
 
 import styles from './styles.module.css'
 
+import Simplest from './sandboxes/gesture-simplest/src/App'
 import Drag from './sandboxes/gesture-drag/src/App'
 import Target from './sandboxes/gesture-target/src/App'
 import Nested from './sandboxes/gesture-nested/src/App'
@@ -23,6 +24,7 @@ import InfiniteSlideshow from './sandboxes/infinite-slideshow/src/App'
 import ActionSheet from './sandboxes/action-sheet/src/App'
 
 const links = {
+  'gesture-simplest': Simplest,
   'gesture-drag': Drag,
   'gesture-target': Target,
   'gesture-nested': Nested,

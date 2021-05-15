@@ -1,0 +1,12 @@
+.drag {
+  position: absolute;
+  height: 80px;
+  width: 80px;
+  border-radius: 16px;
+  background-color: hotpink;
+  cursor: grab;
+  touch-action: none;
+  -webkit-user-select: none;
+  user-select: none;
+  font-size: 10px;
+}
