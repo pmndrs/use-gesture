@@ -8,24 +8,27 @@ import styles from './styles.module.css'
 document.addEventListener('wheel', (e) => e.preventDefault(), { passive: false })
 
 const torusknot = new THREE.TorusKnotBufferGeometry(3, 0.8, 256, 16)
+const dodecahedron = new THREE.DodecahedronGeometry(2)
 
-const Mesh = () => {
+const Mesh = ({ color, ...props }) => {
   const { viewport } = useThree()
 
   const bind = useGesture({
-    onDrag: ({ event, offset: [x, y] }) => {
-      event.object.position.x = x / viewport.factor
-      event.object.position.y = -y / viewport.factor
+    onDrag: ({ event, delta: [x, y] }) => {
+      event.stopPropagation()
+      event.object.position.x += x / viewport.factor
+      event.object.position.y += -y / viewport.factor
     },
     onPinch: ({ event, offset: [s, a] }) => {
+      event.stopPropagation()
       event.object.rotation.z = (-a * Math.PI) / 180
       event.object.scale.set(s, s, s)
     }
   })
 
   return (
-    <mesh {...bind()} geometry={torusknot}>
-      <meshPhysicalMaterial attach="material" flatShading />
+    <mesh {...bind()} {...props}>
+      <meshPhysicalMaterial attach="material" flatShading color={color} />
     </mesh>
   )
 }
@@ -38,8 +41,11 @@ export default function App() {
       camera={{ position: [0, 0, 16], fov: 50 }}
       style={{ background: 'dimgray', height: '100vh', width: '100vw' }}
     >
+      <ambientLight intensity={0.1} />
       <directionalLight />
-      <Mesh />
+      <pointLight />
+      <Mesh geometry={torusknot} color="indianred" position-x={4} />
+      <Mesh geometry={dodecahedron} color="royalblue" position-x={-4} position-z={-4} />
     </Canvas>
   )
 }
