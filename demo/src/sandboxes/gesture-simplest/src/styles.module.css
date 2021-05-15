@@ -2,11 +2,15 @@
   position: absolute;
   height: 80px;
   width: 80px;
-  border-radius: 16px;
+  border-radius: 8px;
   background-color: hotpink;
   cursor: grab;
   touch-action: none;
   -webkit-user-select: none;
   user-select: none;
   font-size: 10px;
+}
+
+.drag:focus {
+  border: 2px solid red;
 }

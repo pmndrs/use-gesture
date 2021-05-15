@@ -1,10 +1,10 @@
 # @use-gesture
 
-[![npm (tag)](https://img.shields.io/npm/v/react-use-gesture?style=flat&colorA=000000&colorB=000000)](https://www.npmjs.com/package/react-use-gesture) ![npm bundle size](https://img.shields.io/bundlephobia/minzip/react-use-gesture?style=flat&colorA=000000&colorB=000000) ![NPM](https://img.shields.io/npm/l/react-use-gesture?style=flat&colorA=000000&colorB=000000) ![Travis (.org) branch](https://img.shields.io/travis/pmndrs/react-use-gesture/master?style=flat&colorA=000000&colorB=000000) [![Discord Shield](https://img.shields.io/discord/740090768164651008?style=flat&colorA=000000&colorB=000000&label=discord&logo=discord&logoColor=ffffff)](https://discord.gg/poimandres)
+[![npm (tag)](https://img.shields.io/npm/v/@use-gesture/react?style=flat&colorA=000000&colorB=000000)](https://www.npmjs.com/package/@use-gesture/react) ![npm bundle size](https://img.shields.io/bundlephobia/minzip/@use-gesture/react?style=flat&colorA=000000&colorB=000000) ![NPM](https://img.shields.io/npm/l/@use-gesture/react?style=flat&colorA=000000&colorB=000000) [![Discord Shield](https://img.shields.io/discord/740090768164651008?style=flat&colorA=000000&colorB=000000&label=discord&logo=discord&logoColor=ffffff)](https://discord.gg/poimandres)
 
 @use-gesture is a library that let you bind richer mouse and touch events to any component or view. With the data you receive, it becomes trivial to set up gestures, and often takes no more than a few lines of code.
 
-You can use it stand-alone, but to make the most of it you should combine it with an animation library like [react-spring](https://github.com/react-spring/react-spring), though you can most certainly use any other.
+You can use it stand-alone, but to make the most of it you should combine it with an animation library like [react-spring](https://github.com/pmndrs/react-spring), though you can most certainly use any other.
 
 <p align="middle">
   <a href="https://codesandbox.io/s/github/pmndrs/use-gesture/tree/v10/demo/src/sandboxes/draggable-list"><img src="https://i.imgur.com/qLKJod3.gif" width="400"/></a>
@@ -17,7 +17,9 @@ You can use it stand-alone, but to make the most of it you should combine it wit
 
 <p align="middle"><i>The demos are real click them!</i></p>
 
-### Installation
+## Installation
+
+### React
 
 ```bash
 #Yarn
@@ -27,19 +29,31 @@ yarn add @use-gesture/react
 npm install @use-gesture/react
 ```
 
-### [Full documentation website](https://use-gesture.netlify.com)
+### Vanilla javascript
 
-- [Available Hooks](https://use-gesture.netlify.com/docs/hooks)
-- [Gesture State](https://use-gesture.netlify.com/docs/state)
-- [Gesture Options](https://use-gesture.netlify.com/docs/options)
-- [Utilities](https://use-gesture.netlify.com/docs/utilities)
-- [FAQ](https://use-gesture.netlify.com/docs/faq)
+```bash
+#Yarn
+yarn add @use-gesture/vanilla
+
+#NPM
+npm install @use-gesture/vanilla
+```
+
+### [Full documentation website](https://v10-beta--use-gesture.netlify.com)
+
+- [Available Gestures](https://v10-beta--use-gesture.netlify.com/docs/gestures)
+- [Gesture State](https://v10-beta--use-gesture.netlify.com/docs/state)
+- [Gesture Options](https://v10-beta--use-gesture.netlify.com/docs/options)
+- [FAQ](https://v10-beta--use-gesture.netlify.com/docs/faq)
 
 ### Simple example
 
 <p align="middle">
   <a href="https://codesandbox.io/s/github/pmndrs/use-gesture/tree/v10/demo/src/sandboxes/gesture-simplest"><img src="https://i.imgur.com/AMzsEi3.gif" width="400"/></a>
 </p>
+
+<details>
+  <summary>React</summary>
 
 ```jsx
 import { useSpring, animated } from '@react-spring/web'
@@ -56,6 +70,35 @@ function PullRelease() {
   // Bind it to a component
   return <animated.div {...bind()} style={{ x, y, touchAction: 'none' }} />
 ```
+
+</details>
+
+<details>
+  <summary>Vanilla javascript</summary>
+
+```html
+<!-- index.js -->
+<div id="drag" />
+```
+
+```js
+// script.js
+const el = document.getElementById('drag')
+const gesture = new DragGesture(el, ({ active, movement: [mx, my] }) => {
+  setActive(active)
+  anime({
+    targets: el,
+    translateX: active ? mx : 0,
+    translateY: active ? my : 0,
+    duration: active ? 0 : 1000
+  })
+})
+
+// when you want to remove the listener
+gesture.destroy()
+```
+
+</details>
 
 The example above makes a `div` draggable so that it follows your mouse on drag, and returns to its initial position on release.
 
@@ -75,4 +118,4 @@ The example above makes a `div` draggable so that it follows your mouse on drag,
 | `usePinch`   | Handles the pinch gesture                  |
 | `useGesture` | Handles multiple gestures in one hook      |
 
-#### [More on the full documentation website...](https://use-gesture.netlify.com)
+#### [More on the full documentation website...](https://v10--beta-use-gesture.netlify.com)
