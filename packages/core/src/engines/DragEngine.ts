@@ -72,7 +72,7 @@ export class DragEngine extends CoordinatesEngine<'drag'> {
   }
 
   pointerDown(event: PointerEvent) {
-    if (event.buttons != null && event.buttons !== 1) return
+    if (event.buttons != null && event.buttons % 2 !== 1) return
     this.ctrl.setEventIds(event)
     // We need to capture all pointer ids so that we can keep track of them when
     // they're released off the target

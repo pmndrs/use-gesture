@@ -185,7 +185,7 @@ export abstract class Engine<Key extends GestureKey> {
       shared.touches = this.ctrl.pointerIds.size || this.ctrl.touchIds.size
       shared.locked = !!document.pointerLockElement
       Object.assign(shared, getEventDetails(event))
-      shared.down = shared.pressed = shared.buttons === 1 || shared.touches > 0
+      shared.down = shared.pressed = shared.buttons % 2 === 1 || shared.touches > 0
 
       // sets time stamps
       dt = event.timeStamp - state.timeStamp
