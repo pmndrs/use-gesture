@@ -72,6 +72,7 @@ export class DragEngine extends CoordinatesEngine<'drag'> {
   }
 
   pointerDown(event: PointerEvent) {
+    if (event.buttons != null && event.buttons !== 1) return
     this.ctrl.setEventIds(event)
     // We need to capture all pointer ids so that we can keep track of them when
     // they're released off the target
@@ -301,6 +302,7 @@ export class DragEngine extends CoordinatesEngine<'drag'> {
     if (this.config.pointerCapture) {
       bindFunction(device, 'change', this.pointerMove.bind(this))
       bindFunction(device, 'end', this.pointerUp.bind(this))
+      bindFunction(device, 'cancel', this.pointerUp.bind(this))
     }
     bindFunction('key', 'down', this.keyDown.bind(this))
     bindFunction('key', 'up', this.keyUp.bind(this))

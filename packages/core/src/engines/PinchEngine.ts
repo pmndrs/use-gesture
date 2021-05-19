@@ -87,6 +87,7 @@ export class PinchEngine extends Engine<'pinch'> {
   }
 
   pointerStart(event: PointerEvent) {
+    if (event.buttons != null && event.buttons !== 1) return
     this.ctrl.setEventIds(event)
     ;(event.target as HTMLElement).setPointerCapture(event.pointerId)
     const state = this.state
