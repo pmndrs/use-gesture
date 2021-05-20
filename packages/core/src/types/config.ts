@@ -107,6 +107,17 @@ export type PinchConfig = GestureOptions<'pinch'> & {
 
 export type DragBounds = Bounds | HTMLElement | React.RefObject<HTMLElement>
 
+type MoveAndHoverMouseOnly = {
+  /**
+   * If false, onMove or onHover handlers will also fire on touch devices.
+   */
+  mouseOnly?: boolean
+}
+
+export type MoveConfig = CoordinatesConfig<'move'> & MoveAndHoverMouseOnly
+
+export type HoverConfig = MoveAndHoverMouseOnly
+
 export type DragConfig = CoordinatesConfig<'drag'> & {
   /**
    * If true, the component won't trigger your drag logic if the user just clicked on the component.
@@ -170,14 +181,14 @@ export type UserDragConfig = GenericOptions & DragConfig
 export type UserPinchConfig = GenericOptions & PinchConfig
 export type UserWheelConfig = GenericOptions & CoordinatesConfig<'wheel'>
 export type UserScrollConfig = GenericOptions & CoordinatesConfig<'scroll'>
-export type UserMoveConfig = GenericOptions & CoordinatesConfig<'move'>
-export type UserHoverConfig = GenericOptions
+export type UserMoveConfig = GenericOptions & MoveConfig
+export type UserHoverConfig = GenericOptions & HoverConfig
 
 export type UserGestureConfig = GenericOptions & {
   drag?: DragConfig
   wheel?: CoordinatesConfig<'wheel'>
   scroll?: CoordinatesConfig<'scroll'>
-  move?: CoordinatesConfig<'move'>
+  move?: MoveConfig
   pinch?: PinchConfig
-  hover?: { enabled?: boolean }
+  hover?: { enabled?: boolean } & HoverConfig
 }

@@ -59,3 +59,7 @@ usePinch(({ offset: [scale, angle] }) => {
   api.start({ rotate: angle, scale })
 })
 ```
+
+### Mouse and Hover
+
+- Add option `mouseOnly` that you can set to `false` to trigger events on non-mouse events.

@@ -1,12 +1,14 @@
 import React from 'react'
 import { render, cleanup, fireEvent, createEvent, waitFor } from '@testing-library/react'
 import '@testing-library/jest-dom/extend-expect'
+import { later, patchCreateEvent } from './utils'
 import Interactive from './components/Interactive'
 import InteractiveDom from './components/InteractiveDom'
 import { InteractiveType } from './components/types'
-import { later } from './utils'
 
 afterAll(cleanup)
+
+patchCreateEvent(createEvent)
 
 describe.each([
   ['attached to component', Interactive, ''],
@@ -17,8 +19,8 @@ describe.each([
   const element = getByTestId(`${prefix}move-el`)
   let delta_t: number
 
-  test('mouseMove should initiate the gesture', () => {
-    const event = createEvent.mouseMove(element, { clientX: 20, clientY: 50 })
+  test('pointerMove should initiate the gesture', () => {
+    const event = createEvent.pointerMove(element, { clientX: 20, clientY: 50 })
     fireEvent(element, event)
     delta_t = event.timeStamp
 
@@ -29,6 +31,7 @@ describe.each([
     expect(getByTestId(`${prefix}move-delta`)).toHaveTextContent('0,0')
     expect(getByTestId(`${prefix}move-initial`)).toHaveTextContent('20,50')
   })
+
   test('initiating the gesture should fire onMoveStart', () => {
     expect(getByTestId(`${prefix}move-start`)).toHaveTextContent(/^fired$/)
     expect(getByTestId(`${prefix}move-end`)).toHaveTextContent(/^not fired$/)
@@ -38,8 +41,8 @@ describe.each([
     expect(getByTestId(`${prefix}move-memo`)).toHaveTextContent('memo')
   })
 
-  test('the second mouseMove event should set first to false', () => {
-    const event = createEvent.mouseMove(element, { clientX: 30, clientY: 80 })
+  test('the second pointerMove event should set first to false', () => {
+    const event = createEvent.pointerMove(element, { clientX: 30, clientY: 80 })
     fireEvent(element, event)
     delta_t = event.timeStamp - delta_t
 
@@ -56,7 +59,7 @@ describe.each([
     expect(getByTestId(`${prefix}move-velocity`)).toHaveTextContent(`${10 / delta_t},${30 / delta_t}`)
   })
 
-  test('the last mouseMove event should debounce and terminate the gesture', async () => {
+  test('the last pointerMove event should debounce and terminate the gesture', async () => {
     await waitFor(() => {
       expect(getByTestId(`${prefix}move-last`)).toHaveTextContent('true')
       expect(getByTestId(`${prefix}move-active`)).toHaveTextContent('false')
@@ -71,26 +74,38 @@ describe.each([
 
   test(`applying an axis SHOULDN'T start the gesture if gesture is not detected first in the right axis`, async () => {
     rerender(<Component gestures={['Move']} config={{ move: { axis: 'x' } }} />)
-    fireEvent.mouseMove(element, { clientX: 0, clientY: 0 })
-    fireEvent.mouseMove(element, { clientX: 0, clientY: 10 })
-    fireEvent.mouseMove(element, { clientX: 4, clientY: 10 })
+    fireEvent.pointerMove(element, { clientX: 0, clientY: 0 })
+    fireEvent.pointerMove(element, { clientX: 0, clientY: 10 })
+    fireEvent.pointerMove(element, { clientX: 4, clientY: 10 })
     expect(getByTestId(`${prefix}move-moving`)).toHaveTextContent('false')
     // allow gesture to finish
     await later(200)
   })
 
   test(`applying an axis SHOULD start the gesture if gesture is detected in the right axis`, async () => {
-    fireEvent.mouseMove(element, { clientX: 0, clientY: 0 })
-    fireEvent.mouseMove(element, { clientX: 10, clientY: 4 })
-    fireEvent.mouseMove(element, { clientX: 13, clientY: 4 })
+    fireEvent.pointerMove(element, { clientX: 0, clientY: 0 })
+    fireEvent.pointerMove(element, { clientX: 10, clientY: 4 })
+    fireEvent.pointerMove(element, { clientX: 13, clientY: 4 })
     expect(getByTestId(`${prefix}move-moving`)).toHaveTextContent('true')
     expect(getByTestId(`${prefix}move-movement`)).toHaveTextContent('13,0')
     await waitFor(() => expect(getByTestId(`${prefix}move-moving`)).toHaveTextContent('false'))
   })
 
+  test(`pointerType touch shouldn't trigger move by default`, () => {
+    fireEvent.pointerMove(element, { pointerType: 'touch' })
+    expect(getByTestId(`${prefix}move-moving`)).toHaveTextContent('false')
+  })
+
+  test(`pointerType touch should trigger move with mouseOnly false`, async () => {
+    rerender(<Component gestures={['Move']} config={{ move: { mouseOnly: false } }} />)
+    fireEvent.pointerMove(element, { pointerType: 'touch' })
+    expect(getByTestId(`${prefix}move-moving`)).toHaveTextContent('true')
+    await waitFor(() => expect(getByTestId(`${prefix}move-moving`)).toHaveTextContent('false'))
+  })
+
   test('disabling all gestures should prevent state from updating', () => {
     rerender(<Component gestures={['Move']} config={{ enabled: false }} />)
-    fireEvent.mouseMove(element)
+    fireEvent.pointerMove(element)
     expect(getByTestId(`${prefix}move-moving`)).toHaveTextContent('false')
   })
 

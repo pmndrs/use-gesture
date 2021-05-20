@@ -6,11 +6,12 @@ export function patchCreateEvent(createEvent: any) {
     if (key.indexOf('pointer') === 0) {
       // @ts-ignore
       const fn = createEvent[key.replace('pointer', 'mouse')]
-      if (!fn) break
+      if (!fn) continue
       // @ts-ignore
-      createEvent[key] = function (type, { pointerId, ...rest }) {
+      createEvent[key] = function (type, { pointerId = 1, pointerType = 'mouse', ...rest } = {}) {
         const event = fn(type, rest)
         event.pointerId = pointerId
+        event.pointerType = pointerType
         const eventType = event.type
         Object.defineProperty(event, 'type', {
           get: function () {

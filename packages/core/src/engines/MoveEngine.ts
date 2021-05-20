@@ -6,6 +6,7 @@ export class MoveEngine extends CoordinatesEngine<'move'> {
   ingKey = 'moving' as const
 
   move(event: PointerEvent) {
+    if (this.config.mouseOnly && event.pointerType !== 'mouse') return
     if (!this.state._active) this.moveStart(event)
     else this.moveChange(event)
     this.timeoutStore.add('moveEnd', this.moveEnd.bind(this))
@@ -40,7 +41,7 @@ export class MoveEngine extends CoordinatesEngine<'move'> {
   }
 
   bind(bindFunction: any) {
-    bindFunction('mouse', 'change', this.move.bind(this))
-    bindFunction('mouse', 'leave', this.moveEnd.bind(this))
+    bindFunction('pointer', 'change', this.move.bind(this))
+    bindFunction('pointer', 'leave', this.moveEnd.bind(this))
   }
 }

@@ -49,12 +49,16 @@ export type InternalPinchOptions = InternalGestureOptions<'pinch'> & {
   lockDirection: boolean
 }
 
+type MoveAndHoverMouseOnly = {
+  mouseOnly: boolean
+}
+
 export type InternalConfig = {
   shared: InternalGenericOptions
   drag?: InternalDragOptions
   wheel?: InternalCoordinatesOptions<'wheel'>
   scroll?: InternalCoordinatesOptions<'scroll'>
-  move?: InternalCoordinatesOptions<'move'>
+  move?: InternalCoordinatesOptions<'move'> & MoveAndHoverMouseOnly
+  hover?: InternalCoordinatesOptions<'hover'> & MoveAndHoverMouseOnly
   pinch?: InternalPinchOptions
-  hover?: InternalCoordinatesOptions<'hover'>
 }

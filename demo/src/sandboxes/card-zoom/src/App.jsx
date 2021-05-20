@@ -18,6 +18,8 @@ export default function App() {
 
   useGesture(
     {
+      onHover: ({ active, event }) => console.log('hover', event, active),
+      // onMove: ({ event }) => console.log('move', event),
       onDrag: ({ pinching, cancel, offset: [x, y], ...rest }) => {
         if (pinching) return cancel()
         api.start({ x, y })
