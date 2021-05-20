@@ -182,13 +182,13 @@ importers:
 
   packages/react:
     specifiers:
-      '@use-gesture/core': ^10.0.0-beta.1
+      '@use-gesture/core': ^10.0.0-beta.7
     dependencies:
       '@use-gesture/core': link:../core
 
   packages/vanilla:
     specifiers:
-      '@use-gesture/core': ^10.0.0-beta.1
+      '@use-gesture/core': ^10.0.0-beta.7
     dependencies:
       '@use-gesture/core': link:../core
 
@@ -20802,7 +20802,7 @@ packages:
       serialize-javascript: 5.0.1
       source-map: 0.6.1
       terser: 5.7.0
-      webpack: 5.37.1
+      webpack: 5.37.1_webpack-cli@4.7.0
 
   /terser/4.8.0:
     resolution:
