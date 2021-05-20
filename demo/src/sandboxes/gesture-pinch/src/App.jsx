@@ -28,7 +28,10 @@ export default function App() {
   return (
     <div className="flex fill center">
       <a.div ref={target} className={styles.drag} style={style}>
-        <div>child</div>
+        <div>
+          <div>child3</div>
+        </div>
+        <div>child2</div>
       </a.div>
     </div>
   )

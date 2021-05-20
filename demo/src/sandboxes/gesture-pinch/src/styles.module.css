@@ -7,12 +7,13 @@
   touch-action: none;
   -webkit-user-select: none;
   user-select: none;
+  display: grid;
+  padding: 60px;
+  grid-gap: 10px;
 }
 
 .drag > div {
-  margin: 20%;
-  width: 60%;
-  height: 60%;
+  flex: 1;
   background-color: #000;
   color: #fff;
   display: flex;
