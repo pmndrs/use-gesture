@@ -8,16 +8,27 @@
   -webkit-user-select: none;
   user-select: none;
   display: grid;
-  padding: 60px;
+  padding: 50px;
   grid-gap: 10px;
+  font-family: monospace;
+}
+
+.drag div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .drag > div {
   flex: 1;
   background-color: #000;
   color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: monospace;
+  padding: 30px;
+}
+
+.drag > div > div {
+  padding: 20px;
+  background: orange;
+  flex: 1;
+  height: 100%;
 }
