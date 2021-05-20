@@ -78,7 +78,7 @@ function Example() {
   <summary>Vanilla javascript</summary>
 
 ```html
-<!-- index.js -->
+<!-- index.html -->
 <div id="drag" />
 ```
 
