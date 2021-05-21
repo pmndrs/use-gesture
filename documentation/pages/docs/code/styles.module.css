@@ -221,8 +221,10 @@
 
 .CaptureFalse svg {
   position: relative;
-  width: 328px;
+  min-width: 328px;
+  max-width: 328px;
   overflow: visible;
+  touch-action: none;
 }
 
 .CaptureFalse .from {

@@ -464,6 +464,8 @@ By default, drag uses [`setPointerCapture`](https://developer.mozilla.org/en-US/
 
 In the example above, the blue dot listens for hover events: when the pink dot is being dragged, it will attach to it. You'll notice that when `pointer.capture` is set to `true`, you won't be able to connect the dots. That's because the blue dot doesn't get pointer events when the pink dot capture the events. Setting `pointer.capture` to false solves this problem.
 
+> Note that this example doesn't work on mobile and is just here to illustrate the option. If you'd want to actually do this in a way that works on mobile, you'd probably have to use `document.elementAtPoint`. [Look at this sandbox](https://codesandbox.io/s/github/pmndrs/use-gesture/tree/v10/demo/src/sandboxes/dots-connect).
+
 ### pointer.lock (drag only)
 
 <Specs types={'boolean'} defaultValue="false" />

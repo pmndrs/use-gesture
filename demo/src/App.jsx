@@ -22,6 +22,7 @@ import Viewpager from './sandboxes/viewpager/src/App'
 import CardZoom from './sandboxes/card-zoom/src/App'
 import InfiniteSlideshow from './sandboxes/infinite-slideshow/src/App'
 import ActionSheet from './sandboxes/action-sheet/src/App'
+import DotsConnect from './sandboxes/dots-connect/src/App'
 
 const links = {
   'gesture-simplest': Simplest,
@@ -42,7 +43,8 @@ const links = {
   viewpager: Viewpager,
   'card-zoom': CardZoom,
   'infinite-slideshow': InfiniteSlideshow,
-  'action-sheet': ActionSheet
+  'action-sheet': ActionSheet,
+  'dots-connect': DotsConnect
 }
 
 const Example = ({ link }) => {
