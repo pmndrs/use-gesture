@@ -1,4 +1,5 @@
-import { registerEngine, MoveEngine, UserMoveConfig, Handler, EventTypes, moveConfigResolver } from '@use-gesture/core'
+import { registerEngine, MoveEngine, moveConfigResolver } from '@use-gesture/core'
+import { UserMoveConfig, Handler, EventTypes } from '@use-gesture/core/types'
 import { useRecognizers } from './useRecognizers'
 
 /**

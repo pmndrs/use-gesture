@@ -1,4 +1,5 @@
-import { Controller, GenericOptions, GestureKey, InternalHandlers, NativeHandlers } from '@use-gesture/core'
+import { Controller } from '@use-gesture/core'
+import { GenericOptions, GestureKey, InternalHandlers, NativeHandlers } from '@use-gesture/core/types'
 
 interface RecognizerConstructor {
   new (

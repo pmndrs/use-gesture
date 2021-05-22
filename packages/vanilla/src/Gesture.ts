@@ -6,16 +6,15 @@ import {
   WheelEngine,
   MoveEngine,
   HoverEngine,
-  parseMergedHandlers,
-  GestureHandlers,
-  UserGestureConfig,
   dragConfigResolver,
-  hoverConfigResolver,
-  moveConfigResolver,
   pinchConfigResolver,
+  moveConfigResolver,
   scrollConfigResolver,
-  wheelConfigResolver
+  wheelConfigResolver,
+  hoverConfigResolver,
+  parseMergedHandlers
 } from '@use-gesture/core'
+import { GestureHandlers, UserGestureConfig } from '@use-gesture/core/types'
 import { Recognizer } from './Recognizer'
 
 interface GestureConstructor {

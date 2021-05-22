@@ -1,11 +1,5 @@
-import {
-  registerEngine,
-  HoverEngine,
-  UserHoverConfig,
-  Handler,
-  EventTypes,
-  hoverConfigResolver
-} from '@use-gesture/core'
+import { registerEngine, HoverEngine, hoverConfigResolver } from '@use-gesture/core'
+import { EventTypes, UserHoverConfig, Handler } from '@use-gesture/core/types'
 import { useRecognizers } from './useRecognizers'
 
 /**

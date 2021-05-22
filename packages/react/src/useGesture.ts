@@ -12,10 +12,9 @@ import {
   scrollConfigResolver,
   wheelConfigResolver,
   hoverConfigResolver,
-  parseMergedHandlers,
-  GestureHandlers,
-  UserGestureConfig
+  parseMergedHandlers
 } from '@use-gesture/core'
+import { GestureHandlers, UserGestureConfig } from '@use-gesture/core/types'
 import { useRecognizers } from './useRecognizers'
 
 /**

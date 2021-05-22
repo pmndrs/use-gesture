@@ -1,11 +1,5 @@
-import {
-  registerEngine,
-  WheelEngine,
-  Handler,
-  UserWheelConfig,
-  EventTypes,
-  wheelConfigResolver
-} from '@use-gesture/core'
+import { registerEngine, WheelEngine, wheelConfigResolver } from '@use-gesture/core'
+import { UserWheelConfig, Handler, EventTypes } from '@use-gesture/core/types'
 import { Recognizer } from './Recognizer'
 
 interface WheelGestureConstructor {
