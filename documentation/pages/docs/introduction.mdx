@@ -40,7 +40,7 @@ function PullRelease() {
 
   // Set the drag hook and define component movement based on gesture data
   const bind = useDrag(({ down, movement: [mx, my] }) => {
-    api.start({ x: down ? mx : 0, y: down ? my : 0 })
+    api.start({ x: down ? mx : 0, y: down ? my : 0, immediate: down })
   })
 
   // Bind it to a component
