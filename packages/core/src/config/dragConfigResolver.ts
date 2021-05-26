@@ -27,7 +27,8 @@ export const dragConfigResolver = {
     if (SUPPORT.touch) return 'touch'
     return 'mouse'
   },
-  preventScroll(value = false) {
+  preventScroll(value: number | boolean = 0, _k: string, { preventScrollAxis = 'x' }) {
+    if (preventScrollAxis) this.preventScrollAxis = preventScrollAxis
     switch (value) {
         case true:
             if (SUPPORT.touch) return DEFAULT_PREVENT_SCROLL_DELAY

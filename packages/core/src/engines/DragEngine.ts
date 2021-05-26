@@ -141,13 +141,13 @@ export class DragEngine extends CoordinatesEngine<'drag'> {
 
     if (config.preventScroll && !state._preventScroll) {
       if (state.axis) {
-        if (state.axis === 'x') {
+        if (state.axis === (config.preventScrollAxis || 'x')) {
+            state._active = false
+            this.clean()
+            return
+        } else {
           this.timeoutStore.remove('startPointerDrag')
           this.startPointerDrag(event)
-          return
-        } else {
-          state._active = false
-          this.clean()
           return
         }
       } else {
