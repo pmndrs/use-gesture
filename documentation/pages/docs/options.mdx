@@ -108,7 +108,7 @@ Here are all options that can be applied to gestures.
 | [`rubberband`](#rubberband)                     |     **all**      | The elasticity coefficient of the gesture when going out of bounds. When set to `true`, the elasticity coefficient will be defaulted to `0.15`                                                       |
 | [`transform`](#transform)                       |     **all**      | A function that you can use to transform pointer values. Useful to map your screen coordinates to custom space coordinates such as a canvas.                                                         |
 | [`filterTaps`](#filtertaps-drag-only)           |     **drag**     | If `true`, the component won't trigger your drag logic if the user just clicked on the component.                                                                                                    |
-| [`preventScroll`](#preventScroll-drag-only)     |     **drag**     | If `true`, drag will be triggered after `250ms` and will prevent window scrolling.                                                                                                                   |
+| [`preventScroll`](#preventScroll-drag-only)     |     **drag**     | If set, the drag will be triggered after the duration of the delay (in `ms`) and will prevent window scrolling. When set to `true`, `preventScroll` is defaulted to `250ms`.                                                                           |
 | [`pointer.touch`](#pointertouch-drag-and-pinch) |  **drag,pinch**  | If `true`, drag and pinch will use touch events on touch-enabled devices. [Read more below](#pointertouch-drag-and-pinch).                                                                           |
 | [`pointer.capture`](#pointercapture-drag-only)  |     **drag**     | If `false`, drag will not use `setPointerCapture` and attach `pointerMove` events to the window. [Read more below](#pointercapture-drag-only).                                                       |
 | [`pointer.lock`](#pointerlock-drag-only)        |     **drag**     | If `true`, the pointer will enter pointer lock mode when drag starts, and exit pointer lock when drag ends. [Read more below](#pointerlock-drag-only).                                               |
@@ -436,17 +436,17 @@ function FilterTapsExample() {
 
 ### preventScroll (drag only)
 
-<Specs types={'boolean'} defaultValue="false" />
+<Specs types={['boolean', 'number']}defaultValue="0" />
 
 **This is an experimental feature, relevant for mobile devices**.
 
 `touch-action: none` is a common css property that you'll set on draggable items so that scroll doesn't interfere with the drag behavior on touch devices. However, this generally means that the scroll of the page can't be initiated from the draggable element. This is fine if your page isn't meant to be scrolled or if your draggable element is relatively small, but in case of large draggable areas this might become a usability issue.
 
-`preventScroll` is a convenient way to have both vertical drag and vertical scrolling coexist. Note that scroll will always have precedence over drag. To drag vertically the user will have to press the draggable area for `250ms` without moving. After these `250ms` the element is draggable and scroll is prevented. Note that if you drag horizontally the scroll will immediately be prevented without waiting for `250ms`.
+`preventScroll` is a convenient way to have both vertical drag and vertical scrolling coexist. Note that scroll will always have precedence over drag. To drag vertically the user will have to press and hold the draggable area for `250ms` (or the specified duration) without moving. After this duration, the element is draggable and scrolling is prevented. Note that if you drag horizontally the scroll will immediately be prevented without waiting for this duration.
 
 <Code id="PreventScroll" />
 
-On desktop, you should be able to drag the torus as you would expect. On mobile, initiating the scroll from the torus should let you scroll the page as expected. Hold touch and drag and you should be able to drag the canvas. This might be clunky as still under test.
+On desktop, you should be able to drag the torus as you would expect without delay. On mobile, initiating scroll from the torus should let you scroll the page as expected. Hold down on the torus and you should be able to drag it after `250ms`. This might be clunky as it's still under testing.
 
 ### pointer.touch (drag and pinch)
 

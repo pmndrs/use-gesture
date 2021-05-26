@@ -29,7 +29,7 @@ export type InternalDragOptions = InternalCoordinatesOptions<'drag'> & {
   filterTaps: boolean
   useTouch: boolean
   pointerCapture: boolean
-  preventScroll: boolean
+  preventScroll: number
   pointerLock: boolean
   device: 'pointer' | 'touch' | 'mouse'
   swipe: {
