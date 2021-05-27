@@ -129,7 +129,7 @@ export abstract class Engine<Key extends GestureKey> {
   }
 
   reset() {
-    const { state, shared, config, ingKey } = this
+    const { state, shared, config, ingKey, args } = this
     const { transform, threshold = [0, 0] } = config
     shared[ingKey] = state._active = state.active = state._blocked = state._force = false
     state._step = [false, false]
@@ -142,6 +142,7 @@ export abstract class Engine<Key extends GestureKey> {
     state._threshold = V.sub(transform(threshold), transform([0, 0])).map(Math.abs) as Vector2
     // prettier-ignore
     state._bounds = [[-Infinity, Infinity], [-Infinity, Infinity]]
+    state.args = args
     state.axis = undefined
     state.memo = undefined
     state.elapsedTime = 0

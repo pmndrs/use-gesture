@@ -8,7 +8,7 @@ import { useRecognizers } from './useRecognizers'
  * @param {Handler<'wheel'>} handler - the function fired every time the wheel gesture updates
  * @param {UserWheelConfig} [config={}] - the config object including generic options and wheel options
  */
-export function useWheel<EventType = EventTypes['wheel'], Config = UserWheelConfig>(
+export function useWheel<EventType = EventTypes['wheel'], Config extends UserWheelConfig = UserWheelConfig>(
   handler: Handler<'wheel', EventType>,
   config: Config | {} = {}
 ) {

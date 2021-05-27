@@ -25,7 +25,10 @@ import { useRecognizers } from './useRecognizers'
  * @param {GestureHandlers} handlers - an object with on[Gesture] keys containg gesture handlers
  * @param {UseGestureConfig} [config={}] - the full config object
  */
-export function useGesture<Config = UserGestureConfig>(_handlers: GestureHandlers, _config: Config | {} = {}) {
+export function useGesture<Config extends UserGestureConfig = UserGestureConfig>(
+  _handlers: GestureHandlers,
+  _config: Config | {} = {}
+) {
   registerEngine('drag', DragEngine, dragConfigResolver)
   registerEngine('pinch', PinchEngine, pinchConfigResolver)
   registerEngine('scroll', ScrollEngine, scrollConfigResolver)
