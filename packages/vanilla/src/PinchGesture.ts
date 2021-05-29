@@ -1,11 +1,5 @@
-import {
-  registerEngine,
-  PinchEngine,
-  Handler,
-  UserPinchConfig,
-  EventTypes,
-  pinchConfigResolver
-} from '@use-gesture/core'
+import { registerEngine, PinchEngine, pinchConfigResolver } from '@use-gesture/core'
+import { UserPinchConfig, Handler, EventTypes } from '@use-gesture/core/types'
 import { Recognizer } from './Recognizer'
 
 interface PinchGestureConstructor {

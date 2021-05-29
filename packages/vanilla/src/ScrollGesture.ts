@@ -1,11 +1,5 @@
-import {
-  registerEngine,
-  ScrollEngine,
-  Handler,
-  UserScrollConfig,
-  EventTypes,
-  scrollConfigResolver
-} from '@use-gesture/core'
+import { registerEngine, ScrollEngine, scrollConfigResolver } from '@use-gesture/core'
+import { UserScrollConfig, Handler, EventTypes } from '@use-gesture/core/types'
 import { Recognizer } from './Recognizer'
 
 interface ScrollGestureConstructor {

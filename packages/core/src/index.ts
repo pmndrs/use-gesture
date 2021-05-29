@@ -19,5 +19,3 @@ export { HoverEngine } from './engines/HoverEngine'
 export { hoverConfigResolver } from './config/hoverConfigResolver'
 
 export { registerEngine, parseMergedHandlers } from './imports'
-
-export * from './types'

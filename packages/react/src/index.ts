@@ -7,3 +7,4 @@ export { useHover } from './useHover'
 export { useGesture } from './useGesture'
 
 export * from '@use-gesture/core/utils'
+export * from '@use-gesture/core/types'

@@ -1,4 +1,5 @@
-import { registerEngine, MoveEngine, UserMoveConfig, Handler, EventTypes, moveConfigResolver } from '@use-gesture/core'
+import { registerEngine, MoveEngine, moveConfigResolver } from '@use-gesture/core'
+import { UserMoveConfig, Handler, EventTypes } from '@use-gesture/core/types'
 import { useRecognizers } from './useRecognizers'
 
 /**
@@ -7,7 +8,7 @@ import { useRecognizers } from './useRecognizers'
  * @param {Handler<'move'>} handler - the function fired every time the move gesture updates
  * @param {UserMoveConfig} [config={}] - the config object including generic options and move options
  */
-export function useMove<EventType = EventTypes['move'], Config = UserMoveConfig>(
+export function useMove<EventType = EventTypes['move'], Config extends UserMoveConfig = UserMoveConfig>(
   handler: Handler<'move', EventType>,
   config: Config | {} = {}
 ) {

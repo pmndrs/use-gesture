@@ -5,6 +5,7 @@ on:
       - '.github/workflows/main.yml'
       - 'packages/**'
       - 'package.json'
+      - 'pnpm-lock.yaml'
       - '!documentation/**'
       - '!webpack-import-test'
       - '!demo/**'
