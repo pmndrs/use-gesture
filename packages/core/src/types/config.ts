@@ -165,10 +165,15 @@ export type DragConfig = CoordinatesConfig<'drag'> & {
     duration?: number
   }
   /**
-   * If true, drag will be triggered after 250ms and will prevent window
-   * scrolling.
+   * If set, the drag will be triggered after the duration of the delay (in ms).
+   * When set to true, delay is defaulted to 250ms.
    */
-  preventScroll?: boolean
+  preventScroll?: boolean | number
+  /**
+   * If set, the drag will allow scrolling in the direction of this axis until
+   * the preventScroll duration has elapsed. Defaults to only 'y'.
+   */
+  preventScrollAxis?: 'x' | 'y' | 'xy'
   /**
    * If set, the handler will be delayed for the duration of the delay (in ms)
    * — or if the user starts moving. When set to true, delay is defaulted

@@ -58,10 +58,13 @@ export default function App() {
       </div>
       <p style={{ padding: 20, lineHeight: 2 }}>
         <code>preventScroll</code> is a convenient way to have both vertical drag and vertical scrolling coexist. Note
-        that scroll will always have precedence over drag. To drag vertically the user will have to press the draggable
-        area for <code>250ms</code> without moving. After these <code>250ms</code> the element is draggable and scroll
-        is prevented. Note that if you drag horizontally the scroll will immediately be prevented without waiting for{' '}
-        <code>250ms</code>.
+        that scroll will always have precedence over drag. To drag vertically the user will have to press and hold the
+        draggable area for <code>250ms</code> (or the specified duration) without moving. After this duration, the
+        element is draggable and scrolling is prevented. Note that if you drag horizontally the scroll will immediately
+        be prevented without waiting for this duration. On desktop, you should be able to drag the torus as you would
+        expect without delay. On mobile, initiating scroll from the torus should let you scroll the page as expected.
+        Hold down on the torus and you should be able to drag it after <code>250ms</code>. This might be clunky as it's
+        still under testing.
       </p>
     </main>
   )

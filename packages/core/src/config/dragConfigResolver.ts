@@ -3,6 +3,7 @@ import { V } from '../utils/maths'
 import { coordinatesConfigResolver } from './coordinatesConfigResolver'
 import { SUPPORT } from './support'
 
+export const DEFAULT_PREVENT_SCROLL_DELAY = 250
 export const DEFAULT_DRAG_DELAY = 180
 export const DEFAULT_SWIPE_VELOCITY = 0.5
 export const DEFAULT_SWIPE_DISTANCE = 50
@@ -26,8 +27,16 @@ export const dragConfigResolver = {
     if (SUPPORT.touch) return 'touch'
     return 'mouse'
   },
-  preventScroll(value = false) {
-    return value && SUPPORT.touch
+  preventScroll(
+    this: InternalDragOptions,
+    value: number | boolean = false,
+    _k: string,
+    { preventScrollAxis = 'y' }: DragConfig
+  ) {
+    if (preventScrollAxis) this.preventScrollAxis = preventScrollAxis
+    if (!SUPPORT.touch) return false
+    if (typeof value === 'number') return value
+    return value ? DEFAULT_PREVENT_SCROLL_DELAY : false
   },
   pointerCapture(this: InternalDragOptions, _v: any, _k: string, { pointer: { capture = true } = {} }) {
     return !this.pointerLock && this.device === 'pointer' && capture
