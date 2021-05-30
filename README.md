@@ -119,4 +119,4 @@ The example above makes a `div` draggable so that it follows your mouse on drag,
 | `usePinch`   | Handles the pinch gesture                  |
 | `useGesture` | Handles multiple gestures in one hook      |
 
-#### [More on the full documentation website...](https://v10--beta-use-gesture.netlify.com)
+#### [More on the full documentation website...](https://use-gesture.netlify.app)
