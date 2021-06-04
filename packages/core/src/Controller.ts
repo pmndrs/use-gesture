@@ -95,9 +95,14 @@ export class Controller {
     const eventOptions = sharedConfig.eventOptions
     const props: any = {}
 
-    const bindFunction = sharedConfig.target
-      ? bindToEventStore(this._targetEventStore, sharedConfig.target())
-      : bindToProps(props, eventOptions)
+    let target
+    if (sharedConfig.target) {
+      target = sharedConfig.target()
+      // if target is undefined let's stop
+      if (!target) return
+    }
+
+    const bindFunction = target ? bindToEventStore(this._targetEventStore, target) : bindToProps(props, eventOptions)
 
     if (sharedConfig.enabled) {
       // Adding native handlers

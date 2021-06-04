@@ -208,7 +208,10 @@ export class DragEngine extends CoordinatesEngine<'drag'> {
   }
 
   pointerClick(event: MouseEvent) {
-    if (!this.state.tap) event.stopPropagation()
+    if (!this.state.tap) {
+      event.preventDefault()
+      event.stopPropagation()
+    }
   }
 
   setupPointer(event: PointerEvent) {
