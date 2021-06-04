@@ -95,28 +95,29 @@ Here are all options that can be applied to gestures.
 
 > All options are not available to all gestures. In the table below **xy** designates coordinates-based gestures: drag, move, wheel and scroll.
 
-| Options                                         |    Gestures      | Description                                                                                                                                                                                          |
-| ----------------------------------------------- | :--------------: | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [`enabled`](#enabled)                           |     **all**      | Whether the gesture is enabled.                                                                                                                                                                      |
-| [`from`](#from)                                 |     **all**      | The initial position `offset` should start from.                                                                                                                                                     |
-| [`threshold`](#threshold)                       |     **all**      | The handler will fire only when the gesture displacement is greater than the threshold.                                                                                                              |
-| [`triggerAllEvents`](#triggerallevents)         |     **all**      | Forces the handler to fire even for non intentional displacement (ignores the `threshold`). In that case, the `intentional` attribute from state will remain `false` until the threshold is reached. |
-| [`axis`](#axis)                                 |     **all**      | Your handler will only trigger if a movement is detected on the specified axis.                                                                                                                      |
-| [`bounds`](#bounds)                             |      **xy**      | Limits the gesture `offset` to the specified bounds.                                                                                                                                                 |
-| [`scaleBounds`](#scalebounds)                   |    **pinch**     | Limits the scale `offset` to the specified bounds.                                                                                                                                                   |
-| [`angleBounds`](#anglebounds)                   |    **pinch**     | Limits the angle `offset` to the specified bounds.                                                                                                                                                   |
-| [`rubberband`](#rubberband)                     |     **all**      | The elasticity coefficient of the gesture when going out of bounds. When set to `true`, the elasticity coefficient will be defaulted to `0.15`                                                       |
-| [`transform`](#transform)                       |     **all**      | A function that you can use to transform pointer values. Useful to map your screen coordinates to custom space coordinates such as a canvas.                                                         |
-| [`filterTaps`](#filtertaps-drag-only)           |     **drag**     | If `true`, the component won't trigger your drag logic if the user just clicked on the component.                                                                                                    |
-| [`preventScroll`](#preventScroll-drag-only)     |     **drag**     | If `true`, drag will be triggered after `250ms` and will prevent window scrolling.                                                                                                                   |
-| [`pointer.touch`](#pointertouch-drag-and-pinch) |  **drag,pinch**  | If `true`, drag and pinch will use touch events on touch-enabled devices. [Read more below](#pointertouch-drag-and-pinch).                                                                           |
-| [`pointer.capture`](#pointercapture-drag-only)  |     **drag**     | If `false`, drag will not use `setPointerCapture` and attach `pointerMove` events to the window. [Read more below](#pointercapture-drag-only).                                                       |
-| [`pointer.lock`](#pointerlock-drag-only)        |     **drag**     | If `true`, the pointer will enter pointer lock mode when drag starts, and exit pointer lock when drag ends. [Read more below](#pointerlock-drag-only).                                               |
-| [`delay`](#delay-drag-only)                     |     **drag**     | If set, the handler will be delayed for the duration of the delay (in `ms`) — or if the user starts moving. When set to `true`, `delay` is defaulted to `180ms`.                                     |
-| [`swipe.distance`](#swipedistance-drag-only)    |     **drag**     | The minimum distance per axis (in `pixels`) the drag gesture needs to travel to trigger a swipe.                                                                                                     |
-| [`swipe.velocity`](#swipevelocity-drag-only)    |    **drag**      | The minimum velocity per axis (in `pixels / ms`) the drag gesture needs to reach before the pointer is released.                                                                                     |
-| [`swipe.duration`](#swipeduration-drag-only)    |    **drag**      | The maximum duration in milliseconds that a swipe is detected.                                                                                                                                       |
-| `mouseOnly`                                     | **hover, move**  | Set to `false` if you want your `hover` or `move` handlers to be triggered on non-mouse events. This is a useful option in case you want to perform logic on touch-enabled devices.                  |
+| Options                                             |    Gestures     | Description                                                                                                                                                                                          |
+| --------------------------------------------------- | :-------------: | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [`enabled`](#enabled)                               |     **all**     | Whether the gesture is enabled.                                                                                                                                                                      |
+| [`from`](#from)                                     |     **all**     | The initial position `offset` should start from.                                                                                                                                                     |
+| [`threshold`](#threshold)                           |     **all**     | The handler will fire only when the gesture displacement is greater than the threshold.                                                                                                              |
+| [`triggerAllEvents`](#triggerallevents)             |     **all**     | Forces the handler to fire even for non intentional displacement (ignores the `threshold`). In that case, the `intentional` attribute from state will remain `false` until the threshold is reached. |
+| [`axis`](#axis)                                     |     **all**     | Your handler will only trigger if a movement is detected on the specified axis.                                                                                                                      |
+| [`bounds`](#bounds)                                 |     **xy**      | Limits the gesture `offset` to the specified bounds.                                                                                                                                                 |
+| [`scaleBounds`](#scalebounds)                       |    **pinch**    | Limits the scale `offset` to the specified bounds.                                                                                                                                                   |
+| [`angleBounds`](#anglebounds)                       |    **pinch**    | Limits the angle `offset` to the specified bounds.                                                                                                                                                   |
+| [`rubberband`](#rubberband)                         |     **all**     | The elasticity coefficient of the gesture when going out of bounds. When set to `true`, the elasticity coefficient will be defaulted to `0.15`                                                       |
+| [`transform`](#transform)                           |     **all**     | A function that you can use to transform pointer values. Useful to map your screen coordinates to custom space coordinates such as a canvas.                                                         |
+| [`filterTaps`](#filtertaps-drag-only)               |    **drag**     | If `true`, the component won't trigger your drag logic if the user just clicked on the component.                                                                                                    |
+| [`preventScroll`](#preventScroll-drag-only)         |    **drag**     | If set, the drag will be triggered after the duration of the delay (in `ms`) and will prevent window scrolling. When set to `true`, `preventScroll` is defaulted to `250ms`.                         |
+| [`preventScrollAxis`](#preventScrollAxis-drag-only) |    **drag**     | If set, the drag will allow scrolling in the direction of the axis/axes unless the preventScroll duration has elapsed. Defaults to only 'y'.                                                         |
+| [`pointer.touch`](#pointertouch-drag-and-pinch)     | **drag,pinch**  | If `true`, drag and pinch will use touch events on touch-enabled devices. [Read more below](#pointertouch-drag-and-pinch).                                                                           |
+| [`pointer.capture`](#pointercapture-drag-only)      |    **drag**     | If `false`, drag will not use `setPointerCapture` and attach `pointerMove` events to the window. [Read more below](#pointercapture-drag-only).                                                       |
+| [`pointer.lock`](#pointerlock-drag-only)            |    **drag**     | If `true`, the pointer will enter pointer lock mode when drag starts, and exit pointer lock when drag ends. [Read more below](#pointerlock-drag-only).                                               |
+| [`delay`](#delay-drag-only)                         |    **drag**     | If set, the handler will be delayed for the duration of the delay (in `ms`) — or if the user starts moving. When set to `true`, `delay` is defaulted to `180ms`.                                     |
+| [`swipe.distance`](#swipedistance-drag-only)        |    **drag**     | The minimum distance per axis (in `pixels`) the drag gesture needs to travel to trigger a swipe.                                                                                                     |
+| [`swipe.velocity`](#swipevelocity-drag-only)        |    **drag**     | The minimum velocity per axis (in `pixels / ms`) the drag gesture needs to reach before the pointer is released.                                                                                     |
+| [`swipe.duration`](#swipeduration-drag-only)        |    **drag**     | The maximum duration in milliseconds that a swipe is detected.                                                                                                                                       |
+| `mouseOnly`                                         | **hover, move** | Set to `false` if you want your `hover` or `move` handlers to be triggered on non-mouse events. This is a useful option in case you want to perform logic on touch-enabled devices.                  |
 
 ## Options explained
 
@@ -440,13 +441,19 @@ function FilterTapsExample() {
 
 **This is an experimental feature, relevant for mobile devices**.
 
-`touch-action: none` is a common css property that you'll set on draggable items so that scroll doesn't interfere with the drag behavior on touch devices. However, this generally means that the scroll of the page can't be initiated from the draggable element. This is fine if your page isn't meant to be scrolled or if your draggable element is relatively small, but in case of large draggable areas this might become a usability issue.
+`touch-action: none` is a common CSS property that you'll set on draggable items so that scroll doesn't interfere with the drag behavior on touch devices. However, this generally means that the scroll of the page can't be initiated from the draggable element. This is fine if your page isn't meant to be scrolled or if your draggable element is relatively small, but in case of large draggable areas this might become a usability issue.
 
-`preventScroll` is a convenient way to have both vertical drag and vertical scrolling coexist. Note that scroll will always have precedence over drag. To drag vertically the user will have to press the draggable area for `250ms` without moving. After these `250ms` the element is draggable and scroll is prevented. Note that if you drag horizontally the scroll will immediately be prevented without waiting for `250ms`.
+`preventScroll` is a convenient way to have both vertical drag and vertical scrolling coexist. Note that scroll will always have precedence over drag. To drag vertically the user will have to press and hold the draggable area for `250ms` (or the specified duration) without moving. After this duration, the element is draggable and scrolling is prevented. Note that if you drag horizontally the scroll will immediately be prevented without waiting for this duration.
 
 <Code id="PreventScroll" />
 
-On desktop, you should be able to drag the torus as you would expect. On mobile, initiating the scroll from the torus should let you scroll the page as expected. Hold touch and drag and you should be able to drag the canvas. This might be clunky as still under test.
+On desktop, you should be able to drag the torus as you would expect without delay. On mobile, initiating scroll from the torus should let you scroll the page as expected. Hold down on the torus and you should be able to drag it after `250ms`. This might be clunky as it's still under testing.
+
+### preventScrollAxis (drag only)
+
+<Specs types={['x', 'y', 'xy']} defaultValue="y" />
+
+This can optionally be used together with `preventScroll`. This defines the axis/axes in which scrolling is permitted, unless the user taps and holds on the element for the specified duration. Afterwhich, all scrolling is blocked. Depending on the complexity of the nesting of the element, you may need to assign the property `touch-action: pan-x`, `touch-action: pan-y`, or both, to the element to allow for the correct behavior.
 
 ### pointer.touch (drag and pinch)
 
@@ -458,7 +465,7 @@ Most gestures, drag included, use [pointer events](https://developer.mozilla.org
 
 <Specs types={'boolean'} defaultValue="true" />
 
-By default, drag uses [`setPointerCapture`](https://developer.mozilla.org/en-US/docs/Web/API/Element/setPointerCapture) to track the pointer movement. When a pointer is captured by a target, it won't trigger any listener from another target (even a css `:hover`). Most of the time this is fine, but in some situations, you may want to drag an element and still receive events from another target.
+By default, drag uses [`setPointerCapture`](https://developer.mozilla.org/en-US/docs/Web/API/Element/setPointerCapture) to track the pointer movement. When a pointer is captured by a target, it won't trigger any listener from another target (even a CSS `:hover`). Most of the time this is fine, but in some situations, you may want to drag an element and still receive events from another target.
 
 <Code id="CaptureFalse" />
 

@@ -141,13 +141,13 @@ export class DragEngine extends CoordinatesEngine<'drag'> {
 
     if (config.preventScroll && !state._preventScroll) {
       if (state.axis) {
-        if (state.axis === 'x') {
-          this.timeoutStore.remove('startPointerDrag')
-          this.startPointerDrag(event)
-          return
-        } else {
+        if (state.axis === config.preventScrollAxis || config.preventScrollAxis === 'xy') {
           state._active = false
           this.clean()
+          return
+        } else {
+          this.timeoutStore.remove('startPointerDrag')
+          this.startPointerDrag(event)
           return
         }
       } else {
@@ -260,7 +260,7 @@ export class DragEngine extends CoordinatesEngine<'drag'> {
     this.eventStore.add(this.sharedConfig.window!, 'touch', 'change', this.preventScroll.bind(this), { passive: false })
     this.eventStore.add(this.sharedConfig.window!, 'touch', 'end', this.clean.bind(this), { passive: false })
     this.eventStore.add(this.sharedConfig.window!, 'touch', 'cancel', this.clean.bind(this), { passive: false })
-    this.timeoutStore.add('startPointerDrag', this.startPointerDrag.bind(this), 250, event)
+    this.timeoutStore.add('startPointerDrag', this.startPointerDrag.bind(this), this.config.preventScroll, event)
   }
 
   setupDelayTrigger(event: PointerEvent) {

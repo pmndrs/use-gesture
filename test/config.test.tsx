@@ -46,6 +46,7 @@ describe('testing derived config', () => {
 
   describe('testing drag configuration', () => {
     test(`empty config should return default drag config`, () => {
+      console.log(parse({}, 'drag'))
       expect(parse({}, 'drag').drag).toStrictEqual({
         enabled: true,
         device: 'pointer',
@@ -67,6 +68,7 @@ describe('testing derived config', () => {
         axis: undefined,
         lockDirection: false,
         preventScroll: false,
+        preventScrollAxis: 'y',
         pointerLock: false,
         pointerCapture: true,
         filterTaps: false,
