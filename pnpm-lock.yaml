@@ -149,7 +149,7 @@ importers:
       react-dom: ^17.0.2
       react-player: ^2.9.0
       react-toastify: ^7.0.3
-      sharp: 0.28.3
+      sharp: 0.28.2
       smooth-doc: 7.0.1
       three: ^0.129.0
     dependencies:
@@ -173,7 +173,7 @@ importers:
       react-dom: 17.0.2_react@17.0.2
       react-player: 2.9.0_react@17.0.2
       react-toastify: 7.0.4_react-dom@17.0.2+react@17.0.2
-      sharp: 0.28.3
+      sharp: 0.28.2
       smooth-doc: 7.0.1_3bc1a78a92807bcd38c810f3fdf5a9f1
       three: 0.129.0
 
@@ -6337,7 +6337,6 @@ packages:
   /ansi-regex/3.0.0:
     resolution: { integrity: sha1-7QMXwyIGT3lGbAKWa922Bas32Zg= }
     engines: { node: '>=4' }
-    dev: true
 
   /ansi-regex/4.1.0:
     resolution:
@@ -16051,11 +16050,6 @@ packages:
       semver: 5.7.1
     dev: false
 
-  /node-addon-api/3.2.0:
-    resolution:
-      { integrity: sha512-kcwSAWhPi4+QzAtsL2+2s/awvDo2GKLsvMCwNRxb5BUshteXU8U97NCyvQDsGKs/m0He9WcG4YWew/BnuLx++w== }
-    dev: false
-
   /node-addon-api/3.2.1:
     resolution:
       { integrity: sha512-mmcei9JghVNDYydghQmeDX8KoAm0FAiYyIcUt/N4nhyAipB17pllZQDOJD2fotxABnt4Mdz+dKTO7eftLg4d0A== }
@@ -16136,10 +16130,6 @@ packages:
     dependencies:
       inherits: 2.0.4
       readable-stream: 1.0.34
-    dev: false
-
-  /noop-logger/0.1.1:
-    resolution: { integrity: sha1-lKKxYzxPExdVMAfYlm/Q6EG2pMI= }
     dev: false
 
   /normalize-package-data/2.5.0:
@@ -17749,28 +17739,6 @@ packages:
       { integrity: sha512-V9hI7UMJyEhNZjM8CbZaP/804ZRLgzWkCS9OOYnEZkszzj3zKR/erRdj0uFMcN3pp6x4B+AIZebmkQgGRinG/g== }
     dependencies:
       jimp: 0.14.0
-    dev: false
-
-  /prebuild-install/6.1.2:
-    resolution:
-      { integrity: sha512-PzYWIKZeP+967WuKYXlTOhYBgGOvTRSfaKI89XnfJ0ansRAH7hDU45X+K+FZeI1Wb/7p/NnuctPH3g0IqKUuSQ== }
-    engines: { node: '>=6' }
-    hasBin: true
-    dependencies:
-      detect-libc: 1.0.3
-      expand-template: 2.0.3
-      github-from-package: 0.0.0
-      minimist: 1.2.5
-      mkdirp-classic: 0.5.3
-      napi-build-utils: 1.0.2
-      node-abi: 2.30.0
-      noop-logger: 0.1.1
-      npmlog: 4.1.2
-      pump: 3.0.0
-      rc: 1.2.8
-      simple-get: 3.1.0
-      tar-fs: 2.1.1
-      tunnel-agent: 0.6.0
     dev: false
 
   /prebuild-install/6.1.3:
@@ -19420,22 +19388,6 @@ packages:
     dependencies:
       color: 3.1.3
       detect-libc: 1.0.3
-      node-addon-api: 3.2.0
-      prebuild-install: 6.1.2
-      semver: 7.3.5
-      simple-get: 3.1.0
-      tar-fs: 2.1.1
-      tunnel-agent: 0.6.0
-    dev: false
-
-  /sharp/0.28.3:
-    resolution:
-      { integrity: sha512-21GEP45Rmr7q2qcmdnjDkNP04Ooh5v0laGS5FDpojOO84D1DJwUijLiSq8XNNM6e8aGXYtoYRh3sVNdm8NodMA== }
-    engines: { node: '>=10' }
-    requiresBuild: true
-    dependencies:
-      color: 3.1.3
-      detect-libc: 1.0.3
       node-addon-api: 3.2.1
       prebuild-install: 6.1.3
       semver: 7.3.5
@@ -20105,7 +20057,6 @@ packages:
     dependencies:
       is-fullwidth-code-point: 2.0.0
       strip-ansi: 4.0.0
-    dev: true
 
   /string-width/3.1.0:
     resolution:
@@ -20205,7 +20156,6 @@ packages:
     engines: { node: '>=4' }
     dependencies:
       ansi-regex: 3.0.0
-    dev: true
 
   /strip-ansi/5.2.0:
     resolution:
@@ -22227,7 +22177,7 @@ packages:
     resolution:
       { integrity: sha512-QGkOQc8XL6Bt5PwnsExKBPuMKBxnGxWWW3fU55Xt4feHozMUhdUMaBCk290qpm/wG5u/RSKzwdAC4i51YigihA== }
     dependencies:
-      string-width: 1.0.2
+      string-width: 2.1.1
     dev: false
 
   /widest-line/2.0.1:
