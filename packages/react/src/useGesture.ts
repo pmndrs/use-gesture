@@ -1,21 +1,6 @@
-import {
-  registerEngine,
-  DragEngine,
-  PinchEngine,
-  ScrollEngine,
-  WheelEngine,
-  MoveEngine,
-  HoverEngine,
-  dragConfigResolver,
-  pinchConfigResolver,
-  moveConfigResolver,
-  scrollConfigResolver,
-  wheelConfigResolver,
-  hoverConfigResolver,
-  parseMergedHandlers
-} from '@use-gesture/core'
+import { dragAction, pinchAction, scrollAction, wheelAction, moveAction, hoverAction } from '@use-gesture/core/actions'
 import { GestureHandlers, UserGestureConfig } from '@use-gesture/core/types'
-import { useRecognizers } from './useRecognizers'
+import { createUseGesture } from './createUseGesture'
 
 /**
  * @public
@@ -26,16 +11,9 @@ import { useRecognizers } from './useRecognizers'
  * @param {UseGestureConfig} [config={}] - the full config object
  */
 export function useGesture<Config extends UserGestureConfig = UserGestureConfig>(
-  _handlers: GestureHandlers,
-  _config: Config | {} = {}
+  handlers: GestureHandlers,
+  config: Config | {} = {}
 ) {
-  registerEngine('drag', DragEngine, dragConfigResolver)
-  registerEngine('pinch', PinchEngine, pinchConfigResolver)
-  registerEngine('scroll', ScrollEngine, scrollConfigResolver)
-  registerEngine('wheel', WheelEngine, wheelConfigResolver)
-  registerEngine('move', MoveEngine, moveConfigResolver)
-  registerEngine('hover', HoverEngine, hoverConfigResolver)
-
-  const { handlers, nativeHandlers, config } = parseMergedHandlers(_handlers, _config)
-  return useRecognizers<Config>(handlers, config, undefined, nativeHandlers)
+  const hook = createUseGesture([dragAction, pinchAction, scrollAction, wheelAction, moveAction, hoverAction])
+  return hook(handlers, config)
 }

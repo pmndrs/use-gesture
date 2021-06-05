@@ -8,3 +8,4 @@ export { Gesture } from './Gesture'
 
 export * from '@use-gesture/core/utils'
 export * from '@use-gesture/core/types'
+export * from '@use-gesture/core/actions'

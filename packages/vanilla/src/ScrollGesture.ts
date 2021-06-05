@@ -1,4 +1,4 @@
-import { registerEngine, ScrollEngine, scrollConfigResolver } from '@use-gesture/core'
+import { registerAction, scrollAction } from '@use-gesture/core/actions'
 import { UserScrollConfig, Handler, EventTypes } from '@use-gesture/core/types'
 import { Recognizer } from './Recognizer'
 
@@ -13,10 +13,10 @@ interface ScrollGestureConstructor {
 export interface ScrollGesture extends Recognizer {}
 
 export const ScrollGesture: ScrollGestureConstructor = function <EventType = EventTypes['scroll']>(
-  target: Element,
+  target: EventTarget,
   handler: Handler<'scroll', EventType>,
   config: UserScrollConfig | {} = {}
 ) {
-  registerEngine('scroll', ScrollEngine, scrollConfigResolver)
+  registerAction(scrollAction)
   return new Recognizer(target, { scroll: handler }, config, 'scroll')
 } as any

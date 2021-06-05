@@ -1,4 +1,4 @@
-import { registerEngine, HoverEngine, hoverConfigResolver } from '@use-gesture/core'
+import { registerAction, hoverAction } from '@use-gesture/core/actions'
 import { EventTypes, UserHoverConfig, Handler } from '@use-gesture/core/types'
 import { Recognizer } from './Recognizer'
 
@@ -13,10 +13,10 @@ interface HoverGestureConstructor {
 export interface HoverGesture extends Recognizer {}
 
 export const HoverGesture: HoverGestureConstructor = function <EventType = EventTypes['hover']>(
-  target: Element,
+  target: EventTarget,
   handler: Handler<'hover', EventType>,
   config: UserHoverConfig | {} = {}
 ) {
-  registerEngine('hover', HoverEngine, hoverConfigResolver)
+  registerAction(hoverAction)
   return new Recognizer(target, { hover: handler }, config, 'hover')
 } as any

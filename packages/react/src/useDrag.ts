@@ -1,4 +1,4 @@
-import { registerEngine, DragEngine, dragConfigResolver } from '@use-gesture/core'
+import { registerAction, dragAction } from '@use-gesture/core/actions'
 import { EventTypes, Handler, UserDragConfig } from '@use-gesture/core/types'
 import { useRecognizers } from './useRecognizers'
 
@@ -12,6 +12,6 @@ export function useDrag<EventType = EventTypes['drag'], Config extends UserDragC
   handler: Handler<'drag', EventType>,
   config: Config | {} = {}
 ) {
-  registerEngine('drag', DragEngine, dragConfigResolver)
+  registerAction(dragAction)
   return useRecognizers({ drag: handler }, config, 'drag')
 }

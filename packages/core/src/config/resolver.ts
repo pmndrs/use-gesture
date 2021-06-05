@@ -1,5 +1,5 @@
 import { sharedConfigResolver } from './sharedConfigResolver'
-import { ConfigResolverMap } from '../imports'
+import { ConfigResolverMap } from '../actions'
 import { GestureKey, InternalConfig, UserGestureConfig } from '../types'
 
 export type Resolver = (x: any, key: string, obj: any) => any

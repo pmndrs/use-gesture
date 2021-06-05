@@ -1,7 +1,7 @@
 import { parse } from '../packages/core/src/config/resolver'
 import { dragConfigResolver } from '../packages/core/src/config/dragConfigResolver'
 import { pinchConfigResolver } from '../packages/core/src/config/pinchConfigResolver'
-import { ConfigResolverMap } from '../packages/core/src/imports'
+import { ConfigResolverMap } from '../packages/core/src/actions'
 import { DragConfig, PinchConfig } from '../packages/core/src/types'
 import { identity } from '../packages/core/src/config/sharedConfigResolver'
 
@@ -46,7 +46,6 @@ describe('testing derived config', () => {
 
   describe('testing drag configuration', () => {
     test(`empty config should return default drag config`, () => {
-      console.log(parse({}, 'drag'))
       expect(parse({}, 'drag').drag).toStrictEqual({
         enabled: true,
         device: 'pointer',

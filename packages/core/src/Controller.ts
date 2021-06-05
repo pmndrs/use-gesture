@@ -1,4 +1,4 @@
-import { EngineMap } from './imports'
+import { EngineMap } from './actions'
 import { parse } from './config/resolver'
 import { isTouch, toReactHandlerProp, touchIds } from './utils/events'
 import { EventStore } from './EventStore'
