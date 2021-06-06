@@ -39,6 +39,13 @@ export function parse(config: UserGestureConfig, gestureKey?: GestureKey): Inter
   } else {
     for (const key in rest) {
       const resolver = ConfigResolverMap.get(key as GestureKey)!
+      if (process.env.NODE_ENV === 'development') {
+        if (!resolver)
+          // eslint-disable-next-line no-console
+          console.warn(
+            `[@use-gesture]: You've created a custom handler that that uses the \`${key}\` gesture but isn't properly configured.\n\nPlease add \`${key}Action\` when creating your handler.`
+          )
+      }
       _config[key] = resolveWith({ shared: _config.shared, ...rest[key] }, resolver)
     }
   }

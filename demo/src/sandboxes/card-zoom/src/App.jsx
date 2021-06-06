@@ -1,11 +1,13 @@
 import React from 'react'
 import { useSpring, animated } from '@react-spring/web'
-import { useGesture } from '@use-gesture/react'
+import { createUseGesture, dragAction, pinchAction } from '@use-gesture/react'
 
 import styles from './styles.module.css'
 
 document.addEventListener('gesturestart', e => e.preventDefault())
 document.addEventListener('gesturechange', e => e.preventDefault())
+
+const useGesture = createUseGesture([dragAction, pinchAction])
 
 export default function App() {
   const [style, api] = useSpring(() => ({
@@ -18,7 +20,7 @@ export default function App() {
 
   useGesture(
     {
-      onHover: ({ active, event }) => console.log('hover', event, active),
+      // onHover: ({ active, event }) => console.log('hover', event, active),
       // onMove: ({ event }) => console.log('move', event),
       onDrag: ({ pinching, cancel, offset: [x, y], ...rest }) => {
         if (pinching) return cancel()
