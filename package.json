@@ -31,7 +31,7 @@
   "size-limit": [
     {
       "name": "@use-gesture/core",
-      "path": "packages/core/dist/use-gesture-core.esm.js",
+      "path": "packages/core/dist/*.esm.js",
       "limit": "8 KB"
     },
     {
