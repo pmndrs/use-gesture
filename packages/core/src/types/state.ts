@@ -152,6 +152,10 @@ export type CommonGestureState = {
    */
   elapsedTime: number
   /**
+   * Event type.
+   */
+  type: string
+  /**
    * Value returned by your handler on its previous run.
    */
   memo?: any

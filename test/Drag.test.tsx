@@ -1,6 +1,6 @@
 import React from 'react'
 import { render, cleanup, fireEvent, createEvent, waitFor } from '@testing-library/react'
-import { patchCreateEvent } from './utils'
+import { later, patchCreateEvent } from './utils'
 import '@testing-library/jest-dom/extend-expect'
 import Interactive from './components/Interactive'
 import InteractiveDom from './components/InteractiveDom'
@@ -153,7 +153,8 @@ describe.each([
     expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('false')
   })
 
-  test(`applying a threshold should allow the gesture to start when it's reached`, () => {
+  test(`applying a threshold should allow the gesture to start when it's reached`, async () => {
+    await later()
     fireEvent.pointerMove(element, { pointerId: 8, clientX: 12, clientY: 12, buttons: 1 })
     expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('true')
     expect(getByTestId(`${prefix}drag-movement`)).toHaveTextContent('2,2')

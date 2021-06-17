@@ -1,4 +1,4 @@
-export const later = (delay: number) => new Promise((resolve) => setTimeout(resolve, delay))
+export const later = (delay: number = 10) => new Promise((resolve) => setTimeout(resolve, delay))
 
 export function patchCreateEvent(createEvent: any) {
   // patching createEvent

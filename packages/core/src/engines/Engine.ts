@@ -183,6 +183,7 @@ export abstract class Engine<Key extends GestureKey> {
     if (event) {
       // sets the shared state with event properties
       state.event = event
+      state.type = event.type
       shared.touches = this.ctrl.pointerIds.size || this.ctrl.touchIds.size
       shared.locked = !!document.pointerLockElement
       Object.assign(shared, getEventDetails(event))
