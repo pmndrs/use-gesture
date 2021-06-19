@@ -21,6 +21,8 @@ function restrictVectorToAxis(v: Vector2, axis?: 'x' | 'y') {
 }
 
 export abstract class CoordinatesEngine<Key extends CoordinatesKey> extends Engine<Key> {
+  aliasKey = 'xy'
+
   reset() {
     super.reset()
     this.state.axis = undefined
@@ -37,8 +39,6 @@ export abstract class CoordinatesEngine<Key extends CoordinatesKey> extends Engi
 
   computeMovement() {
     this.state.movement = V.sub(this.state.offset, this.state.lastOffset)
-    // let's take profit from this function to set `values` alias to `xy`
-    this.state.xy = this.state.values
   }
 
   intent(v: Vector2) {

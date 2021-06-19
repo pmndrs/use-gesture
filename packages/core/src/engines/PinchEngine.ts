@@ -7,7 +7,8 @@ const SCALE_ANGLE_RATIO_INTENT_DEG = 30
 const PINCH_WHEEL_RATIO = 60
 
 export class PinchEngine extends Engine<'pinch'> {
-  readonly ingKey = 'pinching' as const
+  ingKey = 'pinching' as const
+  aliasKey = 'da'
 
   init() {
     this.state.offset = [1, 0]
@@ -33,8 +34,6 @@ export class PinchEngine extends Engine<'pinch'> {
   computeMovement() {
     const { offset, lastOffset } = this.state
     this.state.movement = [offset[0] / lastOffset[0] - 1, offset[1] - lastOffset[1]]
-    // let's take profit from this function to set `values` alias to `xy`
-    this.state.da = this.state.values
   }
 
   intent(v: Vector2) {

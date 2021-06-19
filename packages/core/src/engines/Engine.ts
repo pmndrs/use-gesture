@@ -42,6 +42,12 @@ export abstract class Engine<Key extends GestureKey> {
   /**
    * The arguments passed to the `bind` function.
    */
+
+  /**
+   * State prop that aliases state values (`xy` or `da`).
+   */
+  abstract readonly aliasKey: string
+
   args: any[]
 
   constructor(ctrl: Controller, args: any[], key: Key) {
@@ -278,7 +284,7 @@ export abstract class Engine<Key extends GestureKey> {
     if ((state._blocked || !state.intentional) && !state._force && !config.triggerAllEvents) return
 
     // @ts-ignore
-    const memo = this.handler({ ...shared, ...state })
+    const memo = this.handler({ ...shared, ...state, [this.aliasKey]: state.values })
 
     // Sets memo to the returned value of the handler (unless it's  undefined)
     if (memo !== undefined) state.memo = memo

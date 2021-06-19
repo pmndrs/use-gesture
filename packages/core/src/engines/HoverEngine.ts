@@ -16,8 +16,10 @@ export class HoverEngine extends CoordinatesEngine<'hover'> {
 
   leave(event: PointerEvent) {
     if (this.config.mouseOnly && event.pointerType !== 'mouse') return
+
     const state = this.state
     if (!state._active) return
+
     state._active = false
     const values = pointerValues(event)
     state._movement = state._delta = V.sub(values, state.values)
