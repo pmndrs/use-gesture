@@ -105,6 +105,15 @@ export class Controller {
     const bindFunction = target ? bindToEventStore(this._targetEventStore, target) : bindToProps(props, eventOptions)
 
     if (sharedConfig.enabled) {
+      // Adding gesture handlers
+      for (const gestureKey of this.gestures) {
+        if (this.config[gestureKey]!.enabled) {
+          const Engine = EngineMap.get(gestureKey)!
+          // @ts-ignore
+          new Engine(this, args, gestureKey).bind(bindFunction)
+        }
+      }
+
       // Adding native handlers
       for (const eventKey in this.nativeHandlers) {
         bindFunction(
@@ -115,15 +124,6 @@ export class Controller {
           undefined,
           true
         )
-      }
-
-      // Adding gesture handlers
-      for (const gestureKey of this.gestures) {
-        if (this.config[gestureKey]!.enabled) {
-          const Engine = EngineMap.get(gestureKey)!
-          // @ts-ignore
-          new Engine(this, args, gestureKey).bind(bindFunction)
-        }
       }
     }
 
@@ -145,12 +145,15 @@ function setupGesture(ctrl: Controller, gestureKey: GestureKey) {
 }
 
 function resolveGestures(ctrl: Controller, internalHandlers: InternalHandlers) {
+  // make sure hover handlers are added first to prevent bugs such as #322
+  // where the hover pointerLeave handler is removed before the move
+  // pointerLeave, which prevents hovering: false to be fired.
+  if (internalHandlers.hover) setupGesture(ctrl, 'hover')
   if (internalHandlers.drag) setupGesture(ctrl, 'drag')
   if (internalHandlers.wheel) setupGesture(ctrl, 'wheel')
   if (internalHandlers.scroll) setupGesture(ctrl, 'scroll')
   if (internalHandlers.move) setupGesture(ctrl, 'move')
   if (internalHandlers.pinch) setupGesture(ctrl, 'pinch')
-  if (internalHandlers.hover) setupGesture(ctrl, 'hover')
 }
 
 const bindToEventStore =
