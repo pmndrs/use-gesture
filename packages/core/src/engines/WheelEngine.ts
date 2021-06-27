@@ -18,7 +18,9 @@ export class WheelEngine extends CoordinatesEngine<'wheel'> {
   }
 
   wheelChange(event: WheelEvent) {
-    if (event.cancelable) event.preventDefault()
+    try {
+      if (event.cancelable) event.preventDefault()
+    } catch {}
     const state = this.state
     state._delta = wheelValues(event)
     V.addTo(this.state._movement, state._delta)
