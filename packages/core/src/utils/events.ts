@@ -29,7 +29,9 @@ export function isTouch(event: UIEvent) {
 }
 
 function getCurrentTargetTouchList(event: TouchEvent) {
-  return Array.from(event.touches).filter((e) => (event.currentTarget as Node)?.contains(e.target as Node))
+  return Array.from(event.touches).filter(
+    (e) => e.target === event.currentTarget || (event.currentTarget as Node)?.contains?.(e.target as Node)
+  )
 }
 
 function getTouchList(event: TouchEvent) {
