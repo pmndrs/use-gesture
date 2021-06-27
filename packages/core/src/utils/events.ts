@@ -103,7 +103,7 @@ export function getEventDetails(event: any) {
   if ('buttons' in event) payload.buttons = event.buttons
   if ('shiftKey' in event) {
     const { shiftKey, altKey, metaKey, ctrlKey } = event
-    Object.assign({ shiftKey, altKey, metaKey, ctrlKey })
+    Object.assign(payload, { shiftKey, altKey, metaKey, ctrlKey })
   }
   return payload
 }
