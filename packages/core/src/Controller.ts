@@ -145,7 +145,7 @@ export class Controller {
       const capture = !!~eventKey.indexOf('capture')
       const passive = !!~eventKey.indexOf('passive')
       // pointermovecapture => pointermove
-      if (capture || passive) eventKey = eventKey.replace(/capture|passive/, '')
+      if (capture || passive) eventKey = eventKey.replace(/capture|passive/g, '')
       this._targetEventStore.add(target, eventKey, '', props[handlerProp], { capture, passive })
     }
   }
