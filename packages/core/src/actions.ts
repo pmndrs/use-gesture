@@ -1,4 +1,4 @@
-import { GestureKey, EngineClass, Action } from '../types'
+import { GestureKey, EngineClass, Action } from './types'
 import { ResolverMap } from './config/resolver'
 
 import { DragEngine } from './engines/DragEngine'
