@@ -16,7 +16,7 @@ export class EventStore {
     options?: AddEventListenerOptions
   ) {
     const type = toDomEventType(device, action)
-    const eventOptions = options || this._ctrl.config.shared.eventOptions
+    const eventOptions = { ...this._ctrl.config.shared.eventOptions, ...options }
     element.addEventListener(type, handler, eventOptions)
     this._listeners.push(() => element.removeEventListener(type, handler, eventOptions))
   }

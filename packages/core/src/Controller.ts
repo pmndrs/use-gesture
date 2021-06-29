@@ -1,6 +1,6 @@
 import { EngineMap } from './actions'
 import { parse } from './config/resolver'
-import { isTouch, toReactHandlerProp, touchIds } from './utils/events'
+import { isTouch, toHandlerProp, touchIds } from './utils/events'
 import { EventStore } from './EventStore'
 import { TimeoutStore } from './TimeoutStore'
 import { chain } from './utils/fn'
@@ -102,7 +102,7 @@ export class Controller {
       if (!target) return
     }
 
-    const bindFunction = target ? bindToEventStore(this._targetEventStore, target) : bindToProps(props, eventOptions)
+    const bindFunction = bindToProps(props, eventOptions, !!target)
 
     if (sharedConfig.enabled) {
       // Adding gesture handlers
@@ -129,11 +129,24 @@ export class Controller {
 
     // If target isn't set, we return an object that contains gesture handlers
     // mapped to props handler event keys.
-    if (!sharedConfig.target) {
-      for (const handlerProp in props) {
-        props[handlerProp] = chain(...props[handlerProp])
-      }
-      return props
+    for (const handlerProp in props) {
+      props[handlerProp] = chain(...props[handlerProp])
+    }
+
+    // When target isn't specified then return hanlder props.
+    if (!target) return props
+
+    // When target is specified, then add listeners to the controller target
+    // store.
+    for (const handlerProp in props) {
+      // onPointerMoveCapture => pointermovecapture
+      let eventKey = handlerProp.substr(2).toLowerCase()
+      // capture = true
+      const capture = !!~eventKey.indexOf('capture')
+      const passive = !!~eventKey.indexOf('passive')
+      // pointermovecapture => pointermove
+      if (capture || passive) eventKey = eventKey.replace(/capture|passive/, '')
+      this._targetEventStore.add(target, eventKey, '', props[handlerProp], { capture, passive })
     }
   }
 }
@@ -148,29 +161,16 @@ function resolveGestures(ctrl: Controller, internalHandlers: InternalHandlers) {
   // make sure hover handlers are added first to prevent bugs such as #322
   // where the hover pointerLeave handler is removed before the move
   // pointerLeave, which prevents hovering: false to be fired.
-  if (internalHandlers.hover) setupGesture(ctrl, 'hover')
   if (internalHandlers.drag) setupGesture(ctrl, 'drag')
   if (internalHandlers.wheel) setupGesture(ctrl, 'wheel')
   if (internalHandlers.scroll) setupGesture(ctrl, 'scroll')
   if (internalHandlers.move) setupGesture(ctrl, 'move')
   if (internalHandlers.pinch) setupGesture(ctrl, 'pinch')
+  if (internalHandlers.hover) setupGesture(ctrl, 'hover')
 }
 
-const bindToEventStore =
-  (eventStore: EventStore, target: EventTarget) =>
-  (
-    device: string,
-    action: string,
-    handler: (event: any) => void,
-    options?: AddEventListenerOptions,
-    isNative = false
-  ) => {
-    if (isNative) device = device.slice(2).toLowerCase() // transforms onMouseDown into mousedown
-    eventStore.add(target, device, action, handler, options)
-  }
-
 const bindToProps =
-  (props: any, eventOptions: AddEventListenerOptions) =>
+  (props: any, eventOptions: AddEventListenerOptions, withPassiveOption: boolean) =>
   (
     device: string,
     action: string,
@@ -179,8 +179,10 @@ const bindToProps =
     isNative = false
   ) => {
     const capture = options.capture ?? eventOptions.capture
+    const passive = options.passive ?? eventOptions.passive
     // a native handler is already passed as a prop like "onMouseDown"
-    const handlerProp = isNative ? device : toReactHandlerProp(device, action, capture)
+    let handlerProp = isNative ? device : toHandlerProp(device, action, capture)
+    if (withPassiveOption && passive) handlerProp += 'Passive'
     props[handlerProp] = props[handlerProp] || []
     props[handlerProp].push(handler)
   }
