@@ -9,7 +9,7 @@
     "serve": "gatsby serve"
   },
   "dependencies": {
-    "@reach/tabs": "^0.15.0",
+    "@reach/tabs": "^0.15.2",
     "@react-spring/three": "^9.2.3",
     "@react-spring/web": "^9.2.3",
     "@react-three/drei": "^4.1.6",
@@ -22,7 +22,7 @@
     "gatsby-plugin-google-analytics": "^3.6.0",
     "gatsby-plugin-pnpm": "^1.2.6",
     "lethargy": "^1.0.9",
-    "leva": "^0.9.12",
+    "leva": "^0.9.13",
     "mdx-observable": "^0.2.0",
     "parse-numeric-range": "^1.2.0",
     "react": "^17.0.2",
