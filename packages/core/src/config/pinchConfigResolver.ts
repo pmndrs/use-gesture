@@ -15,8 +15,10 @@ export const pinchConfigResolver = {
     const sharedConfig = config.shared
     if (sharedConfig.target && !SUPPORT.touch && SUPPORT.gesture) return 'gesture'
     if (this.useTouch) return 'touch'
-    if (SUPPORT.touch && SUPPORT.pointer) return 'pointer'
-    if (SUPPORT.touch) return 'touch'
+    if (SUPPORT.touchscreen) {
+      if (SUPPORT.pointer) return 'pointer'
+      if (SUPPORT.touch) return 'touch'
+    }
     // device is undefined and that's ok, we're going to use wheel to zoom.
   },
   bounds(_v: any, _k: string, { scaleBounds = {}, angleBounds = {} }: PinchConfig) {

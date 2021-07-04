@@ -4,6 +4,10 @@ function supportsTouchEvents(): boolean {
   return isBrowser && 'ontouchstart' in window
 }
 
+function isTouchScreen(): boolean {
+  return supportsTouchEvents() || (isBrowser && navigator.maxTouchPoints > 1)
+}
+
 function supportsPointerEvents(): boolean {
   return isBrowser && 'onpointerdown' in window
 }
@@ -26,6 +30,7 @@ export const SUPPORT = {
   isBrowser,
   gesture: supportsGestureEvents(),
   touch: supportsTouchEvents(),
+  touchscreen: isTouchScreen(),
   pointer: supportsPointerEvents(),
   pointerLock: supportsPointerLock()
 }

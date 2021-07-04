@@ -34,7 +34,7 @@ export const dragConfigResolver = {
     { preventScrollAxis = 'y' }: DragConfig
   ) {
     if (preventScrollAxis) this.preventScrollAxis = preventScrollAxis
-    if (!SUPPORT.touch) return false
+    if (!SUPPORT.touchscreen) return false
     if (typeof value === 'number') return value
     return value ? DEFAULT_PREVENT_SCROLL_DELAY : false
   },
