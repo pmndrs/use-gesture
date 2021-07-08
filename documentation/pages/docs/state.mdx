@@ -21,41 +21,43 @@ With the exception of `xy`, `cancel` and `canceled` all the attributes below are
 ```jsx
 const bind = useXXXX(state => {
   const {
-    event,       // the source event
-    xy,          // [x,y] values (pointer position or scroll offset)
-    initial,     // xy value when the gesture started
-    intentional, // is the gesture intentional
-    delta,       // movement delta (movement - previous movement)
-    offset,      // offset since the first gesture
-    lastOffset,  // offset when the last gesture started
-    movement,    // displacement between offset and lastOffset
-    velocity,    // momentum of the gesture per axis
-    distance,    // offset distance per axis
-    direction,   // direction per axis
-    startTime,   // gesture start time
-    elapsedTime, // gesture elapsed time
-    type,        // gesture type
-    timeStamp,   // timestamp of the event
-    first,       // true when it's the first event
-    last,        // true when it's the last event
-    active,      // true when the gesture is active
-    memo,        // value returned by your handler on its previous run
-    cancel,      // function you can call to interrupt some gestures
-    canceled,    // whether the gesture was canceled (drag and pinch)
-    down,        // true when a mouse button or touch is down
-    buttons,     // number of buttons pressed
-    touches,     // number of fingers touching the screen
-    args,        // arguments you passed to bind (React only)
-    ctrlKey,     // true when control key is pressed
-    altKey,      // "      "  alt     "      "
-    shiftKey,    // "      "  shift   "      "
-    metaKey,     // "      "  meta    "      "
-    locked,      // whether document.pointerLockElement is set
-    dragging,    // is the component currently being dragged
-    moving,      // "              "              "  moved
-    scrolling,   // "              "              "  scrolled
-    wheeling,    // "              "              "  wheeled
-    pinching     // "              "              "  pinched
+    event,         // the source event
+    xy,            // [x,y] values (pointer position or scroll offset)
+    initial,       // xy value when the gesture started
+    intentional,   // is the gesture intentional
+    delta,         // movement delta (movement - previous movement)
+    offset,        // offset since the first gesture
+    lastOffset,    // offset when the last gesture started
+    movement,      // displacement between offset and lastOffset
+    velocity,      // momentum of the gesture per axis
+    distance,      // offset distance per axis
+    direction,     // direction per axis
+    startTime,     // gesture start time
+    elapsedTime,   // gesture elapsed time
+    type,          // event type
+    target,        // event target
+    currentTarget, // event currentTarget
+    timeStamp,     // timestamp of the event
+    first,         // true when it's the first event
+    last,          // true when it's the last event
+    active,        // true when the gesture is active
+    memo,          // value returned by your handler on its previous run
+    cancel,        // function you can call to interrupt some gestures
+    canceled,      // whether the gesture was canceled (drag and pinch)
+    down,          // true when a mouse button or touch is down
+    buttons,       // number of buttons pressed
+    touches,       // number of fingers touching the screen
+    args,          // arguments you passed to bind (React only)
+    ctrlKey,       // true when control key is pressed
+    altKey,        // "      "  alt     "      "
+    shiftKey,      // "      "  shift   "      "
+    metaKey,       // "      "  meta    "      "
+    locked,        // whether document.pointerLockElement is set
+    dragging,      // is the component currently being dragged
+    moving,        // "              "              "  moved
+    scrolling,     // "              "              "  scrolled
+    wheeling,      // "              "              "  wheeled
+    pinching       // "              "              "  pinched
   } = state
 })
 ```
@@ -68,9 +70,9 @@ The state attributes for **pinch** include all of the above (with the exception 
 ```jsx
 const bind = usePinch(state => {
   const {
-    da,          // [d,a] absolute distance and angle of the two pointers
-    origin,      // coordinates of the center between the two touch event
-    offset,      // [scale, angle] offsets (starts withs scale=1)
+    da,            // [d,a] absolute distance and angle of the two pointers
+    origin,        // coordinates of the center between the two touch event
+    offset,        // [scale, angle] offsets (starts withs scale=1)
   } = state
 })
 ```
@@ -83,8 +85,8 @@ The **drag** gesture state adds a few attributes which can help you understand t
 ```jsx
 const bind = useDrag(state => {
   const {
-    swipe,     // [swipeX, swipeY] 0 if no swipe detected, -1 or 1 otherwise
-    tap,       // is the drag assimilated to a tap
+    swipe,         // [swipeX, swipeY] 0 if no swipe detected, -1 or 1 otherwise
+    tap,           // is the drag assimilated to a tap
   } = state
 })
 ```

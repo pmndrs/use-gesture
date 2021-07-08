@@ -81,9 +81,13 @@ export type CommonGestureState = {
    */
   event: UIEvent
   /**
-   * The event current target.
+   * The event target.
    */
   target: EventTarget
+  /**
+   * The event current target.
+   */
+  currentTarget: EventTarget
   /**
    * True when the gesture is intentional (passed the threshold).
    */

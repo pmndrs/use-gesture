@@ -169,7 +169,8 @@ export abstract class Engine<Key extends GestureKey> {
     if (!state._active) {
       this.reset()
       state._active = true
-      state.target = event.currentTarget!
+      state.target = event.target!
+      state.currentTarget = event.currentTarget!
       state.initial = state.values
       state.lastOffset = config.from ? call(config.from, state) : state.offset
       state.offset = state.lastOffset
