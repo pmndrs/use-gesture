@@ -1,4 +1,5 @@
 import { FullGestureState, GestureHandlers, GestureKey, InternalHandlers, UserGestureConfig } from './types'
+import { EngineMap } from './actions'
 
 const RE_NOT_NATIVE = /^on(Drag|Wheel|Scroll|Move|Pinch|Hover)/
 
@@ -32,6 +33,16 @@ function registerGesture(
   config: any
 ) {
   if (!actions.has(handlerKey)) return
+
+  if (!EngineMap.has(key)) {
+    if (process.env.NODE_ENV === 'development') {
+      // eslint-disable-next-line no-console
+      console.warn(
+        `[@use-gesture]: You've created a custom handler that that uses the \`${key}\` gesture but isn't properly configured.\n\nPlease add \`${key}Action\` when creating your handler.`
+      )
+    }
+    return
+  }
 
   const startKey = handlerKey + 'Start'
   const endKey = handlerKey + 'End'

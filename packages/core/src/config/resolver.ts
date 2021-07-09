@@ -39,14 +39,20 @@ export function parse(config: UserGestureConfig, gestureKey?: GestureKey): Inter
   } else {
     for (const key in rest) {
       const resolver = ConfigResolverMap.get(key as GestureKey)!
-      if (process.env.NODE_ENV === 'development') {
-        if (!resolver)
+
+      if (resolver) {
+        _config[key] = resolveWith({ shared: _config.shared, ...rest[key] }, resolver)
+      } else if (process.env.NODE_ENV === 'development') {
+        if (!['drag', 'pinch', 'scroll', 'wheel', 'move', 'hover'].includes(key)) {
+          if (key === 'domTarget') {
+            throw Error(`[@use-gesture]: \`domTarget\` option has been renamed to \`target\`.`)
+          }
           // eslint-disable-next-line no-console
           console.warn(
-            `[@use-gesture]: You've created a custom handler that that uses the \`${key}\` gesture but isn't properly configured.\n\nPlease add \`${key}Action\` when creating your handler.`
+            `[@use-gesture]: Unknown config key \`${key}\` was used. Please read the documentation for further information.`
           )
+        }
       }
-      _config[key] = resolveWith({ shared: _config.shared, ...rest[key] }, resolver)
     }
   }
   return _config
