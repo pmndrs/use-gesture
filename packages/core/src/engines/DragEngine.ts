@@ -77,7 +77,7 @@ export class DragEngine extends CoordinatesEngine<'drag'> {
     // We need to capture all pointer ids so that we can keep track of them when
     // they're released off the target
     if (this.config.pointerCapture) {
-      ;(event.currentTarget as HTMLElement).setPointerCapture(event.pointerId)
+      ;(event.target as HTMLElement).setPointerCapture(event.pointerId)
     }
 
     const state = this.state
@@ -167,8 +167,8 @@ export class DragEngine extends CoordinatesEngine<'drag'> {
     this.ctrl.setEventIds(event)
     // We release the pointer id if it has pointer capture
     try {
-      if (this.config.pointerCapture && (event.currentTarget as HTMLElement).hasPointerCapture(event.pointerId)) {
-        ;(event.currentTarget as HTMLElement).releasePointerCapture(event.pointerId)
+      if (this.config.pointerCapture && (event.target as HTMLElement).hasPointerCapture(event.pointerId)) {
+        ;(event.target as HTMLElement).releasePointerCapture(event.pointerId)
       }
     } catch {
       if (process.env.NODE_ENV === 'development') {
