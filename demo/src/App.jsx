@@ -16,6 +16,7 @@ import ThreePreventScroll from './sandboxes/gesture-three-prevent-scroll/src/App
 import Scroll from './sandboxes/gesture-scroll/src/App'
 import Slide from './sandboxes/slide/src/App'
 import DraggableList from './sandboxes/draggable-list/src/App'
+import DraggableImage from './sandboxes/draggable-image/src/App'
 import DraggableListPreventScroll from './sandboxes/draggable-list-prevent-scroll/src/App'
 import CardsStack from './sandboxes/cards-stack/src/App'
 import Viewpager from './sandboxes/viewpager/src/App'
@@ -38,6 +39,7 @@ const links = {
   'gesture-scroll': Scroll,
   slide: Slide,
   'draggable-list': DraggableList,
+  'draggable-image': DraggableImage,
   'draggable-list-prevent-scroll': DraggableListPreventScroll,
   'cards-stack': CardsStack,
   viewpager: Viewpager,
