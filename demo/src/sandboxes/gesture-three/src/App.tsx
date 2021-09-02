@@ -1,5 +1,5 @@
 import React from 'react'
-import { Canvas, useThree } from '@react-three/fiber'
+import { Canvas, useThree, ThreeEvent } from '@react-three/fiber'
 import { useGesture } from '@use-gesture/react'
 import * as THREE from 'three'
 
@@ -10,10 +10,10 @@ document.addEventListener('wheel', (e) => e.preventDefault(), { passive: false }
 const torusknot = new THREE.TorusKnotBufferGeometry(3, 0.8, 256, 16)
 const dodecahedron = new THREE.DodecahedronGeometry(2)
 
-const Mesh = ({ color, ...props }) => {
+const Mesh = ({ color, ...props }: Partial<THREE.Mesh> & { color: string }) => {
   const { viewport } = useThree()
 
-  const bind = useGesture({
+  const bind = useGesture<{ drag: ThreeEvent<PointerEvent>; pinch: ThreeEvent<PointerEvent> }>({
     onDrag: ({ event, delta: [x, y] }) => {
       event.stopPropagation()
       event.object.position.x += x / viewport.factor
@@ -27,6 +27,7 @@ const Mesh = ({ color, ...props }) => {
   })
 
   return (
+    // @ts-ignore
     <mesh {...bind()} {...props}>
       <meshPhysicalMaterial attach="material" flatShading color={color} />
     </mesh>
