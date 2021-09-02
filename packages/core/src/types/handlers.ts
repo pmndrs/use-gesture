@@ -5,23 +5,27 @@ export type Handler<Key extends GestureKey, EventType = EventTypes[Key]> = (
   state: Omit<FullGestureState<Key>, 'event'> & { event: EventType }
 ) => any | void
 
-export type UserHandlers = {
-  onDrag: Handler<'drag'>
-  onDragStart: Handler<'drag'>
-  onDragEnd: Handler<'drag'>
-  onPinch: Handler<'pinch'>
-  onPinchStart: Handler<'pinch'>
-  onPinchEnd: Handler<'pinch'>
-  onWheel: Handler<'wheel'>
-  onWheelStart: Handler<'wheel'>
-  onWheelEnd: Handler<'wheel'>
-  onMove: Handler<'move'>
-  onMoveStart: Handler<'move'>
-  onMoveEnd: Handler<'move'>
-  onScroll: Handler<'scroll'>
-  onScrollStart: Handler<'scroll'>
-  onScrollEnd: Handler<'scroll'>
-  onHover: Handler<'hover'>
+// if no type is provided in the user generic for a given key
+// then return the default EventTypes that key
+type check<T extends AnyHandlerEventTypes, Key extends GestureKey> = undefined extends T[Key] ? EventTypes[Key] : T[Key]
+
+export type UserHandlers<T extends AnyHandlerEventTypes = EventTypes> = {
+  onDrag: Handler<'drag', check<T, 'drag'>>
+  onDragStart: Handler<'drag', check<T, 'drag'>>
+  onDragEnd: Handler<'drag', check<T, 'drag'>>
+  onPinch: Handler<'pinch', check<T, 'pinch'>>
+  onPinchStart: Handler<'pinch', check<T, 'pinch'>>
+  onPinchEnd: Handler<'pinch', check<T, 'pinch'>>
+  onWheel: Handler<'wheel', check<T, 'wheel'>>
+  onWheelStart: Handler<'wheel', check<T, 'wheel'>>
+  onWheelEnd: Handler<'wheel', check<T, 'wheel'>>
+  onMove: Handler<'move', check<T, 'move'>>
+  onMoveStart: Handler<'move', check<T, 'move'>>
+  onMoveEnd: Handler<'move', check<T, 'move'>>
+  onScroll: Handler<'scroll', check<T, 'scroll'>>
+  onScrollStart: Handler<'scroll', check<T, 'scroll'>>
+  onScrollEnd: Handler<'scroll', check<T, 'scroll'>>
+  onHover: Handler<'hover', check<T, 'hover'>>
 }
 
 export type ReactDOMAttributes = React.DOMAttributes<EventTarget>
@@ -34,10 +38,27 @@ type GetEventType<Key extends NativeHandlersKeys> = ReactDOMAttributes[Key] exte
   ? EventType
   : UIEvent
 
-export type NativeHandlers = {
-  [key in NativeHandlersKeys]?: (state: State['shared'] & { event: GetEventType<key>; args: any }, ...args: any) => void
+export type NativeHandlers<T extends AnyHandlerEventTypes = {}> = {
+  [key in NativeHandlersKeys]?: (
+    state: State['shared'] & { event: undefined extends T[key] ? GetEventType<key> : T[key]; args: any },
+    ...args: any
+  ) => void
 }
 
-export type GestureHandlers = Partial<NativeHandlers & UserHandlers>
+// allows overriding the event type from the returned state in handlers
+export type AnyHandlerEventTypes = Partial<
+  {
+    drag: any
+    wheel: any
+    scroll: any
+    move: any
+    pinch: any
+    hover: any
+  } & { [key in NativeHandlersKeys]: any }
+>
+
+export type GestureHandlers<HandlerType extends AnyHandlerEventTypes = EventTypes> = Partial<
+  NativeHandlers<HandlerType> & UserHandlers<HandlerType>
+>
 
 export type InternalHandlers = { [Key in GestureKey]?: Handler<Key, any> }
