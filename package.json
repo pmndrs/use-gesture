@@ -66,8 +66,7 @@
   "jest": {
     "testEnvironment": "jsdom",
     "roots": [
-      "./test",
-      "./packages"
+      "./test"
     ],
     "setupFilesAfterEnv": [
       "jest-chain",
