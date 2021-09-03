@@ -1,20 +1,23 @@
 import { dragAction, pinchAction, scrollAction, wheelAction, moveAction, hoverAction } from '@use-gesture/core/actions'
-import { GestureHandlers, UserGestureConfig } from '@use-gesture/core/types'
+import { AnyHandlerEventTypes, EventTypes, GestureHandlers, UserGestureConfig } from '@use-gesture/core/types'
 import { Recognizer } from './Recognizer'
 import { createGesture } from './createGesture'
 
 interface GestureConstructor {
-  new (target: EventTarget, handlers: GestureHandlers, config?: UserGestureConfig): Gesture
+  new <HandlerTypes extends AnyHandlerEventTypes = EventTypes>(
+    target: EventTarget,
+    handlers: GestureHandlers<HandlerTypes>,
+    config?: UserGestureConfig
+  ): Gesture
 }
 
 export interface Gesture extends Recognizer {}
 
-export const Gesture: GestureConstructor = function (
+export const Gesture: GestureConstructor = function <HandlerTypes extends AnyHandlerEventTypes = EventTypes>(
   target: EventTarget,
-  handlers: GestureHandlers,
+  handlers: GestureHandlers<HandlerTypes>,
   config: UserGestureConfig | {} = {}
 ) {
   const gestureFunction = createGesture([dragAction, pinchAction, scrollAction, wheelAction, moveAction, hoverAction])
-
   return gestureFunction(target, handlers, config)
 } as any
