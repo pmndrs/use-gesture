@@ -120,5 +120,8 @@
     "overrides": {
       "sharp": "0.28.2"
     }
+  },
+  "dependencies": {
+    "tsd": "^0.17.0"
   }
 }
