@@ -4,6 +4,8 @@ import { call } from '../utils/fn'
 import { V, computeRubberband } from '../utils/maths'
 import { GestureKey, IngKey, State, Vector2 } from '../types'
 
+const BEFORE_LAST_KINEMATICS_DELAY = 32
+
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export interface Engine<Key extends GestureKey> {
   /**
@@ -249,7 +251,7 @@ export abstract class Engine<Key extends GestureKey> {
 
         this.computeOffset()
 
-        if (!state.last) {
+        if (!state.last || dt > BEFORE_LAST_KINEMATICS_DELAY) {
           state.delta = V.sub(movement, previousMovement)
           const absoluteDelta = state.delta.map(Math.abs) as Vector2
 
