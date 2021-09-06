@@ -4,6 +4,19 @@ import { call } from '../utils/fn'
 import { V, computeRubberband } from '../utils/maths'
 import { GestureKey, IngKey, State, Vector2 } from '../types'
 
+/**
+ * The lib doesn't compute the kinematics on the last event of the gesture
+ * (i.e. for a drag gesture, the `pointerup` coordinates will generally match the
+ * last `pointermove` coordinates which would result in all drags ending with a
+ * `[0,0]` velocity). However, hen the timestamp difference between the last
+ * event (ie pointerup) and the before last event (ie pointermove) is greater
+ * than BEFORE_LAST_KINEMATICS_DELAY, the kinematics are computed (which would
+ * mean that if you release your drag after stopping for more than
+ * BEFORE_LAST_KINEMATICS_DELAY, the velocity will be indeed 0).
+ *
+ * See https://github.com/pmndrs/use-gesture/pull/337 for more details.
+ */
+
 const BEFORE_LAST_KINEMATICS_DELAY = 32
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
