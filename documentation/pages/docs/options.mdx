@@ -100,6 +100,7 @@ Here are all options that can be applied to gestures.
 | [`enabled`](#enabled)                               |     **all**     | Whether the gesture is enabled.                                                                                                                                                                      |
 | [`from`](#from)                                     |     **all**     | The initial position `offset` should start from.                                                                                                                                                     |
 | [`threshold`](#threshold)                           |     **all**     | The handler will fire only when the gesture displacement is greater than the threshold.                                                                                                              |
+| [`preventDefault`](#preventdefault)                 |     **all**     | Will `preventDefault` all events triggered by the handler.                                                                                                                                           |
 | [`triggerAllEvents`](#triggerallevents)             |     **all**     | Forces the handler to fire even for non intentional displacement (ignores the `threshold`). In that case, the `intentional` attribute from state will remain `false` until the threshold is reached. |
 | [`axis`](#axis)                                     |     **all**     | Your handler will only trigger if a movement is detected on the specified axis.                                                                                                                      |
 | [`bounds`](#bounds)                                 |     **xy**      | Limits the gesture `offset` to the specified bounds.                                                                                                                                                 |
@@ -234,6 +235,27 @@ function ThresholdExample() {
 ```
 
 > If you still want your handler to be triggered for non intentional displacement, this is where the `triggerAllEvents` config option and the `intentional` state attribute become useful.
+
+### preventDefault
+
+<Specs types="boolean" defaultValue="false" />
+
+Will run `event.cancelable && event.preventDefault()` on all events triggered by the handler. Can be useful when dragging links or images.
+
+<Code id="PreventDefault" />
+
+```jsx highlight={4-5}
+function PreventDefault() {
+  const [{ x, y }, api] = useSpring(() => ({ x: 0, y: 0 }))
+  const bind = useDrag(({ offset: [x, y] }) => api.start({ x, y }), {
+    preventDefault: true,
+    filterTaps: true
+  })
+  return <animated.a href="https://github.com/pmndrs/use-gesture" {...bind()} style={{ x, y }} />
+}
+```
+
+> Don't forget to use the [`filterTaps`](#filtertaps-drag-only) option to prevent the link from opening unintentionally at the end of the gesture.
 
 ### triggerAllEvents
 

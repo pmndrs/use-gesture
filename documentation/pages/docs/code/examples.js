@@ -127,6 +127,41 @@ export function From({ setActive }) {
   )
 }
 
+export function PreventDefault() {
+  const [linkStyle, api] = useSpring(() => ({ x: 0, y: 0, immediate: true }))
+  const [preventDefaultStyles, preventDefaultApi] = useSpring(() => ({ x: 0, y: 0 }))
+
+  const bind = useDrag(({ offset: [x, y] }) => api.start({ x, y, immediate: true }))
+  const bindWithPreventDefault = useDrag(({ offset: [x, y] }) => preventDefaultApi.start({ x, y, immediate: true }), {
+    filterTaps: true,
+    preventDefault: true
+  })
+  return (
+    <>
+      <animated.a
+        className={styles.link}
+        {...bind()}
+        style={linkStyle}
+        href="https://github.com/pmndrs/use-gesture"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Normal link
+      </animated.a>
+      <animated.a
+        className={styles.link}
+        {...bindWithPreventDefault()}
+        style={preventDefaultStyles}
+        href="https://github.com/pmndrs/use-gesture"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Link with preventDefault option
+      </animated.a>
+    </>
+  )
+}
+
 export function Threshold({ setActive }) {
   const [{ x, y }, api] = useSpring(() => ({ x: 0, y: 0 }))
   const [props, apiL] = useSpring(() => ({ x: 0, y: 0, opacity: 0 }))

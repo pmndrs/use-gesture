@@ -1,6 +1,6 @@
 {
   "name": "@use-gesture/core",
-  "version": "10.0.0-beta.23",
+  "version": "10.0.0-beta.24",
   "description": "Core engine for receiving gestures",
   "license": "MIT",
   "main": "dist/use-gesture-core.cjs.js",

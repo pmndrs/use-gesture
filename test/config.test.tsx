@@ -55,6 +55,7 @@ describe('testing derived config', () => {
         ],
         from: undefined,
         transform: identity,
+        preventDefault: false,
         triggerAllEvents: false,
         delay: 0,
         swipe: {
@@ -114,6 +115,7 @@ describe('testing derived config', () => {
         device: 'pointer',
         transform: identity,
         triggerAllEvents: false,
+        preventDefault: false,
         lockDirection: false,
         from: undefined,
         useTouch: false,

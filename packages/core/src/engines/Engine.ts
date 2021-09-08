@@ -190,6 +190,8 @@ export abstract class Engine<Key extends GestureKey> {
     if (event) {
       // sets the shared state with event properties
       state.event = event
+      // if config.preventDefault is true, then preventDefault
+      if (config.preventDefault && event.cancelable) state.event.preventDefault()
       state.type = event.type
       shared.touches = this.ctrl.pointerIds.size || this.ctrl.touchIds.size
       shared.locked = !!document.pointerLockElement

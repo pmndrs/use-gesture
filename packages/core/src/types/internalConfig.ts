@@ -14,6 +14,7 @@ export type InternalGestureOptions<Key extends GestureKey> = {
   enabled: boolean
   from: Vector2 | ((state: State[Key]) => Vector2)
   threshold: Vector2
+  preventDefault: boolean
   triggerAllEvents: boolean
   rubberband: Vector2
   bounds: [Vector2, Vector2] | ((state: State[Key]) => [Vector2, Vector2])

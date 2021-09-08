@@ -27,18 +27,15 @@ function Image() {
 function Link() {
   const [props, api] = useSpring(() => ({ x: 0, y: 0, scale: 1 }))
   const bind = useDrag(
-    ({ event, intentional, active, offset: [x, y] }) => {
-      event.preventDefault()
-      if (intentional) {
-        api.start({
-          x,
-          y,
-          scale: active ? 1.2 : 1,
-          immediate: (k) => k !== 'scale' && active
-        })
-      }
+    ({ active, offset: [x, y] }) => {
+      api.start({
+        x,
+        y,
+        scale: active ? 1.2 : 1,
+        immediate: (k) => k !== 'scale' && active
+      })
     },
-    { filterTaps: true, triggerAllEvents: true }
+    { filterTaps: true, preventDefault: true }
   )
   return (
     <animated.a
@@ -47,7 +44,7 @@ function Link() {
       style={props}
       href="https://github.com/pmndrs/use-gesture"
       target="_blank"
-      rel="noopener,noreferrer"
+      rel="noopener noreferrer"
     >
       This is a link
     </animated.a>

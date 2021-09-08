@@ -7,6 +7,9 @@ export const commonConfigResolver = {
   enabled(value = true) {
     return value
   },
+  preventDefault(value = false) {
+    return value
+  },
   triggerAllEvents(value = false) {
     return value
   },

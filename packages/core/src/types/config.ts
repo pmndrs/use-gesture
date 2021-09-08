@@ -45,6 +45,10 @@ export type GestureOptions<T extends GestureKey> = GenericOptions & {
    */
   threshold?: number | Vector2
   /**
+   * The handler will preventDefault all events when `true`.
+   */
+  preventDefault?: boolean
+  /**
    * Forces the handler to fire even for non intentional displacement (ignores
    * the threshold). In that case, the intentional attribute from state will
    * remain false until the threshold is reached.

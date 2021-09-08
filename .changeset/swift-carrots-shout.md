@@ -19,6 +19,7 @@
 ### General
 
 - Types: Handlers have a better type inference
+- Adds `preventDefault` option so that all events are prevented when `true`
 - ~~Adds `r3f` general shared option that will perform some adjustments when using @react-three/fiber~~
 
 ### Drag

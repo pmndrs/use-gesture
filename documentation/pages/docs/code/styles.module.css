@@ -244,3 +244,14 @@
 .PointerTrue {
   overflow: hidden;
 }
+
+.PreventDefault {
+  flex-direction: column;
+}
+
+.link {
+  user-select: none;
+  touch-action: none;
+  font-weight: bold;
+  font-size: 0.8em;
+}
