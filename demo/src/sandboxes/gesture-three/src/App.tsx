@@ -1,11 +1,9 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Canvas, useThree, ThreeEvent } from '@react-three/fiber'
 import { useGesture } from '@use-gesture/react'
 import * as THREE from 'three'
 
 import styles from './styles.module.css'
-
-document.addEventListener('wheel', (e) => e.preventDefault(), { passive: false })
 
 const torusknot = new THREE.TorusKnotBufferGeometry(3, 0.8, 256, 16)
 const dodecahedron = new THREE.DodecahedronGeometry(2)
@@ -35,6 +33,12 @@ const Mesh = ({ color, ...props }: Partial<THREE.Mesh> & { color: string }) => {
 }
 
 export default function App() {
+  useEffect(() => {
+    const handler = (e: WheelEvent) => e.preventDefault()
+    document.addEventListener('wheel', handler, { passive: false })
+    return () => document.removeEventListener('wheel', handler)
+  }, [])
+
   return (
     <Canvas
       className={styles.canvas}

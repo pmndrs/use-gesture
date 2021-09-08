@@ -1,15 +1,22 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useSpring, animated } from '@react-spring/web'
 import { createUseGesture, dragAction, pinchAction } from '@use-gesture/react'
 
 import styles from './styles.module.css'
 
-document.addEventListener('gesturestart', e => e.preventDefault())
-document.addEventListener('gesturechange', e => e.preventDefault())
-
 const useGesture = createUseGesture([dragAction, pinchAction])
 
 export default function App() {
+  useEffect(() => {
+    const handler = e => e.preventDefault()
+    document.addEventListener('gesturestart', handler)
+    document.addEventListener('gesturechange', handler)
+    return () => {
+      document.removeEventListener('gesturestart', handler)
+      document.removeEventListener('gesturechange', handler)
+    }
+  }, [])
+
   const [style, api] = useSpring(() => ({
     x: 0,
     y: 0,
