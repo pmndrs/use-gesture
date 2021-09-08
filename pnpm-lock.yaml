@@ -137,8 +137,8 @@ importers:
   documentation:
     specifiers:
       '@reach/tabs': ^0.16.1
-      '@react-spring/three': 9.2.1
-      '@react-spring/web': 9.2.1
+      '@react-spring/three': ^9.2.4
+      '@react-spring/web': ^9.2.4
       '@react-three/drei': ^7.6.0
       '@react-three/fiber': ^7.0.6
       '@use-gesture/react': '*'
@@ -161,8 +161,8 @@ importers:
       three: ^0.132.2
     dependencies:
       '@reach/tabs': 0.16.1_react-dom@17.0.2+react@17.0.2
-      '@react-spring/three': 9.2.1_9cdc7b3632d426589671046affa6062b
-      '@react-spring/web': 9.2.1_react-dom@17.0.2+react@17.0.2
+      '@react-spring/three': 9.2.4_9cdc7b3632d426589671046affa6062b
+      '@react-spring/web': 9.2.4_react-dom@17.0.2+react@17.0.2
       '@react-three/drei': 7.6.0_b1e5cfdb569a905af6f034dbca595928
       '@react-three/fiber': 7.0.6_47774e19dc582045dca53dd58d5f8de9
       '@use-gesture/react': link:../packages/react
@@ -4876,9 +4876,9 @@ packages:
       react: 17.0.2
     dev: false
 
-  /@react-spring/three/9.2.1_9cdc7b3632d426589671046affa6062b:
+  /@react-spring/three/9.2.4_9cdc7b3632d426589671046affa6062b:
     resolution:
-      { integrity: sha512-0gRz2y8G5szbtywvTDbaT3B+1Xseq5Yu2X02Ey8k18IksAncMZ/KFcRJIYFQn+7OlLVaoxPzXibSUNT4notWMg== }
+      { integrity: sha512-ljFig7XW099VWwRPKPUf+4yYLivp/sSWXN3oO5SJOF/9BSoV1quS/9chZ5Myl5J14od3CsHf89Tv4FdlX5kHlA== }
     peerDependencies:
       '@react-three/fiber': '>=6.0'
       react: '>=16.11'
@@ -4901,21 +4901,6 @@ packages:
   /@react-spring/types/9.2.4:
     resolution:
       { integrity: sha512-zHUXrWO8nweUN/ISjrjqU7GgXXvoEbFca1CgiE0TY0H/dqJb3l+Rhx8ecPVNYimzFg3ZZ1/T0egpLop8SOv4aA== }
-    dev: false
-
-  /@react-spring/web/9.2.1_react-dom@17.0.2+react@17.0.2:
-    resolution:
-      { integrity: sha512-7YimWKLuHhUZhuDchfn4Yo631KqULWCgrDLOZBu0o4AZwVMFvguVY1g0Tpm5K+68Z7kJaS0n5pf8wlwtGIOs+w== }
-    peerDependencies:
-      react: ^16.8.0  || ^17.0.0
-      react-dom: ^16.8.0  || ^17.0.0
-    dependencies:
-      '@react-spring/animated': 9.2.4_react@17.0.2
-      '@react-spring/core': 9.2.4_react@17.0.2
-      '@react-spring/shared': 9.2.4_react@17.0.2
-      '@react-spring/types': 9.2.4
-      react: 17.0.2
-      react-dom: 17.0.2_react@17.0.2
     dev: false
 
   /@react-spring/web/9.2.3_react-dom@17.0.2+react@17.0.2:

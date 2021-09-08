@@ -1,6 +1,6 @@
 import React, { Suspense, useState, useEffect, useRef } from 'react'
 import { useSpring, useSprings, animated, to } from '@react-spring/web'
-import { a as a3f } from '@react-spring/three'
+import { a as a3f, Globals } from '@react-spring/three'
 import { Canvas, useThree, useFrame } from '@react-three/fiber'
 import { useTexture } from '@react-three/drei'
 import { useDrag, useScroll, useGesture, useWheel } from '@use-gesture/react'
@@ -10,6 +10,11 @@ import anime from 'animejs/lib/anime.es.js'
 import cn from 'classnames'
 import * as THREE from 'three'
 import * as styles from './styles.module.css'
+
+// https://github.com/pmndrs/react-spring/issues/1586#issuecomment-870778191
+Globals.assign({
+  frameLoop: 'always'
+})
 
 export function EasterDiv({ children }) {
   const [{ x, y, live }, api] = useSpring(() => ({ x: 0, y: 0, live: false }))
