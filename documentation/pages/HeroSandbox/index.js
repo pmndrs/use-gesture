@@ -6,7 +6,7 @@ import cn from 'classnames'
 import { Leva, useControls } from 'leva'
 import { tweaks } from './data'
 
-// import 'react-toastify/dist/ReactToastify.css'
+import 'react-toastify/dist/ReactToastify.css'
 import * as styles from './hero.module.css'
 
 toast.configure({ position: 'bottom-right', pauseOnHover: false, draggable: false })
@@ -126,6 +126,7 @@ export default function Hero() {
         threshold: [threshold, threshold],
         bounds: activateBounds ? { bottom, right, left, top } : undefined,
         rubberband: activateBounds ? rubberband : 0,
+        pointer: { capture: false }, // to keep capturing pointerleave
         from: () => [props.x.get(), props.y.get()]
       }
     }
