@@ -1,5 +1,5 @@
 import React from 'react'
-import { UserGestureConfig } from '../../packages/core/src'
+import { UserGestureConfig } from '../../packages/core/src/types'
 
 interface Props {
   bindArgs?: any[]

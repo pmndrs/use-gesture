@@ -7,7 +7,6 @@ import InteractiveDom from './components/InteractiveDom'
 import { InteractiveType } from './components/types'
 
 afterAll(cleanup)
-
 patchCreateEvent(createEvent)
 
 describe.each([

@@ -7,7 +7,6 @@ import { InteractiveType } from './components/types'
 import { patchCreateEvent } from './utils'
 
 afterAll(cleanup)
-
 patchCreateEvent(createEvent)
 
 // TODO test with gesturechange and touch

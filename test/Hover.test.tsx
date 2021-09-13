@@ -7,7 +7,6 @@ import { patchCreateEvent } from './utils'
 import InteractiveDom from './components/InteractiveDom'
 
 afterAll(cleanup)
-
 patchCreateEvent(createEvent)
 
 // TODO - should be able to test on a node component

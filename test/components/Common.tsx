@@ -1,5 +1,5 @@
 import React, { ReactChild } from 'react'
-import { UserHandlers } from '../../packages/core/src'
+import { UserHandlers } from '../../packages/core/src/types'
 
 export const createHandlers = ({
   gestures,

@@ -7,7 +7,6 @@ import Interactive from './components/Interactive'
 import InteractiveDom from './components/InteractiveDom'
 
 afterEach(cleanup)
-
 patchCreateEvent(createEvent)
 
 test('bind should dispatch its arguments', () => {
@@ -78,11 +77,29 @@ test('testing timestamp', () => {
   expect(getByTestId('drag-elapsedTime').innerHTML).toBe(String(time - start))
 })
 
+test('testing transform', () => {
+  const { getByTestId } = render(
+    <Interactive
+      gestures={['Drag']}
+      memoArg="memo"
+      config={{
+        transform: ([x, y]) => [x / 2, y / 4]
+      }}
+    />
+  )
+  const element = getByTestId('drag-el')
+  fireEvent.pointerDown(element, { pointerId: 10, clientX: 0, clientY: 0, buttons: 1 })
+  fireEvent.pointerMove(element, { pointerId: 10, clientX: 20, clientY: 20, buttons: 1 })
+  expect(getByTestId('drag-movement')).toHaveTextContent('10,5')
+  expect(getByTestId('drag-offset')).toHaveTextContent('10,5')
+  expect(getByTestId('drag-delta')).toHaveTextContent('10,5')
+})
+
 test('testing unmount with domTarget', () => {
   const { getByTestId, unmount } = render(<InteractiveDom gestures={['Drag']} />)
   const element = getByTestId('dom-drag-el')
-  fireEvent.pointerDown(element, { pointerId: 10, buttons: 1 })
-  fireEvent.pointerMove(element, { pointerId: 10, clientX: 20, clientY: 50, buttons: 1 })
+  fireEvent.pointerDown(element, { pointerId: 11, buttons: 1 })
+  fireEvent.pointerMove(element, { pointerId: 11, clientX: 20, clientY: 50, buttons: 1 })
   expect(getByTestId('dom-drag-dragging')).toHaveTextContent('true')
   unmount()
 })

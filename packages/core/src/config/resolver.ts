@@ -30,7 +30,7 @@ export function resolveWith<T extends { [k: string]: any }, V extends { [k: stri
 export function parse(config: UserGestureConfig, gestureKey?: GestureKey): InternalConfig {
   const { target, eventOptions, window, enabled, transform, ...rest } = config as any
   const _config: any = {
-    shared: resolveWith({ target, eventOptions, window, enabled }, sharedConfigResolver)
+    shared: resolveWith({ target, eventOptions, window, enabled, transform }, sharedConfigResolver)
   }
 
   if (gestureKey) {
