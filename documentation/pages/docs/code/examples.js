@@ -42,6 +42,7 @@ export function PullRelease({ setActive }) {
 
 export function Offset({ setActive }) {
   const [{ x, y }, api] = useSpring(() => ({ x: 0, y: 0 }))
+
   const bind = useDrag(({ down, offset: [x, y] }) => {
     setActive && setActive(down)
     api.start({ x, y })
@@ -53,7 +54,7 @@ export function Cancel({ setActive }) {
   const [{ x, bg }, api] = useSpring(() => ({ x: 0, bg: 'cornflowerblue' }))
   const bind = useDrag(({ active, movement: [mx], cancel, canceled }) => {
     setActive && setActive(active)
-    if (mx > 200) cancel()
+    if (mx > 100) cancel()
     api.start({
       x: active ? mx : 0,
       bg: canceled ? 'lightpink' : 'cornflowerblue',

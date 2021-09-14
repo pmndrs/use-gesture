@@ -83,7 +83,7 @@
   top: 0;
   bottom: 0;
   background-color: hotpink;
-  width: calc(50% - 200px);
+  width: calc(50% - 100px);
   opacity: 0.5;
   border-radius: 0 4px 4px 0;
 }
