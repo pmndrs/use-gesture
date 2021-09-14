@@ -168,6 +168,7 @@ export class DragEngine extends CoordinatesEngine<'drag'> {
     // We release the pointer id if it has pointer capture
     try {
       if (this.config.pointerCapture && (event.target as HTMLElement).hasPointerCapture(event.pointerId)) {
+        // this shouldn't be necessary as it should be automatic when releasing the pointer
         ;(event.target as HTMLElement).releasePointerCapture(event.pointerId)
       }
     } catch {
