@@ -17,6 +17,7 @@ describe.each([
   const { getByTestId, rerender } = render(<Component bindArgs={[2]} gestures={['Drag']} memoArg="memo" />)
   const element = getByTestId(`${prefix}drag-el`)
   let delta_t: number
+  let lastVelocity: string
   test('pointerDown should initiate the gesture', () => {
     const event = createEvent.pointerDown(element, { pointerId: 1, clientX: 10, clientY: 20, buttons: 1 })
 
@@ -76,12 +77,17 @@ describe.each([
   })
 
   test('pointerUp should terminate the gesture', () => {
+    lastVelocity = getByTestId(`${prefix}drag-velocity`).textContent
     fireEvent.pointerUp(element, { pointerId: 1 })
     expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('false')
     expect(getByTestId(`${prefix}drag-active`)).toHaveTextContent('false')
     expect(getByTestId(`${prefix}drag-last`)).toHaveTextContent('true')
     expect(getByTestId(`${prefix}drag-intentional`)).toHaveTextContent('true')
     expect(getByTestId(`${prefix}drag-down`)).toHaveTextContent('false')
+  })
+
+  test(`pointerUp released in less than 32ms shouldn't change kinematics`, () => {
+    expect(getByTestId(`${prefix}drag-velocity`)).toHaveTextContent(lastVelocity)
   })
 
   test('terminating the gesture should fire onDragEnd', () => {
@@ -108,7 +114,17 @@ describe.each([
     fireEvent.pointerMove(element, { pointerId: 4, clientX: 20, clientY: 50, buttons: 1 })
     expect(getByTestId(`${prefix}drag-offset`)).toHaveTextContent('-30,0')
     expect(getByTestId(`${prefix}drag-movement`)).toHaveTextContent('-10,-10')
+  })
+
+  test('releasing pointer after more than 32ms should reset kinematics', async () => {
+    const lastTimeStamp = Number(getByTestId(`${prefix}drag-timeStamp`).textContent)
+    await later(50)
     fireEvent.pointerUp(element, { pointerId: 4 })
+    const latestTimeStamp = Number(getByTestId(`${prefix}drag-timeStamp`).textContent)
+    expect(latestTimeStamp - lastTimeStamp).toBeGreaterThan(32)
+    expect(getByTestId(`${prefix}drag-velocity`)).toHaveTextContent('0,0')
+    expect(getByTestId(`${prefix}drag-delta`)).toHaveTextContent('0,0')
+    expect(getByTestId(`${prefix}drag-direction`)).toHaveTextContent('0,0')
   })
 
   test('canceling the gesture should cancel the gesture in the next RAF tick', async () => {
