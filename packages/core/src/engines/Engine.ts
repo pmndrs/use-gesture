@@ -14,7 +14,7 @@ import { GestureKey, IngKey, State, Vector2 } from '../types'
  * mean that if you release your drag after stopping for more than
  * BEFORE_LAST_KINEMATICS_DELAY, the velocity will be indeed 0).
  *
- * See https://github.com/pmndrs/use-gesture/pull/337 for more details.
+ * See https://github.com/pmndrs/use-gesture/issues/332 for more details.
  */
 
 const BEFORE_LAST_KINEMATICS_DELAY = 32
