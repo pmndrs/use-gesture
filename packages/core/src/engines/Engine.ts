@@ -8,7 +8,7 @@ import { GestureKey, IngKey, State, Vector2 } from '../types'
  * The lib doesn't compute the kinematics on the last event of the gesture
  * (i.e. for a drag gesture, the `pointerup` coordinates will generally match the
  * last `pointermove` coordinates which would result in all drags ending with a
- * `[0,0]` velocity). However, hen the timestamp difference between the last
+ * `[0,0]` velocity). However, when the timestamp difference between the last
  * event (ie pointerup) and the before last event (ie pointermove) is greater
  * than BEFORE_LAST_KINEMATICS_DELAY, the kinematics are computed (which would
  * mean that if you release your drag after stopping for more than
