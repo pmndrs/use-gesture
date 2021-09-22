@@ -46,7 +46,7 @@
       "name": "@use-gesture/react -- tree-shaking",
       "import": "{ useDrag }",
       "path": "packages/react/dist/use-gesture-react.esm.js",
-      "limit": "6 KB",
+      "limit": "8 KB",
       "ignore": [
         "react"
       ]
@@ -60,7 +60,7 @@
       "name": "@use-gesture/vanilla -- tree-shaking",
       "import": "{ WheelGesture }",
       "path": "packages/vanilla/dist/use-gesture-vanilla.esm.js",
-      "limit": "5 KB"
+      "limit": "8 KB"
     }
   ],
   "jest": {
