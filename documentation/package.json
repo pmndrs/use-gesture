@@ -20,7 +20,7 @@
     "classnames": "^2.2.6",
     "gatsby": "^3.13.0",
     "gatsby-plugin-google-analytics": "^3.13.0",
-    "gatsby-plugin-pnpm": "1.2.8",
+    "gatsby-plugin-pnpm": "^1.2.8",
     "lethargy": "^1.0.9",
     "leva": "^0.9.13",
     "mdx-observable": "^0.2.0",
