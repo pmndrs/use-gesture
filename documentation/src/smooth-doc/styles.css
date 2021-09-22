@@ -34,6 +34,7 @@ footer a {
 
 footer img {
   display: inline-block;
+  margin-bottom: 0.2em;
 }
 
 footer p:first-child {

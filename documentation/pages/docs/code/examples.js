@@ -12,9 +12,7 @@ import * as THREE from 'three'
 import * as styles from './styles.module.css'
 
 // https://github.com/pmndrs/react-spring/issues/1586#issuecomment-870778191
-Globals.assign({
-  frameLoop: 'always'
-})
+Globals.assign({ frameLoop: 'always' })
 
 export function EasterDiv({ children }) {
   const [{ x, y, live }, api] = useSpring(() => ({ x: 0, y: 0, live: false }))

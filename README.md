@@ -39,12 +39,12 @@ yarn add @use-gesture/vanilla
 npm install @use-gesture/vanilla
 ```
 
-### [Full documentation website](https://v10-beta--use-gesture.netlify.com)
+### [Full documentation website](https://use-gesture.netlify.com)
 
-- [Available Gestures](https://v10-beta--use-gesture.netlify.com/docs/gestures)
-- [Gesture State](https://v10-beta--use-gesture.netlify.com/docs/state)
-- [Gesture Options](https://v10-beta--use-gesture.netlify.com/docs/options)
-- [FAQ](https://v10-beta--use-gesture.netlify.com/docs/faq)
+- [Available Gestures](https://use-gesture.netlify.com/docs/gestures)
+- [Gesture State](https://use-gesture.netlify.com/docs/state)
+- [Gesture Options](https://use-gesture.netlify.com/docs/options)
+- [FAQ](https://use-gesture.netlify.com/docs/faq)
 
 ### Simple example
 
@@ -119,4 +119,4 @@ The example above makes a `div` draggable so that it follows your mouse on drag,
 | `usePinch`   | Handles the pinch gesture                  |
 | `useGesture` | Handles multiple gestures in one hook      |
 
-#### [More on the full documentation website...](https://v10-beta--use-gesture.netlify.app/)
+#### [More on the full documentation website...](https://use-gesture.netlify.app/)

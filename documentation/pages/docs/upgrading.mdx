@@ -1,0 +1,20 @@
+---
+title: Upgrading to @use-gesture
+section: More
+---
+
+import UseGesture from './code/rug'
+
+# Upgrading to @use-gesture/react
+
+How to switch from `react-use-gesture` to <UseGesture pkg="react" />
+
+## Transition
+
+`react-use-gesture` was born as a React-only project. <UseGesture pkg="react" /> replaces `react-use-gesture` completely and relies on a universal core, <UseGesture pkg="core" /> that also powers <UseGesture pkg="vanilla" />.
+
+Upgrading from `react-use-gesture` to <UseGesture pkg="react" /> is rather straightforward, although includes some breaking changes that are listed here.
+
+### Main breaking change
+
+The API is 95% the same as before, the main one being the `domTarget` option being renamed to `target`.

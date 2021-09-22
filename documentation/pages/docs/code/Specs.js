@@ -47,7 +47,7 @@ const Row = styled.box`
   }
 `
 
-export default function SpecsFn({ types, defaultValue }) {
+export default function SpecsFn({ types, gestures, defaultValue }) {
   const t = Array.isArray(types) ? types : [types]
 
   const l = t.join('').length
@@ -65,6 +65,12 @@ export default function SpecsFn({ types, defaultValue }) {
           </ul>
         )}
       </Row>
+      {gestures && (
+        <Row>
+          <div>Limited to</div>
+          <div>{gestures.join(', ')}</div>
+        </Row>
+      )}
       <Row>
         <div>Default</div>
         <div>{defaultValue}</div>
