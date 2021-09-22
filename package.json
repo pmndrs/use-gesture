@@ -17,7 +17,7 @@
     "validate": "preconstruct validate",
     "lint:full": "eslint packages/*/src",
     "lint": "pretty-quick --staged",
-    "release": "pnpm build && pnpm run changeset publish",
+    "release": "pnpm build && pnpm changeset publish",
     "tsc": "tsc --noEmit",
     "docs:start": "pnpm run start --filter documentation",
     "docs:build": "pnpm run build --filter documentation",
