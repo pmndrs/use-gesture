@@ -1,0 +1,57 @@
+name: CI
+on:
+  push:
+    paths:
+      - '.github/workflows/main.yml'
+      - 'packages/**'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - '!documentation/**'
+      - '!webpack-import-test'
+      - '!demo/**'
+      - '!**.md'
+      - '!.changeset/**'
+env:
+  CI: true
+  PNPM_CACHE_FOLDER: .pnpm-store
+jobs:
+  build:
+    name: Build, lint, and test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Use Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Install pnpm
+        run: npm i pnpm@latest -g
+
+      - name: Setup pnpm config
+        run: pnpm config set store-dir $PNPM_CACHE_FOLDER
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Check types
+        run: pnpm tsc
+
+      - uses: actions/cache@v2
+        name: Setup build cache
+        id: build-cache
+        with:
+          path: packages/**/dist
+          key: ${{ runner.os }}-build-${{ hashFiles('packages/') }}
+          restore-keys: |
+            ${{ runner.os }}-build-
+
+      - name: Build without cache
+        if: steps.build-cache.outputs.cache-hit != 'true'
+        run: pnpm build
+
+      - name: Run tests
+        run: pnpm test

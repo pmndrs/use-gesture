@@ -1,21 +1,26 @@
 import React from 'react'
 import { Link } from 'gatsby'
-import styles from './video.module.css'
+
+import * as styles from './video.module.css'
 
 const links = {
-  drag: { label: 'useDrag', link: 'hooks/#list-of-hooks' },
-  wheel: { label: 'useWheel', link: 'hooks/#list-of-hooks' },
-  pinch: { label: 'usePinch', link: 'hooks/#list-of-hooks' },
-  move: { label: 'useMove', link: 'hooks/#list-of-hooks' },
+  drag: { label: 'drag', link: 'gestures' },
+  wheel: { label: 'wheel', link: 'gestures' },
+  pinch: { label: 'pinch', link: 'gestures' },
+  move: { label: 'move', link: 'gestures' },
   initial: { label: 'initial', link: 'options/#initial' },
   rubberband: { label: 'rubberband', link: 'options/#rubberband' },
-  touchaction: { label: 'touch-action', link: 'extras/#touch-action' },
+  touchaction: { label: 'touch-action', link: 'extras/#touch-action' }
 }
 
 const Video = ({ video, id, badges }) => {
   return (
     <div>
-      <a target="_blank" rel="noopener noreferrer" href={`https://codesandbox.io/s/${id}`}>
+      <a
+        target="_blank"
+        rel="noopener noreferrer"
+        href={`https://codesandbox.io/s/github/pmndrs/use-gesture/tree/v10/demo/src/sandboxes/${id}`}
+      >
         <video autoPlay muted playsInline loop width="100%">
           <source src={video} type="video/mp4" />
         </video>

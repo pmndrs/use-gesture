@@ -55,7 +55,7 @@
   left: 0;
   right: 0;
   border-radius: 4px 4px 0 0;
-  color: var(--xstyled-colors-white);
+  color: #fff;
   padding: 0.5em 2em;
   font-family: monospace;
 }
@@ -83,7 +83,7 @@
   top: 0;
   bottom: 0;
   background-color: hotpink;
-  width: calc(50% - 200px);
+  width: calc(50% - 100px);
   opacity: 0.5;
   border-radius: 0 4px 4px 0;
 }
@@ -92,19 +92,19 @@
   position: absolute;
   height: 80px;
   width: 80px;
-  border: 2px solid var(--xstyled-colors-primary);
+  border: 2px solid var(--xstyled-colors-on-background-primary);
   transform: scale(1.1);
   opacity: 0.4;
   transition: all 350ms ease;
 }
 
 .Swipe .square.active {
-  background: var(--xstyled-colors-primary);
+  background: var(--xstyled-colors-on-background-primary);
   opacity: 0.6;
 }
 
 .scroll {
-  background: var(--xstyled-colors-primary);
+  background: var(--xstyled-colors-blockquote-background);
   position: absolute;
   top: 0;
   left: 0;
@@ -212,4 +212,46 @@
 
 .Transform canvas {
   touch-action: none;
+}
+
+.CaptureFalse {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.CaptureFalse svg {
+  position: relative;
+  min-width: 328px;
+  max-width: 328px;
+  overflow: visible;
+  touch-action: none;
+}
+
+.CaptureFalse .from {
+  cursor: pointer;
+  touch-action: none;
+}
+
+.CaptureFalse .target:hover {
+  fill: hotpink;
+}
+
+.CaptureFalse > div {
+  position: absolute;
+  font-size: 0.8em;
+}
+
+.PointerTrue {
+  overflow: hidden;
+}
+
+.PreventDefault {
+  flex-direction: column;
+}
+
+.link {
+  user-select: none;
+  touch-action: none;
+  font-weight: bold;
+  font-size: 0.8em;
 }

@@ -11,14 +11,14 @@ import {
   FeatureImage,
   FeatureTitle,
   FeatureText,
-  ScreenContainer,
+  ScreenContainer
 } from 'smooth-doc/components'
 
 import { Link } from 'gatsby'
 
 import Sandbox from './HeroSandbox'
 import Title from './HeroSandbox/Title'
-import ReactUseGesture from './docs/code/rug'
+import UseGesture from './docs/code/rug'
 
 import compassImageURL from '../images/compass.svg'
 import gameImageURL from '../images/game.svg'
@@ -31,8 +31,8 @@ import Shields from './partials/shields'
   <HeroBody style={{ width: '100%', textAlign: 'center', padding: '46px 0' }}>
     <Title>move it, zoom it, drag it, scroll it, pinch it</Title>
     <HeroTeaser>
-      <ReactUseGesture />
-      &nbsp;&nbsp;is the only gesture hooks you'll need.
+      <UseGesture />
+      &nbsp;&nbsp;is the only gesture lib you'll need.
     </HeroTeaser>
     <HeroActionList style={{ justifyContent: 'center' }}>
       <HeroAction>
@@ -51,7 +51,7 @@ import Shields from './partials/shields'
       <FeatureImage src={toolsImageURL} width={100} height={100} />
       <FeatureTitle>Gestures made simple</FeatureTitle>
       <FeatureText style={{ textAlign: 'left' }}>
-        <ReactUseGesture /> allows you to implement advanced UI interactions with just a few lines of code.
+        <UseGesture /> allows you to implement advanced UI interactions with just a few lines of code.
       </FeatureText>
     </Feature>
     <Feature col={{ xs: 1, md: 1 / 3 }}>
@@ -65,7 +65,7 @@ import Shields from './partials/shields'
       <FeatureImage src={gameImageURL} width={100} height={100} />
       <FeatureTitle>Plays well with any animation library</FeatureTitle>
       <FeatureText style={{ textAlign: 'left' }}>
-        Any animation framework can work! <ReactUseGesture /> operates nicely with both{' '}
+        Any animation framework can work! <UseGesture pkg="react" /> operates nicely with both{' '}
         <a href="https://github.com/pmndrs/react-spring">React Spring</a> and{' '}
         <a href="https://github.com/pmndrs/react-three-fiber">React Three Fiber</a>
       </FeatureText>

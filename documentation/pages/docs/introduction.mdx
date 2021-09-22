@@ -6,29 +6,26 @@ section: About
 
 import Code from './code/'
 import { EasterDiv } from './code/examples'
-import ReactUseGesture from './code/rug'
+import UseGesture from './code/rug'
 
 # Getting started
 
-&zwnj;<ReactUseGesture /> is a set of hooks that let you bind mouse and touch events to any React component.
+&zwnj;<UseGesture /> is a set of gestures that let you bind mouse and touch events to any node.
 
-With the data you receive, it becomes easy to set up complex gestures like dragging and pinching with a few lines of code. You can use this library stand-alone, but to make the most of it you should combine it with an animation library like [React-spring](https://github.com/pmndrs/react-spring).
+With the data you receive, it becomes easy to set up complex gestures like dragging and pinching with a few lines of code.
 
-## Installation
+## React
 
-Using `yarn`:
+In React, <UseGesture pkg="react"/> consists in multiple hooks you can attach to a component. You can use the library as standalone, but to make the most of it you should combine it with an animation library like [react-spring](https://github.com/pmndrs/react-spring).
 
-```bash
-yarn add react-use-gesture
-```
-
-Using `npm`:
+### Installation
 
 ```bash
-npm install --save react-use-gesture
+yarn add @use-gesture/react
+npm install @use-gesture/react
 ```
 
-## Simple example
+### Simple React example
 
 <Code id="PullRelease" />
 
@@ -36,14 +33,14 @@ The following example makes a <EasterDiv><code>&lt;div/&gt;</code></EasterDiv> d
 
 ```jsx
 import { useSpring, animated } from '@react-spring/web'
-import { useDrag } from 'react-use-gesture'
+import { useDrag } from '@use-gesture/react'
 
 function PullRelease() {
   const [{ x, y }, api] = useSpring(() => ({ x: 0, y: 0 }))
 
   // Set the drag hook and define component movement based on gesture data
   const bind = useDrag(({ down, movement: [mx, my] }) => {
-    api.start({ x: down ? mx : 0, y: down ? my : 0 })
+    api.start({ x: down ? mx : 0, y: down ? my : 0, immediate: down })
   })
 
   // Bind it to a component
@@ -55,4 +52,45 @@ function PullRelease() {
 
 The `useDrag` hook returns a function (stored in the `bind` constant), which when called returns an object with event handlers. Here, when you spread `{...bind()}` into a component, you're actually adding `onMouseDown` and `onTouchStart` event handlers.
 
-> It's important that you understand <ReactUseGesture/> is not responsible for actually moving the component. The `useDrag` hook just hands over gesture data to React-spring which sets the component transforms. If you're not familiar with React-spring, head over [its documentation here](https://react-spring.io).
+> It's important that you understand <UseGesture pkg="react" /> is not responsible for actually moving the component. The `useDrag` hook just hands over gesture data to react-spring which sets the component transforms. If you're not familiar with react-spring, head over [its documentation here](https://react-spring.io).
+
+## Vanilla javascript
+
+Although <UseGesture /> was originally built for React, v10 is now platform agnostic, and can work in vanilla javascript.
+
+### Installation
+
+```bash
+yarn add @use-gesture/vanilla
+npm install @use-gesture/vanilla
+```
+
+### Simple Vanilla example
+
+<Code id="Vanilla" />
+
+The following example makes a <EasterDiv><code>&lt;div/&gt;</code></EasterDiv> draggable so that it follows your mouse or finger on drag, and returns to its initial position on release.
+
+```html
+<!-- index.html -->
+<div id="drag" />
+```
+
+```js
+// script.js
+const el = document.getElementById('drag')
+const gesture = new DragGesture(el, ({ active, movement: [mx, my] }) => {
+  setActive(active)
+  anime({
+    targets: el,
+    translateX: active ? mx : 0,
+    translateY: active ? my : 0,
+    duration: active ? 0 : 1000
+  })
+})
+
+// when you want to remove the listener
+gesture.destroy()
+```
+
+> The vanilla api is new from v10 and still experimental. Feel free to contribute!

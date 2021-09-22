@@ -1,14 +1,18 @@
 import React, { Suspense, useState, useEffect, useRef } from 'react'
 import { useSpring, useSprings, animated, to } from '@react-spring/web'
-import { a as a3f } from '@react-spring/three'
+import { a as a3f, Globals } from '@react-spring/three'
 import { Canvas, useThree, useFrame } from '@react-three/fiber'
 import { useTexture } from '@react-three/drei'
-import { useDrag, useScroll, useGesture, useWheel } from 'react-use-gesture'
+import { useDrag, useScroll, useGesture, useWheel } from '@use-gesture/react'
+import { DragGesture } from '@use-gesture/vanilla'
 import { Lethargy } from 'lethargy'
+import anime from 'animejs/lib/anime.es.js'
 import cn from 'classnames'
 import * as THREE from 'three'
+import * as styles from './styles.module.css'
 
-import styles from './styles.module.css'
+// https://github.com/pmndrs/react-spring/issues/1586#issuecomment-870778191
+Globals.assign({ frameLoop: 'always' })
 
 export function EasterDiv({ children }) {
   const [{ x, y, live }, api] = useSpring(() => ({ x: 0, y: 0, live: false }))
@@ -19,7 +23,7 @@ export function EasterDiv({ children }) {
   })
 
   return (
-    <animated.span className={styles.easter} {...bind()} style={{ x, y, zIndex: live.to(a => (a ? 10000 : 0)) }}>
+    <animated.span className={styles.easter} {...bind()} style={{ x, y, zIndex: live.to((a) => (a ? 10000 : 0)) }}>
       {children}
     </animated.span>
   )
@@ -36,6 +40,7 @@ export function PullRelease({ setActive }) {
 
 export function Offset({ setActive }) {
   const [{ x, y }, api] = useSpring(() => ({ x: 0, y: 0 }))
+
   const bind = useDrag(({ down, offset: [x, y] }) => {
     setActive && setActive(down)
     api.start({ x, y })
@@ -47,11 +52,11 @@ export function Cancel({ setActive }) {
   const [{ x, bg }, api] = useSpring(() => ({ x: 0, bg: 'cornflowerblue' }))
   const bind = useDrag(({ active, movement: [mx], cancel, canceled }) => {
     setActive && setActive(active)
-    if (mx > 200) cancel()
+    if (mx > 100) cancel()
     api.start({
       x: active ? mx : 0,
       bg: canceled ? 'lightpink' : 'cornflowerblue',
-      immediate: active,
+      immediate: active
     })
   })
 
@@ -69,7 +74,7 @@ export function Swipe({ setActive }) {
 
   const { x } = useSpring({ x: position * space })
   const bind = useDrag(({ down, swipe: [swipeX] }) => {
-    setPosition(p => Math.min(Math.max(-1, p + swipeX), 1))
+    setPosition((p) => Math.min(Math.max(-1, p + swipeX), 1))
     setActive && setActive(down)
   })
 
@@ -89,39 +94,74 @@ export function Swipe({ setActive }) {
   )
 }
 
-export function DomTarget() {
+export function Target() {
   const [{ width }, api] = useSpring(() => ({ width: '0%' }))
   useScroll(
     ({ xy: [, y] }) => {
       api.start({ width: (y / document.documentElement.scrollHeight) * 100 + '%' })
     },
-    { domTarget: typeof window === 'object' ? window : null }
+    { target: typeof window === 'object' ? window : null }
   )
 
   return <animated.div className={styles.scroll} style={{ width }} />
 }
 
-export function Initial({ setActive }) {
-  const [usingInitial, setUsingInitial] = useState(true)
+export function From({ setActive }) {
+  const [usingFrom, setUsingFrom] = useState(true)
   const [{ x }, api] = useSpring(() => ({ x: 0 }))
   const bind = useDrag(
-    ({ down, movement: [mx] }) => {
+    ({ down, offset: [ox] }) => {
       setActive && setActive(down)
-      api.start({ x: down ? mx : 0, immediate: down, config: { duration: 3000 } })
+      api.start({ x: down ? ox : 0, immediate: down, config: { duration: 3000 } })
     },
     {
-      initial: usingInitial ? () => [x.get(), 0] : [0, 0],
+      from: usingFrom ? () => [x.get(), 0] : [0, 0]
     }
   )
   return (
     <>
       <div className={styles.ui}>
         <label>
-          <input type="checkbox" checked={usingInitial} onChange={e => setUsingInitial(e.target.checked)} />
-          Use initial
+          <input type="checkbox" checked={usingFrom} onChange={(e) => setUsingFrom(e.target.checked)} />
+          Use `from`
         </label>
       </div>
       <animated.div className={styles.drag} {...bind()} style={{ x }} />
+    </>
+  )
+}
+
+export function PreventDefault() {
+  const [linkStyle, api] = useSpring(() => ({ x: 0, y: 0, immediate: true }))
+  const [preventDefaultStyles, preventDefaultApi] = useSpring(() => ({ x: 0, y: 0 }))
+
+  const bind = useDrag(({ offset: [x, y] }) => api.start({ x, y, immediate: true }))
+  const bindWithPreventDefault = useDrag(({ offset: [x, y] }) => preventDefaultApi.start({ x, y, immediate: true }), {
+    filterTaps: true,
+    preventDefault: true
+  })
+  return (
+    <>
+      <animated.a
+        className={styles.link}
+        {...bind()}
+        style={linkStyle}
+        href="https://github.com/pmndrs/use-gesture"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Normal link
+      </animated.a>
+      <animated.a
+        className={styles.link}
+        {...bindWithPreventDefault()}
+        style={preventDefaultStyles}
+        href="https://github.com/pmndrs/use-gesture"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Link with preventDefault option
+      </animated.a>
     </>
   )
 }
@@ -134,7 +174,7 @@ export function Threshold({ setActive }) {
   const [movY, setMovY] = useState(false)
 
   const bind = useDrag(
-    ({ _movement: [mx, my], _intentional: [ix, iy], down, movement: [x, y], intentional }) => {
+    ({ _movement: [mx, my], _step: [ix, iy], down, movement: [x, y], intentional }) => {
       if (intentional) {
         api.start({ x: down ? x : 0, y: down ? y : 0, immediate: down })
       }
@@ -151,7 +191,7 @@ export function Threshold({ setActive }) {
     { threshold: 100, triggerAllEvents: true }
   )
 
-  const th = index => v => {
+  const th = (index) => (v) => {
     const displ = Math.floor(100 - Math.abs(v))
     const axis = index === 0 ? 'x: ' : 'y: '
     const m = index === 0 ? movX : movY
@@ -220,7 +260,7 @@ export function Rubberband({ setActive }) {
       <animated.div
         className={styles.limits}
         style={{
-          background: to([x, y], closestLimit).to([0, 100], ['transparent', 'blue']),
+          background: to([x, y], closestLimit).to([0, 100], ['transparent', 'blue'])
         }}
       />
       <animated.div className={styles.drag} {...bind()} style={{ x, y }} />
@@ -243,13 +283,13 @@ export function Axis({ setActive }) {
     <>
       <div className={cn(styles.ui, styles.horizontal)}>
         <label>
-          <input type="radio" checked={axis === 'x'} value="x" onChange={e => setAxis(e.target.value)} />X axis
+          <input type="radio" checked={axis === 'x'} value="x" onChange={(e) => setAxis(e.target.value)} />X axis
         </label>
         <label>
-          <input type="radio" checked={axis === 'y'} value="y" onChange={e => setAxis(e.target.value)} />Y axis
+          <input type="radio" checked={axis === 'y'} value="y" onChange={(e) => setAxis(e.target.value)} />Y axis
         </label>
         <label>
-          <input type="radio" checked={axis === 'false'} value="false" onChange={e => setAxis(e.target.value)} />
+          <input type="radio" checked={axis === 'false'} value="false" onChange={(e) => setAxis(e.target.value)} />
           No axis lock
         </label>
       </div>
@@ -273,10 +313,10 @@ export function Axis2({ setActive }) {
     <>
       <div className={cn(styles.ui, styles.horizontal)}>
         <label>
-          <input type="radio" checked={axis === 'x'} value="x" onChange={e => setAxis(e.target.value)} />X axis
+          <input type="radio" checked={axis === 'x'} value="x" onChange={(e) => setAxis(e.target.value)} />X axis
         </label>
         <label>
-          <input type="radio" checked={axis === 'false'} value="false" onChange={e => setAxis(e.target.value)} />
+          <input type="radio" checked={axis === 'false'} value="false" onChange={(e) => setAxis(e.target.value)} />
           No axis lock
         </label>
       </div>
@@ -285,14 +325,14 @@ export function Axis2({ setActive }) {
   )
 }
 
-export function LockDirection({ setActive }) {
+export function LockAxis({ setActive }) {
   const [{ x, y }, api] = useSpring(() => ({ x: 0, y: 0 }))
   const bind = useDrag(
     ({ down, movement: [mx, my] }) => {
       setActive && setActive(down)
       api.start({ x: down ? mx : 0, y: down ? my : 0, immediate: down })
     },
-    { lockDirection: true }
+    { axis: 'lock' }
   )
   return <animated.div className={styles.drag} {...bind()} style={{ x, y }} />
 }
@@ -331,10 +371,10 @@ export function Delay({ setActive }) {
     x: 0,
     y: 0,
     scale: 1,
-    backgroundColor: 'lightskyblue',
+    backgroundColor: 'lightskyblue'
   }))
   const [{ countdown }, countdownApi] = useSpring(() => ({
-    countdown: 1000,
+    countdown: 1000
   }))
 
   const [status, setStatus] = useState('idle')
@@ -363,8 +403,8 @@ export function Delay({ setActive }) {
 
   const bind = useGesture(
     {
-      onDrag: ({ down, movement: [mx, my], distance, last }) => {
-        if (distance > 0 && down && status !== 'elapsed') {
+      onDrag: ({ down, movement: [mx, my], distance: [dx, dy], last }) => {
+        if ((dx > 0 || dy > 0) && down && status !== 'elapsed') {
           clearInterval(timer.current)
           setStatus('moved')
         }
@@ -374,11 +414,11 @@ export function Delay({ setActive }) {
           x: down ? mx : 0,
           y: down ? my : 0,
           scale: down ? 1.2 : 1,
-          backgroundColor: down ? 'hotpink' : 'lightskyblue',
+          backgroundColor: down ? 'hotpink' : 'lightskyblue'
         })
       },
       onPointerDown: startCountdown,
-      onPointerUp: clearCountdown,
+      onPointerUp: clearCountdown
     },
     { drag: { delay: 1000 } }
   )
@@ -412,15 +452,15 @@ export function Delay({ setActive }) {
 const colors = ['lightcoral', 'cadetblue', 'mediumpurple', 'darkorange']
 
 export function TouchAction() {
-  const [springs, api] = useSprings(colors.length, i => ({
+  const [springs, api] = useSprings(colors.length, (i) => ({
     x: 0,
     opacity: 1,
     moving: false,
-    background: colors[i],
+    background: colors[i]
   }))
   const bind = useDrag(
     ({ active, down, movement: [x], args: [index] }) =>
-      api.start(i => {
+      api.start((i) => {
         if (i === index) return { x: active ? x : 0, moving: active, immediate: down }
         else return { opacity: down ? 0.6 : 1 }
       }),
@@ -429,7 +469,7 @@ export function TouchAction() {
 
   return springs.map(({ moving, ...style }, i) => (
     <animated.div key={i} className={styles.drag} {...bind(i)} style={{ ...style, touchAction: 'pan-y' }}>
-      {moving.to(m => (m ? `body shouldn't scroll` : '← Drag me →'))}
+      {moving.to((m) => (m ? `body shouldn't scroll` : '← Drag me →'))}
     </animated.div>
   ))
 }
@@ -450,17 +490,17 @@ export function LethargyWheel() {
       event.stopPropagation()
       const s = lethargy.check(event)
       if (s) {
-        if (!wait) setIndex(i => clamp(i - s, 0, slides.length - 1))
+        if (!wait) setIndex((i) => clamp(i - s, 0, slides.length - 1))
         return true
       }
       return false
     },
-    { domTarget: ref, eventOptions: { passive: false } }
+    { target: ref, eventOptions: { passive: false } }
   )
 
   return (
     <div ref={ref} style={{ transform: `translateY(${-index * 330}px)` }}>
-      {slides.map(i => (
+      {slides.map((i) => (
         <div key={i}>{i}</div>
       ))}
     </div>
@@ -492,10 +532,10 @@ const torusknot = new THREE.TorusKnotBufferGeometry(3, 0.8, 256, 16)
 const material = new THREE.MeshStandardMaterial({
   metalness: 1,
   roughness: 0,
-  envMapIntensity: 1.0,
+  envMapIntensity: 1.0
 })
 
-export function PreventWindowScrollY() {
+export function PreventScroll() {
   const [{ rot, scale }, api] = useSpring(() => ({ rot: [0, 0, 0], scale: [0.8, 0.8, 0.8] }))
   const ref = useRef()
   const bind = useGesture(
@@ -504,9 +544,9 @@ export function PreventWindowScrollY() {
         api.start({ rot: [z / 50, y / 50, 0], scale: active ? [1, 1, 1] : [0.8, 0.8, 0.8] })
         ref.current.style.cursor = active ? 'grabbing' : 'initial'
       },
-      onHover: ({ dragging, hovering }) => !dragging && (ref.current.style.cursor = hovering ? 'grab' : 'initial'),
+      onHover: ({ dragging, hovering }) => !dragging && (ref.current.style.cursor = hovering ? 'grab' : 'initial')
     },
-    { drag: { experimental_preventWindowScrollY: true } }
+    { drag: { preventScroll: true } }
   )
   return (
     <Canvas concurrent camera={{ position: [0, 0, 16], fov: 50 }} onCreated={({ gl }) => (ref.current = gl.domElement)}>
@@ -528,7 +568,7 @@ function Box() {
   const bind = useDrag(({ offset: [x, y] }) => springApi.start({ position: [x, y, 0] }), {
     bounds: { left: -width / 2.2, right: width / 2.2, top: -height / 2.2, bottom: height / 2.2 },
     rubberband: true,
-    transform: ([x, y]) => [x / factor, -y / factor],
+    transform: ([x, y]) => [x / factor, -y / factor]
   })
 
   useFrame(() => (mesh.current.rotation.x = mesh.current.rotation.y += 0.01))
@@ -549,4 +589,101 @@ export function Transform() {
       <Box />
     </Canvas>
   )
+}
+
+export function CaptureFalse() {
+  const [{ x2, y2 }, api] = useSpring(() => ({ x2: 0, y2: 0 }))
+  const [hover, setHover] = useState(false)
+  const [dragging, setDragging] = useState(false)
+  const [capture, setCapture] = useState(true)
+  const [attached, setAttached] = useState(false)
+
+  const bind = useDrag(
+    ({ active, last, movement: [x, y] }) => {
+      setDragging(active)
+      if (last) {
+        setAttached(hover)
+        api.start({ x2: hover ? 300 : 0, y2: 0 })
+      } else {
+        setAttached(false)
+        api.start({ x2: x, y2: y, immediate: true })
+      }
+    },
+    { pointer: { capture } }
+  )
+
+  return (
+    <>
+      <div className={cn(styles.ui, styles.horizontal)}>
+        pointer.capture&nbsp;→&nbsp;
+        <label>
+          <input type="radio" checked={capture} value="x" onChange={() => setCapture(true)} />
+          true
+        </label>
+        <label>
+          <input type="radio" checked={!capture} value="y" onChange={() => setCapture(false)} />
+          false
+        </label>
+      </div>
+      <svg viewBox="-14.5 -14.5 328 28" version="1.1" xmlns="http://www.w3.org/2000/svg">
+        <animated.line x1="0" y1="0" x2={x2} y2={y2} stroke="hotpink" strokeLinecap="square" strokeWidth="2" />
+        <circle className={styles.from} {...bind()} fill="hotpink" cx="0" cy="0" r="12" />
+        <circle
+          className={styles.target}
+          onPointerEnter={() => setHover(true)}
+          onPointerLeave={() => setHover(false)}
+          fill={attached ? 'hotpink' : 'blue'}
+          cx="300"
+          cy="0"
+          r="12"
+        />
+      </svg>
+      <div>
+        {attached
+          ? 'Dots are connected!'
+          : dragging && hover
+          ? 'You can release the pointer'
+          : 'Connect the pink dot to the blue dot'}
+      </div>
+    </>
+  )
+}
+
+export function PointerTrue({ parentRef }) {
+  const [{ x, y }, api] = useSpring(() => ({ x: 0, y: 0 }))
+  const bind = useDrag(
+    ({ first, offset: [x, y], memo }) => {
+      if (first) {
+        memo = parentRef.current.getBoundingClientRect()
+      }
+      const dx = memo.width / 2 - 40
+      const dy = memo.height / 2 - 40
+      x = ((x + Math.sign(x) * dx) % memo.width) - Math.sign(x) * dx
+      y = ((y + Math.sign(y) * dy) % memo.height) - Math.sign(y) * dy
+      api.start({ x, y, immediate: true })
+
+      return memo
+    },
+    { pointer: { lock: true } }
+  )
+  return <animated.div className={styles.drag} {...bind()} style={{ x, y }} />
+}
+
+export function Vanilla({ setActive }) {
+  const el = useRef()
+  useEffect(() => {
+    const gesture = new DragGesture(el, ({ active, movement: [mx, my] }) => {
+      setActive(active)
+      anime({
+        targets: el.current,
+        translateX: active ? mx : 0,
+        translateY: active ? my : 0,
+        duration: active ? 0 : 1000
+      })
+    })
+
+    return () => gesture.destroy()
+  }, [setActive])
+
+  return <div ref={el} className={styles.drag} />
 }

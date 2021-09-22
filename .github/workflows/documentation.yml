@@ -1,0 +1,44 @@
+name: Docs
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'documentation/**'
+      - '.github/workflows/documentation.yml'
+env:
+  CI: true
+  PNPM_CACHE_FOLDER: .pnpm-store
+jobs:
+  publish_documentation:
+    name: Publish documentation
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Use Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Install pnpm
+        run: npm i pnpm@latest -g
+
+      - name: Setup pnpm config
+        run: pnpm config set store-dir $PNPM_CACHE_FOLDER
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Build documentation
+        run: pnpm docs:build
+
+      - name: Publish
+        uses: netlify/actions/cli@master
+        with:
+          args: deploy --dir=documentation/public --prod
+        env:
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}

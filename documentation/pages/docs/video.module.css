@@ -32,7 +32,7 @@
 }
 
 .badges > .badge:hover {
-  background-color: var(--xstyled-colors-primary, #667eea);
+  background-color: var(--xstyled-colors-on-background-primary, #667eea);
   color: #fff;
 }
 

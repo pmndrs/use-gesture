@@ -5,7 +5,8 @@ const Specs = styled.box`
   color: on-background-light;
   opacity: 0.6;
   font-size: 0.85em;
-  margin-top: ${th.px(-9)};
+  margin-top: ${th.px(10)};
+  margin-bottom: 20px;
   overflow-x: scroll;
   border-left: 3px solid;
   border-left-color: layout-border;
@@ -46,8 +47,9 @@ const Row = styled.box`
   }
 `
 
-export default function SpecsFn({ types, defaultValue }) {
+export default function SpecsFn({ types, gestures, defaultValue }) {
   const t = Array.isArray(types) ? types : [types]
+
   const l = t.join('').length
   return (
     <Specs>
@@ -57,12 +59,18 @@ export default function SpecsFn({ types, defaultValue }) {
           t.join(' | ')
         ) : (
           <ul>
-            {t.map(v => (
+            {t.map((v) => (
               <li key={v}>{v}</li>
             ))}
           </ul>
         )}
       </Row>
+      {gestures && (
+        <Row>
+          <div>Limited to</div>
+          <div>{gestures.join(', ')}</div>
+        </Row>
+      )}
       <Row>
         <div>Default</div>
         <div>{defaultValue}</div>

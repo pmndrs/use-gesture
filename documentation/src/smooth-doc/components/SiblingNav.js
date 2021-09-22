@@ -42,7 +42,7 @@ export const InnerSiblingNavLink = styled.aBox`
 
 export const SiblingNavLink = React.forwardRef(({ type, children, ...props }, ref) => {
   return (
-    <InnerSiblingNavLink ref={ref} forwardedAs={Link} data-type={type} gridArea={type} {...props}>
+    <InnerSiblingNavLink ref={ref} as={Link} data-type={type} gridArea={type} {...props}>
       <span>{type === 'previous' && '← '}</span>
       <div>
         <p>{type === 'previous' ? 'Prev' : 'Next'}</p>

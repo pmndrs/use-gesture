@@ -1,1 +1,1 @@
-# [React UseGesture website](https://use-gesture.netlify.app/)
+# [Use-gesture website](https://use-gesture.netlify.app/)
