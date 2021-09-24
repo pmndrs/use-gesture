@@ -27,13 +27,17 @@ export class PinchEngine extends Engine<'pinch'> {
   }
 
   computeOffset() {
-    const { movement, lastOffset } = this.state
-    this.state.offset = [(1 + movement[0]) * lastOffset[0], movement[1] + lastOffset[1]]
+    const { type, movement, lastOffset } = this.state
+    if (type === 'wheel') {
+      this.state.offset = V.add(movement, lastOffset)
+    } else {
+      this.state.offset = [(1 + movement[0]) * lastOffset[0], movement[1] + lastOffset[1]]
+    }
   }
 
   computeMovement() {
     const { offset, lastOffset } = this.state
-    this.state.movement = [offset[0] / lastOffset[0] - 1, offset[1] - lastOffset[1]]
+    this.state.movement = [offset[0] / lastOffset[0], offset[1] - lastOffset[1]]
   }
 
   intent(v: Vector2) {

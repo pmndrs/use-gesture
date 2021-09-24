@@ -18,8 +18,8 @@ export default function App() {
     ({ active, turns, ...state }) => {
       let [scale, angle] = state[gesture]
       api.start({
-        rotate: active || gesture === 'offset' ? angle : 0,
-        scale: active || gesture === 'offset' ? scale : 1
+        scale: active || gesture === 'offset' ? scale : 1,
+        rotate: active || gesture === 'offset' ? angle : 0
       })
     },
     { target, eventOptions: { passive: false }, pointer: { touch }, ...rest }
