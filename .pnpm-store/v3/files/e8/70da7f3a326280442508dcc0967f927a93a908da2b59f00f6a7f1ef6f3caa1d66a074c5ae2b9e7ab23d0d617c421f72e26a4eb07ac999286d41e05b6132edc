@@ -1,8 +1,0 @@
-{
-  "name": "reakit-system/useProps",
-  "private": true,
-  "sideEffects": false,
-  "main": "../lib/useProps",
-  "module": "../es/useProps",
-  "types": "../ts/useProps"
-}

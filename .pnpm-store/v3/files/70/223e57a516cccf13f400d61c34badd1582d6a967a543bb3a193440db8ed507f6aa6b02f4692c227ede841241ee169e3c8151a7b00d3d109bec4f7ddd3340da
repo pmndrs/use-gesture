@@ -1,8 +1,0 @@
-{
-  "name": "reakit/Menu/MenuItemRadio",
-  "private": true,
-  "sideEffects": false,
-  "main": "../../lib/Menu/MenuItemRadio",
-  "module": "../../es/Menu/MenuItemRadio",
-  "types": "../../ts/Menu/MenuItemRadio"
-}

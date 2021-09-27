@@ -1,8 +1,0 @@
-{
-  "name": "reakit-warning/warning",
-  "private": true,
-  "sideEffects": false,
-  "main": "../lib/warning",
-  "module": "../es/warning",
-  "types": "../ts/warning"
-}

@@ -1,8 +1,0 @@
-{
-  "name": "reakit/Composite/Composite",
-  "private": true,
-  "sideEffects": false,
-  "main": "../../lib/Composite/Composite",
-  "module": "../../es/Composite/Composite",
-  "types": "../../ts/Composite/Composite"
-}

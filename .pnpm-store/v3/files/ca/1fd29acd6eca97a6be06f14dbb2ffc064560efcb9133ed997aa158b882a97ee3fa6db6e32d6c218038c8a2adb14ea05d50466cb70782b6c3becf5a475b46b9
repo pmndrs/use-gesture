@@ -1,8 +1,0 @@
-{
-  "name": "reakit/Input",
-  "private": true,
-  "sideEffects": false,
-  "main": "../lib/Input",
-  "module": "../es/Input",
-  "types": "../ts/Input"
-}

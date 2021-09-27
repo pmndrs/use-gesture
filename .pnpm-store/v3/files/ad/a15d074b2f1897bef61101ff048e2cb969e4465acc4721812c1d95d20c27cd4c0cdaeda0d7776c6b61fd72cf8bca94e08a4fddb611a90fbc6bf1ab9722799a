@@ -1,8 +1,0 @@
-{
-  "name": "reakit/Combobox/ComboboxPopover",
-  "private": true,
-  "sideEffects": false,
-  "main": "../../lib/Combobox/ComboboxPopover",
-  "module": "../../es/Combobox/ComboboxPopover",
-  "types": "../../ts/Combobox/ComboboxPopover"
-}

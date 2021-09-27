@@ -1,1 +1,0 @@
-export declare const ROVER_KEYS: readonly ["baseId", "unstable_idCountRef", "orientation", "stops", "currentId", "unstable_pastId", "unstable_moves", "loop", "setBaseId", "register", "unregister", "move", "next", "previous", "first", "last", "unstable_reset", "unstable_orientate", "stopId"];

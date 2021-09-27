@@ -1,8 +1,0 @@
-{
-  "name": "reakit/Form/FormInput",
-  "private": true,
-  "sideEffects": false,
-  "main": "../../lib/Form/FormInput",
-  "module": "../../es/Form/FormInput",
-  "types": "../../ts/Form/FormInput"
-}

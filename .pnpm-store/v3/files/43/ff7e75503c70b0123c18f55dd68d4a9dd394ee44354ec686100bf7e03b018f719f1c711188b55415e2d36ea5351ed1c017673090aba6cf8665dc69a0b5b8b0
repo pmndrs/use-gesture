@@ -1,8 +1,0 @@
-{
-  "name": "reakit/Grid/Grid",
-  "private": true,
-  "sideEffects": false,
-  "main": "../../lib/Grid/Grid",
-  "module": "../../es/Grid/Grid",
-  "types": "../../ts/Grid/Grid"
-}

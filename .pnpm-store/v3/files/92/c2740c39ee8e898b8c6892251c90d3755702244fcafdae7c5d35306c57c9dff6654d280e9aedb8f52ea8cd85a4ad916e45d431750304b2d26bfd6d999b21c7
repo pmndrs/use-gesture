@@ -1,8 +1,0 @@
-{
-  "name": "reakit/VisuallyHidden",
-  "private": true,
-  "sideEffects": false,
-  "main": "../lib/VisuallyHidden",
-  "module": "../es/VisuallyHidden",
-  "types": "../ts/VisuallyHidden"
-}

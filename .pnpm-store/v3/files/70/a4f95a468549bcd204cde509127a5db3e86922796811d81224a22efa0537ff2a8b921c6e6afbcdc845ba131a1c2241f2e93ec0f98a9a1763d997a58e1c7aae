@@ -1,8 +1,0 @@
-{
-  "name": "reakit-utils/canUseDOM",
-  "private": true,
-  "sideEffects": false,
-  "main": "../lib/canUseDOM",
-  "module": "../es/canUseDOM",
-  "types": "../ts/canUseDOM"
-}

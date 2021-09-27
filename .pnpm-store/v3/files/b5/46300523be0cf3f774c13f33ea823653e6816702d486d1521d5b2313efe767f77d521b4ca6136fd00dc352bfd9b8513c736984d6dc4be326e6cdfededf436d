@@ -1,8 +1,0 @@
-{
-  "name": "reakit/Form/FormRadioGroup",
-  "private": true,
-  "sideEffects": false,
-  "main": "../../lib/Form/FormRadioGroup",
-  "module": "../../es/Form/FormRadioGroup",
-  "types": "../../ts/Form/FormRadioGroup"
-}

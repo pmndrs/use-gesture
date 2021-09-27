@@ -1,8 +1,0 @@
-{
-  "name": "reakit/Rover/RoverState",
-  "private": true,
-  "sideEffects": false,
-  "main": "../../lib/Rover/RoverState",
-  "module": "../../es/Rover/RoverState",
-  "types": "../../ts/Rover/RoverState"
-}

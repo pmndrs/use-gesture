@@ -1,8 +1,0 @@
-{
-  "name": "reakit-utils/closest",
-  "private": true,
-  "sideEffects": false,
-  "main": "../lib/closest",
-  "module": "../es/closest",
-  "types": "../ts/closest"
-}

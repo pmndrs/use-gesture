@@ -1,8 +1,0 @@
-{
-  "name": "reakit/Id/IdProvider",
-  "private": true,
-  "sideEffects": false,
-  "main": "../../lib/Id/IdProvider",
-  "module": "../../es/Id/IdProvider",
-  "types": "../../ts/Id/IdProvider"
-}

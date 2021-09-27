@@ -1,8 +1,0 @@
-{
-  "name": "reakit-utils/matches",
-  "private": true,
-  "sideEffects": false,
-  "main": "../lib/matches",
-  "module": "../es/matches",
-  "types": "../ts/matches"
-}

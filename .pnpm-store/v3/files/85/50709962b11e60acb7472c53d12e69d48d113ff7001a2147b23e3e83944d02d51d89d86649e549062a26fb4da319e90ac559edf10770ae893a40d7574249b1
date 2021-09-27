@@ -1,8 +1,0 @@
-{
-  "name": "reakit-utils/useUpdateEffect",
-  "private": true,
-  "sideEffects": false,
-  "main": "../lib/useUpdateEffect",
-  "module": "../es/useUpdateEffect",
-  "types": "../ts/useUpdateEffect"
-}

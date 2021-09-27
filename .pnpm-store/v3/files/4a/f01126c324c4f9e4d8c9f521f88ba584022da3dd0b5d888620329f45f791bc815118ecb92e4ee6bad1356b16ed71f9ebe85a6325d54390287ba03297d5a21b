@@ -1,8 +1,0 @@
-{
-  "name": "reakit-utils/ensureFocus",
-  "private": true,
-  "sideEffects": false,
-  "main": "../lib/ensureFocus",
-  "module": "../es/ensureFocus",
-  "types": "../ts/ensureFocus"
-}

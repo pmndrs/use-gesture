@@ -1,2 +1,0 @@
-import { css as scCss } from 'styled-components';
-export declare function css(...args: Parameters<typeof scCss>): ReturnType<typeof scCss>;

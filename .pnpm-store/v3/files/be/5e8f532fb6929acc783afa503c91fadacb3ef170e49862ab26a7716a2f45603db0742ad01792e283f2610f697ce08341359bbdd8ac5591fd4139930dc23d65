@@ -1,4 +1,0 @@
-{
-  "main": "dist/reach-utils-compose-event-handlers.cjs.js",
-  "module": "dist/reach-utils-compose-event-handlers.esm.js"
-}

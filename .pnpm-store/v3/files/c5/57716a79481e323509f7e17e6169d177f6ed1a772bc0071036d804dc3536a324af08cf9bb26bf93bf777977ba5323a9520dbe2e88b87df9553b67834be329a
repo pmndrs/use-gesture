@@ -1,8 +1,0 @@
-{
-  "name": "reakit/Tooltip/TooltipState",
-  "private": true,
-  "sideEffects": false,
-  "main": "../../lib/Tooltip/TooltipState",
-  "module": "../../es/Tooltip/TooltipState",
-  "types": "../../ts/Tooltip/TooltipState"
-}

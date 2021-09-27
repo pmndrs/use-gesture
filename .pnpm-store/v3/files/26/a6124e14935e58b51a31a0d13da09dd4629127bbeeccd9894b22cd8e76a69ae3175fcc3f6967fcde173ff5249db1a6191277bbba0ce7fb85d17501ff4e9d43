@@ -1,1 +1,0 @@
-"use strict";var e=require("../WebGPUUniformsGroup.cjs.js");require("../WebGPUBinding.cjs.js"),require("../constants.cjs.js");module.exports=class extends e{constructor(e){let s;super("nodeUniforms"),"vertex"===e?s=GPUShaderStage.VERTEX:"fragment"===e&&(s=GPUShaderStage.FRAGMENT),this.setVisibility(s)}};

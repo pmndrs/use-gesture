@@ -1,1 +1,0 @@
-{"version":3,"file":"bin-script.js","sourceRoot":"","sources":["../src/bin-script.ts"],"names":[],"mappings":";;;AAEA,+BAA4B;AAE5B,UAAI,CAAC,SAAS,EAAE,EAAE,eAAe,EAAE,IAAI,EAAE,CAAC,CAAA","sourcesContent":["#!/usr/bin/env node\n\nimport { main } from './bin'\n\nmain(undefined, { '--script-mode': true })\n"]}

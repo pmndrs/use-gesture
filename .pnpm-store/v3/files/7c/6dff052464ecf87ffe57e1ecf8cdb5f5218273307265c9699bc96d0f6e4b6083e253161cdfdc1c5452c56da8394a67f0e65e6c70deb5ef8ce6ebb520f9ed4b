@@ -1,8 +1,0 @@
-{
-  "name": "reakit-system/createComponent",
-  "private": true,
-  "sideEffects": false,
-  "main": "../lib/createComponent",
-  "module": "../es/createComponent",
-  "types": "../ts/createComponent"
-}

@@ -1,8 +1,0 @@
-{
-  "name": "reakit/Composite/CompositeItemWidget",
-  "private": true,
-  "sideEffects": false,
-  "main": "../../lib/Composite/CompositeItemWidget",
-  "module": "../../es/Composite/CompositeItemWidget",
-  "types": "../../ts/Composite/CompositeItemWidget"
-}

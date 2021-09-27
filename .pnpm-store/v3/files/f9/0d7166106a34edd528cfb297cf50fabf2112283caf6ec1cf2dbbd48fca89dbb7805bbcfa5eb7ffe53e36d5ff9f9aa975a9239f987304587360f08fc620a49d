@@ -1,8 +1,0 @@
-{
-  "name": "reakit/Combobox/ComboboxGridCell",
-  "private": true,
-  "sideEffects": false,
-  "main": "../../lib/Combobox/ComboboxGridCell",
-  "module": "../../es/Combobox/ComboboxGridCell",
-  "types": "../../ts/Combobox/ComboboxGridCell"
-}

@@ -1,8 +1,0 @@
-{
-  "name": "reakit-system/SystemContext",
-  "private": true,
-  "sideEffects": false,
-  "main": "../lib/SystemContext",
-  "module": "../es/SystemContext",
-  "types": "../ts/SystemContext"
-}

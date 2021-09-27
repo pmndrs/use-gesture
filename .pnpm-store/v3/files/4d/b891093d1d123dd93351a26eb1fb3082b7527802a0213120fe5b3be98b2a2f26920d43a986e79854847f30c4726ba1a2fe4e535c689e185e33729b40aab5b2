@@ -1,8 +1,0 @@
-{
-  "name": "reakit-utils/fireEvent",
-  "private": true,
-  "sideEffects": false,
-  "main": "../lib/fireEvent",
-  "module": "../es/fireEvent",
-  "types": "../ts/fireEvent"
-}

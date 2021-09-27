@@ -1,8 +1,0 @@
-{
-  "name": "reakit/Combobox/ComboboxListGridState",
-  "private": true,
-  "sideEffects": false,
-  "main": "../../lib/Combobox/ComboboxListGridState",
-  "module": "../../es/Combobox/ComboboxListGridState",
-  "types": "../../ts/Combobox/ComboboxListGridState"
-}

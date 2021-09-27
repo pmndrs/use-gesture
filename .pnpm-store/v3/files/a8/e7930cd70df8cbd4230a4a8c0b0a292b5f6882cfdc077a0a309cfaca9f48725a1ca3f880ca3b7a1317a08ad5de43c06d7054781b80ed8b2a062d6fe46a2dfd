@@ -1,7 +1,0 @@
-import { IProps, ThemeGetter } from './types';
-interface ThemeGet {
-    (path: string, defaultValue?: any): (props: IProps) => any;
-    [key: string]: ThemeGetter;
-}
-export declare const th: ThemeGet;
-export {};

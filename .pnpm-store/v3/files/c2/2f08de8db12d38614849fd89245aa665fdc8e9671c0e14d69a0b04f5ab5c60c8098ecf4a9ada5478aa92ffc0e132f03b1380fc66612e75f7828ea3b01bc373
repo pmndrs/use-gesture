@@ -1,4 +1,0 @@
-export declare const mediaGetters: {
-    'min-width': (value: any) => (props: object) => any;
-    'max-width': (value: any) => (props: object) => any;
-};

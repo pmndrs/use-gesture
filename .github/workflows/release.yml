@@ -13,56 +13,34 @@ env:
 
 jobs:
   version:
-    timeout-minutes: 8
-    runs-on: ubuntu-latest
-    steps:
-      - name: checkout code repository
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
+    - name: Use Node
+      uses: actions/setup-node@v2
+      with:
+        node-version: '16'
 
-      - name: setup caching
-        uses: actions/cache@v2
-        with:
-          path: ${{ env.PNPM_CACHE_FOLDER }}
-          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-
-      - name: setup pnpm
-        uses: pnpm/action-setup@v2.0.1
-        with:
-          version: 6.x
+    - name: Install pnpm
+      run: npm i pnpm@latest -g
 
-      - name: setup node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: 16.x
-          cache: 'pnpm'
+    - name: Setup pnpm config
+      run: pnpm config set store-dir $PNPM_CACHE_FOLDER
 
-      - name: Set up NPM credentials
-        run: echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+    - name: Install dependencies
+      run: pnpm install
 
-      - name: setup pnpm config
-        run: pnpm config set store-dir $PNPM_CACHE_FOLDER
-
-      - run: pnpm install
-
-      - name: Create versions PR & prepare publish
-        id: changesets
-        uses: changesets/action@master
-        # if: github.ref == 'refs/heads/master'
-        with:
-          # Custom versioning script in package.json
-          version: pnpm ci:version
-          # Custom versioning script in package.json
-          publish: pnpm ci:publish
-          # Messages
-          commit: 'chore(deploy): Release'
-          title: 'chore(deploy): Release'
-        env:
-          # npm publish token required for publishing. Set this in secrets
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-          # automatically available in actions
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Create versions PR & prepare publish
+      id: changesets
+      uses: changesets/action@master
+      # if: github.ref == 'refs/heads/master'
+      with:
+        # Custom versioning script in package.json
+        version: pnpm ci:version
+        # Custom versioning script in package.json
+        publish: pnpm ci:publish
+        # Messages
+        commit: 'chore(deploy): Release'
+        title: 'chore(deploy): Release'
+      env:
+        # npm publish token required for publishing. Set this in secrets
+        NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        # automatically available in actions
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

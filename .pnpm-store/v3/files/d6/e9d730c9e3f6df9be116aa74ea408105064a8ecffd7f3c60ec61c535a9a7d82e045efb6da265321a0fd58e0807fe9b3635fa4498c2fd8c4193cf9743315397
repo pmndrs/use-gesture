@@ -1,8 +1,0 @@
-{
-  "name": "reakit/Box/Box",
-  "private": true,
-  "sideEffects": false,
-  "main": "../../lib/Box/Box",
-  "module": "../../es/Box/Box",
-  "types": "../../ts/Box/Box"
-}

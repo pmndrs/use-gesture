@@ -1,8 +1,0 @@
-{
-  "name": "reakit/Menu/MenuItem",
-  "private": true,
-  "sideEffects": false,
-  "main": "../../lib/Menu/MenuItem",
-  "module": "../../es/Menu/MenuItem",
-  "types": "../../ts/Menu/MenuItem"
-}

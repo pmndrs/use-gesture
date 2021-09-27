@@ -1,8 +1,0 @@
-{
-  "name": "reakit/Radio/RadioGroup",
-  "private": true,
-  "sideEffects": false,
-  "main": "../../lib/Radio/RadioGroup",
-  "module": "../../es/Radio/RadioGroup",
-  "types": "../../ts/Radio/RadioGroup"
-}

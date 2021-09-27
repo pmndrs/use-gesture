@@ -1,9 +1,0 @@
-import { RestEndpoint } from '../types';
-export declare const get: RestEndpoint<'Release', 'get'>;
-export declare const query: RestEndpoint<'Release', 'query'>;
-export declare const create: RestEndpoint<'Release', 'create'>;
-export declare const update: RestEndpoint<'Release', 'update'>;
-export declare const del: RestEndpoint<'Release', 'delete'>;
-export declare const publish: RestEndpoint<'Release', 'publish'>;
-export declare const unpublish: RestEndpoint<'Release', 'unpublish'>;
-export declare const validate: RestEndpoint<'Release', 'validate'>;

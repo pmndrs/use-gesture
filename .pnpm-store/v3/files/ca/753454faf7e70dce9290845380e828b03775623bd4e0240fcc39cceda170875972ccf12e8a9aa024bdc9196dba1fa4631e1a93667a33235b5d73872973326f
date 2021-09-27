@@ -1,8 +1,0 @@
-{
-  "name": "reakit-utils/isTextField",
-  "private": true,
-  "sideEffects": false,
-  "main": "../lib/isTextField",
-  "module": "../es/isTextField",
-  "types": "../ts/isTextField"
-}

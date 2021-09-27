@@ -1,8 +1,0 @@
-{
-  "name": "reakit/Tab/TabState",
-  "private": true,
-  "sideEffects": false,
-  "main": "../../lib/Tab/TabState",
-  "module": "../../es/Tab/TabState",
-  "types": "../../ts/Tab/TabState"
-}

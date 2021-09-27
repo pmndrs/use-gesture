@@ -1,8 +1,0 @@
-{
-  "name": "reakit-utils/getNextActiveElementOnBlur",
-  "private": true,
-  "sideEffects": false,
-  "main": "../lib/getNextActiveElementOnBlur",
-  "module": "../es/getNextActiveElementOnBlur",
-  "types": "../ts/getNextActiveElementOnBlur"
-}

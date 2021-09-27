@@ -1,8 +1,0 @@
-{
-  "name": "reakit-utils/isPromise",
-  "private": true,
-  "sideEffects": false,
-  "main": "../lib/isPromise",
-  "module": "../es/isPromise",
-  "types": "../ts/isPromise"
-}

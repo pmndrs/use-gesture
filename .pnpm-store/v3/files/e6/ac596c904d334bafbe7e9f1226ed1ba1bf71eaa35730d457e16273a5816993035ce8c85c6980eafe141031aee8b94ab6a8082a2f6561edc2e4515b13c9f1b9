@@ -1,8 +1,0 @@
-{
-  "name": "reakit-utils/useLiveRef",
-  "private": true,
-  "sideEffects": false,
-  "main": "../lib/useLiveRef",
-  "module": "../es/useLiveRef",
-  "types": "../ts/useLiveRef"
-}
