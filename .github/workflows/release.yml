@@ -6,7 +6,6 @@ on:
     paths:
       - '**/package.json'
       - '.changeset/**'
-      - '.github/workflows/release.yml'
 
 env:
   PNPM_CACHE_FOLDER: .pnpm-store
@@ -17,6 +16,11 @@ jobs:
     timeout-minutes: 8
     runs-on: ubuntu-latest
     steps:
+      - name: checkout code repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
       - name: Use Node
         uses: actions/setup-node@v2
         with:
@@ -31,12 +35,21 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
+      - name: Set up NPM credentials
+        run: echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - run: pnpm install
+
       - name: Create versions PR & prepare publish
         id: changesets
         uses: changesets/action@master
         # if: github.ref == 'refs/heads/master'
         with:
+          # Custom versioning script in package.json
           version: pnpm ci:version
+          # Custom versioning script in package.json
           publish: pnpm ci:publish
           # Messages
           commit: 'chore(deploy): Release'
