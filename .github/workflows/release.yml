@@ -35,9 +35,7 @@ jobs:
         uses: changesets/action@master
         # if: github.ref == 'refs/heads/master'
         with:
-          # Custom versioning script in package.json
           version: pnpm ci:version
-          # Custom versioning script in package.json
           publish: pnpm ci:publish
           # Messages
           commit: 'chore(deploy): Release'
