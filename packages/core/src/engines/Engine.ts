@@ -261,13 +261,13 @@ export abstract class Engine<Key extends GestureKey> {
           if (this.setup) this.setup()
         }
 
-        const previousMovement = state.movement
         state.movement = movement
+        const previousOffset = state.offset
 
         this.computeOffset()
 
         if (!state.last || dt > BEFORE_LAST_KINEMATICS_DELAY) {
-          state.delta = V.sub(movement, previousMovement)
+          state.delta = V.sub(state.offset, previousOffset)
           const absoluteDelta = state.delta.map(Math.abs) as Vector2
 
           V.addTo(state.distance, absoluteDelta)

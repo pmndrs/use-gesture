@@ -47,7 +47,7 @@ describe.each([
     expect(getByTestId(`${prefix}pinch-origin`)).toHaveTextContent(`0,20`)
     expect(getByTestId(`${prefix}pinch-initial`)).toHaveTextContent(`40,0`)
     expect(getByTestId(`${prefix}pinch-offset`)).toHaveTextContent(`1,0`)
-    expect(getByTestId(`${prefix}pinch-movement`)).toHaveTextContent(`0,0`)
+    expect(getByTestId(`${prefix}pinch-movement`)).toHaveTextContent(`1,0`)
     expect(getByTestId(`${prefix}pinch-touches`)).toHaveTextContent('2')
   })
 
@@ -71,7 +71,7 @@ describe.each([
     const delta = (30 - 40) / 40
     offset = 1 + delta
     expect(getByTestId(`${prefix}pinch-da`)).toHaveTextContent(`30,-90`)
-    expect(getByTestId(`${prefix}pinch-movement`)).toHaveTextContent(`${delta},-90`)
+    expect(getByTestId(`${prefix}pinch-movement`)).toHaveTextContent(`${1 + delta},-90`)
     expect(getByTestId(`${prefix}pinch-offset`)).toHaveTextContent(`${offset},-90`)
     expect(getByTestId(`${prefix}pinch-delta`)).toHaveTextContent(`${delta},-90`)
     expect(getByTestId(`${prefix}pinch-origin`)).toHaveTextContent(`15,0`)
@@ -107,7 +107,7 @@ describe.each([
 
     expect(getByTestId(`${prefix}pinch-da`)).toHaveTextContent(`30,90`)
     expect(getByTestId(`${prefix}pinch-active`)).toHaveTextContent('true')
-    expect(getByTestId(`${prefix}pinch-movement`)).toHaveTextContent(`${delta},90`)
+    expect(getByTestId(`${prefix}pinch-movement`)).toHaveTextContent(`${1 + delta},90`)
     expect(getByTestId(`${prefix}pinch-offset`)).toHaveTextContent(`${offset},0`)
   })
 

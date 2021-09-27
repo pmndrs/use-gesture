@@ -4,7 +4,7 @@ import { V } from '../utils/maths'
 import { Vector2, WebKitGestureEvent } from '../types'
 
 const SCALE_ANGLE_RATIO_INTENT_DEG = 30
-const PINCH_WHEEL_RATIO = 60
+const PINCH_WHEEL_RATIO = 36
 
 export class PinchEngine extends Engine<'pinch'> {
   ingKey = 'pinching' as const
@@ -27,13 +27,17 @@ export class PinchEngine extends Engine<'pinch'> {
   }
 
   computeOffset() {
-    const { movement, lastOffset } = this.state
-    this.state.offset = [(1 + movement[0]) * lastOffset[0], movement[1] + lastOffset[1]]
+    const { type, movement, lastOffset } = this.state
+    if (type === 'wheel') {
+      this.state.offset = V.add(movement, lastOffset)
+    } else {
+      this.state.offset = [(1 + movement[0]) * lastOffset[0], movement[1] + lastOffset[1]]
+    }
   }
 
   computeMovement() {
     const { offset, lastOffset } = this.state
-    this.state.movement = [offset[0] / lastOffset[0] - 1, offset[1] - lastOffset[1]]
+    this.state.movement = [offset[0] / lastOffset[0], offset[1] - lastOffset[1]]
   }
 
   intent(v: Vector2) {
@@ -249,7 +253,7 @@ export class PinchEngine extends Engine<'pinch'> {
       }
     }
     const state = this.state
-    state._delta = [-wheelValues(event)[1] / PINCH_WHEEL_RATIO, 0]
+    state._delta = [(-wheelValues(event)[1] / PINCH_WHEEL_RATIO) * state.offset[0], 0]
     V.addTo(state._movement, state._delta)
 
     this.state.origin = [event.clientX, event.clientY]

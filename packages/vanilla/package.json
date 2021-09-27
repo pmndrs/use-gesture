@@ -35,6 +35,6 @@
   ],
   "homepage": "https://use-gesture.netlify.app",
   "dependencies": {
-    "@use-gesture/core": "^10.0.0"
+    "@use-gesture/core": "10.0.0"
   }
 }
