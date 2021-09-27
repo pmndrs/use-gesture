@@ -1,0 +1,8 @@
+{
+  "name": "reakit/Form/FormGroup",
+  "private": true,
+  "sideEffects": false,
+  "main": "../../lib/Form/FormGroup",
+  "module": "../../es/Form/FormGroup",
+  "types": "../../ts/Form/FormGroup"
+}

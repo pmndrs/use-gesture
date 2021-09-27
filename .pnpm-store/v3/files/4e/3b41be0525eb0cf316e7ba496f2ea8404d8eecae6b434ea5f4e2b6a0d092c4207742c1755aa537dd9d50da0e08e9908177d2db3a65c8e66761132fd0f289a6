@@ -1,0 +1,23 @@
+{
+  "name": "@algolia/client-recommendation",
+  "version": "4.9.1",
+  "private": false,
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/algolia/algoliasearch-client-javascript.git"
+  },
+  "license": "MIT",
+  "sideEffects": false,
+  "main": "index.js",
+  "module": "dist/client-recommendation.esm.js",
+  "types": "dist/client-recommendation.d.ts",
+  "files": [
+    "index.js",
+    "dist"
+  ],
+  "dependencies": {
+    "@algolia/client-common": "4.9.1",
+    "@algolia/requester-common": "4.9.1",
+    "@algolia/transporter": "4.9.1"
+  }
+}

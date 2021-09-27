@@ -1,0 +1,63 @@
+{
+  "name": "remark-mdx",
+  "version": "2.0.0-next.9",
+  "description": "remark plugin to add support for mdx",
+  "repository": "https://github.com/mdx-js/mdx/tree/master/packages/remark-mdx",
+  "bugs": "https://github.com/mdx-js/mdx/issues",
+  "funding": {
+    "type": "opencollective",
+    "url": "https://opencollective.com/unified"
+  },
+  "author": "Titus Wormer <tituswormer@gmail.com> (https://wooorm.com)",
+  "contributors": [
+    "Titus Wormer <tituswormer@gmail.com> (https://wooorm.com)",
+    "Christian Murphy <christian.murphy.42@gmail.com>"
+  ],
+  "license": "MIT",
+  "types": "types/index.d.ts",
+  "files": [
+    "index.js",
+    "types/index.d.ts"
+  ],
+  "keywords": [
+    "unified",
+    "remark",
+    "remark-plugin",
+    "plugin",
+    "mdast",
+    "markdown",
+    "jsx",
+    "javascript",
+    "xml",
+    "mdx"
+  ],
+  "scripts": {
+    "test-api": "node test",
+    "test-coverage": "nyc --reporter lcov tape test/index.js",
+    "test-types": "dtslint types",
+    "test": "yarn format && yarn test-coverage && yarn test-types"
+  },
+  "dependencies": {
+    "mdast-util-mdx": "^0.1.1",
+    "micromark-extension-mdx": "^0.2.0",
+    "micromark-extension-mdxjs": "^0.3.0"
+  },
+  "devDependencies": {
+    "nyc": "^15.1.0",
+    "remark-parse": "^9.0.0",
+    "remark-stringify": "^9.0.1",
+    "tape": "^5.0.1",
+    "to-vfile": "^6.1.0",
+    "unified": "^9.0.0",
+    "unist-builder": "^2.0.3",
+    "unist-util-remove-position": "^3.0.0",
+    "unist-util-visit": "^2.0.0"
+  },
+  "nyc": {
+    "check-coverage": true,
+    "lines": 100,
+    "functions": 100,
+    "branches": 100
+  },
+  "gitHead": "6fc71ff94c671582b4185a98f87dcdb1d18c831b"
+}

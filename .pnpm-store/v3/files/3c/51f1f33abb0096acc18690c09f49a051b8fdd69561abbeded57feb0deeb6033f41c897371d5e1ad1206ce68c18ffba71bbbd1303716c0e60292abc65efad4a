@@ -1,0 +1,8 @@
+{
+  "name": "reakit/Button",
+  "private": true,
+  "sideEffects": false,
+  "main": "../lib/Button",
+  "module": "../es/Button",
+  "types": "../ts/Button"
+}

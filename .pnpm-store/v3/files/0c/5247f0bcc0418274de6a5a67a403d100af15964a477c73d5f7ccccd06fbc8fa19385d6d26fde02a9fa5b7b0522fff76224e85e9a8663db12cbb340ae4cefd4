@@ -1,0 +1,4 @@
+{
+  "main": "dist/reach-utils-use-lazy-ref.cjs.js",
+  "module": "dist/reach-utils-use-lazy-ref.esm.js"
+}

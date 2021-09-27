@@ -1,0 +1,88 @@
+"use strict";
+
+exports.__esModule = true;
+exports.Observe = exports.State = undefined;
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _react = require("react");
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var StoreContext = _react2.default.createContext({ setState: function setState() {} });
+
+// provides {...state, setState} as context as well as render prop
+// if the children prop is a function
+
+var State = function (_React$Component) {
+  _inherits(State, _React$Component);
+
+  function State() {
+    var _temp, _this, _ret;
+
+    _classCallCheck(this, State);
+
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    return _ret = (_temp = (_this = _possibleConstructorReturn(this, _React$Component.call.apply(_React$Component, [this].concat(args))), _this), _this.state = _extends({}, _this.props.initialState, {
+      setState: function setState(update) {
+        return _this.setState(update);
+      }
+    }), _temp), _possibleConstructorReturn(_this, _ret);
+  }
+
+  State.prototype.render = function render() {
+    return _react2.default.createElement(
+      StoreContext.Provider,
+      { value: this.state },
+      _react2.default.createElement(
+        _react2.default.Fragment,
+        null,
+        typeof this.props.children === "function" ? this.props.children(this.state) : this.props.children
+      )
+    );
+  };
+
+  return State;
+}(_react2.default.Component);
+
+State.defaultProps = {
+  initialState: {}
+};
+
+var Observe = function (_React$Component2) {
+  _inherits(Observe, _React$Component2);
+
+  function Observe() {
+    _classCallCheck(this, Observe);
+
+    return _possibleConstructorReturn(this, _React$Component2.apply(this, arguments));
+  }
+
+  Observe.prototype.render = function render() {
+    var children = this.props.children;
+
+    return _react2.default.createElement(
+      StoreContext.Consumer,
+      null,
+      function (store) {
+        return children(store);
+      }
+    );
+  };
+
+  return Observe;
+}(_react2.default.Component);
+
+exports.State = State;
+exports.Observe = Observe;

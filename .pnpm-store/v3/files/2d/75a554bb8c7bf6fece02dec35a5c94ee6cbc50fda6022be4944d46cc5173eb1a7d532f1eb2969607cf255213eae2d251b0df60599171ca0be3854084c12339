@@ -1,0 +1,8 @@
+{
+  "name": "reakit-utils/getWindow",
+  "private": true,
+  "sideEffects": false,
+  "main": "../lib/getWindow",
+  "module": "../es/getWindow",
+  "types": "../ts/getWindow"
+}

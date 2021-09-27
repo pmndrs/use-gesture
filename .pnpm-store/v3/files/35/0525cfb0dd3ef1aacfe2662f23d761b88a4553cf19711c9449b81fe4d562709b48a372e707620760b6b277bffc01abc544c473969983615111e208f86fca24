@@ -1,0 +1,8 @@
+{
+  "name": "reakit/Popover/PopoverDisclosure",
+  "private": true,
+  "sideEffects": false,
+  "main": "../../lib/Popover/PopoverDisclosure",
+  "module": "../../es/Popover/PopoverDisclosure",
+  "types": "../../ts/Popover/PopoverDisclosure"
+}

@@ -1,0 +1,8 @@
+{
+  "name": "reakit-utils/isButton",
+  "private": true,
+  "sideEffects": false,
+  "main": "../lib/isButton",
+  "module": "../es/isButton",
+  "types": "../ts/isButton"
+}

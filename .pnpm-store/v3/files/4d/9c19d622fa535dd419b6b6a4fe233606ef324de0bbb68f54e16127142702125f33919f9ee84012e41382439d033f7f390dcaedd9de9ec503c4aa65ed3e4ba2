@@ -1,0 +1,8 @@
+{
+  "name": "reakit-utils/pick",
+  "private": true,
+  "sideEffects": false,
+  "main": "../lib/pick",
+  "module": "../es/pick",
+  "types": "../ts/pick"
+}

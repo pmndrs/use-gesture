@@ -1,0 +1,8 @@
+{
+  "name": "reakit-utils/fireBlurEvent",
+  "private": true,
+  "sideEffects": false,
+  "main": "../lib/fireBlurEvent",
+  "module": "../es/fireBlurEvent",
+  "types": "../ts/fireBlurEvent"
+}

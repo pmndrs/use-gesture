@@ -1,0 +1,32 @@
+{
+  "name": "react-three-fiber",
+  "version": "0.0.0-deprecated",
+  "description": "A React renderer for Three.js (web and react-native)",
+  "keywords": [
+    "react",
+    "renderer",
+    "fiber",
+    "three",
+    "threejs"
+  ],
+  "author": "Paul Henschel",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pmndrs/react-three-fiber/issues"
+  },
+  "homepage": "https://github.com/pmndrs/react-three-fiber#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pmndrs/react-three-fiber.git"
+  },
+  "collective": {
+    "type": "opencollective",
+    "url": "https://opencollective.com/react-three-fiber"
+  },
+  "main": "index.js",
+  "module": "index.js",
+  "react-native": "native.js",
+  "scripts": {
+    "test": "echo 1"
+  }
+}

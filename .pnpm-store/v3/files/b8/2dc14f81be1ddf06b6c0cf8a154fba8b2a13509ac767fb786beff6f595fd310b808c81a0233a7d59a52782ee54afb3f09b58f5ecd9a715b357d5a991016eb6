@@ -1,0 +1,8 @@
+{
+  "name": "reakit/Form/FormPushButton",
+  "private": true,
+  "sideEffects": false,
+  "main": "../../lib/Form/FormPushButton",
+  "module": "../../es/Form/FormPushButton",
+  "types": "../../ts/Form/FormPushButton"
+}

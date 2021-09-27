@@ -1,0 +1,8 @@
+{
+  "name": "reakit/Menu/MenuGroup",
+  "private": true,
+  "sideEffects": false,
+  "main": "../../lib/Menu/MenuGroup",
+  "module": "../../es/Menu/MenuGroup",
+  "types": "../../ts/Menu/MenuGroup"
+}

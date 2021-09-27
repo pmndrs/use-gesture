@@ -1,0 +1,8 @@
+{
+  "name": "reakit-utils/useForkRef",
+  "private": true,
+  "sideEffects": false,
+  "main": "../lib/useForkRef",
+  "module": "../es/useForkRef",
+  "types": "../ts/useForkRef"
+}

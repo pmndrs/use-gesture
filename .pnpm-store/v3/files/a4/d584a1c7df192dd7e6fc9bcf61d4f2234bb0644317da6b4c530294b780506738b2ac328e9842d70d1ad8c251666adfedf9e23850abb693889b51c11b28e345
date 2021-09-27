@@ -1,0 +1,5 @@
+import * as React from 'react';
+import { Object3DNode } from '@react-three/fiber';
+import { FirstPersonControls as FirstPersonControlImpl } from 'three-stdlib';
+export declare type FirstPersonControlsProps = Object3DNode<FirstPersonControlImpl, typeof FirstPersonControlImpl>;
+export declare const FirstPersonControls: React.ForwardRefExoticComponent<Pick<FirstPersonControlsProps, "object" | "attach" | "attachArray" | "attachObject" | "args" | "children" | "key" | "onUpdate" | "position" | "up" | "scale" | "rotation" | "matrix" | "quaternion" | "layers" | "dispose" | "lookAt" | "addEventListener" | "hasEventListener" | "removeEventListener" | "dispatchEvent" | keyof import("@react-three/fiber/dist/declarations/src/core/events").EventHandlers | "enabled" | "update" | "domElement" | "movementSpeed" | "autoForward" | "lookSpeed" | "lookVertical" | "activeLook" | "heightSpeed" | "heightCoef" | "heightMin" | "heightMax" | "constrainVertical" | "verticalMin" | "verticalMax" | "mouseDragOn" | "handleResize"> & React.RefAttributes<FirstPersonControlImpl>>;

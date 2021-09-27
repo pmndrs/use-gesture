@@ -1,0 +1,4 @@
+{
+  "main": "dist/reach-utils-use-update-effect.cjs.js",
+  "module": "dist/reach-utils-use-update-effect.esm.js"
+}

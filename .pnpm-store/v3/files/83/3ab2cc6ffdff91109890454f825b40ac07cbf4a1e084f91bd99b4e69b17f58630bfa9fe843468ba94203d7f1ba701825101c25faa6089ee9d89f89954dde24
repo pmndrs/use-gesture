@@ -1,0 +1,99 @@
+'use strict';
+
+Object.defineProperty(exports, '__esModule', { value: true });
+
+var _tslib = require('./_virtual/_tslib.js');
+var utils = require('./utils.js');
+var serviceScope = require('./serviceScope.js');
+
+function createNullActor(id) {
+  return {
+    id: id,
+    send: function () {
+      return void 0;
+    },
+    subscribe: function () {
+      return {
+        unsubscribe: function () {
+          return void 0;
+        }
+      };
+    },
+    getSnapshot: function () {
+      return undefined;
+    },
+    toJSON: function () {
+      return {
+        id: id
+      };
+    }
+  };
+}
+/**
+ * Creates a deferred actor that is able to be invoked given the provided
+ * invocation information in its `.meta` value.
+ *
+ * @param invokeDefinition The meta information needed to invoke the actor.
+ */
+
+function createInvocableActor(invokeDefinition, machine, context, _event) {
+  var _a;
+
+  var invokeSrc = utils.toInvokeSource(invokeDefinition.src);
+  var serviceCreator = (_a = machine === null || machine === void 0 ? void 0 : machine.options.services) === null || _a === void 0 ? void 0 : _a[invokeSrc.type];
+  var resolvedData = invokeDefinition.data ? utils.mapContext(invokeDefinition.data, context, _event) : undefined;
+  var tempActor = serviceCreator ? createDeferredActor(serviceCreator, invokeDefinition.id, resolvedData) : createNullActor(invokeDefinition.id); // @ts-ignore
+
+  tempActor.meta = invokeDefinition;
+  return tempActor;
+}
+function createDeferredActor(entity, id, data) {
+  var tempActor = createNullActor(id); // @ts-ignore
+
+  tempActor.deferred = true;
+
+  if (utils.isMachine(entity)) {
+    // "mute" the existing service scope so potential spawned actors within the `.initialState` stay deferred here
+    var initialState_1 = tempActor.state = serviceScope.provide(undefined, function () {
+      return (data ? entity.withContext(data) : entity).initialState;
+    });
+
+    tempActor.getSnapshot = function () {
+      return initialState_1;
+    };
+  }
+
+  return tempActor;
+}
+function isActor(item) {
+  try {
+    return typeof item.send === 'function';
+  } catch (e) {
+    return false;
+  }
+}
+function isSpawnedActor(item) {
+  return isActor(item) && 'id' in item;
+}
+function toActorRef(actorRefLike) {
+  return _tslib.__assign({
+    subscribe: function () {
+      return {
+        unsubscribe: function () {
+          return void 0;
+        }
+      };
+    },
+    id: 'anonymous',
+    getSnapshot: function () {
+      return undefined;
+    }
+  }, actorRefLike);
+}
+
+exports.createDeferredActor = createDeferredActor;
+exports.createInvocableActor = createInvocableActor;
+exports.createNullActor = createNullActor;
+exports.isActor = isActor;
+exports.isSpawnedActor = isSpawnedActor;
+exports.toActorRef = toActorRef;

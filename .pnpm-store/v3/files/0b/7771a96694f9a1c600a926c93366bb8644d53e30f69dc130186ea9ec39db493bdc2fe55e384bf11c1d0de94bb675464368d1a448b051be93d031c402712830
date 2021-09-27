@@ -1,0 +1,49 @@
+{
+	"name": "mozjpeg",
+	"version": "7.1.0",
+	"description": "mozjpeg wrapper that makes it seamlessly available as a local dependency",
+	"license": "MIT",
+	"repository": "imagemin/mozjpeg-bin",
+	"bin": "cli.js",
+	"engines": {
+		"node": ">=10"
+	},
+	"scripts": {
+		"postinstall": "node lib/install.js",
+		"test": "xo && ava --timeout=120s",
+		"build-linux": "docker build --tag imagemin/mozjpeg docker && docker run --rm --volume $(pwd)/vendor/linux:/src/out imagemin/mozjpeg cp cjpeg /src/out"
+	},
+	"files": [
+		"index.js",
+		"cli.js",
+		"lib",
+		"vendor/source"
+	],
+	"keywords": [
+		"imagemin",
+		"jpeg",
+		"jpg",
+		"img",
+		"image",
+		"compress",
+		"minify",
+		"mozjpeg",
+		"optimize"
+	],
+	"dependencies": {
+		"bin-build": "^3.0.0",
+		"bin-wrapper": "^4.0.0",
+		"logalot": "^2.1.0"
+	},
+	"devDependencies": {
+		"ava": "^3.8.0",
+		"bin-check": "^4.1.0",
+		"compare-size": "^3.0.0",
+		"execa": "^4.0.0",
+		"tempy": "^0.5.0",
+		"xo": "^0.30.0"
+	},
+	"ava": {
+		"serial": true
+	}
+}

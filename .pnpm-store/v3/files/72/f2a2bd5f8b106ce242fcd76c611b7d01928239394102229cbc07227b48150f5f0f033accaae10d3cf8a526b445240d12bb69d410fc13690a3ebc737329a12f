@@ -1,0 +1,8 @@
+{
+  "name": "reakit/Dialog/DialogState",
+  "private": true,
+  "sideEffects": false,
+  "main": "../../lib/Dialog/DialogState",
+  "module": "../../es/Dialog/DialogState",
+  "types": "../../ts/Dialog/DialogState"
+}

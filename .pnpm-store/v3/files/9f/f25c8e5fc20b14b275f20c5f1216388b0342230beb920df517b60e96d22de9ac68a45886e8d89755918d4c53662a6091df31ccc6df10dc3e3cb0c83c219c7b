@@ -1,0 +1,1 @@
+"use strict";var e=require("../core/InputNode.cjs.js");require("../core/Node.cjs.js"),require("../core/constants.cjs.js");module.exports=class extends e{constructor(e){super("vec2"),this.value=e,Object.defineProperty(this,"isVector2Node",{value:!0})}};

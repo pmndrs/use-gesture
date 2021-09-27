@@ -1,0 +1,8 @@
+{
+  "name": "reakit-utils/normalizePropsAreEqual",
+  "private": true,
+  "sideEffects": false,
+  "main": "../lib/normalizePropsAreEqual",
+  "module": "../es/normalizePropsAreEqual",
+  "types": "../ts/normalizePropsAreEqual"
+}

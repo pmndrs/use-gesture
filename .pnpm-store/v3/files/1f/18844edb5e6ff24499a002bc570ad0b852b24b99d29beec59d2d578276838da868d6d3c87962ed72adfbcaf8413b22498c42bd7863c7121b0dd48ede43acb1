@@ -1,0 +1,8 @@
+{
+  "name": "reakit/Disclosure/DisclosureContent",
+  "private": true,
+  "sideEffects": false,
+  "main": "../../lib/Disclosure/DisclosureContent",
+  "module": "../../es/Disclosure/DisclosureContent",
+  "types": "../../ts/Disclosure/DisclosureContent"
+}

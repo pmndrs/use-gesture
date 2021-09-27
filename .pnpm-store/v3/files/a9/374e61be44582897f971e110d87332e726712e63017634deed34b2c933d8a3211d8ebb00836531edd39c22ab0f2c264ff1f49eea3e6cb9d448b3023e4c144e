@@ -1,0 +1,39 @@
+{
+  "name": "@reach/auto-id",
+  "version": "0.16.0",
+  "description": "Autogenerate IDs to facilitate WAI-ARIA and server rendering.",
+  "author": "React Training <hello@reacttraining.com>",
+  "license": "MIT",
+  "sideEffects": [
+    "*.css"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/reach/reach-ui.git",
+    "directory": "packages/auto-id"
+  },
+  "dependencies": {
+    "@reach/utils": "0.16.0",
+    "tslib": "^2.3.0"
+  },
+  "devDependencies": {
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
+  },
+  "peerDependencies": {
+    "react": "^16.8.0 || 17.x",
+    "react-dom": "^16.8.0 || 17.x"
+  },
+  "main": "dist/reach-auto-id.cjs.js",
+  "module": "dist/reach-auto-id.esm.js",
+  "types": "dist/reach-auto-id.cjs.d.ts",
+  "files": [
+    "README.md",
+    "dist"
+  ],
+  "eslintIgnore": [
+    "node_modules",
+    "dist"
+  ],
+  "gitHead": "e4c6093db14e3cc24c26794a002dbd8c866c0387"
+}

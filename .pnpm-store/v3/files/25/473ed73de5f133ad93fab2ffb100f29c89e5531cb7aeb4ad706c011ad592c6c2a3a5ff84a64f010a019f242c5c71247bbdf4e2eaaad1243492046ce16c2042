@@ -1,0 +1,8 @@
+{
+  "name": "reakit/Menu/MenuArrow",
+  "private": true,
+  "sideEffects": false,
+  "main": "../../lib/Menu/MenuArrow",
+  "module": "../../es/Menu/MenuArrow",
+  "types": "../../ts/Menu/MenuArrow"
+}

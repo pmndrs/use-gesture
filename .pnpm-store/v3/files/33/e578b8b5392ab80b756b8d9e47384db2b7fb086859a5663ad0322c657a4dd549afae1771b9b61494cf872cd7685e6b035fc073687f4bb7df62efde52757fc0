@@ -1,0 +1,8 @@
+{
+  "name": "reakit/Form/FormCheckbox",
+  "private": true,
+  "sideEffects": false,
+  "main": "../../lib/Form/FormCheckbox",
+  "module": "../../es/Form/FormCheckbox",
+  "types": "../../ts/Form/FormCheckbox"
+}

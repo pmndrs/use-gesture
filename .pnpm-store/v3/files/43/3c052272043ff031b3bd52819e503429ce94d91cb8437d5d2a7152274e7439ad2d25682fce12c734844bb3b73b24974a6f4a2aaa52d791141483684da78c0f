@@ -1,0 +1,84 @@
+{
+  "name": "@sinonjs/fake-timers",
+  "description": "Fake JavaScript timers",
+  "version": "7.1.2",
+  "homepage": "https://github.com/sinonjs/fake-timers",
+  "author": "Christian Johansen",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sinonjs/fake-timers.git"
+  },
+  "bugs": {
+    "mail": "christian@cjohansen.no",
+    "url": "https://github.com/sinonjs/fake-timers/issues"
+  },
+  "license": "BSD-3-Clause",
+  "scripts": {
+    "build": "rm -rf types && tsc",
+    "lint": "eslint .",
+    "test-node": "mocha test/ integration-test/ -R dot --check-leaks",
+    "test-headless": "mochify --no-detect-globals --timeout=10000",
+    "test-check-coverage": "npm run test-coverage && nyc check-coverage",
+    "test-cloud": "mochify --wd --no-detect-globals --timeout=10000",
+    "test-coverage": "nyc --all --reporter text --reporter html --reporter lcovonly npm run test-node",
+    "test-types": "tsd && tsc --noEmit test/check-types.ts",
+    "test": "npm run test-node && npm run test-headless",
+    "prettier:check": "prettier --check '**/*.{js,css,md,ts}'",
+    "prettier:write": "prettier --write '**/*.{js,css,md,ts}'",
+    "prepublishOnly": "npm run build",
+    "preversion": "./scripts/preversion.sh",
+    "version": "./scripts/version.sh",
+    "postversion": "./scripts/postversion.sh"
+  },
+  "lint-staged": {
+    "*.{js,css,md}": "prettier --check",
+    "*.js": "eslint"
+  },
+  "files": [
+    "src/",
+    "types"
+  ],
+  "devDependencies": {
+    "@sinonjs/referee-sinon": "6.0.1",
+    "eslint": "6.8.0",
+    "eslint-config-prettier": "6.10.0",
+    "eslint-config-sinon": "3.0.1",
+    "eslint-plugin-ie11": "1.0.0",
+    "eslint-plugin-mocha": "6.2.2",
+    "eslint-plugin-prettier": "3.1.1",
+    "husky": "4.2.1",
+    "jsdom": "16.5.2",
+    "lint-staged": "10.0.7",
+    "mocha": "8.3.2",
+    "mochify": "7.0.0",
+    "nyc": "14.1.1",
+    "prettier": "2.2.1",
+    "tsd": "0.14.0",
+    "typescript": "4.1.3"
+  },
+  "main": "./src/fake-timers-src.js",
+  "types": "./types/fake-timers-src.d.ts",
+  "dependencies": {
+    "@sinonjs/commons": "^1.7.0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint"
+    }
+  },
+  "nyc": {
+    "branches": 85,
+    "lines": 92,
+    "functions": 92,
+    "statements": 92,
+    "exclude": [
+      "**/*-test.js",
+      "coverage/**",
+      "types/**",
+      "fake-timers.js"
+    ]
+  },
+  "tsd": {
+    "directory": "test"
+  }
+}

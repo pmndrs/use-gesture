@@ -1,0 +1,8 @@
+{
+  "name": "reakit-utils/getActiveElement",
+  "private": true,
+  "sideEffects": false,
+  "main": "../lib/getActiveElement",
+  "module": "../es/getActiveElement",
+  "types": "../ts/getActiveElement"
+}

@@ -1,0 +1,6 @@
+export declare function toCustomPropertiesReferences<T extends Record<string | number, unknown>>(values: T, theme?: object, keys?: string[], parent?: string): Record<string | number, unknown>;
+export declare function toCustomPropertiesDeclarations(values: {
+    [key: string]: unknown;
+}, theme?: object, keys?: string[], parent?: string, state?: {
+    value: string;
+}): string;

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name=viewport content="width=device-width, initial-scale=1">
+	<link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+	<link href="./global.css" rel="stylesheet" type="text/css">
+	<title>Lethargy demo</title>
+</head>
+<body>
+	<div class="content">
+		<h1>Lethargy Demo</h1>
+		<p>Each scroll <em>intent</em> should fire only one block of events, regardless of the device - mousewheel or trackpad. Start scrolling!</p>
+		<table>
+		  <tr>
+		    <td><div class="inactive indicator"></div></td>
+		    <td><div class="active indicator"></div></td>
+		    <td><div class="inertial indicator"></div></td>
+		  </tr>
+		  <tr>
+		    <td><span class="inactive">Initialized</span></td>
+		    <td><span class="active">Intent</span></td>
+		    <td><span class="inertial">Inertial</span></td>
+		  </tr>
+		</table>
+		<div class="current indicator"></div>
+		<p><small>Open up your console to see each data point! This demo uses jQuery, but Lethargy also works <a href="https://github.com/d4nyll/lethargy/with-jquery" target="_self">without jQuery</a>, Star us on <a href="https://github.com/d4nyll/lethargy" target="_blank">GitHub</a>, or visit the <a href="http://blog.danyll.com/lethargy-tackling-inertial-scroll/" target="_blank">Blog</a> to understand its design.</small></p>
+	</div>
+	<script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+	<script src="./lethargy.min.js"></script>
+	<script>
+		(function() {
+			$('.current').css("background-color", "gray");
+			var lethargy = new Lethargy();
+
+			// Bind all mousewheel events and pass it to Lethargy.check()
+			$(window).bind('mousewheel DOMMouseScroll wheel MozMousePixelScroll', function(e){
+				e.preventDefault()
+				e.stopPropagation();
+
+				// Lethargy.check() must only be called once per mouse event
+				// If you need to use the result in more than one place
+				// you MUST store it as a variable and use that variable instead
+				// See https://github.com/d4nyll/lethargy/issues/5
+				var result = lethargy.check(e);
+
+				// false means it's not a scroll intent, 1 or -1 means it is
+				console.log(result);
+				if(result !== false) {
+					$('.current').css("background-color", "#1AB742");
+				} else {
+					$('.current').css("background-color", "#E8305D");
+				}
+			});
+		})();
+	</script>
+</body>
+</html>

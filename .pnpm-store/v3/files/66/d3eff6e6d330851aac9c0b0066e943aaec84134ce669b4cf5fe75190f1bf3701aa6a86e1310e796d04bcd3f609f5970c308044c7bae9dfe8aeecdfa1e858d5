@@ -1,0 +1,17 @@
+{ "name": "busboy",
+  "version": "0.2.14",
+  "author": "Brian White <mscdex@mscdex.net>",
+  "description": "A streaming parser for HTML form data for node.js",
+  "main": "./lib/main",
+  "dependencies": {
+    "dicer": "0.2.5",
+    "readable-stream": "1.1.x"
+  },
+  "scripts": {
+    "test": "node test/test.js"
+  },
+  "engines": { "node": ">=0.8.0" },
+  "keywords": [ "uploads", "forms", "multipart", "form-data" ],
+  "licenses": [ { "type": "MIT", "url": "http://github.com/mscdex/busboy/raw/master/LICENSE" } ],
+  "repository" : { "type": "git", "url": "http://github.com/mscdex/busboy.git" }
+}

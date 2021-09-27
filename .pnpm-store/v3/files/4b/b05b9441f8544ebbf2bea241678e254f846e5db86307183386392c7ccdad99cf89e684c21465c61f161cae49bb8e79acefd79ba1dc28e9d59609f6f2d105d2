@@ -1,0 +1,1 @@
+{"mappings":"A;AAQA,iBAAiB;IAAE,QAAQ,EAAE,MAAM,SAAS,CAAA;CAAE,CAAC;AAE/C,OAAA,MAAM,mFA2BJ,CAAC;AA4BH,OAAA,MAAM;cAAuC,MAAM,SAAS;oJAE3D,CAAC;AAwBF,OAAA,MAAM,mFAAW,CAAC","sources":["./packages/react/slot/src/packages/react/slot/src/Slot.tsx","./packages/react/slot/src/packages/react/slot/src/index.ts"],"sourcesContent":[null,null],"names":[],"version":3,"file":"index.d.ts.map"}

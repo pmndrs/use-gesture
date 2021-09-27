@@ -1,0 +1,15 @@
+{
+  "name": "@react-spring/types",
+  "version": "9.1.1",
+  "description": "Internal package with TypeScript stuff",
+  "main": "src/index.ts",
+  "repository": "pmndrs/react-spring",
+  "license": "MIT",
+  "publishConfig": {
+    "directory": "dist"
+  },
+  "scripts": {
+    "build": "rimraf dist && yarn copy",
+    "copy": "copyfiles package.json *.js *.d.ts dist"
+  }
+}

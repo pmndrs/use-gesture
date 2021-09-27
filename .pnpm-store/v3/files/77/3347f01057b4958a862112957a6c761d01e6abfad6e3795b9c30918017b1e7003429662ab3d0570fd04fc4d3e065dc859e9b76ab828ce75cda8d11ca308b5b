@@ -1,0 +1,8 @@
+{
+  "name": "reakit/Group",
+  "private": true,
+  "sideEffects": false,
+  "main": "../lib/Group",
+  "module": "../es/Group",
+  "types": "../ts/Group"
+}

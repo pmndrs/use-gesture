@@ -1,0 +1,28 @@
+{
+    "name": "@types/eslint-scope",
+    "version": "3.7.1",
+    "description": "TypeScript definitions for eslint-scope",
+    "homepage": "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/eslint-scope",
+    "license": "MIT",
+    "contributors": [
+        {
+            "name": "Toru Nagashima",
+            "url": "https://github.com/mysticatea",
+            "githubUsername": "mysticatea"
+        }
+    ],
+    "main": "",
+    "types": "index.d.ts",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/DefinitelyTyped/DefinitelyTyped.git",
+        "directory": "types/eslint-scope"
+    },
+    "scripts": {},
+    "dependencies": {
+        "@types/eslint": "*",
+        "@types/estree": "*"
+    },
+    "typesPublisherContentHash": "47224c2bf9a37ca8eb542bd7399915133185a33ed6b71ef30985d3c8a9598e8c",
+    "typeScriptVersion": "3.6"
+}

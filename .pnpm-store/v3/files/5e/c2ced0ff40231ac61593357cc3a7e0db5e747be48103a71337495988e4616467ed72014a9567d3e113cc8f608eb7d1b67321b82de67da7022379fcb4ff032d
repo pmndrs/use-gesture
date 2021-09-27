@@ -1,0 +1,2 @@
+import*as e from"react";import t from"@babel/runtime/helpers/esm/extends";const r="div";export const Primitive=/*#__PURE__*/e.forwardRef(((o,i)=>{const{as:n=r,...a}=o;/*#__PURE__*/return e.createElement(n,t({},a,{ref:i}))}));/*#__PURE__*/export const Root=Primitive;export function extendPrimitive(r,o){const i=/*#__PURE__*/e.forwardRef(((i,n)=>{const a=r,s={...o.defaultProps,...i};/*#__PURE__*/return e.createElement(a,t({},s,{ref:n}))}));return i.displayName=o.displayName||"Extended"+r.displayName,i}
+//# sourceMappingURL=index.module.js.map

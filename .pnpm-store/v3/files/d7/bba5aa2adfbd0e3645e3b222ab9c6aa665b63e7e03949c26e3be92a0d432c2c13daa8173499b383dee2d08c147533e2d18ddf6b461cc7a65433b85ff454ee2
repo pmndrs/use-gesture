@@ -1,0 +1,4 @@
+{
+  "main": "dist/reach-utils-computed-styles.cjs.js",
+  "module": "dist/reach-utils-computed-styles.esm.js"
+}

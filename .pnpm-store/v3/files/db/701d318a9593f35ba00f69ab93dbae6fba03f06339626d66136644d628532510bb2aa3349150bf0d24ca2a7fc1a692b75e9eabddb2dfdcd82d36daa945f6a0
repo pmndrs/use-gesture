@@ -1,0 +1,76 @@
+html, body {
+	font-family: Montserrat,sans-serif;
+	height: 100%;
+	width: 100%;
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	display: table;
+}
+
+a {
+	font-weight: 700;
+	color: inherit;
+}
+
+h1 {
+	font-size: 3rem;
+}
+
+table {
+	margin: 0 auto;
+	margin-bottom: 50px;
+}
+
+td {
+	width: 100px;
+}
+
+.active
+,.inertial
+,.inactive {
+	font-weight: 700;
+}
+.active {
+	color: #1AB742;
+}
+.inertial {
+	color: #E8305D;
+}
+.inactive {
+	color: gray;
+}
+
+.indicator.active {
+	background-color: #1AB742;
+}
+
+.indicator.inertial {
+	background-color: #E8305D;
+}
+
+.indicator.inactive {
+	background-color: gray;
+}
+
+.indicator {
+	height: 30px;
+	width: 30px;
+	border-radius: 15px;
+	display: inline-block;
+}
+
+.content {
+	text-align: center;
+	display: table-cell;
+	vertical-align: middle;
+}
+
+.content > p, .content > h3 {
+	width: 400px;
+	max-width: 80%;
+	margin-left: auto;
+	margin-right: auto;
+}
