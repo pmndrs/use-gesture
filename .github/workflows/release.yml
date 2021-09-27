@@ -6,36 +6,63 @@ on:
     paths:
       - '**/package.json'
       - '.changeset/**'
+
 env:
-  CI: true
   PNPM_CACHE_FOLDER: .pnpm-store
+  HUSKY: 0 # Bypass husky commit hook for CI
+
 jobs:
   version:
-    timeout-minutes: 15
+    timeout-minutes: 8
     runs-on: ubuntu-latest
     steps:
       - name: checkout code repository
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
+
+      - name: setup caching
+        uses: actions/cache@v2
+        with:
+          path: ${{ env.PNPM_CACHE_FOLDER }}
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-
+      - name: setup pnpm
+        uses: pnpm/action-setup@v2.0.1
+        with:
+          version: 6.x
+
       - name: setup node.js
         uses: actions/setup-node@v2
         with:
-          node-version: 14
-      - name: install pnpm
-        run: npm i pnpm@latest -g
-      - name: Setup npmrc
-        run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > .npmrc
+          node-version: 16.x
+          cache: 'pnpm'
+
+      - name: Set up NPM credentials
+        run: echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
       - name: setup pnpm config
         run: pnpm config set store-dir $PNPM_CACHE_FOLDER
-      - name: install dependencies
-        run: pnpm install
-      - name: create and publish versions
+
+      - run: pnpm install
+
+      - name: Create versions PR & prepare publish
+        id: changesets
         uses: changesets/action@master
+        # if: github.ref == 'refs/heads/master'
         with:
+          # Custom versioning script in package.json
           version: pnpm ci:version
-          commit: 'chore: update versions'
-          title: 'chore: update versions'
+          # Custom versioning script in package.json
           publish: pnpm ci:publish
+          # Messages
+          commit: 'chore(deploy): Release'
+          title: 'chore(deploy): Release'
         env:
+          # npm publish token required for publishing. Set this in secrets
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          # automatically available in actions
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
