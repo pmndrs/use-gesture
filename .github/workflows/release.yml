@@ -13,34 +13,38 @@ env:
 
 jobs:
   version:
-    - name: Use Node
-      uses: actions/setup-node@v2
-      with:
-        node-version: '16'
+    timeout-minutes: 8
+    runs-on: ubuntu-latest
+    steps:
+      - name: Use Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
 
-    - name: Install pnpm
-      run: npm i pnpm@latest -g
+      - name: Install pnpm
+        run: npm i pnpm@latest -g
 
-    - name: Setup pnpm config
-      run: pnpm config set store-dir $PNPM_CACHE_FOLDER
+      - name: Setup pnpm config
+        run: pnpm config set store-dir $PNPM_CACHE_FOLDER
 
-    - name: Install dependencies
-      run: pnpm install
+      - name: Install dependencies
 
-    - name: Create versions PR & prepare publish
-      id: changesets
-      uses: changesets/action@master
-      # if: github.ref == 'refs/heads/master'
-      with:
-        # Custom versioning script in package.json
-        version: pnpm ci:version
-        # Custom versioning script in package.json
-        publish: pnpm ci:publish
-        # Messages
-        commit: 'chore(deploy): Release'
-        title: 'chore(deploy): Release'
-      env:
-        # npm publish token required for publishing. Set this in secrets
-        NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        # automatically available in actions
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - run: pnpm install
+
+      - name: Create versions PR & prepare publish
+        id: changesets
+        uses: changesets/action@master
+        # if: github.ref == 'refs/heads/master'
+        with:
+          # Custom versioning script in package.json
+          version: pnpm ci:version
+          # Custom versioning script in package.json
+          publish: pnpm ci:publish
+          # Messages
+          commit: 'chore(deploy): Release'
+          title: 'chore(deploy): Release'
+        env:
+          # npm publish token required for publishing. Set this in secrets
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          # automatically available in actions
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
