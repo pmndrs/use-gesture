@@ -28,8 +28,7 @@ jobs:
         run: pnpm config set store-dir $PNPM_CACHE_FOLDER
 
       - name: Install dependencies
-
-      - run: pnpm install
+        run: pnpm install
 
       - name: Create versions PR & prepare publish
         id: changesets
