@@ -1,0 +1,1 @@
+"use strict";function e(e){e=e||{},this.name=e.name,this.type=e.type,this.node=e.node,this.needsUpdate=e.needsUpdate}Object.defineProperty(exports,"__esModule",{value:!0}),Object.defineProperties(e.prototype,{value:{get:function(){return this.node.value},set:function(e){this.node.value=e}}}),exports.NodeUniform=e;

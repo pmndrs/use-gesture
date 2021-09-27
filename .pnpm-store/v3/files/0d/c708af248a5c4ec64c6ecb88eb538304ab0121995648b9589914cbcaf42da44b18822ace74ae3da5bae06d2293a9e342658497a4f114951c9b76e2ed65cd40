@@ -1,0 +1,78 @@
+{
+  "name": "extract-files",
+  "version": "9.0.0",
+  "description": "Clones a value, recursively extracting File, Blob and ReactNativeFile instances with their object paths, replacing them with null. FileList instances are treated as File instance arrays.",
+  "license": "MIT",
+  "author": {
+    "name": "Jayden Seric",
+    "email": "me@jaydenseric.com",
+    "url": "https://jaydenseric.com"
+  },
+  "repository": "github:jaydenseric/extract-files",
+  "homepage": "https://github.com/jaydenseric/extract-files#readme",
+  "bugs": "https://github.com/jaydenseric/extract-files/issues",
+  "funding": "https://github.com/sponsors/jaydenseric",
+  "keywords": [
+    "extract",
+    "file",
+    "files",
+    "File",
+    "FileList",
+    "Blob",
+    "react",
+    "native",
+    "esm",
+    "mjs"
+  ],
+  "files": [
+    "public"
+  ],
+  "sideEffects": false,
+  "main": "public",
+  "exports": {
+    ".": {
+      "import": "./public/index.mjs",
+      "require": "./public/index.js"
+    },
+    "./public/": "./public/",
+    "./package": "./package.json",
+    "./package.json": "./package.json"
+  },
+  "engines": {
+    "node": "^10.17.0 || ^12.0.0 || >= 13.7.0"
+  },
+  "browserslist": "Node 10.17 - 11 and Node < 11, Node 12 - 13 and Node < 13, Node >= 13.7, > 0.5%, not OperaMini all, not dead",
+  "devDependencies": {
+    "@babel/cli": "^7.10.5",
+    "@babel/core": "^7.10.5",
+    "@babel/preset-env": "^7.10.4",
+    "@size-limit/preset-small-lib": "^4.5.5",
+    "babel-eslint": "^10.1.0",
+    "coverage-node": "^3.0.0",
+    "eslint": "^7.5.0",
+    "eslint-config-env": "^15.0.1",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-jsdoc": "^30.0.3",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "hard-rejection": "^2.1.0",
+    "jsdoc-md": "^7.0.0",
+    "prettier": "^2.0.5",
+    "size-limit": "^4.5.5",
+    "test-director": "^4.0.1"
+  },
+  "scripts": {
+    "prepare": "npm run prepare:clean && npm run prepare:babel && npm run prepare:jsdoc && npm run prepare:prettier",
+    "prepare:clean": "rm -rf public",
+    "prepare:babel": "babel src -d . --keep-file-extension",
+    "prepare:jsdoc": "jsdoc-md",
+    "prepare:prettier": "prettier --write public readme.md",
+    "test": "npm run test:eslint && npm run test:prettier && npm run test:api && npm run test:size",
+    "test:eslint": "eslint --ext mjs,js .",
+    "test:prettier": "prettier -c .",
+    "test:api": "coverage-node -r hard-rejection/register test",
+    "test:size": "size-limit",
+    "prepublishOnly": "npm test"
+  }
+}

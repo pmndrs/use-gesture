@@ -1,0 +1,8 @@
+{
+  "name": "reakit-utils/applyState",
+  "private": true,
+  "sideEffects": false,
+  "main": "../lib/applyState",
+  "module": "../es/applyState",
+  "types": "../ts/applyState"
+}

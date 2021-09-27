@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name=viewport content="width=device-width, initial-scale=1">
+	<link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+	<link href="./global.css" rel="stylesheet" type="text/css">
+	<title>Lethargy demo</title>
+</head>
+<body>
+	<div class="content">
+		<h1>Lethargy Demo</h1>
+		<p>Each scroll <em>intent</em> should fire only one block of events, regardless of the device - mousewheel or trackpad. Start scrolling!</p>
+		<table>
+		  <tr>
+		    <td><div class="inactive indicator"></div></td>
+		    <td><div class="active indicator"></div></td>
+		    <td><div class="inertial indicator"></div></td>
+		  </tr>
+		  <tr>
+		    <td><span class="inactive">Initialized</span></td>
+		    <td><span class="active">Intent</span></td>
+		    <td><span class="inertial">Inertial</span></td>
+		  </tr>
+		</table>
+		<div class="current indicator"></div>
+		<p><small>Open up your console to see each data point! This demo uses native JavaScript, but Lethargy also works <a href="https://github.com/d4nyll/lethargy/with-jquery" target="_self">with jQuery</a>, Star us on <a href="https://github.com/d4nyll/lethargy" target="_blank">GitHub</a>, or visit the <a href="http://blog.danyll.com/lethargy-tackling-inertial-scroll/" target="_blank">Blog</a> to understand its design.</small></p>
+	</div>
+	<!--First, include the Lethargy library-->
+	<script src="./lethargy.min.js"></script>
+
+	<!--Next, bind your scroll events to run a function that checks with lethargy-->
+	<script>
+		// Cross-browser bind without using JQuery, taken from http://stackoverflow.com/a/3076693/3966682
+		function addEvent(el, eventType, handler) {
+			if (el.addEventListener) { // DOM Level 2 browsers
+				el.addEventListener(eventType, handler, false);
+			} else if (el.attachEvent) { // IE <= 8
+				el.attachEvent('on' + eventType, handler);
+			} else { // ancient browsers
+				el['on' + eventType] = handler;
+			}
+		};
+		(function() {
+			document.getElementsByClassName('current')[0].style.backgroundColor = "gray";
+			var lethargy = new Lethargy();
+
+			// Define the function to run on mousewheel
+			var checkScroll = function (e) {
+				e.preventDefault()
+				e.stopPropagation();
+
+				// Lethargy.check() must only be called once per mouse event
+				// If you need to use the result in more than one place
+				// you MUST store it as a variable and use that variable instead
+				// See https://github.com/d4nyll/lethargy/issues/5
+				var result = lethargy.check(e);
+
+				// false means it's not a scroll intent, 1 or -1 means it is
+				console.log(result);
+				if(result !== false) {
+					document.getElementsByClassName('current')[0].style.backgroundColor = "#1AB742";
+				} else {
+					document.getElementsByClassName('current')[0].style.backgroundColor = "#E8305D";
+				}
+			};
+
+			// Cross-browser way to bind to mouse events
+			addEvent(window, 'mousewheel', checkScroll);
+			addEvent(window, 'DOMMouseScroll', checkScroll);
+			addEvent(window, 'wheel', checkScroll);
+			addEvent(window, 'MozMousePixelScroll', checkScroll);
+			
+		})();
+	</script>
+</body>
+</html>

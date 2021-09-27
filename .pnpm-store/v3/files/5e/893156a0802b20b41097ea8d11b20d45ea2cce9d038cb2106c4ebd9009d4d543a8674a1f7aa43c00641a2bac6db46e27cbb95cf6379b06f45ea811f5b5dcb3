@@ -1,0 +1,8 @@
+{
+  "name": "reakit/Menu/MenuBarState",
+  "private": true,
+  "sideEffects": false,
+  "main": "../../lib/Menu/MenuBarState",
+  "module": "../../es/Menu/MenuBarState",
+  "types": "../../ts/Menu/MenuBarState"
+}

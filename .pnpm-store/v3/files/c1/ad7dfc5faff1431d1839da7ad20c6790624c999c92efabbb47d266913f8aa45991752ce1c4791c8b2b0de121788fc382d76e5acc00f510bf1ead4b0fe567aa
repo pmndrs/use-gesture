@@ -1,0 +1,38 @@
+import * as React from 'react';
+declare type ColorModeState = [string | null, (mode: string | null) => void];
+declare type Color = string | ((props: Record<string, unknown>) => Color);
+declare type Colors = Record<string, Color>;
+interface ITheme {
+    useCustomProperties?: boolean;
+    useColorSchemeMediaQuery?: boolean;
+    initialColorModeName?: string;
+    defaultColorModeName?: string;
+    colors?: Colors & {
+        modes?: Record<string, Colors>;
+    };
+}
+export declare function createColorStyles(theme: ITheme, { targetSelector }?: {
+    targetSelector?: string | undefined;
+}): string | null;
+export declare function useColorModeState(theme: ITheme, { target }?: {
+    target?: Element;
+}): ColorModeState;
+export declare function useColorModeTheme(theme: ITheme, mode: string | null): ITheme | null;
+export declare const ColorModeContext: React.Context<ColorModeState | null>;
+export declare function useColorMode(): ColorModeState;
+export interface ColorModeProviderProps {
+    children: React.ReactNode;
+    target?: Element;
+    targetSelector?: string;
+}
+export declare function createColorModeProvider({ ThemeContext, ThemeProvider, ColorModeStyle, }: {
+    ThemeContext: React.Context<any>;
+    ThemeProvider: React.ComponentType<any>;
+    ColorModeStyle: React.ComponentType<any>;
+}): React.FC<ColorModeProviderProps>;
+interface GetInitScriptOptions {
+    target?: string;
+}
+export declare function getColorModeInitScriptElement(options?: GetInitScriptOptions): JSX.Element;
+export declare function getColorModeInitScriptTag(options?: GetInitScriptOptions): string;
+export {};

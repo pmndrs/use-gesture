@@ -1,0 +1,32 @@
+{
+  "name": "mmd-parser",
+  "version": "1.0.4",
+  "description": "MMD parser",
+  "main": "build/mmdparser.js",
+  "jsnext:main": "build/mmdparser.module.js",
+  "scripts": {
+    "all": "npm run build && npm run build-uglify && npm run test",
+    "build": "rollup -c",
+    "build-uglify": "rollup -c && uglifyjs build/mmdparser.js -cm --preamble \"// https://github.com/takahirox/mmd-parser#readme\" > build/mmdparser.min.js",
+    "dev": "rollup -c -w",
+    "test": "node test/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/takahirox/mmd-parser.git"
+  },
+  "author": "Takahiro <hogehoge@gachapin.jp> (https://github.com/takahirox)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/takahirox/mmd-parser/issues"
+  },
+  "homepage": "https://github.com/takahirox/mmd-parser#readme",
+  "devDependencies": {
+    "charset-encoder-js": "^1.0.1",
+    "rollup": "^0.36.3",
+    "rollup-plugin-node-resolve": "^2.0.0",
+    "rollup-plugin-commonjs": "^5.0.5",
+    "uglify-js": "^2.7.4",
+    "xhr2": "^0.1.3"
+  }
+}

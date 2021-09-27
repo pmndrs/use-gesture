@@ -1,0 +1,8 @@
+export declare function createBox(): (string | import("@xstyled/system").StyleGenerator)[];
+export declare namespace createBox {
+    var meta: {
+        props: string[];
+        getStyle: import("@xstyled/system").StyleGenerator;
+        generators?: import("@xstyled/system").StyleGenerator[] | undefined;
+    };
+}

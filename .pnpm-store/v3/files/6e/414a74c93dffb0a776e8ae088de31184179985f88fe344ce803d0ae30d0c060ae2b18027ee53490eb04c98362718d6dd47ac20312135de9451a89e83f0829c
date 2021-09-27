@@ -1,0 +1,1 @@
+"use strict";var e=require("../inputs/FloatNode.cjs.js"),s=require("../core/constants.cjs.js");require("../core/InputNode.cjs.js"),require("../core/Node.cjs.js");module.exports=class extends e{constructor(){super(),this.updateType=s.NodeUpdateType.Frame}update(e){this.value=e.time}};

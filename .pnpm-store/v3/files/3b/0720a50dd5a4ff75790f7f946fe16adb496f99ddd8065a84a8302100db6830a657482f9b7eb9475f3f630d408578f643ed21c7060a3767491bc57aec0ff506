@@ -1,0 +1,24 @@
+{
+    "name": "@types/component-emitter",
+    "version": "1.2.10",
+    "description": "TypeScript definitions for component-emitter",
+    "license": "MIT",
+    "contributors": [
+        {
+            "name": "Peter Snider",
+            "url": "https://github.com/psnider",
+            "githubUsername": "psnider"
+        }
+    ],
+    "main": "",
+    "types": "index.d.ts",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/DefinitelyTyped/DefinitelyTyped.git",
+        "directory": "types/component-emitter"
+    },
+    "scripts": {},
+    "dependencies": {},
+    "typesPublisherContentHash": "446bfc6b04cc0bdf3afbaa65ac393c5c9056ab15d158199b96d266059c762403",
+    "typeScriptVersion": "3.1"
+}

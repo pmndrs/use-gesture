@@ -1,0 +1,8 @@
+{
+  "name": "reakit/Grid/GridRow",
+  "private": true,
+  "sideEffects": false,
+  "main": "../../lib/Grid/GridRow",
+  "module": "../../es/Grid/GridRow",
+  "types": "../../ts/Grid/GridRow"
+}

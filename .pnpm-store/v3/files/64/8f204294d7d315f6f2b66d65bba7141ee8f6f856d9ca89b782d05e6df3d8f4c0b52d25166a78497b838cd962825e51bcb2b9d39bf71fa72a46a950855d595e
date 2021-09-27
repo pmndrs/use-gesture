@@ -1,0 +1,8 @@
+{
+  "name": "reakit/Role/Role",
+  "private": true,
+  "sideEffects": false,
+  "main": "../../lib/Role/Role",
+  "module": "../../es/Role/Role",
+  "types": "../../ts/Role/Role"
+}

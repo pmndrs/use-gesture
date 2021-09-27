@@ -1,0 +1,30 @@
+{
+  "name": "lethargy",
+  "main": "lethargy.js",
+  "version": "1.0.4",
+  "homepage": "https://github.com/d4nyll/lethargy",
+  "authors": [
+    "Daniel Li <dan@danyll.com>"
+  ],
+  "description": "Distinguish between scroll events initiated by the user, and those by inertial scrolling",
+  "keywords": [
+    "scroll",
+    "wheel",
+    "mouse",
+    "mousewheel",
+    "scrolljacking",
+    "inertial",
+    "scroll",
+    "trackpad",
+    "magic",
+    "mouse"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

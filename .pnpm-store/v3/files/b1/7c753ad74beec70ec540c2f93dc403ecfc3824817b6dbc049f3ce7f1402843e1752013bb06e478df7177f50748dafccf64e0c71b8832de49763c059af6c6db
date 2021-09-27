@@ -1,0 +1,15 @@
+{
+  "name": "xor",
+  "repo": "component/xor",
+  "description": "tiny xor utility function",
+  "version": "0.0.4",
+  "keywords": [
+    "xor"
+  ],
+  "dependencies": {},
+  "development": {},
+  "license": "MIT",
+  "scripts": [
+    "index.js"
+  ]
+}

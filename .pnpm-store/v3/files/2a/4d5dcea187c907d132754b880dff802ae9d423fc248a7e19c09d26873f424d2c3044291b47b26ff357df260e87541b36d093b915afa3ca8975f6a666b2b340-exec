@@ -1,0 +1,84 @@
+#!/usr/bin/env node
+/* eslint no-console: off */
+
+import fs from 'fs';
+import path from 'path';
+import { load } from '../src/opentype';
+
+// Print out information about the font on the console.
+function printFontInfo(font) {
+    console.log('  glyphs:', font.glyphs.length);
+    console.log('  kerning pairs (kern table):', Object.keys(font.kerningPairs).length);
+    console.log('  kerning pairs (GPOS table):', (font.getGposKerningValue) ? 'yes' : 'no');
+}
+
+// Recursively walk a directory and execute the function for every file.
+function walk(dir, fn) {
+    var files, i, file;
+    files = fs.readdirSync(dir);
+    for (i = 0; i < files.length; i += 1) {
+        file = files[i];
+        var fullName = path.join(dir, file);
+        var stat = fs.statSync(fullName);
+        if (stat.isFile()) {
+            fn(fullName);
+        } else if (stat.isDirectory()) {
+            walk(fullName, fn);
+        }
+    }
+}
+
+// Print out usage information.
+function printUsage() {
+    console.log('Usage: ot command [dir|file]');
+    console.log();
+    console.log('Commands:');
+    console.log();
+    console.log('  info    Get information of specified font or fonts in the specified directory.');
+    console.log();
+}
+
+function fileInfo(file) {
+    load(file, function(err, font) {
+        console.log(path.basename(file));
+        if (err) {
+            console.log('  (Error: ' + err + ')');
+        } else if (!font.supported) {
+            console.log('  (Unsupported)');
+        } else {
+            printFontInfo(font);
+        }
+    });
+}
+
+function recursiveInfo(fontDirectory) {
+    walk(fontDirectory, function(file) {
+        var ext = path.extname(file).toLowerCase();
+        if (ext === '.ttf' || ext === '.otf') {
+            fileInfo(file);
+        }
+    });
+}
+
+if (process.argv.length < 3) {
+    printUsage();
+} else {
+    var command = process.argv[2];
+    if (command === 'info') {
+        var fontpath = process.argv.length === 3 ? '.' : process.argv[3];
+        if (fs.existsSync(fontpath)) {
+            var ext = path.extname(fontpath).toLowerCase();
+            if (fs.statSync(fontpath).isDirectory()) {
+                recursiveInfo(fontpath);
+            } else if (ext === '.ttf' || ext === '.otf') {
+                fileInfo(fontpath);
+            } else {
+                printUsage();
+            }
+        } else {
+            console.log('Path not found');
+        }
+    } else {
+        printUsage();
+    }
+}

@@ -1,0 +1,8 @@
+{
+  "name": "reakit/Tooltip/TooltipArrow",
+  "private": true,
+  "sideEffects": false,
+  "main": "../../lib/Tooltip/TooltipArrow",
+  "module": "../../es/Tooltip/TooltipArrow",
+  "types": "../../ts/Tooltip/TooltipArrow"
+}

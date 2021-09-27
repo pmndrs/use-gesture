@@ -1,0 +1,5 @@
+All property/options names rename to coding style.
+
+think to make chaining (new Buffer().fromImage(img).toImage())
+think to make PointContainer fromXX methods static to be like Point.createFromXX methods or vice-versa
+rename Point.createFromXX methods to fromXX methods

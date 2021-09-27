@@ -1,0 +1,242 @@
+'use strict';
+
+Object.defineProperty(exports, '__esModule', { value: true });
+
+/* eslint-disable no-console */
+/**
+ * Identity function.
+ * @param x
+ */
+
+var identity = function identity(x) {
+  return x;
+};
+/**
+ * Check if a value is not null and not undefined.
+ * @param n
+ */
+
+var is = function is(n) {
+  return n !== undefined && n !== null;
+};
+/**
+ * Check if a value is a number.
+ * @param n
+ */
+
+var num = function num(n) {
+  return typeof n === 'number' && !Number.isNaN(n);
+};
+/**
+ * Check if a value is a string.
+ * @param n
+ */
+
+var string = function string(n) {
+  return typeof n === 'string' && n !== '';
+};
+/**
+ * Check if a value is an object.
+ * @param n
+ */
+
+var obj = function obj(n) {
+  return typeof n === 'object' && n !== null;
+};
+/**
+ * Check if a value is a function.
+ * @param n
+ */
+
+var func = function func(n) {
+  return typeof n === 'function';
+};
+/**
+ * Check if a value is a negative number.
+ * @param n
+ */
+
+var negative = function negative(n) {
+  return num(n) && n < 0;
+};
+/**
+ * Get a value from an object or an array.
+ * @param from
+ * @param path
+ */
+
+var get = function get(from, path) {
+  var paths = String(path).split('.');
+  var pathsLength = paths.length;
+  var result = from;
+
+  for (var i = 0; i < pathsLength; i += 1) {
+    if (result === undefined) return result;
+    var _path = paths[i];
+    result = is(result[_path]) ? result[_path] : undefined;
+  }
+
+  return result;
+};
+/**
+ * Assign object into another
+ * @param a
+ * @param b
+ */
+
+var assign = function assign(a, b) {
+  // @ts-ignore
+  if (!is(b)) return a; // eslint-disable-next-line no-restricted-syntax, guard-for-in
+
+  for (var key in b) {
+    // @ts-ignore
+    a[key] = b[key];
+  } // @ts-ignore
+
+
+  return a;
+};
+/**
+ * Merge deeply one object into another.
+ * @param a
+ * @param b
+ */
+
+var merge = function merge(a, b) {
+  // @ts-ignore
+  if (!is(b)) return a; // eslint-disable-next-line no-restricted-syntax
+
+  for (var key in b) {
+    // eslint-disable-next-line no-continue
+    // @ts-ignore
+    if (obj(a[key])) {
+      // @ts-ignore
+      a[key] = merge(assign({}, a[key]), b[key]);
+    } else {
+      // @ts-ignore
+      a[key] = b[key];
+    }
+  } // @ts-ignore
+
+
+  return a;
+};
+/**
+ * Warn if a condition is not met.
+ * @param condition
+ * @param message
+ */
+
+var warn = function warn(condition, message) {
+  {
+    if (!condition && console.error) {
+      console.error(message);
+    }
+  }
+};
+/**
+ * Recursively call a function until getting something that is not a function.
+ * @param value
+ * @param arg
+ */
+
+function cascade(value, arg) {
+  if (typeof value === 'function') {
+    return cascade(value(arg), arg);
+  }
+
+  return value;
+}
+/**
+ * Get value from theme.
+ * @param props
+ * @param path
+ * @param initial
+ */
+
+var getThemeValue = function getThemeValue(props, path, initial) {
+  if (initial === void 0) {
+    initial = props.theme;
+  }
+
+  return cascade(get(initial, path), props);
+};
+/**
+ * Omit values from an object.
+ * @param object
+ * @param values
+ */
+
+function omit(object, values) {
+  var result = {}; // eslint-disable-next-line no-restricted-syntax
+
+  for (var key in object) {
+    if (values.indexOf(key) === -1) {
+      result[key] = object[key];
+    }
+  }
+
+  return result;
+}
+/* eslint-disable no-continue, no-loop-func, no-cond-assign */
+
+/**
+ * Flatten every string together in an array.
+ * @param array
+ */
+
+function flattenStrings(array) {
+  return array.reduce(function (flattenedArray, value) {
+    var lastIndex = flattenedArray.length - 1;
+    var last = flattenedArray[lastIndex];
+
+    if (typeof last === 'string' && typeof value === 'string') {
+      flattenedArray[lastIndex] = last + value;
+    } else {
+      flattenedArray.push(value);
+    }
+
+    return flattenedArray;
+  }, []);
+}
+
+function flattenDown(array, result) {
+  for (var i = 0; i < array.length; i++) {
+    var value = array[i];
+
+    if (Array.isArray(value)) {
+      flattenDown(value, result);
+    } else {
+      result.push(value);
+    }
+  }
+
+  return result;
+}
+/**
+ * Flatten an array.
+ * @param array
+ */
+
+
+function flatten(array) {
+  return flattenDown(array, []);
+}
+
+exports.assign = assign;
+exports.cascade = cascade;
+exports.flatten = flatten;
+exports.flattenStrings = flattenStrings;
+exports.func = func;
+exports.get = get;
+exports.getThemeValue = getThemeValue;
+exports.identity = identity;
+exports.is = is;
+exports.merge = merge;
+exports.negative = negative;
+exports.num = num;
+exports.obj = obj;
+exports.omit = omit;
+exports.string = string;
+exports.warn = warn;
+//# sourceMappingURL=util.cjs.development.js.map

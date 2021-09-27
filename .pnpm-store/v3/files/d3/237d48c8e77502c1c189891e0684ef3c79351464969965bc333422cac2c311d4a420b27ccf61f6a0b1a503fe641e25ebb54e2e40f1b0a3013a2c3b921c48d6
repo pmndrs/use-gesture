@@ -1,0 +1,5 @@
+import type { EventObject, BaseActionObject } from './types';
+import { Cast, UnionFromCreatorsReturnTypes, FinalModelCreators, Model, ModelCreators } from './model.types';
+export declare function createModel<TContext, TEvent extends EventObject, TAction extends BaseActionObject = BaseActionObject>(initialContext: TContext): Model<TContext, TEvent, TAction, void>;
+export declare function createModel<TContext, TModelCreators extends ModelCreators<TModelCreators>, TFinalModelCreators = FinalModelCreators<TModelCreators>, TComputedEvent = 'events' extends keyof TFinalModelCreators ? UnionFromCreatorsReturnTypes<TFinalModelCreators['events']> : never, TComputedAction = 'actions' extends keyof TFinalModelCreators ? UnionFromCreatorsReturnTypes<TFinalModelCreators['actions']> : never>(initialContext: TContext, creators: TModelCreators): Model<TContext, Cast<TComputedEvent, EventObject>, Cast<TComputedAction, BaseActionObject>, TFinalModelCreators>;
+//# sourceMappingURL=model.d.ts.map

@@ -1,0 +1,128 @@
+{
+  "name": "wouter",
+  "version": "2.7.4",
+  "description": "A minimalistic routing for React and Preact. Nothing extra, just HOOKS.",
+  "keywords": [
+    "react",
+    "preact",
+    "router",
+    "tiny",
+    "routing",
+    "hooks",
+    "useLocation"
+  ],
+  "files": [
+    "*.js",
+    "*.d.ts",
+    "preact",
+    "cjs"
+  ],
+  "type": "module",
+  "exports": {
+    ".": {
+      "require": "./cjs/index.js",
+      "default": "./index.js"
+    },
+    "./use-location": {
+      "require": "./cjs/use-location.js",
+      "default": "./use-location.js"
+    },
+    "./matcher": {
+      "require": "./cjs/matcher.js",
+      "default": "./matcher.js"
+    },
+    "./static-location": {
+      "require": "./cjs/static-location.js",
+      "default": "./static-location.js"
+    }
+  },
+  "main": "cjs/index.js",
+  "module": "index.js",
+  "types": "index.d.ts",
+  "scripts": {
+    "fix:p": "prettier --write './**/*.js{x,}'",
+    "test": "jest --verbose --coverage",
+    "size": "size-limit",
+    "build": "npm run bundle",
+    "lint": "eslint *.js preact/",
+    "lint-types": "npm run types-preact && dtslint types --onlyTestTsNext && dtslint types/preact --onlyTestTsNext",
+    "types-react": "copyfiles -f types/*.d.ts .",
+    "types-preact": "copyfiles -f {index,matcher,use-location,static-location}.js types/{matcher,use-location,static-location}.d.ts types/preact/*.d.ts preact/",
+    "bundle": "rollup -e react,preact,preact/hooks -f cjs --exports named --preserveModules -d ${DIR}cjs ${DIR}*.js && rollup -f cjs --exports auto -d ${DIR}cjs ${DIR}static-location.js && echo '{\"type\": \"commonjs\"}' > ${DIR}cjs/package.json",
+    "prepublishOnly": "npm run types-react && npm run types-preact && npm run bundle && DIR=./preact/ npm run bundle"
+  },
+  "author": "Alexey Taktarov <molefrog@gmail.com>",
+  "license": "ISC",
+  "peerDependencies": {
+    "react": ">=16.8.0"
+  },
+  "repository": "molefrog/wouter",
+  "size-limit": [
+    {
+      "path": "index.js",
+      "limit": "1400 B"
+    },
+    {
+      "path": "use-location.js",
+      "limit": "400 B"
+    }
+  ],
+  "husky": {
+    "hooks": {
+      "commit-msg": "yarn fix:p"
+    }
+  },
+  "eslintConfig": {
+    "extends": "eslint:recommended",
+    "parserOptions": {
+      "ecmaVersion": 6,
+      "sourceType": "module",
+      "ecmaFeatures": {
+        "jsx": true
+      }
+    },
+    "env": {
+      "browser": true,
+      "node": true,
+      "jest": true
+    },
+    "rules": {
+      "no-unused-vars": [
+        "error",
+        {
+          "varsIgnorePattern": "^_",
+          "argsIgnorePattern": "^_"
+        }
+      ],
+      "react-hooks/rules-of-hooks": "error",
+      "react-hooks/exhaustive-deps": "warn"
+    },
+    "plugins": [
+      "react-hooks"
+    ]
+  },
+  "jest": {
+    "transform": {
+      "\\.js$": "jest-esm-jsx-transform"
+    }
+  },
+  "devDependencies": {
+    "@size-limit/preset-small-lib": "^4.9.2",
+    "@testing-library/react": "^11.2.5",
+    "@testing-library/react-hooks": "^5.0.3",
+    "@types/react": "^17.0.1",
+    "copyfiles": "^2.4.1",
+    "dtslint": "^4.0.6",
+    "eslint": "^7.19.0",
+    "eslint-plugin-react-hooks": "^4.2.0",
+    "husky": "^4.3.0",
+    "jest": "^26.6.3",
+    "jest-esm-jsx-transform": "^1.0.0",
+    "preact": "^10.0.0",
+    "prettier": "^2.1.2",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "react-test-renderer": "^17.0.1",
+    "rollup": "^2.38.5"
+  }
+}

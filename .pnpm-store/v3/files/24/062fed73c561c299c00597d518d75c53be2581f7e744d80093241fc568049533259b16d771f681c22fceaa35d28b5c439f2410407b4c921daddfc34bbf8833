@@ -1,0 +1,82 @@
+export declare type IVariants = Record<string | number, string | number>;
+export declare type ITheme = {
+    animations?: unknown;
+    borders?: unknown;
+    borderStyles?: unknown;
+    borderWidths?: unknown;
+    colors?: unknown;
+    fonts?: unknown;
+    fontSizes?: unknown;
+    fontWeights?: unknown;
+    gridTemplateColumns?: unknown;
+    gridTemplateRows?: unknown;
+    inset?: unknown;
+    letterSpacings?: unknown;
+    lineHeights?: unknown;
+    radii?: unknown;
+    ringWidths?: unknown;
+    shadows?: unknown;
+    screens?: unknown;
+    settings?: unknown;
+    sizes?: unknown;
+    space?: unknown;
+    timingFunctions?: unknown;
+    transforms?: unknown;
+    transitions?: unknown;
+    transitionProperties?: unknown;
+    transformers?: unknown;
+    zIndices?: unknown;
+};
+export declare type IProps = {
+    [Key: string]: any;
+    [Key: number]: any;
+    theme?: any;
+};
+export declare type IStyles = Record<string, unknown>;
+export declare type IBreakpoints = Record<string | number, number>;
+export declare type IPropsWithTheme<TTheme extends ITheme> = IProps & {
+    theme: TTheme;
+};
+export interface StyleGetter {
+    (props: IProps): any;
+}
+export declare type Mixin = (value: unknown) => IStyles | null | undefined | StyleGetter;
+export declare type Breakpoints<TTheme extends ITheme> = TTheme extends {
+    breakpoints: IBreakpoints;
+} ? TTheme['screens'] : Record<string, unknown>;
+export declare type BreakpointsProps<TType, TTheme extends ITheme> = {
+    [P in keyof Breakpoints<TTheme>]?: TType;
+};
+export declare type SystemProp<TType, TTheme extends ITheme> = TType | BreakpointsProps<TType, TTheme>;
+export interface StyleGenerator {
+    (props: IProps, sort?: boolean): any;
+    meta: {
+        props: string[];
+        getStyle: StyleGenerator;
+        generators?: StyleGenerator[];
+    };
+    apply: (values: object) => (IProps: object) => any;
+}
+export interface TransformValue<TValueType = any> {
+    (value: string | number, options: {
+        rawValue: TValueType;
+        variants: IVariants;
+        props: IProps;
+    }): string | number | null;
+}
+export interface ThemeGetter<TValueType = any> {
+    (value: TValueType, defaultValue?: any): (props: IProps) => any;
+    meta: {
+        name?: string;
+        transform?: TransformValue<TValueType>;
+    };
+}
+/**
+ * Define a type from a variant.
+ */
+export declare type VariantsType<TVariants, TBaseType = number | string> = TVariants extends ReadonlyArray<any> ? number | (TBaseType & {}) : TVariants extends Array<any> ? number | (TBaseType & {}) : TVariants extends {
+    default: any;
+} ? keyof TVariants | (TBaseType & {}) | true : TVariants extends IVariants ? keyof TVariants | (TBaseType & {}) : TBaseType & {};
+export declare type FirstArg<T extends (...args: any) => any> = Parameters<T>[0];
+export interface Theme extends ITheme {
+}

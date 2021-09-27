@@ -1,0 +1,94 @@
+/**
+ * Identity function.
+ * @param x
+ */
+export declare const identity: <T>(x: T) => T;
+/**
+ * Check if a value is not null and not undefined.
+ * @param n
+ */
+export declare const is: <T>(n: T) => n is Exclude<T, null | undefined>;
+/**
+ * Check if a value is a number.
+ * @param n
+ */
+export declare const num: (n: any) => n is number;
+/**
+ * Check if a value is a string.
+ * @param n
+ */
+export declare const string: (n: any) => n is string;
+/**
+ * Check if a value is an object.
+ * @param n
+ */
+export declare const obj: (n: any) => n is object;
+/**
+ * Check if a value is a function.
+ * @param n
+ */
+export declare const func: (n: any) => n is Function;
+/**
+ * Check if a value is a negative number.
+ * @param n
+ */
+export declare const negative: (n: any) => n is number;
+declare type Path = string | number;
+/**
+ * Get a value from an object or an array.
+ * @param from
+ * @param path
+ */
+export declare const get: <T>(from: any[] | {
+    [key: string]: any;
+}, path: Path) => T;
+/**
+ * Assign object into another
+ * @param a
+ * @param b
+ */
+export declare const assign: <TObject, TSource>(a: TObject, b: TSource) => TObject & TSource;
+/**
+ * Merge deeply one object into another.
+ * @param a
+ * @param b
+ */
+export declare const merge: <TObject, TSource>(a: TObject, b: TSource) => TObject & TSource;
+/**
+ * Warn if a condition is not met.
+ * @param condition
+ * @param message
+ */
+export declare const warn: (condition: boolean, message: string) => void;
+/**
+ * Recursively call a function until getting something that is not a function.
+ * @param value
+ * @param arg
+ */
+export declare function cascade(value: any, arg?: any): Exclude<any, Function>;
+/**
+ * Get value from theme.
+ * @param props
+ * @param path
+ * @param initial
+ */
+export declare const getThemeValue: <TProps extends {
+    theme?: any;
+}>(props: TProps, path: Path, initial?: any) => any;
+/**
+ * Omit values from an object.
+ * @param object
+ * @param values
+ */
+export declare function omit<T extends object, K extends string[]>(object: T, values: K): Pick<T, Exclude<keyof T, K[number]>>;
+/**
+ * Flatten every string together in an array.
+ * @param array
+ */
+export declare function flattenStrings(array: any[]): any[];
+/**
+ * Flatten an array.
+ * @param array
+ */
+export declare function flatten(array: any[]): any[];
+export {};

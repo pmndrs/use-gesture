@@ -1,0 +1,8 @@
+{
+  "name": "reakit/Popover/PopoverBackdrop",
+  "private": true,
+  "sideEffects": false,
+  "main": "../../lib/Popover/PopoverBackdrop",
+  "module": "../../es/Popover/PopoverBackdrop",
+  "types": "../../ts/Popover/PopoverBackdrop"
+}

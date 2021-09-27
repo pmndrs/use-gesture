@@ -1,0 +1,51 @@
+import { GraphQLSchema, DocumentNode } from 'graphql';
+import { Source } from '@graphql-tools/utils';
+import { GraphQLExtensionsRegistry } from './extension';
+import { IExtensions, IGraphQLProject, IGraphQLProjectLegacy } from './types';
+import { LoadSchemaOptions as ToolsLoadSchemaOptions, LoadTypedefsOptions as ToolsLoadTypedefsOptions, UnnormalizedTypeDefPointer } from '@graphql-tools/load';
+declare type Pointer = UnnormalizedTypeDefPointer | UnnormalizedTypeDefPointer[];
+declare type LoadTypedefsOptions = Partial<ToolsLoadTypedefsOptions>;
+declare type LoadSchemaOptions = Partial<ToolsLoadSchemaOptions>;
+export declare class GraphQLProjectConfig {
+    readonly schema: Pointer;
+    readonly documents?: UnnormalizedTypeDefPointer | UnnormalizedTypeDefPointer[];
+    readonly include?: string | string[];
+    readonly exclude?: string | string[];
+    readonly extensions: IExtensions;
+    readonly filepath: string;
+    readonly dirpath: string;
+    readonly name: string;
+    readonly isLegacy: boolean;
+    private readonly _extensionsRegistry;
+    constructor({ filepath, name, config, extensionsRegistry, }: {
+        filepath: string;
+        name: string;
+        config: IGraphQLProject | IGraphQLProjectLegacy;
+        extensionsRegistry: GraphQLExtensionsRegistry;
+    });
+    hasExtension(name: string): boolean;
+    extension<T = any>(name: string): T;
+    getSchema(): Promise<GraphQLSchema>;
+    getSchema(out: 'DocumentNode'): Promise<DocumentNode>;
+    getSchema(out: 'GraphQLSchema'): Promise<GraphQLSchema>;
+    getSchema(out: 'string'): Promise<string>;
+    getSchemaSync(): GraphQLSchema;
+    getSchemaSync(out: 'DocumentNode'): DocumentNode;
+    getSchemaSync(out: 'GraphQLSchema'): GraphQLSchema;
+    getSchemaSync(out: 'string'): string;
+    getDocuments(): Promise<Source[]>;
+    getDocumentsSync(): Source[];
+    loadSchema(pointer: Pointer): Promise<GraphQLSchema>;
+    loadSchema(pointer: Pointer, out: 'string', options?: LoadSchemaOptions): Promise<GraphQLSchema>;
+    loadSchema(pointer: Pointer, out: 'DocumentNode', options?: LoadSchemaOptions): Promise<DocumentNode>;
+    loadSchema(pointer: Pointer, out: 'GraphQLSchema', options?: LoadSchemaOptions): Promise<GraphQLSchema>;
+    loadSchemaSync(pointer: Pointer): GraphQLSchema;
+    loadSchemaSync(pointer: Pointer, out: 'string', options?: LoadSchemaOptions): GraphQLSchema;
+    loadSchemaSync(pointer: Pointer, out: 'DocumentNode', options?: LoadSchemaOptions): DocumentNode;
+    loadSchemaSync(pointer: Pointer, out: 'GraphQLSchema', options?: LoadSchemaOptions): GraphQLSchema;
+    loadDocuments(pointer: Pointer, options?: LoadTypedefsOptions): Promise<Source[]>;
+    loadDocumentsSync(pointer: Pointer, options?: LoadTypedefsOptions): Source[];
+    match(filepath: string): boolean;
+}
+export {};
+//# sourceMappingURL=project-config.d.ts.map

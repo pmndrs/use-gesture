@@ -1,0 +1,8 @@
+{
+  "name": "reakit/Form/FormRadio",
+  "private": true,
+  "sideEffects": false,
+  "main": "../../lib/Form/FormRadio",
+  "module": "../../es/Form/FormRadio",
+  "types": "../../ts/Form/FormRadio"
+}

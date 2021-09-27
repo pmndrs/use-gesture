@@ -1,0 +1,11 @@
+import { ThemedStyledFunction, ThemedBaseStyledInterface, DefaultTheme } from 'styled-components';
+import { SystemProps } from '@xstyled/system';
+import { BoxElements } from './BoxElements';
+declare type ThemedXStyledComponentFactories<T extends object> = {
+    [Key in keyof BoxElements]: ThemedStyledFunction<BoxElements[Key], T, SystemProps<T>>;
+};
+interface ThemeBaseXStyledInterface<T extends object> extends ThemedBaseStyledInterface<T>, ThemedXStyledComponentFactories<T> {
+}
+declare type XStyledInterface = ThemeBaseXStyledInterface<DefaultTheme>;
+export declare const styled: XStyledInterface;
+export {};

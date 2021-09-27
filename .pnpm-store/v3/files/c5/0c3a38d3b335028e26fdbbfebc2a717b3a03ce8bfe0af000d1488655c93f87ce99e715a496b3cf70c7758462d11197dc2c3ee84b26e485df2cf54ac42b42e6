@@ -1,0 +1,23 @@
+{
+  "name": "dom-iterator",
+  "Repo": "matthewmueller/dom-iterator",
+  "description": "iterate through DOM nodes",
+  "version": "1.0.0",
+  "keywords": [
+    "iterate",
+    "dom"
+  ],
+  "dependencies": {
+    "component/xor": "0.0.3",
+    "component/props": "1.1.1"
+  },
+  "development": {
+    "component/domify": "*",
+    "component/assert": "*"
+  },
+  "license": "MIT",
+  "main": "index.js",
+  "scripts": [
+    "index.js"
+  ]
+}

@@ -1,0 +1,95 @@
+{
+  "name": "graphql-compose",
+  "version": "7.25.1",
+  "description": "GraphQL schema builder from different data sources with middleware extensions.",
+  "files": [
+    "lib",
+    "esm",
+    "mjs"
+  ],
+  "main": "lib/index.js",
+  "module": "mjs/index.mjs",
+  "types": "lib/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/graphql-compose/graphql-compose.git"
+  },
+  "keywords": [
+    "graphql",
+    "compose"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/graphql-compose/graphql-compose/issues"
+  },
+  "homepage": "https://github.com/graphql-compose/graphql-compose",
+  "peerDependencies": {
+    "graphql": "^14.2.0 || ^15.0.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "7.12.10",
+    "@babel/core": "7.12.10",
+    "@babel/plugin-proposal-class-properties": "7.12.1",
+    "@babel/plugin-proposal-nullish-coalescing-operator": "7.12.1",
+    "@babel/plugin-proposal-object-rest-spread": "7.12.1",
+    "@babel/plugin-proposal-optional-chaining": "7.12.7",
+    "@babel/plugin-transform-flow-strip-types": "7.12.10",
+    "@babel/plugin-transform-runtime": "7.12.10",
+    "@babel/preset-env": "7.12.11",
+    "@babel/preset-flow": "7.12.1",
+    "@types/graphql": "14.5.0",
+    "babel-core": "7.0.0-bridge.0",
+    "babel-eslint": "10.1.0",
+    "babel-jest": "26.6.3",
+    "cz-conventional-changelog": "3.3.0",
+    "eslint": "7.17.0",
+    "eslint-config-airbnb-base": "14.2.1",
+    "eslint-config-prettier": "7.1.0",
+    "eslint-plugin-flowtype": "5.2.0",
+    "eslint-plugin-import": "2.22.1",
+    "eslint-plugin-prettier": "3.3.1",
+    "flow-bin": "0.131.0",
+    "graphql": "15.4.0",
+    "jest": "26.6.3",
+    "prettier": "2.2.1",
+    "rimraf": "3.0.2",
+    "semantic-release": "17.3.1",
+    "tslint": "6.1.3",
+    "tslint-config-prettier": "1.18.0",
+    "tslint-plugin-prettier": "2.3.0",
+    "typescript": "4.1.3"
+  },
+  "dependencies": {
+    "graphql-type-json": "0.3.2",
+    "object-path": "0.11.5"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
+  "scripts": {
+    "build": "npm run build-cjs && npm run build-mjs && npm run build-esm",
+    "build-cjs": "rimraf lib && BABEL_ENV=cjs babel src --ignore __tests__,__mocks__ -d lib && COPY_TO_FOLDER=lib npm run build-flow && COPY_TO_FOLDER=lib npm run build-ts",
+    "build-esm": "rimraf esm && BABEL_ENV=esm babel src --ignore __tests__,__mocks__ -d esm && COPY_TO_FOLDER=esm npm run build-flow && COPY_TO_FOLDER=esm npm run build-ts",
+    "build-mjs": "rimraf mjs && BABEL_ENV=mjs babel src --ignore __tests__,__mocks__ -d mjs && yarn build-mjs-rename && COPY_TO_FOLDER=mjs npm run build-flow",
+    "build-mjs-rename": "find ./mjs -name \"*.js\" -exec bash -c 'mv \"$1\" \"${1%.js}\".mjs' - '{}' \\;",
+    "build-flow": "find ./src -name '*.js' -not -path '*/__*' | while read filepath; do cp $filepath `echo ./${COPY_TO_FOLDER:-lib}$filepath | sed 's/.\\/src\\//\\//g'`.flow; done",
+    "build-ts": "find ./src -name '*.d.ts' -not -path '*/__*' | while read filepath; do cp $filepath `echo ./${COPY_TO_FOLDER:-lib}$filepath | sed 's/.\\/src\\//\\//g'`; done",
+    "watch": "jest --watch",
+    "coverage": "jest --coverage --maxWorkers 4",
+    "lint": "npm run eslint && npm run tslint",
+    "eslint": "eslint --ext .js ./src",
+    "tslint": "tslint -p . \"src/**/*.d.ts\"",
+    "tscheck": "tsc --noEmit",
+    "flow": "./node_modules/.bin/flow",
+    "test": "npm run coverage && npm run lint && npm run flow && npm run tscheck",
+    "semantic-release": "semantic-release",
+    "test-prev-vers": "yarn add graphql@14.2.0 --dev && jest && yarn remove graphql && yarn add graphql --dev --exact && git checkout HEAD -- package.json yarn.lock"
+  },
+  "collective": {
+    "type": "opencollective",
+    "url": "https://opencollective.com/graphql-compose",
+    "logo": "https://opencollective.com/graphql-compose/logo.txt"
+  }
+}

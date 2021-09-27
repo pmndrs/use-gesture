@@ -1,0 +1,79 @@
+{
+  "name": "eslint-plugin-jest-dom",
+  "version": "3.9.2",
+  "description": "ESLint plugin to follow best practices and anticipate common mistakes when writing tests with jest-dom",
+  "main": "dist/index.js",
+  "keywords": [
+    "eslint",
+    "eslintplugin",
+    "eslint-plugin",
+    "jest-dom",
+    "testing-library",
+    "react-testing-library",
+    "dom-testing-library",
+    "RTL",
+    "DTL",
+    "tests"
+  ],
+  "author": "Ben Monro",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/testing-library/eslint-plugin-jest-dom"
+  },
+  "bugs": {
+    "url": "https://github.com/testing-library/eslint-plugin-jest-dom/issues"
+  },
+  "homepage": "https://github.com/testing-library/eslint-plugin-jest-dom#readme",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "kcd-scripts build",
+    "pregenerate-readme-table": "yarn build",
+    "generate-readme-table": "node build/generate-readme-table.js",
+    "lint": "kcd-scripts lint",
+    "setup": "npm install && npm run validate -s",
+    "test": "kcd-scripts test",
+    "test:smoke": "eslint-remote-tester --config ./smoke-test/eslint-remote-tester.config.js",
+    "test:update": "npm test -- --updateSnapshot --coverage",
+    "validate": "kcd-scripts validate"
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.9.6",
+    "@testing-library/dom": "^7.28.1",
+    "requireindex": "^1.2.0"
+  },
+  "devDependencies": {
+    "@typescript-eslint/parser": "^4.8.2",
+    "eslint": "^7.31.0",
+    "eslint-remote-tester": "^1.2.0",
+    "jest-extended": "^0.11.5",
+    "kcd-scripts": "6.5.1",
+    "typescript": "^4.1.2"
+  },
+  "peerDependencies": {
+    "eslint": ">=6.8"
+  },
+  "eslintConfig": {
+    "extends": "./node_modules/kcd-scripts/eslint.js",
+    "rules": {
+      "babel/quotes": "off",
+      "max-lines-per-function": "off",
+      "testing-library/no-dom-import": "off",
+      "consistent-return": "off"
+    }
+  },
+  "eslintIgnore": [
+    "node_modules",
+    "coverage",
+    "dist",
+    ".cache-eslint-remote-tester",
+    "eslint-remote-tester-results"
+  ],
+  "engines": {
+    "node": "^10.12.0 || >=12.0.0",
+    "npm": ">=6",
+    "yarn": ">=1"
+  }
+}

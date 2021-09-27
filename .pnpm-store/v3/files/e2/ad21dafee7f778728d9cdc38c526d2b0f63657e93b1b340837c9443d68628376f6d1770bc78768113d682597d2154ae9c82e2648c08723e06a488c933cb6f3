@@ -1,0 +1,1 @@
+"use strict";Object.defineProperty(exports,"__esModule",{value:!0});var e=require("@react-three/fiber");exports.useAspect=function(t,r,i){void 0===i&&(i=1);var s=e.useThree((function(e){return e.viewport})),u=r*(s.aspect>t/r?s.width/t:s.height/r);return[t*(s.aspect>t/r?s.width/t:s.height/r)*i,u*i,1]};

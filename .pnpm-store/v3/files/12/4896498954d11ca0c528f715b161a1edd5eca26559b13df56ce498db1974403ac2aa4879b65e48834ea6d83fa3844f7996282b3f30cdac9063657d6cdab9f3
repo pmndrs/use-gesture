@@ -1,0 +1,1 @@
+"use strict";var e=require("./WebGPUBinding.cjs.js"),s=require("./constants.cjs.js");module.exports=class extends e{constructor(e,r){super(e),this.type=s.GPUBindingType.StorageBuffer,this.usage=GPUBufferUsage.VERTEX|GPUBufferUsage.STORAGE|GPUBufferUsage.COPY_DST,this.attribute=r,this.bufferGPU=null,Object.defineProperty(this,"isStorageBuffer",{value:!0})}};

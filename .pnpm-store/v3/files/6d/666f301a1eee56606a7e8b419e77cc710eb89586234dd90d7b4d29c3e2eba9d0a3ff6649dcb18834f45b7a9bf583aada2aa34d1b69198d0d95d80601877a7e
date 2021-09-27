@@ -1,0 +1,43 @@
+{
+  "name": "@reach/tabs",
+  "version": "0.16.1",
+  "description": "Accessible React Tabs Component",
+  "author": "React Training <hello@reacttraining.com>",
+  "license": "MIT",
+  "sideEffects": [
+    "*.css"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/reach/reach-ui.git",
+    "directory": "packages/tabs"
+  },
+  "dependencies": {
+    "@reach/auto-id": "0.16.0",
+    "@reach/descendants": "0.16.1",
+    "@reach/utils": "0.16.0",
+    "prop-types": "^15.7.2",
+    "tslib": "^2.3.0"
+  },
+  "devDependencies": {
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
+  },
+  "peerDependencies": {
+    "react": "^16.8.0 || 17.x",
+    "react-dom": "^16.8.0 || 17.x"
+  },
+  "main": "dist/reach-tabs.cjs.js",
+  "module": "dist/reach-tabs.esm.js",
+  "types": "dist/reach-tabs.cjs.d.ts",
+  "files": [
+    "README.md",
+    "dist",
+    "styles.css"
+  ],
+  "eslintIgnore": [
+    "node_modules",
+    "dist"
+  ],
+  "gitHead": "def3e4a96c6bc184ff78725e37854e542225d371"
+}

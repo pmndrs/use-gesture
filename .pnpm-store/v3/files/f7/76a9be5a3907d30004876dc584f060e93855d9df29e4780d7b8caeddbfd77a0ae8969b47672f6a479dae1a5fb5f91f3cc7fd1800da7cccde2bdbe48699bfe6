@@ -1,0 +1,5 @@
+import { IProps } from './types';
+export declare const up: (key: string | number, rules: unknown) => (props: IProps) => unknown;
+export declare const down: (key: string | number, rules: any) => (props: IProps) => any[] | null;
+export declare const between: (lower: string | number, upper: string | number, rules: any) => (props: IProps) => unknown;
+export declare const breakpoints: (values: any) => (props: IProps) => unknown[];

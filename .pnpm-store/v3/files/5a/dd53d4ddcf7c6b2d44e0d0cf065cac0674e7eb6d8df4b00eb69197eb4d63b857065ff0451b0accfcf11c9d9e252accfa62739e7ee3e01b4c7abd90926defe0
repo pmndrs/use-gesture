@@ -1,0 +1,8 @@
+{
+  "name": "reakit/Combobox/ComboboxItem",
+  "private": true,
+  "sideEffects": false,
+  "main": "../../lib/Combobox/ComboboxItem",
+  "module": "../../es/Combobox/ComboboxItem",
+  "types": "../../ts/Combobox/ComboboxItem"
+}

@@ -1,0 +1,8 @@
+{
+  "name": "reakit/Clickable",
+  "private": true,
+  "sideEffects": false,
+  "main": "../lib/Clickable",
+  "module": "../es/Clickable",
+  "types": "../ts/Clickable"
+}

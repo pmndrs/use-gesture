@@ -1,0 +1,8 @@
+{
+  "name": "reakit-system/SystemProvider",
+  "private": true,
+  "sideEffects": false,
+  "main": "../lib/SystemProvider",
+  "module": "../es/SystemProvider",
+  "types": "../ts/SystemProvider"
+}

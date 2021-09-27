@@ -1,0 +1,8 @@
+{
+  "name": "reakit/Grid/GridState",
+  "private": true,
+  "sideEffects": false,
+  "main": "../../lib/Grid/GridState",
+  "module": "../../es/Grid/GridState",
+  "types": "../../ts/Grid/GridState"
+}

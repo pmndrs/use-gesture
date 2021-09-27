@@ -1,0 +1,8 @@
+{
+  "name": "reakit-utils/hasFocus",
+  "private": true,
+  "sideEffects": false,
+  "main": "../lib/hasFocus",
+  "module": "../es/hasFocus",
+  "types": "../ts/hasFocus"
+}

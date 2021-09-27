@@ -1,0 +1,4 @@
+{
+  "main": "dist/reach-utils-use-focus-change.cjs.js",
+  "module": "dist/reach-utils-use-focus-change.esm.js"
+}

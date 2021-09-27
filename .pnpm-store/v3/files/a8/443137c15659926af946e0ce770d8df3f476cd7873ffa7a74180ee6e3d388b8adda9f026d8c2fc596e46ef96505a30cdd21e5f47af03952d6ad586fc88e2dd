@@ -1,0 +1,800 @@
+export declare const StyledRow: import("@stitches/react").StitchesComponentWithAutoCompleteForJSXElements<"div", {}, import("@stitches/react").TMedias & {
+    initial: "";
+}, {
+    colors: {
+        elevation1: string;
+        elevation2: string;
+        elevation3: string;
+        accent1: string;
+        accent2: string;
+        accent3: string;
+        highlight1: string;
+        highlight2: string;
+        highlight3: string;
+        vivid1: string;
+        folderWidgetColor: string;
+        folderTextColor: string;
+        toolTipBackground: string;
+        toolTipText: string;
+    };
+    radii: {
+        xs: string;
+        sm: string;
+        lg: string;
+    };
+    space: {
+        xs: string;
+        sm: string;
+        md: string;
+        rowGap: string;
+        colGap: string;
+    };
+    fonts: {
+        mono: string;
+        sans: string;
+    };
+    fontSizes: {
+        root: string;
+        toolTip: string;
+    };
+    sizes: {
+        rootWidth: string;
+        controlWidth: string;
+        numberInputMinWidth: string;
+        scrubberWidth: string;
+        scrubberHeight: string;
+        rowHeight: string;
+        folderTitleHeight: string;
+        checkboxSize: string;
+        joystickWidth: string;
+        joystickHeight: string;
+        colorPickerWidth: string;
+        colorPickerHeight: string;
+        imagePreviewWidth: string;
+        imagePreviewHeight: string;
+        monitorHeight: string;
+        titleBarHeight: string;
+    };
+    shadows: {
+        level1: string;
+        level2: string;
+    };
+    borderWidths: {
+        root: string;
+        input: string;
+        focus: string;
+        hover: string;
+        active: string;
+        folder: string;
+    };
+    fontWeights: {
+        label: string;
+        folder: string;
+        button: string;
+    };
+}, {
+    $flex: unknown;
+    $flexCenter: unknown;
+    $reset: unknown;
+    $draggable: unknown;
+    $focus: string;
+    $focusWithin: string;
+    $hover: string;
+    $active: string;
+    $inputStyle: string;
+    $focusStyle: string;
+    $hoverStyle: string;
+    $activeStyle: string;
+}, import("@stitches/react").CSSPropertiesToTokenScale>;
+export declare const StyledInputRow: import("@stitches/react").StitchesComponentWithAutoCompleteForJSXElements<"div", {}, import("@stitches/react").TMedias & {
+    initial: "";
+}, {
+    colors: {
+        elevation1: string;
+        elevation2: string;
+        elevation3: string;
+        accent1: string;
+        accent2: string;
+        accent3: string;
+        highlight1: string;
+        highlight2: string;
+        highlight3: string;
+        vivid1: string;
+        folderWidgetColor: string;
+        folderTextColor: string;
+        toolTipBackground: string;
+        toolTipText: string;
+    };
+    radii: {
+        xs: string;
+        sm: string;
+        lg: string;
+    };
+    space: {
+        xs: string;
+        sm: string;
+        md: string;
+        rowGap: string;
+        colGap: string;
+    };
+    fonts: {
+        mono: string;
+        sans: string;
+    };
+    fontSizes: {
+        root: string;
+        toolTip: string;
+    };
+    sizes: {
+        rootWidth: string;
+        controlWidth: string;
+        numberInputMinWidth: string;
+        scrubberWidth: string;
+        scrubberHeight: string;
+        rowHeight: string;
+        folderTitleHeight: string;
+        checkboxSize: string;
+        joystickWidth: string;
+        joystickHeight: string;
+        colorPickerWidth: string;
+        colorPickerHeight: string;
+        imagePreviewWidth: string;
+        imagePreviewHeight: string;
+        monitorHeight: string;
+        titleBarHeight: string;
+    };
+    shadows: {
+        level1: string;
+        level2: string;
+    };
+    borderWidths: {
+        root: string;
+        input: string;
+        focus: string;
+        hover: string;
+        active: string;
+        folder: string;
+    };
+    fontWeights: {
+        label: string;
+        folder: string;
+        button: string;
+    };
+}, {
+    $flex: unknown;
+    $flexCenter: unknown;
+    $reset: unknown;
+    $draggable: unknown;
+    $focus: string;
+    $focusWithin: string;
+    $hover: string;
+    $active: string;
+    $inputStyle: string;
+    $focusStyle: string;
+    $hoverStyle: string;
+    $activeStyle: string;
+}, import("@stitches/react").CSSPropertiesToTokenScale>;
+export declare const CopyLabelContainer: import("@stitches/react").StitchesComponentWithAutoCompleteForJSXElements<"div", {
+    align: {
+        top: unknown;
+    };
+}, import("@stitches/react").TMedias & {
+    initial: "";
+}, {
+    colors: {
+        elevation1: string;
+        elevation2: string;
+        elevation3: string;
+        accent1: string;
+        accent2: string;
+        accent3: string;
+        highlight1: string;
+        highlight2: string;
+        highlight3: string;
+        vivid1: string;
+        folderWidgetColor: string;
+        folderTextColor: string;
+        toolTipBackground: string;
+        toolTipText: string;
+    };
+    radii: {
+        xs: string;
+        sm: string;
+        lg: string;
+    };
+    space: {
+        xs: string;
+        sm: string;
+        md: string;
+        rowGap: string;
+        colGap: string;
+    };
+    fonts: {
+        mono: string;
+        sans: string;
+    };
+    fontSizes: {
+        root: string;
+        toolTip: string;
+    };
+    sizes: {
+        rootWidth: string;
+        controlWidth: string;
+        numberInputMinWidth: string;
+        scrubberWidth: string;
+        scrubberHeight: string;
+        rowHeight: string;
+        folderTitleHeight: string;
+        checkboxSize: string;
+        joystickWidth: string;
+        joystickHeight: string;
+        colorPickerWidth: string;
+        colorPickerHeight: string;
+        imagePreviewWidth: string;
+        imagePreviewHeight: string;
+        monitorHeight: string;
+        titleBarHeight: string;
+    };
+    shadows: {
+        level1: string;
+        level2: string;
+    };
+    borderWidths: {
+        root: string;
+        input: string;
+        focus: string;
+        hover: string;
+        active: string;
+        folder: string;
+    };
+    fontWeights: {
+        label: string;
+        folder: string;
+        button: string;
+    };
+}, {
+    $flex: unknown;
+    $flexCenter: unknown;
+    $reset: unknown;
+    $draggable: unknown;
+    $focus: string;
+    $focusWithin: string;
+    $hover: string;
+    $active: string;
+    $inputStyle: string;
+    $focusStyle: string;
+    $hoverStyle: string;
+    $activeStyle: string;
+}, import("@stitches/react").CSSPropertiesToTokenScale>;
+export declare const StyledOptionalToggle: import("@stitches/react").StitchesComponentWithAutoCompleteForJSXElements<"input", {}, import("@stitches/react").TMedias & {
+    initial: "";
+}, {
+    colors: {
+        elevation1: string;
+        elevation2: string;
+        elevation3: string;
+        accent1: string;
+        accent2: string;
+        accent3: string;
+        highlight1: string;
+        highlight2: string;
+        highlight3: string;
+        vivid1: string;
+        folderWidgetColor: string;
+        folderTextColor: string;
+        toolTipBackground: string;
+        toolTipText: string;
+    };
+    radii: {
+        xs: string;
+        sm: string;
+        lg: string;
+    };
+    space: {
+        xs: string;
+        sm: string;
+        md: string;
+        rowGap: string;
+        colGap: string;
+    };
+    fonts: {
+        mono: string;
+        sans: string;
+    };
+    fontSizes: {
+        root: string;
+        toolTip: string;
+    };
+    sizes: {
+        rootWidth: string;
+        controlWidth: string;
+        numberInputMinWidth: string;
+        scrubberWidth: string;
+        scrubberHeight: string;
+        rowHeight: string;
+        folderTitleHeight: string;
+        checkboxSize: string;
+        joystickWidth: string;
+        joystickHeight: string;
+        colorPickerWidth: string;
+        colorPickerHeight: string;
+        imagePreviewWidth: string;
+        imagePreviewHeight: string;
+        monitorHeight: string;
+        titleBarHeight: string;
+    };
+    shadows: {
+        level1: string;
+        level2: string;
+    };
+    borderWidths: {
+        root: string;
+        input: string;
+        focus: string;
+        hover: string;
+        active: string;
+        folder: string;
+    };
+    fontWeights: {
+        label: string;
+        folder: string;
+        button: string;
+    };
+}, {
+    $flex: unknown;
+    $flexCenter: unknown;
+    $reset: unknown;
+    $draggable: unknown;
+    $focus: string;
+    $focusWithin: string;
+    $hover: string;
+    $active: string;
+    $inputStyle: string;
+    $focusStyle: string;
+    $hoverStyle: string;
+    $activeStyle: string;
+}, import("@stitches/react").CSSPropertiesToTokenScale>;
+export declare const StyledInputWrapper: import("@stitches/react").StitchesComponentWithAutoCompleteForJSXElements<"div", {
+    disabled: {
+        true: unknown;
+    };
+}, import("@stitches/react").TMedias & {
+    initial: "";
+}, {
+    colors: {
+        elevation1: string;
+        elevation2: string;
+        elevation3: string;
+        accent1: string;
+        accent2: string;
+        accent3: string;
+        highlight1: string;
+        highlight2: string;
+        highlight3: string;
+        vivid1: string;
+        folderWidgetColor: string;
+        folderTextColor: string;
+        toolTipBackground: string;
+        toolTipText: string;
+    };
+    radii: {
+        xs: string;
+        sm: string;
+        lg: string;
+    };
+    space: {
+        xs: string;
+        sm: string;
+        md: string;
+        rowGap: string;
+        colGap: string;
+    };
+    fonts: {
+        mono: string;
+        sans: string;
+    };
+    fontSizes: {
+        root: string;
+        toolTip: string;
+    };
+    sizes: {
+        rootWidth: string;
+        controlWidth: string;
+        numberInputMinWidth: string;
+        scrubberWidth: string;
+        scrubberHeight: string;
+        rowHeight: string;
+        folderTitleHeight: string;
+        checkboxSize: string;
+        joystickWidth: string;
+        joystickHeight: string;
+        colorPickerWidth: string;
+        colorPickerHeight: string;
+        imagePreviewWidth: string;
+        imagePreviewHeight: string;
+        monitorHeight: string;
+        titleBarHeight: string;
+    };
+    shadows: {
+        level1: string;
+        level2: string;
+    };
+    borderWidths: {
+        root: string;
+        input: string;
+        focus: string;
+        hover: string;
+        active: string;
+        folder: string;
+    };
+    fontWeights: {
+        label: string;
+        folder: string;
+        button: string;
+    };
+}, {
+    $flex: unknown;
+    $flexCenter: unknown;
+    $reset: unknown;
+    $draggable: unknown;
+    $focus: string;
+    $focusWithin: string;
+    $hover: string;
+    $active: string;
+    $inputStyle: string;
+    $focusStyle: string;
+    $hoverStyle: string;
+    $activeStyle: string;
+}, import("@stitches/react").CSSPropertiesToTokenScale>;
+export declare const StyledLabel: import("@stitches/react").StitchesComponentWithAutoCompleteForJSXElements<"label", {}, import("@stitches/react").TMedias & {
+    initial: "";
+}, {
+    colors: {
+        elevation1: string;
+        elevation2: string;
+        elevation3: string;
+        accent1: string;
+        accent2: string;
+        accent3: string;
+        highlight1: string;
+        highlight2: string;
+        highlight3: string;
+        vivid1: string;
+        folderWidgetColor: string;
+        folderTextColor: string;
+        toolTipBackground: string;
+        toolTipText: string;
+    };
+    radii: {
+        xs: string;
+        sm: string;
+        lg: string;
+    };
+    space: {
+        xs: string;
+        sm: string;
+        md: string;
+        rowGap: string;
+        colGap: string;
+    };
+    fonts: {
+        mono: string;
+        sans: string;
+    };
+    fontSizes: {
+        root: string;
+        toolTip: string;
+    };
+    sizes: {
+        rootWidth: string;
+        controlWidth: string;
+        numberInputMinWidth: string;
+        scrubberWidth: string;
+        scrubberHeight: string;
+        rowHeight: string;
+        folderTitleHeight: string;
+        checkboxSize: string;
+        joystickWidth: string;
+        joystickHeight: string;
+        colorPickerWidth: string;
+        colorPickerHeight: string;
+        imagePreviewWidth: string;
+        imagePreviewHeight: string;
+        monitorHeight: string;
+        titleBarHeight: string;
+    };
+    shadows: {
+        level1: string;
+        level2: string;
+    };
+    borderWidths: {
+        root: string;
+        input: string;
+        focus: string;
+        hover: string;
+        active: string;
+        folder: string;
+    };
+    fontWeights: {
+        label: string;
+        folder: string;
+        button: string;
+    };
+}, {
+    $flex: unknown;
+    $flexCenter: unknown;
+    $reset: unknown;
+    $draggable: unknown;
+    $focus: string;
+    $focusWithin: string;
+    $hover: string;
+    $active: string;
+    $inputStyle: string;
+    $focusStyle: string;
+    $hoverStyle: string;
+    $activeStyle: string;
+}, import("@stitches/react").CSSPropertiesToTokenScale>;
+export declare const Overlay: import("@stitches/react").StitchesComponentWithAutoCompleteForJSXElements<"div", {}, import("@stitches/react").TMedias & {
+    initial: "";
+}, {
+    colors: {
+        elevation1: string;
+        elevation2: string;
+        elevation3: string;
+        accent1: string;
+        accent2: string;
+        accent3: string;
+        highlight1: string;
+        highlight2: string;
+        highlight3: string;
+        vivid1: string;
+        folderWidgetColor: string;
+        folderTextColor: string;
+        toolTipBackground: string;
+        toolTipText: string;
+    };
+    radii: {
+        xs: string;
+        sm: string;
+        lg: string;
+    };
+    space: {
+        xs: string;
+        sm: string;
+        md: string;
+        rowGap: string;
+        colGap: string;
+    };
+    fonts: {
+        mono: string;
+        sans: string;
+    };
+    fontSizes: {
+        root: string;
+        toolTip: string;
+    };
+    sizes: {
+        rootWidth: string;
+        controlWidth: string;
+        numberInputMinWidth: string;
+        scrubberWidth: string;
+        scrubberHeight: string;
+        rowHeight: string;
+        folderTitleHeight: string;
+        checkboxSize: string;
+        joystickWidth: string;
+        joystickHeight: string;
+        colorPickerWidth: string;
+        colorPickerHeight: string;
+        imagePreviewWidth: string;
+        imagePreviewHeight: string;
+        monitorHeight: string;
+        titleBarHeight: string;
+    };
+    shadows: {
+        level1: string;
+        level2: string;
+    };
+    borderWidths: {
+        root: string;
+        input: string;
+        focus: string;
+        hover: string;
+        active: string;
+        folder: string;
+    };
+    fontWeights: {
+        label: string;
+        folder: string;
+        button: string;
+    };
+}, {
+    $flex: unknown;
+    $flexCenter: unknown;
+    $reset: unknown;
+    $draggable: unknown;
+    $focus: string;
+    $focusWithin: string;
+    $hover: string;
+    $active: string;
+    $inputStyle: string;
+    $focusStyle: string;
+    $hoverStyle: string;
+    $activeStyle: string;
+}, import("@stitches/react").CSSPropertiesToTokenScale>;
+export declare const StyledToolTipContent: import("@stitches/react").StitchesComponentWithAutoCompleteForJSXElements<"div", {}, import("@stitches/react").TMedias & {
+    initial: "";
+}, {
+    colors: {
+        elevation1: string;
+        elevation2: string;
+        elevation3: string;
+        accent1: string;
+        accent2: string;
+        accent3: string;
+        highlight1: string;
+        highlight2: string;
+        highlight3: string;
+        vivid1: string;
+        folderWidgetColor: string;
+        folderTextColor: string;
+        toolTipBackground: string;
+        toolTipText: string;
+    };
+    radii: {
+        xs: string;
+        sm: string;
+        lg: string;
+    };
+    space: {
+        xs: string;
+        sm: string;
+        md: string;
+        rowGap: string;
+        colGap: string;
+    };
+    fonts: {
+        mono: string;
+        sans: string;
+    };
+    fontSizes: {
+        root: string;
+        toolTip: string;
+    };
+    sizes: {
+        rootWidth: string;
+        controlWidth: string;
+        numberInputMinWidth: string;
+        scrubberWidth: string;
+        scrubberHeight: string;
+        rowHeight: string;
+        folderTitleHeight: string;
+        checkboxSize: string;
+        joystickWidth: string;
+        joystickHeight: string;
+        colorPickerWidth: string;
+        colorPickerHeight: string;
+        imagePreviewWidth: string;
+        imagePreviewHeight: string;
+        monitorHeight: string;
+        titleBarHeight: string;
+    };
+    shadows: {
+        level1: string;
+        level2: string;
+    };
+    borderWidths: {
+        root: string;
+        input: string;
+        focus: string;
+        hover: string;
+        active: string;
+        folder: string;
+    };
+    fontWeights: {
+        label: string;
+        folder: string;
+        button: string;
+    };
+}, {
+    $flex: unknown;
+    $flexCenter: unknown;
+    $reset: unknown;
+    $draggable: unknown;
+    $focus: string;
+    $focusWithin: string;
+    $hover: string;
+    $active: string;
+    $inputStyle: string;
+    $focusStyle: string;
+    $hoverStyle: string;
+    $activeStyle: string;
+}, import("@stitches/react").CSSPropertiesToTokenScale>;
+export declare const ToolTipArrow: import("@stitches/react").StitchesComponentWithAutoCompleteForReactComponents<import("@radix-ui/react-primitive").ExtendedPrimitive<import("@radix-ui/react-popper").PopperArrowPrimitive, "svg">, {}, import("@stitches/react").TMedias & {
+    initial: "";
+}, {
+    colors: {
+        elevation1: string;
+        elevation2: string;
+        elevation3: string;
+        accent1: string;
+        accent2: string;
+        accent3: string;
+        highlight1: string;
+        highlight2: string;
+        highlight3: string;
+        vivid1: string;
+        folderWidgetColor: string;
+        folderTextColor: string;
+        toolTipBackground: string;
+        toolTipText: string;
+    };
+    radii: {
+        xs: string;
+        sm: string;
+        lg: string;
+    };
+    space: {
+        xs: string;
+        sm: string;
+        md: string;
+        rowGap: string;
+        colGap: string;
+    };
+    fonts: {
+        mono: string;
+        sans: string;
+    };
+    fontSizes: {
+        root: string;
+        toolTip: string;
+    };
+    sizes: {
+        rootWidth: string;
+        controlWidth: string;
+        numberInputMinWidth: string;
+        scrubberWidth: string;
+        scrubberHeight: string;
+        rowHeight: string;
+        folderTitleHeight: string;
+        checkboxSize: string;
+        joystickWidth: string;
+        joystickHeight: string;
+        colorPickerWidth: string;
+        colorPickerHeight: string;
+        imagePreviewWidth: string;
+        imagePreviewHeight: string;
+        monitorHeight: string;
+        titleBarHeight: string;
+    };
+    shadows: {
+        level1: string;
+        level2: string;
+    };
+    borderWidths: {
+        root: string;
+        input: string;
+        focus: string;
+        hover: string;
+        active: string;
+        folder: string;
+    };
+    fontWeights: {
+        label: string;
+        folder: string;
+        button: string;
+    };
+}, {
+    $flex: unknown;
+    $flexCenter: unknown;
+    $reset: unknown;
+    $draggable: unknown;
+    $focus: string;
+    $focusWithin: string;
+    $hover: string;
+    $active: string;
+    $inputStyle: string;
+    $focusStyle: string;
+    $hoverStyle: string;
+    $activeStyle: string;
+}, import("@stitches/react").CSSPropertiesToTokenScale>;

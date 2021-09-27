@@ -1,0 +1,79 @@
+{
+  "author": "tony_quetano@planttheidea.com",
+  "contributors": [
+    "Dariusz Rzepka <rzepkadarek@gmail.com>"
+  ],
+  "browser": "dist/fast-copy.js",
+  "bugs": {
+    "url": "https://github.com/planttheidea/fast-copy/issues"
+  },
+  "description": "A blazing fast deep object copier",
+  "devDependencies": {
+    "@types/jest": "^26.0.0",
+    "@types/lodash": "^4.14.155",
+    "@types/node": "^14.0.13",
+    "@types/ramda": "^0.27.6",
+    "@types/react": "^16.9.38",
+    "benchee": "^1.0.3",
+    "cli-table2": "^0.2.0",
+    "clone": "^2.1.2",
+    "deepclone": "^1.0.2",
+    "fast-clone": "^1.5.3",
+    "html-webpack-plugin": "^4.3.0",
+    "in-publish": "^2.0.1",
+    "jest": "^26.0.1",
+    "lodash": "^4.17.11",
+    "nyc": "^15.1.0",
+    "ramda": "^0.27.0",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "rollup": "^2.17.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-terser": "^6.1.0",
+    "rollup-plugin-typescript2": "^0.27.1",
+    "ts-jest": "^26.1.0",
+    "ts-loader": "^7.0.5",
+    "tslint": "^6.1.2",
+    "tslint-config-airbnb": "^5.11.2",
+    "tslint-loader": "^3.5.4",
+    "typescript": "^3.9.5",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.11",
+    "webpack-dev-server": "^3.11.0"
+  },
+  "homepage": "https://github.com/planttheidea/fast-copy#readme",
+  "keywords": [
+    "clone",
+    "deep",
+    "copy",
+    "fast"
+  ],
+  "license": "MIT",
+  "main": "dist/fast-copy.cjs.js",
+  "module": "dist/fast-copy.esm.js",
+  "name": "fast-copy",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/planttheidea/fast-copy.git"
+  },
+  "scripts": {
+    "benchmark": "npm run build && node benchmark/index.js",
+    "build": "NODE_ENV=production rollup -c",
+    "clean": "rimraf dist",
+    "dev": "NODE_ENV=development webpack-dev-server --colors --progress --config=webpack/webpack.config.js",
+    "dist": "npm run clean && npm run build",
+    "lint": "NODE_ENV=test tslint 'src/*.ts'",
+    "lint:fix": "npm run lint -- --fix",
+    "prepublishOnly": "npm run lint && npm run typecheck && npm run test && npm run dist",
+    "release": "release-it",
+    "release:beta": "release-it --config=.release-it.beta.json",
+    "release:dry": "release-it --dry-run",
+    "start": "npm run dev",
+    "test": "NODE_PATH=. jest",
+    "test:coverage": "npm run test -- --coverage",
+    "test:watch": "npm run test -- --watch",
+    "typecheck": "tsc src/*.ts --noEmit"
+  },
+  "types": "index.d.ts",
+  "version": "2.1.1"
+}

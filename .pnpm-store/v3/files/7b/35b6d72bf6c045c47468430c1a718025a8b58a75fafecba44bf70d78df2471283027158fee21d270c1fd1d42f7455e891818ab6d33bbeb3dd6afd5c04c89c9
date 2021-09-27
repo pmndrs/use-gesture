@@ -1,0 +1,36 @@
+{
+  "name": "@graphql-tools/import/es5",
+  "version": "6.4.0",
+  "description": "A set of utils for faster development of GraphQL tools",
+  "sideEffects": false,
+  "peerDependencies": {
+    "graphql": "^14.0.0 || ^15.0.0 || ^16.0.0"
+  },
+  "dependencies": {
+    "resolve-from": "5.0.0",
+    "tslib": "~2.3.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "ardatan/graphql-tools",
+    "directory": "packages/import"
+  },
+  "author": "Dotan Simha <dotansimha@gmail.com>",
+  "license": "MIT",
+  "main": "index.js",
+  "module": "index.mjs",
+  "typings": "index.d.ts",
+  "typescript": {
+    "definition": "index.d.ts"
+  },
+  "exports": {
+    ".": {
+      "require": "./index.js",
+      "import": "./index.mjs"
+    },
+    "./*": {
+      "require": "./*.js",
+      "import": "./*.mjs"
+    }
+  }
+}

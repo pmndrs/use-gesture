@@ -1,0 +1,1 @@
+"use strict";var e=require("../core/InputNode.cjs.js"),r=require("three");require("../core/Node.cjs.js"),require("../core/constants.cjs.js");module.exports=class extends e{constructor(e=new r.Matrix4){super("mat4"),this.value=e,Object.defineProperty(this,"isMatrix4Node",{value:!0})}};

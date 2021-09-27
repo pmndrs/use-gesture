@@ -1,0 +1,1 @@
+"use strict";var e=require("../core/InputNode.cjs.js");require("../core/Node.cjs.js"),require("../core/constants.cjs.js");module.exports=class extends e{constructor(e=0){super("float"),this.value=e,Object.defineProperty(this,"isFloatNode",{value:!0})}};

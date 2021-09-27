@@ -1,0 +1,1 @@
+"use strict";var e=require("./Node.cjs.js"),t=require("./constants.cjs.js");module.exports=class extends e{constructor(e){super(),this.value=e}getType(e){return this.value.getType(e)}generate(e,r){const s=this.getType(e),a=this.value.buildStage(e,t.NodeShaderStage.Vertex,s),o=e.getVaryFromNode(this,s);o.snippet=a;const u=e.getPropertyName(o);return e.format(u,s,r)}};

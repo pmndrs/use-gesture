@@ -1,0 +1,17 @@
+{
+	"name": "screenlog",
+	"description": "Bring console.log on the screen.",
+	"main": "dist/screenlog.min.js",
+	"author": "Kushagra Gour",
+	"license": "MIT",
+	"ignore": [
+		"CONTRIBUTING.md",
+		"Gruntfile.js"
+	],
+	"keywords": [
+		"console",
+		"log",
+		"screen",
+		"debug"
+	]
+}
