@@ -6,6 +6,7 @@ on:
     paths:
       - '**/package.json'
       - '.changeset/**'
+      - '.github/workflows/release.yml'
 
 env:
   PNPM_CACHE_FOLDER: .pnpm-store
