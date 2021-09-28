@@ -20,7 +20,7 @@ export default function App() {
   }
 
   const bind = useDrag(
-    ({ last, vxvy: [, vy], movement: [, my], cancel, canceled }) => {
+    ({ last, velocity: [, vy], direction: [, dy], movement: [, my], cancel, canceled }) => {
       // if the user drags up passed a threshold, then we cancel
       // the drag so that the sheet resets to its open position
       if (my < -70) cancel()
@@ -28,7 +28,7 @@ export default function App() {
       // when the user releases the sheet, we check whether it passed
       // the threshold for it to close, or if we reset it to its open positino
       if (last) {
-        my > height * 0.5 || vy > 0.5 ? close(vy) : open({ canceled })
+        my > height * 0.5 || (vy > 0.5 && dy > 0) ? close(vy) : open({ canceled })
       }
       // when the user keeps dragging, we just move the sheet according to
       // the cursor position
