@@ -49,6 +49,7 @@ jobs:
         # if: github.ref == 'refs/heads/master'
         with:
           version: pnpm ci:version
+          update-lock: pnpm install --lockfile-only #updates lock file
           publish: pnpm ci:publish
           # Messages
           commit: 'chore(deploy): Release'
