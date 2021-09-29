@@ -17,7 +17,7 @@ module.exports = {
         sections: ['About', 'Reference', 'More'],
         navItems: [
           { title: 'Docs', url: '/docs/' },
-          { title: 'API', url: '/docs/gestures' }
+          { title: 'API', url: '/docs/gestures/' }
         ],
         docSearch: {
           apiKey: '8f83d46775c065911151bd1d02788227',
