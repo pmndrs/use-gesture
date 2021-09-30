@@ -1,0 +1,4 @@
+{
+  "main": "dist/reach-utils-use-stable-callback.cjs.js",
+  "module": "dist/reach-utils-use-stable-callback.esm.js"
+}

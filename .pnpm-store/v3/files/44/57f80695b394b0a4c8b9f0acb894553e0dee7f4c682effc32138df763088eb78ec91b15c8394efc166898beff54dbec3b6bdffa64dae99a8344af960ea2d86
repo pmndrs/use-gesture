@@ -1,0 +1,8 @@
+{
+  "name": "reakit/Menu/MenuSeparator",
+  "private": true,
+  "sideEffects": false,
+  "main": "../../lib/Menu/MenuSeparator",
+  "module": "../../es/Menu/MenuSeparator",
+  "types": "../../ts/Menu/MenuSeparator"
+}

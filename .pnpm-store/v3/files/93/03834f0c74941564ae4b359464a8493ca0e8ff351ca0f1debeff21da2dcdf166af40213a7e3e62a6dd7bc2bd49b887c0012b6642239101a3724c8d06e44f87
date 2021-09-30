@@ -1,0 +1,8 @@
+{
+  "name": "reakit/Composite/CompositeGroup",
+  "private": true,
+  "sideEffects": false,
+  "main": "../../lib/Composite/CompositeGroup",
+  "module": "../../es/Composite/CompositeGroup",
+  "types": "../../ts/Composite/CompositeGroup"
+}

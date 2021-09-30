@@ -1,0 +1,4 @@
+{
+  "main": "dist/reach-utils-use-event-listener.cjs.js",
+  "module": "dist/reach-utils-use-event-listener.esm.js"
+}

@@ -1,0 +1,8 @@
+{
+  "name": "reakit/Combobox/ComboboxListState",
+  "private": true,
+  "sideEffects": false,
+  "main": "../../lib/Combobox/ComboboxListState",
+  "module": "../../es/Combobox/ComboboxListState",
+  "types": "../../ts/Combobox/ComboboxListState"
+}

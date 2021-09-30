@@ -1,0 +1,80 @@
+{
+  "name": "peek-readable",
+  "version": "3.1.3",
+  "description": "Read and peek from a readable stream",
+  "author": {
+    "name": "Borewit",
+    "url": "https://github.com/Borewit"
+  },
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/Borewit"
+  },
+  "scripts": {
+    "clean": "del-cli lib/**/*.js lib/**/*.js.map lib/**/*.d.ts test/**/*.js test/**/*.js.map coverage .nyc_output",
+    "build": "npm run clean && npm run compile",
+    "compile-src": "tsc -p lib",
+    "compile-test": "tsc -p test",
+    "compile": "npm run compile-src && yarn run compile-test",
+    "eslint": "eslint lib test --ext .ts --ignore-pattern *.d.ts",
+    "lint-md": "remark -u preset-lint-recommended .",
+    "lint": "npm run lint-md && npm run eslint",
+    "test": "mocha --require ts-node/register --require source-map-support/register --full-trace test/*.ts",
+    "test-coverage": "nyc npm run test",
+    "send-coveralls": "nyc report --reporter=text-lcov | coveralls",
+    "start": "npm run compile && npm run lint && npm run cover-test"
+  },
+  "engines": {
+    "node": ">=8"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Borewit/peek-readable"
+  },
+  "license": "MIT",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "bugs": {
+    "url": "https://github.com/Borewit/peek-readable/issues"
+  },
+  "files": [
+    "lib/**/*.js",
+    "lib/**/*.d.ts"
+  ],
+  "devDependencies": {
+    "@types/mocha": "^8.2.0",
+    "@types/node": "^14.14.20",
+    "@typescript-eslint/eslint-plugin": "^2.34.0",
+    "@typescript-eslint/parser": "^2.34.0",
+    "add": "^2.0.6",
+    "chai": "^4.2.0",
+    "coveralls": "^3.1.0",
+    "del-cli": "^3.0.1",
+    "eslint": "^6.8.0",
+    "mocha": "^7.2.0",
+    "nyc": "^15.1.0",
+    "remark-cli": "^9.0.0",
+    "remark-preset-lint-recommended": "^5.0.0",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.1.3"
+  },
+  "keywords": [
+    "readable",
+    "buffer",
+    "stream",
+    "read"
+  ],
+  "nyc": {
+    "check-coverage": true,
+    "extension": [
+      ".ts"
+    ],
+    "sourceMap": true,
+    "instrument": true,
+    "reporter": [
+      "lcov",
+      "text"
+    ],
+    "report-dir": "coverage"
+  }
+}

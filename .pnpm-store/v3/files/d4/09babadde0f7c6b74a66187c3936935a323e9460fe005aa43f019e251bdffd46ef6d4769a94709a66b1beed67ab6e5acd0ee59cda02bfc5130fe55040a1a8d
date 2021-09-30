@@ -1,0 +1,24 @@
+{
+  "name": "@webpack-cli/configtest",
+  "version": "1.0.4",
+  "description": "Validate a webpack configuration.",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/webpack/webpack-cli.git"
+  },
+  "homepage": "https://github.com/webpack/webpack-cli/tree/master/packages/configtest",
+  "files": [
+    "lib"
+  ],
+  "peerDependencies": {
+    "webpack": "4.x.x || 5.x.x",
+    "webpack-cli": "4.x.x"
+  },
+  "gitHead": "2be9b9254009598e021b830091fba8832dfdb57b"
+}

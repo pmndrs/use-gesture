@@ -1,0 +1,8 @@
+{
+  "name": "reakit-utils/shallowEqual",
+  "private": true,
+  "sideEffects": false,
+  "main": "../lib/shallowEqual",
+  "module": "../es/shallowEqual",
+  "types": "../ts/shallowEqual"
+}

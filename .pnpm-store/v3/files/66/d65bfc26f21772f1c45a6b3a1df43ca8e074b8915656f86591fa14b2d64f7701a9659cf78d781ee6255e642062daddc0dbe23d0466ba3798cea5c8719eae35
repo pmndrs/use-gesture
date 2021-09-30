@@ -1,0 +1,46 @@
+{
+	"name": "is-png",
+	"version": "2.0.0",
+	"description": "Check if a Buffer/Uint8Array is a PNG image",
+	"license": "MIT",
+	"repository": "sindresorhus/is-png",
+	"author": {
+		"name": "Sindre Sorhus",
+		"email": "sindresorhus@gmail.com",
+		"url": "sindresorhus.com"
+	},
+	"engines": {
+		"node": ">=8"
+	},
+	"scripts": {
+		"test": "xo && ava && tsd"
+	},
+	"files": [
+		"index.js",
+		"index.d.ts"
+	],
+	"keywords": [
+		"png",
+		"portable",
+		"network",
+		"graphics",
+		"image",
+		"picture",
+		"photo",
+		"type",
+		"detect",
+		"check",
+		"is",
+		"exif",
+		"binary",
+		"buffer",
+		"uint8array"
+	],
+	"devDependencies": {
+		"@types/node": "^11.13.5",
+		"ava": "^1.4.1",
+		"read-chunk": "^3.2.0",
+		"tsd": "^0.7.2",
+		"xo": "^0.24.0"
+	}
+}

@@ -1,0 +1,94 @@
+{
+  "name": "chevrotain",
+  "version": "9.0.2",
+  "description": "Chevrotain is a high performance fault tolerant javascript parsing DSL for building recursive decent parsers",
+  "keywords": [
+    "parser",
+    "syntax",
+    "lexical",
+    "analysis",
+    "grammar",
+    "lexer",
+    "tokenizer",
+    "generator",
+    "compiler",
+    "fault",
+    "tolerant"
+  ],
+  "bugs": {
+    "url": "https://github.com/Chevrotain/chevrotain/issues"
+  },
+  "license": "Apache-2.0",
+  "author": {
+    "name": "Shahar Soel"
+  },
+  "files": [
+    "chevrotain.d.ts",
+    "lib_esm/**/*.mjs",
+    "lib_esm/**/*.mjs.map",
+    "lib/src/**/*.js",
+    "lib/src/**/*.js.map",
+    "lib/chevrotain.d.ts",
+    "lib/chevrotain.min.js",
+    "lib/chevrotain.js",
+    "src/**/*.ts",
+    "readme.md",
+    "LICENSE.TXT",
+    "diagrams/**/*.*",
+    "CHANGELOG.md"
+  ],
+  "typings": "./chevrotain.d.ts",
+  "main": "./lib/src/api.js",
+  "exports": {
+    "require": "./lib/src/api.js",
+    "import": "./lib_esm/api_esm.mjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/Chevrotain/chevrotain.git"
+  },
+  "homepage": "https://chevrotain.io/docs/",
+  "scripts": {
+    "---------- CI FLOWS --------": "",
+    "build": "npm-run-all clean compile bundle",
+    "test": "npm-run-all coverage",
+    "version": "tsc ./src/version.ts --outDir lib/src && node ./scripts/version-update.js",
+    "---------- DEV FLOWS --------": "",
+    "watch": "tsc -w",
+    "unit-tests": "mocha",
+    "quick-build": "tsc && yarn run bundle",
+    "---------- BUILD STEPS --------": "",
+    "clean": "shx rm -rf coverage dev lib lib_esm",
+    "compile": "tsc && node ./scripts/fix-coverage-report.js && npm-run-all gen-esm-wrapper",
+    "compile:watch": "tsc -w",
+    "gen-esm-wrapper": "gen-esm-wrapper . ./lib_esm/api_esm.mjs",
+    "coverage": "nyc mocha",
+    "---------- BUNDLING --------": "",
+    "bundle": "npm-run-all bundle:**",
+    "bundle:regular": "webpack --config webpack_release.config.js",
+    "bundle:min": "webpack --config webpack_release_min.config.js",
+    "bundle:esm:regular": "esbuild ./lib/src/api.js --bundle --sourcemap --format=esm --outfile=lib_esm/chevrotain.mjs",
+    "bundle:esm:min": "esbuild ./lib/src/api.js --bundle --minify --format=esm --sourcemap --outfile=lib_esm/chevrotain.min.mjs"
+  },
+  "dependencies": {
+    "@chevrotain/types": "^9.0.2",
+    "@chevrotain/utils": "^9.0.2",
+    "regexp-to-ast": "0.5.0"
+  },
+  "devDependencies": {
+    "@types/sinon-chai": "^3.2.0",
+    "error-stack-parser": "^2.0.6",
+    "esbuild": "^0.12.8",
+    "gen-esm-wrapper": "^1.1.2",
+    "gitty": "^3.6.0",
+    "jsdom": "16.6.0",
+    "jsonfile": "^6.0.1",
+    "require-from-string": "^2.0.2",
+    "sinon": "^11.1.1",
+    "sinon-chai": "^3.0.0",
+    "webpack": "5.38.1",
+    "webpack-cli": "^4.1.0",
+    "xregexp": "^5.0.1"
+  },
+  "gitHead": "027c35d42c4976fa7ef438c3af8690783989cfb6"
+}

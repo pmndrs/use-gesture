@@ -1,0 +1,1 @@
+"use strict";var e=require("three");module.exports=class{constructor(r,t={}){this.renderer=r,this.renderTarget=new e.WebGLRenderTarget(t)}getTexture(){return this.renderTarget.texture}setSize(e,r){this.renderTarget.setSize(e,r)}render(e,r){const t=this.renderer,s=this.renderTarget;t.setRenderTarget(s),t.render(e,r),t.setRenderTarget(null)}};

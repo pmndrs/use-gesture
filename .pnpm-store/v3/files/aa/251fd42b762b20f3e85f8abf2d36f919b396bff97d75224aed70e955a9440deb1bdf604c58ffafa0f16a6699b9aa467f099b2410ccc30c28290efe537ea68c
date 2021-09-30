@@ -1,0 +1,4 @@
+{
+  "main": "dist/reach-utils-type-check.cjs.js",
+  "module": "dist/reach-utils-type-check.esm.js"
+}

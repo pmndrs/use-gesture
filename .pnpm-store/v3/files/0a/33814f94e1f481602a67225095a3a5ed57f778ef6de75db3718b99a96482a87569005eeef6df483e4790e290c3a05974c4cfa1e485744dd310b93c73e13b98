@@ -1,0 +1,8 @@
+{
+  "name": "reakit/Tab/TabList",
+  "private": true,
+  "sideEffects": false,
+  "main": "../../lib/Tab/TabList",
+  "module": "../../es/Tab/TabList",
+  "types": "../../ts/Tab/TabList"
+}

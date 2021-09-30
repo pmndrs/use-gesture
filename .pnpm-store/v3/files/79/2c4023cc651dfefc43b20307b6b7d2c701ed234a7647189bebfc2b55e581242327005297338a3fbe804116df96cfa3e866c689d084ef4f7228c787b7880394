@@ -1,0 +1,27 @@
+import { IProps, IStyles, IVariants, StyleGetter, ThemeGetter, TransformValue, StyleGenerator, Mixin } from './types';
+declare type ThemeCache = Record<string, any>;
+export declare const themeGetter: <TValueType>({ name, transform: defaultTransform, key, defaultVariants, compose, shorthand, }: {
+    name?: string | undefined;
+    key?: string | undefined;
+    transform?: TransformValue<TValueType> | undefined;
+    defaultVariants?: IVariants | undefined;
+    compose?: ThemeGetter<any> | undefined;
+    shorthand?: boolean | undefined;
+}) => ThemeGetter<TValueType>;
+export declare function createStyleGenerator(getStyle: StyleGetter, props: string[], generators?: StyleGenerator[]): StyleGenerator;
+export declare function reduceBreakpoints(props: IProps, values: {
+    [key: string]: any;
+}, getStyle?: (value: any) => IStyles | null, cache?: ThemeCache): IStyles;
+export declare function compose(...generators: StyleGenerator[]): StyleGenerator;
+declare type CSSProperty = string | string[] | Mixin;
+export declare function style({ prop, cssProperty, key, transform, themeGet, states, }: {
+    prop: string | string[];
+    cssProperty?: CSSProperty;
+    key?: string;
+    transform?: TransformValue;
+    themeGet?: ThemeGetter;
+    states?: {
+        [key: string]: string;
+    };
+}): StyleGenerator;
+export {};

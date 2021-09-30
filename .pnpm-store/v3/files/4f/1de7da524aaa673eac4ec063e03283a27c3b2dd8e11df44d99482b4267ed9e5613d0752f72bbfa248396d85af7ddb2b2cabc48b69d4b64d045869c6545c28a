@@ -1,0 +1,21 @@
+{
+    "name": "@types/json-patch",
+    "version": "0.0.30",
+    "description": "TypeScript definitions for json-patch",
+    "license": "MIT",
+    "contributors": [
+        {
+            "name": "vvakame",
+            "url": "https://github.com/vvakame"
+        }
+    ],
+    "main": "",
+    "repository": {
+        "type": "git",
+        "url": "https://www.github.com/DefinitelyTyped/DefinitelyTyped.git"
+    },
+    "scripts": {},
+    "dependencies": {},
+    "typesPublisherContentHash": "8fe4b52972d95c538f682cb69fec3a734ad85fa7a73f9513bf97cc6995090bb8",
+    "typeScriptVersion": "2.0"
+}

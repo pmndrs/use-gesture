@@ -1,0 +1,8 @@
+{
+  "name": "reakit/Form/utils",
+  "private": true,
+  "sideEffects": false,
+  "main": "../../lib/Form/utils",
+  "module": "../../es/Form/utils",
+  "types": "../../ts/Form/utils"
+}

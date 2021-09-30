@@ -1,0 +1,4 @@
+{
+  "main": "dist/reach-utils-is-right-click.cjs.js",
+  "module": "dist/reach-utils-is-right-click.esm.js"
+}

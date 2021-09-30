@@ -1,0 +1,8 @@
+{
+  "name": "reakit/Combobox/ComboboxGridRow",
+  "private": true,
+  "sideEffects": false,
+  "main": "../../lib/Combobox/ComboboxGridRow",
+  "module": "../../es/Combobox/ComboboxGridRow",
+  "types": "../../ts/Combobox/ComboboxGridRow"
+}

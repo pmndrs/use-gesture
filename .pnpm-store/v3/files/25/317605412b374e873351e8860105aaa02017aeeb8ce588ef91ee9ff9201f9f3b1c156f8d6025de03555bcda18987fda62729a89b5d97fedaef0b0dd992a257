@@ -1,0 +1,8 @@
+{
+  "name": "reakit-utils/useSealedState",
+  "private": true,
+  "sideEffects": false,
+  "main": "../lib/useSealedState",
+  "module": "../es/useSealedState",
+  "types": "../ts/useSealedState"
+}

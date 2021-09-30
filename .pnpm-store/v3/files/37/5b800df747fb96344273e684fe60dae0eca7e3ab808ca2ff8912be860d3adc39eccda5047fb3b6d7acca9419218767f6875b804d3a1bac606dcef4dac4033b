@@ -1,0 +1,4 @@
+{
+  "main": "dist/reach-utils-can-use-dom.cjs.js",
+  "module": "dist/reach-utils-can-use-dom.esm.js"
+}

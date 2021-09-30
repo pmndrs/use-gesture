@@ -1,0 +1,43 @@
+{
+  "name": "@chevrotain/utils",
+  "version": "9.0.2",
+  "description": "common utilities",
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/Chevrotain/chevrotain/issues"
+  },
+  "license": "Apache-2.0",
+  "author": {
+    "name": "Shahar Soel"
+  },
+  "typings": "lib/src/api.d.ts",
+  "main": "lib/src/api.js",
+  "files": [
+    "lib/src/api.js",
+    "lib/src/api.ts",
+    "lib/src/api.d.ts",
+    "README.md",
+    "LICENSE.TXT"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/Chevrotain/chevrotain.git"
+  },
+  "scripts": {
+    "---------- CI FLOWS --------": "",
+    "build": "npm-run-all clean compile",
+    "test": "npm-run-all coverage",
+    "---------- BUILD STEPS --------": "",
+    "clean": "shx rm -rf dev",
+    "compile:watch": "tsc -w",
+    "compile": "tsc",
+    "coverage": "nyc mocha"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.2.15"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "gitHead": "027c35d42c4976fa7ef438c3af8690783989cfb6"
+}

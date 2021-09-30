@@ -1,0 +1,8 @@
+{
+  "name": "reakit-utils/getDocument",
+  "private": true,
+  "sideEffects": false,
+  "main": "../lib/getDocument",
+  "module": "../es/getDocument",
+  "types": "../ts/getDocument"
+}

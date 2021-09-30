@@ -1,0 +1,97 @@
+{
+  "name": "@reach/utils",
+  "version": "0.16.0",
+  "description": "Internal, shared utilities for Reach UI.",
+  "author": "React Training <hello@reacttraining.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/reach/reach-ui.git",
+    "directory": "packages/utils"
+  },
+  "dependencies": {
+    "tiny-warning": "^1.0.3",
+    "tslib": "^2.3.0"
+  },
+  "devDependencies": {
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
+  },
+  "peerDependencies": {
+    "react": "^16.8.0 || 17.x",
+    "react-dom": "^16.8.0 || 17.x"
+  },
+  "main": "dist/reach-utils.cjs.js",
+  "module": "dist/reach-utils.esm.js",
+  "types": "dist/reach-utils.cjs.d.ts",
+  "files": [
+    "README.md",
+    "dist",
+    "can-use-dom",
+    "clone-valid-element",
+    "compose-event-handlers",
+    "compose-refs",
+    "computed-styles",
+    "context",
+    "dev-utils",
+    "get-document-dimensions",
+    "get-scroll-position",
+    "get-scrollbar-offset",
+    "is-right-click",
+    "make-id",
+    "noop",
+    "owner-document",
+    "polymorphic",
+    "type-check",
+    "types",
+    "use-constant",
+    "use-controlled-state",
+    "use-event-listener",
+    "use-focus-change",
+    "use-force-update",
+    "use-isomorphic-layout-effect",
+    "use-lazy-ref",
+    "use-previous",
+    "use-stable-callback",
+    "use-stateful-ref-value",
+    "use-update-effect"
+  ],
+  "eslintIgnore": [
+    "node_modules",
+    "dist"
+  ],
+  "preconstruct": {
+    "entrypoints": [
+      "index.ts",
+      "can-use-dom.ts",
+      "clone-valid-element.ts",
+      "compose-event-handlers.ts",
+      "compose-refs.ts",
+      "computed-styles.ts",
+      "context.ts",
+      "dev-utils.ts",
+      "get-document-dimensions.ts",
+      "get-scroll-position.ts",
+      "get-scrollbar-offset.ts",
+      "is-right-click.ts",
+      "make-id.ts",
+      "noop.ts",
+      "owner-document.ts",
+      "polymorphic.ts",
+      "type-check.ts",
+      "types.ts",
+      "use-constant.ts",
+      "use-controlled-state.ts",
+      "use-event-listener.ts",
+      "use-focus-change.ts",
+      "use-force-update.ts",
+      "use-isomorphic-layout-effect.ts",
+      "use-lazy-ref.ts",
+      "use-previous.ts",
+      "use-stable-callback.ts",
+      "use-stateful-ref-value.ts",
+      "use-update-effect.ts"
+    ]
+  },
+  "gitHead": "e4c6093db14e3cc24c26794a002dbd8c866c0387"
+}

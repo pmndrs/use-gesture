@@ -1,0 +1,33 @@
+{
+  "name": "wouter-preact",
+  "version": "2.7.4",
+  "description": "A minimalistic routing for React and Preact (Preact-only version).",
+  "type": "module",
+  "exports": {
+    ".": {
+      "require": "./cjs/index.js",
+      "default": "./index.js"
+    },
+    "./use-location": {
+      "require": "./cjs/use-location.js",
+      "default": "./use-location.js"
+    },
+    "./matcher": {
+      "require": "./cjs/matcher.js",
+      "default": "./matcher.js"
+    },
+    "./static-location": {
+      "require": "./cjs/static-location.js",
+      "default": "./static-location.js"
+    }
+  },
+  "main": "cjs/index.js",
+  "module": "index.js",
+  "types": "index.d.ts",
+  "author": "Alexey Taktarov <molefrog@gmail.com>",
+  "repository": "molefrog/wouter",
+  "license": "ISC",
+  "peerDependencies": {
+    "preact": "^10.0.0"
+  }
+}

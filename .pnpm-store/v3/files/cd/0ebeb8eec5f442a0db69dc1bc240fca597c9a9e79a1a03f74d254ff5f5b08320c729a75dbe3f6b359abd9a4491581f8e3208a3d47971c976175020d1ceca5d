@@ -1,0 +1,8 @@
+{
+  "name": "reakit/Menu/MenuItemCheckbox",
+  "private": true,
+  "sideEffects": false,
+  "main": "../../lib/Menu/MenuItemCheckbox",
+  "module": "../../es/Menu/MenuItemCheckbox",
+  "types": "../../ts/Menu/MenuItemCheckbox"
+}

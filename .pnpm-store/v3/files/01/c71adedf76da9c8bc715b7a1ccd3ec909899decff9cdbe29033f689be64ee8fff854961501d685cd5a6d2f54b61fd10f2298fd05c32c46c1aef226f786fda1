@@ -1,0 +1,169 @@
+import styled$1, { css as css$1, createGlobalStyle as createGlobalStyle$1, ThemeContext, ThemeProvider } from 'styled-components';
+export { ServerStyleSheet, StyleSheetManager, ThemeConsumer, ThemeContext, ThemeProvider, isStyledComponent, keyframes, withTheme } from 'styled-components';
+import { flattenStrings } from '@xstyled/util';
+import { transform, createColorModeProvider, createColorStyles, useThemeBreakpoints, useThemeBreakpoint, useThemeUp, useThemeDown } from '@xstyled/core';
+export { getColorModeInitScriptElement, getColorModeInitScriptTag, useColorMode, useViewportWidth } from '@xstyled/core';
+import { compose, system, th, createPreflight } from '@xstyled/system';
+export * from '@xstyled/system';
+import { useContext, useMemo } from 'react';
+
+/* eslint-disable no-continue, no-loop-func, no-cond-assign */
+function css() {
+  var scCssArgs = css$1.apply(void 0, arguments);
+  var flattenedArgs = flattenStrings(scCssArgs);
+  return flattenedArgs.map(transform);
+}
+
+var createGlobalStyle = function createGlobalStyle() {
+  // @ts-ignore
+  return createGlobalStyle$1([css.apply(void 0, arguments)]);
+};
+
+function _taggedTemplateLiteralLoose(strings, raw) {
+  if (!raw) {
+    raw = strings.slice(0);
+  }
+
+  strings.raw = raw;
+  return strings;
+}
+
+/* eslint-disable no-continue, no-loop-func, no-cond-assign */
+var tags = /*#__PURE__*/Object.keys(styled$1);
+var createX = function createX(generator) {
+  // @ts-ignore
+  var x = {
+    extend: function extend() {
+      for (var _len = arguments.length, generators = new Array(_len), _key = 0; _key < _len; _key++) {
+        generators[_key] = arguments[_key];
+      }
+
+      return createX(compose.apply(void 0, [generator].concat(generators)));
+    }
+  };
+  tags.forEach(function (tag) {
+    // @ts-ignore
+    x[tag] = styled$1(tag).withConfig({
+      shouldForwardProp: function shouldForwardProp(prop, defaultValidatorFn) {
+        if (typeof prop === 'string' && generator.meta.props.includes(prop)) return false;
+        return defaultValidatorFn(prop);
+      }
+    })(function () {
+      return ["&&{", generator, "}"];
+    });
+  });
+  return x;
+};
+
+var x = /*#__PURE__*/createX(system); // Retro-compatibility
+
+var Box = x.div;
+
+var _templateObject;
+
+function getCreateStyle(baseCreateStyle) {
+  // @ts-ignore
+  var createStyle = function createStyle() {
+    return baseCreateStyle(_templateObject || (_templateObject = _taggedTemplateLiteralLoose(["", ""])), css.apply(void 0, arguments));
+  };
+
+  createStyle.attrs = function (attrs) {
+    var nextCreateStyle = baseCreateStyle.attrs(attrs);
+    return getCreateStyle(nextCreateStyle);
+  };
+
+  createStyle.withConfig = function (config) {
+    var nextCreateStyle = baseCreateStyle.withConfig(config);
+    return getCreateStyle(nextCreateStyle);
+  };
+
+  return createStyle;
+}
+
+var styled = function styled(component) {
+  return getCreateStyle(styled$1(component));
+}; // @ts-ignore
+
+styled.box = /*#__PURE__*/styled(x.div);
+Object.keys(styled$1).forEach(function (key) {
+  // @ts-ignore
+  styled[key] = styled(key); // @ts-ignore
+
+  styled[key + "Box"] = styled(x[key]);
+});
+
+var _templateObject$1;
+var ColorModeStyle = /*#__PURE__*/createGlobalStyle$1(_templateObject$1 || (_templateObject$1 = /*#__PURE__*/_taggedTemplateLiteralLoose(["", ""])), function (p) {
+  return createColorStyles(p.theme, {
+    targetSelector: p.targetSelector
+  });
+});
+var ColorModeProvider = /*#__PURE__*/createColorModeProvider({
+  ThemeContext: ThemeContext,
+  ThemeProvider: ThemeProvider,
+  ColorModeStyle: ColorModeStyle
+});
+
+var useTheme = function useTheme() {
+  return useContext(ThemeContext);
+};
+
+var createUseGetter = function createUseGetter(getter) {
+  return function (value, defaultValue) {
+    var theme = useTheme();
+    return useMemo(function () {
+      return getter(value, defaultValue)({
+        theme: theme
+      });
+    }, [value, defaultValue, theme]);
+  };
+};
+
+var useTh = /*#__PURE__*/createUseGetter(th);
+var useAngle = /*#__PURE__*/createUseGetter(th.angle);
+var useAnimation = /*#__PURE__*/createUseGetter(th.animation);
+var useBorder = /*#__PURE__*/createUseGetter(th.border);
+var useBorderColor = /*#__PURE__*/createUseGetter(th.borderColor);
+var useBorderStyle = /*#__PURE__*/createUseGetter(th.borderStyle);
+var useBorderWidth = /*#__PURE__*/createUseGetter(th.borderWidth);
+var useColor = /*#__PURE__*/createUseGetter(th.color);
+var useDuration = /*#__PURE__*/createUseGetter(th.duration);
+var useFont = /*#__PURE__*/createUseGetter(th.font);
+var useFontSize = /*#__PURE__*/createUseGetter(th.fontSize);
+var useFontWeight = /*#__PURE__*/createUseGetter(th.fontWeight);
+var useInset = /*#__PURE__*/createUseGetter(th.inset);
+var useLetterSpacing = /*#__PURE__*/createUseGetter(th.letterSpacing);
+var useLineHeight = /*#__PURE__*/createUseGetter(th.lineHeight);
+var usePercent = /*#__PURE__*/createUseGetter(th.percent);
+var usePx = /*#__PURE__*/createUseGetter(th.px);
+var useRadius = /*#__PURE__*/createUseGetter(th.radius);
+var useRingWidth = /*#__PURE__*/createUseGetter(th.ringWidth);
+var useShadow = /*#__PURE__*/createUseGetter(th.shadow);
+var useSize = /*#__PURE__*/createUseGetter(th.size);
+var useSpace = /*#__PURE__*/createUseGetter(th.space);
+var useTimingFunctions = /*#__PURE__*/createUseGetter(th.timingFunctions);
+var useTransform = /*#__PURE__*/createUseGetter(th.transform);
+var useTransition = /*#__PURE__*/createUseGetter(th.transition);
+var useTransitionProperty = /*#__PURE__*/createUseGetter(th.transitionProperty);
+var useZIndex = /*#__PURE__*/createUseGetter(th.zIndex);
+
+function useBreakpoints() {
+  return useThemeBreakpoints(useTheme());
+}
+function useBreakpoint() {
+  return useThemeBreakpoint(useTheme());
+}
+function useUp(key) {
+  return useThemeUp(useTheme(), key);
+}
+function useDown(key) {
+  return useThemeDown(useTheme(), key);
+}
+
+var Preflight = /*#__PURE__*/createPreflight({
+  createGlobalStyle: createGlobalStyle$1
+});
+
+export default styled;
+export { Box, ColorModeProvider, Preflight, createGlobalStyle, createX, css, useAngle, useAnimation, useBorder, useBorderColor, useBorderStyle, useBorderWidth, useBreakpoint, useBreakpoints, useColor, useDown, useDuration, useFont, useFontSize, useFontWeight, useInset, useLetterSpacing, useLineHeight, usePercent, usePx, useRadius, useRingWidth, useShadow, useSize, useSpace, useTh, useTheme, useTimingFunctions, useTransform, useTransition, useTransitionProperty, useUp, useZIndex, x };
+//# sourceMappingURL=styled-components.esm.js.map

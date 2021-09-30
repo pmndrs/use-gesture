@@ -1,0 +1,8 @@
+{
+  "name": "reakit-utils/removeIndexFromArray",
+  "private": true,
+  "sideEffects": false,
+  "main": "../lib/removeIndexFromArray",
+  "module": "../es/removeIndexFromArray",
+  "types": "../ts/removeIndexFromArray"
+}

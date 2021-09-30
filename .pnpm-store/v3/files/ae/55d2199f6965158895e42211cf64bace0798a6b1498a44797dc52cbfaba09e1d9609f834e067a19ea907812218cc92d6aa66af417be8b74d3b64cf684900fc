@@ -1,0 +1,2 @@
+export declare const DISCLOSURE_KEYS: readonly ["baseId", "unstable_idCountRef", "visible", "animated", "animating", "setBaseId", "show", "hide", "toggle", "setVisible", "setAnimated", "stopAnimation"];
+export declare const DISCLOSURE_CONTENT_KEYS: readonly ["baseId", "unstable_idCountRef", "visible", "animated", "animating", "setBaseId", "show", "hide", "toggle", "setVisible", "setAnimated", "stopAnimation"];

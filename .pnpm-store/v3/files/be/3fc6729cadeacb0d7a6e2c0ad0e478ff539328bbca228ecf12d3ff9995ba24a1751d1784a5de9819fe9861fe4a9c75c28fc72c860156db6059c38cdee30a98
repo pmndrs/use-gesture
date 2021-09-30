@@ -1,0 +1,8 @@
+{
+  "name": "reakit-system/createHook",
+  "private": true,
+  "sideEffects": false,
+  "main": "../lib/createHook",
+  "module": "../es/createHook",
+  "types": "../ts/createHook"
+}

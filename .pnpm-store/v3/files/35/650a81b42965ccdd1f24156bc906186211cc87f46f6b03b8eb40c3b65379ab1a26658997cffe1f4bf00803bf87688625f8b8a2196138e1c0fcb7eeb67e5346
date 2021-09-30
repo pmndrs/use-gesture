@@ -1,0 +1,38 @@
+import { Theme, ITheme } from '../types';
+import { AnimationsProps } from './animations';
+import { BackgroundsProps } from './backgrounds';
+import { BordersProps } from './borders';
+import { EffectsProps } from './effects';
+import { FlexboxGridsProps } from './flexbox-grids';
+import { FlexboxesProps } from './flexboxes';
+import { GridsProps } from './grids';
+import { InteractivityProps } from './interactivity';
+import { LayoutProps } from './layout';
+import { SizingProps } from './sizing';
+import { SpaceProps } from './space';
+import { SvgProps } from './svg';
+import { TablesProps } from './tables';
+import { TransformsProps } from './transforms';
+import { TransitionsProps } from './transitions';
+import { TypographyProps } from './typography';
+export * from './animations';
+export * from './backgrounds';
+export * from './borders';
+export * from './colors';
+export * from './effects';
+export * from './flexboxes';
+export * from './flexbox-grids';
+export * from './grids';
+export * from './interactivity';
+export * from './layout';
+export * from './sizing';
+export * from './space';
+export * from './svg';
+export * from './tables';
+export * from './transforms';
+export * from './transitions';
+export * from './typography';
+export * from './units';
+export interface SystemProps<T extends ITheme = Theme> extends AnimationsProps<T>, BackgroundsProps<T>, BordersProps<T>, EffectsProps<T>, FlexboxGridsProps<T>, FlexboxesProps<T>, GridsProps<T>, InteractivityProps<T>, LayoutProps<T>, SizingProps<T>, SpaceProps<T>, SvgProps<T>, TablesProps<T>, TransformsProps<T>, TransitionsProps<T>, TypographyProps<T> {
+}
+export declare const system: import("../types").StyleGenerator;

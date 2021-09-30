@@ -1,0 +1,8 @@
+{
+  "name": "reakit-warning/useWarning",
+  "private": true,
+  "sideEffects": false,
+  "main": "../lib/useWarning",
+  "module": "../es/useWarning",
+  "types": "../ts/useWarning"
+}

@@ -1,0 +1,23 @@
+{
+  "name": "@preconstruct/hook",
+  "version": "0.4.0",
+  "description": "A require hook used internally by preconstruct",
+  "main": "index.js",
+  "module": "noop.js",
+  "browser": "noop.js",
+  "files": [
+    "index.js",
+    "noop.js"
+  ],
+  "repository": "https://github.com/preconstruct/preconstruct/tree/master/packages/hook",
+  "license": "MIT",
+  "dependencies": {
+    "@babel/core": "^7.7.7",
+    "@babel/plugin-transform-modules-commonjs": "^7.7.5",
+    "pirates": "^4.0.1",
+    "source-map-support": "^0.5.16"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "name": "reakit/Form/FormLabel",
+  "private": true,
+  "sideEffects": false,
+  "main": "../../lib/Form/FormLabel",
+  "module": "../../es/Form/FormLabel",
+  "types": "../../ts/Form/FormLabel"
+}

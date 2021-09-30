@@ -1,0 +1,11 @@
+language: node_js
+node_js:
+  - lts/*
+  - node
+
+notifications:
+  email:
+    recipients:
+      - dropbox+travis@ricostacruz.com
+    on_success: change
+    on_failure: change

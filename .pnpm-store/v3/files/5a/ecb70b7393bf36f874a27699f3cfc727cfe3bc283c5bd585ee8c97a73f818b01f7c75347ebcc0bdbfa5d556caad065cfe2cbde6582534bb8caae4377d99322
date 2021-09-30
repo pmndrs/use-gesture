@@ -1,0 +1,29 @@
+{
+  "name": "size-limit",
+  "version": "5.0.3",
+  "description": "CLI tool for Size Limit",
+  "keywords": [
+    "size-limit",
+    "cli",
+    "esm",
+    "performance",
+    "budget",
+    "performance budget"
+  ],
+  "author": "Andrey Sitnik <andrey@sitnik.ru>",
+  "license": "MIT",
+  "repository": "ai/size-limit",
+  "bin": "bin.js",
+  "engines": {
+    "node": "^12.0.0 || ^14.0.0 || >=16.0.0"
+  },
+  "dependencies": {
+    "bytes-iec": "^3.1.1",
+    "chokidar": "^3.5.2",
+    "ci-job-number": "^1.2.2",
+    "colorette": "^1.3.0",
+    "globby": "^11.0.4",
+    "lilconfig": "^2.0.3",
+    "mico-spinner": "^1.2.2"
+  }
+}

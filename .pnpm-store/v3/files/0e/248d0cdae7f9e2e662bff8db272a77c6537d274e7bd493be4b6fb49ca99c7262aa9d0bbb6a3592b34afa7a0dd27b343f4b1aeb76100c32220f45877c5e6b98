@@ -1,0 +1,8 @@
+{
+  "name": "reakit/Form/utils/setAllIn",
+  "private": true,
+  "sideEffects": false,
+  "main": "../../../lib/Form/utils/setAllIn",
+  "module": "../../../es/Form/utils/setAllIn",
+  "types": "../../../ts/Form/utils/setAllIn"
+}

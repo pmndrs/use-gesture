@@ -1,0 +1,85 @@
+{
+  "name": "@stitches/react",
+  "version": "0.2.2",
+  "description": "The modern CSS-in-JS library",
+  "type": "module",
+  "main": "dist/index.cjs",
+  "module": "dist/index.mjs",
+  "typings": "types/index.d.ts",
+  "jsdelivr": "dist/index.iife.js",
+  "unpkg": "dist/index.iife.js",
+  "exports": {
+    ".": {
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.mjs",
+      "types": "./types/index.d.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "types",
+    "utils"
+  ],
+  "sideEffects": false,
+  "license": "MIT",
+  "repository": "modulz/stitches",
+  "homepage": "https://github.com/modulz/stitches#readme",
+  "bugs": "https://github.com/modulz/stitches/issues",
+  "contributors": [
+    "Pedro Duarte <pedro@modulz.app>",
+    "Abdulhadi Alhallak <abdulhadi@modulz.app>",
+    "Jonathan Neal <jonathan@modulz.app>"
+  ],
+  "devDependencies": {
+    "react": "17.0.2"
+  },
+  "peerDependencies": {
+    "react": ">= 17.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "component",
+    "components",
+    "create",
+    "css",
+    "css-in-js",
+    "global",
+    "globals",
+    "javascript",
+    "js",
+    "nesting",
+    "object",
+    "object-oriented",
+    "oo",
+    "oocss",
+    "oriented",
+    "scope",
+    "scoped",
+    "style",
+    "styled",
+    "styles",
+    "stylesheet",
+    "stylesheets",
+    "theme",
+    "themes",
+    "theming",
+    "token",
+    "tokens",
+    "type",
+    "typed",
+    "types",
+    "transform",
+    "ts",
+    "variable",
+    "variables",
+    "jsx",
+    "next",
+    "nextjs",
+    "preact",
+    "react",
+    "tsx"
+  ],
+  "gitHead": "676eac2c37f50ec1598c4daba3cfcb35dca92287"
+}

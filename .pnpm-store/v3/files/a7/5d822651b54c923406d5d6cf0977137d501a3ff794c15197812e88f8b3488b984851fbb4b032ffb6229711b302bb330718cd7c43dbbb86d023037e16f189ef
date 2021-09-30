@@ -1,0 +1,1 @@
+"use strict";var e=require("../core/AttributeNode.cjs.js");require("../core/Node.cjs.js"),require("../core/constants.cjs.js");module.exports=class extends e{constructor(e=0){super(null,"vec2"),this.index=e}getAttributeName(){return"uv"+(this.index>0?this.index+1:"")}};

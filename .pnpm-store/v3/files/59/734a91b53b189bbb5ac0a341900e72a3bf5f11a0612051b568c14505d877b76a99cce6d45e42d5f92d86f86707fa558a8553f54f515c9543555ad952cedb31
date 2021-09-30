@@ -1,0 +1,8 @@
+{
+  "name": "reakit/Popover/PopoverArrow",
+  "private": true,
+  "sideEffects": false,
+  "main": "../../lib/Popover/PopoverArrow",
+  "module": "../../es/Popover/PopoverArrow",
+  "types": "../../ts/Popover/PopoverArrow"
+}

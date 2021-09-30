@@ -1,0 +1,8 @@
+{
+  "name": "reakit/Radio/RadioState",
+  "private": true,
+  "sideEffects": false,
+  "main": "../../lib/Radio/RadioState",
+  "module": "../../es/Radio/RadioState",
+  "types": "../../ts/Radio/RadioState"
+}

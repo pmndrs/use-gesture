@@ -1,0 +1,8 @@
+{
+  "name": "reakit-utils/flatten",
+  "private": true,
+  "sideEffects": false,
+  "main": "../lib/flatten",
+  "module": "../es/flatten",
+  "types": "../ts/flatten"
+}

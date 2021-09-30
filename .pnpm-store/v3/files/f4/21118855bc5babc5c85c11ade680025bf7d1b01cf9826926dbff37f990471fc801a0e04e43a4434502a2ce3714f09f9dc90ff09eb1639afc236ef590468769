@@ -1,0 +1,2 @@
+import*as e from"react";export function createContext(t){const r=/*#__PURE__*/e.createContext(null);function n(t){const{children:n,...o}=t,u=e.useMemo((()=>o),Object.values(o));/*#__PURE__*/return e.createElement(r.Provider,{value:u},n)}return n.displayName=t+"Provider",[n,function(n){const o=e.useContext(r);if(null===o)throw new Error(`\`${n}\` must be used within \`${t}\``);return o}]}
+//# sourceMappingURL=index.module.js.map

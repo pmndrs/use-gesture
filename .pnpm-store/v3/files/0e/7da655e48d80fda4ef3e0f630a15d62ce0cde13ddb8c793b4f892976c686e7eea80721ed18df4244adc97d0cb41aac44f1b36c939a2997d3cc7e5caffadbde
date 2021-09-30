@@ -1,0 +1,38 @@
+{
+  "name": "leva",
+  "version": "0.9.13",
+  "main": "dist/leva.cjs.js",
+  "module": "dist/leva.esm.js",
+  "types": "dist/leva.cjs.d.ts",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pmndrs/leva.git",
+    "directory": "packages/leva"
+  },
+  "bugs": "https://github.com/pmndrs/leva/issues",
+  "preconstruct": {
+    "entrypoints": [
+      "index.ts",
+      "plugin/index.ts"
+    ]
+  },
+  "peerDependencies": {
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0"
+  },
+  "dependencies": {
+    "@radix-ui/react-portal": "^0.0.13",
+    "@radix-ui/react-tooltip": "0.0.18",
+    "@stitches/react": "^0.2.0",
+    "@welldone-software/why-did-you-render": "^6.2.0",
+    "colord": "^2.0.1",
+    "dequal": "^2.0.2",
+    "merge-value": "^1.0.0",
+    "react-colorful": "^5.2.2",
+    "react-dropzone": "^11.3.2",
+    "react-use-gesture": "^9.1.3",
+    "v8n": "^1.3.3",
+    "zustand": "^3.5.2"
+  }
+}

@@ -1,0 +1,13 @@
+import { RestEndpoint } from '../types';
+export declare const get: RestEndpoint<'Entry', 'get'>;
+export declare const getMany: RestEndpoint<'Entry', 'getMany'>;
+export declare const patch: RestEndpoint<'Entry', 'patch'>;
+export declare const update: RestEndpoint<'Entry', 'update'>;
+export declare const del: RestEndpoint<'Entry', 'delete'>;
+export declare const publish: RestEndpoint<'Entry', 'publish'>;
+export declare const unpublish: RestEndpoint<'Entry', 'unpublish'>;
+export declare const archive: RestEndpoint<'Entry', 'archive'>;
+export declare const unarchive: RestEndpoint<'Entry', 'unarchive'>;
+export declare const create: RestEndpoint<'Entry', 'create'>;
+export declare const createWithId: RestEndpoint<'Entry', 'createWithId'>;
+export declare const references: RestEndpoint<'Entry', 'references'>;

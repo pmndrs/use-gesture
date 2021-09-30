@@ -1,0 +1,48 @@
+{
+  "name": "probe-image-size",
+  "version": "6.0.0",
+  "description": "Get image size without full download (JPG, GIF, PNG, WebP, BMP, TIFF, PSD)",
+  "keywords": [
+    "image",
+    "size",
+    "jpg",
+    "jpeg",
+    "ico",
+    "gif",
+    "png",
+    "webp",
+    "tiff",
+    "bmp",
+    "svg",
+    "psd"
+  ],
+  "repository": "nodeca/probe-image-size",
+  "license": "MIT",
+  "files": [
+    "index.js",
+    "http.js",
+    "stream.js",
+    "sync.js",
+    "lib/"
+  ],
+  "scripts": {
+    "lint": "eslint .",
+    "test": "npm run lint && nyc mocha",
+    "coverage": "npm run test && nyc report --reporter html",
+    "report-coveralls": "nyc report --reporter=text-lcov | coveralls"
+  },
+  "mocha": {
+    "timeout": 5000
+  },
+  "dependencies": {
+    "deepmerge": "^4.0.0",
+    "needle": "^2.5.2",
+    "stream-parser": "~0.3.1"
+  },
+  "devDependencies": {
+    "coveralls": "^3.0.0",
+    "eslint": "^7.12.1",
+    "mocha": "^8.2.0",
+    "nyc": "^15.1.0"
+  }
+}

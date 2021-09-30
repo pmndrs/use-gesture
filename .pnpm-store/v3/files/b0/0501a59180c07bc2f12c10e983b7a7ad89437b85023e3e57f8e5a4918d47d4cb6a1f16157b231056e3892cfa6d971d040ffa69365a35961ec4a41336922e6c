@@ -1,0 +1,4 @@
+{
+  "main": "dist/reach-utils-get-scrollbar-offset.cjs.js",
+  "module": "dist/reach-utils-get-scrollbar-offset.esm.js"
+}

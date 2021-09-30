@@ -1,0 +1,16 @@
+{
+  "name": "ci-job-number",
+  "version": "1.2.2",
+  "description": "Return CI job number to run huge tests only on first job",
+  "keywords": [
+    "CI",
+    "Travis",
+    "AppVeyor",
+    "Circle",
+    "Semaphore",
+    "job"
+  ],
+  "author": "Andrey Sitnik <andrey@sitnik.ru>",
+  "license": "MIT",
+  "repository": "ai/ci-job-number"
+}

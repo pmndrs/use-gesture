@@ -1,0 +1,91 @@
+{
+  "name": "node-object-hash",
+  "version": "2.3.3",
+  "description": "Node.js object hash library with properties/arrays sorting to provide constant hashes",
+  "keywords": [
+    "hash",
+    "object",
+    "hash-object",
+    "object-hash",
+    "es6",
+    "crypto"
+  ],
+  "homepage": "https://gitlab.com/m03geek/node-object-hash#README",
+  "bugs": {
+    "url": "https://gitlab.com/m03geek/node-object-hash/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SkeLLLa/node-object-hash.git"
+  },
+  "license": "MIT",
+  "author": "m03geek",
+  "main": "dist/hasher.js",
+  "types": "dist/hasher.d.ts",
+  "directories": {
+    "lib": "dist",
+    "doc": "docs",
+    "test": "test"
+  },
+  "files": [
+    "dist/**/*.js",
+    "dist/**/*.ts",
+    "dist/**/*.map"
+  ],
+  "scripts": {
+    "prebenchmark": "npm i --no-save hash-object object-hash benchmark",
+    "benchmark": "node benchmark/bench.js",
+    "prebenchmark:custom": "npm i --no-save hash-object object-hash benchmark",
+    "benchmark:custom": "node --expose-gc benchmark/custom.js",
+    "build": "npm run build:node",
+    "build:node": "tsc -p tsconfig.json",
+    "get-changelog": "conventional-changelog -r 2 -p angular",
+    "lint": "npm run lint:eslint",
+    "lint:eslint": "eslint . --ext js,jsx,ts,tsx",
+    "prerelease": "npm run typedoc && git add -A ./docs",
+    "release": "git add -A && standard-version -a",
+    "test": "npm audit --production && npm run lint && npm run unit",
+    "typedoc": "rm -rf ./docs/* && typedoc && pretty-quick",
+    "unit": "jest --coverage",
+    "postunit": "codecov || true",
+    "version:update": "echo v$npm_package_version > VERSION"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^11.0.0",
+    "@commitlint/config-conventional": "^11.0.0",
+    "@types/jest": "^26.0.0",
+    "@types/node": "^14.0.0",
+    "@typescript-eslint/eslint-plugin": "^4.14.1",
+    "@typescript-eslint/parser": "^4.14.1",
+    "codecov": "^3.5.0",
+    "conventional-changelog-cli": "^2.1.1",
+    "eslint": "^7.0.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-config-prettier": "^7.2.0",
+    "eslint-plugin-jest": "^24.1.3",
+    "eslint-plugin-prettier": "^3.3.1",
+    "eslint-plugin-sort-requires": "^2.1.0",
+    "faker": "^5.0.0",
+    "husky": "^4.0.0",
+    "jest": "^26.0.0",
+    "prettier": "^2.2.1",
+    "prettier-plugin-packagejson": "^2.2.9",
+    "pretty-quick": "^3.1.0",
+    "replace": "^1.1.0",
+    "standard-version": "^9.0.0",
+    "ts-jest": "^26.0.0",
+    "ts-node": "^9.0.0",
+    "typedoc": "^0.20.0",
+    "typedoc-plugin-markdown": "^3.0.0",
+    "typescript": "^4.0.0"
+  },
+  "engines": {
+    "node": ">=0.10.0"
+  }
+}

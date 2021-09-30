@@ -1,0 +1,76 @@
+{
+	"name": "tsd",
+	"version": "0.17.0",
+	"description": "Check TypeScript type definitions",
+	"license": "MIT",
+	"repository": "SamVerschueren/tsd",
+	"author": {
+		"name": "Sam Verschueren",
+		"email": "sam.verschueren@gmail.com",
+		"url": "https://github.com/SamVerschueren"
+	},
+	"main": "dist/index.js",
+	"typings": "dist/index.d.ts",
+	"bin": "dist/cli.js",
+	"engines": {
+		"node": ">=12"
+	},
+	"scripts": {
+		"prepublishOnly": "npm run build",
+		"pretest": "npm run build && cpy \"./**/**\" \"../../../dist/test/fixtures/\" --parents --cwd=source/test/fixtures",
+		"test": "npm run lint && ava",
+		"build": "npm run clean && tsc --project tsconfig.tsd.json && chmod +x dist/cli.js",
+		"clean": "del-cli dist",
+		"lint": "tslint -p tsconfig.tsd.json --format stylish"
+	},
+	"files": [
+		"dist/index.js",
+		"dist/index.d.ts",
+		"dist/cli.js",
+		"dist/lib",
+		"libraries"
+	],
+	"keywords": [
+		"typescript",
+		"tsd",
+		"check",
+		"typings",
+		"types",
+		"typedefs",
+		"typedefinitions"
+	],
+	"dependencies": {
+		"@tsd/typescript": "~4.3.2",
+		"eslint-formatter-pretty": "^4.0.0",
+		"globby": "^11.0.1",
+		"meow": "^9.0.0",
+		"path-exists": "^4.0.0",
+		"read-pkg-up": "^7.0.0"
+	},
+	"devDependencies": {
+		"@ava/typescript": "^1.1.1",
+		"@types/node": "^14.0.0",
+		"@types/react": "^16.9.2",
+		"ava": "^3.8.2",
+		"cpy-cli": "^3.0.0",
+		"del-cli": "^3.0.0",
+		"execa": "^5.0.0",
+		"react": "^16.9.0",
+		"rxjs": "^6.5.3",
+		"tslint": "^5.11.0",
+		"tslint-xo": "^0.9.0",
+		"typescript": "^4.1.5"
+	},
+	"ava": {
+		"timeout": "2m",
+		"files": [
+			"source/test/**/*",
+			"!source/test/fixtures/**/*"
+		],
+		"typescript": {
+			"rewritePaths": {
+				"source/": "dist/"
+			}
+		}
+	}
+}
