@@ -1,8 +1,0 @@
-{
-  "name": "reakit-utils/contains",
-  "private": true,
-  "sideEffects": false,
-  "main": "../lib/contains",
-  "module": "../es/contains",
-  "types": "../ts/contains"
-}

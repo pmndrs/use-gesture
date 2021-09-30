@@ -1,8 +1,0 @@
-{
-  "name": "reakit-utils/createOnKeyDown",
-  "private": true,
-  "sideEffects": false,
-  "main": "../lib/createOnKeyDown",
-  "module": "../es/createOnKeyDown",
-  "types": "../ts/createOnKeyDown"
-}

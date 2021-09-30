@@ -1,8 +1,0 @@
-{
-  "name": "reakit-utils/isInteger",
-  "private": true,
-  "sideEffects": false,
-  "main": "../lib/isInteger",
-  "module": "../es/isInteger",
-  "types": "../ts/isInteger"
-}

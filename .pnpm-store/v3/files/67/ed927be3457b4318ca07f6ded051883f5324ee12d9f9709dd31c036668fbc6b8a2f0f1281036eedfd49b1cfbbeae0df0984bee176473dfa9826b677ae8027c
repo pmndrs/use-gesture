@@ -1,6 +1,0 @@
-import { Theme } from '@xstyled/system';
-export declare function useThemeBreakpoints(theme: Theme): import("@xstyled/system").IBreakpoints;
-export declare function useViewportWidth(): number | null;
-export declare function useThemeBreakpoint(theme: Theme): string | null;
-export declare function useThemeUp(theme: Theme, key: string | number): boolean;
-export declare function useThemeDown(theme: Theme, key: string | number): boolean;

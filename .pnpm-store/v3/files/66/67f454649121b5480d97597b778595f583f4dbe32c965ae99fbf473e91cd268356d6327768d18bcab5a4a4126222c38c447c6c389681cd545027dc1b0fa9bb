@@ -1,8 +1,0 @@
-{
-  "name": "reakit/Id/IdState",
-  "private": true,
-  "sideEffects": false,
-  "main": "../../lib/Id/IdState",
-  "module": "../../es/Id/IdState",
-  "types": "../../ts/Id/IdState"
-}

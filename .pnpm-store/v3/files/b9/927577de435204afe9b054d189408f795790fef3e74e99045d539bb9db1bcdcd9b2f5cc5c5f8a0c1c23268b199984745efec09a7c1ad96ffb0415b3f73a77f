@@ -1,1 +1,0 @@
-file.type + " " + classes().join(" ")

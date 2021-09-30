@@ -1,1 +1,0 @@
-"use strict";var e=require("../core/InputNode.cjs.js");require("../core/Node.cjs.js"),require("../core/constants.cjs.js");module.exports=class extends e{constructor(e){super("color"),this.value=e,Object.defineProperty(this,"isColorNode",{value:!0})}};

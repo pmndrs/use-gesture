@@ -1,8 +1,0 @@
-{
-  "name": "reakit/Form/FormMessage",
-  "private": true,
-  "sideEffects": false,
-  "main": "../../lib/Form/FormMessage",
-  "module": "../../es/Form/FormMessage",
-  "types": "../../ts/Form/FormMessage"
-}

@@ -1,8 +1,0 @@
-{
-  "name": "reakit/Popover/Popover",
-  "private": true,
-  "sideEffects": false,
-  "main": "../../lib/Popover/Popover",
-  "module": "../../es/Popover/Popover",
-  "types": "../../ts/Popover/Popover"
-}

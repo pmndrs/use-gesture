@@ -1,1 +1,0 @@
-{"version":3,"sources":["../sources/index.ts"],"names":[],"mappings":";;;;;AAAA;;;;AACA;;;;AACA","sourcesContent":["export { computeAccessibleDescription } from \"./accessible-description\";\nexport { computeAccessibleName } from \"./accessible-name\";\nexport { default as getRole } from \"./getRole\";\n"],"file":"index.js"}

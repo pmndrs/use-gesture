@@ -1,6 +1,0 @@
-{
-  "main": "dist/cli.cjs.js",
-  "preconstruct": {
-    "source": "../src/worker"
-  }
-}

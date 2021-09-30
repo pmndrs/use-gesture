@@ -1,8 +1,0 @@
-{
-  "name": "reakit-utils/isEmpty",
-  "private": true,
-  "sideEffects": false,
-  "main": "../lib/isEmpty",
-  "module": "../es/isEmpty",
-  "types": "../ts/isEmpty"
-}

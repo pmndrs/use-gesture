@@ -1,8 +1,0 @@
-{
-  "name": "reakit-utils/isPlainObject",
-  "private": true,
-  "sideEffects": false,
-  "main": "../lib/isPlainObject",
-  "module": "../es/isPlainObject",
-  "types": "../ts/isPlainObject"
-}

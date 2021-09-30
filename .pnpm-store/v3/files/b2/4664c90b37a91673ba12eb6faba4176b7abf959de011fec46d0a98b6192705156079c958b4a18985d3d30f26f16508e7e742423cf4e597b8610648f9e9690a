@@ -1,8 +1,0 @@
-{
-  "name": "reakit/Disclosure/DisclosureState",
-  "private": true,
-  "sideEffects": false,
-  "main": "../../lib/Disclosure/DisclosureState",
-  "module": "../../es/Disclosure/DisclosureState",
-  "types": "../../ts/Disclosure/DisclosureState"
-}

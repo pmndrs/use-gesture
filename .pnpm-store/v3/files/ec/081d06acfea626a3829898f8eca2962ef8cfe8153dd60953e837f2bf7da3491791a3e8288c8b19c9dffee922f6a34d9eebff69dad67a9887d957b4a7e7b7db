@@ -1,8 +1,0 @@
-{
-  "name": "reakit/Separator",
-  "private": true,
-  "sideEffects": false,
-  "main": "../lib/Separator",
-  "module": "../es/Separator",
-  "types": "../ts/Separator"
-}

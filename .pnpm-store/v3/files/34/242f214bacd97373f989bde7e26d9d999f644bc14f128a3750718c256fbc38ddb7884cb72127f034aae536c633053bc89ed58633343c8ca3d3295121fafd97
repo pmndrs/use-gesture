@@ -1,8 +1,0 @@
-{
-  "name": "reakit/Grid/GridCell",
-  "private": true,
-  "sideEffects": false,
-  "main": "../../lib/Grid/GridCell",
-  "module": "../../es/Grid/GridCell",
-  "types": "../../ts/Grid/GridCell"
-}

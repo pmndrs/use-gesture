@@ -1,8 +1,0 @@
-{
-  "name": "reakit/Composite/CompositeState",
-  "private": true,
-  "sideEffects": false,
-  "main": "../../lib/Composite/CompositeState",
-  "module": "../../es/Composite/CompositeState",
-  "types": "../../ts/Composite/CompositeState"
-}

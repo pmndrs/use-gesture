@@ -1,8 +1,0 @@
-import { IProps } from './types';
-declare type ColorsGuard = Record<string, string>;
-declare type AlphaVariants = number[];
-declare const defaultAlphaVariants: readonly [0, 5, 10, 20, 25, 30, 40, 50, 60, 70, 75, 80, 90, 95, 100];
-declare type DefaultAlphaVariants = typeof defaultAlphaVariants;
-export declare function generateHexAlphaVariants<T extends ColorsGuard, U extends AlphaVariants | DefaultAlphaVariants = DefaultAlphaVariants>(colors: T, variants?: U): { [key in keyof T]: string; } & { [key_1 in `${Extract<keyof T, string>}-a${U[number]}`]: string; };
-export declare function aliasColor(alias: string, color: string, tones?: number[], variants?: number[]): Record<string, (props: IProps) => unknown>;
-export {};

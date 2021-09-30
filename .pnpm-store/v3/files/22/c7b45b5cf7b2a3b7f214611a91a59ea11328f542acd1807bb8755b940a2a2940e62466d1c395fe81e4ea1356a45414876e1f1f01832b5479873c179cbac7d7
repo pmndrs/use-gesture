@@ -1,8 +1,0 @@
-{
-  "name": "reakit/Checkbox",
-  "private": true,
-  "sideEffects": false,
-  "main": "../lib/Checkbox",
-  "module": "../es/Checkbox",
-  "types": "../ts/Checkbox"
-}

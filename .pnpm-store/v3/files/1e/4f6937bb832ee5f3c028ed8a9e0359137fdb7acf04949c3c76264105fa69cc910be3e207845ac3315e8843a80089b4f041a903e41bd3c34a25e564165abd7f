@@ -1,4 +1,0 @@
-{
-  "main": "dist/reach-utils-use-isomorphic-layout-effect.cjs.js",
-  "module": "dist/reach-utils-use-isomorphic-layout-effect.esm.js"
-}

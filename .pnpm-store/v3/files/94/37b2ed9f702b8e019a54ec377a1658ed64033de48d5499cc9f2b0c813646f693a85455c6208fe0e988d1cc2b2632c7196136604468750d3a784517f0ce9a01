@@ -1,8 +1,0 @@
-{
-  "name": "reakit-utils/isPortalEvent",
-  "private": true,
-  "sideEffects": false,
-  "main": "../lib/isPortalEvent",
-  "module": "../es/isPortalEvent",
-  "types": "../ts/isPortalEvent"
-}

@@ -1,8 +1,0 @@
-{
-  "name": "reakit-utils/createEvent",
-  "private": true,
-  "sideEffects": false,
-  "main": "../lib/createEvent",
-  "module": "../es/createEvent",
-  "types": "../ts/createEvent"
-}

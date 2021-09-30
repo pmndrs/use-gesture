@@ -1,4 +1,0 @@
-export declare const rpxTransformers: {
-    px: <T>(value: T) => string | number | T;
-    border: <T_1>(n: T_1) => string | T_1;
-};

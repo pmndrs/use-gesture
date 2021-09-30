@@ -1,8 +1,0 @@
-{
-  "name": "reakit-utils/tabbable",
-  "private": true,
-  "sideEffects": false,
-  "main": "../lib/tabbable",
-  "module": "../es/tabbable",
-  "types": "../ts/tabbable"
-}

@@ -1,3 +1,0 @@
-import { VariantsType, ITheme, Theme } from '../types';
-export declare type ColorGetter<T extends ITheme = Theme> = VariantsType<T['colors']>;
-export declare const getColor: import("../types").ThemeGetter<(string | number) & {}>;

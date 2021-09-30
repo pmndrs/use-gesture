@@ -1,8 +1,0 @@
-{
-  "name": "reakit/Rover/Rover",
-  "private": true,
-  "sideEffects": false,
-  "main": "../../lib/Rover/Rover",
-  "module": "../../es/Rover/Rover",
-  "types": "../../ts/Rover/Rover"
-}

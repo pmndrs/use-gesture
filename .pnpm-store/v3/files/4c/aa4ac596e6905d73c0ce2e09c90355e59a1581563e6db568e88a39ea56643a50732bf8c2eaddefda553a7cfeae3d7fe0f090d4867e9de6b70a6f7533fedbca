@@ -1,8 +1,0 @@
-{
-  "name": "reakit/Checkbox/CheckboxState",
-  "private": true,
-  "sideEffects": false,
-  "main": "../../lib/Checkbox/CheckboxState",
-  "module": "../../es/Checkbox/CheckboxState",
-  "types": "../../ts/Checkbox/CheckboxState"
-}

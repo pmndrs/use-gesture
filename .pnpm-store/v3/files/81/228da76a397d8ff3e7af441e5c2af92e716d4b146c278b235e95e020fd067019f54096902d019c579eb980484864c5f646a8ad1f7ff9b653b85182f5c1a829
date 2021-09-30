@@ -1,8 +1,0 @@
-{
-  "name": "reakit/Tooltip/TooltipReference",
-  "private": true,
-  "sideEffects": false,
-  "main": "../../lib/Tooltip/TooltipReference",
-  "module": "../../es/Tooltip/TooltipReference",
-  "types": "../../ts/Tooltip/TooltipReference"
-}

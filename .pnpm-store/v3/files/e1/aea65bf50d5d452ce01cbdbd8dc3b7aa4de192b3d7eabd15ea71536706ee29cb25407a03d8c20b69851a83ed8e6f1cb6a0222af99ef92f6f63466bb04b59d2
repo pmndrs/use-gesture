@@ -1,1 +1,0 @@
-"use strict";module.exports=class{constructor(e,t,s,i){this.name=e,this.type=t,this.node=s,this.needsUpdate=i,Object.defineProperty(this,"isNodeUniform",{value:!0})}get value(){return this.node.value}set value(e){this.node.value=e}};

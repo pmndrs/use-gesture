@@ -1,8 +1,0 @@
-{
-  "name": "reakit-utils/types",
-  "private": true,
-  "sideEffects": false,
-  "main": "../lib/types",
-  "module": "../es/types",
-  "types": "../ts/types"
-}

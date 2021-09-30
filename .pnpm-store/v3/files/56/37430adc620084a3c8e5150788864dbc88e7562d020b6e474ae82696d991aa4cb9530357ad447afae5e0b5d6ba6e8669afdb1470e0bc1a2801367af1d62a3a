@@ -1,1 +1,0 @@
-"use strict";Object.defineProperty(exports,"__esModule",{value:!0});var e=require("./Reflector.cjs.js");require("three");class r extends e.Reflector{constructor(e,r){super(e,r),this.geometry.setDrawRange(0,0)}}exports.ReflectorRTT=r;

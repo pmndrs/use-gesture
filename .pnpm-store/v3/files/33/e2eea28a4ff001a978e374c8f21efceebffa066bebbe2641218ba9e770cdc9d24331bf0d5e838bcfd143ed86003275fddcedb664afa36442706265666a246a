@@ -1,8 +1,0 @@
-{
-  "name": "reakit/Toolbar",
-  "private": true,
-  "sideEffects": false,
-  "main": "../lib/Toolbar",
-  "module": "../es/Toolbar",
-  "types": "../ts/Toolbar"
-}

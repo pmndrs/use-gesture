@@ -1,1 +1,0 @@
-"use strict";module.exports=class{constructor(){this.properties=new WeakMap}get(e){let t=this.properties.get(e);return void 0===t&&(t={},this.properties.set(e,t)),t}remove(e){this.properties.delete(e)}dispose(){this.properties=new WeakMap}};

@@ -1,8 +1,0 @@
-{
-  "name": "reakit-utils/toArray",
-  "private": true,
-  "sideEffects": false,
-  "main": "../lib/toArray",
-  "module": "../es/toArray",
-  "types": "../ts/toArray"
-}

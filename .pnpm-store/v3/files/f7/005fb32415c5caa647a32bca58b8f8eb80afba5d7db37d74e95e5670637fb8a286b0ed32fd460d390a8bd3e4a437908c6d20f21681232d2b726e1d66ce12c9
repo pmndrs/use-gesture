@@ -1,8 +1,0 @@
-{
-  "name": "reakit-system/useCreateElement",
-  "private": true,
-  "sideEffects": false,
-  "main": "../lib/useCreateElement",
-  "module": "../es/useCreateElement",
-  "types": "../ts/useCreateElement"
-}

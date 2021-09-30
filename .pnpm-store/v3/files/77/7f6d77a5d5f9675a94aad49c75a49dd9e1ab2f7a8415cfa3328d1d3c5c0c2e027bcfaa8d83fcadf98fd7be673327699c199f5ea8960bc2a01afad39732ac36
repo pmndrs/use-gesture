@@ -1,3 +1,0 @@
-exports.___internalHook = () => {
-  return () => {};
-};

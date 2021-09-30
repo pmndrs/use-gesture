@@ -1,8 +1,0 @@
-{
-  "name": "reakit-utils/omit",
-  "private": true,
-  "sideEffects": false,
-  "main": "../lib/omit",
-  "module": "../es/omit",
-  "types": "../ts/omit"
-}

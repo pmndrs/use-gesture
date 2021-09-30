@@ -1,8 +1,0 @@
-{
-  "name": "reakit/Menu/MenuDisclosure",
-  "private": true,
-  "sideEffects": false,
-  "main": "../../lib/Menu/MenuDisclosure",
-  "module": "../../es/Menu/MenuDisclosure",
-  "types": "../../ts/Menu/MenuDisclosure"
-}

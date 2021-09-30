@@ -1,8 +1,0 @@
-{
-  "name": "reakit-system/useOptions",
-  "private": true,
-  "sideEffects": false,
-  "main": "../lib/useOptions",
-  "module": "../es/useOptions",
-  "types": "../ts/useOptions"
-}

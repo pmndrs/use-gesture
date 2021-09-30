@@ -1,4 +1,0 @@
-{
-  "main": "dist/reach-utils-polymorphic.cjs.js",
-  "module": "dist/reach-utils-polymorphic.esm.js"
-}

@@ -1,8 +1,0 @@
-{
-  "name": "reakit/Form/FormSubmitButton",
-  "private": true,
-  "sideEffects": false,
-  "main": "../../lib/Form/FormSubmitButton",
-  "module": "../../es/Form/FormSubmitButton",
-  "types": "../../ts/Form/FormSubmitButton"
-}

@@ -1,4 +1,0 @@
-{
-  "main": "dist/reach-utils-use-stateful-ref-value.cjs.js",
-  "module": "dist/reach-utils-use-stateful-ref-value.esm.js"
-}

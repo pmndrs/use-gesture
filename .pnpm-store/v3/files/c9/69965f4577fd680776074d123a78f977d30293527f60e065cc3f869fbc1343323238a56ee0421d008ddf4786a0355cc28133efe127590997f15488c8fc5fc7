@@ -1,8 +1,0 @@
-{
-  "name": "reakit/Form/FormState",
-  "private": true,
-  "sideEffects": false,
-  "main": "../../lib/Form/FormState",
-  "module": "../../es/Form/FormState",
-  "types": "../../ts/Form/FormState"
-}

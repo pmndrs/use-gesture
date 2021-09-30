@@ -1,4 +1,0 @@
-{
-  "main": "dist/reach-utils-use-controlled-state.cjs.js",
-  "module": "dist/reach-utils-use-controlled-state.esm.js"
-}

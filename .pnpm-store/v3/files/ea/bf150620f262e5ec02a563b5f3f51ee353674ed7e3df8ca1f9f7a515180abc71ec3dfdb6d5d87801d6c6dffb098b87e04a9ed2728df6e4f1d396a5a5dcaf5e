@@ -1,8 +1,0 @@
-{
-  "name": "reakit/Provider",
-  "private": true,
-  "sideEffects": false,
-  "main": "../lib/Provider",
-  "module": "../es/Provider",
-  "types": "../ts/Provider"
-}

@@ -1,1 +1,0 @@
-"use strict";var e=require("../core/Node.cjs.js");require("../core/constants.cjs.js");module.exports=class extends e{constructor(e,t="x"){super(),this.node=e,this.components=t}getType(e){return e.getTypeFromLength(this.components.length)}generate(e,t){const s=this.node.getType(e),o=`${this.node.build(e,s)}.${this.components}`;return e.format(o,this.getType(e),t)}};

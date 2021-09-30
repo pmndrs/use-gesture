@@ -1,8 +1,0 @@
-{
-  "name": "reakit/Form/FormRemoveButton",
-  "private": true,
-  "sideEffects": false,
-  "main": "../../lib/Form/FormRemoveButton",
-  "module": "../../es/Form/FormRemoveButton",
-  "types": "../../ts/Form/FormRemoveButton"
-}

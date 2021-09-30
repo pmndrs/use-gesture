@@ -1,8 +1,0 @@
-{
-  "name": "reakit-utils/isSelfTarget",
-  "private": true,
-  "sideEffects": false,
-  "main": "../lib/isSelfTarget",
-  "module": "../es/isSelfTarget",
-  "types": "../ts/isSelfTarget"
-}
