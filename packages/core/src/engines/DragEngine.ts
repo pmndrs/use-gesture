@@ -140,6 +140,9 @@ export class DragEngine extends CoordinatesEngine<'drag'> {
 
     if (state._delayed) {
       this.timeoutStore.remove('dragDelay')
+      // makes sure first is still true when moving for the first time after a
+      // delay
+      state.active = false
       this.startPointerDrag(event)
       return
     }
