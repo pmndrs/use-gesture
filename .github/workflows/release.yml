@@ -7,10 +7,8 @@ on:
       - '**/package.json'
       - '.changeset/**'
       - '.github/workflows/release.yml'
-
 env:
   HUSKY: 0 # Bypass husky commit hook for CI
-
 jobs:
   version:
     timeout-minutes: 8
@@ -36,7 +34,7 @@ jobs:
 
       - uses: pnpm/action-setup@v2.0.1
         with:
-          version: 6.0.2
+          version: 6.9.1
           run_install: true
 
       - name: Set up NPM credentials
