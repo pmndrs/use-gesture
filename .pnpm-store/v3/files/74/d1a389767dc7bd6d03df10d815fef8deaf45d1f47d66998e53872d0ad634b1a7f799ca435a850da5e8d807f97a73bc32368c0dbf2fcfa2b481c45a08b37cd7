@@ -1,0 +1,85 @@
+{
+  "name": "webpack-dev-middleware",
+  "version": "4.3.0",
+  "description": "A development middleware for webpack",
+  "license": "MIT",
+  "repository": "webpack/webpack-dev-middleware",
+  "author": "Tobias Koppers @sokra",
+  "homepage": "https://github.com/webpack/webpack-dev-middleware",
+  "bugs": "https://github.com/webpack/webpack-dev-middleware/issues",
+  "main": "dist/cjs.js",
+  "funding": {
+    "type": "opencollective",
+    "url": "https://opencollective.com/webpack"
+  },
+  "engines": {
+    "node": ">= v10.23.3"
+  },
+  "scripts": {
+    "commitlint": "commitlint --from=master",
+    "lint:prettier": "prettier \"{**/*,*}.{js,json,md,yml,css}\" --list-different",
+    "lint:js": "eslint --cache src test",
+    "lint": "npm-run-all -l -p \"lint:**\"",
+    "fix:prettier": "npm run lint:prettier -- --write",
+    "fix:js": "npm run lint:js -- --fix",
+    "fix": "npm-run-all fix:js fix:prettier",
+    "prepare": "husky install && npm run build",
+    "build": "del dist && babel src -d dist --copy-files",
+    "release": "standard-version",
+    "security": "npm audit",
+    "test:only": "cross-env NODE_ENV=test jest",
+    "test:watch": "npm run test:only -- --watch",
+    "test:coverage": "npm run test:only -- --collectCoverageFrom=\"src/**/*.js\" --coverage",
+    "pretest": "npm run lint",
+    "test": "npm run test:coverage"
+  },
+  "files": [
+    "dist"
+  ],
+  "peerDependencies": {
+    "webpack": "^4.0.0 || ^5.0.0"
+  },
+  "dependencies": {
+    "colorette": "^1.2.2",
+    "mem": "^8.1.1",
+    "memfs": "^3.2.2",
+    "mime-types": "^2.1.30",
+    "range-parser": "^1.2.1",
+    "schema-utils": "^3.0.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.14.3",
+    "@babel/core": "^7.14.3",
+    "@babel/preset-env": "^7.14.2",
+    "@commitlint/cli": "^12.1.4",
+    "@commitlint/config-conventional": "^12.1.4",
+    "@webpack-contrib/eslint-config-webpack": "^3.0.0",
+    "babel-jest": "^26.6.3",
+    "chokidar": "^3.5.1",
+    "connect": "^3.7.0",
+    "cross-env": "^7.0.3",
+    "deepmerge": "^4.2.2",
+    "del": "^6.0.0",
+    "del-cli": "^3.0.1",
+    "eslint": "^7.26.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "^2.22.1",
+    "execa": "^5.0.0",
+    "express": "^4.17.1",
+    "file-loader": "^6.2.0",
+    "husky": "^6.0.0",
+    "jest": "^26.6.3",
+    "lint-staged": "^11.0.0",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^2.3.0",
+    "standard-version": "^9.3.0",
+    "strip-ansi": "^6.0.0",
+    "supertest": "^6.1.3",
+    "webpack": "^5.37.0"
+  },
+  "keywords": [
+    "webpack",
+    "middleware",
+    "development"
+  ]
+}

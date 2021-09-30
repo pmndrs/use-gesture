@@ -1,0 +1,25 @@
+{
+  "name": "component-props",
+  "description": "Parse immediate identifiers from a js expression",
+  "version": "1.1.1",
+  "keywords": [
+    "template",
+    "engine",
+    "parse",
+    "parser"
+  ],
+  "devDependencies": {
+    "should": "~1.2.2",
+    "mocha": "~1.9.0"
+  },
+  "component": {
+    "scripts": {
+      "props/index.js": "index.js"
+    }
+  },
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/component/props.git"
+  }
+}

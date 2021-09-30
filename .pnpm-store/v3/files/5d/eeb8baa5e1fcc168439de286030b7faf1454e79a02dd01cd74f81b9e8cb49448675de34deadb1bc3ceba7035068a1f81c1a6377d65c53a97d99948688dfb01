@@ -1,0 +1,31 @@
+import { matchesState } from './utils';
+import { mapState } from './mapState';
+import { StateNode } from './StateNode';
+import { State } from './State';
+import { Machine, createMachine } from './Machine';
+import { Actor } from './Actor';
+import { raise, send, sendParent, sendUpdate, log, start, stop, assign, after, done, respond, doneInvoke, forwardTo, escalate, choose, pure } from './actions';
+import { interpret, Interpreter, spawn, InterpreterStatus } from './interpreter';
+import { matchState } from './match';
+import { createSchema } from './schema';
+declare const actions: {
+    raise: typeof raise;
+    send: typeof send;
+    sendParent: typeof sendParent;
+    sendUpdate: typeof sendUpdate;
+    log: typeof log;
+    cancel: (sendId: string | number) => import("./types").CancelAction;
+    start: typeof start;
+    stop: typeof stop;
+    assign: <TContext, TEvent extends import("./types").EventObject = import("./types").EventObject>(assignment: import("./types").Assigner<TContext, TEvent> | import("./types").PropertyAssigner<TContext, TEvent>) => import("./types").AssignAction<TContext, TEvent>;
+    after: typeof after;
+    done: typeof done;
+    respond: typeof respond;
+    forwardTo: typeof forwardTo;
+    escalate: typeof escalate;
+    choose: typeof choose;
+    pure: typeof pure;
+};
+export { Actor, Machine, StateNode, State, matchesState, mapState, actions, assign, send, sendParent, sendUpdate, forwardTo, interpret, Interpreter, InterpreterStatus, matchState, spawn, doneInvoke, createMachine, createSchema };
+export * from './types';
+//# sourceMappingURL=index.d.ts.map

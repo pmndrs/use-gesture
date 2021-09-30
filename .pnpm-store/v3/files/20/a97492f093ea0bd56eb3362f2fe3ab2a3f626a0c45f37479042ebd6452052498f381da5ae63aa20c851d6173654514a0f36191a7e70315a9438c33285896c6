@@ -1,0 +1,8 @@
+{
+  "name": "reakit/Portal/Portal",
+  "private": true,
+  "sideEffects": false,
+  "main": "../../lib/Portal/Portal",
+  "module": "../../es/Portal/Portal",
+  "types": "../../ts/Portal/Portal"
+}

@@ -1,0 +1,1 @@
+"use strict";Object.defineProperty(exports,"__esModule",{value:!0});var e={uniforms:{},vertexShader:["void main() {","\tgl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );","}"].join("\n"),fragmentShader:["void main() {","\tgl_FragColor = vec4( 1.0, 0.0, 0.0, 0.5 );","}"].join("\n")};exports.BasicShader=e;

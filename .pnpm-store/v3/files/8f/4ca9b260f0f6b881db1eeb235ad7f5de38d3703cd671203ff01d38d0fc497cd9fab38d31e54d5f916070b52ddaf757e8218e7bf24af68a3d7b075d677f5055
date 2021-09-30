@@ -1,0 +1,291 @@
+'use strict';
+
+Object.defineProperty(exports, '__esModule', { value: true });
+
+function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
+
+var styled$1 = require('styled-components');
+var styled$1__default = _interopDefault(styled$1);
+var util = require('@xstyled/util');
+var core = require('@xstyled/core');
+var system = require('@xstyled/system');
+var react = require('react');
+
+/* eslint-disable no-continue, no-loop-func, no-cond-assign */
+function css() {
+  var scCssArgs = styled$1.css.apply(void 0, arguments);
+  var flattenedArgs = util.flattenStrings(scCssArgs);
+  return flattenedArgs.map(core.transform);
+}
+
+var createGlobalStyle = function createGlobalStyle() {
+  // @ts-ignore
+  return styled$1.createGlobalStyle([css.apply(void 0, arguments)]);
+};
+
+function _taggedTemplateLiteralLoose(strings, raw) {
+  if (!raw) {
+    raw = strings.slice(0);
+  }
+
+  strings.raw = raw;
+  return strings;
+}
+
+/* eslint-disable no-continue, no-loop-func, no-cond-assign */
+var tags = /*#__PURE__*/Object.keys(styled$1__default);
+var createX = function createX(generator) {
+  // @ts-ignore
+  var x = {
+    extend: function extend() {
+      for (var _len = arguments.length, generators = new Array(_len), _key = 0; _key < _len; _key++) {
+        generators[_key] = arguments[_key];
+      }
+
+      return createX(system.compose.apply(void 0, [generator].concat(generators)));
+    }
+  };
+  tags.forEach(function (tag) {
+    // @ts-ignore
+    x[tag] = styled$1__default(tag).withConfig({
+      shouldForwardProp: function shouldForwardProp(prop, defaultValidatorFn) {
+        if (typeof prop === 'string' && generator.meta.props.includes(prop)) return false;
+        return defaultValidatorFn(prop);
+      }
+    })(function () {
+      return ["&&{", generator, "}"];
+    });
+  });
+  return x;
+};
+
+var x = /*#__PURE__*/createX(system.system); // Retro-compatibility
+
+var Box = x.div;
+
+var _templateObject;
+
+function getCreateStyle(baseCreateStyle) {
+  // @ts-ignore
+  var createStyle = function createStyle() {
+    return baseCreateStyle(_templateObject || (_templateObject = _taggedTemplateLiteralLoose(["", ""])), css.apply(void 0, arguments));
+  };
+
+  createStyle.attrs = function (attrs) {
+    var nextCreateStyle = baseCreateStyle.attrs(attrs);
+    return getCreateStyle(nextCreateStyle);
+  };
+
+  createStyle.withConfig = function (config) {
+    var nextCreateStyle = baseCreateStyle.withConfig(config);
+    return getCreateStyle(nextCreateStyle);
+  };
+
+  return createStyle;
+}
+
+var styled = function styled(component) {
+  return getCreateStyle(styled$1__default(component));
+}; // @ts-ignore
+
+styled.box = /*#__PURE__*/styled(x.div);
+Object.keys(styled$1__default).forEach(function (key) {
+  // @ts-ignore
+  styled[key] = styled(key); // @ts-ignore
+
+  styled[key + "Box"] = styled(x[key]);
+});
+
+var _templateObject$1;
+var ColorModeStyle = /*#__PURE__*/styled$1.createGlobalStyle(_templateObject$1 || (_templateObject$1 = /*#__PURE__*/_taggedTemplateLiteralLoose(["", ""])), function (p) {
+  return core.createColorStyles(p.theme, {
+    targetSelector: p.targetSelector
+  });
+});
+var ColorModeProvider = /*#__PURE__*/core.createColorModeProvider({
+  ThemeContext: styled$1.ThemeContext,
+  ThemeProvider: styled$1.ThemeProvider,
+  ColorModeStyle: ColorModeStyle
+});
+
+var useTheme = function useTheme() {
+  return react.useContext(styled$1.ThemeContext);
+};
+
+var createUseGetter = function createUseGetter(getter) {
+  return function (value, defaultValue) {
+    var theme = useTheme();
+    return react.useMemo(function () {
+      return getter(value, defaultValue)({
+        theme: theme
+      });
+    }, [value, defaultValue, theme]);
+  };
+};
+
+var useTh = /*#__PURE__*/createUseGetter(system.th);
+var useAngle = /*#__PURE__*/createUseGetter(system.th.angle);
+var useAnimation = /*#__PURE__*/createUseGetter(system.th.animation);
+var useBorder = /*#__PURE__*/createUseGetter(system.th.border);
+var useBorderColor = /*#__PURE__*/createUseGetter(system.th.borderColor);
+var useBorderStyle = /*#__PURE__*/createUseGetter(system.th.borderStyle);
+var useBorderWidth = /*#__PURE__*/createUseGetter(system.th.borderWidth);
+var useColor = /*#__PURE__*/createUseGetter(system.th.color);
+var useDuration = /*#__PURE__*/createUseGetter(system.th.duration);
+var useFont = /*#__PURE__*/createUseGetter(system.th.font);
+var useFontSize = /*#__PURE__*/createUseGetter(system.th.fontSize);
+var useFontWeight = /*#__PURE__*/createUseGetter(system.th.fontWeight);
+var useInset = /*#__PURE__*/createUseGetter(system.th.inset);
+var useLetterSpacing = /*#__PURE__*/createUseGetter(system.th.letterSpacing);
+var useLineHeight = /*#__PURE__*/createUseGetter(system.th.lineHeight);
+var usePercent = /*#__PURE__*/createUseGetter(system.th.percent);
+var usePx = /*#__PURE__*/createUseGetter(system.th.px);
+var useRadius = /*#__PURE__*/createUseGetter(system.th.radius);
+var useRingWidth = /*#__PURE__*/createUseGetter(system.th.ringWidth);
+var useShadow = /*#__PURE__*/createUseGetter(system.th.shadow);
+var useSize = /*#__PURE__*/createUseGetter(system.th.size);
+var useSpace = /*#__PURE__*/createUseGetter(system.th.space);
+var useTimingFunctions = /*#__PURE__*/createUseGetter(system.th.timingFunctions);
+var useTransform = /*#__PURE__*/createUseGetter(system.th.transform);
+var useTransition = /*#__PURE__*/createUseGetter(system.th.transition);
+var useTransitionProperty = /*#__PURE__*/createUseGetter(system.th.transitionProperty);
+var useZIndex = /*#__PURE__*/createUseGetter(system.th.zIndex);
+
+function useBreakpoints() {
+  return core.useThemeBreakpoints(useTheme());
+}
+function useBreakpoint() {
+  return core.useThemeBreakpoint(useTheme());
+}
+function useUp(key) {
+  return core.useThemeUp(useTheme(), key);
+}
+function useDown(key) {
+  return core.useThemeDown(useTheme(), key);
+}
+
+var Preflight = /*#__PURE__*/system.createPreflight({
+  createGlobalStyle: styled$1.createGlobalStyle
+});
+
+Object.keys(system).forEach(function (k) {
+  if (k !== 'default') Object.defineProperty(exports, k, {
+    enumerable: true,
+    get: function () {
+      return system[k];
+    }
+  });
+});
+Object.defineProperty(exports, 'ServerStyleSheet', {
+  enumerable: true,
+  get: function () {
+    return styled$1.ServerStyleSheet;
+  }
+});
+Object.defineProperty(exports, 'StyleSheetManager', {
+  enumerable: true,
+  get: function () {
+    return styled$1.StyleSheetManager;
+  }
+});
+Object.defineProperty(exports, 'ThemeConsumer', {
+  enumerable: true,
+  get: function () {
+    return styled$1.ThemeConsumer;
+  }
+});
+Object.defineProperty(exports, 'ThemeContext', {
+  enumerable: true,
+  get: function () {
+    return styled$1.ThemeContext;
+  }
+});
+Object.defineProperty(exports, 'ThemeProvider', {
+  enumerable: true,
+  get: function () {
+    return styled$1.ThemeProvider;
+  }
+});
+Object.defineProperty(exports, 'isStyledComponent', {
+  enumerable: true,
+  get: function () {
+    return styled$1.isStyledComponent;
+  }
+});
+Object.defineProperty(exports, 'keyframes', {
+  enumerable: true,
+  get: function () {
+    return styled$1.keyframes;
+  }
+});
+Object.defineProperty(exports, 'withTheme', {
+  enumerable: true,
+  get: function () {
+    return styled$1.withTheme;
+  }
+});
+Object.defineProperty(exports, 'getColorModeInitScriptElement', {
+  enumerable: true,
+  get: function () {
+    return core.getColorModeInitScriptElement;
+  }
+});
+Object.defineProperty(exports, 'getColorModeInitScriptTag', {
+  enumerable: true,
+  get: function () {
+    return core.getColorModeInitScriptTag;
+  }
+});
+Object.defineProperty(exports, 'useColorMode', {
+  enumerable: true,
+  get: function () {
+    return core.useColorMode;
+  }
+});
+Object.defineProperty(exports, 'useViewportWidth', {
+  enumerable: true,
+  get: function () {
+    return core.useViewportWidth;
+  }
+});
+exports.Box = Box;
+exports.ColorModeProvider = ColorModeProvider;
+exports.Preflight = Preflight;
+exports.createGlobalStyle = createGlobalStyle;
+exports.createX = createX;
+exports.css = css;
+exports.default = styled;
+exports.useAngle = useAngle;
+exports.useAnimation = useAnimation;
+exports.useBorder = useBorder;
+exports.useBorderColor = useBorderColor;
+exports.useBorderStyle = useBorderStyle;
+exports.useBorderWidth = useBorderWidth;
+exports.useBreakpoint = useBreakpoint;
+exports.useBreakpoints = useBreakpoints;
+exports.useColor = useColor;
+exports.useDown = useDown;
+exports.useDuration = useDuration;
+exports.useFont = useFont;
+exports.useFontSize = useFontSize;
+exports.useFontWeight = useFontWeight;
+exports.useInset = useInset;
+exports.useLetterSpacing = useLetterSpacing;
+exports.useLineHeight = useLineHeight;
+exports.usePercent = usePercent;
+exports.usePx = usePx;
+exports.useRadius = useRadius;
+exports.useRingWidth = useRingWidth;
+exports.useShadow = useShadow;
+exports.useSize = useSize;
+exports.useSpace = useSpace;
+exports.useTh = useTh;
+exports.useTheme = useTheme;
+exports.useTimingFunctions = useTimingFunctions;
+exports.useTransform = useTransform;
+exports.useTransition = useTransition;
+exports.useTransitionProperty = useTransitionProperty;
+exports.useUp = useUp;
+exports.useZIndex = useZIndex;
+exports.x = x;
+//# sourceMappingURL=styled-components.cjs.development.js.map

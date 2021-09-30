@@ -1,0 +1,34 @@
+{
+    "name": "@types/cacheable-request",
+    "version": "6.0.1",
+    "description": "TypeScript definitions for cacheable-request",
+    "license": "MIT",
+    "contributors": [
+        {
+            "name": "BendingBender",
+            "url": "https://github.com/BendingBender",
+            "githubUsername": "BendingBender"
+        },
+        {
+            "name": "Paul Melnikow",
+            "url": "https://github.com/paulmelnikow",
+            "githubUsername": "paulmelnikow"
+        }
+    ],
+    "main": "",
+    "types": "index",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/DefinitelyTyped/DefinitelyTyped.git",
+        "directory": "types/cacheable-request"
+    },
+    "scripts": {},
+    "dependencies": {
+        "@types/http-cache-semantics": "*",
+        "@types/keyv": "*",
+        "@types/node": "*",
+        "@types/responselike": "*"
+    },
+    "typesPublisherContentHash": "c6afce5b9ca6ee2952549da29e2d4af2bd367dbf44a175a005063192d46b7814",
+    "typeScriptVersion": "2.3"
+}

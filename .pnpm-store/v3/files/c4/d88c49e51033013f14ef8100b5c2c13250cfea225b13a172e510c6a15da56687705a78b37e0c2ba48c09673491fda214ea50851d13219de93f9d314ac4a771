@@ -1,0 +1,52 @@
+{
+  "author": "Igor Bezkrovny",
+  "name": "image-q",
+  "version": "1.1.1",
+  "description": "Image Quantization Library in **TypeScript** *(MIT Licensed)*",
+  "license": "MIT",
+  "contributors": [],
+  "homepage": "https://github.com/igor-bezkrovny/image-quantization",
+  "scripts": {
+    "test": "mocha --recursive",
+    "prepublish": "npm run dist",
+    "dist": "webpack --config ./src/webpack.config.js",
+    "watch": "webpack --config ./src/webpack.config.js --watch"
+  },
+  "preferGlobal": false,
+  "main": "./dist/iq.js",
+  "typings": "./dist/iq.d.ts",
+  "dependencies": {},
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^3.0.2",
+    "source-map-loader": "^0.1.5",
+    "ts-loader": "^0.8.2",
+    "typedoc": "^0.4.4",
+    "typescript": "^2.0.0",
+    "webpack": "^1.13.1"
+  },
+  "keywords": [
+    "image",
+    "palette",
+    "quantization",
+    "quantizer",
+    "color",
+    "neuquant",
+    "rgbquant",
+    "xiaolin wu",
+    "cie94 distance",
+    "ciede2000",
+    "dithering",
+    "floyd-steinberg"
+  ],
+  "engines": {
+    "node": ">=0.9.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/igor-bezkrovny/image-quantization"
+  },
+  "bugs": {
+    "url": "https://github.com/igor-bezkrovny/image-quantization/issues"
+  }
+}

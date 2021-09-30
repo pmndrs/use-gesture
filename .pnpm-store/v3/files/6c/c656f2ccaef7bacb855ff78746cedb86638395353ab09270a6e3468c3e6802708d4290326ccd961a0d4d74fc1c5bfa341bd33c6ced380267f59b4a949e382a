@@ -1,0 +1,8 @@
+{
+  "name": "reakit/Tab/Tab",
+  "private": true,
+  "sideEffects": false,
+  "main": "../../lib/Tab/Tab",
+  "module": "../../es/Tab/Tab",
+  "types": "../../ts/Tab/Tab"
+}

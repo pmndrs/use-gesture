@@ -1,0 +1,8 @@
+{
+  "name": "reakit-utils/splitProps",
+  "private": true,
+  "sideEffects": false,
+  "main": "../lib/splitProps",
+  "module": "../es/splitProps",
+  "types": "../ts/splitProps"
+}

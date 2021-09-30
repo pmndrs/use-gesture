@@ -1,0 +1,17 @@
+export declare const defaultStates: {
+    motionSafe: string;
+    motionReduce: string;
+    first: string;
+    last: string;
+    odd: string;
+    even: string;
+    visited: string;
+    checked: string;
+    focusWithin: string;
+    hover: string;
+    focus: string;
+    focusVisible: string;
+    active: string;
+    disabled: string;
+    placeholder: string;
+};

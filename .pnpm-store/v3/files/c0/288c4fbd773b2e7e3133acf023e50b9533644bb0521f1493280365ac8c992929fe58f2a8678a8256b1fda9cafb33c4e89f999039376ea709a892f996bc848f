@@ -1,0 +1,2 @@
+import{Primitive as e}from"@radix-ui/react-primitive";import*as r from"react";import t from"@babel/runtime/helpers/esm/extends";const o="span";export const VisuallyHidden=/*#__PURE__*/r.forwardRef(((i,a)=>{const{as:n=o,...s}=i;/*#__PURE__*/return r.createElement(e,t({},s,{as:n,ref:a,style:{...i.style,position:"absolute",border:0,width:1,height:1,padding:0,margin:-1,overflow:"hidden",clip:"rect(0, 0, 0, 0)",whiteSpace:"nowrap",wordWrap:"normal"}}))}));/*#__PURE__*/export const Root=VisuallyHidden;
+//# sourceMappingURL=index.module.js.map

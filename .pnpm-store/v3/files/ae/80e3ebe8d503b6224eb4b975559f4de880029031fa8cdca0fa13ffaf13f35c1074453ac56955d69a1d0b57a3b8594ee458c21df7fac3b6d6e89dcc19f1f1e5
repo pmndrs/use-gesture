@@ -1,0 +1,15 @@
+declare type DeclarationFile = {
+    name: string;
+    content: string;
+};
+declare type EmittedDeclarationOutput = {
+    /** The emitted d.ts types file. */
+    types: DeclarationFile;
+    /** The emitted d.ts.map declaration map file. */
+    map?: DeclarationFile;
+};
+export declare function createDeclarationCreator(dirname: string, pkgName: string, projectDir: string): Promise<{
+    getDeps: (entrypoints: Array<string>) => Set<string>;
+    getDeclarationFiles: (filename: string) => Promise<EmittedDeclarationOutput>;
+}>;
+export {};

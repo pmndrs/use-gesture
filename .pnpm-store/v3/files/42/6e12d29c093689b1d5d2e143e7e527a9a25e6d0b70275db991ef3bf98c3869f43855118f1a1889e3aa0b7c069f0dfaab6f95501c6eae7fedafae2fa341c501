@@ -1,0 +1,8 @@
+{
+  "name": "reakit/Input/Input",
+  "private": true,
+  "sideEffects": false,
+  "main": "../../lib/Input/Input",
+  "module": "../../es/Input/Input",
+  "types": "../../ts/Input/Input"
+}

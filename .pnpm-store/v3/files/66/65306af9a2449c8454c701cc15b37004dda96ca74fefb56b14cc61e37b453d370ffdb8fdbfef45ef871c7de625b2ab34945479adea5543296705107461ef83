@@ -1,0 +1,8 @@
+{
+  "name": "reakit/Form",
+  "private": true,
+  "sideEffects": false,
+  "main": "../lib/Form",
+  "module": "../es/Form",
+  "types": "../ts/Form"
+}

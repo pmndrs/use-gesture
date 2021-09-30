@@ -1,0 +1,8 @@
+export declare type PxGetter = number | string;
+export declare const getPx: import("..").ThemeGetter<PxGetter>;
+export declare type DurationGetter = number | string;
+export declare const getDuration: import("..").ThemeGetter<DurationGetter>;
+export declare type AngleGetter = number | string;
+export declare const getAngle: import("..").ThemeGetter<AngleGetter>;
+export declare type PercentGetter = number | string;
+export declare const getPercent: import("..").ThemeGetter<PercentGetter>;

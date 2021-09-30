@@ -1,0 +1,8 @@
+{
+  "name": "reakit-utils/hasFocusWithin",
+  "private": true,
+  "sideEffects": false,
+  "main": "../lib/hasFocusWithin",
+  "module": "../es/hasFocusWithin",
+  "types": "../ts/hasFocusWithin"
+}

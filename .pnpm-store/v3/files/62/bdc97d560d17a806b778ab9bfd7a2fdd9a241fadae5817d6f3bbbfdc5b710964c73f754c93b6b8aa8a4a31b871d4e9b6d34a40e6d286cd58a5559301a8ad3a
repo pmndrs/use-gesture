@@ -1,0 +1,8 @@
+{
+  "name": "reakit-system/useToken",
+  "private": true,
+  "sideEffects": false,
+  "main": "../lib/useToken",
+  "module": "../es/useToken",
+  "types": "../ts/useToken"
+}

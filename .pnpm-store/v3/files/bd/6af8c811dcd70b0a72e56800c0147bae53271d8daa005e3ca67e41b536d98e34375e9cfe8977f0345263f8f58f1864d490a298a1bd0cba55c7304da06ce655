@@ -1,0 +1,6 @@
+{
+    "componentChunkName": "component---src-pages-plugins-tsx",
+    "path": "/plugins/",
+    "result": {"pageContext":{"matchPath":"/plugins/*"}},
+    "staticQueryHashes": [],
+    "matchPath": "/plugins/*"}

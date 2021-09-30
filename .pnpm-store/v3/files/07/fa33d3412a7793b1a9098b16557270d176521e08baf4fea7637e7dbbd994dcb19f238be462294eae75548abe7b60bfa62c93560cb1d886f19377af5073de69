@@ -1,0 +1,8 @@
+{
+  "name": "reakit/VisuallyHidden/VisuallyHidden",
+  "private": true,
+  "sideEffects": false,
+  "main": "../../lib/VisuallyHidden/VisuallyHidden",
+  "module": "../../es/VisuallyHidden/VisuallyHidden",
+  "types": "../../ts/VisuallyHidden/VisuallyHidden"
+}

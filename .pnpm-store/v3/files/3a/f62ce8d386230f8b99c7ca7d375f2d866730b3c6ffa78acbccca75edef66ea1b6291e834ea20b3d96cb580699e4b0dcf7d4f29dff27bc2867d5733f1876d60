@@ -1,0 +1,8 @@
+{
+  "name": "reakit/Form/utils/getIn",
+  "private": true,
+  "sideEffects": false,
+  "main": "../../../lib/Form/utils/getIn",
+  "module": "../../../es/Form/utils/getIn",
+  "types": "../../../ts/Form/utils/getIn"
+}

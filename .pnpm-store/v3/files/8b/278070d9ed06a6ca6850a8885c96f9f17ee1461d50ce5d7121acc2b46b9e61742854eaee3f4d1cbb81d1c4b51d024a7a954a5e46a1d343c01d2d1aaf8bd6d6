@@ -1,0 +1,33 @@
+{
+  "name": "screenlog",
+  "version": "0.3.0",
+  "description": "Bring console.log on the screen",
+  "main": "screenlog.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chinchang/screenlog.js.git"
+  },
+  "keywords": [
+    "console",
+    "log",
+    "screen",
+    "debug"
+  ],
+  "author": {
+    "name": "Kushagra Gour"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/chinchang/screenlog.js/issues"
+  },
+  "homepage": "https://github.com/chinchang/screenlog.js",
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-contrib-concat": "^0.5.1",
+    "grunt-contrib-jshint": "^0.11.3",
+    "grunt-contrib-uglify": "^0.11.0"
+  }
+}

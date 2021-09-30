@@ -1,0 +1,4 @@
+{
+  "main": "dist/reach-utils-get-document-dimensions.cjs.js",
+  "module": "dist/reach-utils-get-document-dimensions.esm.js"
+}

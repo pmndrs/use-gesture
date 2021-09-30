@@ -1,0 +1,4 @@
+{
+  "main": "dist/reach-utils-get-scroll-position.cjs.js",
+  "module": "dist/reach-utils-get-scroll-position.esm.js"
+}

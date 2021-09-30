@@ -1,0 +1,13 @@
+import { TransformValue } from './types';
+export declare const unit: (unit: string) => <T extends string | number | null>(value: T) => string | number | null;
+export declare const ms: <T extends string | number | null>(value: T) => string | number | null;
+export declare const px: <T extends string | number | null>(value: T) => string | number | null;
+export declare const deg: <T extends string | number | null>(value: T) => string | number | null;
+interface PxToRemOptions {
+    rootFontSize?: number;
+}
+export declare const remPx: <T>(value: T, options?: PxToRemOptions | undefined) => string | number | T;
+export declare const rpx: <T>(value: T, options?: PxToRemOptions | undefined) => string | number | T;
+export declare const percent: (n: string | number) => string | number;
+export declare const transformNegative: TransformValue;
+export {};

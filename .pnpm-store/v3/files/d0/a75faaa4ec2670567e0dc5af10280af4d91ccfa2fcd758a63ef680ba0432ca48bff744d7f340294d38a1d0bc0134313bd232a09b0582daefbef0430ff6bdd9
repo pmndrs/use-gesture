@@ -1,0 +1,8 @@
+{
+  "name": "reakit/Dialog",
+  "private": true,
+  "sideEffects": false,
+  "main": "../lib/Dialog",
+  "module": "../es/Dialog",
+  "types": "../ts/Dialog"
+}

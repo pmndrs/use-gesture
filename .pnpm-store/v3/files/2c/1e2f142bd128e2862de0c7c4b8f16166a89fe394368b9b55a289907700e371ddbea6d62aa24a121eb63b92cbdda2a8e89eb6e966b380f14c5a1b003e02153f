@@ -1,0 +1,8 @@
+{
+  "name": "reakit/Tabbable/Tabbable",
+  "private": true,
+  "sideEffects": false,
+  "main": "../../lib/Tabbable/Tabbable",
+  "module": "../../es/Tabbable/Tabbable",
+  "types": "../../ts/Tabbable/Tabbable"
+}

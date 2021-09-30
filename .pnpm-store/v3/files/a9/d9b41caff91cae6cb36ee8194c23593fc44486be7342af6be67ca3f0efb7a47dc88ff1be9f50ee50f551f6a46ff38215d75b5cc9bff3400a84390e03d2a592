@@ -1,0 +1,8 @@
+{
+  "name": "reakit-utils/dom",
+  "private": true,
+  "sideEffects": false,
+  "main": "../lib/dom",
+  "module": "../es/dom",
+  "types": "../ts/dom"
+}

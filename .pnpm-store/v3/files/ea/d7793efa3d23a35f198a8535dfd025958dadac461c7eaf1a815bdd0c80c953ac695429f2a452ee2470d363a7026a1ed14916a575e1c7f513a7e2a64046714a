@@ -1,0 +1,8 @@
+{
+  "name": "reakit-utils/isObject",
+  "private": true,
+  "sideEffects": false,
+  "main": "../lib/isObject",
+  "module": "../es/isObject",
+  "types": "../ts/isObject"
+}

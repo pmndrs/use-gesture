@@ -1,0 +1,4 @@
+{
+  "main": "dist/reach-utils-make-id.cjs.js",
+  "module": "dist/reach-utils-make-id.esm.js"
+}

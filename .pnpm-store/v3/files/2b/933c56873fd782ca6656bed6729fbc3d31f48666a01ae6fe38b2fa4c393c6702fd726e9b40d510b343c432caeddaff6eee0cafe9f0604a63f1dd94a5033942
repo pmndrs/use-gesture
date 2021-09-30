@@ -1,0 +1,71 @@
+{
+  "name": "merge-value",
+  "description": "Similar to assign-value but deeply merges object values or nested values using object path/dot notation.",
+  "version": "1.0.0",
+  "homepage": "https://github.com/jonschlinkert/merge-value",
+  "author": "Jon Schlinkert (https://github.com/jonschlinkert)",
+  "repository": "jonschlinkert/merge-value",
+  "bugs": {
+    "url": "https://github.com/jonschlinkert/merge-value/issues"
+  },
+  "license": "MIT",
+  "files": [
+    "index.js"
+  ],
+  "main": "index.js",
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "dependencies": {
+    "get-value": "^2.0.6",
+    "is-extendable": "^1.0.0",
+    "mixin-deep": "^1.2.0",
+    "set-value": "^2.0.0"
+  },
+  "devDependencies": {
+    "gulp-format-md": "^1.0.0",
+    "mocha": "^3.4.2"
+  },
+  "keywords": [
+    "assign",
+    "dot",
+    "extend",
+    "get",
+    "has",
+    "merge",
+    "nested",
+    "notation",
+    "object",
+    "path",
+    "prop",
+    "property",
+    "set",
+    "value"
+  ],
+  "verb": {
+    "related": {
+      "list": [
+        "assign-value",
+        "get-value",
+        "has-value",
+        "set-value",
+        "union-value",
+        "unset-value"
+      ]
+    },
+    "toc": false,
+    "layout": "default",
+    "tasks": [
+      "readme"
+    ],
+    "plugins": [
+      "gulp-format-md"
+    ],
+    "lint": {
+      "reflinks": true
+    }
+  }
+}

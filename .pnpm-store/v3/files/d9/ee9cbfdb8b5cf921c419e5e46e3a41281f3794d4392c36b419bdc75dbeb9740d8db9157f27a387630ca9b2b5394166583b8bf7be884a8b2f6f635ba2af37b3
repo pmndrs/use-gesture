@@ -1,0 +1,76 @@
+{
+  "name": "micromark-extension-mdxjs",
+  "version": "0.3.0",
+  "description": "micromark extension to support MDX.js",
+  "license": "MIT",
+  "keywords": [
+    "micromark",
+    "micromark-extension",
+    "mdx",
+    "mdxjs",
+    "esm",
+    "jsx",
+    "expression",
+    "markdown",
+    "unified"
+  ],
+  "repository": "micromark/micromark-extension-mdxjs",
+  "bugs": "https://github.com/micromark/micromark-extension-mdxjs/issues",
+  "funding": {
+    "type": "opencollective",
+    "url": "https://opencollective.com/unified"
+  },
+  "author": "Titus Wormer <tituswormer@gmail.com> (https://wooorm.com)",
+  "contributors": [
+    "Titus Wormer <tituswormer@gmail.com> (https://wooorm.com)"
+  ],
+  "files": [
+    "index.js"
+  ],
+  "dependencies": {
+    "acorn": "^8.0.0",
+    "acorn-jsx": "^5.0.0",
+    "micromark": "~2.11.0",
+    "micromark-extension-mdx-expression": "~0.3.0",
+    "micromark-extension-mdx-jsx": "~0.3.0",
+    "micromark-extension-mdx-md": "~0.1.0",
+    "micromark-extension-mdxjs-esm": "~0.3.0"
+  },
+  "devDependencies": {
+    "nyc": "^15.0.0",
+    "prettier": "^2.0.0",
+    "remark-cli": "^9.0.0",
+    "remark-preset-wooorm": "^8.0.0",
+    "tape": "^5.0.0",
+    "xo": "^0.36.0"
+  },
+  "scripts": {
+    "format": "remark . -qfo && prettier . -w --loglevel warn && xo --fix",
+    "test-api": "node test",
+    "test-coverage": "nyc --reporter lcov tape test.js",
+    "test": "npm run format && npm run test-coverage"
+  },
+  "nyc": {
+    "check-coverage": true,
+    "lines": 100,
+    "functions": 100,
+    "branches": 100
+  },
+  "prettier": {
+    "tabWidth": 2,
+    "useTabs": false,
+    "singleQuote": true,
+    "bracketSpacing": false,
+    "semi": false,
+    "trailingComma": "none"
+  },
+  "xo": {
+    "prettier": true,
+    "esnext": false
+  },
+  "remarkConfig": {
+    "plugins": [
+      "preset-wooorm"
+    ]
+  }
+}

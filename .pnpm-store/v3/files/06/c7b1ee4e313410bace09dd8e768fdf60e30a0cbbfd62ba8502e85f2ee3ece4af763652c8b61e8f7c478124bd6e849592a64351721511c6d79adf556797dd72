@@ -1,0 +1,1 @@
+{"mappings":"A;AAEA,8BAAuB,gBAAgB,SAAS,MAAM,EAAE,iBAAiB,EAAE,MAAM;YAGtD,gBAAgB,GAAG;QAAE,QAAQ,EAAE,MAAM,SAAS,CAAA;KAAE;A;kBAWvC,MAAM,uBAUzC","sources":["./packages/react/context/src/packages/react/context/src/createContext.tsx","./packages/react/context/src/packages/react/context/src/index.ts"],"sourcesContent":[null,null],"names":[],"version":3,"file":"index.d.ts.map"}

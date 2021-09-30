@@ -1,0 +1,8 @@
+{
+  "name": "reakit/Dialog/DialogBackdrop",
+  "private": true,
+  "sideEffects": false,
+  "main": "../../lib/Dialog/DialogBackdrop",
+  "module": "../../es/Dialog/DialogBackdrop",
+  "types": "../../ts/Dialog/DialogBackdrop"
+}

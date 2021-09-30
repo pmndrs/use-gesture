@@ -1,0 +1,50 @@
+{
+  "name": "@radix-ui/react-tooltip",
+  "version": "0.0.18",
+  "license": "MIT",
+  "source": "src/index.ts",
+  "main": "dist/index.js",
+  "module": "dist/index.module.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "clean": "rm -rf dist",
+    "prepublish": "yarn clean",
+    "version": "yarn version"
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.13.10",
+    "@radix-ui/primitive": "0.0.5",
+    "@radix-ui/react-compose-refs": "0.0.5",
+    "@radix-ui/react-context": "0.0.5",
+    "@radix-ui/react-id": "0.0.6",
+    "@radix-ui/react-polymorphic": "0.0.11",
+    "@radix-ui/react-popper": "0.0.16",
+    "@radix-ui/react-portal": "0.0.13",
+    "@radix-ui/react-presence": "0.0.14",
+    "@radix-ui/react-primitive": "0.0.13",
+    "@radix-ui/react-slot": "0.0.10",
+    "@radix-ui/react-use-controllable-state": "0.0.6",
+    "@radix-ui/react-use-escape-keydown": "0.0.6",
+    "@radix-ui/react-use-layout-effect": "0.0.5",
+    "@radix-ui/react-use-previous": "0.0.5",
+    "@radix-ui/react-use-rect": "0.0.7",
+    "@radix-ui/react-visually-hidden": "0.0.13"
+  },
+  "peerDependencies": {
+    "react": "^16.8 || ^17.0",
+    "react-dom": "^16.8 || ^17.0"
+  },
+  "homepage": "https://radix-ui.com/primitives",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/radix-ui/primitives.git"
+  },
+  "bugs": {
+    "url": "https://github.com/radix-ui/primitives/issues"
+  }
+}

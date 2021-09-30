@@ -1,0 +1,4 @@
+{
+  "main": "dist/reach-utils-noop.cjs.js",
+  "module": "dist/reach-utils-noop.esm.js"
+}

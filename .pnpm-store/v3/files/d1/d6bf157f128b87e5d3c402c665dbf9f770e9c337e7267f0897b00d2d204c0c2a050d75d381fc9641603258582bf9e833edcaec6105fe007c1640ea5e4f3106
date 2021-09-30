@@ -1,0 +1,4 @@
+{
+  "main": "dist/reach-utils-compose-refs.cjs.js",
+  "module": "dist/reach-utils-compose-refs.esm.js"
+}

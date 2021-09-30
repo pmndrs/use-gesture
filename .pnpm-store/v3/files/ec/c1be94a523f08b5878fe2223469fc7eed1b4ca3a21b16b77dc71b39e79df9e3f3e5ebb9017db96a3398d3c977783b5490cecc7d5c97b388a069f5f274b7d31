@@ -1,0 +1,7 @@
+{
+  "name": "smooth-doc/components",
+  "private": true,
+  "sideEffects": false,
+  "main": "../src/components/index.js",
+  "module": "../src/components/index.js"
+}

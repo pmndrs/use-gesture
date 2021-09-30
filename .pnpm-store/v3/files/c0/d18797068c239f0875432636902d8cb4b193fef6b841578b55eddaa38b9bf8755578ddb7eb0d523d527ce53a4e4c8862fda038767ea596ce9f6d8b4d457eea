@@ -1,0 +1,8 @@
+{
+  "name": "reakit/Radio/Radio",
+  "private": true,
+  "sideEffects": false,
+  "main": "../../lib/Radio/Radio",
+  "module": "../../es/Radio/Radio",
+  "types": "../../ts/Radio/Radio"
+}

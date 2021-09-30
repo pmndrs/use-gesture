@@ -1,0 +1,8 @@
+{
+  "name": "reakit/Tab/TabPanel",
+  "private": true,
+  "sideEffects": false,
+  "main": "../../lib/Tab/TabPanel",
+  "module": "../../es/Tab/TabPanel",
+  "types": "../../ts/Tab/TabPanel"
+}

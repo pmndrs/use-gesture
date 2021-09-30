@@ -1,0 +1,43 @@
+{
+  "name": "@chevrotain/types",
+  "version": "9.0.2",
+  "description": "Type Signatures and API Website for Chevrotain",
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/Chevrotain/chevrotain/issues"
+  },
+  "license": "Apache-2.0",
+  "author": {
+    "name": "Shahar Soel"
+  },
+  "files": [
+    "api.d.ts",
+    "README.md",
+    "LICENSE.TXT"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/Chevrotain/chevrotain.git"
+  },
+  "homepage": "https://chevrotain.io/documentation/",
+  "scripts": {
+    "---------- CI FLOWS --------": "",
+    "build": "npm-run-all clean compile api-site:build",
+    "postversion": "npm-run-all api-site:build api-site:upload",
+    "---------- BUILD STEPS --------": "",
+    "clean": "shx rm -rf dev lib",
+    "compile:watch": "tsc -w",
+    "compile": "tsc",
+    "api-site:build": "typedoc api.d.ts --out dev/docs --excludeExternals --excludePrivate",
+    "api-site:upload": "./scripts/api-site-upload.sh"
+  },
+  "devDependencies": {
+    "typedoc": "^0.20.28",
+    "typescript": "4.2.3"
+  },
+  "typings": "api.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
+  "gitHead": "027c35d42c4976fa7ef438c3af8690783989cfb6"
+}

@@ -1,0 +1,8 @@
+{
+  "name": "reakit-utils/useIsomorphicEffect",
+  "private": true,
+  "sideEffects": false,
+  "main": "../lib/useIsomorphicEffect",
+  "module": "../es/useIsomorphicEffect",
+  "types": "../ts/useIsomorphicEffect"
+}

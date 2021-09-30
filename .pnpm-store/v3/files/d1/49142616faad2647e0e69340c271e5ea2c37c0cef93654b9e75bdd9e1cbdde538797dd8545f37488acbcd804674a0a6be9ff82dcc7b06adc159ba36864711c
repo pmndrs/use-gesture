@@ -1,0 +1,8 @@
+{
+  "name": "reakit/Id/Id",
+  "private": true,
+  "sideEffects": false,
+  "main": "../../lib/Id/Id",
+  "module": "../../es/Id/Id",
+  "types": "../../ts/Id/Id"
+}

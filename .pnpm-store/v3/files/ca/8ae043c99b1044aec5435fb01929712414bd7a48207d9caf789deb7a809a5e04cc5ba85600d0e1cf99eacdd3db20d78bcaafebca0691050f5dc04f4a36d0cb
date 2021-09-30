@@ -1,0 +1,22 @@
+{
+  "name": "@size-limit/preset-small-lib",
+  "version": "5.0.3",
+  "description": "Size Limit preset for small open source libraries",
+  "keywords": [
+    "size-limit",
+    "preset",
+    "performance",
+    "budget",
+    "performance budget"
+  ],
+  "author": "Andrey Sitnik <andrey@sitnik.ru>",
+  "license": "MIT",
+  "repository": "ai/size-limit",
+  "peerDependencies": {
+    "size-limit": "5.0.3"
+  },
+  "dependencies": {
+    "@size-limit/webpack": "5.0.3",
+    "@size-limit/file": "5.0.3"
+  }
+}

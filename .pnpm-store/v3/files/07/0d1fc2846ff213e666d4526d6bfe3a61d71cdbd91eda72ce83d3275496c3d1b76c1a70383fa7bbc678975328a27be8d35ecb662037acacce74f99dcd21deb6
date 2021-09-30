@@ -1,0 +1,1 @@
+exports.LICENSE = 'FOO'

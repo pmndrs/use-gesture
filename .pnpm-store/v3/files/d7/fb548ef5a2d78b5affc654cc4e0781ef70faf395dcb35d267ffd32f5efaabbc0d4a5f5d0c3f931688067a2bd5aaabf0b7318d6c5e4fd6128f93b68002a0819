@@ -1,0 +1,8 @@
+{
+  "name": "reakit/Toolbar/ToolbarSeparator",
+  "private": true,
+  "sideEffects": false,
+  "main": "../../lib/Toolbar/ToolbarSeparator",
+  "module": "../../es/Toolbar/ToolbarSeparator",
+  "types": "../../ts/Toolbar/ToolbarSeparator"
+}
