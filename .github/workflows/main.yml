@@ -13,7 +13,6 @@ on:
       - '!.changeset/**'
 env:
   CI: true
-  PNPM_CACHE_FOLDER: .pnpm-store
 jobs:
   build:
     name: Build, lint, and test
@@ -31,17 +30,24 @@ jobs:
       - name: Install pnpm
         run: npm i pnpm@latest -g
 
-      - name: Setup pnpm config
-        run: pnpm config set store-dir $PNPM_CACHE_FOLDER
+      - name: Cache pnpm modules
+        uses: actions/cache@v2
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-
 
-      - name: Install dependencies
-        run: pnpm install
+      - uses: pnpm/action-setup@v2.0.1
+        with:
+          version: 6.9.1
+          run_install: true
 
       - name: Check types
         run: pnpm tsc
 
-      - uses: actions/cache@v2
-        name: Setup build cache
+      - name: Setup build cache
+        uses: actions/cache@v2
         id: build-cache
         with:
           path: packages/**/dist
