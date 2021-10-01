@@ -19,7 +19,7 @@ const Video = ({ video, id, badges }) => {
       <a
         target="_blank"
         rel="noopener noreferrer"
-        href={`https://codesandbox.io/s/github/pmndrs/use-gesture/tree/v10/demo/src/sandboxes/${id}`}
+        href={`https://codesandbox.io/s/github/pmndrs/use-gesture/tree/main/demo/src/sandboxes/${id}`}
       >
         <video autoPlay muted playsInline loop width="100%">
           <source src={video} type="video/mp4" />
