@@ -5,7 +5,7 @@ function supportsTouchEvents(): boolean {
 }
 
 function isTouchScreen(): boolean {
-  return supportsTouchEvents() || (isBrowser && navigator.maxTouchPoints > 1)
+  return supportsTouchEvents() || (isBrowser && window.navigator.maxTouchPoints > 1)
 }
 
 function supportsPointerEvents(): boolean {
