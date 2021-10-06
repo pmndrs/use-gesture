@@ -9,7 +9,8 @@
     "/demo/src/sandboxes/gesture-pinch",
     "/demo/src/sandboxes/gesture-pinch-multiple",
     "/demo/src/sandboxes/gesture-three",
-    "/demo/src/sandboxes/card-zoom"
+    "/demo/src/sandboxes/card-zoom",
+    "/demo/src/sandboxes/viewpager"
   ],
   "node": "14"
 }
