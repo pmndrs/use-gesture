@@ -22,7 +22,7 @@ function Viewpager() {
     scale: 1,
     display: 'block',
   }))
-  const bind = useDrag(({ canceled, first, last, active, movement: [mx], direction: [xDir], cancel }) => {
+  const bind = useDrag(({ active, movement: [mx], direction: [xDir], cancel }) => {
     if (active && Math.abs(mx) > width / 2) {
       index.current = clamp(index.current + (xDir > 0 ? -1 : 1), 0, pages.length - 1)
       cancel()
