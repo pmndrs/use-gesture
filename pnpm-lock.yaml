@@ -155,7 +155,7 @@ importers:
       react-dom: ^17.0.2
       react-player: ^2.9.0
       react-toastify: ^8.0.3
-      sharp: 0.29.1
+      sharp: 0.28.2
       smooth-doc: 7.0.1
       three: ^0.133.1
     dependencies:
@@ -179,7 +179,7 @@ importers:
       react-dom: 17.0.2_react@17.0.2
       react-player: 2.9.0_react@17.0.2
       react-toastify: 8.0.3_react-dom@17.0.2+react@17.0.2
-      sharp: 0.29.1
+      sharp: 0.28.2
       smooth-doc: 7.0.1_34e02454c86145f2a4b2b9f6afb579f8
       three: 0.133.1
 
@@ -6756,7 +6756,6 @@ packages:
   /ansi-regex/3.0.0:
     resolution: { integrity: sha1-7QMXwyIGT3lGbAKWa922Bas32Zg= }
     engines: { node: '>=4' }
-    dev: true
 
   /ansi-regex/4.1.0:
     resolution:
@@ -8591,14 +8590,6 @@ packages:
       { integrity: sha512-aBl7dZI9ENN6fUGC7mWpMTPNHmWUSNan9tuWN6ahh5ZLNk9baLJOnSMlrQkHcrfFgz2/RigjUVAjdx36VcemKA== }
     dependencies:
       color-convert: 1.9.3
-      color-string: 1.6.0
-    dev: false
-
-  /color/4.0.1:
-    resolution:
-      { integrity: sha512-rpZjOKN5O7naJxkH2Rx1sZzzBgaiWECc6BYXjeCE6kF0kcASJYbUq02u7JqIHwCb/j3NhV+QhRL2683aICeGZA== }
-    dependencies:
-      color-convert: 2.0.1
       color-string: 1.6.0
     dev: false
 
@@ -16667,11 +16658,6 @@ packages:
       { integrity: sha512-mmcei9JghVNDYydghQmeDX8KoAm0FAiYyIcUt/N4nhyAipB17pllZQDOJD2fotxABnt4Mdz+dKTO7eftLg4d0A== }
     dev: false
 
-  /node-addon-api/4.2.0:
-    resolution:
-      { integrity: sha512-eazsqzwG2lskuzBqCGPi7Ac2UgOoMz8JVOXVhTvvPDYhthvNpefx8jWD8Np7Gv+2Sz0FlPWZk0nJV0z598Wn8Q== }
-    dev: false
-
   /node-eta/0.9.0:
     resolution: { integrity: sha1-n7CwmbzSoCGUDmA8ZCVNwAPZp6g= }
     dev: false
@@ -19962,22 +19948,6 @@ packages:
       tunnel-agent: 0.6.0
     dev: false
 
-  /sharp/0.29.1:
-    resolution:
-      { integrity: sha512-DpgdAny9TuS+oWCQ7MRS8XyY9x6q1+yW3a5wNx0J3HrGuB/Jot/8WcT+lElHY9iJu2pwtegSGxqMaqFiMhs4rQ== }
-    engines: { node: '>=12.13.0' }
-    requiresBuild: true
-    dependencies:
-      color: 4.0.1
-      detect-libc: 1.0.3
-      node-addon-api: 4.2.0
-      prebuild-install: 6.1.4
-      semver: 7.3.5
-      simple-get: 3.1.0
-      tar-fs: 2.1.1
-      tunnel-agent: 0.6.0
-    dev: false
-
   /shebang-command/1.2.0:
     resolution: { integrity: sha1-RKrGW2lbAzmJaMOfNj/uXer98eo= }
     engines: { node: '>=0.10.0' }
@@ -20593,7 +20563,6 @@ packages:
     dependencies:
       is-fullwidth-code-point: 2.0.0
       strip-ansi: 4.0.0
-    dev: true
 
   /string-width/3.1.0:
     resolution:
@@ -20702,7 +20671,6 @@ packages:
     engines: { node: '>=4' }
     dependencies:
       ansi-regex: 3.0.0
-    dev: true
 
   /strip-ansi/5.2.0:
     resolution:
@@ -22725,7 +22693,7 @@ packages:
     resolution:
       { integrity: sha512-QGkOQc8XL6Bt5PwnsExKBPuMKBxnGxWWW3fU55Xt4feHozMUhdUMaBCk290qpm/wG5u/RSKzwdAC4i51YigihA== }
     dependencies:
-      string-width: 1.0.2
+      string-width: 2.1.1
     dev: false
 
   /widest-line/2.0.1:
