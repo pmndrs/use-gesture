@@ -188,13 +188,13 @@ importers:
 
   packages/react:
     specifiers:
-      '@use-gesture/core': 10.0.2
+      '@use-gesture/core': 10.0.3
     dependencies:
       '@use-gesture/core': link:../core
 
   packages/vanilla:
     specifiers:
-      '@use-gesture/core': 10.0.2
+      '@use-gesture/core': 10.0.3
     dependencies:
       '@use-gesture/core': link:../core
 
