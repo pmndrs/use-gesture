@@ -1,5 +1,11 @@
 # @use-gesture/core
 
+## 10.0.3
+
+### Patch Changes
+
+- de01d7dbb: Sets state `canceled` / `_active` attributes synchronously with `cancel()`.
+
 ## 10.0.2
 
 ### Patch Changes
