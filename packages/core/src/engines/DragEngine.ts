@@ -50,9 +50,9 @@ export class DragEngine extends CoordinatesEngine<'drag'> {
   cancel() {
     const state = this.state
     if (state.canceled) return
+    state.canceled = true
+    state._active = false
     setTimeout(() => {
-      state.canceled = true
-      state._active = false
       // we run compute with no event so that kinematics won't be computed
       this.compute()
       this.emit()
