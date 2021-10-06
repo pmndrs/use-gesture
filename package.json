@@ -26,7 +26,7 @@
     "test:watch": "jest --watchAll",
     "size": "size-limit",
     "size:analyze": "size-limit --why",
-    "ci:version": "pnpm changeset version",
+    "ci:version": "pnpm changeset version && pnpm install --lockfile-only",
     "ci:publish": "pnpm build && pnpm changeset publish"
   },
   "size-limit": [
