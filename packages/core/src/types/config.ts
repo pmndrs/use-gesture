@@ -137,6 +137,10 @@ export type DragConfig = CoordinatesConfig<'drag'> & {
   bounds?: DragBounds | ((state: State['drag']) => DragBounds)
   pointer?: {
     /**
+     * The buttons combination that would trigger the drag
+     */
+    buttons?: number
+    /**
      * If true, drag will use touch events on touch-enabled devices.
      */
     touch?: boolean
