@@ -38,7 +38,8 @@ export const dragConfigResolver = {
     if (typeof value === 'number') return value
     return value ? DEFAULT_PREVENT_SCROLL_DELAY : false
   },
-  pointerCapture(this: InternalDragOptions, _v: any, _k: string, { pointer: { capture = true } = {} }) {
+  pointerCapture(this: InternalDragOptions, _v: any, _k: string, { pointer: { capture = true, buttons = 1 } = {} }) {
+    this.pointerButtons = buttons
     return !this.pointerLock && this.device === 'pointer' && capture
   },
   threshold(this: InternalDragOptions, value: number | Vector2, _k: string, { filterTaps = false, axis = undefined }) {
