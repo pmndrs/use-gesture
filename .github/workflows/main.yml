@@ -6,6 +6,7 @@ on:
       - 'packages/**'
       - 'package.json'
       - 'pnpm-lock.yaml'
+      - 'test/**'
       - '!documentation/**'
       - '!webpack-import-test'
       - '!demo/**'
