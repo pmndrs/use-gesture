@@ -69,6 +69,7 @@ describe('testing derived config', () => {
         lockDirection: false,
         preventScroll: false,
         preventScrollAxis: 'y',
+        pointerButtons: 1,
         pointerLock: false,
         pointerCapture: true,
         filterTaps: false,
