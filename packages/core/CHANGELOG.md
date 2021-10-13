@@ -1,5 +1,11 @@
 # @use-gesture/core
 
+## 10.1.0
+
+### Minor Changes
+
+- b67543ff7: Feat (drag): add the `pointer.buttons` in order to customize which [buttons combination](https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/buttons) will trigger the drag gesture.
+
 ## 10.0.3
 
 ### Patch Changes
