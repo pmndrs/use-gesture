@@ -1,5 +1,13 @@
 # @use-gesture/core
 
+## 10.1.1
+
+### Patch Changes
+
+- Updated dependencies [8a0bfacb0]
+- Updated dependencies [8a0bfacb0]
+  - @use-gesture/core@10.1.1
+
 ## 10.1.0
 
 ### Patch Changes
