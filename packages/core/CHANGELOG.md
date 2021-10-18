@@ -1,5 +1,12 @@
 # @use-gesture/core
 
+## 10.1.1
+
+### Patch Changes
+
+- 8a0bfacb0: fix: Remove the console output statement.
+- 8a0bfacb0: fix: Remove the console output statement.
+
 ## 10.1.0
 
 ### Minor Changes
