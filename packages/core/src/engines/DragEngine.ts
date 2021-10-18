@@ -75,8 +75,6 @@ export class DragEngine extends CoordinatesEngine<'drag'> {
     const config = this.config
     const state = this.state
 
-    console.log(config.pointerButtons)
-
     if (event.buttons != null && event.buttons !== config.pointerButtons) return
     this.ctrl.setEventIds(event)
     // We need to capture all pointer ids so that we can keep track of them when
