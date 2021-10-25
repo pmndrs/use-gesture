@@ -97,6 +97,8 @@ The wheel gesture is a bit tricky, due to the nature of the wheel event. In fact
 
 ## Handling multiple gestures at once
 
+### useGesture and Gesture
+
 &zwnj;<UseGesture /> also allows you to manage different gestures at the same time: for example you might want to enable pinching and dragging on the same component, in that case this is the way to go.
 
 <CodeSnippet>
@@ -203,3 +205,70 @@ function DragAndPointerDown() {
 ```
 
 Even better, the native handler will be passed the shared state of the gestures, including the original event, and the arguments passed to the `bind` function.
+
+### Better tree shaking with createUseGesture and createGesture
+
+<CodeSnippet>
+  <TabPanel>
+
+The `useGesture` hook conveniently offers all gestures out of the box. This comes at the expense of one or two kb of extra gzipped javascript.
+
+If you'd like to only import the code for the gestures you need, you can create a custom `useGesture` hook like so:
+
+```jsx
+import { createUseGesture, dragAction, pinchAction } from '@use-gesture/react'
+
+const useGesture = createUseGesture([dragAction, pinchAction])
+
+const bind = useGesture(
+  {
+    onDrag: (state) => doSomethingWith(state),
+    onDragStart: (state) => doSomethingWith(state),
+    onDragEnd: (state) => doSomethingWith(state),
+    onPinch: (state) => doSomethingWith(state),
+    onPinchStart: (state) => doSomethingWith(state),
+    onPinchEnd: (state) => doSomethingWith(state)
+  },
+  { drag: dragConfig, pinch: pinchConfig }
+)
+
+return <div {...bind()} />
+```
+
+</TabPanel>
+<TabPanel>
+
+`Gesture` conveniently offers all gestures out of the box. This comes at the expense of one or two kb of extra gzipped javascript.
+
+If you'd like to only import the code for the gestures you need, you can create a custom `Gesture` recognizer like so:
+
+```js
+import { createGesture, dragAction, pinchAction } from '@use-gesture/vanilla'
+
+const Gesture = createGesture([dragAction, pinchAction])
+
+const gesture = new Gesture(
+  element,
+  {
+    onDrag: (state) => doSomethingWith(state),
+    onDragStart: (state) => doSomethingWith(state),
+    onDragEnd: (state) => doSomethingWith(state),
+    onPinch: (state) => doSomethingWith(state),
+    onPinchStart: (state) => doSomethingWith(state),
+    onPinchEnd: (state) => doSomethingWith(state)
+  },
+  { drag: dragConfig, pinch: pinchConfig }
+)
+```
+
+</TabPanel>
+</CodeSnippet>
+
+Available actions are:
+
+- `dragAction`
+- `hoverAction`
+- `moveAction`
+- `pinchAction`
+- `scrollAction`
+- `wheelAction`
