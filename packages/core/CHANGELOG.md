@@ -1,5 +1,11 @@
 # @use-gesture/core
 
+## 10.1.2
+
+### Patch Changes
+
+- ed0073543: fix: add threshold to config resolver
+
 ## 10.1.1
 
 ### Patch Changes
