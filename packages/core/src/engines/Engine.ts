@@ -151,7 +151,7 @@ export abstract class Engine<Key extends GestureKey> {
 
   reset() {
     const { state, shared, config, ingKey, args } = this
-    const { transform, threshold = [0, 0] } = config
+    const { transform, threshold } = config
     shared[ingKey] = state._active = state.active = state._blocked = state._force = false
     state._step = [false, false]
     state.intentional = false

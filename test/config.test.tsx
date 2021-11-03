@@ -2,11 +2,13 @@ import { parse } from '../packages/core/src/config/resolver'
 import { dragConfigResolver } from '../packages/core/src/config/dragConfigResolver'
 import { pinchConfigResolver } from '../packages/core/src/config/pinchConfigResolver'
 import { ConfigResolverMap } from '../packages/core/src/actions'
-import { DragConfig, PinchConfig } from '../packages/core/src/types'
+import { DragConfig, PinchConfig, CoordinatesConfig } from '../packages/core/src/types'
 import { identity } from '../packages/core/src/config/sharedConfigResolver'
+import { wheelConfigResolver } from '../packages/core/src/config/wheelConfigResolver'
 
 ConfigResolverMap.set('drag', dragConfigResolver)
 ConfigResolverMap.set('pinch', pinchConfigResolver)
+ConfigResolverMap.set('wheel', wheelConfigResolver)
 
 describe('testing derived config', () => {
   describe('testing derived generic configuration', () => {
@@ -30,17 +32,17 @@ describe('testing derived config', () => {
   })
 
   describe('testing internal gesture configuration', () => {
-    let config: DragConfig
+    let config: CoordinatesConfig
     test(`derived threshold array is set when threshold is a number`, () => {
       config = { threshold: 10 }
-      expect(parse(config, 'drag').drag).toHaveProperty('threshold', [10, 10])
+      expect(parse(config, 'wheel').wheel).toHaveProperty('threshold', [10, 10])
     })
 
     test(`derived rubberband should be set to array, and defaulted when set to true`, () => {
       config = { rubberband: 0.3 }
-      expect(parse(config, 'drag').drag).toHaveProperty('rubberband', [0.3, 0.3])
+      expect(parse(config, 'wheel').wheel).toHaveProperty('rubberband', [0.3, 0.3])
       config = { rubberband: true }
-      expect(parse(config, 'drag').drag).toHaveProperty('rubberband', [0.15, 0.15])
+      expect(parse(config, 'wheel').wheel).toHaveProperty('rubberband', [0.15, 0.15])
     })
   })
 

@@ -16,7 +16,7 @@ function Draggable() {
 
   const { boundToParent, gesture, ...options } = useControls({
     enabled: true,
-    gesture: { options: ['offset', 'movement'] },
+    gesture: { value: 'movement', options: ['offset', 'movement'] },
     axis: { options: [undefined, 'x', 'y', 'lock'] },
     filterTaps: true,
     boundToParent: false,
