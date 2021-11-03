@@ -31,8 +31,8 @@ export const commonConfigResolver = {
   transform(value: any, _k: string, config: { shared: GenericOptions }) {
     return value || config.shared.transform
   },
-  threshold(value = [0, 0]) {
-    return value
+  threshold(value: any) {
+    return V.toVector(value, 0)
   }
 }
 
