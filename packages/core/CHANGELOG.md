@@ -1,5 +1,11 @@
 # @use-gesture/core
 
+## 10.1.3
+
+### Patch Changes
+
+- a9f99ce3c: feat: warn in dev mode if transform function return invalid values
+
 ## 10.1.2
 
 ### Patch Changes
