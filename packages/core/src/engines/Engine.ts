@@ -230,7 +230,8 @@ export abstract class Engine<Key extends GestureKey> {
     const [_m0, _m1] = config.transform(state._movement)
 
     if (process.env.NODE_ENV === 'development') {
-      if (typeof _m0 !== 'number' || typeof _m1 !== 'number') {
+      const isNumberAndNotNaN = (v: any) => typeof v === 'number' && !Number.isNaN(v);
+      if (!isNumberAndNotNaN(_m0) || !isNumberAndNotNaN(_m1)) {
         // eslint-disable-next-line no-console
         console.warn(
           `[@use-gesture]: config.transform() must produce a valid result, but it was: [${_m0},${_m1}]`
