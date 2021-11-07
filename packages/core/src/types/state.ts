@@ -33,7 +33,7 @@ export type SharedGestureState = {
    */
   touches: number
   /**
-   * True when a mouse button or touch is pressed.
+   * True when the main mouse button or touch is pressed.
    */
   pressed: boolean
   /**

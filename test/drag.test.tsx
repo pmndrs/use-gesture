@@ -349,4 +349,44 @@ describe.each([
     expect(getByTestId(`${prefix}drag-movement`)).toHaveTextContent(`10,20`)
     fireEvent.pointerUp(element, { pointerId: 20 })
   })
+
+  test(`drag should start only when it matches pointer.buttons config`, () => {
+    rerender(<Component gestures={['Drag']} />)
+    fireEvent.pointerDown(element, { pointerId: 21, buttons: 2 })
+    expect(getByTestId(`${prefix}drag-active`)).toHaveTextContent(`false`)
+    fireEvent.pointerUp(element, { pointerId: 21 })
+
+    rerender(<Component gestures={['Drag']} config={{ drag: { pointer: { buttons: 2 } } }} />)
+    fireEvent.pointerDown(element, { pointerId: 22, buttons: 2 })
+    expect(getByTestId(`${prefix}drag-active`)).toHaveTextContent(`true`)
+    fireEvent.pointerUp(element, { pointerId: 22 })
+    expect(getByTestId(`${prefix}drag-active`)).toHaveTextContent(`false`)
+  })
+
+  test(`drag should start no matter what when pointer.buttons is equal to -1`, () => {
+    // -1 triggers drag for any buttons config
+    rerender(<Component gestures={['Drag']} config={{ drag: { pointer: { buttons: -1 } } }} />)
+    fireEvent.pointerDown(element, { pointerId: 23, buttons: 16 })
+    expect(getByTestId(`${prefix}drag-active`)).toHaveTextContent(`true`)
+    fireEvent.pointerUp(element, { pointerId: 23 })
+    expect(getByTestId(`${prefix}drag-active`)).toHaveTextContent(`false`)
+  })
+
+  test(`drag should start when pointer.buttons is included inside pointer.buttons`, () => {
+    rerender(<Component gestures={['Drag']} config={{ drag: { pointer: { buttons: [1, 2, 4] } } }} />)
+    fireEvent.pointerDown(element, { pointerId: 24, buttons: 2 })
+    expect(getByTestId(`${prefix}drag-active`)).toHaveTextContent(`true`)
+    fireEvent.pointerUp(element, { pointerId: 24 })
+    expect(getByTestId(`${prefix}drag-active`)).toHaveTextContent(`false`)
+    fireEvent.pointerDown(element, { pointerId: 25, buttons: 4 })
+    expect(getByTestId(`${prefix}drag-active`)).toHaveTextContent(`true`)
+    fireEvent.pointerUp(element, { pointerId: 25 })
+  })
+
+  test(`drag should not start when pointer.buttons is not included inside pointer.buttons`, () => {
+    rerender(<Component gestures={['Drag']} config={{ drag: { pointer: { buttons: [1, 2, 4] } } }} />)
+    fireEvent.pointerDown(element, { pointerId: 26, buttons: 16 })
+    expect(getByTestId(`${prefix}drag-active`)).toHaveTextContent(`false`)
+    fireEvent.pointerUp(element, { pointerId: 26 })
+  })
 })

@@ -75,7 +75,19 @@ export class DragEngine extends CoordinatesEngine<'drag'> {
     const config = this.config
     const state = this.state
 
-    if (event.buttons != null && event.buttons !== config.pointerButtons) return
+    if (
+      event.buttons != null &&
+      // If the user submits an array as pointer.buttons, don't start the drag
+      // if event.buttons isn't included inside that array.
+      Array.isArray(config.pointerButtons)
+        ? !config.pointerButtons.includes(event.buttons)
+        : // If the user submits a number as pointer.buttons, refuse the drag if
+          // config.pointerButtons is different than `-1` and if event.buttons
+          // doesn't match the combination.
+          config.pointerButtons !== -1 && config.pointerButtons !== event.buttons
+    )
+      return
+
     this.ctrl.setEventIds(event)
     // We need to capture all pointer ids so that we can keep track of them when
     // they're released off the target
