@@ -1,8 +1,6 @@
 name: CI
 on:
   push:
-    branches:
-      - '**'
     paths:
       - '.github/workflows/main.yml'
       - 'packages/**'

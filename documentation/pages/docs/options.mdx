@@ -303,9 +303,17 @@ function InitialExample() {
 
 ### pointer.buttons
 
-<Specs gestures={['drag']} types={'number'} defaultValue="1" />
+<Specs gestures={['drag']} types={['number', 'number[]']} defaultValue="1" />
 
 Most of the time you'll want the drag gesture to start when the `left / main` button of your device is pressed. You can change that behavior by submitting a [buttons combination](https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/buttons) that matches one or several buttons to be pressed at once in order for the drag gesture to start.
+
+You can also submit an array with different combinations. In that case, any combination included in that array will trigger the drag.
+
+```js
+const dragConfig = { pointer: { buttons: [1, 2, 4] } }
+```
+
+> If you'd like **any** buttons combination to trigger the drag, you can just pass `-1` to the config option.
 
 ### pointer.capture
 
