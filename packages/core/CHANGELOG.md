@@ -1,5 +1,11 @@
 # @use-gesture/core
 
+## 10.1.4
+
+### Patch Changes
+
+- 090ba6b62: feat: allow pointer.buttons to accept an array or -1
+
 ## 10.1.3
 
 ### Patch Changes
