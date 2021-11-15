@@ -1,5 +1,11 @@
 # @use-gesture/core
 
+## 10.1.5
+
+### Patch Changes
+
+- 55505c071: fix: `event.buttons` condition was preventing `pointer.touch` from behaving properly.
+
 ## 10.1.4
 
 ### Patch Changes
