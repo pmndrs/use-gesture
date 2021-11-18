@@ -20,7 +20,7 @@ module.exports = {
           { title: 'API', url: '/docs/gestures/' }
         ],
         docSearch: {
-          apiKey: '8f83d46775c065911151bd1d02788227',
+          apiKey: '24e7bb49c255f4dea94aba92f5914c85',
           indexName: 'use-gesture'
         },
         twitterAccount: 'pmndrs',
