@@ -21,6 +21,7 @@ module.exports = {
         ],
         docSearch: {
           apiKey: '24e7bb49c255f4dea94aba92f5914c85',
+          appId: '1UFCYC8N2G',
           indexName: 'use-gesture'
         },
         twitterAccount: 'pmndrs',
