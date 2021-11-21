@@ -1,5 +1,11 @@
 # @use-gesture/core
 
+## 10.1.6
+
+### Patch Changes
+
+- 9883b1c78: types: fix ReactDOMAttributes type
+
 ## 10.1.5
 
 ### Patch Changes
