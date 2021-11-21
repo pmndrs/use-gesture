@@ -28,9 +28,12 @@ export type UserHandlers<T extends AnyHandlerEventTypes = EventTypes> = {
   onHover: Handler<'hover', check<T, 'hover'>>
 }
 
-export type ReactDOMAttributes = React.DOMAttributes<EventTarget>
+export type ReactDOMAttributes = Omit<
+  React.DOMAttributes<EventTarget>,
+  'children' | 'dangerouslySetInnerHTML' | keyof UserHandlers
+>
 
-type NativeHandlersKeys = keyof Omit<ReactDOMAttributes, keyof UserHandlers | 'children' | 'dangerouslySetInnerHTML'>
+type NativeHandlersKeys = keyof ReactDOMAttributes
 
 type GetEventType<Key extends NativeHandlersKeys> = ReactDOMAttributes[Key] extends
   | React.EventHandler<infer EventType>
