@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { usePinch } from '@use-gesture/react'
 import { a, useSpring } from '@react-spring/web'
 import { useControls } from 'leva'
@@ -14,9 +14,21 @@ export default function App() {
     axis: { options: [undefined, 'lock'] }
   })
 
+  useEffect(() => {
+    const handler = (e) => e.preventDefault()
+    document.addEventListener('gesturestart', handler)
+    document.addEventListener('gesturechange', handler)
+    document.addEventListener('gestureend', handler)
+    return () => {
+      document.removeEventListener('gesturestart', handler)
+      document.removeEventListener('gesturechange', handler)
+      document.removeEventListener('gestureend', handler)
+    }
+  }, [])
+
   usePinch(
     ({ active, turns, ...state }) => {
-      let [scale, angle] = state[gesture]
+      const [scale, angle] = state[gesture]
       api.start({
         scale: active || gesture === 'offset' ? scale : 1,
         rotate: active || gesture === 'offset' ? angle : 0
