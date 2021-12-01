@@ -106,8 +106,6 @@ export class DragEngine extends CoordinatesEngine<'drag'> {
     this.computeValues(pointerValues(event))
     this.computeInitial()
 
-    console.log('here', this.state.initial)
-
     if (config.preventScroll) {
       this.setupScrollPrevention(event)
     } else if (config.delay > 0) {
