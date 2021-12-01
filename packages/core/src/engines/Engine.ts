@@ -252,14 +252,16 @@ export abstract class Engine<Key extends GestureKey> {
     const [_m0, _m1] = state._movement
     const [t0, t1] = config.threshold
 
-    // `_step` will hold the threshold at which point the gesture was triggered.
-    // The threshold is signed depending on which direction triggered it.
     const { _step, values } = state
 
     if (config.hasCustomTransform) {
+      // When the user is using a custom transform, we're using _step to store
+      // the first value passing the threshold.
       if (_step[0] === false) _step[0] = Math.abs(_m0) >= t0 && values[0]
       if (_step[1] === false) _step[1] = Math.abs(_m1) >= t1 && values[1]
     } else {
+      // `_step` will hold the threshold at which point the gesture was triggered.
+      // The threshold is signed depending on which direction triggered it.
       if (_step[0] === false) _step[0] = Math.abs(_m0) >= t0 && Math.sign(_m0) * t0
       if (_step[1] === false) _step[1] = Math.abs(_m1) >= t1 && Math.sign(_m1) * t1
     }
