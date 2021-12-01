@@ -10,9 +10,9 @@
   },
   "dependencies": {
     "@leva-ui/plugin-spring": "*",
-    "@react-spring/web": "^9.2.5",
-    "@react-three/drei": "^7.12.6",
-    "@react-three/fiber": "^7.0.10",
+    "@react-spring/web": "^9.3.1",
+    "@react-three/drei": "^7.25.3",
+    "@react-three/fiber": "^7.0.21",
     "@use-gesture/react": "*",
     "@use-gesture/vanilla": "*",
     "leva": "*",
@@ -20,18 +20,18 @@
     "lodash.clamp": "^4.0.3",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "react-use-measure": "^2.0.4",
+    "react-use-measure": "^2.1.1",
     "screenlog": "^0.3.0",
-    "three": "^0.133.1",
+    "three": "^0.135.0",
     "wouter": "^2.7.4"
   },
   "devDependencies": {
     "@types/lodash.clamp": "^4.0.6",
-    "@types/react": "^17.0.27",
-    "@types/react-dom": "^17.0.9",
-    "@types/three": "^0.132.2",
+    "@types/react": "^17.0.37",
+    "@types/react-dom": "^17.0.11",
+    "@types/three": "^0.134.0",
     "@vitejs/plugin-react-refresh": "^1.3.6",
-    "typescript": "^4.4.3",
-    "vite": "2.6.3"
+    "typescript": "^4.5.2",
+    "vite": "2.6.14"
   }
 }

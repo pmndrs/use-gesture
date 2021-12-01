@@ -103,8 +103,8 @@ export class DragEngine extends CoordinatesEngine<'drag'> {
     state._pointerId = pointerId(event)
     state._pointerActive = true
 
-    state.values = pointerValues(event)
-    state.initial = state.values
+    this.computeValues(pointerValues(event))
+    this.computeInitial()
 
     if (config.preventScroll) {
       this.setupScrollPrevention(event)
@@ -138,13 +138,13 @@ export class DragEngine extends CoordinatesEngine<'drag'> {
     const id = pointerId(event)
     if (state._pointerId && id !== state._pointerId) return
 
-    const values = pointerValues(event)
+    const _values = pointerValues(event)
 
     if (document.pointerLockElement === event.target) {
       state._delta = [event.movementX, event.movementY]
     } else {
-      state._delta = V.sub(values, state.values)
-      state.values = values
+      state._delta = V.sub(_values, state._values)
+      this.computeValues(_values)
     }
 
     V.addTo(state._movement, state._delta)
@@ -295,8 +295,8 @@ export class DragEngine extends CoordinatesEngine<'drag'> {
   keyDown(event: KeyboardEvent) {
     // @ts-ignore
     const deltaFn = KEYS_DELTA_MAP[event.key]
-    const state = this.state
     if (deltaFn) {
+      const state = this.state
       const factor = event.shiftKey ? 10 : event.altKey ? 0.1 : 1
       state._delta = deltaFn(factor)
 

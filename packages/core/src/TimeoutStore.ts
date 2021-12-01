@@ -1,7 +1,7 @@
 export class TimeoutStore {
   private _timeouts = new Map<string, number>()
 
-  add<FunctionType extends (...args: any) => any>(
+  add<FunctionType extends (...args: any[]) => any>(
     key: string,
     callback: FunctionType,
     ms = 140,

@@ -1,10 +1,22 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useGesture } from '@use-gesture/react'
 import { a, useSpring } from '@react-spring/web'
 
 import styles from './styles.module.css'
 
 export default function Two() {
+  useEffect(() => {
+    const handler = (e) => e.preventDefault()
+    document.addEventListener('gesturestart', handler)
+    document.addEventListener('gesturechange', handler)
+    document.addEventListener('gestureend', handler)
+    return () => {
+      document.removeEventListener('gesturestart', handler)
+      document.removeEventListener('gesturechange', handler)
+      document.removeEventListener('gestureend', handler)
+    }
+  }, [])
+
   const [style1, api1] = useSpring(() => ({ x: 0, y: 0, scale: 1, rotate: 0 }))
   const [style2, api2] = useSpring(() => ({ x: 0, y: 0, scale: 1, rotate: 0 }))
 
