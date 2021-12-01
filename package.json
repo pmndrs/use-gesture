@@ -31,7 +31,6 @@
   },
   "size-limit": [
     {
-    {
       "name": "@use-gesture/react",
       "path": "packages/react/dist/use-gesture-react.esm.js",
       "limit": "9 KB",
@@ -57,7 +56,7 @@
       "name": "@use-gesture/vanilla -- tree-shaking",
       "import": "{ WheelGesture }",
       "path": "packages/vanilla/dist/use-gesture-vanilla.esm.js",
-      "limit": "5 KB"
+      "limit": "6 KB"
     }
   ],
   "jest": {

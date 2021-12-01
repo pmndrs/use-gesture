@@ -14,10 +14,9 @@ export class MoveEngine extends CoordinatesEngine<'move'> {
 
   moveStart(event: PointerEvent) {
     this.start(event)
-    const state = this.state
-    state.values = pointerValues(event)
+    this.computeValues(pointerValues(event))
     this.compute(event)
-    state.initial = state.values
+    this.computeInitial()
     this.emit()
   }
 
@@ -25,9 +24,10 @@ export class MoveEngine extends CoordinatesEngine<'move'> {
     if (!this.state._active) return
     const values = pointerValues(event)
     const state = this.state
-    state._delta = V.sub(values, state.values)
+    state._delta = V.sub(values, state._values)
     V.addTo(state._movement, state._delta)
-    state.values = values
+
+    this.computeValues(values)
 
     this.compute(event)
     this.emit()

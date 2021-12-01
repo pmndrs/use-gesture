@@ -118,8 +118,8 @@ export class PinchEngine extends Engine<'pinch'> {
   pinchStart(event: PointerEvent | TouchEvent, payload: { distance: number; angle: number; origin: Vector2 }) {
     const state = this.state
     state.origin = payload.origin
-    state.values = [payload.distance, payload.angle]
-    state.initial = state.values
+    this.computeValues([payload.distance, payload.angle])
+    this.computeInitial()
 
     this.compute(event)
     this.emit()
@@ -144,14 +144,18 @@ export class PinchEngine extends Engine<'pinch'> {
 
   pinchMove(event: PointerEvent | TouchEvent, payload: { distance: number; angle: number; origin: Vector2 }) {
     const state = this.state
-    const prev_a = state.values[1]
+    const prev_a = state._values[1]
     const delta_a = payload.angle - prev_a
+
     let delta_turns = 0
     if (Math.abs(delta_a) > 270) delta_turns += Math.sign(delta_a)
-    state.values = [payload.distance, payload.angle - 360 * delta_turns]
+
+    this.computeValues([payload.distance, payload.angle - 360 * delta_turns])
+
     state.origin = payload.origin
     state.turns = delta_turns
-    state._movement = [state.values[0] / state.initial[0] - 1, state.values[1] - state.initial[1]]
+    state._movement = [state._values[0] / state._initial[0] - 1, state._values[1] - state._initial[1]]
+
     this.compute(event)
     this.emit()
   }
@@ -196,7 +200,7 @@ export class PinchEngine extends Engine<'pinch'> {
     if (state._active) return
 
     this.start(event)
-    state.values = [event.scale, event.rotation]
+    this.computeValues([event.scale, event.rotation])
     state.origin = [event.clientX, event.clientY]
     this.compute(event)
 
@@ -209,7 +213,8 @@ export class PinchEngine extends Engine<'pinch'> {
     if (!this.state._active) return
 
     const state = this.state
-    state.values = [event.scale, event.rotation]
+
+    this.computeValues([event.scale, event.rotation])
     state.origin = [event.clientX, event.clientY]
     const _previousMovement = state._movement
     state._movement = [event.scale - 1, event.rotation]
