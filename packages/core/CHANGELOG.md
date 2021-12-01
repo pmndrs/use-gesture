@@ -1,5 +1,11 @@
 # @use-gesture/core
 
+## 10.2.0
+
+### Minor Changes
+
+- b4e6181e7: Fix: should fix `transform` function doesn't have [0,0] origin. This required some pretty drastic internal changes hence the minor version bump.
+
 ## 10.1.6
 
 ### Patch Changes
