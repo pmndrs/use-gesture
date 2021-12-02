@@ -37,6 +37,16 @@ jobs:
           version: 6.9.1
           run_install: true
 
+      - uses: canastro/copy-file-action@master
+      - name: copy README file to React package
+        with:
+          source: 'README.md'
+          target: 'packages/react/README.md'
+      - name: copy README file to Vanilla package
+        with:
+          source: 'README.md'
+          target: 'packages/vanilla/README.md'
+
       - name: Set up NPM credentials
         run: echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
         env:
