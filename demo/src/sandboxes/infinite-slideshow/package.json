@@ -1,7 +1,7 @@
 {
   "name": "gesture-infinite-slideshow",
   "version": "1.0.0",
-  "main": "src/index.tsx",
+  "main": "src/index.jsx",
   "dependencies": {
     "@react-spring/web": "*",
     "@use-gesture/react": "latest",
