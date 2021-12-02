@@ -2,8 +2,8 @@ import { parse } from '../packages/core/src/config/resolver'
 import { dragConfigResolver } from '../packages/core/src/config/dragConfigResolver'
 import { pinchConfigResolver } from '../packages/core/src/config/pinchConfigResolver'
 import { ConfigResolverMap } from '../packages/core/src/actions'
-import { DragConfig, PinchConfig, CoordinatesConfig } from '../packages/core/src/types'
-import { identity } from '../packages/core/src/config/sharedConfigResolver'
+import { DragConfig, PinchConfig, CoordinatesConfig, Vector2 } from '../packages/core/src/types'
+import { identity } from '../packages/core/src/config/commonConfigResolver'
 import { wheelConfigResolver } from '../packages/core/src/config/wheelConfigResolver'
 
 ConfigResolverMap.set('drag', dragConfigResolver)
@@ -16,7 +16,7 @@ describe('testing derived config', () => {
       expect(parse({}).shared).toStrictEqual({
         enabled: true,
         target: undefined,
-        transform: identity,
+        transform: undefined,
         eventOptions: { capture: false, passive: true },
         window: window
       })
@@ -57,6 +57,7 @@ describe('testing derived config', () => {
         ],
         from: undefined,
         transform: identity,
+        hasCustomTransform: false,
         preventDefault: false,
         triggerAllEvents: false,
         delay: 0,
@@ -83,13 +84,15 @@ describe('testing derived config', () => {
 
     test(`derived threshold is set when filterTaps, lockDirection or axis are not falsey`, () => {
       dragConfig = { axis: 'lock' }
-      expect(parse(dragConfig, 'drag').drag).toHaveProperty('threshold', [1, 1]).toHaveProperty('axis', undefined)
+      expect(parse(dragConfig, 'drag').drag).toHaveProperty('threshold', [1, 1])
+      expect(parse(dragConfig, 'drag').drag).toHaveProperty('axis', undefined)
 
       dragConfig = { filterTaps: true, axis: 'lock' }
       expect(parse(dragConfig, 'drag').drag).toHaveProperty('threshold', [3, 3])
 
       dragConfig = { axis: 'y' }
-      expect(parse(dragConfig, 'drag').drag).toHaveProperty('threshold', [1, 1]).toHaveProperty('axis', 'y')
+      expect(parse(dragConfig, 'drag').drag).toHaveProperty('threshold', [1, 1])
+      expect(parse(dragConfig, 'drag').drag).toHaveProperty('axis', 'y')
     })
 
     test(`derived delay is set to default when boolean`, () => {
@@ -105,6 +108,14 @@ describe('testing derived config', () => {
       dragConfig.pointer.touch = false
       expect(parse(dragConfig, 'drag').drag).toHaveProperty('device', 'pointer')
     })
+
+    test(`derived transform is properly computed`, () => {
+      const transform = ([x, y]: Vector2) => [x / 2, y / 4] as Vector2
+
+      dragConfig = { transform }
+      expect(parse(dragConfig, 'drag').drag).toHaveProperty('transform', transform)
+      expect(parse(dragConfig, 'drag').drag).toHaveProperty('hasCustomTransform', true)
+    })
   })
 
   describe('testing distance / angle configuration', () => {
@@ -117,6 +128,7 @@ describe('testing derived config', () => {
         ],
         device: 'pointer',
         transform: identity,
+        hasCustomTransform: false,
         triggerAllEvents: false,
         preventDefault: false,
         lockDirection: false,

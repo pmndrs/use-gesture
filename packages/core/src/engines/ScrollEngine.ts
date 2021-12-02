@@ -15,11 +15,12 @@ export class ScrollEngine extends CoordinatesEngine<'scroll'> {
     if (event.cancelable) event.preventDefault()
     const state = this.state
     const values = scrollValues(event)
-    state._delta = V.sub(values, state.values)
+    state._delta = V.sub(values, state._values)
     V.addTo(state._movement, state._delta)
-    state.values = values
 
+    this.computeValues(values)
     this.compute(event)
+
     this.emit()
   }
 

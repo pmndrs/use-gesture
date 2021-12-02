@@ -3,4 +3,3 @@ packages:
   - 'packages/*'
   - 'demo'
   - 'documentation'
-  - 'webpack-import-test'

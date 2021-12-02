@@ -60,7 +60,7 @@ test('testing memo', () => {
 })
 
 test('testing timestamp', () => {
-  const { getByTestId } = render(<Interactive gestures={['Drag']} memoArg="memo" />)
+  const { getByTestId } = render(<Interactive gestures={['Drag']} />)
   const element = getByTestId('drag-el')
   let event = createEvent.pointerDown(element, { pointerId: 9, clientX: 10, clientY: 20, buttons: 1 })
   fireEvent(element, event)
@@ -79,20 +79,19 @@ test('testing timestamp', () => {
 
 test('testing transform', () => {
   const { getByTestId } = render(
-    <Interactive
-      gestures={['Drag']}
-      memoArg="memo"
-      config={{
-        transform: ([x, y]) => [x / 2, y / 4]
-      }}
-    />
+    <Interactive gestures={['Drag']} config={{ transform: ([x, y]) => [1 + x / 2, y / 4] }} />
   )
   const element = getByTestId('drag-el')
-  fireEvent.pointerDown(element, { pointerId: 10, clientX: 0, clientY: 0, buttons: 1 })
-  fireEvent.pointerMove(element, { pointerId: 10, clientX: 20, clientY: 20, buttons: 1 })
-  expect(getByTestId('drag-movement')).toHaveTextContent('10,5')
-  expect(getByTestId('drag-offset')).toHaveTextContent('10,5')
-  expect(getByTestId('drag-delta')).toHaveTextContent('10,5')
+  fireEvent.pointerDown(element, { pointerId: 10, clientX: 20, clientY: 40, buttons: 1 })
+  expect(getByTestId('drag-xy')).toHaveTextContent('11,10')
+  fireEvent.pointerMove(element, { pointerId: 10, clientX: 30, clientY: 80, buttons: 1 })
+  expect(getByTestId('drag-xy')).toHaveTextContent('16,20')
+  expect(getByTestId('drag-initial')).toHaveTextContent('11,10')
+  expect(getByTestId('drag-movement')).toHaveTextContent('5,10')
+  expect(getByTestId('drag-offset')).toHaveTextContent('5,10')
+  expect(getByTestId('drag-delta')).toHaveTextContent('5,10')
+  expect(getByTestId('drag-distance')).toHaveTextContent('5,10')
+  fireEvent.pointerUp(element, { pointerId: 10 })
 })
 
 test('testing unmount with domTarget', () => {

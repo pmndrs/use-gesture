@@ -71,10 +71,10 @@ export abstract class Engine<Key extends GestureKey> {
     this.key = key
 
     if (!this.state) {
-      this.state = {
-        values: [0, 0],
-        initial: [0, 0]
-      } as any
+      this.state = {} as any
+      this.computeValues([0, 0])
+      this.computeInitial()
+
       if (this.init) this.init()
       this.reset()
     }
@@ -150,17 +150,13 @@ export abstract class Engine<Key extends GestureKey> {
   }
 
   reset() {
-    const { state, shared, config, ingKey, args } = this
-    const { transform, threshold } = config
+    const { state, shared, ingKey, args } = this
     shared[ingKey] = state._active = state.active = state._blocked = state._force = false
     state._step = [false, false]
     state.intentional = false
     state._movement = [0, 0]
     state._distance = [0, 0]
     state._delta = [0, 0]
-    // the _threshold is the difference between a [0,0] origin offset converted to
-    // its new space coordinates
-    state._threshold = V.sub(transform(threshold), transform([0, 0])).map(Math.abs) as Vector2
     // prettier-ignore
     state._bounds = [[-Infinity, Infinity], [-Infinity, Infinity]]
     state.args = args
@@ -183,15 +179,40 @@ export abstract class Engine<Key extends GestureKey> {
     const config = this.config
     if (!state._active) {
       this.reset()
+      this.computeInitial()
+
       state._active = true
       state.target = event.target!
       state.currentTarget = event.currentTarget!
-      state.initial = state.values
       state.lastOffset = config.from ? call(config.from, state) : state.offset
       state.offset = state.lastOffset
     }
     state.startTime = state.timeStamp = event.timeStamp
   }
+
+  /**
+   * Assign raw values to `state._values` and transformed values to
+   * `state.values`.
+   * @param values
+   */
+  computeValues(values: Vector2) {
+    const state = this.state
+    state._values = values
+    // transforming values into user-defined coordinates (#402)
+    state.values = this.config.transform(values)
+  }
+
+  /**
+   * Assign `state._values` to `state._initial` and transformed `state.values` to
+   * `state.initial`.
+   * @param values
+   */
+  computeInitial() {
+    const state = this.state
+    state._initial = state._values
+    state.initial = state.values
+  }
+
   /**
    * Computes all sorts of state attributes, including kinematics.
    * @param event
@@ -227,36 +248,38 @@ export abstract class Engine<Key extends GestureKey> {
       V.addTo(state._distance, _absoluteDelta)
     }
 
-    const [_m0, _m1] = config.transform(state._movement)
+    // _movement is calculated by each gesture engine
+    const [_m0, _m1] = state._movement
+    const [t0, t1] = config.threshold
 
-    if (process.env.NODE_ENV === 'development') {
-      const isNumberAndNotNaN = (v: any) => typeof v === 'number' && !Number.isNaN(v);
-      if (!isNumberAndNotNaN(_m0) || !isNumberAndNotNaN(_m1)) {
-        // eslint-disable-next-line no-console
-        console.warn(
-          `[@use-gesture]: config.transform() must produce a valid result, but it was: [${_m0},${_m1}]`
-        )
-      }
+    const { _step, values } = state
+
+    if (config.hasCustomTransform) {
+      // When the user is using a custom transform, we're using _step to store
+      // the first value passing the threshold.
+      if (_step[0] === false) _step[0] = Math.abs(_m0) >= t0 && values[0]
+      if (_step[1] === false) _step[1] = Math.abs(_m1) >= t1 && values[1]
+    } else {
+      // `_step` will hold the threshold at which point the gesture was triggered.
+      // The threshold is signed depending on which direction triggered it.
+      if (_step[0] === false) _step[0] = Math.abs(_m0) >= t0 && Math.sign(_m0) * t0
+      if (_step[1] === false) _step[1] = Math.abs(_m1) >= t1 && Math.sign(_m1) * t1
     }
 
-    const [_t0, _t1] = state._threshold
-    // Step will hold the threshold at which point the gesture was triggered. The
-    // threshold is signed depending on which direction triggered it.
-    let [_s0, _s1] = state._step
-
-    if (_s0 === false) _s0 = Math.abs(_m0) >= _t0 && Math.sign(_m0) * _t0
-    if (_s1 === false) _s1 = Math.abs(_m1) >= _t1 && Math.sign(_m1) * _t1
-
-    state.intentional = _s0 !== false || _s1 !== false
+    state.intentional = _step[0] !== false || _step[0] !== false
 
     if (!state.intentional) return
 
-    state._step = [_s0, _s1]
-
     const movement: Vector2 = [0, 0]
 
-    movement[0] = _s0 !== false ? _m0 - _s0 : 0
-    movement[1] = _s1 !== false ? _m1 - _s1 : 0
+    if (config.hasCustomTransform) {
+      const [v0, v1] = values
+      movement[0] = _step[0] !== false ? v0 - _step[0] : 0
+      movement[1] = _step[1] !== false ? v1 - _step[1] : 0
+    } else {
+      movement[0] = _step[0] !== false ? _m0 - _step[0] : 0
+      movement[1] = _step[1] !== false ? _m1 - _step[1] : 0
+    }
 
     // let's run intentionality check.
     if (this.intent) this.intent(movement)
@@ -307,7 +330,7 @@ export abstract class Engine<Key extends GestureKey> {
 
     if (!state._active) this.clean()
 
-    // we don't trigger the handler if the gesture is blockedor non intentional,
+    // we don't trigger the handler if the gesture is blocked or non intentional,
     // unless the `_force` flag was set or the `triggerAllEvents` option was set
     // to true in the config.
     if ((state._blocked || !state.intentional) && !state._force && !config.triggerAllEvents) return

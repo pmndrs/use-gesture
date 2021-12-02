@@ -21,6 +21,7 @@ function Draggable() {
     filterTaps: true,
     boundToParent: false,
     rubberband: false,
+    threshold: { value: [0, 0], step: 10 },
     delay: { value: 1000, step: 100, min: 0, max: 3000, optional: true, disabled: true }
   })
 

@@ -8,7 +8,6 @@ on:
       - 'pnpm-lock.yaml'
       - 'test/**'
       - '!documentation/**'
-      - '!webpack-import-test'
       - '!demo/**'
       - '!**.md'
       - '!.changeset/**'

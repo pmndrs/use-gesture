@@ -1,6 +1,8 @@
+import { InternalGestureOptions } from '../types'
 import { Vector2, State, GenericOptions } from '../types'
 import { V } from '../utils/maths'
 
+export const identity = (v: Vector2) => v
 export const DEFAULT_RUBBERBAND = 0.15
 
 export const commonConfigResolver = {
@@ -28,8 +30,22 @@ export const commonConfigResolver = {
     // eslint-disable-next-line eqeqeq
     if (value != null) return V.toVector(value)
   },
-  transform(value: any, _k: string, config: { shared: GenericOptions }) {
-    return value || config.shared.transform
+  transform(this: InternalGestureOptions, value: any, _k: string, config: { shared: GenericOptions }) {
+    const transform = value || config.shared.transform
+    this.hasCustomTransform = !!transform
+
+    if (process.env.NODE_ENV === 'development') {
+      const originalTransform = transform || identity
+      return (v: Vector2) => {
+        const r = originalTransform(v)
+        if (!isFinite(r[0]) || !isFinite(r[1])) {
+          // eslint-disable-next-line no-console
+          console.warn(`[@use-gesture]: config.transform() must produce a valid result, but it was: [${r[0]},${[1]}]`)
+        }
+        return r
+      }
+    }
+    return transform || identity
   },
   threshold(value: any) {
     return V.toVector(value, 0)
