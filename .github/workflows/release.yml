@@ -37,17 +37,17 @@ jobs:
           version: 6.9.1
           run_install: true
 
-      - name: copy README file to React package
+      - name: Copy README file to React package
         uses: canastro/copy-file-action@master
         with:
-          source: 'README.md'
-          target: 'packages/react/README.md'
+          source: '/README.md'
+          target: '/packages/react/README.md'
 
-      - name: copy README file to Vanilla package
+      - name: Copy README file to Vanilla package
         uses: canastro/copy-file-action@master
         with:
-          source: 'README.md'
-          target: 'packages/vanilla/README.md'
+          source: '/README.md'
+          target: '/packages/vanilla/README.md'
 
       - name: Set up NPM credentials
         run: echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
@@ -56,7 +56,7 @@ jobs:
 
       - name: Create versions PR & prepare publish
         id: changesets
-        uses: changesets/action@master
+        uses: changesets/action@v1
         # if: github.ref == 'refs/heads/master'
         with:
           version: pnpm ci:version
