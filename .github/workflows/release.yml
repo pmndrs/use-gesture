@@ -37,16 +37,14 @@ jobs:
           version: 6.9.1
           run_install: true
 
-      - uses: actions/checkout@v2
-      - uses: canastro/copy-file-action@master
       - name: copy README file to React package
+        uses: canastro/copy-file-action@master
         with:
           source: 'README.md'
           target: 'packages/react/README.md'
 
-      - uses: actions/checkout@v2
-      - uses: canastro/copy-file-action@master
       - name: copy README file to Vanilla package
+        uses: canastro/copy-file-action@master
         with:
           source: 'README.md'
           target: 'packages/vanilla/README.md'
