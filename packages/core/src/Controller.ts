@@ -45,8 +45,8 @@ export class Controller {
     if (isTouch(event)) {
       this.touchIds = new Set(touchIds(event as TouchEvent))
     } else if ('pointerId' in event) {
-      if (event.type === 'pointerup') this.pointerIds.delete(event.pointerId)
-      else this.pointerIds.add(event.pointerId)
+      if (event.type === 'pointerup' || event.type === 'pointercancel') this.pointerIds.delete(event.pointerId)
+      else if (event.type === 'pointerdown') this.pointerIds.add(event.pointerId)
     }
   }
   /**
