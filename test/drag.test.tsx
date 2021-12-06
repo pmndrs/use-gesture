@@ -177,10 +177,11 @@ describe.each([
     fireEvent.pointerUp(element, { pointerId: 8 })
   })
 
-  test(`applying an axis SHOULDN'T start the gesture if gesture is not detected first in the right axis`, () => {
+  test(`applying an axis SHOULDN'T start the gesture if gesture is not detected first in the right axis`, async () => {
     rerender(<Component gestures={['Drag']} config={{ drag: { axis: 'x' } }} />)
     fireEvent.pointerDown(element, { pointerId: 81, clientX: 0, clientY: 0, buttons: 1 })
     fireEvent.pointerMove(element, { pointerId: 81, clientX: 0, clientY: 50, buttons: 1 })
+    await later()
     fireEvent.pointerMove(element, { pointerId: 81, clientX: 10, clientY: 0, buttons: 1 })
     expect(getByTestId(`${prefix}drag-dragging`)).toHaveTextContent('false')
     fireEvent.pointerUp(element, { pointerId: 81 })
