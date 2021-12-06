@@ -1,5 +1,11 @@
 # @use-gesture/core
 
+## 10.2.2
+
+### Patch Changes
+
+- cffaba5ae: fix: logic error in intent detection
+
 ## 10.2.1
 
 ### Patch Changes
