@@ -266,7 +266,7 @@ export abstract class Engine<Key extends GestureKey> {
       if (_step[1] === false) _step[1] = Math.abs(_m1) >= t1 && Math.sign(_m1) * t1
     }
 
-    state.intentional = _step[0] !== false || _step[0] !== false
+    state.intentional = _step[0] !== false || _step[1] !== false
 
     if (!state.intentional) return
 
