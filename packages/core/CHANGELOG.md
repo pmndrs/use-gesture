@@ -1,5 +1,11 @@
 # @use-gesture/core
 
+## 10.2.1
+
+### Patch Changes
+
+- 2f0cd466b: fix: release pointerId when PointerEvent is canceled. Should fix [#376](https://github.com/pmndrs/use-gesture/issues/376).
+
 ## 10.2.0
 
 ### Minor Changes
