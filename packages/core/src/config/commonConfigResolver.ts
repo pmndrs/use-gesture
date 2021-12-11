@@ -58,6 +58,7 @@ if (process.env.NODE_ENV === 'development') {
       if (value !== undefined) {
         throw Error(`[@use-gesture]: \`domTarget\` option has been renamed to \`target\`.`)
       }
+      return NaN
     },
     lockDirection(value: any) {
       if (value !== undefined) {
@@ -65,11 +66,13 @@ if (process.env.NODE_ENV === 'development') {
           `[@use-gesture]: \`lockDirection\` option has been merged with \`axis\`. Use it as in \`{ axis: 'lock' }\``
         )
       }
+      return NaN
     },
     initial(value: any) {
       if (value !== undefined) {
         throw Error(`[@use-gesture]: \`initial\` option has been renamed to \`from\`.`)
       }
+      return NaN
     }
   })
 }
