@@ -1,5 +1,12 @@
 # @use-gesture/vanilla
 
+## 10.2.3
+
+### Patch Changes
+
+- Updated dependencies [8302c5bfd]
+  - @use-gesture/core@10.2.3
+
 ## 10.2.2
 
 ### Patch Changes

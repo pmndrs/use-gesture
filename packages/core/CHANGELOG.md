@@ -1,5 +1,11 @@
 # @use-gesture/core
 
+## 10.2.3
+
+### Patch Changes
+
+- 8302c5bfd: fix: prevent deprecated resolvers from applying in dev mode
+
 ## 10.2.2
 
 ### Patch Changes
