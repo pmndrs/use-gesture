@@ -77,6 +77,7 @@ if (process.env.NODE_ENV === 'development') {
           `[@use-gesture]: \`useTouch\` option has been renamed to \`pointer.touch\`. Use it as in \`{ pointer: { touch: true } }\`.`
         )
       }
+      return NaN
     },
     experimental_preventWindowScrollY(value: any) {
       if (value !== undefined) {
@@ -84,6 +85,7 @@ if (process.env.NODE_ENV === 'development') {
           `[@use-gesture]: \`experimental_preventWindowScrollY\` option has been renamed to \`preventScroll\`.`
         )
       }
+      return NaN
     },
     swipeVelocity(value: any) {
       if (value !== undefined) {
@@ -91,6 +93,7 @@ if (process.env.NODE_ENV === 'development') {
           `[@use-gesture]: \`swipeVelocity\` option has been renamed to \`swipe.velocity\`. Use it as in \`{ swipe: { velocity: 0.5 } }\`.`
         )
       }
+      return NaN
     },
     swipeDistance(value: any) {
       if (value !== undefined) {
@@ -98,6 +101,7 @@ if (process.env.NODE_ENV === 'development') {
           `[@use-gesture]: \`swipeDistance\` option has been renamed to \`swipe.distance\`. Use it as in \`{ swipe: { distance: 50 } }\`.`
         )
       }
+      return NaN
     },
     swipeDuration(value: any) {
       if (value !== undefined) {
@@ -105,6 +109,7 @@ if (process.env.NODE_ENV === 'development') {
           `[@use-gesture]: \`swipeDuration\` option has been renamed to \`swipe.duration\`. Use it as in \`{ swipe: { duration: 250 } }\`.`
         )
       }
+      return NaN
     }
   })
 }
