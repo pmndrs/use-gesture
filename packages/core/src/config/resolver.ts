@@ -17,7 +17,7 @@ export function resolveWith<T extends { [k: string]: any }, V extends { [k: stri
         if (process.env.NODE_ENV === 'development') {
           const r = resolver.call(result, config[key], key, config)
           // prevents deprecated resolvers from applying in dev mode
-          if (!isNaN(r)) result[key] = r
+          if (!Number.isNaN(r)) result[key] = r
         } else {
           result[key] = resolver.call(result, config[key], key, config)
         }
