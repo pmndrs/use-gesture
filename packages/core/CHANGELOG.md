@@ -1,5 +1,11 @@
 # @use-gesture/core
 
+## 10.2.4
+
+### Patch Changes
+
+- ae631004a: fix: change isNaN to Number.isNaN in dev mode
+
 ## 10.2.3
 
 ### Patch Changes
