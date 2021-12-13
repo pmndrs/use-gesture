@@ -2,7 +2,7 @@
 
 [![npm (tag)](https://img.shields.io/npm/v/@use-gesture/react?style=flat&colorA=000000&colorB=000000)](https://www.npmjs.com/package/@use-gesture/react) ![npm bundle size](https://img.shields.io/bundlephobia/minzip/@use-gesture/react?style=flat&colorA=000000&colorB=000000) ![NPM](https://img.shields.io/npm/l/@use-gesture/react?style=flat&colorA=000000&colorB=000000) [![Discord Shield](https://img.shields.io/discord/740090768164651008?style=flat&colorA=000000&colorB=000000&label=discord&logo=discord&logoColor=ffffff)](https://discord.gg/poimandres)
 
-@use-gesture is a library that let you bind richer mouse and touch events to any component or view. With the data you receive, it becomes trivial to set up gestures, and often takes no more than a few lines of code.
+@use-gesture is a library that lets you bind richer mouse and touch events to any component or view. With the data you receive, it becomes trivial to set up gestures, and often takes no more than a few lines of code.
 
 You can use it stand-alone, but to make the most of it you should combine it with an animation library like [react-spring](https://github.com/pmndrs/react-spring), though you can most certainly use any other.
 
