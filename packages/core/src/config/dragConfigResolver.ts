@@ -43,6 +43,7 @@ export const dragConfigResolver = {
     return !this.pointerLock && this.device === 'pointer' && capture
   },
   threshold(this: InternalDragOptions, value: number | Vector2, _k: string, { filterTaps = false, axis = undefined }) {
+    // TODO add warning when value is 0 and filterTaps or axis is set
     const threshold = V.toVector(value, filterTaps ? 3 : axis ? 1 : 0)
     this.filterTaps = filterTaps
     return threshold
