@@ -128,6 +128,10 @@ export type DragConfig = CoordinatesConfig<'drag'> & {
    */
   filterTaps?: boolean
   /**
+   * The maximum total displacement a tap can have   
+   */
+  tapsThreshold?: number
+  /**
    * Set this option to true when using with @react-three/fiber objects.
    */
   /**

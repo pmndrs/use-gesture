@@ -29,6 +29,7 @@ export type InternalCoordinatesOptions<Key extends CoordinatesKey = CoordinatesK
 
 export type InternalDragOptions = InternalCoordinatesOptions<'drag'> & {
   filterTaps: boolean
+  tapsThreshold: number
   useTouch: boolean
   pointerButtons: number | number[]
   pointerCapture: boolean
