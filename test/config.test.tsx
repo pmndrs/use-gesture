@@ -76,6 +76,7 @@ describe('testing derived config', () => {
         pointerLock: false,
         pointerCapture: true,
         filterTaps: false,
+        tapsThreshold: 3,
         useTouch: false
       })
     })
