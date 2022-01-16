@@ -327,6 +327,7 @@ export class DragEngine extends CoordinatesEngine<'drag'> {
       bindFunction(device, 'change', this.pointerMove.bind(this))
       bindFunction(device, 'end', this.pointerUp.bind(this))
       bindFunction(device, 'cancel', this.pointerUp.bind(this))
+      bindFunction('lostPointerCapture', '', this.pointerUp.bind(this))
     }
     bindFunction('key', 'down', this.keyDown.bind(this))
     bindFunction('key', 'up', this.keyUp.bind(this))
