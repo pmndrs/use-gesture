@@ -27,7 +27,7 @@ describe('testing derived config', () => {
         target: document.createElement('div'),
         eventOptions: { passive: false }
       }
-      expect(config).toHaveProperty('eventOptions.passive', false)
+      expect(parse(config).shared).toHaveProperty('eventOptions.passive', false)
     })
   })
 
