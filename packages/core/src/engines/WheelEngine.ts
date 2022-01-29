@@ -1,6 +1,5 @@
 import { CoordinatesEngine } from './CoordinatesEngine'
 import { wheelValues } from '../utils/events'
-import { V } from '../utils/maths'
 
 export interface WheelEngine extends CoordinatesEngine<'wheel'> {
   wheel(this: WheelEngine, event: WheelEvent): void
@@ -20,7 +19,12 @@ export class WheelEngine extends CoordinatesEngine<'wheel'> {
   wheelChange(event: WheelEvent) {
     const state = this.state
     state._delta = wheelValues(event)
-    V.addTo(this.state._movement, state._delta)
+
+    const [ox, oy] = state.overflow
+    const [dx, dy] = state._delta
+
+    if (!((ox < 0 && dx < 0) || (ox > 0 && dx > 0))) state._movement[0] += dx
+    if (!((oy < 0 && dy < 0) || (oy > 0 && dy > 0))) state._movement[1] += dy
 
     this.compute(event)
     this.emit()
