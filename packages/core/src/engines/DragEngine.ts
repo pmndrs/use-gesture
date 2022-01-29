@@ -207,7 +207,7 @@ export class DragEngine extends CoordinatesEngine<'drag'> {
     this.compute(event)
 
     const [dx, dy] = state._distance
-    state.tap = dx <= 3 && dy <= 3
+    state.tap = dx <= config.tapsThreshold && dy <= config.tapsThreshold
 
     if (state.tap && config.filterTaps) {
       state._force = true
