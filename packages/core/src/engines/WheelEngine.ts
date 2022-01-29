@@ -25,7 +25,7 @@ export class WheelEngine extends CoordinatesEngine<'wheel'> {
     // _movement rolls back to when it passed the bounds.
     const [ox, oy] = state.overflow
     const [dx, dy] = state._delta
-    const [dirx, diry] = state.direction
+    const [dirx, diry] = state._direction
 
     if ((ox < 0 && dx > 0 && dirx < 0) || (ox > 0 && dx < 0 && dirx > 0)) {
       state._movement[0] = state._movementBound[0] as number

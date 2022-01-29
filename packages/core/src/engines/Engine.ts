@@ -307,7 +307,8 @@ export abstract class Engine<Key extends GestureKey> {
           const absoluteDelta = state.delta.map(Math.abs) as Vector2
 
           V.addTo(state.distance, absoluteDelta)
-          state.direction = state._delta.map(Math.sign) as Vector2
+          state.direction = state.delta.map(Math.sign) as Vector2
+          state._direction = state._delta.map(Math.sign) as Vector2
 
           if (!state.first && dt > 0) {
             // calculates kinematics unless the gesture starts or ends

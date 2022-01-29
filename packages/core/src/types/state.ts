@@ -76,6 +76,7 @@ export type CommonGestureState = {
   _initial: Vector2
   _movement: Vector2
   _distance: Vector2
+  _direction: Vector2
   _delta: Vector2
   _bounds: [Vector2, Vector2]
   /**
