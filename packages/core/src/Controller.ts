@@ -1,6 +1,6 @@
 import { EngineMap } from './actions'
 import { parse } from './config/resolver'
-import { isTouch, toHandlerProp, touchIds } from './utils/events'
+import { isTouch, parseProp, toHandlerProp, touchIds } from './utils/events'
 import { EventStore } from './EventStore'
 import { TimeoutStore } from './TimeoutStore'
 import { chain } from './utils/fn'
@@ -139,14 +139,8 @@ export class Controller {
     // When target is specified, then add listeners to the controller target
     // store.
     for (const handlerProp in props) {
-      // onPointerMoveCapture => pointermovecapture
-      let eventKey = handlerProp.substr(2).toLowerCase()
-      // capture = true
-      const capture = !!~eventKey.indexOf('capture')
-      const passive = !!~eventKey.indexOf('passive')
-      // pointermovecapture => pointermove
-      if (capture || passive) eventKey = eventKey.replace(/capture|passive/g, '')
-      this._targetEventStore.add(target, eventKey, '', props[handlerProp], { capture, passive })
+      const { device, capture, passive } = parseProp(handlerProp)
+      this._targetEventStore.add(target, device, '', props[handlerProp], { capture, passive })
     }
   }
 }
