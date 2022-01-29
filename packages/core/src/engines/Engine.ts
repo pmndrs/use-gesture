@@ -156,6 +156,7 @@ export abstract class Engine<Key extends GestureKey> {
     state.intentional = false
     state._movement = [0, 0]
     state._distance = [0, 0]
+    state._direction = [0, 0]
     state._delta = [0, 0]
     // prettier-ignore
     state._bounds = [[-Infinity, Infinity], [-Infinity, Infinity]]
