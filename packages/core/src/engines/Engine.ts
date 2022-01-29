@@ -165,6 +165,7 @@ export abstract class Engine<Key extends GestureKey> {
     state.elapsedTime = 0
     state.direction = [0, 0]
     state.distance = [0, 0]
+    state.overflow = [0, 0]
     state.velocity = [0, 0]
     state.movement = [0, 0]
     state.delta = [0, 0]
@@ -314,6 +315,10 @@ export abstract class Engine<Key extends GestureKey> {
         }
       }
     }
+
+    const [ox, oy] = state.offset
+    const [[x0, x1], [y0, y1]] = state._bounds
+    state.overflow = [ox < x0 ? -1 : ox > x1 ? 1 : 0, oy < y0 ? -1 : oy > y1 ? 1 : 0]
 
     // @ts-ignore
     const rubberband: Vector2 = state._active ? config.rubberband || [0, 0] : [0, 0]
