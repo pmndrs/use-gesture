@@ -7,7 +7,11 @@ export default function App() {
     ({ direction, delta, _movement, offset }) => {
       setWheel({ direction, delta, _movement, offset })
     },
-    { target: window, bounds: { top: -500, bottom: 500 } }
+    {
+      target: window,
+      bounds: { top: -500, bottom: 500 }
+      // rubberband: true
+    }
   )
 
   return (
