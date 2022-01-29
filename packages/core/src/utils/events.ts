@@ -18,6 +18,21 @@ export function toHandlerProp(device: string, action = '', capture: boolean = fa
   return 'on' + capitalize(device) + capitalize(actionKey) + (capture ? 'Capture' : '')
 }
 
+const pointerCaptureEvents = ['gotpointercapture', 'lostpointercapture']
+
+export function parseProp(prop: string) {
+  let eventKey = prop.substring(2).toLowerCase()
+  const passive = !!~eventKey.indexOf('passive')
+  if (passive) eventKey = eventKey.replace('passive', '')
+
+  const captureKey = pointerCaptureEvents.includes(eventKey) ? 'capturecapture' : 'capture'
+  // capture = true
+  const capture = !!~eventKey.indexOf(captureKey)
+  // pointermovecapture => pointermove
+  if (capture) eventKey = eventKey.replace('capture', '')
+  return { device: eventKey, capture, passive }
+}
+
 export function toDomEventType(device: string, action = '') {
   const deviceProps = EVENT_TYPE_MAP[device]
   const actionKey = deviceProps ? deviceProps[action] || action : action

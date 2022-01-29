@@ -323,16 +323,19 @@ export class DragEngine extends CoordinatesEngine<'drag'> {
     const device = this.config.device
 
     bindFunction(device, 'start', this.pointerDown.bind(this))
+
     if (this.config.pointerCapture) {
       bindFunction(device, 'change', this.pointerMove.bind(this))
       bindFunction(device, 'end', this.pointerUp.bind(this))
       bindFunction(device, 'cancel', this.pointerUp.bind(this))
+      bindFunction('lostPointerCapture', '', this.pointerUp.bind(this))
     }
+
     bindFunction('key', 'down', this.keyDown.bind(this))
     bindFunction('key', 'up', this.keyUp.bind(this))
 
     if (this.config.filterTaps) {
-      bindFunction('click', '', this.pointerClick.bind(this), { capture: true })
+      bindFunction('click', '', this.pointerClick.bind(this), { capture: true, passive: false })
     }
   }
 }
