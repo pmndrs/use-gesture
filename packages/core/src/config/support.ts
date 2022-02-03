@@ -29,7 +29,14 @@ function supportsGestureEvents(): boolean {
 export const SUPPORT = {
   isBrowser,
   gesture: supportsGestureEvents(),
-  touch: supportsTouchEvents(),
+  /**
+   * It looks from https://github.com/pmndrs/use-gesture/discussions/421 that
+   * some touchscreens using webkits don't have 'ontouchstart' in window. So
+   * we're considering that browsers support TouchEvent if they have
+   * `maxTouchPoints > 1`
+   */
+  // touch: supportsTouchEvents(),
+  touch: isTouchScreen(),
   touchscreen: isTouchScreen(),
   pointer: supportsPointerEvents(),
   pointerLock: supportsPointerLock()
