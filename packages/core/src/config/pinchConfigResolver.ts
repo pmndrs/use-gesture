@@ -7,7 +7,7 @@ import { SUPPORT } from './support'
 export const pinchConfigResolver = {
   ...commonConfigResolver,
   useTouch(_v: any, _k: string, { pointer: { touch = false } = {} }) {
-    return SUPPORT.touch && touch
+    return touch && SUPPORT.touch
   },
   device(this: InternalPinchOptions, _v: any, _k: string, config: { shared: GenericOptions } & PinchConfig) {
     // Only try to use gesture events when they are supported and domTarget is set
