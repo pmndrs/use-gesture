@@ -156,6 +156,7 @@ export abstract class Engine<Key extends GestureKey> {
     state.intentional = false
     state._movement = [0, 0]
     state._distance = [0, 0]
+    state._direction = [0, 0]
     state._delta = [0, 0]
     // prettier-ignore
     state._bounds = [[-Infinity, Infinity], [-Infinity, Infinity]]
@@ -165,6 +166,8 @@ export abstract class Engine<Key extends GestureKey> {
     state.elapsedTime = 0
     state.direction = [0, 0]
     state.distance = [0, 0]
+    state.overflow = [0, 0]
+    state._movementBound = [false, false]
     state.velocity = [0, 0]
     state.movement = [0, 0]
     state.delta = [0, 0]
@@ -306,6 +309,7 @@ export abstract class Engine<Key extends GestureKey> {
 
           V.addTo(state.distance, absoluteDelta)
           state.direction = state.delta.map(Math.sign) as Vector2
+          state._direction = state._delta.map(Math.sign) as Vector2
 
           if (!state.first && dt > 0) {
             // calculates kinematics unless the gesture starts or ends
@@ -314,6 +318,24 @@ export abstract class Engine<Key extends GestureKey> {
         }
       }
     }
+
+    const [ox, oy] = state.offset
+    const [[x0, x1], [y0, y1]] = state._bounds
+    state.overflow = [ox < x0 ? -1 : ox > x1 ? 1 : 0, oy < y0 ? -1 : oy > y1 ? 1 : 0]
+
+    // _movementBound will store the latest _movement value
+    // before it went off bounds.
+    state._movementBound[0] = state.overflow[0]
+      ? state._movementBound[0] === false
+        ? state._movement[0]
+        : state._movementBound[0]
+      : false
+
+    state._movementBound[1] = state.overflow[1]
+      ? state._movementBound[1] === false
+        ? state._movement[1]
+        : state._movementBound[1]
+      : false
 
     // @ts-ignore
     const rubberband: Vector2 = state._active ? config.rubberband || [0, 0] : [0, 0]

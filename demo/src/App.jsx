@@ -14,6 +14,7 @@ import PinchMultiple from './sandboxes/gesture-pinch-multiple/src/App'
 import Three from './sandboxes/gesture-three/src/App'
 import ThreePreventScroll from './sandboxes/gesture-three-prevent-scroll/src/App'
 import Scroll from './sandboxes/gesture-scroll/src/App'
+import Wheel from './sandboxes/gesture-wheel/src/App'
 import Slide from './sandboxes/slide/src/App'
 import DraggableList from './sandboxes/draggable-list/src/App'
 import DraggableImage from './sandboxes/draggable-image/src/App'
@@ -37,6 +38,7 @@ const links = {
   'gesture-three': Three,
   'gesture-three-prevent-scroll': ThreePreventScroll,
   'gesture-scroll': Scroll,
+  'gesture-wheel': Wheel,
   slide: Slide,
   'draggable-list': DraggableList,
   'draggable-image': DraggableImage,

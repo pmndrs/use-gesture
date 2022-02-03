@@ -71,10 +71,12 @@ export type CommonGestureState = {
   _blocked: boolean
   _force: boolean
   _step: [false | number, false | number]
+  _movementBound: [false | number, false | number]
   _values: Vector2
   _initial: Vector2
   _movement: Vector2
   _distance: Vector2
+  _direction: Vector2
   _delta: Vector2
   _bounds: [Vector2, Vector2]
   /**
@@ -129,9 +131,13 @@ export type CommonGestureState = {
    */
   initial: Vector2
   /**
-   * Direction per axis. -1 when going down, 1 when going up, 0 when still.
+   * Direction per axis. `-1` when going down, `1` when going up, `0` when still.
    */
   direction: Vector2
+  /**
+   * Bound overflow per axis. `-1` when overflowing bounds to the left/top, `1` when overflowing bounds to the right/bottom.
+   */
+  overflow: Vector2
   /**
    * True when it's the first event of the active gesture.
    */
