@@ -1,5 +1,15 @@
 # @use-gesture/core
 
+## 10.2.5
+
+### Patch Changes
+
+- cd5533a4c: fix: change TouchEvent detection
+- 548a90985: [Drag] feat: Adding a custom threshold to taps when filtering them (`tapThreshold`)
+- c5067dce0: feat: add `overflow` state attribute telling when offset is overflowing bounds.
+  [Wheel] fix: only update `offset` when it stays within bounds.
+- 4eaabaf1a: fix: add `lostpointercapture` listener for cases when the `pointerup` event is missed.
+
 ## 10.2.4
 
 ### Patch Changes
