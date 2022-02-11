@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "postinstall": "patch-package",
-    "dev": "vite --port 4000",
+    "dev": "vite --port 4000 --host",
     "build": "vite build",
     "serve": "vite preview"
   },
