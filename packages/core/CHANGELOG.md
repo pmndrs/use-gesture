@@ -1,5 +1,11 @@
 # @use-gesture/core
 
+## 10.2.6
+
+### Patch Changes
+
+- 916d178c6: fix: make sure the drag gesture is ended when `touchcancel` event is triggered.
+
 ## 10.2.5
 
 ### Patch Changes
