@@ -50,7 +50,7 @@ function getCurrentTargetTouchList(event: TouchEvent) {
 }
 
 function getTouchList(event: TouchEvent) {
-  return event.type === 'touchend' ? event.changedTouches : event.targetTouches
+  return event.type === 'touchend' || event.type === 'touchcancel' ? event.changedTouches : event.targetTouches
 }
 
 function getValueEvent<EventType extends TouchEvent | PointerEvent>(
