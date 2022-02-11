@@ -263,6 +263,7 @@ export class DragEngine extends CoordinatesEngine<'drag'> {
     if (!config.pointerCapture) {
       this.eventStore.add(this.sharedConfig.window!, device, 'change', this.pointerMove.bind(this))
       this.eventStore.add(this.sharedConfig.window!, device, 'end', this.pointerUp.bind(this))
+      this.eventStore.add(this.sharedConfig.window!, device, 'cancel', this.pointerUp.bind(this))
     }
   }
 
