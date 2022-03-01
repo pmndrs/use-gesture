@@ -136,8 +136,7 @@ export class DragEngine extends CoordinatesEngine<'drag'> {
     if (state.type === event.type && event.timeStamp === state.timeStamp) return
 
     const id = pointerId(event)
-    if (state._pointerId && id !== state._pointerId) return
-
+    if (state._pointerId !== undefined && id !== state._pointerId) return
     const _values = pointerValues(event)
 
     if (document.pointerLockElement === event.target) {
@@ -200,7 +199,7 @@ export class DragEngine extends CoordinatesEngine<'drag'> {
 
     if (!state._pointerActive) return
     const id = pointerId(event)
-    if (state._pointerId && id !== state._pointerId) return
+    if (state._pointerId !== undefined && id !== state._pointerId) return
 
     this.state._pointerActive = false
     this.setActive()
