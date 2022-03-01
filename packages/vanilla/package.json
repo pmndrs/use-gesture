@@ -1,6 +1,6 @@
 {
   "name": "@use-gesture/vanilla",
-  "version": "10.2.6",
+  "version": "10.2.7",
   "description": "Vanilla target for @use-gesture",
   "keywords": [
     "react",
@@ -35,6 +35,6 @@
   ],
   "homepage": "https://use-gesture.netlify.app",
   "dependencies": {
-    "@use-gesture/core": "10.2.6"
+    "@use-gesture/core": "10.2.7"
   }
 }
