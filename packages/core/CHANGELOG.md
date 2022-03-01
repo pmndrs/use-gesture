@@ -1,5 +1,11 @@
 # @use-gesture/core
 
+## 10.2.7
+
+### Patch Changes
+
+- 2d943428c: Fix a bug when a touch identifier is equal to `0`
+
 ## 10.2.6
 
 ### Patch Changes
