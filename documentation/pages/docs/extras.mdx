@@ -12,7 +12,7 @@ These tips aren't specific to <UseGesture /> but might come handy to anyone buil
 
 ### touch-action
 
-Let's take the mailbox email list: panning vertically should scroll vertically through the emails, and dragging horizontally should unveil options such as delete and mark undread.
+Let's take the mailbox email list: panning vertically should scroll vertically through the emails, and dragging horizontally should unveil options such as delete and mark unread.
 
 In these situations you don't want the `body` of your page to scroll along with the user manipulating the item horizontally. Your first instinct might be to prevent the event default action by calling `event.preventDefault()` in your handler. But there is a simpler, more effective solution, which has to do with a simple CSS property.
 
