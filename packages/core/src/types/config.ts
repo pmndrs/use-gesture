@@ -128,7 +128,7 @@ export type DragConfig = CoordinatesConfig<'drag'> & {
    */
   filterTaps?: boolean
   /**
-   * The maximum total displacement a tap can have   
+   * The maximum total displacement a tap can have
    */
   tapsThreshold?: number
   /**
@@ -149,6 +149,11 @@ export type DragConfig = CoordinatesConfig<'drag'> & {
      * If true, drag will use touch events on touch-enabled devices.
      */
     touch?: boolean
+    /**
+     * If true, drag will use touch events on touch-enabled devices, and use
+     * mouse events on touch-disabled-devices.
+     */
+    disable?: boolean
     /**
      * Doesn't use setPointerCapture when false and delegate drag handling to
      * window

@@ -15,15 +15,16 @@ export const dragConfigResolver = {
     this: InternalDragOptions,
     _v: any,
     _k: string,
-    { pointer: { lock = false, touch = false } = {} }: DragConfig
+    { pointer: { lock = false, touch = false, disable = false } = {} }: DragConfig
   ) {
     this.useTouch = touch && SUPPORT.touch
+    this.disablePointer = disable
     return lock && SUPPORT.pointerLock
   },
   device(this: InternalDragOptions, _v: any, _k: string) {
     if (this.useTouch) return 'touch'
     if (this.pointerLock) return 'mouse'
-    if (SUPPORT.pointer) return 'pointer'
+    if (SUPPORT.pointer && !this.disablePointer) return 'pointer'
     if (SUPPORT.touch) return 'touch'
     return 'mouse'
   },

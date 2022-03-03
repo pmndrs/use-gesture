@@ -31,6 +31,7 @@ export type InternalDragOptions = InternalCoordinatesOptions<'drag'> & {
   filterTaps: boolean
   tapsThreshold: number
   useTouch: boolean
+  disablePointer: boolean
   pointerButtons: number | number[]
   pointerCapture: boolean
   preventScroll: number
