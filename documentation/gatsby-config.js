@@ -1,5 +1,4 @@
 module.exports = {
-  flags: { PRESERVE_WEBPACK_CACHE: true },
   plugins: [
     {
       resolve: 'gatsby-plugin-pnpm',
@@ -25,7 +24,8 @@ module.exports = {
           indexName: 'use-gesture'
         },
         twitterAccount: 'pmndrs',
-        githubRepositoryURL: 'https://github.com/pmndrs/use-gesture'
+        githubRepositoryURL: 'https://github.com/pmndrs/use-gesture',
+        carbonAdsURL: '//cdn.carbonads.com/carbon.js?serve=CEAI42QM&placement=use-gesturenetlifyapp'
       }
     },
 

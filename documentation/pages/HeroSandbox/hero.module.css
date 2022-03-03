@@ -5,6 +5,52 @@
   background-color: #86b4ff1a;
   z-index: 1;
 }
+
+.header aside {
+  height: unset;
+  margin: unset;
+  padding: 10px;
+}
+
+.header :global(#carbonads) {
+  position: absolute;
+  max-width: 300px;
+}
+
+.header :global(#carbonads) > span {
+  display: block;
+  position: relative;
+  padding: 10px;
+
+  border-radius: 4px;
+  background-color: #fff;
+  box-shadow: 0 0 1px 1px hsla(0, 0%, 0%, 0.05), 0 0 2px 2px hsla(0, 0%, 0%, 0.05), 0 0 4px 4px hsla(0, 0%, 0%, 0.05);
+}
+
+.header :global(#carbonads .carbon-wrap) {
+  display: flex;
+}
+
+.header :global(#carbonads .carbon-img) {
+  margin-right: 10px;
+  line-height: 1;
+}
+
+.header :global(#carbonads .carbon-text) {
+  margin-bottom: 28px;
+  padding: 0;
+  font-size: 12px;
+  line-height: 1.45;
+  color: #637381;
+}
+
+.header :global(#carbonads .carbon-poweredby) {
+  position: absolute;
+  bottom: 10px;
+  left: 152px;
+  color: #c5cdd0;
+}
+
 .wrapper,
 .bg {
   width: 100%;

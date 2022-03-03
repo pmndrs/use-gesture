@@ -1,16 +1,19 @@
 ---
 title: Examples
 section: More
+order: 1
 ---
 
 # Examples
 
 Click on the examples below to open them on codesandbox.
 
+<carbon-ad />
+
 import Video from './Video'
 import * as styles from './video.module.css'
 
-<div className={styles.videos} style={{ marginTop: '4rem' }}>
+<div className={styles.videos} style={{ marginTop: '2rem' }}>
   <Video video={'/videos/draggable.mp4'} id="draggable-list" badges={['drag']} />
   <Video video={'/videos/cards.mp4'} id="cards-stack" badges={['drag']} />
   <Video

@@ -16,7 +16,7 @@ const _config = {
   soft: config.default
 }
 
-export default function Hero() {
+export default function Hero({ carbonAd }) {
   const [shadow, setShadow] = useState(false)
   const ref = useRef()
   const rect = useRef({})
@@ -134,6 +134,7 @@ export default function Hero() {
 
   return (
     <div className={styles.header}>
+      {carbonAd}
       <div className={styles.gui}>
         <Leva theme={{ sizes: { controlWidth: '140px' } }} flat fill titleBar={false} />
       </div>
