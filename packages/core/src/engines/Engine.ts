@@ -286,8 +286,11 @@ export abstract class Engine<Key extends GestureKey> {
 
     // let's run intentionality check.
     if (this.intent) this.intent(movement)
+    const previousOffset = state.offset
 
-    if ((state._active && !state._blocked) || state.active) {
+    const gestureIsActive = (state._active && !state._blocked) || state.active
+
+    if (gestureIsActive) {
       state.first = state._active && !state.active
       state.last = !state._active && state.active
       state.active = shared[this.ingKey] = state._active
@@ -299,23 +302,7 @@ export abstract class Engine<Key extends GestureKey> {
         }
 
         state.movement = movement
-        const previousOffset = state.offset
-
         this.computeOffset()
-
-        if (!state.last || dt > BEFORE_LAST_KINEMATICS_DELAY) {
-          state.delta = V.sub(state.offset, previousOffset)
-          const absoluteDelta = state.delta.map(Math.abs) as Vector2
-
-          V.addTo(state.distance, absoluteDelta)
-          state.direction = state.delta.map(Math.sign) as Vector2
-          state._direction = state._delta.map(Math.sign) as Vector2
-
-          if (!state.first && dt > 0) {
-            // calculates kinematics unless the gesture starts or ends
-            state.velocity = [absoluteDelta[0] / dt, absoluteDelta[1] / dt]
-          }
-        }
       }
     }
 
@@ -340,7 +327,23 @@ export abstract class Engine<Key extends GestureKey> {
     // @ts-ignore
     const rubberband: Vector2 = state._active ? config.rubberband || [0, 0] : [0, 0]
     state.offset = computeRubberband(state._bounds, state.offset, rubberband)
+    state.delta = V.sub(state.offset, previousOffset)
+
     this.computeMovement()
+
+    if (gestureIsActive && (!state.last || dt > BEFORE_LAST_KINEMATICS_DELAY)) {
+      state.delta = V.sub(state.offset, previousOffset)
+      const absoluteDelta = state.delta.map(Math.abs) as Vector2
+
+      V.addTo(state.distance, absoluteDelta)
+      state.direction = state.delta.map(Math.sign) as Vector2
+      state._direction = state._delta.map(Math.sign) as Vector2
+
+      if (!state.first && dt > 0) {
+        // calculates kinematics unless the gesture starts or ends
+        state.velocity = [absoluteDelta[0] / dt, absoluteDelta[1] / dt]
+      }
+    }
   }
   /**
    * Fires the gesture handler.
