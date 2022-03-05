@@ -1,5 +1,11 @@
 # @use-gesture/core
 
+## 10.2.8
+
+### Patch Changes
+
+- 2c0fde118: fix: delta is now derived from the `offset` value _after_ it is clamped by bounds.
+
 ## 10.2.7
 
 ### Patch Changes

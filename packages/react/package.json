@@ -1,6 +1,6 @@
 {
   "name": "@use-gesture/react",
-  "version": "10.2.7",
+  "version": "10.2.8",
   "description": "React target for @use-gesture",
   "keywords": [
     "react",
@@ -38,6 +38,6 @@
     "react": ">= 16.8.0"
   },
   "dependencies": {
-    "@use-gesture/core": "10.2.7"
+    "@use-gesture/core": "10.2.8"
   }
 }
