@@ -1,5 +1,11 @@
 # @use-gesture/core
 
+## 10.2.9
+
+### Patch Changes
+
+- d86df73b9: feat: add `pointer.mouse` option to force mouse listeners instead of pointers when possible.
+
 ## 10.2.8
 
 ### Patch Changes
