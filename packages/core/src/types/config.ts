@@ -93,7 +93,7 @@ export type PinchConfig = GestureOptions<'pinch'> & {
     /**
      * If true, pinch will use touch events on touch-enabled devices.
      */
-    touch: boolean
+    touch?: boolean
   }
   /**
    * Limits the scale `offset` to the specified bounds.
@@ -152,8 +152,10 @@ export type DragConfig = CoordinatesConfig<'drag'> & {
     /**
      * If true, drag will use touch events on touch-enabled devices, and use
      * mouse events on touch-disabled-devices.
+     * mouse events on non touch devices.
      */
     disable?: boolean
+    mouse?: boolean
     /**
      * Doesn't use setPointerCapture when false and delegate drag handling to
      * window

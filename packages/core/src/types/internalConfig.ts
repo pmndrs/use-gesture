@@ -47,7 +47,6 @@ export type InternalDragOptions = InternalCoordinatesOptions<'drag'> & {
 }
 
 export type InternalPinchOptions = InternalGestureOptions<'pinch'> & {
-  useTouch: boolean
   /**
    * When device is undefined, we'll be using wheel to zoom.
    */

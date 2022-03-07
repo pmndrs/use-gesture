@@ -6,15 +6,17 @@ import { SUPPORT } from './support'
 
 export const pinchConfigResolver = {
   ...commonConfigResolver,
-  useTouch(_v: any, _k: string, { pointer: { touch = false } = {} }) {
-    return touch && SUPPORT.touch
-  },
-  device(this: InternalPinchOptions, _v: any, _k: string, config: { shared: GenericOptions } & PinchConfig) {
+  device(
+    this: InternalPinchOptions,
+    _v: any,
+    _k: string,
+    { shared, pointer: { touch = false } = {} }: { shared: GenericOptions } & PinchConfig
+  ) {
     // Only try to use gesture events when they are supported and domTarget is set
     // as React doesn't support gesture handlers.
-    const sharedConfig = config.shared
+    const sharedConfig = shared
     if (sharedConfig.target && !SUPPORT.touch && SUPPORT.gesture) return 'gesture'
-    if (this.useTouch) return 'touch'
+    if (SUPPORT.touch && touch) return 'touch'
     if (SUPPORT.touchscreen) {
       if (SUPPORT.pointer) return 'pointer'
       if (SUPPORT.touch) return 'touch'
