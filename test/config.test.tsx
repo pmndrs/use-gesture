@@ -76,8 +76,7 @@ describe('testing derived config', () => {
         pointerLock: false,
         pointerCapture: true,
         filterTaps: false,
-        tapsThreshold: 3,
-        useTouch: false
+        tapsThreshold: 3
       })
     })
 
@@ -102,10 +101,19 @@ describe('testing derived config', () => {
       dragConfig = { delay: false }
       expect(parse(dragConfig, 'drag').drag).toHaveProperty('delay', 0)
     })
+
+    test(`derived device is touch when pointer.touch is true`, () => {
+      dragConfig = { pointer: { touch: true } }
+      expect(parse(dragConfig, 'drag').drag).toHaveProperty('device', 'touch')
+    })
+
     test(`derived device properly handles touch and lock`, () => {
       dragConfig = { pointer: { touch: true, lock: true } }
       expect(parse(dragConfig, 'drag').drag).toHaveProperty('device', 'touch')
-      /* @note unfortunately jsdom doesn't support pointer lock so device is pointer */
+      /**
+       * @note unfortunately jsdom doesn't support pointer lock so device is
+       * `pointer` but it should be `mouse`.
+       */
       dragConfig.pointer.touch = false
       expect(parse(dragConfig, 'drag').drag).toHaveProperty('device', 'pointer')
     })
@@ -134,7 +142,6 @@ describe('testing derived config', () => {
         preventDefault: false,
         lockDirection: false,
         from: undefined,
-        useTouch: false,
         threshold: [0, 0],
         rubberband: [0, 0]
       })
