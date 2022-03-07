@@ -2,7 +2,7 @@
   "packages": ["packages/*"],
   "sandboxes": [
     "/demo/src/sandboxes/gesture-drag",
-    "/demo/src/sandboxes/gesture-target",
+    "/demo/src/sandboxes/gesture-drag-target",
     "/demo/src/sandboxes/gesture-nested",
     "/demo/src/sandboxes/gesture-vanilla",
     "/demo/src/sandboxes/gesture-move",
