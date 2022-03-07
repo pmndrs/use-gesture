@@ -151,10 +151,8 @@ export type DragConfig = CoordinatesConfig<'drag'> & {
     touch?: boolean
     /**
      * If true, drag will use touch events on touch-enabled devices, and use
-     * mouse events on touch-disabled-devices.
      * mouse events on non touch devices.
      */
-    disable?: boolean
     mouse?: boolean
     /**
      * Doesn't use setPointerCapture when false and delegate drag handling to
