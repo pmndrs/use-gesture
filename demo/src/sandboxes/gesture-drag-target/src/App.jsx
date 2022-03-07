@@ -23,7 +23,7 @@ function Draggable() {
     boundToParent: false
   })
 
-  const pointerOptions = useControls('pointer', { touch: false, capture: true, lock: false })
+  const pointerOptions = useControls('pointer', { touch: false, capture: true, lock: false, mouse: false })
 
   useDrag(
     ({ active, event, ...state }) => {

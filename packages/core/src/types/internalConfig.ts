@@ -30,7 +30,6 @@ export type InternalCoordinatesOptions<Key extends CoordinatesKey = CoordinatesK
 export type InternalDragOptions = InternalCoordinatesOptions<'drag'> & {
   filterTaps: boolean
   tapsThreshold: number
-  useTouch: boolean
   pointerButtons: number | number[]
   pointerCapture: boolean
   preventScroll: number
@@ -46,7 +45,6 @@ export type InternalDragOptions = InternalCoordinatesOptions<'drag'> & {
 }
 
 export type InternalPinchOptions = InternalGestureOptions<'pinch'> & {
-  useTouch: boolean
   /**
    * When device is undefined, we'll be using wheel to zoom.
    */

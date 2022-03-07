@@ -5,7 +5,7 @@ import styles from './styles.module.css'
 
 import Simplest from './sandboxes/gesture-simplest/src/App'
 import Drag from './sandboxes/gesture-drag/src/App'
-import Target from './sandboxes/gesture-target/src/App'
+import DragTarget from './sandboxes/gesture-drag-target/src/App'
 import Nested from './sandboxes/gesture-nested/src/App'
 import Vanilla from './sandboxes/gesture-vanilla/src/App'
 import Move from './sandboxes/gesture-move/src/App'
@@ -29,7 +29,7 @@ import DotsConnect from './sandboxes/dots-connect/src/App'
 const links = {
   'gesture-simplest': Simplest,
   'gesture-drag': Drag,
-  'gesture-target': Target,
+  'gesture-drag-target': DragTarget,
   'gesture-nested': Nested,
   'gesture-vanilla': Vanilla,
   'gesture-move': Move,

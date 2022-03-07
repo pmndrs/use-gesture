@@ -11,19 +11,16 @@ export const DEFAULT_SWIPE_DURATION = 250
 
 export const dragConfigResolver = {
   ...coordinatesConfigResolver,
-  pointerLock(
+  device(
     this: InternalDragOptions,
     _v: any,
     _k: string,
-    { pointer: { lock = false, touch = false } = {} }: DragConfig
+    { pointer: { touch = false, lock = false, mouse = false } = {} }: DragConfig
   ) {
-    this.useTouch = touch && SUPPORT.touch
-    return lock && SUPPORT.pointerLock
-  },
-  device(this: InternalDragOptions, _v: any, _k: string) {
-    if (this.useTouch) return 'touch'
+    this.pointerLock = lock && SUPPORT.pointerLock
+    if (SUPPORT.touch && touch) return 'touch'
     if (this.pointerLock) return 'mouse'
-    if (SUPPORT.pointer) return 'pointer'
+    if (SUPPORT.pointer && !mouse) return 'pointer'
     if (SUPPORT.touch) return 'touch'
     return 'mouse'
   },
@@ -33,7 +30,7 @@ export const dragConfigResolver = {
     _k: string,
     { preventScrollAxis = 'y' }: DragConfig
   ) {
-    if (preventScrollAxis) this.preventScrollAxis = preventScrollAxis
+    this.preventScrollAxis = preventScrollAxis
     if (!SUPPORT.touchscreen) return false
     if (typeof value === 'number') return value
     return value ? DEFAULT_PREVENT_SCROLL_DELAY : false

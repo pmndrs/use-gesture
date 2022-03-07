@@ -25,7 +25,7 @@ function Draggable() {
     delay: { value: 1000, step: 100, min: 0, max: 3000, optional: true, disabled: true }
   })
 
-  const pointerOptions = useControls('pointer', { touch: false, capture: true, lock: false })
+  const pointerOptions = useControls('pointer', { touch: false, capture: true, lock: false, mouse: false })
 
   const bind = useDrag(
     ({ active, tap, ...state }) => {
@@ -52,6 +52,8 @@ function Draggable() {
       ...(boundToParent && { bounds: ref })
     }
   )
+
+  console.log(bind())
 
   return (
     <>
