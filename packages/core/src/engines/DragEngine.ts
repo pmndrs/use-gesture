@@ -106,7 +106,7 @@ export class DragEngine extends CoordinatesEngine<'drag'> {
     this.computeValues(pointerValues(event))
     this.computeInitial()
 
-    if (config.preventScroll) {
+    if (config.preventScrollAxis) {
       this.setupScrollPrevention(event)
     } else if (config.delay > 0) {
       this.setupDelayTrigger(event)
@@ -158,7 +158,7 @@ export class DragEngine extends CoordinatesEngine<'drag'> {
       return
     }
 
-    if (config.preventScroll && !state._preventScroll) {
+    if (config.preventScrollAxis && !state._preventScroll) {
       if (state.axis) {
         if (state.axis === config.preventScrollAxis || config.preventScrollAxis === 'xy') {
           state._active = false
@@ -236,11 +236,11 @@ export class DragEngine extends CoordinatesEngine<'drag'> {
 
   setupPointer(event: PointerEvent) {
     const config = this.config
-    let device = config.device
+    const device = config.device
 
     if (process.env.NODE_ENV === 'development') {
       try {
-        if (device === 'pointer') {
+        if (device === 'pointer' && config.preventScrollDelay === undefined) {
           // @ts-ignore (warning for r3f)
           const currentTarget = 'uv' in event ? event.sourceEvent.currentTarget : event.currentTarget
           const style = window.getComputedStyle(currentTarget)
@@ -284,7 +284,7 @@ export class DragEngine extends CoordinatesEngine<'drag'> {
     this.eventStore.add(this.sharedConfig.window!, 'touch', 'change', this.preventScroll.bind(this), { passive: false })
     this.eventStore.add(this.sharedConfig.window!, 'touch', 'end', this.clean.bind(this), { passive: false })
     this.eventStore.add(this.sharedConfig.window!, 'touch', 'cancel', this.clean.bind(this), { passive: false })
-    this.timeoutStore.add('startPointerDrag', this.startPointerDrag.bind(this), this.config.preventScroll, event)
+    this.timeoutStore.add('startPointerDrag', this.startPointerDrag.bind(this), this.config.preventScrollDelay!, event)
   }
 
   setupDelayTrigger(event: PointerEvent) {
