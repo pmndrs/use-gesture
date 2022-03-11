@@ -26,7 +26,11 @@ export const dragConfigResolver = {
   },
   preventScrollAxis(this: InternalDragOptions, value: 'x' | 'y' | 'xy', _k: string, { preventScroll }: DragConfig) {
     this.preventScrollDelay =
-      typeof preventScroll === 'number' ? preventScroll : preventScroll ? DEFAULT_PREVENT_SCROLL_DELAY : undefined
+      typeof preventScroll === 'number'
+        ? preventScroll
+        : preventScroll || (preventScroll === undefined && value)
+        ? DEFAULT_PREVENT_SCROLL_DELAY
+        : undefined
     if (!SUPPORT.touchscreen || preventScroll === false) return undefined
     return value ? value : preventScroll !== undefined ? 'y' : undefined
   },

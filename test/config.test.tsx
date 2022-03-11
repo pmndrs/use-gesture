@@ -70,7 +70,7 @@ describe('testing derived config', () => {
         rubberband: [0, 0],
         axis: undefined,
         lockDirection: false,
-        preventScrollDelay: 250,
+        preventScrollDelay: undefined,
         preventScrollAxis: undefined,
         pointerButtons: 1,
         pointerLock: false,
@@ -140,7 +140,7 @@ describe('testing derived config', () => {
       expect(parse(dragConfig, 'drag').drag).toHaveProperty('preventScrollAxis', 'x')
 
       dragConfig = { preventScrollAxis: 'x', preventScroll: false }
-      expect(parse(dragConfig, 'drag').drag).toHaveProperty('preventScrollDelay', 250)
+      expect(parse(dragConfig, 'drag').drag).toHaveProperty('preventScrollDelay', undefined)
       expect(parse(dragConfig, 'drag').drag).toHaveProperty('preventScrollAxis', undefined)
     })
   })
