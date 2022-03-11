@@ -1,4 +1,11 @@
+const title = '@use-gesture documentation'
+const description = `@use-gesture allows you to implement advanced UI interactions with just a few lines of code.`
+
 module.exports = {
+  siteMetadata: {
+    title,
+    description
+  },
   plugins: [
     {
       resolve: 'gatsby-plugin-pnpm',
@@ -9,9 +16,9 @@ module.exports = {
     {
       resolve: 'smooth-doc',
       options: {
-        name: '@use-gesture',
+        name: title,
         siteUrl: 'https://use-gesture.netlify.app',
-        description: `@use-gesture allows you to implement advanced UI interactions with just a few lines of code.`,
+        description,
         author: 'David Bismut',
         sections: ['About', 'Reference', 'More'],
         navItems: [

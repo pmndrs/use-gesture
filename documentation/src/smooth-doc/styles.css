@@ -2,6 +2,13 @@ body.dragged {
   user-select: none;
 }
 
+body.dragged *,
+body.dragged *:after,
+body.dragged *:before {
+  user-select: none;
+  overscroll-behavior: none;
+}
+
 sup {
   margin: 0 0.2em;
 }
