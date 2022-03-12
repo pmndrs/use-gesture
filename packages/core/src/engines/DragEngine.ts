@@ -149,10 +149,12 @@ export class DragEngine extends CoordinatesEngine<'drag'> {
     V.addTo(state._movement, state._delta)
     this.compute(event)
 
-    if (state._delayed) {
+    // if the gesture is delayed but deliberate, then we can start it
+    // immediately.
+    if (state._delayed && state.intentional) {
       this.timeoutStore.remove('dragDelay')
-      // makes sure first is still true when moving for the first time after a
-      // delay
+      // makes sure `first` is still true when moving for the first time after a
+      // delay.
       state.active = false
       this.startPointerDrag(event)
       return
