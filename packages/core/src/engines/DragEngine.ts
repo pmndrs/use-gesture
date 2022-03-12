@@ -107,6 +107,9 @@ export class DragEngine extends CoordinatesEngine<'drag'> {
     this.computeInitial()
 
     if (config.preventScrollAxis) {
+      // when preventScrollAxis is set we don't consider the gesture active
+      // until it's deliberate
+      state._active = false
       this.setupScrollPrevention(event)
     } else if (config.delay > 0) {
       this.setupDelayTrigger(event)
@@ -199,7 +202,8 @@ export class DragEngine extends CoordinatesEngine<'drag'> {
     const state = this.state
     const config = this.config
 
-    if (!state._pointerActive) return
+    if (!state._active || !state._pointerActive) return
+
     const id = pointerId(event)
     if (state._pointerId !== undefined && id !== state._pointerId) return
 
