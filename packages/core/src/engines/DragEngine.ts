@@ -289,7 +289,15 @@ export class DragEngine extends CoordinatesEngine<'drag'> {
 
   setupDelayTrigger(event: PointerEvent) {
     this.state._delayed = true
-    this.timeoutStore.add('dragDelay', this.startPointerDrag.bind(this), this.config.delay, event)
+    this.timeoutStore.add(
+      'dragDelay',
+      () => {
+        // forces drag to start no matter the threshold when delay is reached
+        this.state._step = [0, 0]
+        this.startPointerDrag(event)
+      },
+      this.config.delay
+    )
   }
 
   keyDown(event: KeyboardEvent) {
