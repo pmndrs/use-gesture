@@ -4,7 +4,7 @@ import { V } from '../utils/maths'
 import { Vector2, WebKitGestureEvent } from '../types'
 
 const SCALE_ANGLE_RATIO_INTENT_DEG = 30
-const PINCH_WHEEL_RATIO = 36
+const PINCH_WHEEL_RATIO = 100
 
 export class PinchEngine extends Engine<'pinch'> {
   ingKey = 'pinching' as const
