@@ -106,7 +106,10 @@ export class DragEngine extends CoordinatesEngine<'drag'> {
     this.computeValues(pointerValues(event))
     this.computeInitial()
 
-    if (config.preventScroll) {
+    if (config.preventScrollAxis) {
+      // when preventScrollAxis is set we don't consider the gesture active
+      // until it's deliberate
+      state._active = false
       this.setupScrollPrevention(event)
     } else if (config.delay > 0) {
       this.setupDelayTrigger(event)
@@ -149,16 +152,18 @@ export class DragEngine extends CoordinatesEngine<'drag'> {
     V.addTo(state._movement, state._delta)
     this.compute(event)
 
-    if (state._delayed) {
+    // if the gesture is delayed but deliberate, then we can start it
+    // immediately.
+    if (state._delayed && state.intentional) {
       this.timeoutStore.remove('dragDelay')
-      // makes sure first is still true when moving for the first time after a
-      // delay
+      // makes sure `first` is still true when moving for the first time after a
+      // delay.
       state.active = false
       this.startPointerDrag(event)
       return
     }
 
-    if (config.preventScroll && !state._preventScroll) {
+    if (config.preventScrollAxis && !state._preventScroll) {
       if (state.axis) {
         if (state.axis === config.preventScrollAxis || config.preventScrollAxis === 'xy') {
           state._active = false
@@ -197,7 +202,8 @@ export class DragEngine extends CoordinatesEngine<'drag'> {
     const state = this.state
     const config = this.config
 
-    if (!state._pointerActive) return
+    if (!state._active || !state._pointerActive) return
+
     const id = pointerId(event)
     if (state._pointerId !== undefined && id !== state._pointerId) return
 
@@ -236,11 +242,11 @@ export class DragEngine extends CoordinatesEngine<'drag'> {
 
   setupPointer(event: PointerEvent) {
     const config = this.config
-    let device = config.device
+    const device = config.device
 
     if (process.env.NODE_ENV === 'development') {
       try {
-        if (device === 'pointer') {
+        if (device === 'pointer' && config.preventScrollDelay === undefined) {
           // @ts-ignore (warning for r3f)
           const currentTarget = 'uv' in event ? event.sourceEvent.currentTarget : event.currentTarget
           const style = window.getComputedStyle(currentTarget)
@@ -282,14 +288,22 @@ export class DragEngine extends CoordinatesEngine<'drag'> {
     persistEvent(event)
     // we add window listeners that will prevent the scroll when the user has started dragging
     this.eventStore.add(this.sharedConfig.window!, 'touch', 'change', this.preventScroll.bind(this), { passive: false })
-    this.eventStore.add(this.sharedConfig.window!, 'touch', 'end', this.clean.bind(this), { passive: false })
-    this.eventStore.add(this.sharedConfig.window!, 'touch', 'cancel', this.clean.bind(this), { passive: false })
-    this.timeoutStore.add('startPointerDrag', this.startPointerDrag.bind(this), this.config.preventScroll, event)
+    this.eventStore.add(this.sharedConfig.window!, 'touch', 'end', this.clean.bind(this))
+    this.eventStore.add(this.sharedConfig.window!, 'touch', 'cancel', this.clean.bind(this))
+    this.timeoutStore.add('startPointerDrag', this.startPointerDrag.bind(this), this.config.preventScrollDelay!, event)
   }
 
   setupDelayTrigger(event: PointerEvent) {
     this.state._delayed = true
-    this.timeoutStore.add('dragDelay', this.startPointerDrag.bind(this), this.config.delay, event)
+    this.timeoutStore.add(
+      'dragDelay',
+      () => {
+        // forces drag to start no matter the threshold when delay is reached
+        this.state._step = [0, 0]
+        this.startPointerDrag(event)
+      },
+      this.config.delay
+    )
   }
 
   keyDown(event: KeyboardEvent) {

@@ -32,8 +32,8 @@ export type InternalDragOptions = InternalCoordinatesOptions<'drag'> & {
   tapsThreshold: number
   pointerButtons: number | number[]
   pointerCapture: boolean
-  preventScroll: number
-  preventScrollAxis: 'x' | 'y' | 'xy'
+  preventScrollDelay?: number
+  preventScrollAxis?: 'x' | 'y' | 'xy'
   pointerLock: boolean
   device: 'pointer' | 'touch' | 'mouse'
   swipe: {

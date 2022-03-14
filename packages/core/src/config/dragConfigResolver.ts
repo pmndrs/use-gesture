@@ -24,16 +24,15 @@ export const dragConfigResolver = {
     if (SUPPORT.touch) return 'touch'
     return 'mouse'
   },
-  preventScroll(
-    this: InternalDragOptions,
-    value: number | boolean = false,
-    _k: string,
-    { preventScrollAxis = 'y' }: DragConfig
-  ) {
-    this.preventScrollAxis = preventScrollAxis
-    if (!SUPPORT.touchscreen) return false
-    if (typeof value === 'number') return value
-    return value ? DEFAULT_PREVENT_SCROLL_DELAY : false
+  preventScrollAxis(this: InternalDragOptions, value: 'x' | 'y' | 'xy', _k: string, { preventScroll }: DragConfig) {
+    this.preventScrollDelay =
+      typeof preventScroll === 'number'
+        ? preventScroll
+        : preventScroll || (preventScroll === undefined && value)
+        ? DEFAULT_PREVENT_SCROLL_DELAY
+        : undefined
+    if (!SUPPORT.touchscreen || preventScroll === false) return undefined
+    return value ? value : preventScroll !== undefined ? 'y' : undefined
   },
   pointerCapture(this: InternalDragOptions, _v: any, _k: string, { pointer: { capture = true, buttons = 1 } = {} }) {
     this.pointerButtons = buttons

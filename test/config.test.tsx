@@ -70,8 +70,8 @@ describe('testing derived config', () => {
         rubberband: [0, 0],
         axis: undefined,
         lockDirection: false,
-        preventScroll: false,
-        preventScrollAxis: 'y',
+        preventScrollDelay: undefined,
+        preventScrollAxis: undefined,
         pointerButtons: 1,
         pointerLock: false,
         pointerCapture: true,
@@ -124,6 +124,24 @@ describe('testing derived config', () => {
       dragConfig = { transform }
       expect(parse(dragConfig, 'drag').drag).toHaveProperty('transform', transform)
       expect(parse(dragConfig, 'drag').drag).toHaveProperty('hasCustomTransform', true)
+    })
+
+    test(`derived preventScrollDelay and preventScrollAxis are properly computed`, () => {
+      dragConfig = { preventScroll: true }
+      expect(parse(dragConfig, 'drag').drag).toHaveProperty('preventScrollDelay', 250)
+      expect(parse(dragConfig, 'drag').drag).toHaveProperty('preventScrollAxis', 'y')
+
+      dragConfig = { preventScroll: 300 }
+      expect(parse(dragConfig, 'drag').drag).toHaveProperty('preventScrollDelay', 300)
+      expect(parse(dragConfig, 'drag').drag).toHaveProperty('preventScrollAxis', 'y')
+
+      dragConfig = { preventScrollAxis: 'x' }
+      expect(parse(dragConfig, 'drag').drag).toHaveProperty('preventScrollDelay', 250)
+      expect(parse(dragConfig, 'drag').drag).toHaveProperty('preventScrollAxis', 'x')
+
+      dragConfig = { preventScrollAxis: 'x', preventScroll: false }
+      expect(parse(dragConfig, 'drag').drag).toHaveProperty('preventScrollDelay', undefined)
+      expect(parse(dragConfig, 'drag').drag).toHaveProperty('preventScrollAxis', undefined)
     })
   })
 

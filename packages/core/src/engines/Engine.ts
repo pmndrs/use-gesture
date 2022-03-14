@@ -258,7 +258,7 @@ export abstract class Engine<Key extends GestureKey> {
     const { _step, values } = state
 
     if (config.hasCustomTransform) {
-      // When the user is using a custom transform, we're using _step to store
+      // When the user is using a custom transform, we're using `_step` to store
       // the first value passing the threshold.
       if (_step[0] === false) _step[0] = Math.abs(_m0) >= t0 && values[0]
       if (_step[1] === false) _step[1] = Math.abs(_m1) >= t1 && values[1]
