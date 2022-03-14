@@ -1,5 +1,13 @@
 # @use-gesture/core
 
+## 10.2.10
+
+### Patch Changes
+
+- f593dbe09: - fix: increase `PINCH_WHEEL_RATIO` to `100` to slow down zoom on wheel-based devices.
+  - fix: force drag to start no matter the threshold when delay is reached.
+  - fix: improve `preventScroll`.
+
 ## 10.2.9
 
 ### Patch Changes
