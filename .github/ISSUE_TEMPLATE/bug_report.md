@@ -14,7 +14,7 @@ assignees: dbismut
 > If applicable, please provide a minimal reproduction sandbox on code sandbox. Or a video / screenshots that could help.
 
 **Information:**
- - React Use Gesture version: [e.g. v8.1.0-beta.6]
+ - Use Gesture version: [e.g. v10.2.10]
  - Device: [e.g. iPhone6]
  - OS: [e.g. iOS8.1]
  - Browser [e.g. stock browser, safari]
