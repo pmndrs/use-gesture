@@ -53,8 +53,6 @@ function Draggable() {
     }
   )
 
-  console.log(bind())
-
   return (
     <>
       <a.div tabIndex={-1} {...bind()} className={styles.drag} style={style}>
