@@ -113,6 +113,11 @@ export class DragEngine extends CoordinatesEngine<'drag'> {
       this.setupScrollPrevention(event)
     } else if (config.delay > 0) {
       this.setupDelayTrigger(event)
+      // makes sure we emit all events when `triggerAllEvents` flag is `true`
+      if (config.triggerAllEvents) {
+        this.compute(event)
+        this.emit()
+      }
     } else {
       this.startPointerDrag(event)
     }

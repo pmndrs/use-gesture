@@ -553,7 +553,7 @@ function Transform() {
 }
 ```
 
-> When you use the `useGesture` hook, you can set the `transform` option at the shared level and at the gesture level, with the `transform` set at the gesture level oveerriding the shared one.
+> When you use the `useGesture` hook, you can set the `transform` option at the shared level and at the gesture level, with the `transform` set at the gesture level overriding the shared one.
 
 ```js
 useGesture({/* handlers */ }, {
@@ -569,6 +569,8 @@ useGesture({/* handlers */ }, {
 <Specs types="boolean" defaultValue="false" />
 
 Forces the handler to fire even for non intentional displacement (ignores the `threshold`). In that case, the `intentional` attribute from state will remain `false` until the threshold is reached.
+
+> At this point, this option will not work as expected when using `preventScroll` or `preventScrollAxis`. Please flag an issue if this breaks your usecase.
 
 ### window
 
