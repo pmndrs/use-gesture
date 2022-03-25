@@ -1,6 +1,6 @@
 import { CoordinatesEngine } from './CoordinatesEngine'
 import { coordinatesConfigResolver } from '../config/coordinatesConfigResolver'
-import { pointerId, pointerValues } from '../utils/events'
+import { pointerId, getPointerType, pointerValues } from '../utils/events'
 import { V } from '../utils/maths'
 import { Vector2 } from '../types'
 
@@ -106,7 +106,7 @@ export class DragEngine extends CoordinatesEngine<'drag'> {
     this.computeValues(pointerValues(event))
     this.computeInitial()
 
-    if (config.preventScrollAxis) {
+    if (config.preventScrollAxis && getPointerType(event) !== 'mouse') {
       // when preventScrollAxis is set we don't consider the gesture active
       // until it's deliberate
       state._active = false

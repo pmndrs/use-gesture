@@ -1,6 +1,6 @@
 import { EngineMap } from './actions'
 import { parse } from './config/resolver'
-import { isTouch, parseProp, toHandlerProp, touchIds } from './utils/events'
+import { parseProp, getPointerType, toHandlerProp, touchIds } from './utils/events'
 import { EventStore } from './EventStore'
 import { TimeoutStore } from './TimeoutStore'
 import { chain } from './utils/fn'
@@ -42,7 +42,7 @@ export class Controller {
    * @param event
    */
   setEventIds(event: TouchEvent | PointerEvent) {
-    if (isTouch(event)) {
+    if (getPointerType(event) === 'touch') {
       this.touchIds = new Set(touchIds(event as TouchEvent))
     } else if ('pointerId' in event) {
       if (event.type === 'pointerup' || event.type === 'pointercancel') this.pointerIds.delete(event.pointerId)
