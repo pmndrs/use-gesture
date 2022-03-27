@@ -104,6 +104,7 @@ Here are all options that can be applied to gestures.
 | [`preventDefault`](#preventdefault)       |     **all**     | Will `preventDefault` all events triggered by the handler.                                                                                                                                           |
 | [`triggerAllEvents`](#triggerallevents)   |     **all**     | Forces the handler to fire even for non intentional displacement (ignores the `threshold`). In that case, the `intentional` attribute from state will remain `false` until the threshold is reached. |
 | [`axis`](#axis)                           |     **all**     | Your handler will only trigger if a movement is detected on the specified axis.                                                                                                                      |
+| [`axisThreshold`](#axisthreshold)         |     **xy**      | Axes are calculated based on a threshold. For drag, thresholds are specified per device type.                                                                                                        |
 | [`bounds`](#bounds)                       |     **xy**      | Limits the gesture `offset` to the specified bounds.                                                                                                                                                 |
 | [`scaleBounds`](#scalebounds)             |    **pinch**    | Limits the scale `offset` to the specified bounds.                                                                                                                                                   |
 | [`angleBounds`](#anglebounds)             |    **pinch**    | Limits the angle `offset` to the specified bounds.                                                                                                                                                   |
@@ -179,6 +180,22 @@ function LockAxisExample() {
   return <animated.div {...bind()} style={{ x, y }} />
 }
 ```
+
+### axisThreshold
+
+A gesture axis is determined whenever x-axis and y-axis displacements reach a threshold.
+
+#### xy gestures (except for drag)
+
+<Specs types="number" defaultValue={0} />
+
+For non-drag xy gestures, that threshold is always a number, which defaults to `0`.
+
+#### drag
+
+<Specs types="{ mouse: number, pen: number, touch: number }" defaultValue="{ mouse: 0, pen: 8, touch: 0 }" />
+
+Drag logic is the same, but you must specify the threshold for a specific device. Since pen is much more sensitive than other devices, the default threshold has been empirically set to `8`.
 
 ### bounds
 
