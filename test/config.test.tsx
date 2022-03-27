@@ -76,7 +76,8 @@ describe('testing derived config', () => {
         pointerLock: false,
         pointerCapture: true,
         filterTaps: false,
-        tapsThreshold: 3
+        tapsThreshold: 3,
+        axisThreshold: { mouse: 0, pen: 8, touch: 0 }
       })
     })
 
@@ -116,6 +117,12 @@ describe('testing derived config', () => {
        */
       dragConfig.pointer.touch = false
       expect(parse(dragConfig, 'drag').drag).toHaveProperty('device', 'pointer')
+    })
+
+    test(`derived axisThreshold is preoperly computer`, () => {
+      const axisThreshold = { pen: 3, mouse: 2 }
+      dragConfig = { axisThreshold }
+      expect(parse(dragConfig, 'drag').drag).toHaveProperty('axisThreshold', { mouse: 2, pen: 3, touch: 0 })
     })
 
     test(`derived transform is properly computed`, () => {

@@ -1,6 +1,6 @@
 import { GestureKey, CoordinatesKey } from './config'
 import { State } from './state'
-import { Vector2 } from './utils'
+import { PointerType, Vector2 } from './utils'
 
 export type InternalGenericOptions = {
   target?: () => EventTarget
@@ -25,9 +25,10 @@ export type InternalGestureOptions<Key extends GestureKey = GestureKey> = {
 export type InternalCoordinatesOptions<Key extends CoordinatesKey = CoordinatesKey> = InternalGestureOptions<Key> & {
   axis?: 'x' | 'y'
   lockDirection: boolean
+  axisThreshold: number
 }
 
-export type InternalDragOptions = InternalCoordinatesOptions<'drag'> & {
+export type InternalDragOptions = Omit<InternalCoordinatesOptions<'drag'>, 'axisThreshold'> & {
   filterTaps: boolean
   tapsThreshold: number
   pointerButtons: number | number[]
@@ -42,6 +43,7 @@ export type InternalDragOptions = InternalCoordinatesOptions<'drag'> & {
     duration: number
   }
   delay: number
+  axisThreshold: Record<PointerType, number>
 }
 
 export type InternalPinchOptions = InternalGestureOptions<'pinch'> & {

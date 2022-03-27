@@ -1,3 +1,4 @@
+import { PointerType } from '../types'
 import { DragConfig, InternalDragOptions, Vector2 } from '../types'
 import { V } from '../utils/maths'
 import { coordinatesConfigResolver } from './coordinatesConfigResolver'
@@ -8,6 +9,8 @@ export const DEFAULT_DRAG_DELAY = 180
 export const DEFAULT_SWIPE_VELOCITY = 0.5
 export const DEFAULT_SWIPE_DISTANCE = 50
 export const DEFAULT_SWIPE_DURATION = 250
+
+const DEFAULT_DRAG_AXIS_THRESHOLD: Record<PointerType, number> = { mouse: 0, touch: 0, pen: 8 }
 
 export const dragConfigResolver = {
   ...coordinatesConfigResolver,
@@ -69,6 +72,10 @@ export const dragConfigResolver = {
       default:
         return value
     }
+  },
+  axisThreshold(value: Record<PointerType, number>) {
+    if (!value) return DEFAULT_DRAG_AXIS_THRESHOLD
+    return { ...DEFAULT_DRAG_AXIS_THRESHOLD, ...value }
   }
 }
 
