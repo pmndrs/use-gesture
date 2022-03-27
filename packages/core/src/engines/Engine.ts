@@ -35,9 +35,11 @@ export interface Engine<Key extends GestureKey> {
    * Function used by some gestures to determine the intentionality of a
    * a movement depending on thresholds. The intent function can change the
    * `state._active` or `state._blocked` flags if the gesture isn't intentional.
-   * @param movement
+   * @param event
    */
-  intent?(movement: Vector2): void
+  axisIntent?(event?: UIEvent): void
+
+  restrictToAxis?(movement: Vector2): void
 }
 
 export abstract class Engine<Key extends GestureKey> {
@@ -251,6 +253,9 @@ export abstract class Engine<Key extends GestureKey> {
       V.addTo(state._distance, _absoluteDelta)
     }
 
+    // let's run intentionality check.
+    if (this.axisIntent) this.axisIntent(event)
+
     // _movement is calculated by each gesture engine
     const [_m0, _m1] = state._movement
     const [t0, t1] = config.threshold
@@ -284,8 +289,8 @@ export abstract class Engine<Key extends GestureKey> {
       movement[1] = _step[1] !== false ? _m1 - _step[1] : 0
     }
 
-    // let's run intentionality check.
-    if (this.intent) this.intent(movement)
+    if (this.restrictToAxis && !state._blocked) this.restrictToAxis(movement)
+
     const previousOffset = state.offset
 
     const gestureIsActive = (state._active && !state._blocked) || state.active

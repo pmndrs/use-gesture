@@ -40,17 +40,20 @@ export class PinchEngine extends Engine<'pinch'> {
     this.state.movement = [offset[0] / lastOffset[0], offset[1] - lastOffset[1]]
   }
 
-  intent(v: Vector2) {
+  axisIntent() {
     const state = this.state
+    const [_m0, _m1] = state._movement
     if (!state.axis) {
-      const axisMovementDifference = Math.abs(v[0]) * SCALE_ANGLE_RATIO_INTENT_DEG - Math.abs(v[1])
+      const axisMovementDifference = Math.abs(_m0) * SCALE_ANGLE_RATIO_INTENT_DEG - Math.abs(_m1)
       if (axisMovementDifference < 0) state.axis = 'angle'
       else if (axisMovementDifference > 0) state.axis = 'scale'
     }
+  }
 
+  restrictToAxis(v: Vector2) {
     if (this.config.lockDirection) {
-      if (state.axis === 'scale') v[1] = 0
-      else if (state.axis === 'angle') v[0] = 0
+      if (this.state.axis === 'scale') v[1] = 0
+      else if (this.state.axis === 'angle') v[0] = 0
     }
   }
 
