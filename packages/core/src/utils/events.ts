@@ -40,8 +40,12 @@ export function toDomEventType(device: string, action = '') {
   return device + actionKey
 }
 
+export function isTouch(event: UIEvent) {
+  return 'touches' in event
+}
+
 export function getPointerType(event: UIEvent): PointerType {
-  if ('touches' in event) return 'touch'
+  if (isTouch(event)) return 'touch'
   if ('pointerType' in event) return (event as PointerEvent).pointerType as PointerType
   return 'mouse'
 }
@@ -59,7 +63,7 @@ function getTouchList(event: TouchEvent) {
 function getValueEvent<EventType extends TouchEvent | PointerEvent>(
   event: EventType
 ): EventType extends TouchEvent ? Touch : PointerEvent {
-  return (getPointerType(event) === 'touch' ? getTouchList(event as TouchEvent)[0] : event) as any
+  return (isTouch(event) ? getTouchList(event as TouchEvent)[0] : event) as any
 }
 
 export function distanceAngle(P1: Touch | PointerEvent, P2: Touch | PointerEvent) {
@@ -85,7 +89,7 @@ export function touchDistanceAngle(event: TouchEvent, ids: number[]) {
 
 export function pointerId(event: PointerEvent | TouchEvent) {
   const valueEvent = getValueEvent(event)
-  return getPointerType(event) === 'touch' ? (valueEvent as Touch).identifier : (valueEvent as PointerEvent).pointerId
+  return isTouch(event) ? (valueEvent as Touch).identifier : (valueEvent as PointerEvent).pointerId
 }
 
 export function pointerValues(event: PointerEvent | TouchEvent): Vector2 {
