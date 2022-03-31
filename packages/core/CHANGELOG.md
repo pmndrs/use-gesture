@@ -1,5 +1,15 @@
 # @use-gesture/core
 
+## 10.2.11
+
+### Patch Changes
+
+- 670e6e2db: - fix: trigger `pointerDown` event when `triggerAllEvents` and `delay` options are set
+  - fix: disable scroll prevention when the event type is `'mouse'`
+  - feat: add `axisThreshold` property to set a threshold for axis calculation (can be set per device for the drag gesture)
+  - fix: axis are now calculated on pixel movement rather than on transformed movement
+- 5979b1add: feat: add modifierKey for wheel option. Defaults to `'ctrlKey'`.
+
 ## 10.2.10
 
 ### Patch Changes
