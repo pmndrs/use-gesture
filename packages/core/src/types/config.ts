@@ -87,6 +87,7 @@ export type CoordinatesConfig<Key extends CoordinatesKey = CoordinatesKey> = Ges
 }
 
 export type PinchBounds = { min?: number; max?: number }
+export type ModifierKey = 'ctrlKey' | 'altKey' | 'metaKey' | null
 
 export type PinchConfig = GestureOptions<'pinch'> & {
   pointer?: {
@@ -107,6 +108,10 @@ export type PinchConfig = GestureOptions<'pinch'> & {
    * Scales OR rotates when set to 'lock'.
    */
   axis?: 'lock' | undefined
+  /**
+   * Key that triggers scale when using the wheel. Defaults to `'ctrlKey'`.
+   */
+  modifierKey?: ModifierKey
 }
 
 export type DragBounds = Bounds | HTMLElement | React.RefObject<HTMLElement>

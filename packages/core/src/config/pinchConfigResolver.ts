@@ -1,3 +1,4 @@
+import { ModifierKey } from '../types'
 import { PinchConfig, GenericOptions, InternalPinchOptions, State, Vector2 } from '../types'
 import { call, assignDefault } from '../utils/fn'
 import { V } from '../utils/maths'
@@ -42,5 +43,9 @@ export const pinchConfigResolver = {
     this.lockDirection = config.axis === 'lock'
     const threshold = V.toVector(value, this.lockDirection ? [0.1, 3] : 0)
     return threshold
+  },
+  modifierKey(value: ModifierKey) {
+    if (value === undefined) return 'ctrlKey'
+    return value
   }
 }

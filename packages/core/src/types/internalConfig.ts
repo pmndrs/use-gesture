@@ -1,4 +1,4 @@
-import { GestureKey, CoordinatesKey } from './config'
+import { GestureKey, CoordinatesKey, ModifierKey } from './config'
 import { State } from './state'
 import { Vector2 } from './utils'
 
@@ -50,6 +50,7 @@ export type InternalPinchOptions = InternalGestureOptions<'pinch'> & {
    */
   device: 'gesture' | 'pointer' | 'touch' | undefined
   lockDirection: boolean
+  modifierKey: ModifierKey
 }
 
 type MoveAndHoverMouseOnly = {

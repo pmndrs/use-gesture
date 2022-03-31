@@ -161,7 +161,8 @@ describe('testing derived config', () => {
         lockDirection: false,
         from: undefined,
         threshold: [0, 0],
-        rubberband: [0, 0]
+        rubberband: [0, 0],
+        modifierKey: 'ctrlKey'
       })
     })
 
@@ -172,6 +173,11 @@ describe('testing derived config', () => {
         [0.5, 1],
         [0, 270]
       ])
+    })
+
+    test(`setting modifierKey to null should result in modifierKey being null`, () => {
+      config = { modifierKey: null }
+      expect(parse(config, 'pinch').pinch).toHaveProperty('modifierKey', null)
     })
   })
 })
