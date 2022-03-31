@@ -1,5 +1,5 @@
 import { State } from './state'
-import { Vector2, Target } from './utils'
+import { Vector2, Target, PointerType } from './utils'
 
 export type GestureKey = Exclude<keyof State, 'shared'>
 export type CoordinatesKey = Exclude<GestureKey, 'pinch'>
@@ -84,6 +84,11 @@ export type CoordinatesConfig<Key extends CoordinatesKey = CoordinatesKey> = Ges
    * Limits the gesture `offset` to the specified bounds.
    */
   bounds?: Bounds | ((state: State[Key]) => Bounds)
+  /**
+   * Determines the number of pixels in one direction needed for axises to be
+   * calculated.
+   */
+  axisThreshold?: number
 }
 
 export type PinchBounds = { min?: number; max?: number }
@@ -127,7 +132,7 @@ export type MoveConfig = CoordinatesConfig<'move'> & MoveAndHoverMouseOnly
 
 export type HoverConfig = MoveAndHoverMouseOnly
 
-export type DragConfig = CoordinatesConfig<'drag'> & {
+export type DragConfig = Omit<CoordinatesConfig<'drag'>, 'axisThreshold'> & {
   /**
    * If true, the component won't trigger your drag logic if the user just clicked on the component.
    */
@@ -203,6 +208,12 @@ export type DragConfig = CoordinatesConfig<'drag'> & {
    * to 180ms.
    */
   delay?: boolean | number
+  /**
+   * Key-number record that determines for each device (`'mouse'`, `'touch'`,
+   * `'pen'`) the number of pixels of drag in one direction needed for axises to
+   * be calculated.
+   */
+  axisThreshold?: Partial<Record<PointerType, number>>
 }
 
 export type UserDragConfig = GenericOptions & DragConfig

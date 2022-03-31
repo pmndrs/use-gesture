@@ -1,3 +1,4 @@
+import { PointerType } from '../types'
 import { Vector2 } from '../types'
 
 const EVENT_TYPE_MAP: any = {
@@ -41,6 +42,12 @@ export function toDomEventType(device: string, action = '') {
 
 export function isTouch(event: UIEvent) {
   return 'touches' in event
+}
+
+export function getPointerType(event: UIEvent): PointerType {
+  if (isTouch(event)) return 'touch'
+  if ('pointerType' in event) return (event as PointerEvent).pointerType as PointerType
+  return 'mouse'
 }
 
 function getCurrentTargetTouchList(event: TouchEvent) {

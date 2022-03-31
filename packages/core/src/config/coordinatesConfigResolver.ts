@@ -1,6 +1,8 @@
 import { commonConfigResolver } from './commonConfigResolver'
 import { InternalCoordinatesOptions, CoordinatesConfig, Bounds, DragBounds, State, Vector2 } from '../types'
 
+const DEFAULT_AXIS_THRESHOLD = 0
+
 export const coordinatesConfigResolver = {
   ...commonConfigResolver,
   axis(
@@ -11,6 +13,9 @@ export const coordinatesConfigResolver = {
   ): InternalCoordinatesOptions['axis'] {
     this.lockDirection = axis === 'lock'
     if (!this.lockDirection) return axis as any
+  },
+  axisThreshold(value = DEFAULT_AXIS_THRESHOLD) {
+    return value
   },
   bounds(
     value: DragBounds | ((state: State) => DragBounds) = {}
