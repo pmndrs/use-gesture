@@ -131,7 +131,7 @@ importers:
   documentation:
     specifiers:
       '@reach/tabs': ^0.16.4
-      '@react-spring/three': ^9.4.4
+      '@react-spring/three': ^9.4.5-beta.0
       '@react-spring/web': ^9.4.5-beta.0
       '@react-three/drei': ^9.4.2
       '@react-three/fiber': ^8.0.11
@@ -154,7 +154,7 @@ importers:
       three: ^0.139.2
     dependencies:
       '@reach/tabs': 0.16.4_react-dom@18.0.0+react@18.0.0
-      '@react-spring/three': 9.4.4_376d13331f30403c37bda42142704713
+      '@react-spring/three': 9.4.5-beta.0_376d13331f30403c37bda42142704713
       '@react-spring/web': 9.4.5-beta.0_react-dom@18.0.0+react@18.0.0
       '@react-three/drei': 9.4.2_f8d47cda77c9dc2e4673ac0c2c0ae5a7
       '@react-three/fiber': 8.0.11_a827855060b62e17a14992b3e241cec5
@@ -5712,6 +5712,23 @@ packages:
       '@react-spring/core': 9.4.4_react@18.0.0
       '@react-spring/shared': 9.4.4_react@18.0.0
       '@react-spring/types': 9.4.4
+      '@react-three/fiber': 8.0.11_a827855060b62e17a14992b3e241cec5
+      react: 18.0.0
+      three: 0.139.2
+    dev: false
+
+  /@react-spring/three/9.4.5-beta.0_376d13331f30403c37bda42142704713:
+    resolution:
+      { integrity: sha512-Y1HhOlfsdx/jtBlrIu9Xwqr+w8G6clvY0S9mmeVlVbtzkv+XYigYfEZ2QPWldetp2qPN7WE4GzwhzzAXPMVo3Q== }
+    peerDependencies:
+      '@react-three/fiber': '>=6.0'
+      react: ^16.11.0  || >=17.0.0 || >=18.0.0
+      three: '>=0.126'
+    dependencies:
+      '@react-spring/animated': 9.4.5-beta.0_react@18.0.0
+      '@react-spring/core': 9.4.5-beta.0_react@18.0.0
+      '@react-spring/shared': 9.4.5-beta.0_react@18.0.0
+      '@react-spring/types': 9.4.5-beta.0
       '@react-three/fiber': 8.0.11_a827855060b62e17a14992b3e241cec5
       react: 18.0.0
       three: 0.139.2

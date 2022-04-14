@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@reach/tabs": "^0.16.4",
-    "@react-spring/three": "^9.4.4",
+    "@react-spring/three": "^9.4.5-beta.0",
     "@react-spring/web": "^9.4.5-beta.0",
     "@react-three/drei": "^9.4.2",
     "@react-three/fiber": "^8.0.11",
