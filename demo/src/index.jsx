@@ -1,5 +1,5 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
+import { createRoot } from 'react-dom/client'
 import App from './App'
 
 import './index.css'
@@ -7,9 +7,9 @@ import './index.css'
 // window.screenLog.init()
 
 const rootElement = document.getElementById('root')
-ReactDOM.render(
+const root = createRoot(rootElement)
+root.render(
   <React.StrictMode>
     <App />
-  </React.StrictMode>,
-  rootElement
+  </React.StrictMode>
 )
