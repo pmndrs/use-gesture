@@ -30,7 +30,6 @@ importers:
       eslint-plugin-testing-library: ^5.3.1
       husky: ^7.0.4
       jest: ^27.5.1
-      patch-package: ^6.4.7
       pnpm: ^6.32.6
       postinstall-postinstall: ^2.1.0
       prettier: ^2.6.2
@@ -68,7 +67,6 @@ importers:
       eslint-plugin-testing-library: 5.3.1_eslint@8.13.0+typescript@4.6.3
       husky: 7.0.4
       jest: 27.5.1
-      patch-package: 6.4.7
       pnpm: 6.32.6
       postinstall-postinstall: 2.1.0
       prettier: 2.6.2
@@ -7154,11 +7152,6 @@ packages:
       { integrity: sha512-NuHqBY1PB/D8xU6s/thBgOAiAP7HOYDQ32+BFZILJ8ivkUkAHQnWfn6WhL79Owj1qmUnoN/YPhktdIoucipkAQ== }
     dev: false
 
-  /@yarnpkg/lockfile/1.1.0:
-    resolution:
-      { integrity: sha512-GpSwvyXOcOOlV70vbnzjj4fW5xW/FdUF6nQEt1ENy7m4ZCczi1+/buVUPAqmGfqznsORNFzUMjctTIp8a9tuCQ== }
-    dev: true
-
   /abab/2.0.5:
     resolution:
       { integrity: sha512-9IK9EadsbHo6jLWIpxpR6pL0sazTXV6+SQv25ZB+F7Bj9mJNaOc4nCRabwd5M/JwmUa8idz6Eci6eKfJryPs6Q== }
@@ -9127,6 +9120,7 @@ packages:
       semver: 5.7.1
       shebang-command: 1.2.0
       which: 1.3.1
+    dev: false
 
   /cross-spawn/7.0.3:
     resolution:
@@ -11687,13 +11681,6 @@ packages:
       path-exists: 4.0.0
     dev: true
 
-  /find-yarn-workspace-root/2.0.0:
-    resolution:
-      { integrity: sha512-1IMnbjt4KzsQfnhnzNd8wUEgXZ44IzZaZmnLYx7D5FZlaHt2gW20Cri8Q+E/t5tIj4+epTBub+2Zxu/vNILzqQ== }
-    dependencies:
-      micromatch: 4.0.4
-    dev: true
-
   /find-yarn-workspace-root2/1.2.16:
     resolution:
       { integrity: sha512-hr6hb1w8ePMpPVUK39S4RlwJzi+xPLuVuG8XlwXU3KD5Yn3qgBWVfy3AzNlDhWvE1EORCE65/Qm26rFQt3VLVA== }
@@ -13782,6 +13769,7 @@ packages:
       { integrity: sha512-F+i2BKsFrH66iaUFc0woD8sLy8getkwTwtOBjvs56Cx4CgJDeKQeqfz8wAYiSb8JOprWhHH5p77PbmYCvvUuXQ== }
     engines: { node: '>=8' }
     hasBin: true
+    dev: false
 
   /is-dotfile/1.0.3:
     resolution: { integrity: sha1-pqLzL/0t+wT1yiXs0Pa4PPeYoeE= }
@@ -14096,6 +14084,7 @@ packages:
     engines: { node: '>=8' }
     dependencies:
       is-docker: 2.2.1
+    dev: false
 
   /is-yarn-global/0.3.0:
     resolution:
@@ -14924,13 +14913,6 @@ packages:
     resolution:
       { integrity: sha512-dcS1ul+9tmeD95T+x28/ehLgd9mENa3LsvDTtzm3vyBEO7RPptvAD+t44WVXaUjTBRcrpFeFlC8WCruUR456hw== }
     engines: { node: '>=0.10.0' }
-
-  /klaw-sync/6.0.0:
-    resolution:
-      { integrity: sha512-nIeuVSzdCCs6TDPTqI8w1Yre34sSq7AkZ4B3sfOBbI2CgVSB4Du4aLQijFU2+lhAFCwt9+42Hel6lQNIv6AntQ== }
-    dependencies:
-      graceful-fs: 4.2.9
-    dev: true
 
   /kleur/3.0.3:
     resolution:
@@ -16002,6 +15984,7 @@ packages:
   /nice-try/1.0.5:
     resolution:
       { integrity: sha512-1nh45deeb5olNY7eX82BkPO7SSxR5SSYJiPTrTdFUVYwAl8CKMA5N9PjTYkHiRjisVcxcQ1HXdLhx2qxxJzLNQ== }
+    dev: false
 
   /nlcst-to-string/2.0.4:
     resolution:
@@ -16376,6 +16359,7 @@ packages:
     dependencies:
       is-docker: 2.2.1
       is-wsl: 2.2.0
+    dev: false
 
   /opentracing/0.14.7:
     resolution:
@@ -16748,27 +16732,6 @@ packages:
       cross-spawn: 6.0.5
     dev: false
 
-  /patch-package/6.4.7:
-    resolution:
-      { integrity: sha512-S0vh/ZEafZ17hbhgqdnpunKDfzHQibQizx9g8yEf5dcVk3KOflOfdufRXQX8CSEkyOQwuM/bNz1GwKvFj54kaQ== }
-    engines: { npm: '>5' }
-    hasBin: true
-    dependencies:
-      '@yarnpkg/lockfile': 1.1.0
-      chalk: 2.4.2
-      cross-spawn: 6.0.5
-      find-yarn-workspace-root: 2.0.0
-      fs-extra: 7.0.1
-      is-ci: 2.0.0
-      klaw-sync: 6.0.0
-      minimist: 1.2.5
-      open: 7.4.2
-      rimraf: 2.7.1
-      semver: 5.7.1
-      slash: 2.0.0
-      tmp: 0.0.33
-    dev: true
-
   /path-case/2.1.1:
     resolution: { integrity: sha1-lLgDfDctP+KQbkZbtF4l0ibo7qU= }
     dependencies:
@@ -16791,6 +16754,7 @@ packages:
   /path-key/2.0.1:
     resolution: { integrity: sha1-QRyttXTFoUDTpLGRDUDYDMn0C0A= }
     engines: { node: '>=4' }
+    dev: false
 
   /path-key/3.1.1:
     resolution:
@@ -18471,6 +18435,7 @@ packages:
     hasBin: true
     dependencies:
       glob: 7.2.0
+    dev: false
 
   /rimraf/3.0.2:
     resolution:
@@ -18825,12 +18790,6 @@ packages:
       mkdirp: 1.0.4
       nanospinner: 1.0.0
       picocolors: 1.0.0
-    dev: true
-
-  /slash/2.0.0:
-    resolution:
-      { integrity: sha512-ZYKh3Wh2z1PpEXWr0MpSBZ0V6mZHAQfYevttO11c51CaWjGTaadiKZ+wVt1PbMlDV5qhMFslpZCemhwOK7C89A== }
-    engines: { node: '>=6' }
     dev: true
 
   /slash/3.0.0:

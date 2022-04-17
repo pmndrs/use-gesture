@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "postinstall": "patch-package",
     "dev": "vite --port 4000 --host",
     "build": "vite build",
     "serve": "vite preview"
