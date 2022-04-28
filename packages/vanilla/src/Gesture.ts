@@ -16,8 +16,8 @@ export interface Gesture extends Recognizer {}
 export const Gesture: GestureConstructor = function <HandlerTypes extends AnyHandlerEventTypes = EventTypes>(
   target: EventTarget,
   handlers: GestureHandlers<HandlerTypes>,
-  config: UserGestureConfig | {} = {}
+  config?: UserGestureConfig
 ) {
   const gestureFunction = createGesture([dragAction, pinchAction, scrollAction, wheelAction, moveAction, hoverAction])
-  return gestureFunction(target, handlers, config)
+  return gestureFunction(target, handlers, config || ({} as UserGestureConfig))
 } as any

@@ -8,12 +8,12 @@ import { createUseGesture } from './createUseGesture'
  * The most complete gesture hook, allowing support for multiple gestures.
  *
  * @param {GestureHandlers} handlers - an object with on[Gesture] keys containg gesture handlers
- * @param {UseGestureConfig} [config={}] - the full config object
+ * @param {UseGestureConfig} config - the full config object
  */
 export function useGesture<
   HandlerTypes extends AnyHandlerEventTypes = EventTypes,
   Config extends UserGestureConfig = UserGestureConfig
->(handlers: GestureHandlers<HandlerTypes>, config: Config | {} = {}) {
+>(handlers: GestureHandlers<HandlerTypes>, config?: Config) {
   const hook = createUseGesture([dragAction, pinchAction, scrollAction, wheelAction, moveAction, hoverAction])
-  return hook(handlers, config)
+  return hook(handlers, config || ({} as Config))
 }

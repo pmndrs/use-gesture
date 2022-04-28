@@ -15,8 +15,8 @@ export interface PinchGesture extends Recognizer {}
 export const PinchGesture: PinchGestureConstructor = function <EventType = EventTypes['pinch']>(
   target: EventTarget,
   handler: Handler<'pinch', EventType>,
-  config: UserPinchConfig | {} = {}
+  config?: UserPinchConfig
 ) {
   registerAction(pinchAction)
-  return new Recognizer(target, { pinch: handler }, config, 'pinch')
+  return new Recognizer(target, { pinch: handler }, config || {}, 'pinch')
 } as any

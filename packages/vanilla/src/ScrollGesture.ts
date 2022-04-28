@@ -15,8 +15,8 @@ export interface ScrollGesture extends Recognizer {}
 export const ScrollGesture: ScrollGestureConstructor = function <EventType = EventTypes['scroll']>(
   target: EventTarget,
   handler: Handler<'scroll', EventType>,
-  config: UserScrollConfig | {} = {}
+  config?: UserScrollConfig
 ) {
   registerAction(scrollAction)
-  return new Recognizer(target, { scroll: handler }, config, 'scroll')
+  return new Recognizer(target, { scroll: handler }, config || {}, 'scroll')
 } as any

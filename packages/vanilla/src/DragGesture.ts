@@ -15,8 +15,8 @@ export interface DragGesture extends Recognizer {}
 export const DragGesture: DragGestureConstructor = function <EventType = EventTypes['drag']>(
   target: EventTarget,
   handler: Handler<'drag', EventType>,
-  config: UserDragConfig | {} = {}
+  config?: UserDragConfig
 ) {
   registerAction(dragAction)
-  return new Recognizer(target, { drag: handler }, config, 'drag')
+  return new Recognizer(target, { drag: handler }, config || {}, 'drag')
 } as any

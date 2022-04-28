@@ -15,8 +15,8 @@ export interface MoveGesture extends Recognizer {}
 export const MoveGesture: MoveGestureConstructor = function <EventType = EventTypes['move']>(
   target: EventTarget,
   handler: Handler<'move', EventType>,
-  config: UserMoveConfig | {} = {}
+  config?: UserMoveConfig
 ) {
   registerAction(moveAction)
-  return new Recognizer(target, { move: handler }, config, 'move')
+  return new Recognizer(target, { move: handler }, config || {}, 'move')
 } as any
