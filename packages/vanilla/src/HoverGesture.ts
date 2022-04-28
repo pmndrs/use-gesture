@@ -15,8 +15,8 @@ export interface HoverGesture extends Recognizer {}
 export const HoverGesture: HoverGestureConstructor = function <EventType = EventTypes['hover']>(
   target: EventTarget,
   handler: Handler<'hover', EventType>,
-  config: UserHoverConfig | {} = {}
+  config?: UserHoverConfig
 ) {
   registerAction(hoverAction)
-  return new Recognizer(target, { hover: handler }, config, 'hover')
+  return new Recognizer(target, { hover: handler }, config || {}, 'hover')
 } as any

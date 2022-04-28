@@ -8,9 +8,9 @@ export function createUseGesture(actions: Action[]) {
 
   return function useGesture<Config extends UserGestureConfig = UserGestureConfig>(
     _handlers: GestureHandlers,
-    _config: Config | {} = {}
+    _config?: Config
   ) {
-    const { handlers, nativeHandlers, config } = parseMergedHandlers(_handlers, _config)
+    const { handlers, nativeHandlers, config } = parseMergedHandlers(_handlers, _config || {})
     return useRecognizers<Config>(handlers, config, undefined, nativeHandlers)
   }
 }

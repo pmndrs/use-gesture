@@ -6,12 +6,12 @@ import { useRecognizers } from './useRecognizers'
  * Hover hook.
  *
  * @param {Handler<'hover'>} handler - the function fired every time the hover gesture updates
- * @param {UserHoverConfig} [config={}] - the config object including generic options and hover options
+ * @param {UserHoverConfig} config - the config object including generic options and hover options
  */
 export function useHover<EventType = EventTypes['hover'], Config extends UserHoverConfig = UserHoverConfig>(
   handler: Handler<'hover', EventType>,
-  config: Config | {} = {}
+  config?: Config
 ) {
   registerAction(hoverAction)
-  return useRecognizers({ hover: handler }, config, 'hover')
+  return useRecognizers({ hover: handler }, config || {}, 'hover')
 }
