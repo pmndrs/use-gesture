@@ -1,5 +1,11 @@
 # @use-gesture/core
 
+## 10.2.12
+
+### Patch Changes
+
+- 91651b202: Fix config types
+
 ## 10.2.11
 
 ### Patch Changes
