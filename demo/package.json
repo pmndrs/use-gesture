@@ -9,28 +9,28 @@
   },
   "dependencies": {
     "@leva-ui/plugin-spring": "*",
-    "@react-spring/web": "^9.4.5-beta.0",
-    "@react-three/drei": "^9.4.2",
-    "@react-three/fiber": "^8.0.11",
+    "@react-spring/web": "^9.4.5",
+    "@react-three/drei": "^9.7.1",
+    "@react-three/fiber": "^8.0.14",
     "@use-gesture/react": "*",
     "@use-gesture/vanilla": "*",
     "leva": "*",
     "lodash-move": "^1.1.1",
     "lodash.clamp": "^4.0.3",
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0",
+    "react": "^18.1.0",
+    "react-dom": "^18.1.0",
     "react-use-measure": "^2.1.1",
     "screenlog": "^0.3.0",
-    "three": "^0.139.2",
+    "three": "^0.140.2",
     "wouter": "^2.7.4"
   },
   "devDependencies": {
-    "@types/lodash.clamp": "^4.0.6",
-    "@types/react": "^18.0.3",
-    "@types/react-dom": "^18.0.0",
-    "@types/three": "^0.139.0",
-    "@vitejs/plugin-react-refresh": "^1.3.6",
-    "typescript": "^4.6.3",
-    "vite": "2.9.2"
+    "@types/lodash.clamp": "^4.0.7",
+    "@types/react": "^18.0.9",
+    "@types/react-dom": "^18.0.3",
+    "@types/three": "^0.140.0",
+    "@vitejs/plugin-react": "^1.3.2",
+    "typescript": "^4.6.4",
+    "vite": "2.9.9"
   }
 }
