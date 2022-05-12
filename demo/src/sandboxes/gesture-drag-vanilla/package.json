@@ -1,5 +1,5 @@
 {
-  "name": "gesture-vanilla",
+  "name": "gesture-drag-vanilla",
   "version": "1.0.0",
   "main": "src/index.jsx",
   "dependencies": {

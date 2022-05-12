@@ -4,7 +4,7 @@
     "/demo/src/sandboxes/gesture-drag",
     "/demo/src/sandboxes/gesture-drag-target",
     "/demo/src/sandboxes/gesture-nested",
-    "/demo/src/sandboxes/gesture-vanilla",
+    "/demo/src/sandboxes/gesture-drag-vanilla",
     "/demo/src/sandboxes/gesture-move",
     "/demo/src/sandboxes/gesture-pinch",
     "/demo/src/sandboxes/gesture-pinch-multiple",
@@ -12,5 +12,5 @@
     "/demo/src/sandboxes/card-zoom",
     "/demo/src/sandboxes/viewpager"
   ],
-  "node": "14"
+  "node": "16"
 }
