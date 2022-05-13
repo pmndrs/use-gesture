@@ -4,11 +4,11 @@
   "main": "src/index.jsx",
   "dependencies": {
     "@leva-ui/plugin-spring": "*",
-    "@react-spring/web": "^9.4.5-beta.0",
+    "@react-spring/web": "^9.4.5",
     "@use-gesture/react": "latest",
     "leva": "*",
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0",
+    "react": "^18.1.0",
+    "react-dom": "^18.1.0",
     "react-scripts": "5.0.0"
   },
   "scripts": {
