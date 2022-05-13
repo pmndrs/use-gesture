@@ -132,7 +132,7 @@ export type MoveConfig = CoordinatesConfig<'move'> & MoveAndHoverMouseOnly
 
 export type HoverConfig = MoveAndHoverMouseOnly
 
-export type DragConfig = Omit<CoordinatesConfig<'drag'>, 'axisThreshold'> & {
+export type DragConfig = Omit<CoordinatesConfig<'drag'>, 'axisThreshold' | 'bounds'> & {
   /**
    * If true, the component won't trigger your drag logic if the user just clicked on the component.
    */

@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 /* Type tests for @use-gesture/react */
 
+import { useRef } from 'react'
 import { expectType } from 'tsd'
 import { ReactDOMAttributes, useDrag, useGesture } from '.'
 
@@ -12,6 +13,13 @@ expectType<void>(useDrag(() => {}, { target: window }))
 
 /* Checks that hooks accept generics to cast event type */
 useDrag<MouseEvent>(({ event }) => expectType<MouseEvent>(event))
+
+const fakeDiv = 'fake' as any as HTMLDivElement
+const fakeRef = useRef<HTMLDivElement>(null)
+/* Checks config.bounds type for useDrag */
+useDrag(() => {}, { bounds: { left: 0 } })
+useDrag(() => {}, { bounds: fakeDiv })
+useDrag(() => {}, { bounds: fakeRef })
 
 /* Checks that useGesture returns event props handler */
 expectType<(...args: any[]) => ReactDOMAttributes>(useGesture({ onPinch: () => {} }))
