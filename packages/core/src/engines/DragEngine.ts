@@ -317,11 +317,11 @@ export class DragEngine extends CoordinatesEngine<'drag'> {
     if (deltaFn) {
       const state = this.state
       const factor = event.shiftKey ? 10 : event.altKey ? 0.1 : 1
-      state._delta = deltaFn(factor)
 
       this.start(event)
-      state._keyboardActive = true
 
+      state._delta = deltaFn(factor)
+      state._keyboardActive = true
       V.addTo(state._movement, state._delta)
 
       this.compute(event)
