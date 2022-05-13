@@ -10,7 +10,7 @@ interface ScrollGestureConstructor {
   ): ScrollGesture
 }
 
-export interface ScrollGesture extends Recognizer {}
+export interface ScrollGesture extends Recognizer<'scroll'> {}
 
 export const ScrollGesture: ScrollGestureConstructor = function <EventType = EventTypes['scroll']>(
   target: EventTarget,

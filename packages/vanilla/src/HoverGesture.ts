@@ -10,7 +10,7 @@ interface HoverGestureConstructor {
   ): HoverGesture
 }
 
-export interface HoverGesture extends Recognizer {}
+export interface HoverGesture extends Recognizer<'hover'> {}
 
 export const HoverGesture: HoverGestureConstructor = function <EventType = EventTypes['hover']>(
   target: EventTarget,

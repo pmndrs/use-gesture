@@ -10,7 +10,7 @@ interface WheelGestureConstructor {
   ): WheelGesture
 }
 
-export interface WheelGesture extends Recognizer {}
+export interface WheelGesture extends Recognizer<'wheel'> {}
 
 export const WheelGesture: WheelGestureConstructor = function <EventType = EventTypes['wheel']>(
   target: EventTarget,

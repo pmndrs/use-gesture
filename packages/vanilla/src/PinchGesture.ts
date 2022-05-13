@@ -10,7 +10,7 @@ interface PinchGestureConstructor {
   ): PinchGesture
 }
 
-export interface PinchGesture extends Recognizer {}
+export interface PinchGesture extends Recognizer<'pinch'> {}
 
 export const PinchGesture: PinchGestureConstructor = function <EventType = EventTypes['pinch']>(
   target: EventTarget,

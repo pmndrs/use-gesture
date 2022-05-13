@@ -10,7 +10,7 @@ interface DragGestureConstructor {
   ): DragGesture
 }
 
-export interface DragGesture extends Recognizer {}
+export interface DragGesture extends Recognizer<'drag'> {}
 
 export const DragGesture: DragGestureConstructor = function <EventType = EventTypes['drag']>(
   target: EventTarget,
