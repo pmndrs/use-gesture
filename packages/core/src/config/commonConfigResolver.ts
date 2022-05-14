@@ -9,6 +9,9 @@ export const commonConfigResolver = {
   enabled(value = true) {
     return value
   },
+  eventOptions(value: AddEventListenerOptions | undefined, _k: string, config: { shared: GenericOptions }) {
+    return { ...config.shared.eventOptions, ...value }
+  },
   preventDefault(value = false) {
     return value
   },

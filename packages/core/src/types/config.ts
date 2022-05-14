@@ -36,6 +36,10 @@ export type GestureOptions<T extends GestureKey> = GenericOptions & {
    */
   enabled?: boolean
   /**
+   * Lets you customize if you want events to be passive or captured.
+   */
+  eventOptions?: AddEventListenerOptions
+  /**
    * The position `offset` will start from.
    */
   from?: Vector2 | ((state: NonNullable<State[T]>) => Vector2)

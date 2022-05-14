@@ -2,7 +2,7 @@ import { parse } from '../packages/core/src/config/resolver'
 import { dragConfigResolver } from '../packages/core/src/config/dragConfigResolver'
 import { pinchConfigResolver } from '../packages/core/src/config/pinchConfigResolver'
 import { ConfigResolverMap } from '../packages/core/src/actions'
-import { DragConfig, PinchConfig, CoordinatesConfig, Vector2 } from '../packages/core/src/types'
+import { DragConfig, PinchConfig, CoordinatesConfig, Vector2, GenericOptions } from '../packages/core/src/types'
 import { identity } from '../packages/core/src/config/commonConfigResolver'
 import { wheelConfigResolver } from '../packages/core/src/config/wheelConfigResolver'
 
@@ -50,6 +50,7 @@ describe('testing derived config', () => {
     test(`empty config should return default drag config`, () => {
       expect(parse({}, 'drag').drag).toStrictEqual({
         enabled: true,
+        eventOptions: { capture: false, passive: true },
         device: 'pointer',
         bounds: [
           [-Infinity, Infinity],
@@ -82,6 +83,22 @@ describe('testing derived config', () => {
     })
 
     let dragConfig: DragConfig
+
+    test(`gesture eventOptions should override shared config`, () => {
+      let sharedConfig: GenericOptions = { eventOptions: { capture: true } }
+      dragConfig = { eventOptions: { passive: false } }
+      expect(parse({ ...sharedConfig, drag: dragConfig }).drag).toHaveProperty('eventOptions', {
+        passive: false,
+        capture: true
+      })
+
+      sharedConfig = {}
+      dragConfig = { eventOptions: { capture: true } }
+      expect(parse({ ...sharedConfig, drag: dragConfig }).drag).toHaveProperty('eventOptions', {
+        passive: true,
+        capture: true
+      })
+    })
 
     test(`derived threshold is set when filterTaps, lockDirection or axis are not falsey`, () => {
       dragConfig = { axis: 'lock' }
@@ -156,6 +173,7 @@ describe('testing derived config', () => {
     test(`empty config should return default distance / angle config`, () => {
       expect(parse({}, 'pinch').pinch).toStrictEqual({
         enabled: true,
+        eventOptions: { capture: false, passive: true },
         bounds: [
           [-Infinity, Infinity],
           [-Infinity, Infinity]
