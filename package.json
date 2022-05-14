@@ -25,7 +25,7 @@
     "test": "jest",
     "test:watch": "jest --watchAll",
     "size": "size-limit",
-    "ci:version": "pnpm changeset version && pnpm install --lockfile-only",
+    "ci:version": "pnpm changeset version && pnpm --filter \"@use-gesture/*\" install --lockfile-only",
     "ci:publish": "pnpm build && pnpm changeset publish"
   },
   "size-limit": [
@@ -72,6 +72,8 @@
   },
   "devDependencies": {
     "@babel/core": "^7.17.10",
+    "@babel/plugin-syntax-flow": "^7.16.7",
+    "@babel/plugin-transform-react-jsx": "^7.17.3",
     "@babel/preset-env": "^7.17.10",
     "@babel/preset-react": "^7.16.7",
     "@babel/preset-typescript": "^7.16.7",
@@ -86,15 +88,10 @@
     "@types/react-dom": "^18.0.4",
     "@typescript-eslint/eslint-plugin": "^5.23.0",
     "@typescript-eslint/parser": "^5.23.0",
-    "babel-eslint": "^10.1.0",
     "babel-jest": "^27.5.1",
     "eslint": "^8.15.0",
     "eslint-config-react-app": "^7.0.1",
-    "eslint-plugin-flowtype": "^8.0.3",
-    "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-jest-dom": "^4.0.1",
-    "eslint-plugin-jsx-a11y": "^6.5.1",
-    "eslint-plugin-react": "^7.29.4",
     "eslint-plugin-react-hooks": "^4.5.0",
     "eslint-plugin-testing-library": "^5.5.0",
     "husky": "^8.0.1",
