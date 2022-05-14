@@ -1,5 +1,15 @@
 # @use-gesture/vanilla
 
+## 10.2.13
+
+### Patch Changes
+
+- 15724eb5c: - Add `setConfig(config)` setter for gestures
+  - Add `createGesture` to exports
+- Updated dependencies [6896094b3]
+- Updated dependencies [15724eb5c]
+  - @use-gesture/core@10.2.13
+
 ## 10.2.12
 
 ### Patch Changes

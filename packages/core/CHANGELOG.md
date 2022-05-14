@@ -1,5 +1,14 @@
 # @use-gesture/core
 
+## 10.2.13
+
+### Patch Changes
+
+- 6896094b3: fix: preventScroll should resist to multiple fingers drag
+- 15724eb5c: - Have `delta` increment on first keydown for drag
+  - Fix `config.bounds` type for drag gestures
+  - Add `eventOptions` option for each gesture
+
 ## 10.2.12
 
 ### Patch Changes
