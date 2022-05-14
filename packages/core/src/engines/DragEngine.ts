@@ -293,8 +293,6 @@ export class DragEngine extends CoordinatesEngine<'drag'> {
     persistEvent(event)
     // we add window listeners that will prevent the scroll when the user has started dragging
     this.eventStore.add(this.sharedConfig.window!, 'touch', 'change', this.preventScroll.bind(this), { passive: false })
-    this.eventStore.add(this.sharedConfig.window!, 'touch', 'end', this.clean.bind(this))
-    this.eventStore.add(this.sharedConfig.window!, 'touch', 'cancel', this.clean.bind(this))
     this.timeoutStore.add('startPointerDrag', this.startPointerDrag.bind(this), this.config.preventScrollDelay!, event)
   }
 
