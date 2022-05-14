@@ -47,7 +47,8 @@ export function Slider({ items, width = 600, visible = 4, style, children }) {
 
   useGesture(
     {
-      onDrag: ({ offset: [x], direction: [dx] }) => {
+      onDrag: ({ event, offset: [x], direction: [dx] }) => {
+        event.preventDefault()
         if (dx) {
           dragOffset.current = -x
           runSprings(wheelOffset.current + -x, -dx)
@@ -61,7 +62,7 @@ export function Slider({ items, width = 600, visible = 4, style, children }) {
         }
       },
     },
-    { target, eventOptions: { passive: false } }
+    { target, wheel: { eventOptions: { passive: false } } }
   )
 
   return (

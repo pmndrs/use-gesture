@@ -13,6 +13,7 @@ function Draggable() {
   const toggleColor = () => setColor((c) => (c === 'black' ? '#ec625c' : 'black'))
 
   const [coords, set] = React.useState({ x: 0, y: 0 })
+  const dragGesture = React.useRef<DragGesture>()
   const [style, api] = useSpring(() => ({ scale: 1, x: 0, y: 0 }))
 
   const options = useControls({
@@ -25,32 +26,32 @@ function Draggable() {
   const pointerOptions = useControls('pointer', { touch: false, capture: true, lock: false })
 
   React.useEffect(() => {
+    dragGesture.current = new DragGesture(target.current!, ({ active, ...state }) => {
+      // @ts-ignore
+      let [x, y] = state[options.gesture]
+      set({ x, y })
+
+      if (pointerOptions.lock) {
+        const dx = window.innerWidth / 2 - 40
+        const dy = window.innerHeight / 2 - 40
+        x = ((x + Math.sign(x) * dx) % window.innerWidth) - Math.sign(x) * dx
+        y = ((y + Math.sign(y) * dy) % window.innerHeight) - Math.sign(y) * dy
+      }
+      api.start({
+        scale: active ? 1.2 : 1,
+        x: active || options.gesture === 'offset' ? x : 0,
+        y: active || options.gesture === 'offset' ? y : 0,
+        immediate: pointerOptions.lock
+      })
+    })
+    return () => dragGesture.current?.destroy()
+  }, [api, options.gesture, pointerOptions.lock])
+
+  React.useEffect(() => {
+    if (!dragGesture.current) return
     api.set({ scale: 1, x: 0, y: 0 })
     const { boundToParent, gesture, ...rest } = options
-    const dragGesture = new DragGesture(
-      target.current!,
-      ({ active, ...state }) => {
-        // @ts-ignore
-        let [x, y] = state[gesture]
-        set({ x, y })
-
-        if (pointerOptions.lock) {
-          const dx = window.innerWidth / 2 - 40
-          const dy = window.innerHeight / 2 - 40
-          x = ((x + Math.sign(x) * dx) % window.innerWidth) - Math.sign(x) * dx
-          y = ((y + Math.sign(y) * dy) % window.innerHeight) - Math.sign(y) * dy
-        }
-        api.start({
-          scale: active ? 1.2 : 1,
-          x: active || gesture === 'offset' ? x : 0,
-          y: active || gesture === 'offset' ? y : 0,
-          immediate: pointerOptions.lock
-        })
-      },
-      // @ts-ignore
-      { ...rest, pointer: pointerOptions, ...(boundToParent && { bounds: ref }) }
-    )
-    return () => dragGesture.destroy()
+    dragGesture.current.setConfig({ ...rest, pointer: pointerOptions, ...(boundToParent && { bounds: ref }) })
   }, [api, options, pointerOptions])
 
   return (

@@ -10,7 +10,7 @@ interface MoveGestureConstructor {
   ): MoveGesture
 }
 
-export interface MoveGesture extends Recognizer {}
+export interface MoveGesture extends Recognizer<'move'> {}
 
 export const MoveGesture: MoveGestureConstructor = function <EventType = EventTypes['move']>(
   target: EventTarget,

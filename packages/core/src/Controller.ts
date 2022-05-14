@@ -92,7 +92,6 @@ export class Controller {
    */
   bind(...args: any[]) {
     const sharedConfig = this.config.shared
-    const eventOptions = sharedConfig.eventOptions
     const props: any = {}
 
     let target
@@ -102,12 +101,12 @@ export class Controller {
       if (!target) return
     }
 
-    const bindFunction = bindToProps(props, eventOptions, !!target)
-
     if (sharedConfig.enabled) {
       // Adding gesture handlers
       for (const gestureKey of this.gestures) {
-        if (this.config[gestureKey]!.enabled) {
+        const gestureConfig = this.config[gestureKey]!
+        const bindFunction = bindToProps(props, gestureConfig.eventOptions, !!target)
+        if (gestureConfig.enabled) {
           const Engine = EngineMap.get(gestureKey)!
           // @ts-ignore
           new Engine(this, args, gestureKey).bind(bindFunction)
@@ -115,8 +114,9 @@ export class Controller {
       }
 
       // Adding native handlers
+      const nativeBindFunction = bindToProps(props, sharedConfig.eventOptions, !!target)
       for (const eventKey in this.nativeHandlers) {
-        bindFunction(
+        nativeBindFunction(
           eventKey,
           '',
           // @ts-ignore

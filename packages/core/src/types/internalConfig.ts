@@ -12,6 +12,7 @@ export type InternalGenericOptions = {
 
 export type InternalGestureOptions<Key extends GestureKey = GestureKey> = {
   enabled: boolean
+  eventOptions: AddEventListenerOptions
   from: Vector2 | ((state: State[Key]) => Vector2)
   threshold: Vector2
   preventDefault: boolean

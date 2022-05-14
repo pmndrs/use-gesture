@@ -13,10 +13,16 @@ function capitalize(string: string) {
   return string[0].toUpperCase() + string.slice(1)
 }
 
+const actionsWithoutCaptureSupported = ['enter', 'leave']
+
+function hasCapture(capture = false, actionKey: string) {
+  return capture && !actionsWithoutCaptureSupported.includes(actionKey)
+}
+
 export function toHandlerProp(device: string, action = '', capture: boolean = false) {
   const deviceProps = EVENT_TYPE_MAP[device]
   const actionKey = deviceProps ? deviceProps[action] || action : action
-  return 'on' + capitalize(device) + capitalize(actionKey) + (capture ? 'Capture' : '')
+  return 'on' + capitalize(device) + capitalize(actionKey) + (hasCapture(capture, actionKey) ? 'Capture' : '')
 }
 
 const pointerCaptureEvents = ['gotpointercapture', 'lostpointercapture']
