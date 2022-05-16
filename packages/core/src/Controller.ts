@@ -80,7 +80,7 @@ export class Controller {
     }
   }
   /**
-   * Executes side effects (attaching listeneds to a `config.target`). Ran on
+   * Executes side effects (attaching listeners to a `config.target`). Ran on
    * each render.
    */
   effect() {
