@@ -1,5 +1,11 @@
 # @use-gesture/core
 
+## 10.2.14
+
+### Patch Changes
+
+- e82f1c220: fix: improve detection for drag gesture, also fixes #494
+
 ## 10.2.13
 
 ### Patch Changes
