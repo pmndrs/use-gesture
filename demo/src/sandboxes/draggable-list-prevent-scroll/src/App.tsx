@@ -52,9 +52,6 @@ function DraggableList({ items }: { items: string[] }) {
             y,
             scale,
           }}
-          onClick={() => {
-            window.open('https://google.com', '_blank')
-          }}
           children={items[i]}
         />
       ))}
