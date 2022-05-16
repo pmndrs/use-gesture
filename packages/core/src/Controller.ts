@@ -44,9 +44,11 @@ export class Controller {
   setEventIds(event: TouchEvent | PointerEvent) {
     if (isTouch(event)) {
       this.touchIds = new Set(touchIds(event as TouchEvent))
+      return this.touchIds
     } else if ('pointerId' in event) {
       if (event.type === 'pointerup' || event.type === 'pointercancel') this.pointerIds.delete(event.pointerId)
       else if (event.type === 'pointerdown') this.pointerIds.add(event.pointerId)
+      return this.pointerIds
     }
   }
   /**
@@ -78,7 +80,7 @@ export class Controller {
     }
   }
   /**
-   * Executes side effects (attaching listeneds to a `config.target`). Ran on
+   * Executes side effects (attaching listeners to a `config.target`). Ran on
    * each render.
    */
   effect() {
@@ -147,7 +149,7 @@ export class Controller {
 
 function setupGesture(ctrl: Controller, gestureKey: GestureKey) {
   ctrl.gestures.add(gestureKey)
-  ctrl.gestureEventStores[gestureKey] = new EventStore(ctrl)
+  ctrl.gestureEventStores[gestureKey] = new EventStore(ctrl, gestureKey)
   ctrl.gestureTimeoutStores[gestureKey] = new TimeoutStore()
 }
 

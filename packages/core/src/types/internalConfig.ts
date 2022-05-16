@@ -5,7 +5,7 @@ import { PointerType, Vector2 } from './utils'
 export type InternalGenericOptions = {
   target?: () => EventTarget
   eventOptions: AddEventListenerOptions
-  window?: EventTarget
+  window: EventTarget
   enabled: boolean
   transform?: (v: Vector2) => Vector2
 }

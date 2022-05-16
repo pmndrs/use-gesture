@@ -88,14 +88,27 @@ export class DragEngine extends CoordinatesEngine<'drag'> {
     )
       return
 
-    this.ctrl.setEventIds(event)
+    const ctrlIds = this.ctrl.setEventIds(event)
     // We need to capture all pointer ids so that we can keep track of them when
     // they're released off the target
     if (config.pointerCapture) {
       ;(event.target as HTMLElement).setPointerCapture(event.pointerId)
     }
 
-    if (state._pointerActive) return
+    if (
+      // in some situations (https://github.com/pmndrs/use-gesture/issues/494#issuecomment-1127584116)
+      // like when a new browser tab is opened during a drag gesture, the drag
+      // can be interrupted mid-way, and can stall. This happens because the
+      // pointerId that initiated the gesture is lost, and since the drag
+      // persists until that pointerId is lifted with pointerup, it never ends.
+      //
+      // Therefore, when we detect that only one pointer is pressing the screen,
+      // we consider that the gesture can proceed.
+      ctrlIds &&
+      ctrlIds.size > 1 &&
+      state._pointerActive
+    )
+      return
 
     this.start(event)
     this.setupPointer(event)
@@ -271,9 +284,9 @@ export class DragEngine extends CoordinatesEngine<'drag'> {
     }
 
     if (!config.pointerCapture) {
-      this.eventStore.add(this.sharedConfig.window!, device, 'change', this.pointerMove.bind(this))
-      this.eventStore.add(this.sharedConfig.window!, device, 'end', this.pointerUp.bind(this))
-      this.eventStore.add(this.sharedConfig.window!, device, 'cancel', this.pointerUp.bind(this))
+      this.eventStore.add(this.sharedConfig.window, device, 'change', this.pointerMove.bind(this))
+      this.eventStore.add(this.sharedConfig.window, device, 'end', this.pointerUp.bind(this))
+      this.eventStore.add(this.sharedConfig.window, device, 'cancel', this.pointerUp.bind(this))
     }
   }
 
@@ -292,7 +305,11 @@ export class DragEngine extends CoordinatesEngine<'drag'> {
   setupScrollPrevention(event: PointerEvent) {
     persistEvent(event)
     // we add window listeners that will prevent the scroll when the user has started dragging
-    this.eventStore.add(this.sharedConfig.window!, 'touch', 'change', this.preventScroll.bind(this), { passive: false })
+    const remove = this.eventStore.add(this.sharedConfig.window, 'touch', 'change', this.preventScroll.bind(this), {
+      passive: false
+    })
+    this.eventStore.add(this.sharedConfig.window, 'touch', 'end', remove)
+    this.eventStore.add(this.sharedConfig.window, 'touch', 'cancel', remove)
     this.timeoutStore.add('startPointerDrag', this.startPointerDrag.bind(this), this.config.preventScrollDelay!, event)
   }
 
