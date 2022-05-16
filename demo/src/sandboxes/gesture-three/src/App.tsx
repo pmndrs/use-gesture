@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { Canvas, useThree, ThreeEvent } from '@react-three/fiber'
 import { useGesture } from '@use-gesture/react'
 import * as THREE from 'three'

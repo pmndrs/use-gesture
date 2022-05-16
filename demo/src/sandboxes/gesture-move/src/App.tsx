@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import { useRef } from 'react'
 import { useGesture } from '@use-gesture/react'
 import { a, useSpring } from '@react-spring/web'
 

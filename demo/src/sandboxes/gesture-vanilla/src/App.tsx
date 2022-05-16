@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Gesture } from '@use-gesture/vanilla'
 
 export default function App() {
   const [wheel, setWheel] = useState({ direction: [0, 0], delta: [0, 0], _movement: [0, 0], offset: [0, 0] })
-  React.useEffect(() => {
+  useEffect(() => {
     const gesture = new Gesture(
       window,
       {

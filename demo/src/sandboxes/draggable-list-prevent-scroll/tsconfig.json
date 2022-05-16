@@ -4,6 +4,7 @@
     "strict": true,
     "esModuleInterop": true,
     "lib": ["dom", "es2015"],
+    "plugins": [{ "name": "typescript-plugin-css-modules" }],
     "jsx": "react-jsx"
   }
 }

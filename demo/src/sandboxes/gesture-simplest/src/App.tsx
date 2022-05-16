@@ -1,4 +1,3 @@
-import React from 'react'
 import { useDrag } from '@use-gesture/react'
 import { a, useSpring } from '@react-spring/web'
 
@@ -6,7 +5,7 @@ import styles from './styles.module.css'
 
 export default function App() {
   const [style, api] = useSpring(() => ({ x: 0, y: 0, scale: 1 }))
-  const bind = useDrag(({ active, offset: [x, y] }) => {
+  const bind = useDrag(({ active, movement: [x, y] }) => {
     api.start({
       x: active ? x : 0,
       y: active ? y : 0,

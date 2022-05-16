@@ -1,4 +1,3 @@
-import React from 'react'
 import { useSpring, animated } from '@react-spring/web'
 import { useDrag } from '@use-gesture/react'
 import styles from './styles.module.css'

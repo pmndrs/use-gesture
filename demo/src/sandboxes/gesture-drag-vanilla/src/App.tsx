@@ -1,4 +1,4 @@
-import React from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { DragGesture } from '@use-gesture/vanilla'
 import { a, useSpring } from '@react-spring/web'
 import { useControls } from 'leva'
@@ -6,14 +6,14 @@ import { useControls } from 'leva'
 import styles from './styles.module.css'
 
 function Draggable() {
-  const ref = React.useRef<HTMLDivElement>(null)
-  const target = React.useRef<HTMLDivElement>(null)
+  const ref = useRef<HTMLDivElement>(null)
+  const target = useRef<HTMLDivElement>(null)
 
-  const [color, setColor] = React.useState('black')
+  const [color, setColor] = useState('black')
   const toggleColor = () => setColor((c) => (c === 'black' ? '#ec625c' : 'black'))
 
-  const [coords, set] = React.useState({ x: 0, y: 0 })
-  const dragGesture = React.useRef<DragGesture>()
+  const [coords, set] = useState({ x: 0, y: 0 })
+  const dragGesture = useRef<DragGesture>()
   const [style, api] = useSpring(() => ({ scale: 1, x: 0, y: 0 }))
 
   const options = useControls({
@@ -25,7 +25,7 @@ function Draggable() {
   })
   const pointerOptions = useControls('pointer', { touch: false, capture: true, lock: false })
 
-  React.useEffect(() => {
+  useEffect(() => {
     dragGesture.current = new DragGesture(target.current!, ({ active, ...state }) => {
       // @ts-ignore
       let [x, y] = state[options.gesture]
@@ -47,7 +47,7 @@ function Draggable() {
     return () => dragGesture.current?.destroy()
   }, [api, options.gesture, pointerOptions.lock])
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!dragGesture.current) return
     api.set({ scale: 1, x: 0, y: 0 })
     const { boundToParent, gesture, ...rest } = options
