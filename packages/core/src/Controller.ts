@@ -149,7 +149,7 @@ export class Controller {
 
 function setupGesture(ctrl: Controller, gestureKey: GestureKey) {
   ctrl.gestures.add(gestureKey)
-  ctrl.gestureEventStores[gestureKey] = new EventStore(ctrl)
+  ctrl.gestureEventStores[gestureKey] = new EventStore(ctrl, gestureKey)
   ctrl.gestureTimeoutStores[gestureKey] = new TimeoutStore()
 }
 
