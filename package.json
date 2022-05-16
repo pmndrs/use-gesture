@@ -26,7 +26,8 @@
     "test:watch": "jest --watchAll",
     "size": "size-limit",
     "ci:version": "pnpm changeset version && pnpm --filter \"@use-gesture/*\" install --lockfile-only",
-    "ci:publish": "pnpm build && pnpm changeset publish"
+    "ci:publish": "pnpm build && pnpm changeset publish",
+    "prepare": "husky install"
   },
   "size-limit": [
     {
