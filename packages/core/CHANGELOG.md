@@ -1,5 +1,11 @@
 # @use-gesture/core
 
+## 10.2.15
+
+### Patch Changes
+
+- be1703a6d: fix: reset \_preventScroll when setting up scroll prevention to avoid side effects
+
 ## 10.2.14
 
 ### Patch Changes
