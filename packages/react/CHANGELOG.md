@@ -1,5 +1,12 @@
 # @use-gesture/core
 
+## 10.2.15
+
+### Patch Changes
+
+- Updated dependencies [be1703a6d]
+  - @use-gesture/core@10.2.15
+
 ## 10.2.14
 
 ### Patch Changes
