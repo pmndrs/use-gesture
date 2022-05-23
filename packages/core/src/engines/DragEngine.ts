@@ -303,6 +303,8 @@ export class DragEngine extends CoordinatesEngine<'drag'> {
   }
 
   setupScrollPrevention(event: PointerEvent) {
+    // fixes https://github.com/pmndrs/use-gesture/issues/497
+    this.state._preventScroll = false
     persistEvent(event)
     // we add window listeners that will prevent the scroll when the user has started dragging
     const remove = this.eventStore.add(this.sharedConfig.window, 'touch', 'change', this.preventScroll.bind(this), {
