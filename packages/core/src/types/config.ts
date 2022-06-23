@@ -123,7 +123,7 @@ export type PinchConfig = GestureOptions<'pinch'> & {
   modifierKey?: ModifierKey
 }
 
-export type DragBounds = Bounds | HTMLElement | React.RefObject<HTMLElement>
+export type DragBounds = Bounds | HTMLElement | { current: HTMLElement | null }
 
 type MoveAndHoverMouseOnly = {
   /**
