@@ -1,13 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React from 'react'
 import { Controller } from '@use-gesture/core'
-import {
-  GenericOptions,
-  GestureKey,
-  InternalHandlers,
-  NativeHandlers,
-  ReactDOMAttributes
-} from '@use-gesture/core/types'
+import { GenericOptions, GestureKey, InternalHandlers, NativeHandlers } from '@use-gesture/core/types'
+import { ReactDOMAttributes } from './types'
 
 type HookReturnType<Config extends GenericOptions> = Config['target'] extends object
   ? void

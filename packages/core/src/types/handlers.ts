@@ -1,5 +1,6 @@
 import { FullGestureState, State, EventTypes } from './state'
 import { GestureKey } from './config'
+import { DOMHandlers, EventHandler } from './utils'
 
 export type Handler<Key extends GestureKey, EventType = EventTypes[Key]> = (
   state: Omit<FullGestureState<Key>, 'event'> & { event: EventType }
@@ -28,16 +29,9 @@ export type UserHandlers<T extends AnyHandlerEventTypes = EventTypes> = {
   onHover: Handler<'hover', check<T, 'hover'>>
 }
 
-export type ReactDOMAttributes = Omit<
-  React.DOMAttributes<EventTarget>,
-  'children' | 'dangerouslySetInnerHTML' | keyof UserHandlers
->
+type NativeHandlersKeys = keyof Omit<DOMHandlers, keyof UserHandlers>
 
-type NativeHandlersKeys = keyof ReactDOMAttributes
-
-type GetEventType<Key extends NativeHandlersKeys> = ReactDOMAttributes[Key] extends
-  | React.EventHandler<infer EventType>
-  | undefined
+type GetEventType<Key extends NativeHandlersKeys> = DOMHandlers[Key] extends EventHandler<infer EventType> | undefined
   ? EventType
   : UIEvent
 

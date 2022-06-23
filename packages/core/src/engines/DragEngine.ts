@@ -376,6 +376,7 @@ export class DragEngine extends CoordinatesEngine<'drag'> {
   }
 }
 
-function persistEvent(event: React.PointerEvent | PointerEvent) {
+function persistEvent(event: PointerEvent) {
+  // @ts-ignore
   'persist' in event && typeof event.persist === 'function' && event.persist()
 }
