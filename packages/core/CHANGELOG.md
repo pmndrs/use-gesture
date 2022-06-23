@@ -1,5 +1,11 @@
 # @use-gesture/core
 
+## 10.2.16
+
+### Patch Changes
+
+- a521a171f: types: remove React types dependency on core package
+
 ## 10.2.15
 
 ### Patch Changes
