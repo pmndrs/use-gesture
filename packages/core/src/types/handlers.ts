@@ -29,7 +29,7 @@ export type UserHandlers<T extends AnyHandlerEventTypes = EventTypes> = {
   onHover: Handler<'hover', check<T, 'hover'>>
 }
 
-type NativeHandlersKeys = keyof DOMHandlers
+type NativeHandlersKeys = keyof Omit<DOMHandlers, keyof UserHandlers>
 
 type GetEventType<Key extends NativeHandlersKeys> = DOMHandlers[Key] extends EventHandler<infer EventType> | undefined
   ? EventType
