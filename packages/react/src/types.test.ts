@@ -3,7 +3,8 @@
 
 import { useRef } from 'react'
 import { expectType } from 'tsd'
-import { ReactDOMAttributes, useDrag, useGesture } from '.'
+import { useDrag, useGesture } from '.'
+import { ReactDOMAttributes } from './types'
 
 /* Checks that gesture hooks return event props handlers */
 expectType<(...args: any[]) => ReactDOMAttributes>(useDrag(() => {}))
