@@ -57,6 +57,16 @@
       "import": "{ WheelGesture }",
       "path": "packages/vanilla/dist/use-gesture-vanilla.esm.js",
       "limit": "6 KB"
+    },
+    {
+      "name": "@use-gesture/svelte",
+      "path": "packages/svelte/dist/use-gesture-svelte.esm.js",
+      "limit": "9 KB"
+    },
+    {
+      "name": "@use-gesture/svelte -- tree-shaking",
+      "path": "packages/svelte/dist/use-gesture-svelte.esm.js",
+      "limit": "6 KB"
     }
   ],
   "jest": {
