@@ -9,6 +9,7 @@ import DragTarget from './sandboxes/gesture-drag-target/src/App'
 import Nested from './sandboxes/gesture-nested/src/App'
 import DragVanilla from './sandboxes/gesture-drag-vanilla/src/App'
 import GestureVanilla from './sandboxes/gesture-vanilla/src/App'
+import GestureSvelte from './sandboxes/gesture-svelte/src/App'
 import Move from './sandboxes/gesture-move/src/App'
 import Pinch from './sandboxes/gesture-pinch/src/App'
 import PinchMultiple from './sandboxes/gesture-pinch-multiple/src/App'
@@ -34,6 +35,7 @@ const links = {
   'gesture-nested': Nested,
   'gesture-drag-vanilla': DragVanilla,
   'gesture-vanilla': GestureVanilla,
+  'gesture-svelte': GestureSvelte,
   'gesture-move': Move,
   'gesture-pinch': Pinch,
   'gesture-pinch-multiple': PinchMultiple,
