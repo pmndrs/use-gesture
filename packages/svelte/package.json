@@ -1,6 +1,6 @@
 {
   "name": "@use-gesture/svelte",
-  "version": "0.0.0",
+  "version": "10.2.15",
   "description": "Svelte target for @use-gesture",
   "keywords": [
     "svelte",
@@ -29,7 +29,7 @@
   "bugs": {
     "url": "https://github.com/pmndrs/use-gesture/issues"
   },
-  "author": "Paul Henschel",
+  "author": "Robert Soriano (https://github.com/wobsoriano)",
   "contributors": [
     "David Bismut (https://github.com/dbismut)"
   ],
