@@ -10,9 +10,10 @@
   "dependencies": {
     "@leva-ui/plugin-spring": "*",
     "@react-spring/web": "^9.4.5",
-    "@react-three/drei": "^9.8.1",
-    "@react-three/fiber": "^8.0.15",
+    "@react-three/drei": "^9.14.3",
+    "@react-three/fiber": "^8.0.27",
     "@use-gesture/react": "*",
+    "@use-gesture/svelte": "*",
     "@use-gesture/vanilla": "*",
     "leva": "*",
     "lodash-move": "^1.1.1",
@@ -21,10 +22,13 @@
     "react-dom": "^18.1.0",
     "react-use-measure": "^2.1.1",
     "screenlog": "^0.3.0",
+    "svelte": "^3.48.0",
+    "svelte-adapter": "^0.5.0",
     "three": "^0.140.2",
     "wouter": "^2.7.4"
   },
   "devDependencies": {
+    "@sveltejs/vite-plugin-svelte": "1.0.0-next.49",
     "@types/lodash.clamp": "^4.0.7",
     "@types/react": "^18.0.9",
     "@types/react-dom": "^18.0.4",

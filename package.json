@@ -65,8 +65,9 @@
     },
     {
       "name": "@use-gesture/svelte -- tree-shaking",
+      "import": "{ drag }",
       "path": "packages/svelte/dist/use-gesture-svelte.esm.js",
-      "limit": "6 KB"
+      "limit": "7 KB"
     }
   ],
   "jest": {
@@ -82,14 +83,14 @@
     ]
   },
   "devDependencies": {
-    "@babel/core": "^7.17.10",
-    "@babel/plugin-syntax-flow": "^7.16.7",
-    "@babel/plugin-transform-react-jsx": "^7.17.3",
-    "@babel/preset-env": "^7.17.10",
-    "@babel/preset-react": "^7.16.7",
-    "@babel/preset-typescript": "^7.16.7",
-    "@changesets/cli": "^2.22.0",
-    "@preconstruct/cli": "^2.1.5",
+    "@babel/core": "^7.18.6",
+    "@babel/plugin-syntax-flow": "^7.18.6",
+    "@babel/plugin-transform-react-jsx": "^7.18.6",
+    "@babel/preset-env": "^7.18.6",
+    "@babel/preset-react": "^7.18.6",
+    "@babel/preset-typescript": "^7.18.6",
+    "@changesets/cli": "^2.23.0",
+    "@preconstruct/cli": "^2.1.6",
     "@size-limit/preset-small-lib": "^7.0.8",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.2.0",
