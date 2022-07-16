@@ -60,6 +60,7 @@ describe('testing derived config', () => {
         transform: identity,
         hasCustomTransform: false,
         preventDefault: false,
+        keys: true,
         triggerAllEvents: false,
         delay: 0,
         swipe: {

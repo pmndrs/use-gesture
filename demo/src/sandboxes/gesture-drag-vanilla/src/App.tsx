@@ -21,8 +21,10 @@ function Draggable() {
     gesture: { options: ['offset', 'movement'] },
     axis: { options: [undefined, 'x', 'y', 'lock'] },
     filterTaps: false,
-    boundToParent: false
+    boundToParent: false,
+    keys: true
   })
+
   const pointerOptions = useControls('pointer', { touch: false, capture: true, lock: false })
 
   useEffect(() => {

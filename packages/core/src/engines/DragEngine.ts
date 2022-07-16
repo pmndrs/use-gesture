@@ -367,9 +367,10 @@ export class DragEngine extends CoordinatesEngine<'drag'> {
       bindFunction('lostPointerCapture', '', this.pointerUp.bind(this))
     }
 
-    bindFunction('key', 'down', this.keyDown.bind(this))
-    bindFunction('key', 'up', this.keyUp.bind(this))
-
+    if (this.config.keys) {
+      bindFunction('key', 'down', this.keyDown.bind(this))
+      bindFunction('key', 'up', this.keyUp.bind(this))
+    }
     if (this.config.filterTaps) {
       bindFunction('click', '', this.pointerClick.bind(this), { capture: true, passive: false })
     }

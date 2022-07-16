@@ -121,6 +121,7 @@ Here are all options that can be applied to gestures.
 | `pointer.mouse`                           |                                           **drag**                                            | If `true`, drag will use mouse event listeners instead of pointer listeners when possible.                                                                                                           |
 | [`pointer.buttons`](#pointerbuttons)      |                                           **drag**                                            | Combination of buttons that triggers the drag gesture. [Read more below](#pointerbuttons).                                                                                                           |
 | [`pointer.lock`](#pointerlock)            |                                           **drag**                                            | If `true`, the pointer will enter pointer lock mode when drag starts, and exit pointer lock when drag ends. [Read more below](#pointerlock).                                                         |
+| [`keys`](#keys)                           |                                           **drag**                                            | By default, the drag gesture can be triggered by arrow keys when the draggable element is focused. Setting `keys` to `false` won't add keyboard event listeners.                                     |
 | [`delay`](#delay)                         |                                           **drag**                                            | If set, the handler will be delayed for the duration of the delay (in `ms`) — or if the user starts moving. When set to `true`, `delay` is defaulted to `180ms`.                                     |
 | [`swipe.distance`](#swipedistance)        |                                           **drag**                                            | The minimum distance per axis (in `pixels`) the drag gesture needs to travel to trigger a swipe.                                                                                                     |
 | [`swipe.velocity`](#swipevelocity)        |                                           **drag**                                            | The minimum velocity per axis (in `pixels / ms`) the drag gesture needs to reach before the pointer is released.                                                                                     |
@@ -324,6 +325,14 @@ function InitialExample() {
 ```
 
 > Unless your initial position is static or depends on `state`, make sure you use a function rather than a static array.
+
+### keys
+
+<Specs gestures={['drag']} types="boolean" defaultValue="true" />
+
+By default, the drag gesture is accessible, meaning you can control the drag of an element with arrow keys. The ` shiftKey` modifier will make the drag 10x faster, the `altKey` will make the drag 10x slower.
+
+If you set `keys` to `false`, your drag handler won't respond to keyboard events.
 
 ### modifierKey
 

@@ -169,6 +169,11 @@ export type DragConfig = Omit<CoordinatesConfig<'drag'>, 'axisThreshold' | 'boun
      */
     mouse?: boolean
     /**
+     * If false, will disable KeyboardEvents that would otherwise trigger the
+     * drag gesture when the element is focused. Defaults to true.
+     */
+    keys?: boolean
+    /**
      * Doesn't use setPointerCapture when false and delegate drag handling to
      * window
      */
