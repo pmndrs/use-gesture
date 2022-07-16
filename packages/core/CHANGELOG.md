@@ -1,5 +1,12 @@
 # @use-gesture/core
 
+## 10.2.17
+
+### Patch Changes
+
+- 48dc6a102: feat: add option to remove arrow keys listeners for the drag gesture.
+- d73ee4e34: Always trigger wheel events on pinch
+
 ## 10.2.16
 
 ### Patch Changes
