@@ -289,10 +289,9 @@ export class PinchEngine extends Engine<'pinch'> {
       bindFunction(device, 'end', this[device + 'End'].bind(this))
       // @ts-ignore
       bindFunction(device, 'cancel', this[device + 'End'].bind(this))
-    } else {
-      // we try to set a passive listener, knowing that in any case React will
-      // ignore it.
-      bindFunction('wheel', '', this.wheel.bind(this), { passive: false })
     }
+    // we try to set a passive listener, knowing that in any case React will
+    // ignore it.
+    bindFunction('wheel', '', this.wheel.bind(this), { passive: false })
   }
 }
