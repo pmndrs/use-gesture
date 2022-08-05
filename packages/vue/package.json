@@ -1,0 +1,46 @@
+{
+  "name": "@use-gesture/vue",
+  "version": "10.2.15",
+  "description": "Vue target for @use-gesture",
+  "keywords": [
+    "vue",
+    "hook",
+    "gesture",
+    "mouse",
+    "trackpad",
+    "touch",
+    "drag",
+    "pinch",
+    "rotate",
+    "scale",
+    "zoom",
+    "scroll",
+    "wheel"
+  ],
+  "license": "MIT",
+  "sideEffects": false,
+  "main": "dist/use-gesture-vue.cjs.js",
+  "module": "dist/use-gesture-vue.esm.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pmndrs/use-gesture.git",
+    "directory": "packages/vue"
+  },
+  "bugs": {
+    "url": "https://github.com/pmndrs/use-gesture/issues"
+  },
+  "author": "Robert Soriano (https://github.com/wobsoriano)",
+  "contributors": [
+    "David Bismut (https://github.com/dbismut)"
+  ],
+  "homepage": "https://use-gesture.netlify.app",
+  "peerDependencies": {
+    "vue": ">=3.2.0"
+  },
+  "dependencies": {
+    "@use-gesture/core": "10.2.16"
+  },
+  "devDependencies": {
+    "vue": "^3.2.37"
+  }
+}

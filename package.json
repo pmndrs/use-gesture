@@ -68,6 +68,17 @@
       "import": "{ drag }",
       "path": "packages/svelte/dist/use-gesture-svelte.esm.js",
       "limit": "7 KB"
+    },
+    {
+      "name": "@use-gesture/vue",
+      "path": "packages/vue/dist/use-gesture-svelte.esm.js",
+      "limit": "9 KB"
+    },
+    {
+      "name": "@use-gesture/vue -- tree-shaking",
+      "import": "{ drag }",
+      "path": "packages/vue/dist/use-gesture-vue.esm.js",
+      "limit": "7 KB"
     }
   ],
   "jest": {
