@@ -1,5 +1,11 @@
 # @use-gesture/core
 
+## 10.2.18
+
+### Patch Changes
+
+- 115ee1f59: fix: don't let Enter key preventDefault on onClick when filterTaps is true.
+
 ## 10.2.17
 
 ### Patch Changes
