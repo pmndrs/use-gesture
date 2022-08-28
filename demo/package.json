@@ -39,7 +39,6 @@
     "@types/three": "^0.143.1",
     "@vitejs/plugin-react": "^2.0.1",
     "@vitejs/plugin-vue": "^3.0.3",
-    "typescript": "^4.8.2",
     "typescript-plugin-css-modules": "^3.4.0",
     "vite": "3.0.9",
     "vue-tsc": "^0.40.2"
