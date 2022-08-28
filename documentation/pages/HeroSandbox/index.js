@@ -9,7 +9,7 @@ import { tweaks } from './data'
 import 'react-toastify/dist/ReactToastify.css'
 import * as styles from './hero.module.css'
 
-toast.configure({ position: 'bottom-right', pauseOnHover: false, draggable: false })
+const toastConfig = { position: toast.POSITION.BOTTOM_RIGHT, pauseOnHover: false, draggable: false }
 
 const _config = {
   stiff: { tension: 200, friction: 20 },
@@ -78,9 +78,9 @@ export default function Hero({ carbonAd }) {
   const bind = useGesture(
     {
       onDrag: ({ hovering, tap, swipe: [swipeX, swipeY], active, movement: [mx, my], offset: [x, y] }) => {
-        if (tap) toast('Tap!')
-        if (swipeX) toast(`Swipe ${swipeX > 0 ? 'Right' : 'Left'}`)
-        if (swipeY) toast(`Swipe ${swipeY > 0 ? 'Bottom' : 'Top'}`)
+        if (tap) toast('Tap!', toastConfig)
+        if (swipeX) toast(`Swipe ${swipeX > 0 ? 'Right' : 'Left'}`, toastConfig)
+        if (swipeY) toast(`Swipe ${swipeY > 0 ? 'Bottom' : 'Top'}`, toastConfig)
         document.body.classList.toggle('dragged', active)
 
         if (active) {
