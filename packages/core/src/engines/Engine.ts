@@ -3,6 +3,8 @@ import { getEventDetails } from '../utils/events'
 import { call } from '../utils/fn'
 import { V, computeRubberband } from '../utils/maths'
 import { GestureKey, IngKey, Vector2 } from '../types'
+import { NonUndefined } from '../types'
+import { State } from '../types'
 
 /**
  * The lib doesn't compute the kinematics on the last event of the gesture
@@ -37,7 +39,7 @@ export interface Engine<Key extends GestureKey> {
    * `state._active` or `state._blocked` flags if the gesture isn't intentional.
    * @param event
    */
-  axisIntent?(event?: UIEvent): void
+  axisIntent?(event?: NonUndefined<State[Key]>['event']): void
 
   restrictToAxis?(movement: Vector2): void
 }
@@ -179,10 +181,7 @@ export abstract class Engine<Key extends GestureKey> {
    * Function ran at the start of the gesture.
    * @param event
    */
-  start(event: UIEvent) {
-    // TODO 28.08.22
-    // this should be the actual type of Event NonNullable<State[Key]>['event']
-    // but it now throws an error I'm not sure why
+  start(event: NonUndefined<State[Key]>['event']) {
     const state = this.state
     const config = this.config
     if (!state._active) {
@@ -225,7 +224,7 @@ export abstract class Engine<Key extends GestureKey> {
    * Computes all sorts of state attributes, including kinematics.
    * @param event
    */
-  compute(event?: UIEvent) {
+  compute(event?: NonUndefined<State[Key]>['event']) {
     const { state, config, shared } = this
     state.args = this.args
 
