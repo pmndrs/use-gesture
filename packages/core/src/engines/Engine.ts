@@ -2,7 +2,7 @@ import { Controller } from '../Controller'
 import { getEventDetails } from '../utils/events'
 import { call } from '../utils/fn'
 import { V, computeRubberband } from '../utils/maths'
-import { GestureKey, IngKey, State, Vector2 } from '../types'
+import { GestureKey, IngKey, Vector2 } from '../types'
 
 /**
  * The lib doesn't compute the kinematics on the last event of the gesture
@@ -179,7 +179,10 @@ export abstract class Engine<Key extends GestureKey> {
    * Function ran at the start of the gesture.
    * @param event
    */
-  start(event: NonNullable<State[Key]>['event']) {
+  start(event: UIEvent) {
+    // TODO 28.08.22
+    // this should be the actual type of Event NonNullable<State[Key]>['event']
+    // but it now throws an error I'm not sure why
     const state = this.state
     const config = this.config
     if (!state._active) {
@@ -222,7 +225,7 @@ export abstract class Engine<Key extends GestureKey> {
    * Computes all sorts of state attributes, including kinematics.
    * @param event
    */
-  compute(event?: NonNullable<State[Key]>['event']) {
+  compute(event?: UIEvent) {
     const { state, config, shared } = this
     state.args = this.args
 
