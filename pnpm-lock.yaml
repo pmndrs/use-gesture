@@ -197,7 +197,7 @@ importers:
 
   packages/react:
     specifiers:
-      '@use-gesture/core': 10.2.16
+      '@use-gesture/core': 10.2.18
     dependencies:
       '@use-gesture/core': link:../core
 
@@ -209,7 +209,7 @@ importers:
 
   packages/vanilla:
     specifiers:
-      '@use-gesture/core': 10.2.16
+      '@use-gesture/core': 10.2.18
     dependencies:
       '@use-gesture/core': link:../core
 

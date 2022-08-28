@@ -252,7 +252,11 @@ export class DragEngine extends CoordinatesEngine<'drag'> {
   }
 
   pointerClick(event: MouseEvent) {
-    if (!this.state.tap) {
+    // event.detail indicates the number of buttons being pressed. When it's
+    // null, it's likely to be a keyboard event from the Enter Key that could
+    // be used for accessibility, and therefore shouldn't be prevented.
+    // See https://github.com/pmndrs/use-gesture/issues/530
+    if (!this.state.tap && event.detail > 0) {
       event.preventDefault()
       event.stopPropagation()
     }
@@ -367,9 +371,10 @@ export class DragEngine extends CoordinatesEngine<'drag'> {
       bindFunction('lostPointerCapture', '', this.pointerUp.bind(this))
     }
 
-    bindFunction('key', 'down', this.keyDown.bind(this))
-    bindFunction('key', 'up', this.keyUp.bind(this))
-
+    if (this.config.keys) {
+      bindFunction('key', 'down', this.keyDown.bind(this))
+      bindFunction('key', 'up', this.keyUp.bind(this))
+    }
     if (this.config.filterTaps) {
       bindFunction('click', '', this.pointerClick.bind(this), { capture: true, passive: false })
     }

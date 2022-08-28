@@ -41,6 +41,9 @@ export const dragConfigResolver = {
     this.pointerButtons = buttons
     return !this.pointerLock && this.device === 'pointer' && capture
   },
+  keys(value = true) {
+    return value
+  },
   threshold(
     this: InternalDragOptions,
     value: number | Vector2,

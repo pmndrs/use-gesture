@@ -37,6 +37,7 @@ export type InternalDragOptions = Omit<InternalCoordinatesOptions<'drag'>, 'axis
   preventScrollDelay?: number
   preventScrollAxis?: 'x' | 'y' | 'xy'
   pointerLock: boolean
+  keys: boolean
   device: 'pointer' | 'touch' | 'mouse'
   swipe: {
     velocity: Vector2
