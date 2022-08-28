@@ -1,6 +1,6 @@
 {
   "name": "@use-gesture/vue",
-  "version": "10.2.15",
+  "version": "10.2.18",
   "description": "Vue target for @use-gesture",
   "keywords": [
     "vue",
@@ -38,6 +38,6 @@
     "vue": ">=3.2.0"
   },
   "dependencies": {
-    "@use-gesture/core": "10.2.16"
+    "@use-gesture/core": "10.2.18"
   }
 }

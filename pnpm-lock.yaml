@@ -203,9 +203,9 @@ importers:
 
   packages/svelte:
     specifiers:
-      '@use-gesture/vanilla': 10.2.16
+      '@use-gesture/vanilla': 10.2.18
     dependencies:
-      '@use-gesture/vanilla': 10.2.16
+      '@use-gesture/vanilla': link:../vanilla
 
   packages/vanilla:
     specifiers:
@@ -215,9 +215,9 @@ importers:
 
   packages/vue:
     specifiers:
-      '@use-gesture/core': 10.2.16
+      '@use-gesture/core': 10.2.18
     dependencies:
-      '@use-gesture/core': 10.2.16
+      '@use-gesture/core': link:../core
 
 packages:
   /@adobe/css-tools/4.0.1:
@@ -6785,11 +6785,6 @@ packages:
       eslint-visitor-keys: 3.3.0
     dev: true
 
-  /@use-gesture/core/10.2.16:
-    resolution:
-      { integrity: sha512-2J2GICmrSA6RwcowqzL0TY6S8bJY35KhLnE0YjBIVobQL2RilSDefXTKMxxyontp2mALDeeYAHh9ZLu+vMaq8Q== }
-    dev: false
-
   /@use-gesture/core/10.2.18:
     resolution:
       { integrity: sha512-O+qxBlKxPtYM/LyRnK/U5MhVA9kKHj4C2yHsUurDxNO0a8D1PHLz9YmMPh2UXGQE4wtSke03GsLqRsHbUvN9nw== }
@@ -6803,13 +6798,6 @@ packages:
     dependencies:
       '@use-gesture/core': 10.2.18
       react: 18.2.0
-    dev: false
-
-  /@use-gesture/vanilla/10.2.16:
-    resolution:
-      { integrity: sha512-ngvcqTeKTAfKHm4YoX32WgrDbRaPowSVju1AH4phReGvzOEKac5l+E4NOLTqlkHFmLIBvMx820pv6pyPHxaHSw== }
-    dependencies:
-      '@use-gesture/core': 10.2.16
     dev: false
 
   /@vercel/webpack-asset-relocator-loader/1.7.3:
