@@ -39,8 +39,5 @@
   },
   "dependencies": {
     "@use-gesture/core": "10.2.16"
-  },
-  "devDependencies": {
-    "vue": "^3.2.37"
   }
 }
