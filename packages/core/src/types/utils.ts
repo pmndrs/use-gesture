@@ -2,11 +2,12 @@ export type Vector2 = [number, number]
 export type WebKitGestureEvent = PointerEvent & { scale: number; rotation: number }
 export type Target = EventTarget | { current: EventTarget | null }
 export type PointerType = 'mouse' | 'touch' | 'pen'
-export type NonUndefined<T> = T extends undefined ? never : T
-// rip off from React types
 
+// replaces NonUndefined from 4.7 and inferior versions
+export type NonUndefined<T> = T extends undefined ? never : T
 export type EventHandler<E extends Event = Event> = (event: E) => void
 
+// rip off from React types
 export interface DOMHandlers {
   // Clipboard Events
   onCopy?: EventHandler<ClipboardEvent>
