@@ -30,7 +30,7 @@
     "@types/react-dom": "^18.0.4",
     "@types/three": "^0.140.0",
     "@vitejs/plugin-react": "^1.3.2",
-    "typescript": "^4.6.4",
+    "typescript": "^4.8.2",
     "typescript-plugin-css-modules": "^3.4.0",
     "vite": "2.9.9"
   }
