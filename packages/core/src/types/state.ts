@@ -252,14 +252,16 @@ export type EventTypes = {
   pinch: PointerEvent | TouchEvent | WheelEvent | WebKitGestureEvent
 }
 
-export interface State {
+export type StateTypes = {
   shared: SharedGestureState
-  drag?: DragState & { event: EventTypes['drag'] }
-  wheel?: CoordinatesState & { event: EventTypes['wheel'] }
-  scroll?: CoordinatesState & { event: EventTypes['scroll'] }
-  move?: CoordinatesState & { event: EventTypes['move'] }
-  hover?: CoordinatesState & { event: EventTypes['hover'] }
-  pinch?: PinchState & { event: EventTypes['pinch'] }
+  drag: DragState & { event: EventTypes['drag'] }
+  wheel: CoordinatesState & { event: EventTypes['wheel'] }
+  scroll: CoordinatesState & { event: EventTypes['scroll'] }
+  move: CoordinatesState & { event: EventTypes['move'] }
+  hover: CoordinatesState & { event: EventTypes['hover'] }
+  pinch: PinchState & { event: EventTypes['pinch'] }
 }
 
-export type FullGestureState<Key extends GestureKey> = SharedGestureState & NonNullable<State[Key]>
+export type State = Pick<StateTypes, 'shared'> & Partial<Omit<StateTypes, 'shared'>>
+
+export type FullGestureState<Key extends GestureKey> = SharedGestureState & StateTypes[Key]

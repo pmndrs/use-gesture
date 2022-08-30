@@ -1,4 +1,4 @@
-import { State } from './state'
+import { State, StateTypes } from './state'
 import { Vector2, Target, PointerType } from './utils'
 
 export type GestureKey = Exclude<keyof State, 'shared'>
@@ -42,7 +42,7 @@ export type GestureOptions<T extends GestureKey> = GenericOptions & {
   /**
    * The position `offset` will start from.
    */
-  from?: Vector2 | ((state: NonNullable<State[T]>) => Vector2)
+  from?: Vector2 | ((state: StateTypes[T]) => Vector2)
   /**
    * The handler will fire only when the gesture displacement is greater than
    * the threshold.
@@ -152,7 +152,7 @@ export type DragConfig = Omit<CoordinatesConfig<'drag'>, 'axisThreshold' | 'boun
    * Limits the gesture `offset` to the specified bounds. Can be a ref or a dom
    * node.
    */
-  bounds?: DragBounds | ((state: State['drag']) => DragBounds)
+  bounds?: DragBounds | ((state: StateTypes['drag']) => DragBounds)
   pointer?: {
     /**
      * The buttons combination that would trigger the drag. Use `-1` to allow
