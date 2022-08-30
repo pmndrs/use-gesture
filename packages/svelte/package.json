@@ -1,6 +1,6 @@
 {
   "name": "@use-gesture/svelte",
-  "version": "10.2.18",
+  "version": "10.2.19",
   "description": "Svelte target for @use-gesture",
   "keywords": [
     "svelte",
@@ -35,6 +35,6 @@
   ],
   "homepage": "https://use-gesture.netlify.app",
   "dependencies": {
-    "@use-gesture/vanilla": "10.2.18"
+    "@use-gesture/vanilla": "10.2.19"
   }
 }

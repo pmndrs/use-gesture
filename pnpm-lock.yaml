@@ -197,25 +197,25 @@ importers:
 
   packages/react:
     specifiers:
-      '@use-gesture/core': 10.2.18
+      '@use-gesture/core': 10.2.19
     dependencies:
       '@use-gesture/core': link:../core
 
   packages/svelte:
     specifiers:
-      '@use-gesture/vanilla': 10.2.18
+      '@use-gesture/vanilla': 10.2.19
     dependencies:
       '@use-gesture/vanilla': link:../vanilla
 
   packages/vanilla:
     specifiers:
-      '@use-gesture/core': 10.2.18
+      '@use-gesture/core': 10.2.19
     dependencies:
       '@use-gesture/core': link:../core
 
   packages/vue:
     specifiers:
-      '@use-gesture/core': 10.2.18
+      '@use-gesture/core': 10.2.19
     dependencies:
       '@use-gesture/core': link:../core
 
@@ -5672,7 +5672,7 @@ packages:
       '@babel/runtime': 7.18.9
       '@react-spring/three': 9.5.2_6ovrzwfaplyi3f62bs3r7o7kyq
       '@react-three/fiber': 8.6.0_f72olm6mn3unzgg4exeiaoxanm
-      '@use-gesture/react': 10.2.18_react@18.2.0
+      '@use-gesture/react': 10.2.19_react@18.2.0
       detect-gpu: 4.0.37
       glsl-noise: 0.0.0
       lodash.omit: 4.5.0
@@ -6785,18 +6785,18 @@ packages:
       eslint-visitor-keys: 3.3.0
     dev: true
 
-  /@use-gesture/core/10.2.18:
+  /@use-gesture/core/10.2.19:
     resolution:
-      { integrity: sha512-O+qxBlKxPtYM/LyRnK/U5MhVA9kKHj4C2yHsUurDxNO0a8D1PHLz9YmMPh2UXGQE4wtSke03GsLqRsHbUvN9nw== }
+      { integrity: sha512-fsvuWmEfDDVgCEChLZuJFO8ZgBQLsEsL40ncv+HWYbkF90SwrLo2lkCu+O9TZa9ipqWC2KBXl27pRODY5ogr4w== }
     dev: false
 
-  /@use-gesture/react/10.2.18_react@18.2.0:
+  /@use-gesture/react/10.2.19_react@18.2.0:
     resolution:
-      { integrity: sha512-MJQ5q/huXIER3st3bsmuWA7lxcdwZd28KJoBPFPNxKFenjF47smaiCCf+dLjUBiTV0DiIYAN4pXK19KxwfnUgg== }
+      { integrity: sha512-pzRBEHehKKaM0T1bRlvLACfUlFetfaTrNH3mduJlRTsWvgKV+SNhoGxZzIavqyZW1kcIacYeXPr3XfvutpoN2w== }
     peerDependencies:
       react: '>= 16.8.0'
     dependencies:
-      '@use-gesture/core': 10.2.18
+      '@use-gesture/core': 10.2.19
       react: 18.2.0
     dev: false
 
@@ -15320,7 +15320,7 @@ packages:
       '@radix-ui/react-portal': 0.1.4_biqbaboplfbrettd7655fr4n2y
       '@radix-ui/react-tooltip': 0.1.6_biqbaboplfbrettd7655fr4n2y
       '@stitches/react': 1.2.8_react@18.2.0
-      '@use-gesture/react': 10.2.18_react@18.2.0
+      '@use-gesture/react': 10.2.19_react@18.2.0
       '@welldone-software/why-did-you-render': 6.2.3_react@18.2.0
       colord: 2.9.3
       dequal: 2.0.3
