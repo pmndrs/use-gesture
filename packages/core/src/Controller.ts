@@ -4,7 +4,15 @@ import { isTouch, parseProp, toHandlerProp, touchIds } from './utils/events'
 import { EventStore } from './EventStore'
 import { TimeoutStore } from './TimeoutStore'
 import { chain } from './utils/fn'
-import { GestureKey, InternalConfig, InternalHandlers, NativeHandlers, State, UserGestureConfig } from './types'
+import {
+  GestureKey,
+  InternalConfig,
+  InternalHandlers,
+  NativeHandlers,
+  State,
+  UserGestureConfig,
+  NormalizePropFunction
+} from './types'
 
 export class Controller {
   /**
@@ -34,7 +42,7 @@ export class Controller {
     }
   } as State
 
-  constructor(handlers: InternalHandlers) {
+  constructor(handlers: InternalHandlers, private normalizeProp?: NormalizePropFunction) {
     resolveGestures(this, handlers)
   }
   /**
@@ -107,7 +115,7 @@ export class Controller {
       // Adding gesture handlers
       for (const gestureKey of this.gestures) {
         const gestureConfig = this.config[gestureKey]!
-        const bindFunction = bindToProps(props, gestureConfig.eventOptions, !!target)
+        const bindFunction = bindToProps(props, gestureConfig.eventOptions, !!target, this.normalizeProp)
         if (gestureConfig.enabled) {
           const Engine = EngineMap.get(gestureKey)!
           // @ts-ignore
@@ -166,7 +174,12 @@ function resolveGestures(ctrl: Controller, internalHandlers: InternalHandlers) {
 }
 
 const bindToProps =
-  (props: any, eventOptions: AddEventListenerOptions, withPassiveOption: boolean) =>
+  (
+    props: any,
+    eventOptions: AddEventListenerOptions,
+    withPassiveOption: boolean,
+    normalizeProp?: NormalizePropFunction
+  ) =>
   (
     device: string,
     action: string,
@@ -177,7 +190,7 @@ const bindToProps =
     const capture = options.capture ?? eventOptions.capture
     const passive = options.passive ?? eventOptions.passive
     // a native handler is already passed as a prop like "onMouseDown"
-    let handlerProp = isNative ? device : toHandlerProp(device, action, capture)
+    let handlerProp = isNative ? device : toHandlerProp({ device, action, capture }, normalizeProp)
     if (withPassiveOption && passive) handlerProp += 'Passive'
     props[handlerProp] = props[handlerProp] || []
     props[handlerProp].push(handler)
