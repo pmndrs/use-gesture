@@ -1,5 +1,4 @@
-import { ModifierKey } from '../types'
-import { PinchConfig, GenericOptions, InternalPinchOptions, State, Vector2 } from '../types'
+import { PinchConfig, GenericOptions, InternalPinchOptions, State, Vector2, ModifierKey } from '../types'
 import { call, assignDefault } from '../utils/fn'
 import { V } from '../utils/maths'
 import { commonConfigResolver } from './commonConfigResolver'
