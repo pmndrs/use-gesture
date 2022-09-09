@@ -1,5 +1,3 @@
-export { normalizeProps } from './useRecognizers'
-
 export { useDrag } from './useDrag'
 export { usePinch } from './usePinch'
 export { useWheel } from './useWheel'

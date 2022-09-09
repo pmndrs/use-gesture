@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useSpring } from 'vue-use-spring'
-import { normalizeProps, useDrag } from '@use-gesture/vue'
+import { useDrag } from '@use-gesture/vue'
 
 const position = useSpring({ x: 0, y: 0 })
 
@@ -13,7 +13,7 @@ const bind = useDrag(({ down, movement: [mx, my] }) => {
 <template>
   <div
     className="drag"
-    v-bind="normalizeProps(bind())"
+    v-on="bind()"
     :style="{
       touchAction: 'none',
       transform: `translate(${position.x}px, ${position.y}px)`

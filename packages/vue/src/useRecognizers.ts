@@ -1,34 +1,17 @@
 import { Controller } from '@use-gesture/core'
-import type { DOMHandlers, GenericOptions, GestureKey, InternalHandlers, NativeHandlers } from '@use-gesture/core/types'
+import type {
+  DOMHandlers,
+  GenericOptions,
+  GestureKey,
+  InternalHandlers,
+  NativeHandlers,
+  NormalizePropFunction
+} from '@use-gesture/core/types'
 import { watchEffect } from 'vue'
 import type { Events as VueEvents } from 'vue'
 
-type Dict = Record<string, any>
-
-const eventMap: Dict = {
-  onKeyDown: 'onKeydown',
-  onKeyup: 'onKeyup',
-  onPointerCancel: 'onPointercancel',
-  onPointerDown: 'onPointerdown',
-  onPointerMove: 'onPointermove',
-  onPointerEnter: 'onPointerenter',
-  onPointerLeave: 'onPointerleave',
-  onPointerUp: 'onPointerup',
-  onWheel: 'onWheel',
-  onScroll: 'onScroll'
-}
-
-function toVueProp(prop: string) {
-  if (prop in eventMap) return eventMap[prop]
-
-  return prop
-}
-
-export const normalizeProps = (props: Dict = {}) => {
-  const normalized: Dict = {}
-  for (const key in props) normalized[toVueProp(key)] = props[key]
-
-  return normalized
+const normalizeProp: NormalizePropFunction = (device, actionKey, capture) => {
+  return device + actionKey
 }
 
 type CombinedEventHandlers = VueEvents & DOMHandlers
@@ -53,7 +36,7 @@ export function useRecognizers<Config extends GenericOptions>(
   gestureKey?: GestureKey,
   nativeHandlers?: NativeHandlers
 ): HookReturnType<Config> {
-  const ctrl = new Controller(handlers)
+  const ctrl = new Controller(handlers, normalizeProp)
   ctrl.applyHandlers(handlers, nativeHandlers)
   ctrl.applyConfig(config, gestureKey)
 
