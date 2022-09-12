@@ -60,4 +60,7 @@ export type GestureHandlers<HandlerType extends AnyHandlerEventTypes = EventType
 
 export type InternalHandlers = { [Key in GestureKey]?: Handler<Key, any> }
 
-export type NormalizePropFunction = (device: string, actionKey: string, capture: boolean) => string
+export type NormalizePropFunction = (
+  eventAttributes: { device: string; actionKey: string; capture: boolean; passive: boolean },
+  isNative: boolean
+) => string

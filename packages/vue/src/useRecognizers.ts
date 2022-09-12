@@ -1,6 +1,5 @@
 import { Controller } from '@use-gesture/core'
 import type {
-  DOMHandlers,
   GenericOptions,
   GestureKey,
   InternalHandlers,
@@ -8,13 +7,15 @@ import type {
   NormalizePropFunction
 } from '@use-gesture/core/types'
 import { watchEffect } from 'vue'
-import type { Events as VueEvents } from 'vue'
+import { VueEvents } from './types'
 
-const normalizeProp: NormalizePropFunction = (device, actionKey, capture) => {
-  return device + actionKey
+// TODO I'm unsure how to handle capture in Vue granulary?
+const normalizeProp: NormalizePropFunction = ({ device, actionKey }, isNative) => {
+  const prop = isNative ? device.substring(2) : device + actionKey
+  return prop.toLowerCase()
 }
 
-type CombinedEventHandlers = VueEvents & DOMHandlers
+type CombinedEventHandlers = VueEvents
 
 type HookReturnType<Config extends GenericOptions> = Config['target'] extends object
   ? void

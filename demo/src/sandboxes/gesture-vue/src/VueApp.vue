@@ -1,12 +1,15 @@
 <script setup lang="ts">
 import { useSpring } from 'vue-use-spring'
-import { useDrag } from '@use-gesture/vue'
+import { useGesture } from '@use-gesture/vue'
 
 const position = useSpring({ x: 0, y: 0 })
 
-const bind = useDrag(({ down, movement: [mx, my] }) => {
-  position.x = down ? mx : 0
-  position.y = down ? my : 0
+const bind = useGesture({
+  onDrag: ({ down, movement: [mx, my] }) => {
+    position.x = down ? mx : 0
+    position.y = down ? my : 0
+  },
+  onClick: () => console.log('click')
 })
 </script>
 

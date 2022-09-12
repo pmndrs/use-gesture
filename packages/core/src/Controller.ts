@@ -124,7 +124,7 @@ export class Controller {
       }
 
       // Adding native handlers
-      const nativeBindFunction = bindToProps(props, sharedConfig.eventOptions, !!target)
+      const nativeBindFunction = bindToProps(props, sharedConfig.eventOptions, !!target, this.normalizeProp)
       for (const eventKey in this.nativeHandlers) {
         nativeBindFunction(
           eventKey,
@@ -173,6 +173,15 @@ function resolveGestures(ctrl: Controller, internalHandlers: InternalHandlers) {
   if (internalHandlers.hover) setupGesture(ctrl, 'hover')
 }
 
+/**
+ *
+ * @param props The object that will contain the handlers
+ * @param eventOptions The event options passed to the listener
+ * @param withPassiveOption
+ * @param normalizeProp A function mapping device / action / capture to handler keys
+ * @returns
+ */
+
 const bindToProps =
   (
     props: any,
@@ -189,9 +198,11 @@ const bindToProps =
   ) => {
     const capture = options.capture ?? eventOptions.capture
     const passive = options.passive ?? eventOptions.passive
-    // a native handler is already passed as a prop like "onMouseDown"
-    let handlerProp = isNative ? device : toHandlerProp({ device, action, capture }, normalizeProp)
-    if (withPassiveOption && passive) handlerProp += 'Passive'
+    let handlerProp = toHandlerProp(
+      { device, action, capture, passive: withPassiveOption && passive },
+      isNative,
+      normalizeProp
+    )
     props[handlerProp] = props[handlerProp] || []
     props[handlerProp].push(handler)
   }

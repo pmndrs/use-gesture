@@ -18,25 +18,34 @@ function hasCapture(capture = false, actionKey: string) {
   return capture && !actionsWithoutCaptureSupported.includes(actionKey)
 }
 
-const toCamelCaseProp: NormalizePropFunction = (device, actionKey, capture) => {
-  return 'on' + capitalize(device) + capitalize(actionKey) + (hasCapture(capture, actionKey) ? 'Capture' : '')
+const toCamelCaseProp: NormalizePropFunction = ({ device, actionKey, capture, passive }, isNative) => {
+  let handlerProp = isNative
+    ? device
+    : 'on' + capitalize(device) + capitalize(actionKey) + (hasCapture(capture, actionKey) ? 'Capture' : '')
+  if (passive) handlerProp += 'Passive'
+  return handlerProp
 }
-
+/**
+ * The purpose of this function is to map an event
+ */
 export function toHandlerProp(
   {
     device,
     action = '',
-    capture = false
+    capture = false,
+    passive = true
   }: {
     device: string
     action?: string
     capture?: boolean
+    passive?: boolean
   },
+  isNative: boolean,
   normalizeProp = toCamelCaseProp
 ) {
   const deviceProps = EVENT_TYPE_MAP[device]
   const actionKey = deviceProps ? deviceProps[action] || action : action
-  return normalizeProp(device, actionKey, capture)
+  return normalizeProp({ device, actionKey, capture, passive }, isNative)
 }
 
 const pointerCaptureEvents = ['gotpointercapture', 'lostpointercapture']
