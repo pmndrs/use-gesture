@@ -133,7 +133,7 @@ describe('testing derived config', () => {
        * @note unfortunately jsdom doesn't support pointer lock so device is
        * `pointer` but it should be `mouse`.
        */
-      dragConfig.pointer.touch = false
+      dragConfig.pointer!.touch = false
       expect(parse(dragConfig, 'drag').drag).toHaveProperty('device', 'pointer')
     })
 
