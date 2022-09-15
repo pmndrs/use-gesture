@@ -1,5 +1,11 @@
 # @use-gesture/core
 
+## 10.2.20
+
+### Patch Changes
+
+- de807fddc: fix: applying a new config to useGesture / Gesture shouldn't throw an error.
+
 ## 10.2.19
 
 ### Patch Changes
