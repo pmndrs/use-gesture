@@ -1,5 +1,5 @@
 import { GestureKey } from './config'
-import { NonUndefined, Vector2, WebKitGestureEvent } from './utils'
+import { Vector2, WebKitGestureEvent } from './utils'
 
 export type IngKey = 'dragging' | 'wheeling' | 'moving' | 'hovering' | 'scrolling' | 'pinching'
 
@@ -262,4 +262,4 @@ export interface State {
   pinch?: PinchState & { event: EventTypes['pinch'] }
 }
 
-export type FullGestureState<Key extends GestureKey> = SharedGestureState & NonUndefined<State[Key]>
+export type FullGestureState<Key extends GestureKey> = SharedGestureState & NonNullable<State[Key]>

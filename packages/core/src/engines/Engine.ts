@@ -3,7 +3,6 @@ import { getEventDetails } from '../utils/events'
 import { call } from '../utils/fn'
 import { V, computeRubberband } from '../utils/maths'
 import { GestureKey, IngKey, State, Vector2 } from '../types'
-import { NonUndefined } from '../types'
 
 /**
  * The lib doesn't compute the kinematics on the last event of the gesture
@@ -180,7 +179,7 @@ export abstract class Engine<Key extends GestureKey> {
    * Function ran at the start of the gesture.
    * @param event
    */
-  start(event: NonUndefined<State[Key]>['event']) {
+  start(event: NonNullable<State[Key]>['event']) {
     const state = this.state
     const config = this.config
     if (!state._active) {
@@ -223,7 +222,7 @@ export abstract class Engine<Key extends GestureKey> {
    * Computes all sorts of state attributes, including kinematics.
    * @param event
    */
-  compute(event?: NonUndefined<State[Key]>['event']) {
+  compute(event?: NonNullable<State[Key]>['event']) {
     const { state, config, shared } = this
     state.args = this.args
 
