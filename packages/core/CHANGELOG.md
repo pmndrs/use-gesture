@@ -1,5 +1,14 @@
 # @use-gesture/core
 
+## 10.2.21
+
+### Patch Changes
+
+- 6f4c09b55: fix: rolls back wheel-based pinch movement to bounds (thanks [@Andarist](https://github.com/Andarist)!)
+- 854f4dfc1: feat (pinch):
+
+  - `pinchOnwheel: false` prevents pinching with wheel.
+
 ## 10.2.20
 
 ### Patch Changes
