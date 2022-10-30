@@ -109,7 +109,8 @@ Here are all options that can be applied to gestures.
 | [`bounds`](#bounds)                       |                                            **xy**                                             | Limits the gesture `offset` to the specified bounds.                                                                                                                                                 |
 | [`scaleBounds`](#scalebounds)             |                                           **pinch**                                           | Limits the scale `offset` to the specified bounds.                                                                                                                                                   |
 | [`angleBounds`](#anglebounds)             |                                           **pinch**                                           | Limits the angle `offset` to the specified bounds.                                                                                                                                                   |
-| [`modifierKey`](#modifierKey)             |                                           **pinch**                                           | The modifier key that triggers a scale when wheeling. Defaults to `'ctrlKey'`. Can be null.                                                                                                          |
+| [`modifierKey`](#modifierKey)             |                                           **pinch**                                           | The modifier key that triggers a scale when wheeling. Defaults to `'ctrlKey'`. Can be `null`.                                                                                                        |
+| `pinchOnWheel`                            |                                           **pinch**                                           | If `false`, pinching with the wheel will be disabled.                                                                                                                                                |
 | [`rubberband`](#rubberband)               |                                            **all**                                            | The elasticity coefficient of the gesture when going out of bounds. When set to `true`, the elasticity coefficient will be defaulted to `0.15`                                                       |
 | [`transform`](#transform)                 |                                            **all**                                            | A function that you can use to transform pointer values. Useful to map your screen coordinates to custom space coordinates such as a canvas.                                                         |
 | [`filterTaps`](#filtertaps)               |                                           **drag**                                            | If `true`, the component won't trigger your drag logic if the user just clicked on the component.                                                                                                    |
@@ -339,6 +340,8 @@ If you set `keys` to `false`, your drag handler won't respond to keyboard events
 <Specs gestures={['pinch']} types={[`'ctrlKey'`, `'altKey'`, `'metaKey'`, 'null']} defaultValue={`'ctrlKey'`} />
 
 This option lets you set the modifier key that triggers a scale gesture when using wheel inside the `onPinch` handler.
+
+When `null`, pinching will be triggered using wheel _without_ the need of pressing a modifier key.
 
 ### pointer.buttons
 

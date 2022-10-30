@@ -55,6 +55,7 @@ export type InternalPinchOptions = InternalGestureOptions<'pinch'> & {
   device: 'gesture' | 'pointer' | 'touch' | undefined
   lockDirection: boolean
   modifierKey: ModifierKey
+  pinchOnWheel: boolean
 }
 
 type MoveAndHoverMouseOnly = {

@@ -121,6 +121,10 @@ export type PinchConfig = GestureOptions<'pinch'> & {
    * Key that triggers scale when using the wheel. Defaults to `'ctrlKey'`.
    */
   modifierKey?: ModifierKey
+  /**
+   * Whether wheel should trigger a pinch at all.
+   */
+  pinchOnWheel?: boolean
 }
 
 export type DragBounds = Bounds | HTMLElement | { current: HTMLElement | null }

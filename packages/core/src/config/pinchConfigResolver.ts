@@ -47,5 +47,8 @@ export const pinchConfigResolver = {
   modifierKey(value: ModifierKey) {
     if (value === undefined) return 'ctrlKey'
     return value
+  },
+  pinchOnWheel(value = true) {
+    return value
   }
 }
