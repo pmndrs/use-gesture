@@ -2,6 +2,7 @@ import { Engine } from './Engine'
 import { touchDistanceAngle, distanceAngle, wheelValues } from '../utils/events'
 import { V } from '../utils/maths'
 import { Vector2, WebKitGestureEvent } from '../types'
+import { clampStateInternalMovementToBounds } from '../utils/state'
 
 const SCALE_ANGLE_RATIO_INTENT_DEG = 30
 const PINCH_WHEEL_RATIO = 100
@@ -266,17 +267,7 @@ export class PinchEngine extends Engine<'pinch'> {
     V.addTo(state._movement, state._delta)
 
     // _movement rolls back to when it passed the bounds.
-    const [ox, oy] = state.overflow
-    const [dx, dy] = state._delta
-    const [dirx, diry] = state._direction
-
-    if ((ox < 0 && dx > 0 && dirx < 0) || (ox > 0 && dx < 0 && dirx > 0)) {
-      state._movement[0] = state._movementBound[0] as number
-    }
-
-    if ((oy < 0 && dy > 0 && diry < 0) || (oy > 0 && dy < 0 && diry > 0)) {
-      state._movement[1] = state._movementBound[1] as number
-    }
+    clampStateInternalMovementToBounds(state)
 
     this.state.origin = [event.clientX, event.clientY]
 
