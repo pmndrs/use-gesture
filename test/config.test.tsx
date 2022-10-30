@@ -188,7 +188,8 @@ describe('testing derived config', () => {
         from: undefined,
         threshold: [0, 0],
         rubberband: [0, 0],
-        modifierKey: 'ctrlKey'
+        modifierKey: 'ctrlKey',
+        pinchOnWheel: true
       })
     })
 

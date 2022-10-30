@@ -1,5 +1,7 @@
 ---
-"@use-gesture/core": patch
+'@use-gesture/core': patch
 ---
 
-fix: `modifierKey: null` is not respected
+feat (pinch):
+
+- `pinchOnwheel: false` prevents pinching with wheel.

@@ -237,7 +237,7 @@ export class PinchEngine extends Engine<'pinch'> {
 
   wheel(event: WheelEvent) {
     const modifierKey = this.config.modifierKey
-    if ((modifierKey || modifierKey === null) && !event[modifierKey]) return
+    if (modifierKey && !event[modifierKey]) return
     if (!this.state._active) this.wheelStart(event)
     else this.wheelChange(event)
     this.timeoutStore.add('wheelEnd', this.wheelEnd.bind(this))
@@ -292,6 +292,8 @@ export class PinchEngine extends Engine<'pinch'> {
     }
     // we try to set a passive listener, knowing that in any case React will
     // ignore it.
-    bindFunction('wheel', '', this.wheel.bind(this), { passive: false })
+    if (this.config.pinchOnWheel) {
+      bindFunction('wheel', '', this.wheel.bind(this), { passive: false })
+    }
   }
 }
