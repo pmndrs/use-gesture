@@ -1,5 +1,11 @@
 # @use-gesture/core
 
+## 10.2.22
+
+### Patch Changes
+
+- c6215e8ad: fix: properly resolve pointer.keys config
+
 ## 10.2.21
 
 ### Patch Changes
