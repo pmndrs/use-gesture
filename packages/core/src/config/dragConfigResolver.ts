@@ -37,12 +37,15 @@ export const dragConfigResolver = {
     if (!SUPPORT.touchscreen || preventScroll === false) return undefined
     return value ? value : preventScroll !== undefined ? 'y' : undefined
   },
-  pointerCapture(this: InternalDragOptions, _v: any, _k: string, { pointer: { capture = true, buttons = 1 } = {} }) {
+  pointerCapture(
+    this: InternalDragOptions,
+    _v: any,
+    _k: string,
+    { pointer: { capture = true, buttons = 1, keys = true } = {} }
+  ) {
     this.pointerButtons = buttons
+    this.keys = keys
     return !this.pointerLock && this.device === 'pointer' && capture
-  },
-  keys(value = true) {
-    return value
   },
   threshold(
     this: InternalDragOptions,
