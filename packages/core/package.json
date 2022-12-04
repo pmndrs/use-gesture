@@ -7,29 +7,26 @@
   "module": "dist/use-gesture-core.esm.js",
   "exports": {
     ".": {
-      "types": "./dist/use-gesture-core.cjs.d.ts",
-      "module": "./dist/use-gesture-core.esm.js",
-      "default": "./dist/use-gesture-core.cjs.js"
-    },
-    "./actions": {
-      "types": "./dist/declarations/src/actions.d.ts",
       "module": "./dist/use-gesture-core.esm.js",
       "default": "./dist/use-gesture-core.cjs.js"
     },
     "./types": {
-      "types": "./dist/declarations/src/types.d.ts",
-      "module": "./dist/use-gesture-core.esm.js",
-      "default": "./dist/use-gesture-core.cjs.js"
+      "module": "./types/dist/use-gesture-core-types.esm.js",
+      "default": "./types/dist/use-gesture-core-types.cjs.js"
     },
     "./utils": {
-      "types": "./dist/declarations/src/utils.d.ts",
-      "module": "./dist/use-gesture-core.esm.js",
-      "default": "./dist/use-gesture-core.cjs.js"
+      "module": "./utils/dist/use-gesture-core-utils.esm.js",
+      "default": "./utils/dist/use-gesture-core-utils.cjs.js"
+    },
+    "./actions": {
+      "module": "./actions/dist/use-gesture-core-actions.esm.js",
+      "default": "./actions/dist/use-gesture-core-actions.cjs.js"
     },
     "./package.json": "./package.json"
   },
   "sideEffects": false,
   "preconstruct": {
+    "exports": true,
     "entrypoints": [
       "./index.ts",
       "./utils.ts",

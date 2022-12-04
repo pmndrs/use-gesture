@@ -5,6 +5,9 @@
   "license": "MIT",
   "private": true,
   "preconstruct": {
+    "___experimentalFlags_WILL_CHANGE_IN_PATCH": {
+      "exports": true
+    },
     "packages": [
       "packages/*"
     ]
