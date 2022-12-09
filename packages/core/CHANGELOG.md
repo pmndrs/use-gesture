@@ -1,5 +1,11 @@
 # @use-gesture/core
 
+## 10.2.23
+
+### Patch Changes
+
+- 79684a05f: types: add package exports
+
 ## 10.2.22
 
 ### Patch Changes
