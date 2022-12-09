@@ -5,8 +5,28 @@
   "license": "MIT",
   "main": "dist/use-gesture-core.cjs.js",
   "module": "dist/use-gesture-core.esm.js",
+  "exports": {
+    ".": {
+      "module": "./dist/use-gesture-core.esm.js",
+      "default": "./dist/use-gesture-core.cjs.js"
+    },
+    "./types": {
+      "module": "./types/dist/use-gesture-core-types.esm.js",
+      "default": "./types/dist/use-gesture-core-types.cjs.js"
+    },
+    "./utils": {
+      "module": "./utils/dist/use-gesture-core-utils.esm.js",
+      "default": "./utils/dist/use-gesture-core-utils.cjs.js"
+    },
+    "./actions": {
+      "module": "./actions/dist/use-gesture-core-actions.esm.js",
+      "default": "./actions/dist/use-gesture-core-actions.cjs.js"
+    },
+    "./package.json": "./package.json"
+  },
   "sideEffects": false,
   "preconstruct": {
+    "exports": true,
     "entrypoints": [
       "./index.ts",
       "./utils.ts",
