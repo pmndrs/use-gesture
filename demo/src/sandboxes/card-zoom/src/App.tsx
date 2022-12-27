@@ -8,7 +8,7 @@ const useGesture = createUseGesture([dragAction, pinchAction])
 
 export default function App() {
   useEffect(() => {
-    const handler = e => e.preventDefault()
+    const handler = (e: Event) => e.preventDefault()
     document.addEventListener('gesturestart', handler)
     document.addEventListener('gesturechange', handler)
     document.addEventListener('gestureend', handler)
@@ -25,7 +25,7 @@ export default function App() {
     scale: 1,
     rotateZ: 0,
   }))
-  const ref = React.useRef(null)
+  const ref = React.useRef<HTMLDivElement>(null)
 
   useGesture(
     {
@@ -37,7 +37,7 @@ export default function App() {
       },
       onPinch: ({ origin: [ox, oy], first, movement: [ms], offset: [s, a], memo }) => {
         if (first) {
-          const { width, height, x, y } = ref.current.getBoundingClientRect()
+          const { width, height, x, y } = ref.current!.getBoundingClientRect()
           const tx = ox - (x + width / 2)
           const ty = oy - (y + height / 2)
           memo = [style.x.get(), style.y.get(), tx, ty]
