@@ -26,42 +26,17 @@ Depending on whether you use gesture-specific hooks or if you use the `useGestur
 
 ```js
 // when you use a gesture-specific hook
-useDrag(state => doSomethingWith(state), { ...sharedOptions, ...dragOptions })
+useDrag((state) => doSomethingWith(state), { ...sharedOptions, ...dragOptions })
 
 // when you use the useGesture hook
-useGesture({
-  onDrag: state => doSomethingWith(state),
-  onPinch: state => doSomethingWith(state),
-  // ...
+useGesture(
+  // handlers
   {
-  // global options such as `target`
-  ...sharedOptions,
-  // gesture specific options
-  drag: dragOptions,
-  wheel: wheelOptions,
-  pinch: pinchOptions,
-  scroll: scrollOptions,
-  hover: hoverOptions,
-  }
-})
-```
-
-</TabPanel>
-<TabPanel>
-
-```js
-// when you use a gesture-specific class
-new DragGesture(
-  element,
-  state => doSomethingWith(state),
-  { ...sharedOptions, ...dragOptions }
-)
-
-// when you use the Gesture class
-new Gesture(element, {
-  onDrag: state => doSomethingWith(state),
-  onPinch: state => doSomethingWith(state),
-  // ...
+    onDrag: (state) => doSomethingWith(state),
+    onPinch: (state) => doSomethingWith(state)
+    // ...
+  },
+  // configs
   {
     // global options such as `target`
     ...sharedOptions,
@@ -70,10 +45,38 @@ new Gesture(element, {
     wheel: wheelOptions,
     pinch: pinchOptions,
     scroll: scrollOptions,
-    wheel: wheelOptions,
-    hover: hoverOptions,
+    hover: hoverOptions
   }
-})
+)
+```
+
+</TabPanel>
+<TabPanel>
+
+```js
+// when you use a gesture-specific class
+new DragGesture(element, (state) => doSomethingWith(state), { ...sharedOptions, ...dragOptions })
+
+// when you use the Gesture class
+new Gesture(
+  element,
+  // handlers
+  {
+    onDrag: (state) => doSomethingWith(state),
+    onPinch: (state) => doSomethingWith(state)
+  },
+  // configs
+  {
+    // global options such as `target`
+    ...sharedOptions,
+    // gesture specific options
+    drag: dragOptions,
+    wheel: wheelOptions,
+    pinch: pinchOptions,
+    scroll: scrollOptions,
+    hover: hoverOptions
+  }
+)
 ```
 
   </TabPanel>
