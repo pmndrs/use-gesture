@@ -79,7 +79,8 @@ describe('testing derived config', () => {
         pointerCapture: true,
         filterTaps: false,
         tapsThreshold: 3,
-        axisThreshold: { mouse: 0, pen: 8, touch: 0 }
+        axisThreshold: { mouse: 0, pen: 8, touch: 0 },
+        keyboardDisplacement: 10
       })
     })
 
