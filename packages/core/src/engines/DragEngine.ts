@@ -5,10 +5,10 @@ import { V } from '../utils/maths'
 import { Vector2 } from '../types'
 
 const KEYS_DELTA_MAP = {
-  ArrowRight: (displacement: number, factor: number) => [displacement * factor, 0],
-  ArrowLeft: (displacement: number, factor: number) => [-1 * displacement * factor, 0],
-  ArrowUp: (displacement: number, factor: number) => [0, -1 * displacement * factor],
-  ArrowDown: (displacement: number, factor: number) => [0, displacement * factor]
+  ArrowRight: (displacement: number, factor: number = 1) => [displacement * factor, 0],
+  ArrowLeft: (displacement: number, factor: number = 1) => [-1 * displacement * factor, 0],
+  ArrowUp: (displacement: number, factor: number = 1) => [0, -1 * displacement * factor],
+  ArrowDown: (displacement: number, factor: number = 1) => [0, displacement * factor]
 }
 
 export class DragEngine extends CoordinatesEngine<'drag'> {
