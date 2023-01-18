@@ -4,12 +4,12 @@ import { pointerId, getPointerType, pointerValues } from '../utils/events'
 import { V } from '../utils/maths'
 import { Vector2 } from '../types'
 
-const getKeysDeltaMap = (displacement: number) => ({
-  ArrowRight: (factor = 1) => [displacement * factor, 0],
-  ArrowLeft: (factor = 1) => [-displacement * factor, 0],
-  ArrowUp: (factor = 1) => [0, -displacement * factor],
-  ArrowDown: (factor = 1) => [0, displacement * factor]
-})
+const KEYS_DELTA_MAP = {
+  ArrowRight: (displacement: number, factor: number) => [displacement * factor, 0],
+  ArrowLeft: (displacement: number, factor: number) => [-1 * displacement * factor, 0],
+  ArrowUp: (displacement: number, factor: number) => [0, -1 * displacement * factor],
+  ArrowDown: (displacement: number, factor: number) => [0, displacement * factor]
+}
 
 export class DragEngine extends CoordinatesEngine<'drag'> {
   ingKey = 'dragging' as const
@@ -332,14 +332,14 @@ export class DragEngine extends CoordinatesEngine<'drag'> {
 
   keyDown(event: KeyboardEvent) {
     // @ts-ignore
-    const deltaFn = getKeysDeltaMap(this.config.keyboardDisplacement)[event.key]
+    const deltaFn = KEYS_DELTA_MAP[event.key]
     if (deltaFn) {
       const state = this.state
       const factor = event.shiftKey ? 10 : event.altKey ? 0.1 : 1
 
       this.start(event)
 
-      state._delta = deltaFn(factor)
+      state._delta = deltaFn(this.config.keyboardDisplacement, factor)
       state._keyboardActive = true
       V.addTo(state._movement, state._delta)
 
@@ -349,8 +349,7 @@ export class DragEngine extends CoordinatesEngine<'drag'> {
   }
 
   keyUp(event: KeyboardEvent) {
-    const keysDeltaMap = getKeysDeltaMap(this.config.keyboardDisplacement)
-    if (!(event.key in keysDeltaMap)) return
+    if (!(event.key in KEYS_DELTA_MAP)) return
 
     this.state._keyboardActive = false
     this.setActive()
