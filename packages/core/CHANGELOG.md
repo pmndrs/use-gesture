@@ -1,5 +1,11 @@
 # @use-gesture/core
 
+## 10.2.24
+
+### Patch Changes
+
+- 60aae2149: feat: Added option to configure keyboard displacement in the drag gesture
+
 ## 10.2.23
 
 ### Patch Changes
