@@ -17,6 +17,7 @@
     "validate": "preconstruct validate",
     "lint:full": "eslint packages/*/src",
     "lint": "pretty-quick --staged",
+    "prettier": "prettier --write .",
     "tsc": "tsc --noEmit",
     "docs:start": "pnpm --filter documentation run start",
     "docs:build": "pnpm --filter documentation run build",
@@ -91,6 +92,7 @@
     "@typescript-eslint/parser": "^5.49.0",
     "babel-jest": "^29.4.1",
     "eslint": "^8.32.0",
+    "eslint-config-prettier": "^8.6.0",
     "eslint-config-react-app": "^7.0.1",
     "eslint-plugin-jest-dom": "^4.0.3",
     "eslint-plugin-react-hooks": "^4.6.0",
@@ -106,5 +108,9 @@
     "size-limit": "^7.0.8",
     "tsd": "^0.25.0",
     "typescript": "^4.9.4"
+  },
+  "lint-staged": {
+    "*.js": "eslint --cache --fix",
+    "*.{js,css,md}": "prettier --write"
   }
 }

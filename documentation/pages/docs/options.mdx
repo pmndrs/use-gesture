@@ -26,24 +26,26 @@ Depending on whether you use gesture-specific hooks or if you use the `useGestur
 
 ```js
 // when you use a gesture-specific hook
-useDrag(state => doSomethingWith(state), { ...sharedOptions, ...dragOptions })
+useDrag((state) => doSomethingWith(state), { ...sharedOptions, ...dragOptions })
 
 // when you use the useGesture hook
-useGesture({
-  onDrag: state => doSomethingWith(state),
-  onPinch: state => doSomethingWith(state),
-  // ...
+useGesture(
   {
-  // global options such as `target`
-  ...sharedOptions,
-  // gesture specific options
-  drag: dragOptions,
-  wheel: wheelOptions,
-  pinch: pinchOptions,
-  scroll: scrollOptions,
-  hover: hoverOptions,
+    onDrag: (state) => doSomethingWith(state),
+    onPinch: (state) => doSomethingWith(state)
+    // ...
+  },
+  {
+    // global options such as `target`
+    ...sharedOptions,
+    // gesture specific options
+    drag: dragOptions,
+    wheel: wheelOptions,
+    pinch: pinchOptions,
+    scroll: scrollOptions,
+    hover: hoverOptions
   }
-})
+)
 ```
 
 </TabPanel>

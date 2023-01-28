@@ -1,5 +1,5 @@
 {
-  "extends": "react-app",
+  "extends": ["react-app", "prettier"],
   "plugins": ["testing-library", "jest-dom"],
   "rules": {
     "no-console": "warn",
