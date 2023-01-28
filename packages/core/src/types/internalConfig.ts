@@ -46,6 +46,7 @@ export type InternalDragOptions = Omit<InternalCoordinatesOptions<'drag'>, 'axis
   }
   delay: number
   axisThreshold: Record<PointerType, number>
+  keyboardDisplacement: number
 }
 
 export type InternalPinchOptions = InternalGestureOptions<'pinch'> & {

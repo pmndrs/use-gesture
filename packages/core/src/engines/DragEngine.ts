@@ -4,13 +4,11 @@ import { pointerId, getPointerType, pointerValues } from '../utils/events'
 import { V } from '../utils/maths'
 import { Vector2 } from '../types'
 
-const DISPLACEMENT = 10
-
 const KEYS_DELTA_MAP = {
-  ArrowRight: (factor = 1) => [DISPLACEMENT * factor, 0],
-  ArrowLeft: (factor = 1) => [-DISPLACEMENT * factor, 0],
-  ArrowUp: (factor = 1) => [0, -DISPLACEMENT * factor],
-  ArrowDown: (factor = 1) => [0, DISPLACEMENT * factor]
+  ArrowRight: (displacement: number, factor: number = 1) => [displacement * factor, 0],
+  ArrowLeft: (displacement: number, factor: number = 1) => [-1 * displacement * factor, 0],
+  ArrowUp: (displacement: number, factor: number = 1) => [0, -1 * displacement * factor],
+  ArrowDown: (displacement: number, factor: number = 1) => [0, displacement * factor]
 }
 
 export class DragEngine extends CoordinatesEngine<'drag'> {
@@ -341,7 +339,7 @@ export class DragEngine extends CoordinatesEngine<'drag'> {
 
       this.start(event)
 
-      state._delta = deltaFn(factor)
+      state._delta = deltaFn(this.config.keyboardDisplacement, factor)
       state._keyboardActive = true
       V.addTo(state._movement, state._delta)
 

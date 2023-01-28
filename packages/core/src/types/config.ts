@@ -227,6 +227,10 @@ export type DragConfig = Omit<CoordinatesConfig<'drag'>, 'axisThreshold' | 'boun
    * be calculated.
    */
   axisThreshold?: Partial<Record<PointerType, number>>
+  /**
+   * The distance (in pixels) emulated by arrow keys.
+   */
+  keyboardDisplacement?: number
 }
 
 export type UserDragConfig = GenericOptions & DragConfig
