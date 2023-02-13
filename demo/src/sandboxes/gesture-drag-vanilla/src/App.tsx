@@ -21,11 +21,10 @@ function Draggable() {
     gesture: { options: ['offset', 'movement'] },
     axis: { options: [undefined, 'x', 'y', 'lock'] },
     filterTaps: false,
-    boundToParent: false,
-    keys: true
+    boundToParent: false
   })
 
-  const pointerOptions = useControls('pointer', { touch: false, capture: true, lock: false })
+  const pointerOptions = useControls('pointer', { touch: false, capture: true, lock: false, keys: true })
 
   useEffect(() => {
     dragGesture.current = new DragGesture(target.current!, ({ active, ...state }) => {
