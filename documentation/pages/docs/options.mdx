@@ -26,24 +26,26 @@ Depending on whether you use gesture-specific hooks or if you use the `useGestur
 
 ```js
 // when you use a gesture-specific hook
-useDrag(state => doSomethingWith(state), { ...sharedOptions, ...dragOptions })
+useDrag((state) => doSomethingWith(state), { ...sharedOptions, ...dragOptions })
 
 // when you use the useGesture hook
-useGesture({
-  onDrag: state => doSomethingWith(state),
-  onPinch: state => doSomethingWith(state),
-  // ...
+useGesture(
   {
-  // global options such as `target`
-  ...sharedOptions,
-  // gesture specific options
-  drag: dragOptions,
-  wheel: wheelOptions,
-  pinch: pinchOptions,
-  scroll: scrollOptions,
-  hover: hoverOptions,
+    onDrag: (state) => doSomethingWith(state),
+    onPinch: (state) => doSomethingWith(state)
+    // ...
+  },
+  {
+    // global options such as `target`
+    ...sharedOptions,
+    // gesture specific options
+    drag: dragOptions,
+    wheel: wheelOptions,
+    pinch: pinchOptions,
+    scroll: scrollOptions,
+    hover: hoverOptions
   }
-})
+)
 ```
 
 </TabPanel>
@@ -109,7 +111,8 @@ Here are all options that can be applied to gestures.
 | [`bounds`](#bounds)                       |                                            **xy**                                             | Limits the gesture `offset` to the specified bounds.                                                                                                                                                 |
 | [`scaleBounds`](#scalebounds)             |                                           **pinch**                                           | Limits the scale `offset` to the specified bounds.                                                                                                                                                   |
 | [`angleBounds`](#anglebounds)             |                                           **pinch**                                           | Limits the angle `offset` to the specified bounds.                                                                                                                                                   |
-| [`modifierKey`](#modifierKey)             |                                           **pinch**                                           | The modifier key that triggers a scale when wheeling. Defaults to `'ctrlKey'`. Can be null.                                                                                                          |
+| [`modifierKey`](#modifierkey)             |                                           **pinch**                                           | The modifier key that triggers a scale when wheeling. Defaults to `'ctrlKey'`. Can be `null`.                                                                                                        |
+| `pinchOnWheel`                            |                                           **pinch**                                           | If `false`, pinching with the wheel will be disabled.                                                                                                                                                |
 | [`rubberband`](#rubberband)               |                                            **all**                                            | The elasticity coefficient of the gesture when going out of bounds. When set to `true`, the elasticity coefficient will be defaulted to `0.15`                                                       |
 | [`transform`](#transform)                 |                                            **all**                                            | A function that you can use to transform pointer values. Useful to map your screen coordinates to custom space coordinates such as a canvas.                                                         |
 | [`filterTaps`](#filtertaps)               |                                           **drag**                                            | If `true`, the component won't trigger your drag logic if the user just clicked on the component.                                                                                                    |
@@ -121,11 +124,12 @@ Here are all options that can be applied to gestures.
 | `pointer.mouse`                           |                                           **drag**                                            | If `true`, drag will use mouse event listeners instead of pointer listeners when possible.                                                                                                           |
 | [`pointer.buttons`](#pointerbuttons)      |                                           **drag**                                            | Combination of buttons that triggers the drag gesture. [Read more below](#pointerbuttons).                                                                                                           |
 | [`pointer.lock`](#pointerlock)            |                                           **drag**                                            | If `true`, the pointer will enter pointer lock mode when drag starts, and exit pointer lock when drag ends. [Read more below](#pointerlock).                                                         |
-| [`keys`](#keys)                           |                                           **drag**                                            | By default, the drag gesture can be triggered by arrow keys when the draggable element is focused. Setting `keys` to `false` won't add keyboard event listeners.                                     |
+| [`pointer.keys`](#pointerkeys)            |                                           **drag**                                            | By default, the drag gesture can be triggered by arrow keys when the draggable element is focused. Setting `keys` to `false` won't add keyboard event listeners.                                     |
 | [`delay`](#delay)                         |                                           **drag**                                            | If set, the handler will be delayed for the duration of the delay (in `ms`) — or if the user starts moving. When set to `true`, `delay` is defaulted to `180ms`.                                     |
 | [`swipe.distance`](#swipedistance)        |                                           **drag**                                            | The minimum distance per axis (in `pixels`) the drag gesture needs to travel to trigger a swipe.                                                                                                     |
 | [`swipe.velocity`](#swipevelocity)        |                                           **drag**                                            | The minimum velocity per axis (in `pixels / ms`) the drag gesture needs to reach before the pointer is released.                                                                                     |
 | [`swipe.duration`](#swipeduration)        |                                           **drag**                                            | The maximum duration in milliseconds that a swipe is detected.                                                                                                                                       |
+| `keyboardDisplacement`                    |                                           **drag**                                            | The distance (in `pixels`) emulated by arrow keys. Default is `10`.                                                                                                                                  |
 | `mouseOnly`                               |                                        **hover, move**                                        | Set to `false` if you want your `hover` or `move` handlers to be triggered on non-mouse events. This is a useful option in case you want to perform logic on touch-enabled devices.                  |
 
 ## Options explained
@@ -145,7 +149,7 @@ See also [`scaleBounds`](#scalebounds).
 
 <Specs types={['x', 'y', 'lock', 'undefined']} defaultValue="undefined" />
 
-`axis` makes it easy to constraint the user gesture to a specific axis.
+`axis` makes it easy to constrain the user gesture to a specific axis.
 
 <Code id="Axis" />
 
@@ -326,19 +330,13 @@ function InitialExample() {
 
 > Unless your initial position is static or depends on `state`, make sure you use a function rather than a static array.
 
-### keys
-
-<Specs gestures={['drag']} types="boolean" defaultValue="true" />
-
-By default, the drag gesture is accessible, meaning you can control the drag of an element with arrow keys. The ` shiftKey` modifier will make the drag 10x faster, the `altKey` will make the drag 10x slower.
-
-If you set `keys` to `false`, your drag handler won't respond to keyboard events.
-
 ### modifierKey
 
 <Specs gestures={['pinch']} types={[`'ctrlKey'`, `'altKey'`, `'metaKey'`, 'null']} defaultValue={`'ctrlKey'`} />
 
 This option lets you set the modifier key that triggers a scale gesture when using wheel inside the `onPinch` handler.
+
+When `null`, pinching will be triggered using wheel _without_ the need of pressing a modifier key.
 
 ### pointer.buttons
 
@@ -365,6 +363,14 @@ By default, drag uses [`setPointerCapture`](https://developer.mozilla.org/en-US/
 In the example above, the blue dot listens for hover events: when the pink dot is being dragged, it will attach to it. You'll notice that when `pointer.capture` is set to `true`, you won't be able to connect the dots. That's because the blue dot doesn't get pointer events when the pink dot capture the events. Setting `pointer.capture` to false solves this problem.
 
 > Note that this example doesn't work on mobile and is just here to illustrate the option. If you'd want to actually do this in a way that works on mobile, you'd probably have to use `document.elementAtPoint`. [Look at this sandbox](https://codesandbox.io/s/github/pmndrs/use-gesture/tree/main/demo/src/sandboxes/dots-connect).
+
+### pointer.keys
+
+<Specs gestures={['drag']} types="boolean" defaultValue="true" />
+
+By default, the drag gesture is accessible, meaning you can control the drag of an element with arrow keys. The ` shiftKey` modifier will make the drag 10x faster, the `altKey` will make the drag 10x slower.
+
+If you set `keys` to `false`, your drag handler won't respond to keyboard events.
 
 ### pointer.lock
 

@@ -390,4 +390,26 @@ describe.each([
     expect(getByTestId(`${prefix}drag-active`)).toHaveTextContent(`false`)
     fireEvent.pointerUp(element, { pointerId: 26 })
   })
+
+  test(`drag should react to key press`, () => {
+    rerender(<Component gestures={['Drag']} />)
+    fireEvent.keyDown(element, { key: 'ArrowDown' })
+    expect(getByTestId(`${prefix}drag-active`)).toHaveTextContent(`true`)
+    expect(getByTestId(`${prefix}drag-offset`)).toHaveTextContent(`15,40`)
+    fireEvent.keyDown(element, { key: 'ArrowLeft', shiftKey: true })
+    expect(getByTestId(`${prefix}drag-offset`)).toHaveTextContent(`-85,40`)
+    rerender(<Component gestures={['Drag']} config={{ drag: { keyboardDisplacement: 25 } }} />)
+    fireEvent.keyDown(element, { key: 'ArrowUp' })
+    expect(getByTestId(`${prefix}drag-offset`)).toHaveTextContent(`-85,15`)
+    fireEvent.keyDown(element, { key: 'ArrowLeft', altKey: true })
+    expect(getByTestId(`${prefix}drag-offset`)).toHaveTextContent(`-87.5,15`)
+    fireEvent.keyUp(element, { key: 'ArrowDown' })
+    expect(getByTestId(`${prefix}drag-active`)).toHaveTextContent(`false`)
+  })
+
+  test(`drag should not react to key press when pointer.key = false`, () => {
+    rerender(<Component gestures={['Drag']} config={{ drag: { pointer: { keys: false } } }} />)
+    fireEvent.keyDown(element, { key: 'ArrowDown' })
+    expect(getByTestId(`${prefix}drag-active`)).toHaveTextContent(`false`)
+  })
 })

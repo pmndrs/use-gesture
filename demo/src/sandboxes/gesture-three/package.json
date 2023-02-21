@@ -10,7 +10,7 @@
     "leva": "*",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
-    "react-scripts": "5.0.0",
+    "react-scripts": "^5.0.1",
     "three": "^0.132.2"
   },
   "devDependencies": {
@@ -19,8 +19,8 @@
     "@types/react": "^18.0.3",
     "@types/react-dom": "^18.0.0",
     "@types/three": "^0.131.0",
-    "typescript": "^4.8.2",
-    "typescript-plugin-css-modules": "^3.4.0"
+    "typescript": "^4.9.4",
+    "typescript-plugin-css-modules": "^4.1.1"
   },
   "scripts": {
     "start": "react-scripts start",

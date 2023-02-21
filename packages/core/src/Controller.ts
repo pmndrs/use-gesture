@@ -74,7 +74,7 @@ export class Controller {
    * @param gestureKey
    */
   applyConfig(config: UserGestureConfig, gestureKey?: GestureKey) {
-    this.config = parse(config, gestureKey)
+    this.config = parse(config, gestureKey, this.config)
   }
   /**
    * Cleans all side effects (listeners, timeouts). When the gesture is

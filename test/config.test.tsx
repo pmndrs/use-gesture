@@ -79,7 +79,8 @@ describe('testing derived config', () => {
         pointerCapture: true,
         filterTaps: false,
         tapsThreshold: 3,
-        axisThreshold: { mouse: 0, pen: 8, touch: 0 }
+        axisThreshold: { mouse: 0, pen: 8, touch: 0 },
+        keyboardDisplacement: 10
       })
     })
 
@@ -133,7 +134,7 @@ describe('testing derived config', () => {
        * @note unfortunately jsdom doesn't support pointer lock so device is
        * `pointer` but it should be `mouse`.
        */
-      dragConfig.pointer.touch = false
+      dragConfig.pointer!.touch = false
       expect(parse(dragConfig, 'drag').drag).toHaveProperty('device', 'pointer')
     })
 
@@ -188,7 +189,8 @@ describe('testing derived config', () => {
         from: undefined,
         threshold: [0, 0],
         rubberband: [0, 0],
-        modifierKey: 'ctrlKey'
+        modifierKey: 'ctrlKey',
+        pinchOnWheel: true
       })
     })
 

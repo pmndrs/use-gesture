@@ -121,6 +121,10 @@ export type PinchConfig = GestureOptions<'pinch'> & {
    * Key that triggers scale when using the wheel. Defaults to `'ctrlKey'`.
    */
   modifierKey?: ModifierKey
+  /**
+   * Whether wheel should trigger a pinch at all.
+   */
+  pinchOnWheel?: boolean
 }
 
 export type DragBounds = Bounds | HTMLElement | { current: HTMLElement | null }
@@ -223,6 +227,10 @@ export type DragConfig = Omit<CoordinatesConfig<'drag'>, 'axisThreshold' | 'boun
    * be calculated.
    */
   axisThreshold?: Partial<Record<PointerType, number>>
+  /**
+   * The distance (in pixels) emulated by arrow keys.
+   */
+  keyboardDisplacement?: number
 }
 
 export type UserDragConfig = GenericOptions & DragConfig

@@ -9,6 +9,7 @@ export const DEFAULT_DRAG_DELAY = 180
 export const DEFAULT_SWIPE_VELOCITY = 0.5
 export const DEFAULT_SWIPE_DISTANCE = 50
 export const DEFAULT_SWIPE_DURATION = 250
+export const DEFAULT_KEYBOARD_DISPLACEMENT = 10
 
 const DEFAULT_DRAG_AXIS_THRESHOLD: Record<PointerType, number> = { mouse: 0, touch: 0, pen: 8 }
 
@@ -37,12 +38,15 @@ export const dragConfigResolver = {
     if (!SUPPORT.touchscreen || preventScroll === false) return undefined
     return value ? value : preventScroll !== undefined ? 'y' : undefined
   },
-  pointerCapture(this: InternalDragOptions, _v: any, _k: string, { pointer: { capture = true, buttons = 1 } = {} }) {
+  pointerCapture(
+    this: InternalDragOptions,
+    _v: any,
+    _k: string,
+    { pointer: { capture = true, buttons = 1, keys = true } = {} }
+  ) {
     this.pointerButtons = buttons
+    this.keys = keys
     return !this.pointerLock && this.device === 'pointer' && capture
-  },
-  keys(value = true) {
-    return value
   },
   threshold(
     this: InternalDragOptions,
@@ -79,6 +83,9 @@ export const dragConfigResolver = {
   axisThreshold(value: Record<PointerType, number>) {
     if (!value) return DEFAULT_DRAG_AXIS_THRESHOLD
     return { ...DEFAULT_DRAG_AXIS_THRESHOLD, ...value }
+  },
+  keyboardDisplacement(value: number = DEFAULT_KEYBOARD_DISPLACEMENT) {
+    return value
   }
 }
 

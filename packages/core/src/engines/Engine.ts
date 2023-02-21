@@ -301,6 +301,7 @@ export abstract class Engine<Key extends GestureKey> {
 
       if (event) {
         if (state.first) {
+          // @ts-expect-error (4.9 regression https://github.com/microsoft/TypeScript/issues/51501)
           if ('bounds' in config) state._bounds = call(config.bounds, state)
           if (this.setup) this.setup()
         }
