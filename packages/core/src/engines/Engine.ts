@@ -2,9 +2,7 @@ import { Controller } from '../Controller'
 import { getEventDetails } from '../utils/events'
 import { call } from '../utils/fn'
 import { V, computeRubberband } from '../utils/maths'
-import { GestureKey, IngKey, State, Vector2 } from '../types'
-import { NonUndefined } from '../types'
-
+import { GestureKey, IngKey, Vector2, NonUndefined, State } from '../types'
 /**
  * The lib doesn't compute the kinematics on the last event of the gesture
  * (i.e. for a drag gesture, the `pointerup` coordinates will generally match the
@@ -38,7 +36,7 @@ export interface Engine<Key extends GestureKey> {
    * `state._active` or `state._blocked` flags if the gesture isn't intentional.
    * @param event
    */
-  axisIntent?(event?: UIEvent): void
+  axisIntent?(event?: NonUndefined<State[Key]>['event']): void
 
   restrictToAxis?(movement: Vector2): void
 }

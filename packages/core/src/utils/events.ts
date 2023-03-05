@@ -1,5 +1,4 @@
-import { PointerType } from '../types'
-import { Vector2 } from '../types'
+import { NormalizePropFunction, PointerType, Vector2 } from '../types'
 
 const EVENT_TYPE_MAP: any = {
   pointer: { start: 'down', change: 'move', end: 'up' },
@@ -19,10 +18,34 @@ function hasCapture(capture = false, actionKey: string) {
   return capture && !actionsWithoutCaptureSupported.includes(actionKey)
 }
 
-export function toHandlerProp(device: string, action = '', capture: boolean = false) {
+const toCamelCaseProp: NormalizePropFunction = ({ device, actionKey, capture, passive }, isNative) => {
+  let handlerProp = isNative
+    ? device
+    : 'on' + capitalize(device) + capitalize(actionKey) + (hasCapture(capture, actionKey) ? 'Capture' : '')
+  if (passive) handlerProp += 'Passive'
+  return handlerProp
+}
+/**
+ * The purpose of this function is to map an event
+ */
+export function toHandlerProp(
+  {
+    device,
+    action = '',
+    capture = false,
+    passive = true
+  }: {
+    device: string
+    action?: string
+    capture?: boolean
+    passive?: boolean
+  },
+  isNative: boolean,
+  normalizeProp = toCamelCaseProp
+) {
   const deviceProps = EVENT_TYPE_MAP[device]
   const actionKey = deviceProps ? deviceProps[action] || action : action
-  return 'on' + capitalize(device) + capitalize(actionKey) + (hasCapture(capture, actionKey) ? 'Capture' : '')
+  return normalizeProp({ device, actionKey, capture, passive }, isNative)
 }
 
 const pointerCaptureEvents = ['gotpointercapture', 'lostpointercapture']

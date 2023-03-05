@@ -4,7 +4,15 @@ import { isTouch, parseProp, toHandlerProp, touchIds } from './utils/events'
 import { EventStore } from './EventStore'
 import { TimeoutStore } from './TimeoutStore'
 import { chain } from './utils/fn'
-import { GestureKey, InternalConfig, InternalHandlers, NativeHandlers, State, UserGestureConfig } from './types'
+import {
+  GestureKey,
+  InternalConfig,
+  InternalHandlers,
+  NativeHandlers,
+  State,
+  UserGestureConfig,
+  NormalizePropFunction
+} from './types'
 
 export class Controller {
   /**
@@ -34,7 +42,7 @@ export class Controller {
     }
   } as State
 
-  constructor(handlers: InternalHandlers) {
+  constructor(handlers: InternalHandlers, private normalizeProp?: NormalizePropFunction) {
     resolveGestures(this, handlers)
   }
   /**
@@ -107,7 +115,7 @@ export class Controller {
       // Adding gesture handlers
       for (const gestureKey of this.gestures) {
         const gestureConfig = this.config[gestureKey]!
-        const bindFunction = bindToProps(props, gestureConfig.eventOptions, !!target)
+        const bindFunction = bindToProps(props, gestureConfig.eventOptions, !!target, this.normalizeProp)
         if (gestureConfig.enabled) {
           const Engine = EngineMap.get(gestureKey)!
           // @ts-ignore
@@ -116,7 +124,7 @@ export class Controller {
       }
 
       // Adding native handlers
-      const nativeBindFunction = bindToProps(props, sharedConfig.eventOptions, !!target)
+      const nativeBindFunction = bindToProps(props, sharedConfig.eventOptions, !!target, this.normalizeProp)
       for (const eventKey in this.nativeHandlers) {
         nativeBindFunction(
           eventKey,
@@ -165,8 +173,22 @@ function resolveGestures(ctrl: Controller, internalHandlers: InternalHandlers) {
   if (internalHandlers.hover) setupGesture(ctrl, 'hover')
 }
 
+/**
+ *
+ * @param props The object that will contain the handlers
+ * @param eventOptions The event options passed to the listener
+ * @param withPassiveOption
+ * @param normalizeProp A function mapping device / action / capture to handler keys
+ * @returns
+ */
+
 const bindToProps =
-  (props: any, eventOptions: AddEventListenerOptions, withPassiveOption: boolean) =>
+  (
+    props: any,
+    eventOptions: AddEventListenerOptions,
+    withPassiveOption: boolean,
+    normalizeProp?: NormalizePropFunction
+  ) =>
   (
     device: string,
     action: string,
@@ -176,9 +198,11 @@ const bindToProps =
   ) => {
     const capture = options.capture ?? eventOptions.capture
     const passive = options.passive ?? eventOptions.passive
-    // a native handler is already passed as a prop like "onMouseDown"
-    let handlerProp = isNative ? device : toHandlerProp(device, action, capture)
-    if (withPassiveOption && passive) handlerProp += 'Passive'
+    let handlerProp = toHandlerProp(
+      { device, action, capture, passive: withPassiveOption && passive },
+      isNative,
+      normalizeProp
+    )
     props[handlerProp] = props[handlerProp] || []
     props[handlerProp].push(handler)
   }
