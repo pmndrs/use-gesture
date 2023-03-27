@@ -192,8 +192,8 @@ export abstract class Engine<Key extends GestureKey> {
       state.currentTarget = event.currentTarget!
       state.lastOffset = config.from ? call(config.from, state) : state.offset
       state.offset = state.lastOffset
+      state.startTime = state.timeStamp = event.timeStamp
     }
-    state.startTime = state.timeStamp = event.timeStamp
   }
 
   /**
