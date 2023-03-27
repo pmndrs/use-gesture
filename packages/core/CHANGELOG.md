@@ -1,5 +1,11 @@
 # @use-gesture/core
 
+## 10.2.25
+
+### Patch Changes
+
+- 3701753ea: fix: set startTime inside start function
+
 ## 10.2.24
 
 ### Patch Changes
