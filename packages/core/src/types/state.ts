@@ -163,6 +163,10 @@ export type CommonGestureState = {
    */
   elapsedTime: number
   /**
+   * Time delta (ms) with the previous event.
+   */
+  timeDelta: number
+  /**
    * Event type.
    */
   type: string

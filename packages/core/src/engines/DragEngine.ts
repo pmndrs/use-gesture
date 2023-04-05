@@ -233,16 +233,18 @@ export class DragEngine extends CoordinatesEngine<'drag'> {
     if (state.tap && config.filterTaps) {
       state._force = true
     } else {
-      const [dirx, diry] = state.direction
-      const [vx, vy] = state.velocity
-      const [mx, my] = state.movement
+      const [_dx, _dy] = state._delta
+      const [_mx, _my] = state._movement
       const [svx, svy] = config.swipe.velocity
       const [sx, sy] = config.swipe.distance
       const sdt = config.swipe.duration
 
       if (state.elapsedTime < sdt) {
-        if (Math.abs(vx) > svx && Math.abs(mx) > sx) state.swipe[0] = dirx
-        if (Math.abs(vy) > svy && Math.abs(my) > sy) state.swipe[1] = diry
+        const _vx = Math.abs(_dx / state.timeDelta)
+        const _vy = Math.abs(_dy / state.timeDelta)
+
+        if (_vx > svx && Math.abs(_mx) > sx) state.swipe[0] = Math.sign(_dx)
+        if (_vy > svy && Math.abs(_my) > sy) state.swipe[1] = Math.sign(_dy)
       }
     }
 

@@ -166,7 +166,7 @@ export abstract class Engine<Key extends GestureKey> {
     state.args = args
     state.axis = undefined
     state.memo = undefined
-    state.elapsedTime = 0
+    state.elapsedTime = state.timeDelta = 0
     state.direction = [0, 0]
     state.distance = [0, 0]
     state.overflow = [0, 0]
@@ -349,6 +349,7 @@ export abstract class Engine<Key extends GestureKey> {
       if (!state.first && dt > 0) {
         // calculates kinematics unless the gesture starts or ends
         state.velocity = [absoluteDelta[0] / dt, absoluteDelta[1] / dt]
+        state.timeDelta = dt
       }
     }
   }
