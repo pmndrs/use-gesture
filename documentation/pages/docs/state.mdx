@@ -35,12 +35,13 @@ const bind = useXXXX(state => {
     distance,      // offset distance per axis
     direction,     // direction per axis
     overflow,      // whether the offset is overflowing bounds (per axis)
-    startTime,     // gesture start time
-    elapsedTime,   // gesture elapsed time
+    startTime,     // gesture start time (ms)
+    timeDelta,     // Time delta (ms) with the previous event
+    elapsedTime,   // gesture elapsed time (ms)
+    timeStamp,     // timestamp of the event
     type,          // event type
     target,        // event target
     currentTarget, // event currentTarget
-    timeStamp,     // timestamp of the event
     first,         // true when it's the first event
     last,          // true when it's the last event
     active,        // true when the gesture is active
