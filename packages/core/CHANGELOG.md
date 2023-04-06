@@ -1,5 +1,12 @@
 # @use-gesture/core
 
+## 10.2.26
+
+### Patch Changes
+
+- db0d934eb: fix: add a try catch when calculating the distance and angle as apparently some events might be undefined on Windows #551
+- 43e751a51: fix: calculate swipe from raw movement (\_movement) #592
+
 ## 10.2.25
 
 ### Patch Changes
