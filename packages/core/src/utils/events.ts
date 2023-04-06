@@ -73,15 +73,20 @@ function getValueEvent<EventType extends TouchEvent | PointerEvent>(
 }
 
 export function distanceAngle(P1: Touch | PointerEvent, P2: Touch | PointerEvent) {
-  const dx = P2.clientX - P1.clientX
-  const dy = P2.clientY - P1.clientY
-  const cx = (P2.clientX + P1.clientX) / 2
-  const cy = (P2.clientY + P1.clientY) / 2
+  // add a try catch
+  // attempt to fix https://github.com/pmndrs/use-gesture/issues/551
+  try {
+    const dx = P2.clientX - P1.clientX
+    const dy = P2.clientY - P1.clientY
+    const cx = (P2.clientX + P1.clientX) / 2
+    const cy = (P2.clientY + P1.clientY) / 2
 
-  const distance = Math.hypot(dx, dy)
-  const angle = -(Math.atan2(dx, dy) * 180) / Math.PI
-  const origin = [cx, cy] as Vector2
-  return { angle, distance, origin }
+    const distance = Math.hypot(dx, dy)
+    const angle = -(Math.atan2(dx, dy) * 180) / Math.PI
+    const origin = [cx, cy] as Vector2
+    return { angle, distance, origin }
+  } catch {}
+  return null
 }
 
 export function touchIds(event: TouchEvent) {

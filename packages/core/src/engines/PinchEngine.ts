@@ -90,6 +90,8 @@ export class PinchEngine extends Engine<'pinch'> {
     state._touchIds = Array.from(ctrlTouchIds).slice(0, 2) as [number, number]
 
     const payload = touchDistanceAngle(event, state._touchIds)
+
+    if (!payload) return
     this.pinchStart(event, payload)
   }
 
@@ -116,6 +118,8 @@ export class PinchEngine extends Engine<'pinch'> {
 
     // @ts-ignore
     const payload = distanceAngle(...Array.from(_pointerEvents.values()))
+
+    if (!payload) return
     this.pinchStart(event, payload)
   }
 
@@ -132,6 +136,8 @@ export class PinchEngine extends Engine<'pinch'> {
   touchMove(event: TouchEvent) {
     if (!this.state._active) return
     const payload = touchDistanceAngle(event, this.state._touchIds)
+
+    if (!payload) return
     this.pinchMove(event, payload)
   }
 
@@ -143,6 +149,8 @@ export class PinchEngine extends Engine<'pinch'> {
     if (!this.state._active) return
     // @ts-ignore
     const payload = distanceAngle(...Array.from(_pointerEvents.values()))
+
+    if (!payload) return
     this.pinchMove(event, payload)
   }
 
