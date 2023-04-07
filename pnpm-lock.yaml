@@ -180,13 +180,13 @@ importers:
 
   packages/react:
     specifiers:
-      '@use-gesture/core': 10.2.25
+      '@use-gesture/core': 10.2.26
     dependencies:
       '@use-gesture/core': link:../core
 
   packages/vanilla:
     specifiers:
-      '@use-gesture/core': 10.2.25
+      '@use-gesture/core': 10.2.26
     dependencies:
       '@use-gesture/core': link:../core
 

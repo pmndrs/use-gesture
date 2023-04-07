@@ -1,5 +1,13 @@
 # @use-gesture/core
 
+## 10.2.26
+
+### Patch Changes
+
+- Updated dependencies [db0d934eb]
+- Updated dependencies [43e751a51]
+  - @use-gesture/core@10.2.26
+
 ## 10.2.25
 
 ### Patch Changes
