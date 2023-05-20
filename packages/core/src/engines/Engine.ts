@@ -346,8 +346,11 @@ export abstract class Engine<Key extends GestureKey> {
       state.direction = state.delta.map(Math.sign) as Vector2
       state._direction = state._delta.map(Math.sign) as Vector2
 
+      // calculates kinematics unless the gesture starts or ends or if the
+      // dt === 0 (which can happen on high frame rate monitors, see issue #581)
+      // because of privacy protection:
+      // https://developer.mozilla.org/en-US/docs/Web/API/Event/timeStamp#reduced_time_precision
       if (!state.first && dt > 0) {
-        // calculates kinematics unless the gesture starts or ends
         state.velocity = [absoluteDelta[0] / dt, absoluteDelta[1] / dt]
         state.timeDelta = dt
       }
