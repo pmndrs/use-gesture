@@ -150,10 +150,6 @@ export class DragEngine extends CoordinatesEngine<'drag'> {
 
     if (!state._pointerActive) return
 
-    // if the event has the same timestamp as the previous event
-    // note that checking type equality is ONLY for tests ¯\_(ツ)_/¯
-    if (state.type === event.type && event.timeStamp === state.timeStamp) return
-
     const id = pointerId(event)
     if (state._pointerId !== undefined && id !== state._pointerId) return
     const _values = pointerValues(event)
