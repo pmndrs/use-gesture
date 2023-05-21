@@ -257,7 +257,7 @@ importers:
   packages/react:
     dependencies:
       '@use-gesture/core':
-        specifier: 10.2.26
+        specifier: 10.2.27
         version: link:../core
       react:
         specifier: '>= 16.8.0'
@@ -266,7 +266,7 @@ importers:
   packages/vanilla:
     dependencies:
       '@use-gesture/core':
-        specifier: 10.2.26
+        specifier: 10.2.27
         version: link:../core
 
 packages:
