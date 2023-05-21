@@ -1,5 +1,13 @@
 # @use-gesture/core
 
+## 10.2.27
+
+### Patch Changes
+
+- 0dce2216c: detect lost pointer capture in PinchEngine
+- 957aee8b5: fix: don't block events with similar timestamps #581
+- 51c6cfcf4: chore: upgrade to typescript 5.0
+
 ## 10.2.26
 
 ### Patch Changes
