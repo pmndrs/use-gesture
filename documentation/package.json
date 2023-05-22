@@ -18,7 +18,7 @@
     "@use-gesture/vanilla": "*",
     "animejs": "^3.2.1",
     "classnames": "^2.3.2",
-    "gatsby": "^4.12.1",
+    "gatsby": "4.12.1",
     "gatsby-plugin-google-analytics": "^4.24.0",
     "gatsby-plugin-pnpm": "^1.2.10",
     "lethargy": "^1.0.9",
@@ -29,7 +29,10 @@
     "react-dom": "^18.2.0",
     "react-player": "^2.10.0",
     "react-toastify": "^8.1.0",
-    "smooth-doc": "^8.0.1",
+    "smooth-doc": "^8.1.0",
     "three": "^0.140.2"
+  },
+  "devDependencies": {
+    "eslint-plugin-flowtype": "^5.2.0"
   }
 }

@@ -549,7 +549,7 @@ export function PreventScroll() {
     { drag: { preventScroll: true } }
   )
   return (
-    <Canvas concurrent camera={{ position: [0, 0, 16], fov: 50 }} onCreated={({ gl }) => (ref.current = gl.domElement)}>
+    <Canvas camera={{ position: [0, 0, 16], fov: 50 }} onCreated={({ gl }) => (ref.current = gl.domElement)}>
       <Suspense fallback={null}>
         <a3f.mesh {...bind()} rotation={rot} geometry={torusknot} material={material} scale={scale} />
         <Environment />
