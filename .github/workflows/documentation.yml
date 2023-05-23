@@ -21,11 +21,11 @@ jobs:
       - name: Use Node
         uses: actions/setup-node@v3
         with:
-          node-version: '14'
+          node-version: '18'
 
       - uses: pnpm/action-setup@v2
         with:
-          version: 7.1.0
+          version: 8.3.1
           run_install: true
 
       - name: Build documentation
