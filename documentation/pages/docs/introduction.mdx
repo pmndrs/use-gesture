@@ -52,7 +52,7 @@ function PullRelease() {
 
 ### How does this work?
 
-The `useDrag` hook returns a function (stored in the `bind` constant), which when called returns an object with event handlers. Here, when you spread `{...bind()}` into a component, you're actually adding `onMouseDown` and `onTouchStart` event handlers.
+The `useDrag` hook returns a function (stored in the `bind` constant), which when called returns an object with event handlers. Here, when you spread `{...bind()}` into a component, you're actually adding `onPointerDown`,  `onPointerMove` and `onPointerUp` event handlers (the handlers may vary depending on the configuration options passed to the `useDrag`). 
 
 > It's important that you understand <UseGesture pkg="react" /> is not responsible for actually moving the component. The `useDrag` hook just hands over gesture data to react-spring which sets the component transforms. If you're not familiar with react-spring, head over [its documentation here](https://react-spring.io).
 
