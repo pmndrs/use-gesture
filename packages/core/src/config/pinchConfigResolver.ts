@@ -44,7 +44,7 @@ export const pinchConfigResolver = {
     const threshold = V.toVector(value, this.lockDirection ? [0.1, 3] : 0)
     return threshold
   },
-  modifierKey(value: ModifierKey) {
+  modifierKey(value: ModifierKey | ModifierKey[]) {
     if (value === undefined) return 'ctrlKey'
     return value
   },
