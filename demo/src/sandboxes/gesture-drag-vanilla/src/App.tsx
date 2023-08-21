@@ -52,6 +52,7 @@ function Draggable() {
     if (!dragGesture.current) return
     api.set({ scale: 1, x: 0, y: 0 })
     const { boundToParent, gesture, ...rest } = options
+    // @ts-ignore
     dragGesture.current.setConfig({ ...rest, pointer: pointerOptions, ...(boundToParent && { bounds: ref }) })
   }, [api, options, pointerOptions])
 

@@ -22,7 +22,7 @@
     "docs:start": "pnpm --filter documentation run start",
     "docs:build": "pnpm --filter documentation run build",
     "demo:dev": "pnpm --filter demo run dev",
-    "demo:build": "pnpm --filter demo un build",
+    "demo:build": "pnpm --filter demo run build",
     "test": "jest",
     "test:watch": "jest --watchAll",
     "size": "size-limit",
