@@ -117,7 +117,7 @@ importers:
   demo:
     dependencies:
       '@leva-ui/plugin-spring':
-        specifier: ^0.9.18
+        specifier: '*'
         version: 0.9.18(leva@0.9.35)(react-dom@18.2.0)(react@18.2.0)
       '@react-spring/web':
         specifier: ^9.4.5
@@ -135,7 +135,7 @@ importers:
         specifier: '*'
         version: link:../packages/vanilla
       leva:
-        specifier: ^0.9.35
+        specifier: '*'
         version: 0.9.35(@types/react-dom@18.2.7)(@types/react@18.2.21)(react-dom@18.2.0)(react@18.2.0)
       lodash-move:
         specifier: ^1.1.1
