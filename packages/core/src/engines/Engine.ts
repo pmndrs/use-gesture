@@ -342,8 +342,13 @@ export abstract class Engine<Key extends GestureKey> {
       const absoluteDelta = state.delta.map(Math.abs) as Vector2
 
       V.addTo(state.distance, absoluteDelta)
-      state.direction = state.delta.map(Math.sign) as Vector2
       state._direction = state._delta.map(Math.sign) as Vector2
+
+      // It's fair that we compute the direction based on the actual _delta of the movement.
+      // This will result in having a direction set even when the drag just started, but that's
+      // what user wants in most cases.
+      state.direction = state._direction
+      // state.direction = state.delta.map(Math.sign) as Vector2
 
       // calculates kinematics unless the gesture starts or ends or if the
       // dt === 0 (which can happen on high frame rate monitors, see issue #581)
