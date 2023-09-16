@@ -207,5 +207,10 @@ describe('testing derived config', () => {
       config = { modifierKey: null }
       expect(parse(config, 'pinch').pinch).toHaveProperty('modifierKey', null)
     })
+
+    test(`setting modifierKey to array should result in modifierKey being an array`, () => {
+      config = { modifierKey: ['altKey', 'ctrlKey'] }
+      expect(parse(config, 'pinch').pinch).toHaveProperty('modifierKey', ['altKey', 'ctrlKey'])
+    })
   })
 })

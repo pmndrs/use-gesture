@@ -246,7 +246,7 @@ export class PinchEngine extends Engine<'pinch'> {
 
   wheel(event: WheelEvent) {
     const modifierKey = this.config.modifierKey
-    if (modifierKey && !event[modifierKey]) return
+    if (modifierKey && (Array.isArray(modifierKey) ? !modifierKey.find((k) => event[k]) : !event[modifierKey])) return
     if (!this.state._active) this.wheelStart(event)
     else this.wheelChange(event)
     this.timeoutStore.add('wheelEnd', this.wheelEnd.bind(this))

@@ -55,7 +55,7 @@ export type InternalPinchOptions = InternalGestureOptions<'pinch'> & {
    */
   device: 'gesture' | 'pointer' | 'touch' | undefined
   lockDirection: boolean
-  modifierKey: ModifierKey
+  modifierKey: ModifierKey | NonNullable<ModifierKey>[]
   pinchOnWheel: boolean
 }
 

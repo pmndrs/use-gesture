@@ -332,7 +332,11 @@ function InitialExample() {
 
 ### modifierKey
 
-<Specs gestures={['pinch']} types={[`'ctrlKey'`, `'altKey'`, `'metaKey'`, 'null']} defaultValue={`'ctrlKey'`} />
+<Specs
+  gestures={['pinch']}
+  types={[`'ctrlKey'`, `'altKey'`, `'metaKey'`, `Array<'ctrlKey' | 'altKey' | 'metaKey'>`, 'null']}
+  defaultValue={`'ctrlKey'`}
+/>
 
 This option lets you set the modifier key that triggers a scale gesture when using wheel inside the `onPinch` handler.
 

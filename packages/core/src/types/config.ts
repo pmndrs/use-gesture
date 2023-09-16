@@ -120,7 +120,7 @@ export type PinchConfig = GestureOptions<'pinch'> & {
   /**
    * Key that triggers scale when using the wheel. Defaults to `'ctrlKey'`.
    */
-  modifierKey?: ModifierKey
+  modifierKey?: ModifierKey | NonNullable<ModifierKey>[]
   /**
    * Whether wheel should trigger a pinch at all.
    */
