@@ -1,5 +1,15 @@
 # @use-gesture/core
 
+## 10.3.0
+
+### Minor Changes
+
+- 1ee9f42e3: Fix: touch support is reverted to only checking TouchEvent support #626
+
+### Patch Changes
+
+- c19ff0b24: feat: modifierKey can be an array via @BJvdA
+
 ## 10.2.27
 
 ### Patch Changes
