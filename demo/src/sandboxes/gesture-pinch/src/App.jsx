@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { usePinch } from '@use-gesture/react'
 import { a, useSpring } from '@react-spring/web'
-import { useControls } from 'leva'
+import { folder, useControls } from 'leva'
 
 import styles from './styles.module.css'
 
@@ -13,6 +13,16 @@ export default function App() {
     touch: false,
     axis: { options: [undefined, 'lock'] }
   })
+
+  const _modifierKey = useControls('modifierKey', {
+    ctrlKey: false,
+    metaKey: false,
+    altKey: false
+  })
+
+  const modifierKey = Object.entries(_modifierKey)
+    .filter(([, v]) => !!v)
+    .map((e) => e[0])
 
   useEffect(() => {
     const handler = (e) => e.preventDefault()
@@ -34,7 +44,13 @@ export default function App() {
         rotate: active || gesture === 'offset' ? angle : 0
       })
     },
-    { target, eventOptions: { passive: false }, pointer: { touch }, ...rest }
+    {
+      target,
+      eventOptions: { passive: false },
+      pointer: { touch },
+      modifierKey: modifierKey.length ? modifierKey : undefined,
+      ...rest
+    }
   )
 
   return (
