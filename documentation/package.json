@@ -22,7 +22,7 @@
     "gatsby-plugin-google-analytics": "^4.24.0",
     "gatsby-plugin-pnpm": "^1.2.10",
     "lethargy": "^1.0.9",
-    "leva": "^0.9.25",
+    "leva": "^0.9.35",
     "mdx-observable": "^0.2.0",
     "parse-numeric-range": "^1.3.0",
     "react": "^18.2.0",
