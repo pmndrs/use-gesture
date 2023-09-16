@@ -26,12 +26,12 @@
   },
   "devDependencies": {
     "@types/lodash.clamp": "^4.0.7",
-    "@types/react": "^18.0.24",
-    "@types/react-dom": "^18.0.8",
+    "@types/react": "^18.2.21",
+    "@types/react-dom": "^18.2.7",
     "@types/three": "^0.140.0",
     "@vitejs/plugin-react": "^3.1.0",
-    "typescript": "^5.0.4",
+    "typescript": "^5.2.2",
     "typescript-plugin-css-modules": "^5.0.1",
-    "vite": "^4.2.1"
+    "vite": "^4.4.9"
   }
 }

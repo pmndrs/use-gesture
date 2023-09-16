@@ -20,7 +20,7 @@ jobs:
 
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Use Node
         uses: actions/setup-node@v3
@@ -37,7 +37,7 @@ jobs:
 
       - uses: pnpm/action-setup@v2
         with:
-          version: 8.3.1
+          version: 8
           run_install: |
             args: [--filter "@use-gesture/*"]
 

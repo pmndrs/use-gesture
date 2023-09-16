@@ -34,9 +34,13 @@ export const SUPPORT = {
    * some touchscreens using webkits don't have 'ontouchstart' in window. So
    * we're considering that browsers support TouchEvent if they have
    * `maxTouchPoints > 1`
+   *
+   * Update 16/09/2023: This generates failure on other Windows systems, so reverting
+   * back to detecting TouchEvent support only.
+   * https://github.com/pmndrs/use-gesture/issues/626
    */
-  // touch: supportsTouchEvents(),
-  touch: isTouchScreen(),
+  touch: supportsTouchEvents(),
+  // touch: isTouchScreen(),
   touchscreen: isTouchScreen(),
   pointer: supportsPointerEvents(),
   pointerLock: supportsPointerLock()
