@@ -165,9 +165,7 @@ export interface DOMHandlers {
   onPointerCancel?: EventHandler<PointerEvent>
   onPointerCancelCapture?: EventHandler<PointerEvent>
   onPointerEnter?: EventHandler<PointerEvent>
-  onPointerEnterCapture?: EventHandler<PointerEvent>
   onPointerLeave?: EventHandler<PointerEvent>
-  onPointerLeaveCapture?: EventHandler<PointerEvent>
   onPointerOver?: EventHandler<PointerEvent>
   onPointerOverCapture?: EventHandler<PointerEvent>
   onPointerOut?: EventHandler<PointerEvent>
