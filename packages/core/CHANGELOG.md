@@ -1,5 +1,11 @@
 # @use-gesture/core
 
+## 10.3.1
+
+### Patch Changes
+
+- 6f6f4a5b4: fix(types): compatibility with @types/react >=18.2.66
+
 ## 10.3.0
 
 ### Minor Changes
