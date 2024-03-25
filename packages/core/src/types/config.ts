@@ -1,5 +1,5 @@
 import { State } from './state'
-import { Vector2, Target, PointerType, NonUndefined } from './utils'
+import { Vector2, Target, PointerType } from './utils'
 
 export type GestureKey = Exclude<keyof State, 'shared'>
 export type CoordinatesKey = Exclude<GestureKey, 'pinch'>
@@ -42,7 +42,7 @@ export type GestureOptions<T extends GestureKey> = GenericOptions & {
   /**
    * The position `offset` will start from.
    */
-  from?: Vector2 | ((state: NonUndefined<State[T]>) => Vector2)
+  from?: Vector2 | ((state: NonNullable<State[T]>) => Vector2)
   /**
    * The handler will fire only when the gesture displacement is greater than
    * the threshold.
