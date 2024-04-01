@@ -29,6 +29,13 @@
   user-select: none;
 }
 
+.wheel {
+  background: #91c9f9;
+  border-radius: 16px;
+  height: 80px;
+  width: 80px;
+}
+
 .overlay {
   position: fixed;
   top: 0;

@@ -140,6 +140,13 @@ export type MoveConfig = CoordinatesConfig<'move'> & MoveAndHoverMouseOnly
 
 export type HoverConfig = MoveAndHoverMouseOnly
 
+export type WheelConfig = {
+  /**
+   * If true, inverts the direction of wheel scrolling to mimic natural touchpad gestures.
+   */
+  reverse?: boolean
+}
+
 export type DragConfig = Omit<CoordinatesConfig<'drag'>, 'axisThreshold' | 'bounds'> & {
   /**
    * If true, the component won't trigger your drag logic if the user just clicked on the component.
@@ -235,14 +242,14 @@ export type DragConfig = Omit<CoordinatesConfig<'drag'>, 'axisThreshold' | 'boun
 
 export type UserDragConfig = GenericOptions & DragConfig
 export type UserPinchConfig = GenericOptions & PinchConfig
-export type UserWheelConfig = GenericOptions & CoordinatesConfig<'wheel'>
+export type UserWheelConfig = GenericOptions & WheelConfig & CoordinatesConfig<'wheel'>
 export type UserScrollConfig = GenericOptions & CoordinatesConfig<'scroll'>
 export type UserMoveConfig = GenericOptions & MoveConfig
 export type UserHoverConfig = GenericOptions & HoverConfig
 
 export type UserGestureConfig = GenericOptions & {
   drag?: DragConfig
-  wheel?: CoordinatesConfig<'wheel'>
+  wheel?: WheelConfig & CoordinatesConfig<'wheel'>
   scroll?: CoordinatesConfig<'scroll'>
   move?: MoveConfig
   pinch?: PinchConfig

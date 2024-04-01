@@ -20,8 +20,10 @@ export class WheelEngine extends CoordinatesEngine<'wheel'> {
 
   wheelChange(event: WheelEvent) {
     const state = this.state
+    const { reverse } = this.config
+
     state._delta = wheelValues(event)
-    V.addTo(state._movement, state._delta)
+    reverse ? V.subTo(state._movement, state._delta) : V.addTo(state._movement, state._delta)
 
     // _movement rolls back to when it passed the bounds.
     clampStateInternalMovementToBounds(state)

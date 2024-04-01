@@ -131,6 +131,7 @@ Here are all options that can be applied to gestures.
 | [`swipe.duration`](#swipeduration)        |                                           **drag**                                            | The maximum duration in milliseconds that a swipe is detected.                                                                                                                                       |
 | `keyboardDisplacement`                    |                                           **drag**                                            | The distance (in `pixels`) emulated by arrow keys. Default is `10`.                                                                                                                                  |
 | `mouseOnly`                               |                                        **hover, move**                                        | Set to `false` if you want your `hover` or `move` handlers to be triggered on non-mouse events. This is a useful option in case you want to perform logic on touch-enabled devices.                  |
+| [`reverse`](#reverse)                     |                                           **wheel**                                           | If `true`, inverts the direction of wheel scrolling to mimic natural touchpad gestures.                                                                                                              |
 
 ## Options explained
 
@@ -434,6 +435,14 @@ On desktop, you should be able to drag the torus as you would expect without del
 <Specs gestures={['drag']} types={['x', 'y', 'xy']} defaultValue="y" />
 
 This can optionally be used together with `preventScroll`. This defines the axis/axes in which scrolling is permitted, unless the user taps and holds on the element for the specified duration. Afterwhich, all scrolling is blocked. Depending on the complexity of the nesting of the element, you may need to assign the property `touch-action: pan-x`, `touch-action: pan-y`, or both, to the element to allow for the correct behavior.
+
+### reverse
+
+<Specs types="boolean" defaultValue="false" />
+
+When set to `true`, the `reverse` option inverses the direction of the wheel gesture. This can be useful in scenarios where the default gesture direction does not align with the intended interaction design. For example, in a carousel, setting `reverse` to `true` would mean swiping left would move to the next item, and swiping right would move to the previous item, which is the opposite of the default behavior.
+
+<Code id="Reverse" />
 
 ### rubberband
 
