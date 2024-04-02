@@ -1,4 +1,4 @@
-import { GestureKey, CoordinatesKey, ModifierKey } from './config'
+import { GestureKey, CoordinatesKey, ModifierKey, WheelConfig } from './config'
 import { State } from './state'
 import { PointerType, Vector2 } from './utils'
 
@@ -66,7 +66,7 @@ type MoveAndHoverMouseOnly = {
 export type InternalConfig = {
   shared: InternalGenericOptions
   drag?: InternalDragOptions
-  wheel?: InternalCoordinatesOptions<'wheel'>
+  wheel?: InternalCoordinatesOptions<'wheel'> & WheelConfig
   scroll?: InternalCoordinatesOptions<'scroll'>
   move?: InternalCoordinatesOptions<'move'> & MoveAndHoverMouseOnly
   hover?: InternalCoordinatesOptions<'hover'> & MoveAndHoverMouseOnly

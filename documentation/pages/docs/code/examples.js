@@ -246,6 +246,39 @@ const limitFn = (b, y) =>
 
 const closestLimit = (x, y) => Math.max(limitFn(xBounds, x), limitFn(yBounds, y))
 
+export function Reverse({ setActive }) {
+  const [isReversed, setIsReversed] = useState(true)
+  const [{ x, y }, api] = useSpring(() => ({ x: 85, y: 51 }))
+  const [position] = useState({ x: 85, y: 51 })
+
+  const ref = useRef()
+  useWheel(
+    ({ down, offset: [x, y] }, memo = position) => {
+      setActive && setActive(down)
+      api.start({ x: memo.x + x, y: memo.y + y, immediate: true })
+    },
+    {
+      preventDefault: true,
+      target: ref,
+      eventOptions: { passive: false },
+      reverse: isReversed
+    }
+  )
+  return (
+    <>
+      <div className={styles.ui}>
+        <label>
+          <input type="checkbox" checked={isReversed} onChange={(e) => setIsReversed(e.target.checked)} />
+          Use `reverse`
+        </label>
+      </div>
+      <div ref={ref} className={styles.limits}>
+        <animated.div className={styles.wheel} style={{ x, y }} />
+      </div>
+    </>
+  )
+}
+
 export function Rubberband({ setActive }) {
   const [{ x, y }, api] = useSpring(() => ({ x: 0, y: 0 }))
   const bind = useDrag(

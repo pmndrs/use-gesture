@@ -94,6 +94,15 @@ describe.each([
     expect(getByTestId(`${prefix}wheel-movement`)).toHaveTextContent('13,0')
     await waitFor(() => expect(getByTestId(`${prefix}wheel-wheeling`)).toHaveTextContent('false'))
   })
+
+  test('applying reverse SHOULD inverse wheel directions', async () => {
+    rerender(<Component gestures={['Wheel']} config={{ wheel: { reverse: true } }} />)
+    fireEvent.wheel(element, { deltaX: -3, deltaY: 10 })
+    fireEvent.wheel(element, { deltaX: 4, deltaY: -6 })
+    expect(getByTestId(`${prefix}wheel-movement`)).toHaveTextContent('-1,-4')
+    await waitFor(() => expect(getByTestId(`${prefix}wheel-wheeling`)).toHaveTextContent('false'))
+  })
+
   test('disabling all gestures should prevent state from updating', async () => {
     rerender(<Component gestures={['Wheel']} config={{ enabled: false }} />)
     fireEvent.wheel(element)
