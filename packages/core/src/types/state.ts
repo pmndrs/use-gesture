@@ -181,6 +181,13 @@ export type CommonGestureState = {
   args?: any
 }
 
+export type CommonGestureKey = {
+  /**
+   * The gesture type.
+   */
+  gestureKey: 'wheel' | 'scroll' | 'move' | 'hover'
+}
+
 export type CoordinatesState = CommonGestureState & {
   /**
    * The initial axis (x or y) of the gesture.
@@ -215,6 +222,10 @@ export type DragState = CoordinatesState & {
    * [swipeX, swipeY] is [0, 0] if no swipe detected, -1 or 1 otherwise.
    */
   swipe: Vector2
+  /**
+   * The gesture type.
+   */
+  gestureKey: 'drag'
 }
 
 export interface PinchState extends CommonGestureState {
@@ -245,6 +256,10 @@ export interface PinchState extends CommonGestureState {
    * Function that can be called to cancel the pinch.
    */
   cancel(): void
+  /**
+   * The gesture type.
+   */
+  gestureKey: 'pinch'
 }
 
 export type EventTypes = {
@@ -259,10 +274,10 @@ export type EventTypes = {
 export interface State {
   shared: SharedGestureState
   drag?: DragState & { event: EventTypes['drag'] }
-  wheel?: CoordinatesState & { event: EventTypes['wheel'] }
-  scroll?: CoordinatesState & { event: EventTypes['scroll'] }
-  move?: CoordinatesState & { event: EventTypes['move'] }
-  hover?: CoordinatesState & { event: EventTypes['hover'] }
+  wheel?: CoordinatesState & CommonGestureKey & { event: EventTypes['wheel'] }
+  scroll?: CoordinatesState & CommonGestureKey & { event: EventTypes['scroll'] }
+  move?: CoordinatesState & CommonGestureKey & { event: EventTypes['move'] }
+  hover?: CoordinatesState & CommonGestureKey & { event: EventTypes['hover'] }
   pinch?: PinchState & { event: EventTypes['pinch'] }
 }
 

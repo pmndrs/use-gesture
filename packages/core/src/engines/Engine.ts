@@ -1,9 +1,8 @@
 import { Controller } from '../Controller'
+import { GestureKey, IngKey, NonUndefined, State, Vector2 } from '../types'
 import { getEventDetails } from '../utils/events'
 import { call } from '../utils/fn'
 import { V, computeRubberband } from '../utils/maths'
-import { GestureKey, IngKey, State, Vector2 } from '../types'
-import { NonUndefined } from '../types'
 
 /**
  * The lib doesn't compute the kinematics on the last event of the gesture
@@ -74,7 +73,9 @@ export abstract class Engine<Key extends GestureKey> {
     this.key = key
 
     if (!this.state) {
-      this.state = {} as any
+      this.state = {
+        gestureKey: key
+      } as any
       this.computeValues([0, 0])
       this.computeInitial()
 
