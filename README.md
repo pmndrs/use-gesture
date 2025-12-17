@@ -39,12 +39,12 @@ yarn add @use-gesture/vanilla
 npm install @use-gesture/vanilla
 ```
 
-### [Full documentation website](https://use-gesture.netlify.com)
+### [Full documentation website](https://use-gesture.netlify.app)
 
-- [Available Gestures](https://use-gesture.netlify.com/docs/gestures)
-- [Gesture State](https://use-gesture.netlify.com/docs/state)
-- [Gesture Options](https://use-gesture.netlify.com/docs/options)
-- [FAQ](https://use-gesture.netlify.com/docs/faq)
+- [Available Gestures](https://use-gesture.netlify.app/docs/gestures)
+- [Gesture State](https://use-gesture.netlify.app/docs/state)
+- [Gesture Options](https://use-gesture.netlify.app/docs/options)
+- [FAQ](https://use-gesture.netlify.app/docs/faq)
 
 ### Simple example
 
