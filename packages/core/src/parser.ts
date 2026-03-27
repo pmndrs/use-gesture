@@ -1,7 +1,7 @@
 import { FullGestureState, GestureHandlers, GestureKey, InternalHandlers, UserGestureConfig } from './types'
 import { EngineMap } from './actions'
 
-const RE_NOT_NATIVE = /^on(Drag|Wheel|Scroll|Move|Pinch|Hover)/
+const RE_NOT_NATIVE = /^on(Drag|Wheel|Scroll|Move|Pinch|Hover|Tap)/
 
 function sortHandlers(_handlers: GestureHandlers) {
   const native: any = {}
@@ -22,7 +22,7 @@ function sortHandlers(_handlers: GestureHandlers) {
   return [handlers, native, actions]
 }
 
-type HandlerKey = 'onDrag' | 'onPinch' | 'onWheel' | 'onMove' | 'onScroll' | 'onHover'
+type HandlerKey = 'onDrag' | 'onPinch' | 'onWheel' | 'onMove' | 'onScroll' | 'onHover' | 'onTap'
 
 function registerGesture(
   actions: Set<unknown>,
@@ -73,6 +73,7 @@ export function parseMergedHandlers(mergedHandlers: GestureHandlers, mergedConfi
   registerGesture(actions, handlers, 'onPinch', 'pinch', internalHandlers, mergedConfig)
   registerGesture(actions, handlers, 'onMove', 'move', internalHandlers, mergedConfig)
   registerGesture(actions, handlers, 'onHover', 'hover', internalHandlers, mergedConfig)
+  registerGesture(actions, handlers, 'onTap', 'tap', internalHandlers, mergedConfig)
 
   return { handlers: internalHandlers, config: mergedConfig, nativeHandlers }
 }

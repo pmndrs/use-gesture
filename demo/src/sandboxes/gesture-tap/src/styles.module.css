@@ -1,0 +1,71 @@
+.tap {
+  position: absolute;
+  height: 120px;
+  width: 120px;
+  background-color: #ec625c;
+  cursor: pointer;
+  touch-action: none;
+  -webkit-user-select: none;
+  user-select: none;
+  border-radius: 8px;
+}
+
+.tap > div {
+  margin: 10%;
+  width: 80%;
+  height: 80%;
+  background-color: #000;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: monospace;
+  font-size: 11px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.tap:focus {
+  outline: 2px solid #fff;
+}
+
+.tap.singleTap > div {
+  background-color: #4ade80;
+}
+
+.tap.doubleTap > div {
+  background-color: #60a5fa;
+}
+
+.tap.longPress > div {
+  background-color: #f472b6;
+}
+
+.status {
+  position: absolute;
+  bottom: 100px;
+  color: #888;
+  font-family: monospace;
+  font-size: 14px;
+  text-align: center;
+}
+
+.status span {
+  display: block;
+  margin: 4px 0;
+}
+
+.info {
+  position: absolute;
+  bottom: 40px;
+  color: #888;
+  font-family: monospace;
+  font-size: 11px;
+  text-align: center;
+  max-width: 300px;
+}
+
+.info p {
+  margin: 4px 0;
+}

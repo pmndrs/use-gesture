@@ -63,6 +63,20 @@ type MoveAndHoverMouseOnly = {
   mouseOnly: boolean
 }
 
+export type InternalTapOptions = InternalGestureOptions<'tap'> & {
+  tapDiscrimination: boolean
+  tapTimeout: number
+  longPressTimeout: number
+  moveThreshold: number
+  mouseOnly: boolean
+  pointerButtons: number | number[]
+  pointerCapture: boolean
+  // CoordinatesEngine compatibility (tap doesn't use these but needs them for type compatibility)
+  axis?: undefined
+  lockDirection: boolean
+  axisThreshold: number
+}
+
 export type InternalConfig = {
   shared: InternalGenericOptions
   drag?: InternalDragOptions
@@ -71,4 +85,5 @@ export type InternalConfig = {
   move?: InternalCoordinatesOptions<'move'> & MoveAndHoverMouseOnly
   hover?: InternalCoordinatesOptions<'hover'> & MoveAndHoverMouseOnly
   pinch?: InternalPinchOptions
+  tap?: InternalTapOptions
 }

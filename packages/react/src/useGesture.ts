@@ -1,4 +1,12 @@
-import { dragAction, pinchAction, scrollAction, wheelAction, moveAction, hoverAction } from '@use-gesture/core/actions'
+import {
+  dragAction,
+  pinchAction,
+  scrollAction,
+  wheelAction,
+  moveAction,
+  hoverAction,
+  tapAction
+} from '@use-gesture/core/actions'
 import { GestureHandlers, UserGestureConfig, EventTypes, AnyHandlerEventTypes } from '@use-gesture/core/types'
 import { createUseGesture } from './createUseGesture'
 
@@ -14,6 +22,14 @@ export function useGesture<
   HandlerTypes extends AnyHandlerEventTypes = EventTypes,
   Config extends UserGestureConfig = UserGestureConfig
 >(handlers: GestureHandlers<HandlerTypes>, config?: Config) {
-  const hook = createUseGesture([dragAction, pinchAction, scrollAction, wheelAction, moveAction, hoverAction])
+  const hook = createUseGesture([
+    dragAction,
+    pinchAction,
+    scrollAction,
+    wheelAction,
+    moveAction,
+    hoverAction,
+    tapAction
+  ])
   return hook(handlers, config || ({} as Config))
 }

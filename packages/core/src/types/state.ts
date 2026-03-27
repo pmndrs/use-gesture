@@ -1,7 +1,7 @@
 import { GestureKey } from './config'
 import { NonUndefined, Vector2, WebKitGestureEvent } from './utils'
 
-export type IngKey = 'dragging' | 'wheeling' | 'moving' | 'hovering' | 'scrolling' | 'pinching'
+export type IngKey = 'dragging' | 'wheeling' | 'moving' | 'hovering' | 'scrolling' | 'pinching' | 'tapping'
 
 export type SharedGestureState = {
   /**
@@ -28,6 +28,10 @@ export type SharedGestureState = {
    * True if the element is being pinched.
    */
   pinching?: boolean
+  /**
+   * True if the element is being tapped (long press active).
+   */
+  tapping?: boolean
   /**
    * Number of fingers touching the screen.
    */
@@ -247,6 +251,34 @@ export interface PinchState extends CommonGestureState {
   cancel(): void
 }
 
+export type TapState = CoordinatesState & {
+  _pointerId?: number
+  _pointerActive: boolean
+  _waitingForSecondTap: boolean
+  _lastUpTime: number
+  _longPressTriggered: boolean
+
+  /**
+   * The number of taps detected (1 for single, 2 for double).
+   */
+  tapCount: number
+  /**
+   * True when a single tap is confirmed (after tapTimeout with no second tap).
+   * Only set when tapDiscrimination config is true.
+   */
+  singleTap: boolean
+  /**
+   * True when a double tap is detected.
+   * Only set when tapDiscrimination config is true.
+   */
+  doubleTap: boolean
+  /**
+   * True when long press threshold is met (pointer held down for longPressTimeout).
+   * Only set when longPressTimeout config > 0.
+   */
+  longPress: boolean
+}
+
 export type EventTypes = {
   drag: PointerEvent | TouchEvent | MouseEvent | KeyboardEvent
   wheel: WheelEvent
@@ -254,6 +286,7 @@ export type EventTypes = {
   move: PointerEvent
   hover: PointerEvent
   pinch: PointerEvent | TouchEvent | WheelEvent | WebKitGestureEvent
+  tap: PointerEvent | MouseEvent | TouchEvent
 }
 
 export interface State {
@@ -264,6 +297,7 @@ export interface State {
   move?: CoordinatesState & { event: EventTypes['move'] }
   hover?: CoordinatesState & { event: EventTypes['hover'] }
   pinch?: PinchState & { event: EventTypes['pinch'] }
+  tap?: TapState & { event: EventTypes['tap'] }
 }
 
 export type FullGestureState<Key extends GestureKey> = SharedGestureState & NonUndefined<State[Key]>

@@ -6,6 +6,9 @@ import { TimeoutStore } from './TimeoutStore'
 import { chain } from './utils/fn'
 import { GestureKey, InternalConfig, InternalHandlers, NativeHandlers, State, UserGestureConfig } from './types'
 
+/**
+ * The Controller class is responsible for managing the state of gestures.
+ */
 export class Controller {
   /**
    * The list of gestures handled by the Controller.
@@ -163,6 +166,7 @@ function resolveGestures(ctrl: Controller, internalHandlers: InternalHandlers) {
   if (internalHandlers.move) setupGesture(ctrl, 'move')
   if (internalHandlers.pinch) setupGesture(ctrl, 'pinch')
   if (internalHandlers.hover) setupGesture(ctrl, 'hover')
+  if (internalHandlers.tap) setupGesture(ctrl, 'tap')
 }
 
 const bindToProps =

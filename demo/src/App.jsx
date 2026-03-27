@@ -27,6 +27,7 @@ import InfiniteSlideshow from './sandboxes/infinite-slideshow/src/App'
 import ActionSheet from './sandboxes/action-sheet/src/App'
 import DotsConnect from './sandboxes/dots-connect/src/App'
 import NativeVsLib from './sandboxes/native-vs-lib/src/App'
+import Tap from './sandboxes/gesture-tap/src/App'
 
 const links = {
   'gesture-simplest': Simplest,
@@ -42,6 +43,7 @@ const links = {
   'gesture-three-prevent-scroll': ThreePreventScroll,
   'gesture-scroll': Scroll,
   'gesture-wheel': Wheel,
+  'gesture-tap': Tap,
   slide: Slide,
   'draggable-list': DraggableList,
   'draggable-image': DraggableImage,

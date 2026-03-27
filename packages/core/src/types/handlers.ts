@@ -27,6 +27,9 @@ export type UserHandlers<T extends AnyHandlerEventTypes = EventTypes> = {
   onScrollStart: Handler<'scroll', check<T, 'scroll'>>
   onScrollEnd: Handler<'scroll', check<T, 'scroll'>>
   onHover: Handler<'hover', check<T, 'hover'>>
+  onTap: Handler<'tap', check<T, 'tap'>>
+  onTapStart: Handler<'tap', check<T, 'tap'>>
+  onTapEnd: Handler<'tap', check<T, 'tap'>>
 }
 
 type NativeHandlersKeys = keyof Omit<DOMHandlers, keyof UserHandlers>
@@ -51,6 +54,7 @@ export type AnyHandlerEventTypes = Partial<
     move: any
     pinch: any
     hover: any
+    tap: any
   } & { [key in NativeHandlersKeys]: any }
 >
 

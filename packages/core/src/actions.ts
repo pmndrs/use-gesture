@@ -19,6 +19,9 @@ import { wheelConfigResolver } from './config/wheelConfigResolver'
 import { HoverEngine } from './engines/HoverEngine'
 import { hoverConfigResolver } from './config/hoverConfigResolver'
 
+import { TapEngine } from './engines/TapEngine'
+import { tapConfigResolver } from './config/tapConfigResolver'
+
 export const EngineMap = new Map<GestureKey, EngineClass<any>>()
 export const ConfigResolverMap = new Map<GestureKey, ResolverMap>()
 
@@ -61,4 +64,10 @@ export const wheelAction: Action = {
   key: 'wheel',
   engine: WheelEngine as any,
   resolver: wheelConfigResolver
+}
+
+export const tapAction: Action = {
+  key: 'tap',
+  engine: TapEngine as any,
+  resolver: tapConfigResolver
 }

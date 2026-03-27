@@ -4,6 +4,7 @@ export { useWheel } from './useWheel'
 export { useScroll } from './useScroll'
 export { useMove } from './useMove'
 export { useHover } from './useHover'
+export { useTap } from './useTap'
 export { useGesture } from './useGesture'
 export { createUseGesture } from './createUseGesture'
 

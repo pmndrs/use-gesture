@@ -140,6 +140,43 @@ export type MoveConfig = CoordinatesConfig<'move'> & MoveAndHoverMouseOnly
 
 export type HoverConfig = MoveAndHoverMouseOnly
 
+export type TapConfig = GenericOptions & {
+  /**
+   * Enables single vs double tap discrimination.
+   * When true, singleTap fires after tapTimeout if no second tap occurs.
+   * @default false
+   */
+  tapDiscrimination?: boolean
+  /**
+   * Maximum time in ms between two taps to be considered a double tap.
+   * @default 300
+   */
+  tapTimeout?: number
+  /**
+   * Time in ms that pointer must be held down to trigger a long press.
+   * Set to 0 to disable long press detection.
+   * @default 0
+   */
+  longPressTimeout?: number
+  /**
+   * Maximum movement in pixels before the tap is canceled.
+   * @default 10
+   */
+  moveThreshold?: number
+  /**
+   * If false, tap handlers will also fire on touch devices.
+   */
+  mouseOnly?: boolean
+  /**
+   * The pointer buttons that trigger the tap.
+   */
+  pointerButtons?: number | number[] | -1
+  /**
+   * If true, pointer capture will be set on pointer down.
+   */
+  pointerCapture?: boolean
+}
+
 export type DragConfig = Omit<CoordinatesConfig<'drag'>, 'axisThreshold' | 'bounds'> & {
   /**
    * If true, the component won't trigger your drag logic if the user just clicked on the component.
@@ -239,6 +276,7 @@ export type UserWheelConfig = GenericOptions & CoordinatesConfig<'wheel'>
 export type UserScrollConfig = GenericOptions & CoordinatesConfig<'scroll'>
 export type UserMoveConfig = GenericOptions & MoveConfig
 export type UserHoverConfig = GenericOptions & HoverConfig
+export type UserTapConfig = GenericOptions & TapConfig
 
 export type UserGestureConfig = GenericOptions & {
   drag?: DragConfig
@@ -247,4 +285,5 @@ export type UserGestureConfig = GenericOptions & {
   move?: MoveConfig
   pinch?: PinchConfig
   hover?: { enabled?: boolean } & HoverConfig
+  tap?: TapConfig
 }
