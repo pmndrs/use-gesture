@@ -1,0 +1,105 @@
+{
+  "name": "@use-gesture/root",
+  "version": "0.0.0",
+  "description": "React hook for receiving gestures https://use-gesture.netlify.app",
+  "license": "MIT",
+  "private": true,
+  "preconstruct": {
+    "packages": [
+      "packages/*"
+    ]
+  },
+  "scripts": {
+    "postinstall": "husky install && preconstruct dev",
+    "build": "preconstruct build",
+    "watch": "preconstruct watch",
+    "dev": "preconstruct dev",
+    "validate": "preconstruct validate",
+    "lint:full": "eslint packages/*/src",
+    "lint": "pretty-quick --staged",
+    "prettier": "prettier --write .",
+    "tsc": "tsc --noEmit",
+    "docs:start": "pnpm --filter documentation run start",
+    "docs:build": "pnpm --filter documentation run build",
+    "demo:dev": "pnpm --filter demo run dev",
+    "demo:build": "pnpm --filter demo run build",
+    "test": "jest",
+    "test:watch": "jest --watchAll",
+    "size": "size-limit",
+    "ci:version": "pnpm changeset version && pnpm --filter \"@use-gesture/*\" install --lockfile-only",
+    "ci:publish": "pnpm build && pnpm changeset publish",
+    "prepare": "husky install"
+  },
+  "size-limit": [
+    {
+      "name": "@use-gesture/react",
+      "path": "packages/react/dist/use-gesture-react.esm.js",
+      "limit": "9 KB",
+      "ignore": [
+        "react"
+      ]
+    },
+    {
+      "name": "@use-gesture/react -- tree-shaking",
+      "import": "{ useDrag }",
+      "path": "packages/react/dist/use-gesture-react.esm.js",
+      "limit": "7 KB",
+      "ignore": [
+        "react"
+      ]
+    },
+    {
+      "name": "@use-gesture/vanilla",
+      "path": "packages/vanilla/dist/use-gesture-vanilla.esm.js",
+      "limit": "9 KB"
+    },
+    {
+      "name": "@use-gesture/vanilla -- tree-shaking",
+      "import": "{ WheelGesture }",
+      "path": "packages/vanilla/dist/use-gesture-vanilla.esm.js",
+      "limit": "6 KB"
+    }
+  ],
+  "devDependencies": {
+    "@babel/core": "^7.22.19",
+    "@babel/plugin-syntax-flow": "^7.22.5",
+    "@babel/plugin-transform-class-properties": "^7.22.5",
+    "@babel/plugin-transform-react-jsx": "^7.22.15",
+    "@babel/preset-env": "^7.22.15",
+    "@babel/preset-react": "^7.22.15",
+    "@babel/preset-typescript": "^7.22.15",
+    "@changesets/cli": "^2.26.2",
+    "@preconstruct/cli": "^2.8.1",
+    "@size-limit/preset-small-lib": "^7.0.8",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^13.2.0",
+    "@types/jest": "^27.5.2",
+    "@types/node": "^20.6.2",
+    "@types/react": "^18.2.21",
+    "@types/react-dom": "^18.2.7",
+    "@typescript-eslint/eslint-plugin": "^5.62.0",
+    "@typescript-eslint/parser": "^5.62.0",
+    "babel-jest": "^29.4.1",
+    "eslint": "^8.49.0",
+    "eslint-config-prettier": "^8.10.0",
+    "eslint-config-react-app": "^7.0.1",
+    "eslint-plugin-jest-dom": "^4.0.3",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-testing-library": "^5.11.1",
+    "husky": "^8.0.3",
+    "jest": "^27.5.1",
+    "pnpm": "^8.7.5",
+    "postinstall-postinstall": "^2.1.0",
+    "prettier": "^2.8.8",
+    "pretty-quick": "^3.1.3",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "size-limit": "^7.0.8",
+    "tsd": "^0.28.1",
+    "typescript": "^5.2.2"
+  },
+  "lint-staged": {
+    "*.js": "eslint --cache --fix",
+    "*.{js,css,md}": "prettier --write"
+  }
+}

@@ -1,0 +1,61 @@
+name: CI
+on:
+  push:
+    paths:
+      - '.github/workflows/main.yml'
+      - 'packages/**'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - 'test/**'
+      - '!documentation/**'
+      - '!demo/**'
+      - '!**.md'
+      - '!.changeset/**'
+env:
+  CI: true
+jobs:
+  build:
+    name: Build, lint, and test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Use Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Cache pnpm modules
+        uses: actions/cache@v3
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-
+
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
+          run_install: |
+            args: [--filter "@use-gesture/*"]
+
+      - name: Check types
+        run: pnpm tsc
+
+      - name: Setup build cache
+        uses: actions/cache@v3
+        id: build-cache
+        with:
+          path: packages/**/dist
+          key: ${{ runner.os }}-build-${{ hashFiles('packages/') }}
+          restore-keys: |
+            ${{ runner.os }}-build-
+
+      - name: Build without cache
+        if: steps.build-cache.outputs.cache-hit != 'true'
+        run: pnpm build
+
+      - name: Run tests
+        run: pnpm test

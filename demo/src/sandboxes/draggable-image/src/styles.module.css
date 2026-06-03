@@ -1,0 +1,14 @@
+.drag {
+  touch-action: none;
+  -moz-user-select: none;
+  -webkit-user-drag: none;
+  user-select: none;
+  cursor: grab;
+}
+
+.img {
+  width: 400px;
+  height: 400px;
+  background: hotpink;
+  border-radius: 16px;
+}

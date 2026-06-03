@@ -1,0 +1,99 @@
+---
+title: FAQ
+section: More
+order: 2
+---
+
+# Frequently Asked Questions
+
+<carbon-ad />
+
+### Index
+
+- [What is the difference with react-use-gesture?](#what-is-the-difference-with-react-use-gesture)
+- [Why use `react-spring` instead of `React.useState`?](#why-use-react-spring-instead-of-reactusestate)
+- [What are the differences between using `use[Gesture]` hooks and adding listeners manually?](#what-are-the-differences-between-using-usegesture-hooks-and-adding-listeners-manually)
+- [Why `onMove` when `onDrag` already exists?](#why-onmove-when-ondrag-already-exists)
+- [Why `onWheel` and `onScroll`?](#why-onwheel-and-onscroll)
+- [Accessing source event triggers a warning in the console!](#accessing-source-event-triggers-a-warning-in-the-console)
+- [Why do I need to return `memo`?](#why-do-i-need-to-return-memo)
+- [Why is drag being triggered when I just click on an element?](#why-is-drag-being-triggered-when-i-just-click-on-an-element)
+- [Why am I getting warnings from `preventDefault()` after I pass `{passive:false}`?](#why-am-i-getting-warnings-from-preventdefault-after-i-pass-passivefalse)
+- [Why can't I properly drag an image or a link?](#why-cant-i-properly-drag-an-image-or-a-link)
+- [What is the difference the React-with-gesture library?](#what-is-the-difference-the-react-with-gesture-library)
+
+### What is the difference with react-use-gesture?
+
+`@use-gesture` replaces `react-with-gesture`, and aims at being platform agnostic.
+
+### Why use `react-spring` instead of `React.useState`?
+
+Simply because setting state in the gesture handler would re-render the component on each gesture frame, which isn't always good for performance. React-spring lets us animate components without triggering renders. You could still use `useState` if you'd like though!
+
+### What are the differences between using `use[Gesture]` hooks and adding listeners manually?
+
+Not a lot! Essentially these `useXXXX` hooks simplify the implementation of the drag and pinch gestures, calculate kinematics values you wouldn't get out of the box from the listeners, and debounce move, scroll and wheel events to let you know when they end.
+
+### Why `onMove` when `onDrag` already exists?
+
+`onDrag` only fires while you touch or press the element. You just need to hover your mouse above the element to trigger `onMove`.
+
+### Why `onWheel` and `onScroll`?
+
+Scrolling and wheeling are structurally different events although they produce similar results (i.e. scrolling a page). First of all, `wheel` is a mouse-only event. Then, for `onScroll` to be fired, the element you're scrolling needs to actually scroll, therefore have content overflowing, while you just need to wheel over an element to trigger `onWheel`. If you use [react-three-fiber](https://github.com/pmndrs/react-three-fiber), `onWheel` might prove useful to simulate scroll on canvas elements.
+
+### Accessing source event triggers a warning in the console!
+
+You're probably trying to access an event in `onScroll`, `onMove` or `onWheel` handlers. The last event is debounced, and therefore not accessible asynchronously because of how React pools events. A possible solution would be to make sure the event is not part of the last state update:
+
+```jsx
+useScroll(
+  ({ event, last }) => {
+    !last && event.preventDefault() // <-- event will not be accessed in the last event
+  },
+  { target: myRef }
+)
+```
+
+### Why do I need to return `memo`?
+
+As you've seen in some examples, whenever `memo` is used, it is always returned in the handler function. Essentially `memo` is a gesture state attribute that is `undefined` when the gesture starts, but then takes the return value of the handler function.
+
+It may sound silly but returning `memo` makes sure that we continue holding a reference to the initial value of `memo`.
+
+### Why is drag being triggered when I just click on an element?
+
+This is typically a-feature-not-a-bug situation 🙃 Drag is triggered as soon as you mouse down on your component, which means it will be triggered when you just briefly click on it. However, there is an option to not trigger the drag handler before a certain delay, using the config option [`delay`](/docs/options/#delay-drag-only).
+
+```jsx
+// using the default delay
+const bind = useDrag(() => console.log(`Won't show if you hold your mouse less than 180ms`), { delay: true })
+```
+
+### Why am I getting warnings from `preventDefault()` after I pass `{passive:false}`
+
+The basic use of `<Component {...bind()) />` passes the task of attaching listeners to React. React does not [yet](https://github.com/facebook/react/issues/6436) support binding passive listeners via props. To have `useGesture` attach the listeners, you must also [use the `target` option](/docs/options/#target). This is only required if you plan to `preventDefault` or cancel the event.
+
+### Why can't I properly drag an image or a link?
+
+Dragging an image or a link might interfere with the browser native drag and drop. This is why you need to set additional styling on top of `touch-action: none`:
+
+```css
+img.drag {
+  touch-action: none;
+  -moz-user-select: none;
+  -webkit-user-drag: none;
+  user-select: none;
+}
+```
+
+Unfortunately, that may not be enough for Firefox because of [this issue](https://bugzilla.mozilla.org/show_bug.cgi?id=1376369), so you should also prevent default.
+
+```js
+useDrag(({ event, ...state }) => {
+  event.preventDefault()
+  // rest of your gesture logic logic
+})
+```
+
+Have a look at [this sandbox](https://codesandbox.io/s/github/pmndrs/use-gesture/tree/main/demo/src/sandboxes/draggable-image) for an example with dragging an image or a link. That sandbox uses the [`preventDefault`](/docs/options/#preventdefault) option.

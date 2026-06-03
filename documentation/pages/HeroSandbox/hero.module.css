@@ -1,0 +1,136 @@
+.header {
+  position: relative;
+  min-height: 400px;
+  height: 40vh;
+  background-color: #86b4ff1a;
+  z-index: 1;
+}
+
+.header aside {
+  height: unset;
+  margin: unset;
+  padding: 10px;
+}
+
+.header :global(#carbonads) {
+  position: absolute;
+  max-width: 300px;
+}
+
+.header :global(#carbonads) > span {
+  display: block;
+  position: relative;
+  padding: 10px;
+
+  border-radius: 4px;
+  background-color: #fff;
+  box-shadow: 0 0 1px 1px hsla(0, 0%, 0%, 0.05), 0 0 2px 2px hsla(0, 0%, 0%, 0.05), 0 0 4px 4px hsla(0, 0%, 0%, 0.05);
+}
+
+.header :global(#carbonads .carbon-wrap) {
+  display: flex;
+}
+
+.header :global(#carbonads .carbon-img) {
+  margin-right: 10px;
+  line-height: 1;
+}
+
+.header :global(#carbonads .carbon-text) {
+  margin-bottom: 28px;
+  padding: 0;
+  font-size: 12px;
+  line-height: 1.45;
+  color: #637381;
+}
+
+.header :global(#carbonads .carbon-poweredby) {
+  position: absolute;
+  bottom: 10px;
+  left: 152px;
+  color: #c5cdd0;
+}
+
+.wrapper,
+.bg {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  perspective: 720px;
+}
+
+.bg {
+  position: absolute;
+  opacity: 0.02;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 20vw;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.bounds {
+  position: absolute;
+  border: 2px solid slateblue;
+}
+
+.drag {
+  width: 240px;
+  height: 180px;
+  background: url('https://mixkit.imgix.net/art/preview/mixkit-woman-with-a-handbag-walking-her-small-dog-207-original-large.png?q=80&auto=format%2Ccompress&h=200&q=50&dpr=2')
+    center / cover;
+  border-radius: 8px;
+  touch-action: none;
+  user-select: none;
+  position: absolute;
+  box-shadow: 0 8px 30px rgba(14, 21, 47, 0.1);
+  transition: box-shadow 200ms ease-out;
+  overflow: hidden;
+  cursor: grab;
+}
+
+.drag.shadow {
+  box-shadow: 0 45px 100px rgba(14, 21, 47, 0.2), 0 16px 40px rgba(14, 21, 47, 0.1);
+}
+
+.drag > div {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+}
+
+.drag > div:last-child {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 30px;
+  text-shadow: 0 0px 20px rgba(14, 21, 47, 0.2);
+  transition: text-shadow 200ms ease;
+  font-weight: bold;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.drag.shadow > div:last-child {
+  text-shadow: 0 0px 100px rgba(14, 21, 47, 0.6);
+}
+
+.gui {
+  z-index: 1;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background: #181c20;
+  width: 280px;
+}
+
+@media (max-width: 840px) {
+  .gui {
+    display: none;
+  }
+}

@@ -1,0 +1,23 @@
+---
+title: Page not found
+---
+
+import { x } from '@xstyled/styled-components'
+import { Article, ScreenContainer, Button } from 'smooth-doc/components'
+import { Link } from 'gatsby'
+import notFoundImageURL from '../images/404.png'
+
+The page you are looking for does not actually exist.
+
+<Article style={{ textAlign: 'center', overflow: 'hidden' }}>
+  <ScreenContainer mt={5} position="relative">
+    <x.h1 m={0}>That's an empty page!</x.h1>
+    <x.img alt="Empty box" src={notFoundImageURL} w={500} h="auto" mx="auto" my={5} />
+    <x.p my={3} mx="auto" fontSize="1.5em"></x.p>
+    <div>
+      <Button as={Link} to="/">
+        Back to home
+      </Button>
+    </div>
+  </ScreenContainer>
+</Article>

@@ -1,0 +1,109 @@
+---
+title: Useful extras
+section: More
+order: 3
+---
+
+import Code from './code/'
+import UseGesture from './code/rug'
+
+# Useful extras
+
+These tips aren't specific to <UseGesture /> but might come handy to anyone building mobile-friendly UI interfaces.
+
+<carbon-ad />
+
+### touch-action
+
+Let's take the mailbox email list: panning vertically should scroll vertically through the emails, and dragging horizontally should unveil options such as delete and mark unread.
+
+In these situations you don't want the `body` of your page to scroll along with the user manipulating the item horizontally. Your first instinct might be to prevent the event default action by calling `event.preventDefault()` in your handler. But there is a simpler, more effective solution, which has to do with a simple CSS property.
+
+[`touch-action`](https://developer.mozilla.org/en-US/docs/Web/CSS/touch-action) is a CSS property that sets how an element's region can be manipulated by a touchscreen user.
+
+> This demo only makes sense on mobile or when your browser inspector is set for touch devices.
+
+<Code id="TouchAction" />
+
+Setting `touch-action: pan-y` on your draggable element class or style indicates the browser should only react to vertical scrolling when interacting with the item.
+
+> If you don't want the browser scrolling either vertically or horizontally, set `touch-action: none`.
+
+```jsx highlight={3-8}
+function TouchActionExample() {
+  const [springs, api] = useSprings(4, () => ({ x: 0 }))
+
+  const bind = useDrag(
+    ({ down, movement: [x], args: [index] }) => api.start((i) => i === index && { x: down ? x : 0 }),
+    {
+      axis: 'x'
+    }
+  )
+
+  return springs.map(({ x }, i) => <animated.div {...bind(i)} style={{ x, touchAction: 'pan-y' }} />)
+}
+```
+
+In your drag options, you should then set [`{axis:'x'}`](/docs/options/#axis-xy-gestures-only). This will result in the browser natively canceling vertical scrolling when it detects movement intent on the horizontal axis, while your handler will trigger your horizontal logic. When movement intent is detected as vertical by the browser, it will allow your body to scroll, but the `{axis:'x'}` option on the drag handler will prevent your item to move horizontally.
+
+> Note that you can fail this behaviour by slooowly scrolling sideways and then firmly up or down. But it should work in most situations.
+
+### Body Scroll Lock
+
+When you have a menu overlay on top of your page you generally don't want the `body` to scroll along with the menu content. [Body scroll lock](https://github.com/willmcpo/body-scroll-lock) is a javascript library that disable body scroll.
+
+Make sure you can't solve your problem scroll problem with [`touch-action`](#touch-action) before using this library though.
+
+### Lethargy
+
+[Lethargy](https://github.com/d4nyll/lethargy) is a library which objective is _to help distinguish between scroll events initiated by the user, and those by inertial scrolling_. It's especially useful when you want to create full page sliders. Here is an example on how to use it with `useWheel`.
+
+> This demo only makes sense on wheel-based devices. The sensitivity to wheeling depends on your device and can be adjusted with Lethargy options.
+
+<Code id="LethargyWheel" />
+
+<details>
+  <summary>Show code</summary>
+
+```jsx
+const slides = [0, 1, 2, 3, 4, 5]
+// creates a new Lethargy check
+// could be stored as a ref, or a global anywhere in your app
+const lethargy = new Lethargy()
+
+function LethargyWheel() {
+  const [index, setIndex] = useState(0)
+  const ref = useRef()
+
+  useWheel(
+    ({ event, last, memo: wait = false }) => {
+      if (last) return // event can be undefined as the last event is debounced
+      event.preventDefault() // this is needed to prevent the native browser scroll
+      const wheelDirection = lethargy.check(event)
+      // wheelDirection === 0 when Lethargy thinks it's an inertia-triggered event
+      if (wheelDirection) {
+        // wait is going to switch from false to true when an intentional wheel
+        // event has been detected
+        if (!wait) setIndex((i) => clamp(i - wheelDirection, 0, slides.length - 1))
+        return true // will set to wait to true in the next event frame
+      }
+      return false // will set to wait to false in the next event frame
+    },
+    // we need to use a ref to be able to get non passive events and be able
+    // to trigger event.preventDefault()
+    { target: ref, eventOptions: { passive: false } }
+  )
+
+  return (
+    <div ref={ref} style={{ transform: `translateY(${-index * 330}px)` }}>
+      {slides.map((i) => (
+        <div key={i}>{i}</div>
+      ))}
+    </div>
+  )
+}
+```
+
+</details>
+
+Example on CodeSandbox: https://codesandbox.io/s/lethargy-2coe8

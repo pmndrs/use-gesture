@@ -1,0 +1,17 @@
+.svg {
+  position: relative;
+  min-width: 328px;
+  max-width: 328px;
+  overflow: visible;
+  touch-action: none;
+}
+
+.from {
+  cursor: pointer;
+  touch-action: none;
+}
+
+.status {
+  position: absolute;
+  font-size: 0.8em;
+}
