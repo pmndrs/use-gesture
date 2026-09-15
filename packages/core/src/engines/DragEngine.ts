@@ -92,9 +92,20 @@ export class DragEngine extends CoordinatesEngine<'drag'> {
     if (config.pointerCapture) {
       try {
         ;(event.target as HTMLElement).setPointerCapture(event.pointerId)
-      } catch {
-        // setPointerCapture can throw InvalidPointerId when the pointer is no
-        // longer active. Drag can continue without pointer capture.
+      } catch (error) {
+        // setPointerCapture can throw InvalidPointerId (or NotFoundError) when
+        // the pointer is no longer active. Drag can continue without pointer
+        // capture. Any other error is unexpected and should still surface.
+        if (error instanceof DOMException && (error.name === 'InvalidPointerId' || error.name === 'NotFoundError')) {
+          if (process.env.NODE_ENV === 'development') {
+            // eslint-disable-next-line no-console
+            console.warn(
+              `[@use-gesture]: Failed to capture pointer (${error.name}). Drag will continue without pointer capture.`
+            )
+          }
+        } else {
+          throw error
+        }
       }
     }
 
