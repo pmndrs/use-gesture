@@ -11,6 +11,17 @@ on:
       - '!demo/**'
       - '!**.md'
       - '!.changeset/**'
+  pull_request:
+    paths:
+      - '.github/workflows/main.yml'
+      - 'packages/**'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - 'test/**'
+      - '!documentation/**'
+      - '!demo/**'
+      - '!**.md'
+      - '!.changeset/**'
 env:
   CI: true
 jobs:
