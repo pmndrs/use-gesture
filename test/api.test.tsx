@@ -1,5 +1,5 @@
 import React from 'react'
-import { render, cleanup, fireEvent, createEvent } from '@testing-library/react'
+import { render, cleanup, fireEvent, createEvent, waitFor } from '@testing-library/react'
 import { patchCreateEvent } from './utils'
 import '@testing-library/jest-dom/extend-expect'
 import { BindProps, GenuineHandlers } from './components/Api'
@@ -92,6 +92,33 @@ test('testing transform', () => {
   expect(getByTestId('drag-delta')).toHaveTextContent('5,10')
   expect(getByTestId('drag-distance')).toHaveTextContent('5,10')
   fireEvent.pointerUp(element, { pointerId: 10 })
+})
+
+test('testing transform with wheel', async () => {
+  const { getByTestId } = render(
+    <Interactive gestures={['Wheel']} config={{ transform: ([x, y]) => [-x / 2, y / 4] }} />
+  )
+  const element = getByTestId('wheel-el')
+  fireEvent.wheel(element, { deltaX: 10, deltaY: 20 })
+  fireEvent.wheel(element, { deltaX: 4, deltaY: 8 })
+  expect(getByTestId('wheel-movement')).toHaveTextContent('-2,2')
+  expect(getByTestId('wheel-offset')).toHaveTextContent('-2,2')
+  fireEvent.wheel(element, { deltaX: 6, deltaY: 12 })
+  expect(getByTestId('wheel-movement')).toHaveTextContent('-5,5')
+  expect(getByTestId('wheel-delta')).toHaveTextContent('-3,3')
+  await waitFor(() => expect(getByTestId('wheel-active')).toHaveTextContent('false'))
+})
+
+test('testing transform with pinch', () => {
+  const { getByTestId } = render(<Interactive gestures={['Pinch']} config={{ transform: (v) => v }} />)
+  const element = getByTestId('pinch-el')
+  fireEvent.pointerDown(element, { pointerId: 41, clientX: 0, clientY: 0, buttons: 1 })
+  fireEvent.pointerDown(element, { pointerId: 42, clientX: 0, clientY: 40, buttons: 1 })
+  fireEvent.pointerMove(element, { pointerId: 42, clientX: 0, clientY: 80, buttons: 1 })
+  expect(getByTestId('pinch-movement')).toHaveTextContent('2,0')
+  expect(getByTestId('pinch-offset')).toHaveTextContent('2,0')
+  fireEvent.pointerUp(element, { pointerId: 41 })
+  fireEvent.pointerUp(element, { pointerId: 42 })
 })
 
 test('testing unmount with domTarget', () => {

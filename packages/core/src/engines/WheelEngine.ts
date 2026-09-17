@@ -26,6 +26,10 @@ export class WheelEngine extends CoordinatesEngine<'wheel'> {
     // _movement rolls back to when it passed the bounds.
     clampStateInternalMovementToBounds(state)
 
+    // Wheel events carry no position, so we derive one from the movement. With a
+    // custom transform, movement is computed from transformed values (#692).
+    this.computeValues(V.add(state._initial, state._movement))
+
     this.compute(event)
     this.emit()
   }

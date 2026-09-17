@@ -1,5 +1,5 @@
 import { ModifierKey } from '../types'
-import { PinchConfig, GenericOptions, InternalPinchOptions, State, Vector2 } from '../types'
+import { PinchConfig, GenericOptions, InternalGestureOptions, InternalPinchOptions, State, Vector2 } from '../types'
 import { call, assignDefault } from '../utils/fn'
 import { V } from '../utils/maths'
 import { commonConfigResolver } from './commonConfigResolver'
@@ -38,6 +38,13 @@ export const pinchConfigResolver = {
     if (typeof scaleBounds !== 'function' && typeof angleBounds !== 'function') return [_scaleBounds(), _angleBounds()]
 
     return (state: State) => [_scaleBounds(state), _angleBounds(state)]
+  },
+  transform(this: InternalGestureOptions, value: any, _k: string, config: { shared: GenericOptions }) {
+    const transform = commonConfigResolver.transform.call(this, value, _k, config)
+    // pinch values are [distance, angle] and its movement is a scale ratio, so it
+    // can't be derived from transformed values like coordinates gestures (#692).
+    this.hasCustomTransform = false
+    return transform
   },
   threshold(this: InternalPinchOptions, value: number | Vector2, _k: string, config: PinchConfig) {
     this.lockDirection = config.axis === 'lock'
