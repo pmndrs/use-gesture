@@ -415,26 +415,40 @@ describe.each([
 })
 
 describe('drag with a throwing setPointerCapture', () => {
-  test(`drag should still start when setPointerCapture throws InvalidPointerId`, () => {
-    const { container } = render(<Interactive gestures={['Drag']} />)
-    const getByTestId = within(container).getByTestId
-    const element = getByTestId(`drag-el`)
-    // Some browsers throw DOMException: InvalidPointerId when the pointer id is
-    // no longer valid by the time setPointerCapture is called (e.g. the pointer
-    // was released between event dispatch and the capture call during rapid
-    // touch interactions). See https://github.com/pmndrs/use-gesture/issues/701
-    element.setPointerCapture = () => {
-      throw new DOMException('InvalidPointerId', 'InvalidPointerId')
-    }
+  // setPointerCapture throws when the pointer id isn't active anymore, which
+  // happens with forwarded or replayed pointer events (a native pointerdown
+  // always has an active pointer). Current browsers throw NotFoundError;
+  // InvalidPointerId is the legacy name for the same condition.
+  // See https://github.com/pmndrs/use-gesture/issues/701
+  test.each([['NotFoundError'], ['InvalidPointerId']])(
+    `drag shouldn't start when setPointerCapture throws %s`,
+    (errorName) => {
+      const { container } = render(<Interactive gestures={['Drag']} />)
+      const { getByTestId, queryByTestId } = within(container)
+      const element = getByTestId(`drag-el`)
+      const setPointerCapture = element.setPointerCapture
+      element.setPointerCapture = () => {
+        throw new DOMException('No active pointer with the given id is found', errorName)
+      }
 
-    expect(() => {
+      expect(() => {
+        fireEvent.pointerDown(element, { pointerId: 5, clientX: 10, clientY: 20, buttons: 1 })
+      }).not.toThrow()
+
+      // There is no pointer left to lift, so a drag started here would stay
+      // active forever. The gesture never runs, so no state is rendered at all.
+      expect(queryByTestId(`drag-active`)).not.toBeInTheDocument()
+      expect(getByTestId(`drag-start`)).toHaveTextContent('not fired')
+
+      // The failed capture must not leave anything behind that blocks the
+      // next real drag.
+      element.setPointerCapture = setPointerCapture
       fireEvent.pointerDown(element, { pointerId: 1, clientX: 10, clientY: 20, buttons: 1 })
-    }).not.toThrow()
-
-    expect(getByTestId(`drag-active`)).toHaveTextContent('true')
-    expect(getByTestId(`drag-dragging`)).toHaveTextContent('true')
-    expect(getByTestId(`drag-start`)).toHaveTextContent(/^fired$/)
-
-    fireEvent.pointerUp(element, { pointerId: 1 })
-  })
+      expect(getByTestId(`drag-active`)).toHaveTextContent('true')
+      expect(getByTestId(`drag-start`)).toHaveTextContent(/^fired$/)
+      fireEvent.pointerMove(element, { pointerId: 1, clientX: 20, clientY: 30, buttons: 1 })
+      fireEvent.pointerUp(element, { pointerId: 1 })
+      expect(getByTestId(`drag-active`)).toHaveTextContent('false')
+    }
+  )
 })

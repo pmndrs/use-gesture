@@ -1,6 +1,6 @@
 import { CoordinatesEngine } from './CoordinatesEngine'
 import { coordinatesConfigResolver } from '../config/coordinatesConfigResolver'
-import { pointerId, getPointerType, pointerValues } from '../utils/events'
+import { pointerId, getPointerType, pointerValues, capturePointer } from '../utils/events'
 import { V } from '../utils/maths'
 import { Vector2 } from '../types'
 
@@ -89,25 +89,11 @@ export class DragEngine extends CoordinatesEngine<'drag'> {
     const ctrlIds = this.ctrl.setEventIds(event)
     // We need to capture all pointer ids so that we can keep track of them when
     // they're released off the target
-    if (config.pointerCapture) {
-      try {
-        ;(event.target as HTMLElement).setPointerCapture(event.pointerId)
-      } catch (error) {
-        // setPointerCapture can throw InvalidPointerId (or NotFoundError) when
-        // the pointer is no longer active. Drag can continue without pointer
-        // capture. Any other error is unexpected and should still surface.
-        if (error instanceof DOMException && (error.name === 'InvalidPointerId' || error.name === 'NotFoundError')) {
-          if (process.env.NODE_ENV === 'development') {
-            // eslint-disable-next-line no-console
-            console.warn(
-              `[@use-gesture]: Failed to capture pointer (${error.name}). Drag will continue without pointer capture.`
-            )
-          }
-        } else {
-          throw error
-        }
-      }
-    }
+    // If the pointer isn't active anymore the capture fails, and there is no
+    // pointer left to lift, so the drag must not start. Starting it anyway
+    // leaves `_pointerActive` set forever, and the stale id then makes the
+    // multi-pointer guard below bail out of every subsequent pointerdown.
+    if (config.pointerCapture && !capturePointer(event, ctrlIds)) return
 
     if (
       // in some situations (https://github.com/pmndrs/use-gesture/issues/494#issuecomment-1127584116)

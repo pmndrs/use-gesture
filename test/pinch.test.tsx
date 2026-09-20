@@ -1,5 +1,5 @@
 import React from 'react'
-import { render, cleanup, fireEvent, createEvent, waitFor } from '@testing-library/react'
+import { render, cleanup, fireEvent, createEvent, waitFor, within } from '@testing-library/react'
 import '@testing-library/jest-dom/extend-expect'
 import Interactive from './components/Interactive'
 import InteractiveDom from './components/InteractiveDom'
@@ -172,4 +172,32 @@ describe.each([
       expect(getByTestId(`${prefix}pinch-_bounds`)).toHaveTextContent('0.5,4,-600,Infinity')
     })
   }
+})
+
+describe('pinch with a throwing setPointerCapture', () => {
+  test(`pinch shouldn't start when the pointer isn't active anymore`, () => {
+    const { container } = render(<Interactive gestures={['Pinch']} />)
+    const { getByTestId, queryByTestId } = within(container)
+    const element = getByTestId(`pinch-el`)
+    const setPointerCapture = element.setPointerCapture
+    element.setPointerCapture = () => {
+      throw new DOMException('No active pointer with the given id is found', 'NotFoundError')
+    }
+
+    // This capture used to be unguarded, so the DOMException escaped the
+    // pointerdown handler. See https://github.com/pmndrs/use-gesture/issues/701
+    expect(() => {
+      fireEvent.pointerDown(element, { pointerId: 71, clientX: 0, clientY: 0, buttons: 1 })
+      fireEvent.pointerDown(element, { pointerId: 72, clientX: 0, clientY: 40, buttons: 1 })
+    }).not.toThrow()
+    expect(queryByTestId(`pinch-active`)).not.toBeInTheDocument()
+
+    // A real two-pointer pinch still works afterwards.
+    element.setPointerCapture = setPointerCapture
+    fireEvent.pointerDown(element, { pointerId: 73, clientX: 0, clientY: 0, buttons: 1 })
+    fireEvent.pointerDown(element, { pointerId: 74, clientX: 0, clientY: 40, buttons: 1 })
+    expect(getByTestId(`pinch-active`)).toHaveTextContent('true')
+    fireEvent.pointerUp(element, { pointerId: 73 })
+    fireEvent.pointerUp(element, { pointerId: 74 })
+  })
 })

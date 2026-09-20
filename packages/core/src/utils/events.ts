@@ -142,3 +142,34 @@ export function getEventDetails(event: any) {
   }
   return payload
 }
+
+/**
+ * Captures `event.pointerId` on the event target.
+ *
+ * Returns `false` when the pointer isn't active anymore, in which case the
+ * gesture must not start: there would be no pointer left to end it with.
+ * `event.pointerId` is then removed from `ids` so that the stale id doesn't
+ * linger in the controller. Any other error is rethrown.
+ */
+export function capturePointer(event: PointerEvent, ids?: Set<number>) {
+  try {
+    ;(event.target as HTMLElement).setPointerCapture(event.pointerId)
+    return true
+  } catch (error) {
+    // `NotFoundError` is what current browsers throw ("No active pointer with
+    // the given id is found"); `InvalidPointerId` is the legacy name for the
+    // same condition. It happens with forwarded or replayed pointer events,
+    // since a native pointerdown always has an active pointer.
+    if (!(error instanceof DOMException) || (error.name !== 'NotFoundError' && error.name !== 'InvalidPointerId')) {
+      throw error
+    }
+    ids?.delete(event.pointerId)
+    if (process.env.NODE_ENV === 'development') {
+      // eslint-disable-next-line no-console
+      console.warn(
+        `[@use-gesture]: Ignoring pointer ${event.pointerId} because it isn't active anymore (${error.name}).`
+      )
+    }
+    return false
+  }
+}

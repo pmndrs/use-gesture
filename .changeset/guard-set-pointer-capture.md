@@ -2,4 +2,4 @@
 '@use-gesture/core': patch
 ---
 
-Guard drag pointer capture so an `InvalidPointerId` from `setPointerCapture` does not abort the gesture.
+Ignore pointerdown events whose pointer is no longer active. `setPointerCapture` throws `NotFoundError` (formerly `InvalidPointerId`) for forwarded or replayed pointer events; drag and pinch now skip those events instead of throwing or starting a gesture that can never end.

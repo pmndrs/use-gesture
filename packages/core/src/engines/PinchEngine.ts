@@ -1,5 +1,5 @@
 import { Engine } from './Engine'
-import { touchDistanceAngle, distanceAngle, wheelValues } from '../utils/events'
+import { touchDistanceAngle, distanceAngle, wheelValues, capturePointer } from '../utils/events'
 import { V } from '../utils/maths'
 import { Vector2, WebKitGestureEvent } from '../types'
 import { clampStateInternalMovementToBounds } from '../utils/state'
@@ -97,8 +97,10 @@ export class PinchEngine extends Engine<'pinch'> {
 
   pointerStart(event: PointerEvent) {
     if (event.buttons != null && event.buttons % 2 !== 1) return
-    this.ctrl.setEventIds(event)
-    ;(event.target as HTMLElement).setPointerCapture(event.pointerId)
+    const ctrlIds = this.ctrl.setEventIds(event)
+    // Same as in DragEngine: a pointer that isn't active anymore can't drive a
+    // gesture, and the unguarded capture used to throw out of the handler.
+    if (!capturePointer(event, ctrlIds)) return
     const state = this.state
     const _pointerEvents = state._pointerEvents
     const ctrlPointerIds = this.ctrl.pointerIds
